@@ -1,0 +1,445 @@
+{
+  "id": "framing/single",
+  "slug": "single",
+  "title": "Single",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/single",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/single.webp",
+  "detail": "details/framing/single.json",
+  "aliases": [
+    "clean single",
+    "dirty single"
+  ],
+  "description": "A single, in single shot cinematography, is a coverage shot of one principal character, not a one-take scene. A clean single keeps other bodies out; a dirty single lets a shoulder or blur from the partner chew the edge without becoming a true over-the-shoulder.",
+  "thumbnail": "media/808603679a1bd66241e5ffada35ce0ac.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A single isolates. The other person can still be in the room, but they no longer author the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is how you make someone alone during a conversation, or how you give a listener a private beat. It is not a oner and not a long take; those are duration."
+        },
+        {
+          "type": "paragraph",
+          "text": "A single is occupancy: one principal. It is the wrong tool when the relationship must stay visible as a shoulder or as a shared two-shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "Going to singles too early turns every scene into ping-pong. Going to a clean single at the right time can feel like the partner has been erased."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A single isolates. The other person can still be in the room, but they no longer author the frame.This is how you make someone alone during a conversation, or how you give a listener a private beat. It is not a oner and not a long take; those are duration.A single is occupancy: one principal. It is the wrong tool when the relationship must stay visible as a shoulder or as a shared two-shot.Going to singles too early turns every scene into ping-pong. Going to a clean single at the right time can feel like the partner has been erased."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Frame one person. For a clean single, keep edges empty of the partner (Clean Frame).",
+          "links": [
+            {
+              "text": "Clean Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/clean-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "For a dirty single, allow a sliver of the other body as edge chew (Dirty Frame) without a composed foreground shoulder. Size is often Close-Up or Medium Close-Up, but a single can be a medium of one.",
+          "links": [
+            {
+              "text": "Dirty Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+            },
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            },
+            {
+              "text": "Medium Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Clean single of [Subject], one person, no foreground shoulder, the frame belonging entirely to them."
+        }
+      ],
+      "links": [
+        {
+          "text": "Clean Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/clean-frame"
+        },
+        {
+          "text": "Dirty Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Medium Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Frame one person. For a clean single, keep edges empty of the partner (Clean Frame).For a dirty single, allow a sliver of the other body as edge chew (Dirty Frame) without a composed foreground shoulder. Size is often Close-Up or Medium Close-Up, but a single can be a medium of one.Prompt: Clean single of [Subject], one person, no foreground shoulder, the frame belonging entirely to them."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to isolate: the other person is gone even if they are in the room. Do not leave a stray composed shoulder if you meant clean, and do not call a continuous long take a single just because one actor walks."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to isolate: the other person is gone even if they are in the room. Do not leave a stray composed shoulder if you meant clean, and do not call a continuous long take a single just because one actor walks."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Over-the-shoulder coverage uses the partner as a foreground anchor. A Two-Shot keeps both principals.",
+          "links": [
+            {
+              "text": "Over-the-shoulder coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            },
+            {
+              "text": "Two-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Close-Up is a size a single often uses. A Oner is a long unbroken take, a different word.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            },
+            {
+              "text": "Oner",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Single means one occupant of the shot."
+        },
+        {
+          "type": "list-item",
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "displayText": "Close-Up\nRead micro-expression. Default for important dialogue.",
+          "links": [
+            {
+              "text": "Close-UpRead micro-expression. Default for important dialogue.",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Over-the-Shoulder CoverageDefault dialogue coverage with spatial glue.",
+          "displayText": "Over-the-Shoulder Coverage\nDefault dialogue coverage with spatial glue.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder CoverageDefault dialogue coverage with spatial glue.",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Over-the-shoulder coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Two-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Oner",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+        },
+        {
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Over-the-Shoulder CoverageDefault dialogue coverage with spatial glue.",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/95136909e657a1816141551e20893339.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+          "alt": "Close-Up"
+        },
+        {
+          "kind": "image",
+          "path": "media/d65f275fff8e870e92c86c8d7270a51e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/over-the-shoulder-frame-088-over-the-shoulder-coverage-mini.webp",
+          "alt": "Over-the-Shoulder Coverage"
+        },
+        {
+          "kind": "video",
+          "path": "media/f20fdb7d226138aaf5dd59721e8bcc91.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/088-over-the-shoulder-coverage-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Over-the-shoulder coverage uses the partner as a foreground anchor. A Two-Shot keeps both principals.A Close-Up is a size a single often uses. A Oner is a long unbroken take, a different word.Single means one occupant of the shot.Close-UpRead micro-expression. Default for important dialogue.Over-the-Shoulder CoverageDefault dialogue coverage with spatial glue.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Silence of the Lambs uses clean, frontal singles in the interviews so the glass and the partner can vanish and the face owns the rectangle. That isolation is the coverage choice."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: one person, the rest of the relationship offscreen."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Silence of the Lambs uses clean, frontal singles in the interviews so the glass and the partner can vanish and the face owns the rectangle. That isolation is the coverage choice.Grammar: one person, the rest of the relationship offscreen."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say one person and whether the edges are clean. Example: Clean single of [Subject], one person, no foreground shoulder, the frame belonging entirely to them."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you want dirty, say a blur of the partner at the frame edge, not an OTS shoulder. For video, do not let a second face walk in unless that is the beat."
+        },
+        {
+          "type": "quote",
+          "text": "Clean single of [Subject], one person, no foreground shoulder, the frame belonging entirely to them."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Clean+single+of+[Subject],+one+person,+no+foreground+shoulder,+the+frame+belonging+entirely+to+them."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say one person and whether the edges are clean. Example: Clean single of [Subject], one person, no foreground shoulder, the frame belonging entirely to them.If you want dirty, say a blur of the partner at the frame edge, not an OTS shoulder. For video, do not let a second face walk in unless that is the beat.Copy promptUse in Image GeneratorClean single of [Subject], one person, no foreground shoulder, the frame belonging entirely to them.Clean single of [Subject], one person, no foreground shoulder, the frame belonging entirely to them."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Over-the-Shoulder Coverage (composed near shoulder) or a Two-Shot. The tell is a sharp second face, or a textbook OTS.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            },
+            {
+              "text": "Two-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Another tell is calling a oner a single. Fix: one principal, decide clean or dirty, do not confuse occupancy with duration."
+        }
+      ],
+      "links": [
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Two-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Over-the-Shoulder Coverage (composed near shoulder) or a Two-Shot. The tell is a sharp second face, or a textbook OTS.Another tell is calling a oner a single. Fix: one principal, decide clean or dirty, do not confuse occupancy with duration."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Single in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A single is a shot containing one principal character. Clean singles keep other bodies out; dirty singles let a bit of the partner chew the edge. It is coverage occupancy, not a synonym for a one-take scene."
+        },
+        {
+          "type": "heading",
+          "text": "Single vs Over-the-Shoulder Coverage",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "OTS keeps a near shoulder or head as a compositional foreground while we watch the far face. A single removes that anchor so the frame belongs to one person. A dirty single is still a single; it is not a full OTS unless the near body is the viewpoint fragment."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Single?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to isolate someone during or after a conversation. Do not jump there so early that the relationship never exists in frame, and do not confuse it with a oner."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Single for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Clean single of [Subject], one person, no foreground shoulder. If you want dirty, specify a sliver of another body at the edge. Keep a second face out of the shot."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Single in film?A single is a shot containing one principal character. Clean singles keep other bodies out; dirty singles let a bit of the partner chew the edge. It is coverage occupancy, not a synonym for a one-take scene.Single vs Over-the-Shoulder CoverageOTS keeps a near shoulder or head as a compositional foreground while we watch the far face. A single removes that anchor so the frame belongs to one person. A dirty single is still a single; it is not a full OTS unless the near body is the viewpoint fragment.When should I use Single?Use it to isolate someone during or after a conversation. Do not jump there so early that the relationship never exists in frame, and do not confuse it with a oner.How do I prompt Single for AI image or video?Write Clean single of [Subject], one person, no foreground shoulder. If you want dirty, specify a sliver of another body at the edge. Keep a second face out of the shot."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say one person and whether the edges are clean. Example: Clean single of [Subject], one person, no foreground shoulder, the frame belonging entirely to them.",
+      "If you want dirty, say a blur of the partner at the frame edge, not an OTS shoulder. For video, do not let a second face walk in unless that is the beat."
+    ],
+    "example": "Clean single of [Subject], one person, no foreground shoulder, the frame belonging entirely to them."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/808603679a1bd66241e5ffada35ce0ac.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/single.webp",
+      "alt": "Single example"
+    },
+    {
+      "kind": "image",
+      "path": "media/95136909e657a1816141551e20893339.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+      "alt": "Close-Up"
+    },
+    {
+      "kind": "image",
+      "path": "media/d65f275fff8e870e92c86c8d7270a51e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/over-the-shoulder-frame-088-over-the-shoulder-coverage-mini.webp",
+      "alt": "Over-the-Shoulder Coverage"
+    },
+    {
+      "kind": "video",
+      "path": "media/f20fdb7d226138aaf5dd59721e8bcc91.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/088-over-the-shoulder-coverage-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d8ffd748339f2fd16169c6007407c586.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/single/hero.jpg",
+      "alt": "Single",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "3f6438a519f534eb4364d20c86f5d2557900fa804d65fc7933aa3f2d0da4669c"
+}

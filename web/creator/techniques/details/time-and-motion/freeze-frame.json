@@ -1,0 +1,440 @@
+{
+  "id": "time-and-motion/freeze-frame",
+  "slug": "freeze-frame",
+  "title": "Freeze Frame",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/freeze-frame-082-freeze-frame-mini.webp",
+  "detail": "details/time-and-motion/freeze-frame.json",
+  "aliases": [
+    "Pre-existing song placement",
+    "Featured song cue"
+  ],
+  "description": "A freeze frame holds one image so narrative time stops while camera, subject, and world all cease to generate new samples. The hold can end a story, land a joke, or present a face as evidence.",
+  "thumbnail": "media/1ad70976642309f23fa26ea36279f9f2.webp",
+  "video": "media/37917860b99448ecd248b6e9e204384a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/082-freeze-frame-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the fact is the picture itself: a boy at the edge of the sea, a narrator labeling a life, a triumph that should not continue into the next second. Grain, dust, and expression stay."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sound may keep running (voiceover, a song, a crowd) so the freeze feels like a caption, not a crash. It is the wrong tool when you still need motion around a stopped body, or a camera that walks around an instant."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those are frozen-in-motion and bullet time. A posed tableau with living extras is not a freeze."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not freeze a line of dialogue whose meaning is in the next word."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when the fact is the picture itself: a boy at the edge of the sea, a narrator labeling a life, a triumph that should not continue into the next second. Grain, dust, and expression stay.Sound may keep running (voiceover, a song, a crowd) so the freeze feels like a caption, not a crash. It is the wrong tool when you still need motion around a stopped body, or a camera that walks around an instant.Those are frozen-in-motion and bullet time. A posed tableau with living extras is not a freeze.Do not freeze a line of dialogue whose meaning is in the next word."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Select one frame and reprint or hold it for the required duration. An optical zoom into that still (as at the end of The 400 Blows) is a move on a photograph, not new live action."
+        },
+        {
+          "type": "paragraph",
+          "text": "The shutter is no longer sampling. Prompt: Freeze frame on [Subject], the world stopping on a decisive pose, grain holding, a still torn out of time."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Select one frame and reprint or hold it for the required duration. An optical zoom into that still (as at the end of The 400 Blows) is a move on a photograph, not new live action.The shutter is no longer sampling. Prompt: Freeze frame on [Subject], the world stopping on a decisive pose, grain holding, a still torn out of time."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to end, to joke, or to offer evidence, such as a final still of a runaway on a beach. Do not use it when particles should hang while the camera still travels."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to end, to joke, or to offer evidence, such as a final still of a runaway on a beach. Do not use it when particles should hang while the camera still travels."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A freeze is not Slow Motion, which continues to sample the action, only slower. It is not Frozen in Motion, where a chosen person or the camera may still move while the world holds.",
+          "links": [
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            },
+            {
+              "text": "Frozen in Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Bullet Time, an orbit around a sculpture of speed. A Tableau is staged stillness inside living time, extras breathing, not a held frame.",
+          "links": [
+            {
+              "text": "Bullet Time",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+            },
+            {
+              "text": "Tableau",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "TableauHold the arrangement.",
+          "displayText": "Tableau\nHold the arrangement.",
+          "links": [
+            {
+              "text": "TableauHold the arrangement.",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Fast MotionToo much life for real time.",
+          "displayText": "Fast Motion\nToo much life for real time.",
+          "links": [
+            {
+              "text": "Fast MotionToo much life for real time.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Frozen in Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion"
+        },
+        {
+          "text": "Bullet Time",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+        },
+        {
+          "text": "Tableau",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "TableauHold the arrangement.",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "Fast MotionToo much life for real time.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/a93c30aeb2ed5bcd737dc27a09898a53.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tableau.webp",
+          "alt": "Tableau"
+        },
+        {
+          "kind": "image",
+          "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+          "alt": "Fast Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A freeze is not Slow Motion, which continues to sample the action, only slower. It is not Frozen in Motion, where a chosen person or the camera may still move while the world holds.It is not Bullet Time, an orbit around a sculpture of speed. A Tableau is staged stillness inside living time, extras breathing, not a held frame.Slow MotionA second contains a scene.TableauHold the arrangement.Fast MotionToo much life for real time."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The 400 Blows ends on Antoine at the water, the image arrested so the boy cannot run farther. Goodfellas freezes Henry so voiceover can label a life mid-gesture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Rocky is often cited for punctuation energy around a still of triumph. Trainspotting is listed beside freeze grammar more for its opening jolt than for a single copied hold."
+        },
+        {
+          "type": "list-item",
+          "text": "Goodfellas 1990The Layla piano passage accompanies the discovery montage.",
+          "displayText": "Goodfellas 1990\nThe Layla piano passage accompanies the discovery montage."
+        },
+        {
+          "type": "list-item",
+          "text": "Trainspotting 1996The opening running sequence uses a prominent song cue.",
+          "displayText": "Trainspotting 1996\nThe opening running sequence uses a prominent song cue."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/96d5cc45877fd62674f927987b0c60d8.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/freeze-frame/famous/01-goodfellas-1990.jpg",
+          "alt": "Goodfellas 1990"
+        }
+      ],
+      "sourceText": "In film The 400 Blows ends on Antoine at the water, the image arrested so the boy cannot run farther. Goodfellas freezes Henry so voiceover can label a life mid-gesture.Rocky is often cited for punctuation energy around a still of triumph. Trainspotting is listed beside freeze grammar more for its opening jolt than for a single copied hold.Goodfellas 1990The Layla piano passage accompanies the discovery montage.Trainspotting 1996The opening running sequence uses a prominent song cue."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write a hold, not a slow pose. Still: the chosen frame as a photograph with grain, a decisive expression or body shape, no implied smear."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Action around [Subject] freezes into a still frame and holds. Camera stops."
+        },
+        {
+          "type": "paragraph",
+          "text": "No orbit, no hanging debris that later falls."
+        },
+        {
+          "type": "quote",
+          "text": "Edit a group of exhausted friends leaving an all-night diner at sunrise to an original energetic rock cue. Let the first strong beat land on the door opening, then allow the song to continue over several distinct street moments. Use a newly composed track, not a replica of an existing film song."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Edit+a+group+of+exhausted+friends+leaving+an+all-night+diner+at+sunrise+to+an+original+energetic+rock+cue.+Let+the+first+strong+beat+land+on+the+door+opening,+then+allow+the+song+to+continue+over+several+distinct+street+moments.+Use+a+newly+composed+track,+not+a+replica+of+an+existing+film+song."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write a hold, not a slow pose. Still: the chosen frame as a photograph with grain, a decisive expression or body shape, no implied smear.Video: Action around [Subject] freezes into a still frame and holds. Camera stops.No orbit, no hanging debris that later falls.Copy promptUse in Video GeneratorEdit a group of exhausted friends leaving an all-night diner at sunrise to an original energetic rock cue. Let the first strong beat land on the door opening, then allow the song to continue over several distinct street moments. Use a newly composed track, not a replica of an existing film song.Edit a group of exhausted friends leaving an all-night diner at sunrise to an original energetic rock cue. Let the first strong beat land on the door opening, then allow the song to continue over several distinct street moments. Use a newly composed track, not a replica of an existing film song."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Frozen in Motion or Bullet Time. The tell is rain or coat tails hanging while the viewpoint keeps traveling, or a mid-air sculpture with parallax.",
+          "links": [
+            {
+              "text": "Frozen in Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion"
+            },
+            {
+              "text": "Bullet Time",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: stop the camera and the world on one frame. If you need a walk around the instant, change technique."
+        }
+      ],
+      "links": [
+        {
+          "text": "Frozen in Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion"
+        },
+        {
+          "text": "Bullet Time",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Frozen in Motion or Bullet Time. The tell is rain or coat tails hanging while the viewpoint keeps traveling, or a mid-air sculpture with parallax.Fix: stop the camera and the world on one frame. If you need a walk around the instant, change technique."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Freeze Frame in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A freeze frame is a held still taken from the moving picture, so story time stops on one image."
+        },
+        {
+          "type": "heading",
+          "text": "Freeze Frame vs Frozen in Motion",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A freeze holds the entire picture, camera included. Frozen in motion stops most of the world while a chosen body or the viewpoint may continue."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Freeze Frame?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the still is the point: an ending, a joke, or a face presented as evidence. Let sound carry if the hold needs a caption."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Freeze Frame for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write that action freezes into one still and holds, grain included, camera stopped. Ban orbits, hanging debris, and continued footsteps."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Freeze Frame in film?A freeze frame is a held still taken from the moving picture, so story time stops on one image.Freeze Frame vs Frozen in MotionA freeze holds the entire picture, camera included. Frozen in motion stops most of the world while a chosen body or the viewpoint may continue.When should I use Freeze Frame?When the still is the point: an ending, a joke, or a face presented as evidence. Let sound carry if the hold needs a caption.How do I prompt Freeze Frame for AI image or video?Write that action freezes into one still and holds, grain included, camera stopped. Ban orbits, hanging debris, and continued footsteps."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write a hold, not a slow pose. Still: the chosen frame as a photograph with grain, a decisive expression or body shape, no implied smear.",
+      "Video: Action around [Subject] freezes into a still frame and holds. Camera stops.",
+      "No orbit, no hanging debris that later falls."
+    ],
+    "example": "Edit a group of exhausted friends leaving an all-night diner at sunrise to an original energetic rock cue. Let the first strong beat land on the door opening, then allow the song to continue over several distinct street moments. Use a newly composed track, not a replica of an existing film song."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/37917860b99448ecd248b6e9e204384a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/082-freeze-frame-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1ad70976642309f23fa26ea36279f9f2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/freeze-frame-082-freeze-frame-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0f42e84d3bce703d05018ca893019738.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/freeze-frame.jpg",
+      "alt": "Freeze Frame frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a93c30aeb2ed5bcd737dc27a09898a53.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tableau.webp",
+      "alt": "Tableau"
+    },
+    {
+      "kind": "image",
+      "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+      "alt": "Fast Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/96d5cc45877fd62674f927987b0c60d8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/freeze-frame/famous/01-goodfellas-1990.jpg",
+      "alt": "Goodfellas 1990"
+    },
+    {
+      "kind": "image",
+      "path": "media/a55c85eb5f8726f1b0783bd125b861b3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/freeze-frame/hero.jpg",
+      "alt": "Freeze Frame",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "a0740389d9a99cd643f95a184ceb7ee3ac463a52405fa88a8e43da180fb17891"
+}

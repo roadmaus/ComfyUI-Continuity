@@ -1,0 +1,236 @@
+{
+  "version": 1,
+  "locale": "zh",
+  "id": "effects/rack-focus",
+  "sourceHtmlSha256": "e26e024176e61104680086e3b9672f15a36fdb2635b1f36d83d8c573d9ea35d9",
+  "description": "Rack Focus 在一个连续镜头中大致保持构图不变，将清晰合焦的平面从一个对象或距离转移到另一个对象或距离。注意力的变化来自镜头对焦机构的转动，而不是剪切或摄影机移动。",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "叙事作用",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "桌上的黄铜钥匙清晰合焦，门口的女性则处于虚焦状态。"
+        },
+        {
+          "index": 1,
+          "text": "大约两秒内，钥匙逐渐失焦，女性的脸部转为清晰。两个主体都没有移动。"
+        },
+        {
+          "index": 2,
+          "text": "观众会感到注意力在同一空间中完成了交接。它适合在不切镜头的情况下改变画面的主导对象，例如追赶者与被追赶者、线索与面孔、倾听的人与刚进来的人。"
+        },
+        {
+          "index": 3,
+          "text": "缓慢转焦像一句完整的话，快速转焦则像一下短促的强调。"
+        },
+        {
+          "index": 4,
+          "text": "如果近处和远处的对象必须同时清晰，就不适合使用这一手法；那应采用Deep Focus或Split Diopter。需要摄影机实际移动时也不应以转焦代替。如果细节不是变清晰或模糊，而是在变形，就说明模型生成了叠化效果。"
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "how",
+      "title": "工作原理",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "标记两个对焦距离，并与负责跟焦的第一摄影助理排练转焦时机。"
+        },
+        {
+          "index": 1,
+          "text": "为清楚展示效果，应固定云台，或让小幅运镜与转焦同步。镜头光圈全开时，焦点转移会更明显。"
+        },
+        {
+          "index": 2,
+          "text": "对焦时产生的视角变化 可能会稍微改变 视角。决定是否需要。"
+        },
+        {
+          "index": 3,
+          "text": "提示词应说明：固定机位、近处和远处的具体对象、两秒的转焦过程、浅景深、不变焦。"
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "when",
+      "title": "适用场景",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "先让焦点停留在前景钥匙上，再用大约两秒转移到门口的人物。如果场景需要两个距离层面的对象同时清晰，或切镜头更加干净明确，就不要使用Rack Focus。"
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "vs",
+      "title": "与相近技法比较",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "Shallow Focus 是将较薄的焦平面固定在一个位置的状态；Rack Focus 则是让这个焦平面移动的过程。"
+        },
+        {
+          "index": 1,
+          "text": "Split Diopter 通过分区边界让两个不同距离的对象同时清晰；Deep Focus 则让连续的距离范围保持清晰，因此无需转焦。"
+        },
+        {
+          "index": 2,
+          "text": "Push In 会实际移动摄影机；Rack Focus 不改变空间布局，只改变对焦距离。"
+        },
+        {
+          "index": 3,
+          "text": "Shallow Focus\n没有其他邀请。"
+        },
+        {
+          "index": 4,
+          "text": "Split Diopter\n两个距离必须同时为真。"
+        },
+        {
+          "index": 5,
+          "text": "Lens Flare\n光线太强，无法礼貌。"
+        }
+      ],
+      "media": [
+        {
+          "index": 0,
+          "alt": "Shallow Focus"
+        },
+        {
+          "index": 2,
+          "alt": "Split Diopter"
+        },
+        {
+          "index": 4,
+          "alt": "Lens Flare"
+        }
+      ]
+    },
+    {
+      "id": "examples-film",
+      "title": "电影中的应用案例",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "Peking Opera Blues 在同一构图内，将焦点从被追赶的人物转移到追赶他的警官。The Graduate 利用选择性对焦，组织Benjamin与周围人物之间的关系。"
+        },
+        {
+          "index": 1,
+          "text": "The Player 将转焦处理成一段持续引导注意力的长句。"
+        },
+        {
+          "index": 2,
+          "text": "Peking Opera Blues 1986\n在同一构图中，将焦点从被追赶的人物转移到追赶他的警官。"
+        },
+        {
+          "index": 3,
+          "text": "The Graduate 1967\n选择性焦点组织本杰明和周围人物之间的注意力。"
+        }
+      ],
+      "media": [
+        {
+          "index": 0,
+          "alt": "Peking Opera Blues 1986"
+        },
+        {
+          "index": 1,
+          "alt": "The Graduate 1967"
+        }
+      ]
+    },
+    {
+      "id": "prompt",
+      "title": "英文提示词",
+      "blocks": [],
+      "media": []
+    },
+    {
+      "id": "mistakes",
+      "title": "常见问题与解决方法",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "常见误实现包括切镜头、形态变换，或两个距离的对象始终清晰。判断线索是没有失焦、细节像融化一样变化，或者用变焦冒充转焦。"
+        },
+        {
+          "index": 1,
+          "text": "保持构图，让一个焦平面逐渐模糊、另一个逐渐清晰，同时保持对象的身份与外观稳定。"
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "faq",
+      "title": "常见问题",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "电影中的rack focus是什么？"
+        },
+        {
+          "index": 1,
+          "text": "在一个镜头中，将焦点从一个距离平面转移到另一个距离平面的手法。画面构图保持不变，注意力发生转移。也称Focus Pull、Slow Rack或Snap Rack。"
+        },
+        {
+          "index": 2,
+          "text": "Rack focus 与 shallow focus 对比"
+        },
+        {
+          "index": 3,
+          "text": "Shallow Focus 是只有很薄的平面清晰合焦的状态；Rack Focus 则是将该焦平面从一个对象移向另一个对象的动作。"
+        },
+        {
+          "index": 4,
+          "text": "我什么时候应该使用rack focus？"
+        },
+        {
+          "index": 5,
+          "text": "当需要在不切镜头的情况下揭示信息或转移注意力时使用。如果两个距离层面的对象必须同时清晰，就不要使用。"
+        },
+        {
+          "index": 6,
+          "text": "AI图片或视频如何提示rack focus？"
+        },
+        {
+          "index": 7,
+          "text": "对视频，应固定机位，明确近处和远处的主体，并指定转焦时长（约两秒）。对静态图像，可将其描述为两个焦平面的关系：一侧逐渐合焦，另一侧逐渐失焦。"
+        }
+      ],
+      "media": []
+    }
+  ],
+  "media": [
+    {
+      "index": 2,
+      "alt": "Rack Focus 帧随时间变化"
+    },
+    {
+      "index": 3,
+      "alt": "Shallow Focus"
+    },
+    {
+      "index": 5,
+      "alt": "Split Diopter"
+    },
+    {
+      "index": 7,
+      "alt": "Lens Flare"
+    },
+    {
+      "index": 9,
+      "alt": "Peking Opera Blues 1986"
+    },
+    {
+      "index": 10,
+      "alt": "The Graduate 1967"
+    },
+    {
+      "index": 11,
+      "alt": "Rack Focus"
+    }
+  ]
+}

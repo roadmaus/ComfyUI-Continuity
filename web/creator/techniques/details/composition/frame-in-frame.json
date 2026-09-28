@@ -1,0 +1,450 @@
+{
+  "id": "composition/frame-in-frame",
+  "slug": "frame-in-frame",
+  "title": "Frame within Frame",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/frame-in-frame",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+  "detail": "details/composition/frame-in-frame.json",
+  "aliases": [
+    "Doorway framing",
+    "Surcadrage"
+  ],
+  "description": "A frame within a frame (doorway framing, surcadrage) puts a second rectangle inside the screen, a door, window, arch, mirror, or gap that encloses the subject. The inner aperture is a second boundary, and crossing it is a beat, not a decoration.",
+  "thumbnail": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+  "video": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Someone is watched, trapped, or pictured. The inner frame decides who is allowed in the picture of the picture."
+        },
+        {
+          "type": "paragraph",
+          "text": "A man in a doorway is either coming home or locked out, depending on which side of the jamb we stand. It is the wrong tool when the second rectangle is only a pretty arch behind a centered face."
+        },
+        {
+          "type": "paragraph",
+          "text": "If nobody could enter or leave that aperture, you added a sticker. Dirty edges chew."
+        },
+        {
+          "type": "paragraph",
+          "text": "A frame-in-frame cuts a clean inner border. You can have both: a dirty outer view through a clean door."
+        },
+        {
+          "type": "paragraph",
+          "text": "Decide which border owns the subject."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Someone is watched, trapped, or pictured. The inner frame decides who is allowed in the picture of the picture.A man in a doorway is either coming home or locked out, depending on which side of the jamb we stand. It is the wrong tool when the second rectangle is only a pretty arch behind a centered face.If nobody could enter or leave that aperture, you added a sticker. Dirty edges chew.A frame-in-frame cuts a clean inner border. You can have both: a dirty outer view through a clean door.Decide which border owns the subject."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Compose two rectangles. Place the camera so the inner opening has readable sides, top, and (often) threshold."
+        },
+        {
+          "type": "paragraph",
+          "text": "Control exposure between the two spaces: interior warm, exterior cold, or the reverse. A moderate wide (32mm to 40mm) shows both borders."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the inner frame swallows the outer, you have simply recropped. Prompt: Frame-within-frame around [Subject], doorway, window, mirror, or arch as a second rectangle, nested attention."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Compose two rectangles. Place the camera so the inner opening has readable sides, top, and (often) threshold.Control exposure between the two spaces: interior warm, exterior cold, or the reverse. A moderate wide (32mm to 40mm) shows both borders.If the inner frame swallows the outer, you have simply recropped. Prompt: Frame-within-frame around [Subject], doorway, window, mirror, or arch as a second rectangle, nested attention."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for arrivals, farewells, affairs in corridors, and anyone pictured by a house. Do not drop a random arch behind a portrait and call it nested attention."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for arrivals, farewells, affairs in corridors, and anyone pictured by a house. Do not drop a random arch behind a portrait and call it nested attention."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dirty Frame occupies the outer edges with out-of-focus matter. Frame-in-frame is a graphic inner border, often sharp.",
+          "links": [
+            {
+              "text": "Dirty Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Windows stacks many apertures until the building is a grid of shots. Screen in Screen is a picture that is itself a display.",
+          "links": [
+            {
+              "text": "Windows",
+              "url": "https://melies.co/cinematic-techniques/composition/windows"
+            },
+            {
+              "text": "Screen in Screen",
+              "url": "https://melies.co/cinematic-techniques/composition/screen-in-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Negative Space can surround a small inner frame with emptiness. Voyeur is the ethical position of watching through that aperture from concealment.",
+          "links": [
+            {
+              "text": "Negative Space",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            },
+            {
+              "text": "Voyeur",
+              "url": "https://melies.co/cinematic-techniques/composition/voyeur"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dirty FrameWe are not supposed to have this view.",
+          "displayText": "Dirty Frame\nWe are not supposed to have this view.",
+          "links": [
+            {
+              "text": "Dirty FrameWe are not supposed to have this view.",
+              "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Negative SpaceLoneliness needs room.",
+          "displayText": "Negative Space\nLoneliness needs room.",
+          "links": [
+            {
+              "text": "Negative SpaceLoneliness needs room.",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dirty Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+        },
+        {
+          "text": "Windows",
+          "url": "https://melies.co/cinematic-techniques/composition/windows"
+        },
+        {
+          "text": "Screen in Screen",
+          "url": "https://melies.co/cinematic-techniques/composition/screen-in-screen"
+        },
+        {
+          "text": "Negative Space",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Voyeur",
+          "url": "https://melies.co/cinematic-techniques/composition/voyeur"
+        },
+        {
+          "text": "Dirty FrameWe are not supposed to have this view.",
+          "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+        },
+        {
+          "text": "Negative SpaceLoneliness needs room.",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/42192cfbcaa98a313c7df38d8a897967.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dirty-frame-040-foreground-obstruction-mini.webp",
+          "alt": "Dirty Frame"
+        },
+        {
+          "kind": "video",
+          "path": "media/d734365fbad1668a19694f50f3ad0d8e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/040-foreground-obstruction-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+          "alt": "Negative Space"
+        },
+        {
+          "kind": "video",
+          "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Dirty Frame occupies the outer edges with out-of-focus matter. Frame-in-frame is a graphic inner border, often sharp.Windows stacks many apertures until the building is a grid of shots. Screen in Screen is a picture that is itself a display.Negative Space can surround a small inner frame with emptiness. Voyeur is the ethical position of watching through that aperture from concealment.Dirty FrameWe are not supposed to have this view.Negative SpaceLoneliness needs room.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Searchers opens and closes on doorway compositions: desert and home as two countries split by a jamb. In the Mood for Love uses doorframes and corridor gaps to contain encounters that cannot be public."
+        },
+        {
+          "type": "paragraph",
+          "text": "Entering or leaving the inner rectangle is the cut you do not have to make."
+        },
+        {
+          "type": "list-item",
+          "text": "The Searchers 1956The opening and closing doorway compositions.",
+          "displayText": "The Searchers 1956\nThe opening and closing doorway compositions."
+        },
+        {
+          "type": "list-item",
+          "text": "In the Mood for Love 2000Doorframes and corridors contain the encounters.",
+          "displayText": "In the Mood for Love 2000\nDoorframes and corridors contain the encounters."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b7264f1278caf99f72e62d23c9b414e8.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/frame-in-frame/famous/00-the-searchers-1956.jpg",
+          "alt": "The Searchers 1956"
+        },
+        {
+          "kind": "image",
+          "path": "media/690d88803f9dfad76a1894a672ea9efc.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/frame-in-frame/famous/01-in-the-mood-for-love-2000.jpg",
+          "alt": "In the Mood for Love 2000"
+        }
+      ],
+      "sourceText": "In film The Searchers opens and closes on doorway compositions: desert and home as two countries split by a jamb. In the Mood for Love uses doorframes and corridor gaps to contain encounters that cannot be public.Entering or leaving the inner rectangle is the cut you do not have to make.The Searchers 1956The opening and closing doorway compositions.In the Mood for Love 2000Doorframes and corridors contain the encounters."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name both rectangles. Frame-within-frame around [Subject], doorway, window, mirror, or arch as a second rectangle, nested attention."
+        },
+        {
+          "type": "paragraph",
+          "text": "Describe the jamb, the threshold, and which space is brighter. Say whether we are inside looking out or outside looking in."
+        },
+        {
+          "type": "quote",
+          "text": "From inside a dim farmhouse, hold on a bright rectangular doorway framing a lone traveler outside. The family passes into the room while the traveler remains beyond the threshold. Locked wide shot, no push-in, natural exposure contrast."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=From+inside+a+dim+farmhouse,+hold+on+a+bright+rectangular+doorway+framing+a+lone+traveler+outside.+The+family+passes+into+the+room+while+the+traveler+remains+beyond+the+threshold.+Locked+wide+shot,+no+push-in,+natural+exposure+contrast."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name both rectangles. Frame-within-frame around [Subject], doorway, window, mirror, or arch as a second rectangle, nested attention.Describe the jamb, the threshold, and which space is brighter. Say whether we are inside looking out or outside looking in.Copy promptUse in Video GeneratorFrom inside a dim farmhouse, hold on a bright rectangular doorway framing a lone traveler outside. The family passes into the room while the traveler remains beyond the threshold. Locked wide shot, no push-in, natural exposure contrast.From inside a dim farmhouse, hold on a bright rectangular doorway framing a lone traveler outside. The family passes into the room while the traveler remains beyond the threshold. Locked wide shot, no push-in, natural exposure contrast."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a decorative arch. The tell is an ornamental curve that nobody could walk through, with the subject already filling the screen."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to show the inner border on at least three sides and to give the threshold a job."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a decorative arch. The tell is an ornamental curve that nobody could walk through, with the subject already filling the screen.The fix is to show the inner border on at least three sides and to give the threshold a job."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is frame within frame in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An architectural or graphic border inside the screen encloses the subject: door, window, arch, mirror, gap. There are two rectangles. The inner one decides belonging, exclusion, or being pictured."
+        },
+        {
+          "type": "heading",
+          "text": "Frame within Frame vs Dirty Frame",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dirty frame chews the outer edges with shoulders, glass, foliage, or crowd, often soft. A frame within a frame is a second hard rectangle around the action. One is occupancy of the edge. The other is a nested border. They can combine."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use frame within frame?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when someone is watched, trapped, welcomed, or pictured by a building. A crossing of the threshold should be able to matter. Do not use it as a pretty inner crop on a portrait."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt frame within frame for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for a second rectangle and name it. Example: Frame-within-frame around [Subject], doorway, window, mirror, or arch as a second rectangle, nested attention. State which side of the threshold we occupy and the exposure split."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is frame within frame in film?An architectural or graphic border inside the screen encloses the subject: door, window, arch, mirror, gap. There are two rectangles. The inner one decides belonging, exclusion, or being pictured.Frame within Frame vs Dirty FrameA dirty frame chews the outer edges with shoulders, glass, foliage, or crowd, often soft. A frame within a frame is a second hard rectangle around the action. One is occupancy of the edge. The other is a nested border. They can combine.When should I use frame within frame?Use it when someone is watched, trapped, welcomed, or pictured by a building. A crossing of the threshold should be able to matter. Do not use it as a pretty inner crop on a portrait.How do I prompt frame within frame for AI image or video?Ask for a second rectangle and name it. Example: Frame-within-frame around [Subject], doorway, window, mirror, or arch as a second rectangle, nested attention. State which side of the threshold we occupy and the exposure split."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name both rectangles. Frame-within-frame around [Subject], doorway, window, mirror, or arch as a second rectangle, nested attention.",
+      "Describe the jamb, the threshold, and which space is brighter. Say whether we are inside looking out or outside looking in."
+    ],
+    "example": "From inside a dim farmhouse, hold on a bright rectangular doorway framing a lone traveler outside. The family passes into the room while the traveler remains beyond the threshold. Locked wide shot, no push-in, natural exposure contrast."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/87e1bcce09b75dc8d9e4960d1c1a4a1b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/frame-in-frame.jpg",
+      "alt": "Frame within Frame frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/42192cfbcaa98a313c7df38d8a897967.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dirty-frame-040-foreground-obstruction-mini.webp",
+      "alt": "Dirty Frame"
+    },
+    {
+      "kind": "video",
+      "path": "media/d734365fbad1668a19694f50f3ad0d8e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/040-foreground-obstruction-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+      "alt": "Negative Space"
+    },
+    {
+      "kind": "video",
+      "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/b7264f1278caf99f72e62d23c9b414e8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/frame-in-frame/famous/00-the-searchers-1956.jpg",
+      "alt": "The Searchers 1956"
+    },
+    {
+      "kind": "image",
+      "path": "media/690d88803f9dfad76a1894a672ea9efc.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/frame-in-frame/famous/01-in-the-mood-for-love-2000.jpg",
+      "alt": "In the Mood for Love 2000"
+    },
+    {
+      "kind": "image",
+      "path": "media/3424ffc4f2af205caf54bf642accf865.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/frame-in-frame/hero.jpg",
+      "alt": "Frame within Frame",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "7ee618d62d409fe1f89b46c7e119cab311116da991a6d4599f469c2581a1fc1e"
+}

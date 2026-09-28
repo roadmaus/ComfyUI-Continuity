@@ -1,0 +1,466 @@
+{
+  "id": "time-and-motion/frozen-in-motion",
+  "slug": "frozen-in-motion",
+  "title": "Frozen in Motion",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frozen-in-motion-081-frozen-world-with-a-moving-viewpoint-mini.webp",
+  "detail": "details/time-and-motion/frozen-in-motion.json",
+  "aliases": [
+    "Time-stop environment"
+  ],
+  "description": "Frozen in motion stops the environment and most people while a chosen character, the viewpoint, or both continue to move. Particles, extras, and pigeons hang, and the rule of who may move is the entire effect.",
+  "thumbnail": "media/c702fc0092e9c05be32409ffa5919126.webp",
+  "video": "media/a4181faece96e67bdb95dad79830a24f.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/081-frozen-world-with-a-moving-viewpoint-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to separate a mind from consequence: superhuman perception, a wish to step outside a square, a kitchen instant stretched into a walk. Julie can run through a stopped Oslo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Quicksilver can work a room the rest of the world cannot occupy. Hair, weather, shadows, and loose objects must obey the same freeze or the illusion dies."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the whole picture should hold (freeze-frame), when the camera should orbit a crushed event (bullet time), or when crowds should race around a statue (timelapse human). Do not freeze the hero and the street together unless you mean a still."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it to separate a mind from consequence: superhuman perception, a wish to step outside a square, a kitchen instant stretched into a walk. Julie can run through a stopped Oslo.Quicksilver can work a room the rest of the world cannot occupy. Hair, weather, shadows, and loose objects must obey the same freeze or the illusion dies.It is the wrong tool when the whole picture should hold (freeze-frame), when the camera should orbit a crushed event (bullet time), or when crowds should race around a statue (timelapse human). Do not freeze the hero and the street together unless you mean a still."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Decide the rule: extras hold, fluids and debris are suspended, the subject and/or camera may travel. Use held extras and practical supports for simple beats, VFX or 3D for complex hangs."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Frozen-in-motion of [Subject], the world stopped mid-gesture, particles hanging, [Subject] or the camera still allowed to move."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Decide the rule: extras hold, fluids and debris are suspended, the subject and/or camera may travel. Use held extras and practical supports for simple beats, VFX or 3D for complex hangs.Prompt: Frozen-in-motion of [Subject], the world stopped mid-gesture, particles hanging, [Subject] or the camera still allowed to move."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when one person should walk a stopped street, or work a stopped kitchen, while pigeons and extras hang. Do not use it as a freeze of the entire frame, and do not race the crowd."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when one person should walk a stopped street, or work a stopped kitchen, while pigeons and extras hang. Do not use it as a freeze of the entire frame, and do not race the crowd."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Frozen in motion is not Freeze Frame (camera and world both stop). It is not Bullet Time (event crushed, camera orbits a sculpture).",
+          "links": [
+            {
+              "text": "Freeze Frame",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+            },
+            {
+              "text": "Bullet Time",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Timelapse Human (crowd races, hero holds). Slow Motion still advances everyone, only slower.",
+          "links": [
+            {
+              "text": "Timelapse Human",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-human"
+            },
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the permission list explicit."
+        },
+        {
+          "type": "list-item",
+          "text": "Bullet TimeA moment is so important it becomes architecture.",
+          "displayText": "Bullet Time\nA moment is so important it becomes architecture.",
+          "links": [
+            {
+              "text": "Bullet TimeA moment is so important it becomes architecture.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Freeze FrameEnd, joke, or evidence.",
+          "displayText": "Freeze Frame\nEnd, joke, or evidence.",
+          "links": [
+            {
+              "text": "Freeze FrameEnd, joke, or evidence.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Freeze Frame",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+        },
+        {
+          "text": "Bullet Time",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+        },
+        {
+          "text": "Timelapse Human",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-human"
+        },
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Bullet TimeA moment is so important it becomes architecture.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+        },
+        {
+          "text": "Freeze FrameEnd, joke, or evidence.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ebe019bb5b6086b3f4e494a68586760b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bullet-time-080-bullet-time-mini.webp",
+          "alt": "Bullet Time"
+        },
+        {
+          "kind": "video",
+          "path": "media/8fcec48b1bd8a21cecb0d881e78ad77c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/080-bullet-time-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1ad70976642309f23fa26ea36279f9f2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/freeze-frame-082-freeze-frame-mini.webp",
+          "alt": "Freeze Frame"
+        },
+        {
+          "kind": "video",
+          "path": "media/37917860b99448ecd248b6e9e204384a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/082-freeze-frame-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Frozen in motion is not Freeze Frame (camera and world both stop). It is not Bullet Time (event crushed, camera orbits a sculpture).It is not Timelapse Human (crowd races, hero holds). Slow Motion still advances everyone, only slower.Keep the permission list explicit.Bullet TimeA moment is so important it becomes architecture.Freeze FrameEnd, joke, or evidence.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "X-Men: Days of Future Past expands Quicksilver's Pentagon kitchen into a subjective instant the others cannot share. The Worst Person in the World lets Julie run through an Oslo whose other inhabitants are suspended."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Matrix rooftop is the orbiting cousin, bullet time, not this split of who may walk."
+        },
+        {
+          "type": "list-item",
+          "text": "X-Men: Days of Future Past 2014The Pentagon kitchen sequence expands Quicksilver’s subjective instant.",
+          "displayText": "X-Men: Days of Future Past 2014\nThe Pentagon kitchen sequence expands Quicksilver’s subjective instant."
+        },
+        {
+          "type": "list-item",
+          "text": "The Worst Person in the World 2021Julie runs through an Oslo whose other inhabitants are suspended.",
+          "displayText": "The Worst Person in the World 2021\nJulie runs through an Oslo whose other inhabitants are suspended."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/12f0b4727810e7f3cf0fa4e4c124bc94.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/frozen-in-motion/famous/00-x-men-days-of-future-past-2014.jpg",
+          "alt": "X-Men: Days of Future Past 2014"
+        },
+        {
+          "kind": "image",
+          "path": "media/816bad8addec01833a136f0f7a0a0f77.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/frozen-in-motion/famous/01-the-worst-person-in-the-world-2021.jpg",
+          "alt": "The Worst Person in the World 2021"
+        }
+      ],
+      "sourceText": "In film X-Men: Days of Future Past expands Quicksilver's Pentagon kitchen into a subjective instant the others cannot share. The Worst Person in the World lets Julie run through an Oslo whose other inhabitants are suspended.The Matrix rooftop is the orbiting cousin, bullet time, not this split of who may walk.X-Men: Days of Future Past 2014The Pentagon kitchen sequence expands Quicksilver’s subjective instant.The Worst Person in the World 2021Julie runs through an Oslo whose other inhabitants are suspended."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name who moves. Still: one active subject in a square of frozen pedestrians and hanging debris."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Action around [Subject] freezes mid-move while [Subject] and/or the camera may still travel. Coherent suspended poses, no breathing crowds, no racing extras, no array orbit unless you actually want bullet time."
+        },
+        {
+          "type": "quote",
+          "text": "A woman walks through a city square where all other people are motionless mid-gesture and pigeons hang in the air. Only she, her clothing and the following camera move. Coherent suspended poses, no breathing crowds, no melting birds, quiet suspended mood."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+woman+walks+through+a+city+square+where+all+other+people+are+motionless+mid-gesture+and+pigeons+hang+in+the+air.+Only+she,+her+clothing+and+the+following+camera+move.+Coherent+suspended+poses,+no+breathing+crowds,+no+melting+birds,+quiet+suspended+mood."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name who moves. Still: one active subject in a square of frozen pedestrians and hanging debris.Video: Action around [Subject] freezes mid-move while [Subject] and/or the camera may still travel. Coherent suspended poses, no breathing crowds, no racing extras, no array orbit unless you actually want bullet time.Copy promptUse in Video GeneratorA woman walks through a city square where all other people are motionless mid-gesture and pigeons hang in the air. Only she, her clothing and the following camera move. Coherent suspended poses, no breathing crowds, no melting birds, quiet suspended mood.A woman walks through a city square where all other people are motionless mid-gesture and pigeons hang in the air. Only she, her clothing and the following camera move. Coherent suspended poses, no breathing crowds, no melting birds, quiet suspended mood."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Freeze Frame, Bullet Time, or Timelapse Human. The tell is a fully still picture, an orbit around a statue, or people as smoke.",
+          "links": [
+            {
+              "text": "Freeze Frame",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+            },
+            {
+              "text": "Bullet Time",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+            },
+            {
+              "text": "Timelapse Human",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-human"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: write the freeze rule, hang the extras, and let only the chosen body or camera continue."
+        }
+      ],
+      "links": [
+        {
+          "text": "Freeze Frame",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+        },
+        {
+          "text": "Bullet Time",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+        },
+        {
+          "text": "Timelapse Human",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-human"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Freeze Frame, Bullet Time, or Timelapse Human. The tell is a fully still picture, an orbit around a statue, or people as smoke.Fix: write the freeze rule, hang the extras, and let only the chosen body or camera continue."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Frozen in Motion in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Frozen in motion stops most of the world while a chosen person and/or the camera keep moving, so one clock splits from the rest."
+        },
+        {
+          "type": "heading",
+          "text": "Frozen in Motion vs Bullet Time",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Bullet time walks the camera around a nearly frozen event. Frozen in motion lets a character inhabit a stopped world, not only inspect it from an orbit."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Frozen in Motion?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When one person's experience should leave the world's clock: a run through a stopped city, a superhuman chore in a held kitchen."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Frozen in Motion for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a stopped environment, hanging particles, and a clear permission: who may move. Ban a full freeze, a racing crowd, and an array orbit unless you want those cousins."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Frozen in Motion in film?Frozen in motion stops most of the world while a chosen person and/or the camera keep moving, so one clock splits from the rest.Frozen in Motion vs Bullet TimeBullet time walks the camera around a nearly frozen event. Frozen in motion lets a character inhabit a stopped world, not only inspect it from an orbit.When should I use Frozen in Motion?When one person's experience should leave the world's clock: a run through a stopped city, a superhuman chore in a held kitchen.How do I prompt Frozen in Motion for AI image or video?Write a stopped environment, hanging particles, and a clear permission: who may move. Ban a full freeze, a racing crowd, and an array orbit unless you want those cousins."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name who moves. Still: one active subject in a square of frozen pedestrians and hanging debris.",
+      "Video: Action around [Subject] freezes mid-move while [Subject] and/or the camera may still travel. Coherent suspended poses, no breathing crowds, no racing extras, no array orbit unless you actually want bullet time."
+    ],
+    "example": "A woman walks through a city square where all other people are motionless mid-gesture and pigeons hang in the air. Only she, her clothing and the following camera move. Coherent suspended poses, no breathing crowds, no melting birds, quiet suspended mood."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/a4181faece96e67bdb95dad79830a24f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/081-frozen-world-with-a-moving-viewpoint-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c702fc0092e9c05be32409ffa5919126.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frozen-in-motion-081-frozen-world-with-a-moving-viewpoint-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9c53c8ae6ab351c2c25b728cb71f08a9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/frozen-in-motion.jpg",
+      "alt": "Frozen in Motion frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/ebe019bb5b6086b3f4e494a68586760b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bullet-time-080-bullet-time-mini.webp",
+      "alt": "Bullet Time"
+    },
+    {
+      "kind": "video",
+      "path": "media/8fcec48b1bd8a21cecb0d881e78ad77c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/080-bullet-time-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1ad70976642309f23fa26ea36279f9f2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/freeze-frame-082-freeze-frame-mini.webp",
+      "alt": "Freeze Frame"
+    },
+    {
+      "kind": "video",
+      "path": "media/37917860b99448ecd248b6e9e204384a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/082-freeze-frame-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12f0b4727810e7f3cf0fa4e4c124bc94.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/frozen-in-motion/famous/00-x-men-days-of-future-past-2014.jpg",
+      "alt": "X-Men: Days of Future Past 2014"
+    },
+    {
+      "kind": "image",
+      "path": "media/816bad8addec01833a136f0f7a0a0f77.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/frozen-in-motion/famous/01-the-worst-person-in-the-world-2021.jpg",
+      "alt": "The Worst Person in the World 2021"
+    },
+    {
+      "kind": "image",
+      "path": "media/7b1212a3f3cd42fde979f3b847bf2217.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/frozen-in-motion/hero.jpg",
+      "alt": "Frozen in Motion",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "41b5f51387c17b57fa2c723465aaab55e917be0d3d3d7445d754b129a5c579c3"
+}

@@ -1,0 +1,440 @@
+{
+  "id": "genre-looks/cinema-verite",
+  "slug": "cinema-verite",
+  "title": "Cinéma Vérité",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinema-verite.webp",
+  "detail": "details/genre-looks/cinema-verite.json",
+  "aliases": [],
+  "description": "Cinéma vérité uses available light, zoom-to-find framing, and the filmmaker's presence as a catalyst, so the camera is admitted into the room rather than hidden. Unpretty 16mm or digital frames, mixed color temperature, and a zoom hunting the moment are the physical signature, not a recovered amateur tape.",
+  "thumbnail": "media/698c2a04908f5536012f8e28784057e5.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Life is not staged for a key light. Someone talks, the zoom finds them, a window or a practical is the source, and the filmmaker's question or proximity changes what happens."
+        },
+        {
+          "type": "paragraph",
+          "text": "The frame can be late, centered wrong, or blown at the window. That is the contract."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when polish is the point, or when a fictional camcorder is the story. Blockbuster Gloss would be propaganda here.",
+          "links": [
+            {
+              "text": "Blockbuster Gloss",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Found footage needs a diegetic operator in danger. Documentary is broader: interviews, archive, and observation that may sit back.",
+          "links": [
+            {
+              "text": "Found footage",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            },
+            {
+              "text": "Documentary",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Blockbuster Gloss",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+        },
+        {
+          "text": "Found footage",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        },
+        {
+          "text": "Documentary",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Life is not staged for a key light. Someone talks, the zoom finds them, a window or a practical is the source, and the filmmaker's question or proximity changes what happens.The frame can be late, centered wrong, or blown at the window. That is the contract.It is the wrong tool when polish is the point, or when a fictional camcorder is the story. Blockbuster Gloss would be propaganda here.Found footage needs a diegetic operator in danger. Documentary is broader: interviews, archive, and observation that may sit back."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Available light only, or a small on-camera bounce that still reads as room light. 16mm or a long ENG zoom (the 12-120 class), hunting focus and size."
+        },
+        {
+          "type": "paragraph",
+          "text": "Handheld or a monopod, eye height, reacting. Leave mixed tungsten and daylight."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a rim or a pretty backlight. Prompt available light, unpretty frames, zooming to find, life unstaged."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Available light only, or a small on-camera bounce that still reads as room light. 16mm or a long ENG zoom (the 12-120 class), hunting focus and size.Handheld or a monopod, eye height, reacting. Leave mixed tungsten and daylight.Do not add a rim or a pretty backlight. Prompt available light, unpretty frames, zooming to find, life unstaged."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when style would feel like a lie and the filmmaker's presence is part of the event. Do not use it as a shake filter on a scripted scene that still has three-point lighting."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when style would feel like a lie and the filmmaker's presence is part of the event. Do not use it as a shake filter on a scripted scene that still has three-point lighting."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cinéma vérité is intervention and available light in documentary reality. Documentary includes sit-down interviews and archive.",
+          "links": [
+            {
+              "text": "Cinéma vérité",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            },
+            {
+              "text": "Documentary",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "French New Wave borrows the tools for fiction, then adds jump cuts and cinephile blocking. Handheld is only the body.",
+          "links": [
+            {
+              "text": "French New Wave",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/french-new-wave"
+            },
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Available Light is only the source. Found Footage invents a tape inside the story.",
+          "links": [
+            {
+              "text": "Available Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            },
+            {
+              "text": "Found Footage",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "displayText": "Handheld\nUrgency, documentary truth, or a mind that cannot sit still.",
+          "links": [
+            {
+              "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Available LightCommit to the hour you have.",
+          "displayText": "Available Light\nCommit to the hour you have.",
+          "links": [
+            {
+              "text": "Available LightCommit to the hour you have.",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cinéma vérité",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "Documentary",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+        },
+        {
+          "text": "French New Wave",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/french-new-wave"
+        },
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Available Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Found Footage",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        },
+        {
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Available LightCommit to the hour you have.",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+          "alt": "Handheld"
+        },
+        {
+          "kind": "video",
+          "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+          "alt": "Available Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Cinéma vérité is intervention and available light in documentary reality. Documentary includes sit-down interviews and archive.French New Wave borrows the tools for fiction, then adds jump cuts and cinephile blocking. Handheld is only the body.Available Light is only the source. Found Footage invents a tape inside the story.HandheldUrgency, documentary truth, or a mind that cannot sit still.Available LightCommit to the hour you have.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Don't Look Back (zoom-to-find, dressing rooms, a public figure not styled for film). Primary (campaign interiors, available light, the camera in the room)."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Battle of Algiers (newsreel immediacy as a staged cousin of this grammar). Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Don't Look Back (zoom-to-find, dressing rooms, a public figure not styled for film). Primary (campaign interiors, available light, the camera in the room).The Battle of Algiers (newsreel immediacy as a staged cousin of this grammar). Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cinéma vérité treatment of [Subject], available light, unpretty frames, zooming to find, mixed color temperature, life unstaged. Name the window or practical."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a rim, a crane, or a recovered-tape timestamp."
+        },
+        {
+          "type": "quote",
+          "text": "Cinéma vérité treatment of [Subject], available light, unpretty frames, zooming to find, life unstaged."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Cin%C3%A9ma+v%C3%A9rit%C3%A9+treatment+of+[Subject],+available+light,+unpretty+frames,+zooming+to+find,+life+unstaged."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Cinéma vérité treatment of [Subject], available light, unpretty frames, zooming to find, mixed color temperature, life unstaged. Name the window or practical.Do not add a rim, a crane, or a recovered-tape timestamp.Copy promptUse in Image GeneratorCinéma vérité treatment of [Subject], available light, unpretty frames, zooming to find, life unstaged.Cinéma vérité treatment of [Subject], available light, unpretty frames, zooming to find, life unstaged."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Found Footage or pretty Documentary: a timestamp and panic, or a keyed interview with a clean backlight. The tell is three-point light, a rim, or a device story.",
+          "links": [
+            {
+              "text": "Found Footage",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            },
+            {
+              "text": "Documentary",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: kill the film lights, let the zoom hunt, and keep the filmmaker in the room as a presence, not a horror operator."
+        }
+      ],
+      "links": [
+        {
+          "text": "Found Footage",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        },
+        {
+          "text": "Documentary",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Found Footage or pretty Documentary: a timestamp and panic, or a keyed interview with a clean backlight. The tell is three-point light, a rim, or a device story.Fix: kill the film lights, let the zoom hunt, and keep the filmmaker in the room as a presence, not a horror operator."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Cinéma Vérité in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A documentary look in which available light, zoom-to-find framing, and the filmmaker's presence provoke or witness unstaged life. The camera is a catalyst, not a hidden observer with a key and a rim."
+        },
+        {
+          "type": "heading",
+          "text": "Cinéma Vérité vs Documentary",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Documentary is a broad rhetoric: interview, archive, observation, even mock forms. Cinéma vérité is a specific physical method: available light, zoom, presence. A sit-down with a window key can be documentary without being vérité."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Cinéma Vérité?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When prettifying the room would feel like propaganda, and the filmmaker's being there matters. Skip it for recovered-tape horror, for billboard gloss, or for a scripted scene that still wants a rim light."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Cinéma Vérité for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Cinéma vérité treatment of [Subject], available light, unpretty frames, zooming to find, mixed color, life unstaged. Name the real source. Do not add a timestamp, a rim, or a crane."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Cinéma Vérité in film?A documentary look in which available light, zoom-to-find framing, and the filmmaker's presence provoke or witness unstaged life. The camera is a catalyst, not a hidden observer with a key and a rim.Cinéma Vérité vs DocumentaryDocumentary is a broad rhetoric: interview, archive, observation, even mock forms. Cinéma vérité is a specific physical method: available light, zoom, presence. A sit-down with a window key can be documentary without being vérité.When should I use Cinéma Vérité?When prettifying the room would feel like propaganda, and the filmmaker's being there matters. Skip it for recovered-tape horror, for billboard gloss, or for a scripted scene that still wants a rim light.How do I prompt Cinéma Vérité for AI image or video?Write: Cinéma vérité treatment of [Subject], available light, unpretty frames, zooming to find, mixed color, life unstaged. Name the real source. Do not add a timestamp, a rim, or a crane."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Cinéma vérité treatment of [Subject], available light, unpretty frames, zooming to find, mixed color temperature, life unstaged. Name the window or practical.",
+      "Do not add a rim, a crane, or a recovered-tape timestamp."
+    ],
+    "example": "Cinéma vérité treatment of [Subject], available light, unpretty frames, zooming to find, life unstaged."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/698c2a04908f5536012f8e28784057e5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinema-verite.webp",
+      "alt": "Cinéma Vérité example"
+    },
+    {
+      "kind": "image",
+      "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+      "alt": "Handheld"
+    },
+    {
+      "kind": "video",
+      "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+      "alt": "Available Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/8d1e74c837e68388b1864b52b808ea0f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cinema-verite/hero.jpg",
+      "alt": "Cinéma Vérité",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "19ea7c328ac52e69d028a936e3c242bef2af9df81d0d66a170e07744d85503c2"
+}

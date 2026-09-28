@@ -1,0 +1,376 @@
+{
+  "id": "lighting/eye-light",
+  "slug": "eye-light",
+  "title": "Eye Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/eye-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-light.webp",
+  "detail": "details/lighting/eye-light.json",
+  "aliases": [],
+  "description": "An eye light in eye light cinematography is a small frontal source used to put a catchlight in the irises or to lift the eyes a fraction without becoming a fill. The face can stay in shadow; the eyes remain human, not lamps.",
+  "thumbnail": "media/768a841579b6d80b545b8a54ad8ebdd5.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A dark portrait dies if the sockets are empty pits with no specular. A tiny reflection of a lamp in each iris tells you there is a person looking."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crime close-ups and night interrogations use it so the audience can track thought while the room stays black. It is the wrong tool when you need to open a whole cheek (that is fill) or when the character should feel blind, dead, or monstrous.",
+          "links": [
+            {
+              "text": "fill",
+              "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the eyes glow, the model has turned the catchlight into an emitter."
+        }
+      ],
+      "links": [
+        {
+          "text": "fill",
+          "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A dark portrait dies if the sockets are empty pits with no specular. A tiny reflection of a lamp in each iris tells you there is a person looking.Crime close-ups and night interrogations use it so the audience can track thought while the room stays black. It is the wrong tool when you need to open a whole cheek (that is fill) or when the character should feel blind, dead, or monstrous.If the eyes glow, the model has turned the catchlight into an emitter."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place a small, weak source near camera, often just above the lens, dim enough that it does not flatten the key's shadow pattern. A white card, a dim LED, or a distant practical can be enough."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is usually white or matching the key; keep it out of the skin as much as possible. You want a pinpoint in the iris, not a beauty wash."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: A dark portrait of [Subject], face mostly in shadow, a tiny white reflection of a lamp sitting in each human iris. Eyes stay brown or grey, not glowing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place a small, weak source near camera, often just above the lens, dim enough that it does not flatten the key's shadow pattern. A white card, a dim LED, or a distant practical can be enough.Color is usually white or matching the key; keep it out of the skin as much as possible. You want a pinpoint in the iris, not a beauty wash.Prompt: A dark portrait of [Subject], face mostly in shadow, a tiny white reflection of a lamp sitting in each human iris. Eyes stay brown or grey, not glowing."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to keep a soul in a dark portrait, for example a close-up where the key leaves the eyes in wells. Do not turn the pupils into light sources."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to keep a soul in a dark portrait, for example a close-up where the key leaves the eyes in wells. Do not turn the pupils into light sources."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fill light opens the whole shadow cheek. Key light shapes the face.",
+          "links": [
+            {
+              "text": "Fill light",
+              "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+            },
+            {
+              "text": "Key light",
+              "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Low-key lighting is the contrast environment that often needs an eye light. Top light without an eye light leaves sockets hollow on purpose.",
+          "links": [
+            {
+              "text": "Low-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            },
+            {
+              "text": "Top light",
+              "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "displayText": "Low-Key Lighting\nMystery, crime, or moral night.",
+          "links": [
+            {
+              "text": "Low-Key LightingMystery, crime, or moral night.",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Key LightDecide where the world is lit from. Everything else follows.",
+          "displayText": "Key Light\nDecide where the world is lit from. Everything else follows.",
+          "links": [
+            {
+              "text": "Key LightDecide where the world is lit from. Everything else follows.",
+              "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Fill light",
+          "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+        },
+        {
+          "text": "Key light",
+          "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+        },
+        {
+          "text": "Low-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Top light",
+          "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+        },
+        {
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Key LightDecide where the world is lit from. Everything else follows.",
+          "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+          "alt": "Low-Key Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/060335b879d527a7f44190f4b1d160cf.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/key-light.webp",
+          "alt": "Key Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Fill light opens the whole shadow cheek. Key light shapes the face.Low-key lighting is the contrast environment that often needs an eye light. Top light without an eye light leaves sockets hollow on purpose.Low-Key LightingMystery, crime, or moral night.Key LightDecide where the world is lit from. Everything else follows.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Godfather sometimes withholds even this glint, which is why a tiny eye light in other Gordon Willis-adjacent close-ups feels like a choice. No Country for Old Men keeps dark rooms with human catchlights, not shining irises."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the physics: a reflection, not an emission."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Godfather sometimes withholds even this glint, which is why a tiny eye light in other Gordon Willis-adjacent close-ups feels like a choice. No Country for Old Men keeps dark rooms with human catchlights, not shining irises.Use the physics: a reflection, not an emission."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Specify a reflection, not a glow. Use: \"A dark portrait of [Subject], face mostly in shadow, a tiny white reflection of a lamp sitting in each human iris."
+        },
+        {
+          "type": "paragraph",
+          "text": "\" Keep the key off-axis so the rest of the face stays dark."
+        },
+        {
+          "type": "quote",
+          "text": "A dark portrait of [Subject], face mostly in shadow, a tiny white reflection of a lamp sitting in each human iris. Eyes stay brown or grey, not glowing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=A+dark+portrait+of+[Subject],+face+mostly+in+shadow,+a+tiny+white+reflection+of+a+lamp+sitting+in+each+human+iris.+Eyes+stay+brown+or+grey,+not+glowing."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Specify a reflection, not a glow. Use: \"A dark portrait of [Subject], face mostly in shadow, a tiny white reflection of a lamp sitting in each human iris.\" Keep the key off-axis so the rest of the face stays dark.Copy promptUse in Image GeneratorA dark portrait of [Subject], face mostly in shadow, a tiny white reflection of a lamp sitting in each human iris. Eyes stay brown or grey, not glowing.A dark portrait of [Subject], face mostly in shadow, a tiny white reflection of a lamp sitting in each human iris. Eyes stay brown or grey, not glowing."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is fill or supernatural glowing eyes. The tell is an opened face, or irises emitting light.",
+          "links": [
+            {
+              "text": "fill",
+              "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by dimming the frontal source to a catchlight and stating eye color as a surface."
+        }
+      ],
+      "links": [
+        {
+          "text": "fill",
+          "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is fill or supernatural glowing eyes. The tell is an opened face, or irises emitting light.Fix it by dimming the frontal source to a catchlight and stating eye color as a surface."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is an eye light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A small frontal source that creates catchlights in the irises or slightly lifts the eyes. It does not relight the face."
+        },
+        {
+          "type": "heading",
+          "text": "Eye light vs fill light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fill opens the shadow side of the whole face. An eye light is smaller and only puts a specular in the eyes, or a whisper of exposure there."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use an eye light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it in a dark portrait when the audience must still meet the gaze. Skip it when empty sockets are the point."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt an eye light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Describe a tiny white lamp reflection in each human iris, face remaining in shadow, eyes a natural brown or grey, not glowing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is an eye light in film?A small frontal source that creates catchlights in the irises or slightly lifts the eyes. It does not relight the face.Eye light vs fill lightFill opens the shadow side of the whole face. An eye light is smaller and only puts a specular in the eyes, or a whisper of exposure there.When should I use an eye light?Use it in a dark portrait when the audience must still meet the gaze. Skip it when empty sockets are the point.How do I prompt an eye light for AI image or video?Describe a tiny white lamp reflection in each human iris, face remaining in shadow, eyes a natural brown or grey, not glowing."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Specify a reflection, not a glow. Use: \"A dark portrait of [Subject], face mostly in shadow, a tiny white reflection of a lamp sitting in each human iris.",
+      "\" Keep the key off-axis so the rest of the face stays dark."
+    ],
+    "example": "A dark portrait of [Subject], face mostly in shadow, a tiny white reflection of a lamp sitting in each human iris. Eyes stay brown or grey, not glowing."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/768a841579b6d80b545b8a54ad8ebdd5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-light.webp",
+      "alt": "Eye Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+      "alt": "Low-Key Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/060335b879d527a7f44190f4b1d160cf.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/key-light.webp",
+      "alt": "Key Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/d7bd52d5db07df5b830b5429cfb38db2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/eye-light/hero.jpg",
+      "alt": "Eye Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "8ce24f7926b4ef3c4c4069119f4846bff702c87f8f7995723cfb64d58aba6dce"
+}

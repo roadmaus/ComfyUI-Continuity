@@ -1,0 +1,413 @@
+{
+  "id": "composition/clean-frame",
+  "slug": "clean-frame",
+  "title": "Clean Frame",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/clean-frame",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/clean-frame.webp",
+  "detail": "details/composition/clean-frame.json",
+  "aliases": [],
+  "description": "A clean frame in clean frame cinematography keeps the edges empty of accidental objects so isolation arrives by tidiness, not by blur. The diagram has no landlord in the corners, which is studio-poster clarity even on a real street.",
+  "thumbnail": "media/c1ca2ca3589200a7f0405496227143cc.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Nothing extra. Who owns space is whoever you left in the rectangle."
+        },
+        {
+          "type": "paragraph",
+          "text": "A driver against night, a bottle on seamless, a dancer in a cleared hall: the edges do not argue. It is the wrong tool for eavesdropping and for documentary crowding."
+        },
+        {
+          "type": "paragraph",
+          "text": ", a clean frame may be a lie unless someone in the story has already tidied for an inspection. Clean is not the same as empty."
+        },
+        {
+          "type": "paragraph",
+          "text": "A fully dressed set can still be clean if no lamp, plant, or shoulder nicks the four sides. Negative space is extra emptiness."
+        },
+        {
+          "type": "paragraph",
+          "text": "Clean is extra discipline."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Nothing extra. Who owns space is whoever you left in the rectangle.A driver against night, a bottle on seamless, a dancer in a cleared hall: the edges do not argue. It is the wrong tool for eavesdropping and for documentary crowding., a clean frame may be a lie unless someone in the story has already tidied for an inspection. Clean is not the same as empty.A fully dressed set can still be clean if no lamp, plant, or shoulder nicks the four sides. Negative space is extra emptiness.Clean is extra discipline."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Clear the near field. Watch all four edges on the monitor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use flags and art department, not only a long lens. A longer lens helps by excluding, but a wide clean frame is a stronger claim: you composed the whole room and still kept the borders empty."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stop down if you need the empty walls sharp. Prompt: Clean frame of [Subject], edges empty, no accidental objects, studio-poster clarity, isolation by tidiness."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Clear the near field. Watch all four edges on the monitor.Use flags and art department, not only a long lens. A longer lens helps by excluding, but a wide clean frame is a stronger claim: you composed the whole room and still kept the borders empty.Stop down if you need the empty walls sharp. Prompt: Clean frame of [Subject], edges empty, no accidental objects, studio-poster clarity, isolation by tidiness."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for product, ritual, poster portraits, and any character who lives in control. Do not clean a view that should feel stolen."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for product, ritual, poster portraits, and any character who lives in control. Do not clean a view that should feel stolen."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dirty Frame occupies the edges. That is the opposite ethic.",
+          "links": [
+            {
+              "text": "Dirty Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Negative Space makes emptiness a mass, which a clean frame may also do, but a clean frame can be full of designed set as long as the borders are tidy. Centered Composition often wants clean edges so the altar is not nibbled.",
+          "links": [
+            {
+              "text": "Negative Space",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            },
+            {
+              "text": "Centered Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Void deletes the world. Clean still allows a world, just a disciplined one.",
+          "links": [
+            {
+              "text": "Void",
+              "url": "https://melies.co/cinematic-techniques/composition/void"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Negative SpaceLoneliness needs room.",
+          "displayText": "Negative Space\nLoneliness needs room.",
+          "links": [
+            {
+              "text": "Negative SpaceLoneliness needs room.",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "displayText": "Centered Composition\nControl, ritual, comedy, or fate.",
+          "links": [
+            {
+              "text": "Centered CompositionControl, ritual, comedy, or fate.",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dirty Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+        },
+        {
+          "text": "Negative Space",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Centered Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Void",
+          "url": "https://melies.co/cinematic-techniques/composition/void"
+        },
+        {
+          "text": "Negative SpaceLoneliness needs room.",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+          "alt": "Negative Space"
+        },
+        {
+          "kind": "video",
+          "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+          "alt": "Centered Composition"
+        },
+        {
+          "kind": "video",
+          "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Dirty Frame occupies the edges. That is the opposite ethic.Negative Space makes emptiness a mass, which a clean frame may also do, but a clean frame can be full of designed set as long as the borders are tidy. Centered Composition often wants clean edges so the altar is not nibbled.Void deletes the world. Clean still allows a world, just a disciplined one.Negative SpaceLoneliness needs room.Centered CompositionControl, ritual, comedy, or fate.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Drive isolates night figures and cars with poster discipline: edges held, little accident. Product cinema clears tables until an object is a monument."
+        },
+        {
+          "type": "paragraph",
+          "text": "The grammar is control. A scuff on that control should be intended."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Drive isolates night figures and cars with poster discipline: edges held, little accident. Product cinema clears tables until an object is a monument.The grammar is control. A scuff on that control should be intended."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Forbid the corners. Clean frame of [Subject], edges empty, no accidental objects, studio-poster clarity, isolation by tidiness."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say no foreground occluders, margins clear. If the set is dressed, add fully dressed room, edges still empty of accident."
+        },
+        {
+          "type": "quote",
+          "text": "Clean frame of [Subject], edges empty, no accidental objects, studio-poster clarity, isolation by tidiness."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Clean+frame+of+[Subject],+edges+empty,+no+accidental+objects,+studio-poster+clarity,+isolation+by+tidiness."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Forbid the corners. Clean frame of [Subject], edges empty, no accidental objects, studio-poster clarity, isolation by tidiness.Say no foreground occluders, margins clear. If the set is dressed, add fully dressed room, edges still empty of accident.Copy promptUse in Image GeneratorClean frame of [Subject], edges empty, no accidental objects, studio-poster clarity, isolation by tidiness.Clean frame of [Subject], edges empty, no accidental objects, studio-poster clarity, isolation by tidiness."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a dirty street pretending to be a poster, or a Void you got by turning off the lights. The tell is a stray shoulder, a plant in the corner, or a black field with no place.",
+          "links": [
+            {
+              "text": "Void",
+              "url": "https://melies.co/cinematic-techniques/composition/void"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to clear the edges or to admit you wanted occupied edges and shoot Dirty Frame.",
+          "links": [
+            {
+              "text": "Dirty Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Void",
+          "url": "https://melies.co/cinematic-techniques/composition/void"
+        },
+        {
+          "text": "Dirty Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a dirty street pretending to be a poster, or a Void you got by turning off the lights. The tell is a stray shoulder, a plant in the corner, or a black field with no place.The fix is to clear the edges or to admit you wanted occupied edges and shoot Dirty Frame."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a clean frame in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "The edges are empty of accidental objects. Every inch is chosen. Isolation comes from tidiness. The camera is granted a view, not a peephole."
+        },
+        {
+          "type": "heading",
+          "text": "Clean Frame vs Negative Space",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Negative space is a large empty mass that acts in the story. A clean frame is about edges without accident. You can have a crowded, designed interior that is still clean at the borders. You can also have dirty edges around a tiny figure in a huge sky."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a clean frame?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for control, product, ritual, and poster isolation. Do not tidy a stolen view or a documentary crush."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt clean frame for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban occluders. Example: Clean frame of [Subject], edges empty, no accidental objects, studio-poster clarity, isolation by tidiness. Add no foreground objects at the edges. Models love plants in corners. Forbid them."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a clean frame in film?The edges are empty of accidental objects. Every inch is chosen. Isolation comes from tidiness. The camera is granted a view, not a peephole.Clean Frame vs Negative SpaceNegative space is a large empty mass that acts in the story. A clean frame is about edges without accident. You can have a crowded, designed interior that is still clean at the borders. You can also have dirty edges around a tiny figure in a huge sky.When should I use a clean frame?Use it for control, product, ritual, and poster isolation. Do not tidy a stolen view or a documentary crush.How do I prompt clean frame for AI image or video?Ban occluders. Example: Clean frame of [Subject], edges empty, no accidental objects, studio-poster clarity, isolation by tidiness. Add no foreground objects at the edges. Models love plants in corners. Forbid them."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Forbid the corners. Clean frame of [Subject], edges empty, no accidental objects, studio-poster clarity, isolation by tidiness.",
+      "Say no foreground occluders, margins clear. If the set is dressed, add fully dressed room, edges still empty of accident."
+    ],
+    "example": "Clean frame of [Subject], edges empty, no accidental objects, studio-poster clarity, isolation by tidiness."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/c1ca2ca3589200a7f0405496227143cc.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/clean-frame.webp",
+      "alt": "Clean Frame example"
+    },
+    {
+      "kind": "image",
+      "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+      "alt": "Negative Space"
+    },
+    {
+      "kind": "video",
+      "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+      "alt": "Centered Composition"
+    },
+    {
+      "kind": "video",
+      "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/b2f3e92f5f48b2bb8ad32e58857fcc39.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/clean-frame/hero.jpg",
+      "alt": "Clean Frame",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "d72a8175e120eccf27d59afa63774ceb0d5124aea992cd3add5b464093187e60"
+}

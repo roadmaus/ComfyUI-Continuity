@@ -1,0 +1,436 @@
+{
+  "id": "genre-looks/weirdcore",
+  "slug": "weirdcore",
+  "title": "Weirdcore",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/weirdcore",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/weirdcore.webp",
+  "detail": "details/genre-looks/weirdcore.json",
+  "aliases": [],
+  "description": "The weirdcore aesthetic renders the familiar incorrectly: early-web compression, low-res sacred images, off-center crops, and a joke that is also a threat. The file looks like it should not have opened. Light is on-camera flash or a dim analog room, not a designed key.",
+  "thumbnail": "media/eb4f15d8bb2dd5a4da9195b9010aca70.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face is cut by the frame edge. A caption sits in a default font."
+        },
+        {
+          "type": "paragraph",
+          "text": "JPEG blocks crawl. A toy in the dark is both funny and wrong."
+        },
+        {
+          "type": "paragraph",
+          "text": "Resolution is a weapon. The familiar (a bedroom, a mall, a smile) is encoded badly on purpose."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Dreamcore. Dreamcore is soft, spatial, analog-liminal.",
+          "links": [
+            {
+              "text": "Dreamcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Weirdcore is digital-degraded, captioned, clipart-adjacent. It is not Altered State smear.",
+          "links": [
+            {
+              "text": "Altered State",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The warp is compression and crop, not a trip."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dreamcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+        },
+        {
+          "text": "Altered State",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A face is cut by the frame edge. A caption sits in a default font.JPEG blocks crawl. A toy in the dark is both funny and wrong.Resolution is a weapon. The familiar (a bedroom, a mall, a smile) is encoded badly on purpose.It is not Dreamcore. Dreamcore is soft, spatial, analog-liminal.Weirdcore is digital-degraded, captioned, clipart-adjacent. It is not Altered State smear.The warp is compression and crop, not a trip."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crush the resolution. Allow JPEG artifacts, 240p, chromatic cheapness."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crop faces wrong. On-camera flash or underexposed analog dark."
+        },
+        {
+          "type": "paragraph",
+          "text": "Optional captions. Palette: Windows-era interiors, flash skin, crushed blacks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt early-web dread, low-res sacred, a joke that is also a threat."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Crush the resolution. Allow JPEG artifacts, 240p, chromatic cheapness.Crop faces wrong. On-camera flash or underexposed analog dark.Optional captions. Palette: Windows-era interiors, flash skin, crushed blacks.Prompt early-web dread, low-res sacred, a joke that is also a threat."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the familiar must look incorrectly encoded. Do not use it for a soft memory hall, for a psychedelic warp, or for polished vaporwave marble."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the familiar must look incorrectly encoded. Do not use it for a soft memory hall, for a psychedelic warp, or for polished vaporwave marble."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Weirdcore is low-res, cropped, captioned threat. Dreamcore is a soft empty room.",
+          "links": [
+            {
+              "text": "Weirdcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/weirdcore"
+            },
+            {
+              "text": "Dreamcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Altered State smears perception. Vaporwave is pastel, marble, and tape-nostalgia without the joke-threat.",
+          "links": [
+            {
+              "text": "Altered State",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            },
+            {
+              "text": "Vaporwave",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Stylistic Suck is amateur video as a film's voice. Weirdcore is specifically early-web incorrectness.",
+          "links": [
+            {
+              "text": "Stylistic Suck",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DreamcoreNostalgia with the safety removed.",
+          "displayText": "Dreamcore\nNostalgia with the safety removed.",
+          "links": [
+            {
+              "text": "DreamcoreNostalgia with the safety removed.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Altered StateThe mind is the location.",
+          "displayText": "Altered State\nThe mind is the location.",
+          "links": [
+            {
+              "text": "Altered StateThe mind is the location.",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Weirdcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/weirdcore"
+        },
+        {
+          "text": "Dreamcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+        },
+        {
+          "text": "Altered State",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        },
+        {
+          "text": "Vaporwave",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+        },
+        {
+          "text": "Stylistic Suck",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck"
+        },
+        {
+          "text": "DreamcoreNostalgia with the safety removed.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+        },
+        {
+          "text": "Altered StateThe mind is the location.",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f3b6c79e809226ceda09f46eeebf2c7d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dreamcore.webp",
+          "alt": "Dreamcore"
+        },
+        {
+          "kind": "image",
+          "path": "media/a3332f43e9375fea06874056e78399cb.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/altered-state-altered-state-mini.webp",
+          "alt": "Altered State"
+        },
+        {
+          "kind": "video",
+          "path": "media/b50cc309bf7987ba369a61c9377d7e86.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/altered-state-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Weirdcore is low-res, cropped, captioned threat. Dreamcore is a soft empty room.Altered State smears perception. Vaporwave is pastel, marble, and tape-nostalgia without the joke-threat.Stylistic Suck is amateur video as a film's voice. Weirdcore is specifically early-web incorrectness.DreamcoreNostalgia with the safety removed.Altered StateThe mind is the location.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Skinamarink (dark analog rooms, toys, faces withheld, internet-horror adjacent). Internet horror stills and early-web images supply the native grammar."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Skinamarink (dark analog rooms, toys, faces withheld, internet-horror adjacent). Internet horror stills and early-web images supply the native grammar.Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Weirdcore image of [Subject], early-web dread, low-res sacred, wrong crop, JPEG artifacts, a joke that is also a threat. Name the caption or the chopped face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not polish, and do not soften into a liminal pool."
+        },
+        {
+          "type": "quote",
+          "text": "Weirdcore image of [Subject], early-web dread, low-res sacred, a joke that is also a threat."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Weirdcore+image+of+[Subject],+early-web+dread,+low-res+sacred,+a+joke+that+is+also+a+threat."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Weirdcore image of [Subject], early-web dread, low-res sacred, wrong crop, JPEG artifacts, a joke that is also a threat. Name the caption or the chopped face.Do not polish, and do not soften into a liminal pool.Copy promptUse in Image GeneratorWeirdcore image of [Subject], early-web dread, low-res sacred, a joke that is also a threat.Weirdcore image of [Subject], early-web dread, low-res sacred, a joke that is also a threat."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Dreamcore or Vaporwave: a soft hall, or a pink-cyan mall. The tell is continuous high-res pastel.",
+          "links": [
+            {
+              "text": "Dreamcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+            },
+            {
+              "text": "Vaporwave",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: crush the file, crop wrong, add a cheap flash or a caption, and let the joke threaten."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dreamcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+        },
+        {
+          "text": "Vaporwave",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Dreamcore or Vaporwave: a soft hall, or a pink-cyan mall. The tell is continuous high-res pastel.Fix: crush the file, crop wrong, add a cheap flash or a caption, and let the joke threaten."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Weirdcore in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A look that encodes the familiar badly: low resolution, wrong crops, captions, early-web artifacts, and a joke that is also a threat. The file is the fear."
+        },
+        {
+          "type": "heading",
+          "text": "Weirdcore vs Dreamcore",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dreamcore is analog-soft liminal space, a memory room. Weirdcore is digital-degraded and captioned. One withholds safety with empty architecture. The other withholds it with a bad encode."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Weirdcore?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the familiar should look incorrectly rendered, as if an old file opened wrong. Skip it for soft nostalgia halls, for pastel marble, or for perception smear."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Weirdcore for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Weirdcore image of [Subject], early-web dread, low-res sacred, wrong crop, JPEG artifacts, a joke that is also a threat. Do not polish into dreamcore softness."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Weirdcore in film?A look that encodes the familiar badly: low resolution, wrong crops, captions, early-web artifacts, and a joke that is also a threat. The file is the fear.Weirdcore vs DreamcoreDreamcore is analog-soft liminal space, a memory room. Weirdcore is digital-degraded and captioned. One withholds safety with empty architecture. The other withholds it with a bad encode.When should I use Weirdcore?When the familiar should look incorrectly rendered, as if an old file opened wrong. Skip it for soft nostalgia halls, for pastel marble, or for perception smear.How do I prompt Weirdcore for AI image or video?Write: Weirdcore image of [Subject], early-web dread, low-res sacred, wrong crop, JPEG artifacts, a joke that is also a threat. Do not polish into dreamcore softness."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Weirdcore image of [Subject], early-web dread, low-res sacred, wrong crop, JPEG artifacts, a joke that is also a threat. Name the caption or the chopped face.",
+      "Do not polish, and do not soften into a liminal pool."
+    ],
+    "example": "Weirdcore image of [Subject], early-web dread, low-res sacred, a joke that is also a threat."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/eb4f15d8bb2dd5a4da9195b9010aca70.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/weirdcore.webp",
+      "alt": "Weirdcore example"
+    },
+    {
+      "kind": "image",
+      "path": "media/f3b6c79e809226ceda09f46eeebf2c7d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dreamcore.webp",
+      "alt": "Dreamcore"
+    },
+    {
+      "kind": "image",
+      "path": "media/a3332f43e9375fea06874056e78399cb.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/altered-state-altered-state-mini.webp",
+      "alt": "Altered State"
+    },
+    {
+      "kind": "video",
+      "path": "media/b50cc309bf7987ba369a61c9377d7e86.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/altered-state-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/b9893f1c632b3693f59131220517b79c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/weirdcore/hero.jpg",
+      "alt": "Weirdcore",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "af359a9cffa10acf613720f1bda93e09645e7da8cb20556ff63853edf0bd6fe6"
+}

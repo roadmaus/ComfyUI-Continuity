@@ -1,0 +1,391 @@
+{
+  "id": "camera-movement/wiggle",
+  "slug": "wiggle",
+  "title": "Wiggle",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/wiggle",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wiggle-wiggle-mini.webp",
+  "detail": "details/camera-movement/wiggle.json",
+  "aliases": [],
+  "description": "A wiggle camera rocks between two nearby viewpoints, a tiny stereo fidget that makes a lock-off read as a living postcard. Travel is centimeters, not a dolly.",
+  "thumbnail": "media/722d24b1f3bb969a4f1b73b82223f608.webp",
+  "video": "media/c101a0380b4e1c2a601555e22cc50029.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/wiggle-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Add life to a lock-off without a real move. Lenticular photos, stereo gifs, a still that breathes: depth as a fidget."
+        },
+        {
+          "type": "paragraph",
+          "text": "Near objects shift a little; the far wall almost holds. If the camera walks, you have parallax as a path, not a wiggle."
+        },
+        {
+          "type": "paragraph",
+          "text": "A full slider is already too much. The point is two nearby viewpoints, not a tour."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Add life to a lock-off without a real move. Lenticular photos, stereo gifs, a still that breathes: depth as a fidget.Near objects shift a little; the far wall almost holds. If the camera walks, you have parallax as a path, not a wiggle.A full slider is already too much. The point is two nearby viewpoints, not a tour."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Nodal shift of a few centimeters, or a pair of stills played as a loop. Subject mostly still."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Wiggle cam on [Subject], tiny stereo rock, a living postcard, depth as a fidget."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Nodal shift of a few centimeters, or a pair of stills played as a loop. Subject mostly still.Prompt: Wiggle cam on [Subject], tiny stereo rock, a living postcard, depth as a fidget."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to wake a still without committing to a move. Do not use it as coverage of a walk."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to wake a still without committing to a move. Do not use it as coverage of a walk."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wigglegram is the lenticular or stereo-gif cousin, often a pair of stills. Parallax is the optical fact; a wiggle is parallax as a tiny rock.",
+          "links": [
+            {
+              "text": "Wigglegram",
+              "url": "https://melies.co/cinematic-techniques/effects/wigglegram"
+            },
+            {
+              "text": "Parallax",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/parallax"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Slider Shot travels 60 to 120 centimeters, which is already a real move.",
+          "links": [
+            {
+              "text": "Slider Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slider"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "WigglegramDepth as a twitch.",
+          "displayText": "Wigglegram\nDepth as a twitch.",
+          "links": [
+            {
+              "text": "WigglegramDepth as a twitch.",
+              "url": "https://melies.co/cinematic-techniques/effects/wigglegram"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "ParallaxProve the world has layers.",
+          "displayText": "Parallax\nProve the world has layers.",
+          "links": [
+            {
+              "text": "ParallaxProve the world has layers.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/parallax"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Wigglegram",
+          "url": "https://melies.co/cinematic-techniques/effects/wigglegram"
+        },
+        {
+          "text": "Parallax",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/parallax"
+        },
+        {
+          "text": "Slider Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slider"
+        },
+        {
+          "text": "WigglegramDepth as a twitch.",
+          "url": "https://melies.co/cinematic-techniques/effects/wigglegram"
+        },
+        {
+          "text": "ParallaxProve the world has layers.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/parallax"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8f079dda1e98f299001cd590eef7ee33.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wigglegram-wigglegram-mini.webp",
+          "alt": "Wigglegram"
+        },
+        {
+          "kind": "video",
+          "path": "media/4b23775d72fc68e883116117f676e82b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/wigglegram-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/3a1d3091de6e3fca4df2e2e0c4eda88e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/parallax-parallax-mini.webp",
+          "alt": "Parallax"
+        },
+        {
+          "kind": "video",
+          "path": "media/2784a85fa36f42e8edd95c3211f83dd3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/parallax-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Wigglegram is the lenticular or stereo-gif cousin, often a pair of stills. Parallax is the optical fact; a wiggle is parallax as a tiny rock.A Slider Shot travels 60 to 120 centimeters, which is already a real move.WigglegramDepth as a twitch.ParallaxProve the world has layers.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lenticular photos and TikTok stereo are the grammar: two nearby eyes, a postcard that lives. Not a narrative dolly."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Lenticular photos and TikTok stereo are the grammar: two nearby eyes, a postcard that lives. Not a narrative dolly."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Two nearby viewpoints. Still: Wiggle cam on [Subject], tiny stereo rock, a living postcard, depth as a fidget."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera wiggles between two nearby viewpoints of [Subject]. Centimeters."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a walk."
+        },
+        {
+          "type": "quote",
+          "text": "The camera wiggles between two nearby viewpoints of [Subject]."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+wiggles+between+two+nearby+viewpoints+of+[Subject]."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Two nearby viewpoints. Still: Wiggle cam on [Subject], tiny stereo rock, a living postcard, depth as a fidget.Video: The camera wiggles between two nearby viewpoints of [Subject]. Centimeters.Forbid a walk.Copy promptUse in Video GeneratorThe camera wiggles between two nearby viewpoints of [Subject].The camera wiggles between two nearby viewpoints of [Subject]."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a slider or a dolly. The tell: the background really travels, the path is a meter."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: rock between two nearby viewpoints, stereo fidget only."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a slider or a dolly. The tell: the background really travels, the path is a meter.The fix: rock between two nearby viewpoints, stereo fidget only."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Wiggle in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A wiggle is a tiny stereo rock between two nearby viewpoints, centimeters of travel, so a lock-off reads as a living postcard."
+        },
+        {
+          "type": "heading",
+          "text": "Wiggle vs Parallax",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Parallax is the relative motion of planes when the camera translates any distance. Wiggle is that fact used as a fidget, not as a path."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Wiggle?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to add life to a still without a real move. Do not use it to cover a walk."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Wiggle for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a tiny stereo rock between two nearby viewpoints. Example: Wiggle cam on [Subject], tiny stereo rock, a living postcard, depth as a fidget."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Wiggle in film?A wiggle is a tiny stereo rock between two nearby viewpoints, centimeters of travel, so a lock-off reads as a living postcard.Wiggle vs ParallaxParallax is the relative motion of planes when the camera translates any distance. Wiggle is that fact used as a fidget, not as a path.When should I use Wiggle?Use it to add life to a still without a real move. Do not use it to cover a walk.How do I prompt Wiggle for AI image or video?Write a tiny stereo rock between two nearby viewpoints. Example: Wiggle cam on [Subject], tiny stereo rock, a living postcard, depth as a fidget."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Two nearby viewpoints. Still: Wiggle cam on [Subject], tiny stereo rock, a living postcard, depth as a fidget.",
+      "Video: The camera wiggles between two nearby viewpoints of [Subject]. Centimeters.",
+      "Forbid a walk."
+    ],
+    "example": "The camera wiggles between two nearby viewpoints of [Subject]."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/c101a0380b4e1c2a601555e22cc50029.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/wiggle-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/722d24b1f3bb969a4f1b73b82223f608.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wiggle-wiggle-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7d36a54e64d3416629d7ed61a8dbadae.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/wiggle.jpg",
+      "alt": "Wiggle frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/8f079dda1e98f299001cd590eef7ee33.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wigglegram-wigglegram-mini.webp",
+      "alt": "Wigglegram"
+    },
+    {
+      "kind": "video",
+      "path": "media/4b23775d72fc68e883116117f676e82b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/wigglegram-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3a1d3091de6e3fca4df2e2e0c4eda88e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/parallax-parallax-mini.webp",
+      "alt": "Parallax"
+    },
+    {
+      "kind": "video",
+      "path": "media/2784a85fa36f42e8edd95c3211f83dd3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/parallax-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fa9fab441d0561f789de5441fcd290ea.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/wiggle/hero.jpg",
+      "alt": "Wiggle",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "c203de7473c2e0f5c94f9f78365e900ad4258127cd93f2eeeb0c110c5a2573e4"
+}

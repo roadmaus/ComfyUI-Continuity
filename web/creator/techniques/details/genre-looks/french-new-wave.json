@@ -1,0 +1,448 @@
+{
+  "id": "genre-looks/french-new-wave",
+  "slug": "french-new-wave",
+  "title": "French New Wave",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/french-new-wave",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/french-new-wave.webp",
+  "detail": "details/genre-looks/french-new-wave.json",
+  "aliases": [],
+  "description": "French New Wave cinematography shoots fiction on locations with street light, handheld 16mm or 35mm, and an edit that will jump-cut rather than cover. The frame jumps into walking life: cafes, sidewalks, apartments with mixed practicals, and a camera that admits it is a camera.",
+  "thumbnail": "media/d4c26c7b0a18a70b4463b9525538cb3f.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Youth and impatience with studio polish. A character talks to the lens."
+        },
+        {
+          "type": "paragraph",
+          "text": "A walk is a burst of handheld, then a jump cut skips the boring meters. Paris oxygen, or any city's equivalent, is the lighting plot: windows, cafes, overcast streets."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not cinéma vérité. Vérité is documentary presence.",
+          "links": [
+            {
+              "text": "cinéma vérité",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "New Wave is authored fiction using documentary tools plus cinephile grammar (Jump Cut, freeze, iris, a look at the camera). It is also not found footage: there is no recovered tape, only a director in the street.",
+          "links": [
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "cinéma vérité",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Youth and impatience with studio polish. A character talks to the lens.A walk is a burst of handheld, then a jump cut skips the boring meters. Paris oxygen, or any city's equivalent, is the lighting plot: windows, cafes, overcast streets.It is not cinéma vérité. Vérité is documentary presence.New Wave is authored fiction using documentary tools plus cinephile grammar (Jump Cut, freeze, iris, a look at the camera). It is also not found footage: there is no recovered tape, only a director in the street."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Location interiors, available or small practicals, 35mm or 50mm on a Cameflex-class body, handheld or a light tripod. Shoot the walk, then jump-cut in the edit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Reflexive beats: eyeline to camera, a sudden insert. Street daylight, cafe tungsten, no matching backlight."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt jump cuts implied, street light, jump-into-life framing, handheld Paris oxygen as location air, not as a mood word."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Location interiors, available or small practicals, 35mm or 50mm on a Cameflex-class body, handheld or a light tripod. Shoot the walk, then jump-cut in the edit.Reflexive beats: eyeline to camera, a sudden insert. Street daylight, cafe tungsten, no matching backlight.Prompt jump cuts implied, street light, jump-into-life framing, handheld Paris oxygen as location air, not as a mood word."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a young, restless fiction needs streets, jump cuts, and impatience with coverage. Do not use it for studio three-point polish or for a camcorder-horror premise."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a young, restless fiction needs streets, jump cuts, and impatience with coverage. Do not use it for studio three-point polish or for a camcorder-horror premise."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "French New Wave is fiction plus location plus Jump Cut. Cinéma Vérité is documentary catalysis.",
+          "links": [
+            {
+              "text": "French New Wave",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/french-new-wave"
+            },
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            },
+            {
+              "text": "Cinéma Vérité",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Handheld is the body only. Documentary may interview.",
+          "links": [
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            },
+            {
+              "text": "Documentary",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "New Wave characters still act a story. Arthouse may be slower, emptier, and less cinephile-playful.",
+          "links": [
+            {
+              "text": "Arthouse",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The New Wave camera is in a hurry."
+        },
+        {
+          "type": "list-item",
+          "text": "Jump CutDo not soothe. Show the skip.",
+          "displayText": "Jump Cut\nDo not soothe. Show the skip.",
+          "links": [
+            {
+              "text": "Jump CutDo not soothe. Show the skip.",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "displayText": "Handheld\nUrgency, documentary truth, or a mind that cannot sit still.",
+          "links": [
+            {
+              "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "French New Wave",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/french-new-wave"
+        },
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Cinéma Vérité",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Documentary",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+        },
+        {
+          "text": "Arthouse",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+        },
+        {
+          "text": "Jump CutDo not soothe. Show the skip.",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/30e16a300df23158df8edae534b8363d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+          "alt": "Jump Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+          "alt": "Handheld"
+        },
+        {
+          "kind": "video",
+          "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots French New Wave is fiction plus location plus Jump Cut. Cinéma Vérité is documentary catalysis.Handheld is the body only. Documentary may interview.New Wave characters still act a story. Arthouse may be slower, emptier, and less cinephile-playful.The New Wave camera is in a hurry.Jump CutDo not soothe. Show the skip.HandheldUrgency, documentary truth, or a mind that cannot sit still.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Breathless (jump cuts on the street and in the room, a look to camera). The 400 Blows (location childhood, available light, a final run)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cléo from 5 to 7 (real-time Paris, streets and interiors as a clock). Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Breathless (jump cuts on the street and in the room, a look to camera). The 400 Blows (location childhood, available light, a final run).Cléo from 5 to 7 (real-time Paris, streets and interiors as a clock). Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "French New Wave energy on [Subject], location street light, handheld 35mm, jump cuts implied, jump-into-life framing, mixed cafe practicals. Name the sidewalk or apartment."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a rim, a timestamp, or studio flags."
+        },
+        {
+          "type": "quote",
+          "text": "French New Wave energy on [Subject], jump cuts implied, street light, jump-into-life framing, handheld Paris oxygen."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=French+New+Wave+energy+on+[Subject],+jump+cuts+implied,+street+light,+jump-into-life+framing,+handheld+Paris+oxygen."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it French New Wave energy on [Subject], location street light, handheld 35mm, jump cuts implied, jump-into-life framing, mixed cafe practicals. Name the sidewalk or apartment.Do not add a rim, a timestamp, or studio flags.Copy promptUse in Image GeneratorFrench New Wave energy on [Subject], jump cuts implied, street light, jump-into-life framing, handheld Paris oxygen.French New Wave energy on [Subject], jump cuts implied, street light, jump-into-life framing, handheld Paris oxygen."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Cinéma Vérité or Found Footage: a documentary claim, or a tape. The tell is a news timestamp, a horror shake, or glossy three-point.",
+          "links": [
+            {
+              "text": "Cinéma Vérité",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            },
+            {
+              "text": "Found Footage",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: keep it fiction, keep it location, handheld or light tripod, and let the edit jump."
+        }
+      ],
+      "links": [
+        {
+          "text": "Cinéma Vérité",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "Found Footage",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Cinéma Vérité or Found Footage: a documentary claim, or a tape. The tell is a news timestamp, a horror shake, or glossy three-point.Fix: keep it fiction, keep it location, handheld or light tripod, and let the edit jump."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is French New Wave in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A fiction look from late-1950s France and its heirs: location shooting, street and practical light, handheld cameras, jump cuts, and reflexive cinephile grammar. Studio polish is the enemy."
+        },
+        {
+          "type": "heading",
+          "text": "French New Wave vs Cinéma Vérité",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Vérité documents real people and lets the filmmaker provoke. New Wave stages a story with the same cameras and streets, then jump-cuts and looks back at the lens. One is documentary method. The other is fiction with documentary tools."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use French New Wave?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a restless fiction belongs on a sidewalk or in a cheap apartment, and coverage would feel like a studio. Skip it for recovered-tape horror, for vérité documentary, or for billboard gloss."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt French New Wave for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: French New Wave energy on [Subject], location street light, handheld 35mm, jump cuts implied, jump-into-life framing. Name the cafe or sidewalk. Do not add studio rims or a camcorder timestamp."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is French New Wave in film?A fiction look from late-1950s France and its heirs: location shooting, street and practical light, handheld cameras, jump cuts, and reflexive cinephile grammar. Studio polish is the enemy.French New Wave vs Cinéma VéritéVérité documents real people and lets the filmmaker provoke. New Wave stages a story with the same cameras and streets, then jump-cuts and looks back at the lens. One is documentary method. The other is fiction with documentary tools.When should I use French New Wave?When a restless fiction belongs on a sidewalk or in a cheap apartment, and coverage would feel like a studio. Skip it for recovered-tape horror, for vérité documentary, or for billboard gloss.How do I prompt French New Wave for AI image or video?Write: French New Wave energy on [Subject], location street light, handheld 35mm, jump cuts implied, jump-into-life framing. Name the cafe or sidewalk. Do not add studio rims or a camcorder timestamp."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "French New Wave energy on [Subject], location street light, handheld 35mm, jump cuts implied, jump-into-life framing, mixed cafe practicals. Name the sidewalk or apartment.",
+      "Do not add a rim, a timestamp, or studio flags."
+    ],
+    "example": "French New Wave energy on [Subject], jump cuts implied, street light, jump-into-life framing, handheld Paris oxygen."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/d4c26c7b0a18a70b4463b9525538cb3f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/french-new-wave.webp",
+      "alt": "French New Wave example"
+    },
+    {
+      "kind": "image",
+      "path": "media/30e16a300df23158df8edae534b8363d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+      "alt": "Jump Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+      "alt": "Handheld"
+    },
+    {
+      "kind": "video",
+      "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/0913847b0f3c2c0f7926298068d8f000.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/french-new-wave/hero.jpg",
+      "alt": "French New Wave",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "be6dce8ed461088b31ab8233bea69162ecf70872106f5a59ae13a389e74c90c7"
+}

@@ -1,0 +1,416 @@
+{
+  "id": "camera-movement/gimbal",
+  "slug": "gimbal",
+  "title": "Gimbal Shot",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/gimbal",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gimbal-gimbal-mini.webp",
+  "detail": "details/camera-movement/gimbal.json",
+  "aliases": [],
+  "description": "A gimbal shot uses motorized stabilization for smooth handheld or vehicle-mounted movement. Electronic inertia damps roll and high-frequency shake while a human still carries the camera, freer than a dolly and cleaner than raw handheld.",
+  "thumbnail": "media/3070be4364be0a73e6306a1e7dfc594b.webp",
+  "video": "media/f1caa36e2a9a5509ff6632687fe93d2d.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/gimbal-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Run-and-gun smoothness without a Steadicam vest. Stairs, crowds, and vehicles become possible with a smaller footprint."
+        },
+        {
+          "type": "paragraph",
+          "text": "The image can feel slightly more weightless than a vest-and-arm, because motors, not a spring, do the isolation. It is the wrong tool when you want documentary tremor, or when a rehearsed vest walk through connected rooms is the grammar you actually mean."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the support; smoothness is not one thing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Run-and-gun smoothness without a Steadicam vest. Stairs, crowds, and vehicles become possible with a smaller footprint.The image can feel slightly more weightless than a vest-and-arm, because motors, not a spring, do the isolation. It is the wrong tool when you want documentary tremor, or when a rehearsed vest walk through connected rooms is the grammar you actually mean.Name the support; smoothness is not one thing."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A 3-axis motorized gimbal with IMU. The operator walks or rides; the horizon can be locked."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can still boom and yaw with the handles. Prompt a gimbal move, electronically stabilized but still human-carried, smoother than handheld, freer than dolly."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works A 3-axis motorized gimbal with IMU. The operator walks or rides; the horizon can be locked.You can still boom and yaw with the handles. Prompt a gimbal move, electronically stabilized but still human-carried, smoother than handheld, freer than dolly."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for run-and-gun smoothness without a Steadicam vest. Concrete beat: down a stair, through a crowd, into a car, horizon mostly locked."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not gimbal a shot that should breathe as handheld."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for run-and-gun smoothness without a Steadicam vest. Concrete beat: down a stair, through a crowd, into a car, horizon mostly locked.Do not gimbal a shot that should breathe as handheld."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Steadicam is mechanical vest, arm, and sled. Handheld keeps tremor.",
+          "links": [
+            {
+              "text": "Steadicam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            },
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Gimbal is motors. All three can Follow Shot or track; the difference is how the support isolates the lens from the body.",
+          "links": [
+            {
+              "text": "Follow Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+            },
+            {
+              "text": "track",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "displayText": "Steadicam\nLong connecting moves through architecture. Neither handheld nor dolly.",
+          "links": [
+            {
+              "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "displayText": "Handheld\nUrgency, documentary truth, or a mind that cannot sit still.",
+          "links": [
+            {
+              "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Steadicam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Follow Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+        },
+        {
+          "text": "track",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+          "alt": "Steadicam"
+        },
+        {
+          "kind": "video",
+          "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+          "alt": "Handheld"
+        },
+        {
+          "kind": "video",
+          "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Steadicam is mechanical vest, arm, and sled. Handheld keeps tremor.Gimbal is motors. All three can Follow Shot or track; the difference is how the support isolates the lens from the body.SteadicamLong connecting moves through architecture. Neither handheld nor dolly.HandheldUrgency, documentary truth, or a mind that cannot sit still.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "1917 mixes long connecting movement across supports; some passages read as gimbal-enabled freedom more than as classical vest work. Extraction uses motorized stabilization for action paths through crowds and vehicles."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the electronic lock and human carry, not a war to duplicate."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film 1917 mixes long connecting movement across supports; some passages read as gimbal-enabled freedom more than as classical vest work. Extraction uses motorized stabilization for action paths through crowds and vehicles.Use the electronic lock and human carry, not a war to duplicate."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Gimbal move with [Subject], electronically stabilized but still human-carried, smoother than handheld, freer than dolly, modern action grammar. For motion: smooth gimbal move following [Subject], stabilized but slightly human, gliding through the space."
+        },
+        {
+          "type": "quote",
+          "text": "Smooth gimbal move following [Subject], stabilized but slightly human, gliding through the space."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Smooth+gimbal+move+following+[Subject],+stabilized+but+slightly+human,+gliding+through+the+space."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Gimbal move with [Subject], electronically stabilized but still human-carried, smoother than handheld, freer than dolly, modern action grammar. For motion: smooth gimbal move following [Subject], stabilized but slightly human, gliding through the space.Copy promptUse in Video GeneratorSmooth gimbal move following [Subject], stabilized but slightly human, gliding through the space.Smooth gimbal move following [Subject], stabilized but slightly human, gliding through the space."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Handheld shake or a full Steadicam vest sentence. The tell is tremor, or a claim of Steadicam when the image has that weightless motor lock.",
+          "links": [
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            },
+            {
+              "text": "Steadicam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: name gimbal, horizon hold, human-carried, no footfall bounce."
+        }
+      ],
+      "links": [
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Steadicam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Handheld shake or a full Steadicam vest sentence. The tell is tremor, or a claim of Steadicam when the image has that weightless motor lock.The fix: name gimbal, horizon hold, human-carried, no footfall bounce."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Gimbal Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a camera move on a motorized stabilizer that damps shake while a person still carries or mounts the rig."
+        },
+        {
+          "type": "heading",
+          "text": "Gimbal Shot vs Steadicam",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Steadicam isolates with a mechanical arm and vest. A gimbal isolates with motors. Both can be smooth; the mass and gait feel different."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Gimbal Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When you need smooth walking or vehicle movement without laying track or wearing a vest. Do not use it as fake handheld energy."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Gimbal Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write gimbal, electronically stabilized, human-carried, horizon mostly locked, no handheld tremor, no dolly track. Name the path."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Gimbal Shot in film?It is a camera move on a motorized stabilizer that damps shake while a person still carries or mounts the rig.Gimbal Shot vs SteadicamSteadicam isolates with a mechanical arm and vest. A gimbal isolates with motors. Both can be smooth; the mass and gait feel different.When should I use Gimbal Shot?When you need smooth walking or vehicle movement without laying track or wearing a vest. Do not use it as fake handheld energy.How do I prompt Gimbal Shot for AI image or video?Write gimbal, electronically stabilized, human-carried, horizon mostly locked, no handheld tremor, no dolly track. Name the path."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Gimbal move with [Subject], electronically stabilized but still human-carried, smoother than handheld, freer than dolly, modern action grammar. For motion: smooth gimbal move following [Subject], stabilized but slightly human, gliding through the space."
+    ],
+    "example": "Smooth gimbal move following [Subject], stabilized but slightly human, gliding through the space."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/f1caa36e2a9a5509ff6632687fe93d2d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/gimbal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3070be4364be0a73e6306a1e7dfc594b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gimbal-gimbal-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47755af51fd6f370246d8561a0420f36.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/gimbal.jpg",
+      "alt": "Gimbal Shot frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+      "alt": "Steadicam"
+    },
+    {
+      "kind": "video",
+      "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+      "alt": "Handheld"
+    },
+    {
+      "kind": "video",
+      "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c15b8e83c8f9fd71772ee886c85fd4a9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/gimbal/hero.jpg",
+      "alt": "Gimbal Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "23576c92995e04101e8cca2dbf50b44a41a88db7e2e60abe53c10bd8335e9834"
+}

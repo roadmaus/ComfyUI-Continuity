@@ -1,0 +1,499 @@
+{
+  "id": "camera-angles/shoulder-level",
+  "slug": "shoulder-level",
+  "title": "Shoulder Level",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/shoulder-level",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shoulder-level.webp",
+  "detail": "details/camera-angles/shoulder-level.json",
+  "aliases": [],
+  "description": "A shoulder-level camera sits slightly below the eyes, at the height of a walking companion. It is less formal than true Eye Level and less monumental than a Low Angle; the face is still the target, seen from the deltoid rather than the pupil.",
+  "thumbnail": "media/1bd29edbafc2d47fe2a7598f3b5c19e2.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You stay with a mover without dropping into chaotic Handheld grammar. The lens is where another body would be: beside them on a street, a few inches low, able to take a bump.",
+          "links": [
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hurt Locker bomb walks and Goodfellas nightclub approaches often live in this band because the camera can travel as a person would. It is not Over-the-Shoulder Coverage.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "OTS is a foreground shoulder of a different body. Shoulder-level can be a clean Single or a Follow Shot with no near shoulder at all.",
+          "links": [
+            {
+              "text": "Single",
+              "url": "https://melies.co/cinematic-techniques/framing/single"
+            },
+            {
+              "text": "Follow Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The name is pedestal height."
+        }
+      ],
+      "links": [
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Single",
+          "url": "https://melies.co/cinematic-techniques/framing/single"
+        },
+        {
+          "text": "Follow Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function You stay with a mover without dropping into chaotic Handheld grammar. The lens is where another body would be: beside them on a street, a few inches low, able to take a bump.Hurt Locker bomb walks and Goodfellas nightclub approaches often live in this band because the camera can travel as a person would. It is not Over-the-Shoulder Coverage.OTS is a foreground shoulder of a different body. Shoulder-level can be a clean Single or a Follow Shot with no near shoulder at all.The name is pedestal height."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Set the camera at clavicle or deltoid height, typically 5 to 20 cm below the subject's eyes. Keep the horizon close to level; a tiny look-up is natural from this height and should not grow into a power tilt."
+        },
+        {
+          "type": "paragraph",
+          "text": "A 35mm is a common walking companion. Stabilization (Steadicam, Gimbal Shot) keeps the height without adding shake as style.",
+          "links": [
+            {
+              "text": "Steadicam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            },
+            {
+              "text": "Gimbal Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: shoulder-level camera, slightly below the eyes, walking companion's view."
+        }
+      ],
+      "links": [
+        {
+          "text": "Steadicam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Gimbal Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Set the camera at clavicle or deltoid height, typically 5 to 20 cm below the subject's eyes. Keep the horizon close to level; a tiny look-up is natural from this height and should not grow into a power tilt.A 35mm is a common walking companion. Stabilization (Steadicam, Gimbal Shot) keeps the height without adding shake as style.Prompt: shoulder-level camera, slightly below the eyes, walking companion's view."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to stay with a mover as a companion, especially through rooms and streets. Concrete beat: walking a few feet off a soldier or a host, lens at their shoulder, face readable, floor not dominating."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it as a substitute for messy handheld, and do not call an OTS this unless the only fact you mean is height."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to stay with a mover as a companion, especially through rooms and streets. Concrete beat: walking a few feet off a soldier or a host, lens at their shoulder, face readable, floor not dominating.Do not use it as a substitute for messy handheld, and do not call an OTS this unless the only fact you mean is height."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye Level matches the pupils and reads as equal portrait. Hip Level drops to the belt.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            },
+            {
+              "text": "Hip Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/hip-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Low Angle pitches up on purpose. Over-the-Shoulder Coverage includes a near person's shoulder; shoulder-level need not.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Point of View removes the companion and becomes the mover's eyes. Follow Shot is the path; shoulder-level is the height of that path.",
+          "links": [
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            },
+            {
+              "text": "Follow Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "displayText": "High Angle\nVulnerability, surveillance, or a map of a room.",
+          "links": [
+            {
+              "text": "High AngleVulnerability, surveillance, or a map of a room.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low AnglePower, monument, or intimidation.",
+          "displayText": "Low Angle\nPower, monument, or intimidation.",
+          "links": [
+            {
+              "text": "Low AnglePower, monument, or intimidation.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Hip Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/hip-level"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Follow Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Low AnglePower, monument, or intimidation.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        },
+        {
+          "kind": "image",
+          "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+          "alt": "High Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+          "alt": "Low Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Eye Level matches the pupils and reads as equal portrait. Hip Level drops to the belt.Low Angle pitches up on purpose. Over-the-Shoulder Coverage includes a near person's shoulder; shoulder-level need not.Point of View removes the companion and becomes the mover's eyes. Follow Shot is the path; shoulder-level is the height of that path.Eye LevelDefault honesty. Do not look down or up unless you mean it.High AngleVulnerability, surveillance, or a map of a room.Low AnglePower, monument, or intimidation."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Hurt Locker often stays at soldier height through streets and rooms so the walk is shared, not observed from a balcony. Goodfellas' Copacabana approach rides at companion height through the kitchen: we arrive with Henry, not as his eyes and not as a crane."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the pedestal, not the whole tracking route."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Hurt Locker often stays at soldier height through streets and rooms so the walk is shared, not observed from a balcony. Goodfellas' Copacabana approach rides at companion height through the kitchen: we arrive with Henry, not as his eyes and not as a crane.Borrow the pedestal, not the whole tracking route."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Separate height from move. Quote: Shoulder-level camera on [Subject], slightly below the eyes, a walking companion's view, less formal than true eye-level."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: horizon nearly level, not a low-angle, no foreground shoulder unless you also want OTS. For video, one follow at that height, no tour."
+        },
+        {
+          "type": "quote",
+          "text": "Shoulder-level camera on [Subject], slightly below the eyes, a walking companion's view, less formal than true eye-level."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Shoulder-level+camera+on+[Subject],+slightly+below+the+eyes,+a+walking+companion's+view,+less+formal+than+true+eye-level."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Separate height from move. Quote: Shoulder-level camera on [Subject], slightly below the eyes, a walking companion's view, less formal than true eye-level.Add: horizon nearly level, not a low-angle, no foreground shoulder unless you also want OTS. For video, one follow at that height, no tour.Copy promptUse in Image GeneratorShoulder-level camera on [Subject], slightly below the eyes, a walking companion's view, less formal than true eye-level.Shoulder-level camera on [Subject], slightly below the eyes, a walking companion's view, less formal than true eye-level."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is true Eye Level (too high and formal) or a Low Angle (too much pitch). Tell: matched pupils, or a ceiling grab.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            },
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: camera at the shoulder, slight look-up at most, companion distance. If a blurry shoulder of another actor eats the frame, you wrote OTS."
+        },
+        {
+          "type": "paragraph",
+          "text": "If hands of the subject enter as if we were them, you wrote First-Person.",
+          "links": [
+            {
+              "text": "First-Person",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "First-Person",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is true Eye Level (too high and formal) or a Low Angle (too much pitch). Tell: matched pupils, or a ceiling grab.Fix: camera at the shoulder, slight look-up at most, companion distance. If a blurry shoulder of another actor eats the frame, you wrote OTS.If hands of the subject enter as if we were them, you wrote First-Person."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is shoulder level in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Shoulder-level places the camera slightly below the subject's eyes, at walking-companion height. It is a pedestal choice, usually with a nearly level horizon."
+        },
+        {
+          "type": "heading",
+          "text": "Shoulder level vs eye level",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Eye level matches the pupils and reads as equal, formal coverage. Shoulder level sits a few inches lower, like a person walking beside them, less of a portrait lock."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use shoulder level?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to stay with a mover without a power tilt or a formal eye lock. Do not use it when you need peer-to-peer stillness or a holster-plane standoff."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt shoulder level for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Shoulder-level camera on [Subject], slightly below the eyes, walking companion's view, horizon nearly level. Say not eye-level and not a low-angle. For motion, follow at that height."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is shoulder level in film?Shoulder-level places the camera slightly below the subject's eyes, at walking-companion height. It is a pedestal choice, usually with a nearly level horizon.Shoulder level vs eye levelEye level matches the pupils and reads as equal, formal coverage. Shoulder level sits a few inches lower, like a person walking beside them, less of a portrait lock.When should I use shoulder level?Use it to stay with a mover without a power tilt or a formal eye lock. Do not use it when you need peer-to-peer stillness or a holster-plane standoff.How do I prompt shoulder level for AI image or video?Write: Shoulder-level camera on [Subject], slightly below the eyes, walking companion's view, horizon nearly level. Say not eye-level and not a low-angle. For motion, follow at that height."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Separate height from move. Quote: Shoulder-level camera on [Subject], slightly below the eyes, a walking companion's view, less formal than true eye-level.",
+      "Add: horizon nearly level, not a low-angle, no foreground shoulder unless you also want OTS. For video, one follow at that height, no tour."
+    ],
+    "example": "Shoulder-level camera on [Subject], slightly below the eyes, a walking companion's view, less formal than true eye-level."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/1bd29edbafc2d47fe2a7598f3b5c19e2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shoulder-level.webp",
+      "alt": "Shoulder Level example"
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+      "alt": "High Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+      "alt": "Low Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3009b67180cc2d232a0950e549a6f29c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/shoulder-level/hero.jpg",
+      "alt": "Shoulder Level",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "6c739974f2f71926497257812a70a9fa5eb08dfa244aae703b46376cdc189781"
+}

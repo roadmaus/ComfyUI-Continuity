@@ -1,0 +1,457 @@
+{
+  "id": "camera-movement/double-dolly",
+  "slug": "double-dolly",
+  "title": "Double Dolly",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/double-dolly",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-dolly-019-double-dolly-floating-shot-mini.webp",
+  "detail": "details/camera-movement/double-dolly.json",
+  "aliases": [
+    "Spike Lee float",
+    "Double travelling"
+  ],
+  "description": "A double dolly shot moves performer and camera together on one rolling platform so their relative arrangement stays fixed. The actor appears to glide rather than walk: feet skating, weight transfer absent.",
+  "thumbnail": "media/ce24f94c30c52af03eb506f2b74fd5f1.webp",
+  "video": "media/1032b136cbdc1b953c8b60b66a3524fb.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/019-double-dolly-floating-shot-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An interior state made external. Fate, dread, or transcendence carries the person through a hallway while the world slides."
+        },
+        {
+          "type": "paragraph",
+          "text": "It differs from a stabilized walk because normal stepping is missing on purpose. It is the wrong tool if the performer walks normally, and the wrong tool if only the camera dollies toward a planted actor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Both must share the ride."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function An interior state made external. Fate, dread, or transcendence carries the person through a hallway while the world slides.It differs from a stabilized walk because normal stepping is missing on purpose. It is the wrong tool if the performer walks normally, and the wrong tool if only the camera dollies toward a planted actor.Both must share the ride."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Conceal a platform (or a virtual equivalent) that carries actor and camera. Coordinate speed so background parallax is the only travel."
+        },
+        {
+          "type": "paragraph",
+          "text": "For generation, keep the feet still and the body upright while the environment passes. Prompt a double dolly: subject and camera share one rolling platform, figure gliding, feet skating."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Conceal a platform (or a virtual equivalent) that carries actor and camera. Coordinate speed so background parallax is the only travel.For generation, keep the feet still and the body upright while the environment passes. Prompt a double dolly: subject and camera share one rolling platform, figure gliding, feet skating."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when an interior state should be made external: the person is carried by an idea. Concrete beat: an armed figure glides down a hallway, feet not walking."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it as a fancy walk-and-talk."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when an interior state should be made external: the person is carried by an idea. Concrete beat: an armed figure glides down a hallway, feet not walking.Do not use it as a fancy walk-and-talk."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Dolly In moves only the camera. Steadicam lets both walk, with normal gait.",
+          "links": [
+            {
+              "text": "Dolly In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            },
+            {
+              "text": "Steadicam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Double dolly freezes the relationship and removes the walk. If the feet cycle, the float is gone."
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "displayText": "Dolly In\nEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "links": [
+            {
+              "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "displayText": "Steadicam\nLong connecting moves through architecture. Neither handheld nor dolly.",
+          "links": [
+            {
+              "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Steadicam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+          "alt": "Dolly In"
+        },
+        {
+          "kind": "video",
+          "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+          "alt": "Steadicam"
+        },
+        {
+          "kind": "video",
+          "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Dolly In moves only the camera. Steadicam lets both walk, with normal gait.Double dolly freezes the relationship and removes the walk. If the feet cycle, the float is gone.Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.SteadicamLong connecting moves through architecture. Neither handheld nor dolly.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Do the Right Thing is the float's home grammar. Malcolm X stylizes approach toward the assassination sequence."
+        },
+        {
+          "type": "paragraph",
+          "text": "BlacKkKlansman ends on an armed glide through a hallway. Inside Man uses a floating reaction after the apparent hostage killing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Feet still, world passing: that is the tell."
+        },
+        {
+          "type": "list-item",
+          "text": "BlacKkKlansman 2018The final armed glide through the hallway.",
+          "displayText": "BlacKkKlansman 2018\nThe final armed glide through the hallway."
+        },
+        {
+          "type": "list-item",
+          "text": "Malcolm X 1992Malcolm’s stylized approach toward the assassination sequence.",
+          "displayText": "Malcolm X 1992\nMalcolm’s stylized approach toward the assassination sequence."
+        },
+        {
+          "type": "list-item",
+          "text": "Inside Man 2006Frazier’s floating reaction after the apparent hostage killing.",
+          "displayText": "Inside Man 2006\nFrazier’s floating reaction after the apparent hostage killing."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9b5f5c23380dee90365717f4260ce7af.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/double-dolly/famous/00-blackkklansman-2018.jpg",
+          "alt": "BlacKkKlansman 2018"
+        },
+        {
+          "kind": "image",
+          "path": "media/278655113d4c405c077ec2e8922e5d21.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/double-dolly/famous/01-malcolm-x-1992.jpg",
+          "alt": "Malcolm X 1992"
+        },
+        {
+          "kind": "image",
+          "path": "media/d0ce9ae1d18e43f52925694e14dfaa98.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/double-dolly/famous/02-inside-man-2006.jpg",
+          "alt": "Inside Man 2006"
+        }
+      ],
+      "sourceText": "In film Do the Right Thing is the float's home grammar. Malcolm X stylizes approach toward the assassination sequence.BlacKkKlansman ends on an armed glide through a hallway. Inside Man uses a floating reaction after the apparent hostage killing.Feet still, world passing: that is the tell.BlacKkKlansman 2018The final armed glide through the hallway.Malcolm X 1992Malcolm’s stylized approach toward the assassination sequence.Inside Man 2006Frazier’s floating reaction after the apparent hostage killing."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Double dolly on [Subject]: subject and camera share one rolling platform so the figure appears to glide, feet skating, Spike Lee floating grammar. For motion: [Subject] and the camera move together on the same dolly, creating a floating glide through the space."
+        },
+        {
+          "type": "quote",
+          "text": "A detective stands completely still, feet planted, while she and the camera glide forward together down a long corridor. Her face stays the same size and position. Background moves smoothly backward. No walking cycle, no bobbing, no flying pose, solemn inevitability."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+detective+stands+completely+still,+feet+planted,+while+she+and+the+camera+glide+forward+together+down+a+long+corridor.+Her+face+stays+the+same+size+and+position.+Background+moves+smoothly+backward.+No+walking+cycle,+no+bobbing,+no+flying+pose,+solemn+inevitability."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Double dolly on [Subject]: subject and camera share one rolling platform so the figure appears to glide, feet skating, Spike Lee floating grammar. For motion: [Subject] and the camera move together on the same dolly, creating a floating glide through the space.Copy promptUse in Video GeneratorA detective stands completely still, feet planted, while she and the camera glide forward together down a long corridor. Her face stays the same size and position. Background moves smoothly backward. No walking cycle, no bobbing, no flying pose, solemn inevitability.A detective stands completely still, feet planted, while she and the camera glide forward together down a long corridor. Her face stays the same size and position. Background moves smoothly backward. No walking cycle, no bobbing, no flying pose, solemn inevitability."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Steadicam walk or a solo Dolly In. The tell is a normal gait, or a planted actor growing in frame.",
+          "links": [
+            {
+              "text": "Steadicam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            },
+            {
+              "text": "Dolly In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: shared platform, feet not stepping, environment streaming, body upright."
+        }
+      ],
+      "links": [
+        {
+          "text": "Steadicam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Dolly In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Steadicam walk or a solo Dolly In. The tell is a normal gait, or a planted actor growing in frame.The fix: shared platform, feet not stepping, environment streaming, body upright."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Double Dolly in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a shot where actor and camera ride the same moving platform, so the person glides and the world slides while their size in frame stays oddly constant."
+        },
+        {
+          "type": "heading",
+          "text": "Double Dolly vs Steadicam",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Steadicam follows a walking person. Double dolly carries both, suppressing the walk so the figure floats."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Double Dolly?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a mental state should carry a body through space. Do not use it for ordinary corridor dialogue."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Double Dolly for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write subject and camera on the same dolly, figure gliding, feet still, environment passing. Ban a normal walk."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Double Dolly in film?It is a shot where actor and camera ride the same moving platform, so the person glides and the world slides while their size in frame stays oddly constant.Double Dolly vs SteadicamSteadicam follows a walking person. Double dolly carries both, suppressing the walk so the figure floats.When should I use Double Dolly?When a mental state should carry a body through space. Do not use it for ordinary corridor dialogue.How do I prompt Double Dolly for AI image or video?Write subject and camera on the same dolly, figure gliding, feet still, environment passing. Ban a normal walk."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Double dolly on [Subject]: subject and camera share one rolling platform so the figure appears to glide, feet skating, Spike Lee floating grammar. For motion: [Subject] and the camera move together on the same dolly, creating a floating glide through the space."
+    ],
+    "example": "A detective stands completely still, feet planted, while she and the camera glide forward together down a long corridor. Her face stays the same size and position. Background moves smoothly backward. No walking cycle, no bobbing, no flying pose, solemn inevitability."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/1032b136cbdc1b953c8b60b66a3524fb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/019-double-dolly-floating-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ce24f94c30c52af03eb506f2b74fd5f1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-dolly-019-double-dolly-floating-shot-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4ea9ca1731ba112cbc52da9afea37354.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/double-dolly.jpg",
+      "alt": "Double Dolly frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+      "alt": "Dolly In"
+    },
+    {
+      "kind": "video",
+      "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+      "alt": "Steadicam"
+    },
+    {
+      "kind": "video",
+      "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9b5f5c23380dee90365717f4260ce7af.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/double-dolly/famous/00-blackkklansman-2018.jpg",
+      "alt": "BlacKkKlansman 2018"
+    },
+    {
+      "kind": "image",
+      "path": "media/278655113d4c405c077ec2e8922e5d21.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/double-dolly/famous/01-malcolm-x-1992.jpg",
+      "alt": "Malcolm X 1992"
+    },
+    {
+      "kind": "image",
+      "path": "media/d0ce9ae1d18e43f52925694e14dfaa98.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/double-dolly/famous/02-inside-man-2006.jpg",
+      "alt": "Inside Man 2006"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c7c07d315cbac441e696cff2e5318d0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/double-dolly/hero.jpg",
+      "alt": "Double Dolly",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "ae3eb538d3fb421e75aae134b156c84cef36311ae92ab77b0d7095bd0a4d387d"
+}

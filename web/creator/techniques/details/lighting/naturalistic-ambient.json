@@ -1,0 +1,387 @@
+{
+  "id": "lighting/naturalistic-ambient",
+  "slug": "naturalistic-ambient",
+  "title": "Naturalistic Ambient",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/naturalistic-ambient",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/naturalistic-ambient.webp",
+  "detail": "details/lighting/naturalistic-ambient.json",
+  "aliases": [],
+  "description": "Naturalistic ambient lighting wraps the subject in soft, directionally plausible room or sky tone so the craft reads as unstyled even when units are added. Shadows stay believable; nothing announces a movie lamp.",
+  "thumbnail": "media/f43d62e57e8d4334ed56d9f94b8be9ec.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Invisible craft. A kitchen, a car, a holiday apartment: the light feels like the space, and the audience stops thinking about lighting."
+        },
+        {
+          "type": "paragraph",
+          "text": "Independent drama uses it so emotion is not underlined by a slash of hard key. It is the wrong tool when the story wants a theatrical cut, a butterfly, or a concert edge."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the wrap is so complete that direction dies, you have flattened the room. Naturalistic still has a window side."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Invisible craft. A kitchen, a car, a holiday apartment: the light feels like the space, and the audience stops thinking about lighting.Independent drama uses it so emotion is not underlined by a slash of hard key. It is the wrong tool when the story wants a theatrical cut, a butterfly, or a concert edge.If the wrap is so complete that direction dies, you have flattened the room. Naturalistic still has a window side."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Start from the real window or overhead, then add large soft sources or bounce along that same axis. Keep ratios gentle (often under 4:1)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness is soft; color matches the space (daylight through glass, warm tungsten mix at dusk). Avoid hair lights that cannot be a ceiling and kickers that cannot be a lamp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Naturalistic ambient wrap on [Subject], soft room tone, believable shadow, window-motivated without theatricality."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Start from the real window or overhead, then add large soft sources or bounce along that same axis. Keep ratios gentle (often under 4:1).Hardness is soft; color matches the space (daylight through glass, warm tungsten mix at dusk). Avoid hair lights that cannot be a ceiling and kickers that cannot be a lamp.Prompt: Naturalistic ambient wrap on [Subject], soft room tone, believable shadow, window-motivated without theatricality."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for quiet contemporary drama, a memory that should not look lit. Do not use it for noir graphic or a glamour package."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for quiet contemporary drama, a memory that should not look lit. Do not use it for noir graphic or a glamour package."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Available light forbids adding units; this look may add them. Soft light is the hardness you will use.",
+          "links": [
+            {
+              "text": "Available light",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            },
+            {
+              "text": "Soft light",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Motivated lighting is the justification; naturalistic ambient is the overall unstyled wrap. Bounce light is a common method.",
+          "links": [
+            {
+              "text": "Motivated lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            },
+            {
+              "text": "Bounce light",
+              "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "High-key is brighter and more even than most lived-in rooms.",
+          "links": [
+            {
+              "text": "High-key",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Soft LightBeauty, memory, or kindness.",
+          "displayText": "Soft Light\nBeauty, memory, or kindness.",
+          "links": [
+            {
+              "text": "Soft LightBeauty, memory, or kindness.",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Available LightCommit to the hour you have.",
+          "displayText": "Available Light\nCommit to the hour you have.",
+          "links": [
+            {
+              "text": "Available LightCommit to the hour you have.",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Available light",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Soft light",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "Motivated lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Bounce light",
+          "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+        },
+        {
+          "text": "High-key",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Soft LightBeauty, memory, or kindness.",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "Available LightCommit to the hour you have.",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+          "alt": "Soft Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+          "alt": "Available Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Available light forbids adding units; this look may add them. Soft light is the hardness you will use.Motivated lighting is the justification; naturalistic ambient is the overall unstyled wrap. Bounce light is a common method.High-key is brighter and more even than most lived-in rooms.Soft LightBeauty, memory, or kindness.Available LightCommit to the hour you have.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aftersun lets holiday rooms and sky feel found. Manchester by the Sea keeps New England interiors and winter daylight in a believable wrap."
+        },
+        {
+          "type": "paragraph",
+          "text": "Neither film advertises a key position even when units are surely there."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Aftersun lets holiday rooms and sky feel found. Manchester by the Sea keeps New England interiors and winter daylight in a believable wrap.Neither film advertises a key position even when units are surely there."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ask for room tone, not a named portrait pattern. \" Name a window side."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid hair lights and hard kickers."
+        },
+        {
+          "type": "quote",
+          "text": "Naturalistic ambient wrap on [Subject], soft room tone, believable shadow, window-motivated without theatricality."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Naturalistic+ambient+wrap+on+[Subject],+soft+room+tone,+believable+shadow,+window-motivated+without+theatricality."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Ask for room tone, not a named portrait pattern. \" Name a window side.Forbid hair lights and hard kickers.Copy promptUse in Image GeneratorNaturalistic ambient wrap on [Subject], soft room tone, believable shadow, window-motivated without theatricality.Naturalistic ambient wrap on [Subject], soft room tone, believable shadow, window-motivated without theatricality."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is three-point or frankly available noon sun. The tell is a rim that no ceiling could throw, or harsh unshaped sun while you asked for quiet.",
+          "links": [
+            {
+              "text": "three-point",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            },
+            {
+              "text": "available",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by aligning every unit to the window and softening until direction remains only as a gentle side."
+        }
+      ],
+      "links": [
+        {
+          "text": "three-point",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        },
+        {
+          "text": "available",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is three-point or frankly available noon sun. The tell is a rim that no ceiling could throw, or harsh unshaped sun while you asked for quiet.Fix it by aligning every unit to the window and softening until direction remains only as a gentle side."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is naturalistic ambient in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A crafted wrap that looks like ordinary room or sky light. Units may be added, but direction, hardness, and color stay plausible for the space."
+        },
+        {
+          "type": "heading",
+          "text": "Naturalistic ambient vs available light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Available light uses only what exists. Naturalistic ambient imitates that existence and may hide lights to keep faces readable."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use naturalistic ambient?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for quiet drama that should not look lit. Skip it when graphic shadow or glamour is the point."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt naturalistic ambient for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for a soft room-tone wrap, believable shadow, window-motivated, no theatrical hair light or hard kicker. Name the window side."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is naturalistic ambient in film?A crafted wrap that looks like ordinary room or sky light. Units may be added, but direction, hardness, and color stay plausible for the space.Naturalistic ambient vs available lightAvailable light uses only what exists. Naturalistic ambient imitates that existence and may hide lights to keep faces readable.When should I use naturalistic ambient?Use it for quiet drama that should not look lit. Skip it when graphic shadow or glamour is the point.How do I prompt naturalistic ambient for AI image or video?Ask for a soft room-tone wrap, believable shadow, window-motivated, no theatrical hair light or hard kicker. Name the window side."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Ask for room tone, not a named portrait pattern. \" Name a window side.",
+      "Forbid hair lights and hard kickers."
+    ],
+    "example": "Naturalistic ambient wrap on [Subject], soft room tone, believable shadow, window-motivated without theatricality."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/f43d62e57e8d4334ed56d9f94b8be9ec.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/naturalistic-ambient.webp",
+      "alt": "Naturalistic Ambient example"
+    },
+    {
+      "kind": "image",
+      "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+      "alt": "Soft Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+      "alt": "Available Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/9fdd89349e02dd22cca67fb296b17848.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/naturalistic-ambient/hero.jpg",
+      "alt": "Naturalistic Ambient",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "6c8d2e67270163d553352cc8a34be3aa285b31368b8bf72913823697a343eede"
+}

@@ -1,0 +1,438 @@
+{
+  "id": "color/natural-grade",
+  "slug": "natural-grade",
+  "title": "Natural Grade",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/natural-grade",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/natural-grade.webp",
+  "detail": "details/color/natural-grade.json",
+  "aliases": [],
+  "description": "A natural color grade keeps skin faithful and saturation restrained so the location's real color science remains the authority. No stylized split, no silver punishment, no fever: the grade mostly refuses to editorialize hue.",
+  "thumbnail": "media/bc6d3f83a4464fd33c7bd50b40058a4a.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Style would be a lie. A holiday video that is actually grief, a village in true sun, a fluorescent shop that should stay ugly: the audience is asked to believe the place, not a lookbook."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fidelity is the point, which is harder than a LUT because every mistake shows as fakery. It is the wrong tool when color must carry a version of the story (Palette, Color Shift) or when the world is merciless silver (Bleach Bypass).",
+          "links": [
+            {
+              "text": "Palette",
+              "url": "https://melies.co/cinematic-techniques/color/palette"
+            },
+            {
+              "text": "Color Shift",
+              "url": "https://melies.co/cinematic-techniques/color/color-shift"
+            },
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Filmic Faded can still be fairly natural in hue while lifting the toe; natural-grade is about hue honesty first. Available Light is how you captured it; you can still ruin that capture with a stylized grade.",
+          "links": [
+            {
+              "text": "Filmic Faded",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            },
+            {
+              "text": "Available Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Palette",
+          "url": "https://melies.co/cinematic-techniques/color/palette"
+        },
+        {
+          "text": "Color Shift",
+          "url": "https://melies.co/cinematic-techniques/color/color-shift"
+        },
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Filmic Faded",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Available Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Style would be a lie. A holiday video that is actually grief, a village in true sun, a fluorescent shop that should stay ugly: the audience is asked to believe the place, not a lookbook.Fidelity is the point, which is harder than a LUT because every mistake shows as fakery. It is the wrong tool when color must carry a version of the story (Palette, Color Shift) or when the world is merciless silver (Bleach Bypass).Filmic Faded can still be fairly natural in hue while lifting the toe; natural-grade is about hue honesty first. Available Light is how you captured it; you can still ruin that capture with a stylized grade."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Balance to a plausible white for the location and time of day. Hold skin in a real range (blood, melanin, no teal faces, no plastic orange)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Restrain saturation; do not invent complementary walls. Contrast should match the light you shot, not a trailer."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Natural grade on [Subject], faithful skin, restrained saturation, no stylized split, the location's real color science."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Balance to a plausible white for the location and time of day. Hold skin in a real range (blood, melanin, no teal faces, no plastic orange).Restrain saturation; do not invent complementary walls. Contrast should match the light you shot, not a trailer.Prompt: Natural grade on [Subject], faithful skin, restrained saturation, no stylized split, the location's real color science."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when style would be a lie: a documentary-adjacent drama, a sunlit memory that must stay ordinary. Do not use it if the beat is a designed palette, a fever, or a complementary poster."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when style would be a lie: a documentary-adjacent drama, a sunlit memory that must stay ordinary. Do not use it if the beat is a designed palette, a fever, or a complementary poster."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Available Light is the capture sources. Filmic Faded is a print curve that may still be honest in hue.",
+          "links": [
+            {
+              "text": "Available Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            },
+            {
+              "text": "Filmic Faded",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Teal and Orange and Split Toning editorialize the wheel. Warm Amber and Cool Blue are overall biases.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            },
+            {
+              "text": "Split Toning",
+              "url": "https://melies.co/cinematic-techniques/color/split-tone"
+            },
+            {
+              "text": "Warm Amber",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            },
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Natural-grade refuses those biases except what the location already had."
+        },
+        {
+          "type": "list-item",
+          "text": "Available LightCommit to the hour you have.",
+          "displayText": "Available Light\nCommit to the hour you have.",
+          "links": [
+            {
+              "text": "Available LightCommit to the hour you have.",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Filmic FadedNot HDR. A print.",
+          "displayText": "Filmic Faded\nNot HDR. A print.",
+          "links": [
+            {
+              "text": "Filmic FadedNot HDR. A print.",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Available Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Filmic Faded",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Split Toning",
+          "url": "https://melies.co/cinematic-techniques/color/split-tone"
+        },
+        {
+          "text": "Warm Amber",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        },
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "Available LightCommit to the hour you have.",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Filmic FadedNot HDR. A print.",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+          "alt": "Available Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/6c5de4fbb1a2ea3e097921b0637da37f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/filmic-faded.webp",
+          "alt": "Filmic Faded"
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Available Light is the capture sources. Filmic Faded is a print curve that may still be honest in hue.Teal and Orange and Split Toning editorialize the wheel. Warm Amber and Cool Blue are overall biases.Natural-grade refuses those biases except what the location already had.Available LightCommit to the hour you have.Filmic FadedNot HDR. A print.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aftersun lets holiday light stay plausible so the grief is not costumed in a look. Timbuktu holds desert and village color as themselves."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of restraint, not a still to match."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Aftersun lets holiday light stay plausible so the grief is not costumed in a look. Timbuktu holds desert and village color as themselves.Grammar of restraint, not a still to match."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Forbid the splits by name. Natural grade on [Subject], faithful skin, restrained saturation, no stylized split, the location's real color science."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the real place and time of day. Do not write teal-orange, bleach-bypass, or fever saturation."
+        },
+        {
+          "type": "quote",
+          "text": "Natural grade on [Subject], faithful skin, restrained saturation, no stylized split, the location's real color science."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Natural+grade+on+[Subject],+faithful+skin,+restrained+saturation,+no+stylized+split,+the+location's+real+color+science."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Forbid the splits by name. Natural grade on [Subject], faithful skin, restrained saturation, no stylized split, the location's real color science.Name the real place and time of day. Do not write teal-orange, bleach-bypass, or fever saturation.Copy promptUse in Image GeneratorNatural grade on [Subject], faithful skin, restrained saturation, no stylized split, the location's real color science.Natural grade on [Subject], faithful skin, restrained saturation, no stylized split, the location's real color science."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a mild Teal and Orange or a Filmic Faded LUT that still splits hues. The tell is cyan shadows under 'natural', or plastic skin.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            },
+            {
+              "text": "Filmic Faded",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: faithful skin, location-true walls and sky, no complementary law, restrained chroma."
+        }
+      ],
+      "links": [
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Filmic Faded",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a mild Teal and Orange or a Filmic Faded LUT that still splits hues. The tell is cyan shadows under 'natural', or plastic skin.Fix: faithful skin, location-true walls and sky, no complementary law, restrained chroma."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a natural grade in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a color finish that keeps skin faithful and saturation restrained, so the location's real hues remain in charge. The grade refuses a stylized split or a fever."
+        },
+        {
+          "type": "heading",
+          "text": "Natural Grade vs Filmic Faded",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Filmic faded is about the print curve: lifted blacks, rolled highlights. A natural grade is about hue honesty. They can combine, but a faded print can still be teal-orange, which is no longer natural."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a natural grade?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a stylized look would be a lie. Skip it when palette, fever, silver, or a complementary split is the sentence."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a natural grade for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Natural grade on [Subject], faithful skin, restrained saturation, no stylized split, the location's real color science. Name place and time. Forbid teal-orange and hyper-saturation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a natural grade in film?It is a color finish that keeps skin faithful and saturation restrained, so the location's real hues remain in charge. The grade refuses a stylized split or a fever.Natural Grade vs Filmic FadedFilmic faded is about the print curve: lifted blacks, rolled highlights. A natural grade is about hue honesty. They can combine, but a faded print can still be teal-orange, which is no longer natural.When should I use a natural grade?Use it when a stylized look would be a lie. Skip it when palette, fever, silver, or a complementary split is the sentence.How do I prompt a natural grade for AI image or video?Write: Natural grade on [Subject], faithful skin, restrained saturation, no stylized split, the location's real color science. Name place and time. Forbid teal-orange and hyper-saturation."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Forbid the splits by name. Natural grade on [Subject], faithful skin, restrained saturation, no stylized split, the location's real color science.",
+      "Name the real place and time of day. Do not write teal-orange, bleach-bypass, or fever saturation."
+    ],
+    "example": "Natural grade on [Subject], faithful skin, restrained saturation, no stylized split, the location's real color science."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/bc6d3f83a4464fd33c7bd50b40058a4a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/natural-grade.webp",
+      "alt": "Natural Grade example"
+    },
+    {
+      "kind": "image",
+      "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+      "alt": "Available Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c5de4fbb1a2ea3e097921b0637da37f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/filmic-faded.webp",
+      "alt": "Filmic Faded"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/61ddde5b4a7a11d26dacc97b5b2285aa.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/natural-grade/hero.jpg",
+      "alt": "Natural Grade",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "be0989232f240da9575064e7ed7cbfeebb9359c3f06c60e89bfe6387728a80f9"
+}

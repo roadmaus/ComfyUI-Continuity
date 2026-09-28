@@ -1,0 +1,438 @@
+{
+  "id": "framing/two-shot",
+  "slug": "two-shot",
+  "title": "Two-Shot",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/two-shot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/two-shot-048-profile-two-shot-mini.webp",
+  "detail": "details/framing/two-shot.json",
+  "aliases": [
+    "profile two-shot",
+    "walking two-shot",
+    "layered two-shot",
+    "Shared frame instead of isolated faces"
+  ],
+  "description": "A two-shot, or two shot, frames two principal subjects together so their distance and posture can be compared in one composition. The space between them is part of the sentence.",
+  "thumbnail": "media/ebc6a9329d13b0c650bddc57d3a8808d.webp",
+  "video": "media/c2b51a507b8e5b9e6dbb06fe2e90d474.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/048-profile-two-shot-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "When the relationship is the shot, cutting to singles too soon steals the audience's ability to watch both people at once. A two-shot lets the viewer choose which face to read, and it makes a lean, a flinch, or a widening gap visible without an edit."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when one person must own the frame, or when a third body is politically in the scene. It is also the wrong tool as a timid wide that hides both performances."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep head sizes readable. Profile, 50-50, walking, or layered (one nearer) are variants of the same job: two people, one picture."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function When the relationship is the shot, cutting to singles too soon steals the audience's ability to watch both people at once. A two-shot lets the viewer choose which face to read, and it makes a lean, a flinch, or a widening gap visible without an edit.It is the wrong tool when one person must own the frame, or when a third body is politically in the scene. It is also the wrong tool as a timid wide that hides both performances.Keep head sizes readable. Profile, 50-50, walking, or layered (one nearer) are variants of the same job: two people, one picture."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Balance or deliberately unbalance head sizes. Set a readable axis."
+        },
+        {
+          "type": "paragraph",
+          "text": "40mm to 50mm at table or walking distance is common. Decide whether one face is privileged by focus or light."
+        },
+        {
+          "type": "paragraph",
+          "text": "Small changes in distance are the acting. Prompt: Two-shot of [Subject] with a second figure, the space between them doing narrative work, 50mm, shared frame as relationship."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Balance or deliberately unbalance head sizes. Set a readable axis.40mm to 50mm at table or walking distance is common. Decide whether one face is privileged by focus or light.Small changes in distance are the acting. Prompt: Two-shot of [Subject] with a second figure, the space between them doing narrative work, 50mm, shared frame as relationship."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the relationship is the shot: two people at a diner table, a walk, a shared silence. Do not hide both faces in an unnecessarily empty wide, and do not use a two-shot if the scene has become a trio."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the relationship is the shot: two people at a diner table, a walk, a shared silence. Do not hide both faces in an unnecessarily empty wide, and do not use a two-shot if the scene has become a trio."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Over-the-shoulder coverage puts one face in focus and the partner as a foreground shoulder; it is not a shared two-person portrait. A Single removes the partner.",
+          "links": [
+            {
+              "text": "Over-the-shoulder coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            },
+            {
+              "text": "Single",
+              "url": "https://melies.co/cinematic-techniques/framing/single"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Three-Shot adds a third principal and a new politics. Two-shot means both people author the frame.",
+          "links": [
+            {
+              "text": "Three-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Shot/reverse is an editing pattern, not this size."
+        },
+        {
+          "type": "list-item",
+          "text": "Three-ShotA trio has politics.",
+          "displayText": "Three-Shot\nA trio has politics.",
+          "links": [
+            {
+              "text": "Three-ShotA trio has politics.",
+              "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Choker ShotEmotion with nowhere to hide.",
+          "displayText": "Choker Shot\nEmotion with nowhere to hide.",
+          "links": [
+            {
+              "text": "Choker ShotEmotion with nowhere to hide.",
+              "url": "https://melies.co/cinematic-techniques/framing/choker"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Over-the-shoulder coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Single",
+          "url": "https://melies.co/cinematic-techniques/framing/single"
+        },
+        {
+          "text": "Three-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+        },
+        {
+          "text": "Three-ShotA trio has politics.",
+          "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Choker ShotEmotion with nowhere to hide.",
+          "url": "https://melies.co/cinematic-techniques/framing/choker"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/993aa813c3ad1027061cf473597be748.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-shot.webp",
+          "alt": "Three-Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d5bdd8f53c2bc0f78a3e63efcaac2a30.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choker.webp",
+          "alt": "Choker Shot"
+        }
+      ],
+      "sourceText": "Compared with similar shots Over-the-shoulder coverage puts one face in focus and the partner as a foreground shoulder; it is not a shared two-person portrait. A Single removes the partner.A Three-Shot adds a third principal and a new politics. Two-shot means both people author the frame.Shot/reverse is an editing pattern, not this size.Three-ShotA trio has politics.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.Choker ShotEmotion with nowhere to hide."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Heat plants two opponents across one diner table before and between singles, so the gap is visible. Persona juxtaposes faces inside severe shared compositions."
+        },
+        {
+          "type": "paragraph",
+          "text": "Before Sunrise and The Apartment keep pairs in one frame so walking and apartment air are the relation. Grammar: two bodies, one sentence."
+        },
+        {
+          "type": "list-item",
+          "text": "Persona 1966Faces are juxtaposed and related within severe shared compositions.",
+          "displayText": "Persona 1966\nFaces are juxtaposed and related within severe shared compositions."
+        },
+        {
+          "type": "list-item",
+          "text": "Heat 1995The diner encounter establishes two opponents across one table before and between singles.",
+          "displayText": "Heat 1995\nThe diner encounter establishes two opponents across one table before and between singles."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/0eb67c0bcdc85e7e692365fb7d9210b9.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/two-shot/famous/00-persona-1966.jpg",
+          "alt": "Persona 1966"
+        },
+        {
+          "kind": "image",
+          "path": "media/af6b6dc8fa7fe3e25de053e8960a7d54.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/two-shot/famous/01-heat-1995.jpg",
+          "alt": "Heat 1995"
+        }
+      ],
+      "sourceText": "In film Heat plants two opponents across one diner table before and between singles, so the gap is visible. Persona juxtaposes faces inside severe shared compositions.Before Sunrise and The Apartment keep pairs in one frame so walking and apartment air are the relation. Grammar: two bodies, one sentence.Persona 1966Faces are juxtaposed and related within severe shared compositions.Heat 1995The diner encounter establishes two opponents across one table before and between singles."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand two people and the gap. Example: Two-shot of [Subject] with a second figure, the space between them doing narrative work, 50mm."
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify profile, facing, or layered. Keep both faces readable unless you are hiding one on purpose."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, let distance change; do not cut to singles inside the prompt if you want the shared frame to hold."
+        },
+        {
+          "type": "quote",
+          "text": "Hold a medium profile two-shot of two former business partners seated across a narrow café table. Both faces remain readable at once. One leans forward while the other slowly leans back. No cutting to singles, no focus change, tension expressed through changing distance."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Hold+a+medium+profile+two-shot+of+two+former+business+partners+seated+across+a+narrow+caf%C3%A9+table.+Both+faces+remain+readable+at+once.+One+leans+forward+while+the+other+slowly+leans+back.+No+cutting+to+singles,+no+focus+change,+tension+expressed+through+changing+distance."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Demand two people and the gap. Example: Two-shot of [Subject] with a second figure, the space between them doing narrative work, 50mm.Specify profile, facing, or layered. Keep both faces readable unless you are hiding one on purpose.For video, let distance change; do not cut to singles inside the prompt if you want the shared frame to hold.Copy promptUse in Video GeneratorHold a medium profile two-shot of two former business partners seated across a narrow café table. Both faces remain readable at once. One leans forward while the other slowly leans back. No cutting to singles, no focus change, tension expressed through changing distance.Hold a medium profile two-shot of two former business partners seated across a narrow café table. Both faces remain readable at once. One leans forward while the other slowly leans back. No cutting to singles, no focus change, tension expressed through changing distance."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Over-the-Shoulder Coverage (one face plus a shoulder) or two singles cut together. The tell is one sharp face and a blur of coat, or both people so small the relation dies.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            },
+            {
+              "text": "singles",
+              "url": "https://melies.co/cinematic-techniques/framing/single"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: two principals, comparable scale, the gap visible."
+        }
+      ],
+      "links": [
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "singles",
+          "url": "https://melies.co/cinematic-techniques/framing/single"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Over-the-Shoulder Coverage (one face plus a shoulder) or two singles cut together. The tell is one sharp face and a blur of coat, or both people so small the relation dies.Fix: two principals, comparable scale, the gap visible."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Two-Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A two-shot frames two principal subjects together so their relationship, distance, and posture are visible in one composition. The space between them is part of the shot, not only the faces."
+        },
+        {
+          "type": "heading",
+          "text": "Two-Shot vs Over-the-Shoulder Coverage",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A two-shot gives both people authorship of the frame. Over-the-shoulder coverage uses a near shoulder as a foreground fragment while the far face is the subject. If you only see one face clearly, you are in OTS, not a two-shot."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Two-Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the relationship is the event and the audience should watch both people at once. Do not use it as a timid wide that hides acting, and do not use it for a three-person politics problem."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Two-Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Two-shot of [Subject] with a second figure, the space between them doing narrative work. Name whether they are in profile, facing, or layered. Keep both faces readable."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Two-Shot in film?A two-shot frames two principal subjects together so their relationship, distance, and posture are visible in one composition. The space between them is part of the shot, not only the faces.Two-Shot vs Over-the-Shoulder CoverageA two-shot gives both people authorship of the frame. Over-the-shoulder coverage uses a near shoulder as a foreground fragment while the far face is the subject. If you only see one face clearly, you are in OTS, not a two-shot.When should I use Two-Shot?Use it when the relationship is the event and the audience should watch both people at once. Do not use it as a timid wide that hides acting, and do not use it for a three-person politics problem.How do I prompt Two-Shot for AI image or video?Write Two-shot of [Subject] with a second figure, the space between them doing narrative work. Name whether they are in profile, facing, or layered. Keep both faces readable."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Demand two people and the gap. Example: Two-shot of [Subject] with a second figure, the space between them doing narrative work, 50mm.",
+      "Specify profile, facing, or layered. Keep both faces readable unless you are hiding one on purpose.",
+      "For video, let distance change; do not cut to singles inside the prompt if you want the shared frame to hold."
+    ],
+    "example": "Hold a medium profile two-shot of two former business partners seated across a narrow café table. Both faces remain readable at once. One leans forward while the other slowly leans back. No cutting to singles, no focus change, tension expressed through changing distance."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/c2b51a507b8e5b9e6dbb06fe2e90d474.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/048-profile-two-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ebc6a9329d13b0c650bddc57d3a8808d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/two-shot-048-profile-two-shot-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fe297347827c516bdf27044c29442605.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/two-shot.jpg",
+      "alt": "Two-Shot frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/993aa813c3ad1027061cf473597be748.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-shot.webp",
+      "alt": "Three-Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d5bdd8f53c2bc0f78a3e63efcaac2a30.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choker.webp",
+      "alt": "Choker Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/0eb67c0bcdc85e7e692365fb7d9210b9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/two-shot/famous/00-persona-1966.jpg",
+      "alt": "Persona 1966"
+    },
+    {
+      "kind": "image",
+      "path": "media/af6b6dc8fa7fe3e25de053e8960a7d54.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/two-shot/famous/01-heat-1995.jpg",
+      "alt": "Heat 1995"
+    },
+    {
+      "kind": "image",
+      "path": "media/7cce4b30b8e00e5725ad99cd28408624.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/two-shot/hero.jpg",
+      "alt": "Two-Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "fd20485dfb2dd1f1ea261d9e22d1751e66de55ee28c6df0fa82e47116a627ea1"
+}

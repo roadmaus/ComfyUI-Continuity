@@ -1,0 +1,343 @@
+{
+  "id": "viral-looks/hand-paint",
+  "slug": "hand-paint",
+  "title": "Hand Paint",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/hand-paint",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hand-paint.webp",
+  "detail": "details/viral-looks/hand-paint.json",
+  "aliases": [],
+  "description": "Hand paint, the hand paint look, is wet strokes laid over a living picture, a painter's wrist still in the shot or at least a stroke that just happened. Canvas is finished oil; this is paint as a verb.",
+  "thumbnail": "media/ec886cd3b80b806d576ad7e35142a98e.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Making, memory, a portrait being invented: photographic underlayer, color still moving, face kept. A finished gallery still wants canvas."
+        },
+        {
+          "type": "paragraph",
+          "text": "A dry painterly grade is a lie about process. It is the wrong tool when the paint is dry and even, and the wrong tool if the face dissolves into abstract."
+        },
+        {
+          "type": "paragraph",
+          "text": "Show wetness and the direction of a stroke that just happened."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Making, memory, a portrait being invented: photographic underlayer, color still moving, face kept. A finished gallery still wants canvas.A dry painterly grade is a lie about process. It is the wrong tool when the paint is dry and even, and the wrong tool if the face dissolves into abstract.Show wetness and the direction of a stroke that just happened."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Portrait distance, 50mm, lock-off. Photographic underlayer, wet strokes with direction, brush or hand optional in frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color that is still moving. Prompt: Hand-paint over [Subject], wet strokes still moving, a painter's wrist in the picture."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Portrait distance, 50mm, lock-off. Photographic underlayer, wet strokes with direction, brush or hand optional in frame.Color that is still moving. Prompt: Hand-paint over [Subject], wet strokes still moving, a painter's wrist in the picture."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A portrait being made, memory as labor, process. Do not use it as a dry painterly grade, and do not use it when you wanted finished canvas."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A portrait being made, memory as labor, process. Do not use it as a dry painterly grade, and do not use it when you wanted finished canvas."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Canvas is finished oil, tooth and bristle at rest. Akrill is plastic poster pigment.",
+          "links": [
+            {
+              "text": "Canvas",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+            },
+            {
+              "text": "Akrill",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/akrill"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hand paint shows the act: wet stroke, optional wrist. If the paint has already dried, you wanted canvas."
+        },
+        {
+          "type": "list-item",
+          "text": "CanvasThe stock is paint.",
+          "displayText": "Canvas\nThe stock is paint.",
+          "links": [
+            {
+              "text": "CanvasThe stock is paint.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AkrillThe pigment should sit on top.",
+          "displayText": "Akrill\nThe pigment should sit on top.",
+          "links": [
+            {
+              "text": "AkrillThe pigment should sit on top.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/akrill"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Canvas",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+        },
+        {
+          "text": "Akrill",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/akrill"
+        },
+        {
+          "text": "CanvasThe stock is paint.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+        },
+        {
+          "text": "AkrillThe pigment should sit on top.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/akrill"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1d3244991bc2e19cddb76634840966ac.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/canvas.webp",
+          "alt": "Canvas"
+        },
+        {
+          "kind": "image",
+          "path": "media/67909b15296c2b3e96e4def9f50b2040.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/akrill.webp",
+          "alt": "Akrill"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Canvas is finished oil, tooth and bristle at rest. Akrill is plastic poster pigment.Hand paint shows the act: wet stroke, optional wrist. If the paint has already dried, you wanted canvas.CanvasThe stock is paint.AkrillThe pigment should sit on top.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Loving Vincent's labor is paint as a verb as much as a finished stock. Painted title sequences keep the stroke in motion."
+        },
+        {
+          "type": "paragraph",
+          "text": "Process as image. Not a painting to clone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Loving Vincent's labor is paint as a verb as much as a finished stock. Painted title sequences keep the stroke in motion.Process as image. Not a painting to clone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wet, directional, face kept. Hand-paint over [Subject], wet strokes still moving, a painter's wrist in the picture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add photographic underlayer, wet edges, optional brush in frame, eyes readable. Not dry varnish."
+        },
+        {
+          "type": "quote",
+          "text": "Hand-paint over [Subject], wet strokes still moving, a painter's wrist in the picture."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Hand-paint+over+[Subject],+wet+strokes+still+moving,+a+painter's+wrist+in+the+picture."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Wet, directional, face kept. Hand-paint over [Subject], wet strokes still moving, a painter's wrist in the picture.Add photographic underlayer, wet edges, optional brush in frame, eyes readable. Not dry varnish.Copy promptUse in Image GeneratorHand-paint over [Subject], wet strokes still moving, a painter's wrist in the picture.Hand-paint over [Subject], wet strokes still moving, a painter's wrist in the picture."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A dry painterly grade, or a finished Canvas with no wet act. The tell is no wetness and no stroke direction.",
+          "links": [
+            {
+              "text": "Canvas",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: wet paint, a stroke that just happened, face held."
+        }
+      ],
+      "links": [
+        {
+          "text": "Canvas",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A dry painterly grade, or a finished Canvas with no wet act. The tell is no wetness and no stroke direction.Fix it: wet paint, a stroke that just happened, face held."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Hand Paint in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Process as image: wet strokes over a living picture, a painter's wrist implied or shown. Paint as a verb, not a finished canvas."
+        },
+        {
+          "type": "heading",
+          "text": "Hand Paint vs Canvas",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Canvas is finished oil. Hand paint is the wet act. If the stroke is still moving, you are here. If the gallery object is done, you wanted canvas."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Hand Paint?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Making, memory, a portrait being invented. Skip dry grades and finished gallery stills."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Hand Paint for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Photographic underlayer, then: Hand-paint over [Subject], wet strokes still moving, a painter's wrist in the picture. Demand wetness and a readable face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Hand Paint in film?Process as image: wet strokes over a living picture, a painter's wrist implied or shown. Paint as a verb, not a finished canvas.Hand Paint vs CanvasCanvas is finished oil. Hand paint is the wet act. If the stroke is still moving, you are here. If the gallery object is done, you wanted canvas.When should I use Hand Paint?Making, memory, a portrait being invented. Skip dry grades and finished gallery stills.How do I prompt Hand Paint for AI image or video?Photographic underlayer, then: Hand-paint over [Subject], wet strokes still moving, a painter's wrist in the picture. Demand wetness and a readable face."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Wet, directional, face kept. Hand-paint over [Subject], wet strokes still moving, a painter's wrist in the picture.",
+      "Add photographic underlayer, wet edges, optional brush in frame, eyes readable. Not dry varnish."
+    ],
+    "example": "Hand-paint over [Subject], wet strokes still moving, a painter's wrist in the picture."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/ec886cd3b80b806d576ad7e35142a98e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hand-paint.webp",
+      "alt": "Hand Paint example"
+    },
+    {
+      "kind": "image",
+      "path": "media/1d3244991bc2e19cddb76634840966ac.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/canvas.webp",
+      "alt": "Canvas"
+    },
+    {
+      "kind": "image",
+      "path": "media/67909b15296c2b3e96e4def9f50b2040.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/akrill.webp",
+      "alt": "Akrill"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/983ec46dfcf4055c3c01b663143cc723.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/hand-paint/hero.jpg",
+      "alt": "Hand Paint",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "1cd80b14832c46a0bd490503cb006da01f739c02f7e44ba3c880a44476e722f2"
+}

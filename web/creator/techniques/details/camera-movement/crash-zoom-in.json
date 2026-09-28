@@ -1,0 +1,459 @@
+{
+  "id": "camera-movement/crash-zoom-in",
+  "slug": "crash-zoom-in",
+  "title": "Crash Zoom In",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+  "detail": "details/camera-movement/crash-zoom-in.json",
+  "aliases": [
+    "whip zoom",
+    "snap zoom",
+    "zoom in",
+    "zoom out",
+    "slow zoom",
+    "Zoom coup de poing"
+  ],
+  "description": "A crash zoom is a rapid focal-length snap from a wider frame into a detail, usually without moving the camera. The punch is optical and conspicuous: size changes faster than a body can walk.",
+  "thumbnail": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+  "video": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The shot punctuates a hit, a name, a weapon, or a comic sting. Artificiality is the point."
+        },
+        {
+          "type": "paragraph",
+          "text": "The audience is not invited to approach; they are struck by a lens. It is the wrong tool for a thought that should land over several seconds, and the wrong tool for geography."
+        },
+        {
+          "type": "paragraph",
+          "text": "After the snap, hold. If you keep zooming or add shake, the sting becomes noise."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The shot punctuates a hit, a name, a weapon, or a comic sting. Artificiality is the point.The audience is not invited to approach; they are struck by a lens. It is the wrong tool for a thought that should land over several seconds, and the wrong tool for geography.After the snap, hold. If you keep zooming or add shake, the sting becomes noise."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the subject on the zoom center. Use a controlled fast zoom or, in post, a high-resolution crop that still behaves like optics, not a warp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Expect radial motion blur during the snap, then a hard hold on the tight frame. Avoid autofocus hunting."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt an aggressive optical punch-in under one second, zoom blur, then a locked tight hold, and ban a physical dolly."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Keep the subject on the zoom center. Use a controlled fast zoom or, in post, a high-resolution crop that still behaves like optics, not a warp.Expect radial motion blur during the snap, then a hard hold on the tight frame. Avoid autofocus hunting.Prompt an aggressive optical punch-in under one second, zoom blur, then a locked tight hold, and ban a physical dolly."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to punctuate a hit, a realization, or a comic sting. Concrete beat: a name is spoken and the face slams into close-up."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it as a substitute for walking closer through a room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to punctuate a hit, a realization, or a comic sting. Concrete beat: a name is spoken and the face slams into close-up.Do not use it as a substitute for walking closer through a room."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Slow Zoom In is the same optical family at patience speed. A Dolly In has parallax and feels like a person stepping in.",
+          "links": [
+            {
+              "text": "Slow Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            },
+            {
+              "text": "Dolly In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Whip Pan blurs by rotating the head, not by changing focal length. Crash zoom in is a snap of the lens, then a hold.",
+          "links": [
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom OutShock-reveal scale or undercut a close moment.",
+          "displayText": "Crash Zoom Out\nShock-reveal scale or undercut a close moment.",
+          "links": [
+            {
+              "text": "Crash Zoom OutShock-reveal scale or undercut a close moment.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "displayText": "Whip Pan\nTransition, punchline, or sudden attention shift.",
+          "links": [
+            {
+              "text": "Whip PanTransition, punchline, or sudden attention shift.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        },
+        {
+          "text": "Dolly In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Crash Zoom OutShock-reveal scale or undercut a close moment.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-out"
+        },
+        {
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/50f4effe5c52992f8b05bebf3c572d46.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-out-03-crash-zoom-out-v2-mini.webp",
+          "alt": "Crash Zoom Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/5a74b21f2d2f97e035b9035f20977f76.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-crash-zoom-out-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+          "alt": "Whip Pan"
+        },
+        {
+          "kind": "video",
+          "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Slow Zoom In is the same optical family at patience speed. A Dolly In has parallax and feels like a person stepping in.A Whip Pan blurs by rotating the head, not by changing focal length. Crash zoom in is a snap of the lens, then a hold.Crash Zoom OutShock-reveal scale or undercut a close moment.Whip PanTransition, punchline, or sudden attention shift.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Django Unchained uses abrupt zooms as Western punctuation. The Grand Budapest Hotel snaps to comic information."
+        },
+        {
+          "type": "paragraph",
+          "text": "Kill Bill and Hot Fuzz treat the crash zoom as genre grammar rather than invisibility. Use the speed and the hold, not the costumes."
+        },
+        {
+          "type": "list-item",
+          "text": "Django Unchained 2012Abrupt zooms punctuate reactions and Western-style confrontations.",
+          "displayText": "Django Unchained 2012\nAbrupt zooms punctuate reactions and Western-style confrontations."
+        },
+        {
+          "type": "list-item",
+          "text": "The Grand Budapest Hotel 2014Sudden reframings emphasize comic information.",
+          "displayText": "The Grand Budapest Hotel 2014\nSudden reframings emphasize comic information."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/43bc63cd106c8521faa82f442b5b4784.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crash-zoom-in/famous/00-django-unchained-2012.jpg",
+          "alt": "Django Unchained 2012"
+        },
+        {
+          "kind": "image",
+          "path": "media/d300083b25fb7094e5e0d605eacfe9fd.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crash-zoom-in/famous/01-the-grand-budapest-hotel-2014.jpg",
+          "alt": "The Grand Budapest Hotel 2014"
+        }
+      ],
+      "sourceText": "In film Django Unchained uses abrupt zooms as Western punctuation. The Grand Budapest Hotel snaps to comic information.Kill Bill and Hot Fuzz treat the crash zoom as genre grammar rather than invisibility. Use the speed and the hold, not the costumes.Django Unchained 2012Abrupt zooms punctuate reactions and Western-style confrontations.The Grand Budapest Hotel 2014Sudden reframings emphasize comic information."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aggressive crash zoom into [Subject], snap optical punch-in under one second, radial motion blur, Shaw Brothers energy, then a hard hold on the tight frame. For motion: sudden crash zoom into [Subject] in under a second, then hold."
+        },
+        {
+          "type": "paragraph",
+          "text": "Heavy zoom blur during the snap."
+        },
+        {
+          "type": "quote",
+          "text": "A solemn auctioneer lifts a plain wooden box. Snap-zoom instantly from a medium shot to the tiny blinking light hidden under its lid. Fixed camera position, strong punchy zoom, immediate sharp landing, no forward dolly and no slow-motion."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+solemn+auctioneer+lifts+a+plain+wooden+box.+Snap-zoom+instantly+from+a+medium+shot+to+the+tiny+blinking+light+hidden+under+its+lid.+Fixed+camera+position,+strong+punchy+zoom,+immediate+sharp+landing,+no+forward+dolly+and+no+slow-motion."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Aggressive crash zoom into [Subject], snap optical punch-in under one second, radial motion blur, Shaw Brothers energy, then a hard hold on the tight frame. For motion: sudden crash zoom into [Subject] in under a second, then hold.Heavy zoom blur during the snap.Copy promptUse in Video GeneratorA solemn auctioneer lifts a plain wooden box. Snap-zoom instantly from a medium shot to the tiny blinking light hidden under its lid. Fixed camera position, strong punchy zoom, immediate sharp landing, no forward dolly and no slow-motion.A solemn auctioneer lifts a plain wooden box. Snap-zoom instantly from a medium shot to the tiny blinking light hidden under its lid. Fixed camera position, strong punchy zoom, immediate sharp landing, no forward dolly and no slow-motion."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a fast Dolly In or a Whip Pan. The tell is parallax or horizontal streaking instead of radial zoom blur.",
+          "links": [
+            {
+              "text": "Dolly In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            },
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: camera body still, subject on center, snap, then freeze the tight frame. Do not add unrelated camera shake."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a fast Dolly In or a Whip Pan. The tell is parallax or horizontal streaking instead of radial zoom blur.The fix: camera body still, subject on center, snap, then freeze the tight frame. Do not add unrelated camera shake."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Crash Zoom In in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a very fast increase of focal length that slams from a wider shot into a detail, usually from a locked camera, then holds."
+        },
+        {
+          "type": "heading",
+          "text": "Crash Zoom In vs Dolly In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly in moves the camera through space. Crash zoom in changes only the lens, often with radial blur, and reads as a punctuation mark rather than an approach."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Crash Zoom In?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a fact must hit: a face, a gun, a title, a joke. Use it once per beat and hold. Do not use it to tour a location."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Crash Zoom In for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Demand a snap optical zoom in under one second, radial zoom blur, a still camera body, and a hard hold. Ban dolly and extra shake."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Crash Zoom In in film?It is a very fast increase of focal length that slams from a wider shot into a detail, usually from a locked camera, then holds.Crash Zoom In vs Dolly InDolly in moves the camera through space. Crash zoom in changes only the lens, often with radial blur, and reads as a punctuation mark rather than an approach.When should I use Crash Zoom In?When a fact must hit: a face, a gun, a title, a joke. Use it once per beat and hold. Do not use it to tour a location.How do I prompt Crash Zoom In for AI image or video?Demand a snap optical zoom in under one second, radial zoom blur, a still camera body, and a hard hold. Ban dolly and extra shake."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Aggressive crash zoom into [Subject], snap optical punch-in under one second, radial motion blur, Shaw Brothers energy, then a hard hold on the tight frame. For motion: sudden crash zoom into [Subject] in under a second, then hold.",
+      "Heavy zoom blur during the snap."
+    ],
+    "example": "A solemn auctioneer lifts a plain wooden box. Snap-zoom instantly from a medium shot to the tiny blinking light hidden under its lid. Fixed camera position, strong punchy zoom, immediate sharp landing, no forward dolly and no slow-motion."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5b62a549c96b42d8115ae9ae8945a689.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/crash-zoom-in.jpg",
+      "alt": "Crash Zoom In frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/50f4effe5c52992f8b05bebf3c572d46.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-out-03-crash-zoom-out-v2-mini.webp",
+      "alt": "Crash Zoom Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/5a74b21f2d2f97e035b9035f20977f76.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-crash-zoom-out-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+      "alt": "Whip Pan"
+    },
+    {
+      "kind": "video",
+      "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/43bc63cd106c8521faa82f442b5b4784.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crash-zoom-in/famous/00-django-unchained-2012.jpg",
+      "alt": "Django Unchained 2012"
+    },
+    {
+      "kind": "image",
+      "path": "media/d300083b25fb7094e5e0d605eacfe9fd.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crash-zoom-in/famous/01-the-grand-budapest-hotel-2014.jpg",
+      "alt": "The Grand Budapest Hotel 2014"
+    },
+    {
+      "kind": "image",
+      "path": "media/3a6cce54f09277eb89278fba2b359eaf.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crash-zoom-in/hero.jpg",
+      "alt": "Crash Zoom In",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "e7d34daeff72cbd98ff98d54257dda5beb79f46cde90f5c31c1606f725be77a3"
+}

@@ -1,0 +1,381 @@
+{
+  "id": "lighting/three-point-lighting",
+  "slug": "three-point-lighting",
+  "title": "Three-Point Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/three-point-lighting",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+  "detail": "details/lighting/three-point-lighting.json",
+  "aliases": [],
+  "description": "Three-point lighting, the basic three point lighting setup, places a key, a fill, and a backlight so a face is modeled from one dominant side, opened in the shadows, and separated from the background. The key is brightest and sets direction; fill and back exist only as ratios against it.",
+  "thumbnail": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In a scene it is the default portrait grammar: the audience can read both eyes, the cheekbones have a light side and a shadow side, and the hair does not melt into the wall. Classical coverage uses it so reverse shots match, and so a close-up still feels like the same room as the master."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the room already has a single honest source, or when the story wants a face half-erased. Teaching the setup is useful."
+        },
+        {
+          "type": "paragraph",
+          "text": "Leaving it on every night interior as three hidden movie lights is how a crime scene starts to look like a cosmetics ad."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function In a scene it is the default portrait grammar: the audience can read both eyes, the cheekbones have a light side and a shadow side, and the hair does not melt into the wall. Classical coverage uses it so reverse shots match, and so a close-up still feels like the same room as the master.It is the wrong tool when the room already has a single honest source, or when the story wants a face half-erased. Teaching the setup is useful.Leaving it on every night interior as three hidden movie lights is how a crime scene starts to look like a cosmetics ad."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place the key about 45 degrees off camera axis and 30 to 45 degrees above the eyes, large enough to be slightly soft unless the scene is harsh. 5 to 3 stops down so the shadow cheek still has pores."
+        },
+        {
+          "type": "paragraph",
+          "text": "Put backlight high and behind, often slightly opposite the key, warm or white, flagged so it rims hair and shoulders without flaring the lens. Prompt: Classic three-point lighting on [Subject]: key at 45 degrees, soft fill opening shadows, warm backlight rim, modeled volume."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place the key about 45 degrees off camera axis and 30 to 45 degrees above the eyes, large enough to be slightly soft unless the scene is harsh. 5 to 3 stops down so the shadow cheek still has pores.Put backlight high and behind, often slightly opposite the key, warm or white, flagged so it rims hair and shoulders without flaring the lens. Prompt: Classic three-point lighting on [Subject]: key at 45 degrees, soft fill opening shadows, warm backlight rim, modeled volume."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a teachable talking-head or a studio close-up that must stay readable across a whole scene. Do not use it as the only language of a night interior that is supposed to be one lamp."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a teachable talking-head or a studio close-up that must stay readable across a whole scene. Do not use it as the only language of a night interior that is supposed to be one lamp."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Key light is the dominant source inside this setup, not the setup itself. Fill light only opens the key's shadows; it has no third direction.",
+          "links": [
+            {
+              "text": "Key light",
+              "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+            },
+            {
+              "text": "Fill light",
+              "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Backlight is the rear unit that separates the figure. Rembrandt lighting and loop lighting are facial patterns you can make with the key while the other two points still exist.",
+          "links": [
+            {
+              "text": "Backlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            },
+            {
+              "text": "Rembrandt lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            },
+            {
+              "text": "loop lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Key LightDecide where the world is lit from. Everything else follows.",
+          "displayText": "Key Light\nDecide where the world is lit from. Everything else follows.",
+          "links": [
+            {
+              "text": "Key LightDecide where the world is lit from. Everything else follows.",
+              "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Fill LightControl how much of the dark you can still read.",
+          "displayText": "Fill Light\nControl how much of the dark you can still read.",
+          "links": [
+            {
+              "text": "Fill LightControl how much of the dark you can still read.",
+              "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "BacklightSeparate a dark figure from a dark world.",
+          "displayText": "Backlight\nSeparate a dark figure from a dark world.",
+          "links": [
+            {
+              "text": "BacklightSeparate a dark figure from a dark world.",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Key light",
+          "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+        },
+        {
+          "text": "Fill light",
+          "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+        },
+        {
+          "text": "Backlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "Rembrandt lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "loop lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+        },
+        {
+          "text": "Key LightDecide where the world is lit from. Everything else follows.",
+          "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+        },
+        {
+          "text": "Fill LightControl how much of the dark you can still read.",
+          "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+        },
+        {
+          "text": "BacklightSeparate a dark figure from a dark world.",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/060335b879d527a7f44190f4b1d160cf.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/key-light.webp",
+          "alt": "Key Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/bf5c953c02683c6a73c9786a0e1cebe6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fill-light.webp",
+          "alt": "Fill Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+          "alt": "Backlight"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Key light is the dominant source inside this setup, not the setup itself. Fill light only opens the key's shadows; it has no third direction.Backlight is the rear unit that separates the figure. Rembrandt lighting and loop lighting are facial patterns you can make with the key while the other two points still exist.Key LightDecide where the world is lit from. Everything else follows.Fill LightControl how much of the dark you can still read.BacklightSeparate a dark figure from a dark world."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Casablanca and Rebecca show the classical Hollywood version: key, fill, and a hair or back edge kept in ratio so stars stay modeled in every size. Use that grammar, not a poster to copy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Later films keep the three jobs even when the units are hidden in practicals."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Casablanca and Rebecca show the classical Hollywood version: key, fill, and a hair or back edge kept in ratio so stars stay modeled in every size. Use that grammar, not a poster to copy.Later films keep the three jobs even when the units are hidden in practicals."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name all three jobs, not the word portrait. \" Add key side (left or right), fill ratio, and backlight color."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not write a mood word in place of the three positions."
+        },
+        {
+          "type": "quote",
+          "text": "Classic three-point lighting on [Subject]: key at 45 degrees, soft fill opening shadows, warm backlight rim, sculpted dimensionality."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Classic+three-point+lighting+on+[Subject]:+key+at+45+degrees,+soft+fill+opening+shadows,+warm+backlight+rim,+sculpted+dimensionality."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name all three jobs, not the word portrait. \" Add key side (left or right), fill ratio, and backlight color.Do not write a mood word in place of the three positions.Copy promptUse in Image GeneratorClassic three-point lighting on [Subject]: key at 45 degrees, soft fill opening shadows, warm backlight rim, sculpted dimensionality.Classic three-point lighting on [Subject]: key at 45 degrees, soft fill opening shadows, warm backlight rim, sculpted dimensionality."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a single frontal soft light labeled as three-point. The tell is even cheeks, no hair edge, and a shadowless nose.",
+          "links": [
+            {
+              "text": "soft light",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by offsetting the key, dropping fill, and adding a flagged rear rim."
+        }
+      ],
+      "links": [
+        {
+          "text": "soft light",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a single frontal soft light labeled as three-point. The tell is even cheeks, no hair edge, and a shadowless nose.Fix it by offsetting the key, dropping fill, and adding a flagged rear rim."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is three-point lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A conventional arrangement of key, fill, and backlight. The key sets direction and exposure, fill opens the shadow side, and backlight separates the subject from the background."
+        },
+        {
+          "type": "heading",
+          "text": "Three-point lighting vs key light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Key light is one source. Three-point lighting is a three-job system in which that key is joined by a dimmer fill and a rear separation light."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use three-point lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a face must stay fully readable and consistent across coverage. Skip it when a single motivated source should own the room."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt three-point lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "State key at about 45 degrees, soft fill on the opposite cheek, and a warm or white backlight rim. Name which side is keyed so the model does not flatten the face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is three-point lighting in film?A conventional arrangement of key, fill, and backlight. The key sets direction and exposure, fill opens the shadow side, and backlight separates the subject from the background.Three-point lighting vs key lightKey light is one source. Three-point lighting is a three-job system in which that key is joined by a dimmer fill and a rear separation light.When should I use three-point lighting?Use it when a face must stay fully readable and consistent across coverage. Skip it when a single motivated source should own the room.How do I prompt three-point lighting for AI image or video?State key at about 45 degrees, soft fill on the opposite cheek, and a warm or white backlight rim. Name which side is keyed so the model does not flatten the face."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name all three jobs, not the word portrait. \" Add key side (left or right), fill ratio, and backlight color.",
+      "Do not write a mood word in place of the three positions."
+    ],
+    "example": "Classic three-point lighting on [Subject]: key at 45 degrees, soft fill opening shadows, warm backlight rim, sculpted dimensionality."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/060335b879d527a7f44190f4b1d160cf.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/key-light.webp",
+      "alt": "Key Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/bf5c953c02683c6a73c9786a0e1cebe6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fill-light.webp",
+      "alt": "Fill Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+      "alt": "Backlight"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/95af101cac4b83e25f3ecb90cbb0b789.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/three-point-lighting/hero.jpg",
+      "alt": "Three-Point Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "556f35e71a1e5b1342a3f4df69856d88367a0d710bbd169bacdd356db82a6182"
+}

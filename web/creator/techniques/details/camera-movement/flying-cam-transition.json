@@ -1,0 +1,395 @@
+{
+  "id": "camera-movement/flying-cam-transition",
+  "slug": "flying-cam-transition",
+  "title": "Flying Cam Transition",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/flying-cam-transition",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/flying-cam-transition-flying-cam-transition-mini.webp",
+  "detail": "details/camera-movement/flying-cam-transition.json",
+  "aliases": [],
+  "description": "A flying cam transition is one continuous flight that punches a wall or window and lands in a new room. Architecture becomes a tunnel; the join is travel, not a hidden cut.",
+  "thumbnail": "media/bcae88aaa8c33c504860c42799f33a67.webp",
+  "video": "media/db237d1a7258083fb0a9213465b2ffd5.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/flying-cam-transition-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Change rooms without a cut. Virtuoso intros, dreams, a house that is a mind: the camera flies a readable path through a named threshold and arrives."
+        },
+        {
+          "type": "paragraph",
+          "text": "A cut hidden by a passing truck is not this. Through-object uses a prop; this uses the building."
+        },
+        {
+          "type": "paragraph",
+          "text": "Geography has to stay readable or the stunt is only noise."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Change rooms without a cut. Virtuoso intros, dreams, a house that is a mind: the camera flies a readable path through a named threshold and arrives.A cut hidden by a passing truck is not this. Through-object uses a prop; this uses the building.Geography has to stay readable or the stunt is only noise."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "FPV energy on a planned 3D or practical path: window, hole, door, then a settle in the second space. Subject waiting on the other side or carried with us."
+        },
+        {
+          "type": "paragraph",
+          "text": "One move. Prompt: Flying-cam transition through [Subject]'s world, one continuous flight that punches a wall or window and lands in a new room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works FPV energy on a planned 3D or practical path: window, hole, door, then a settle in the second space. Subject waiting on the other side or carried with us.One move. Prompt: Flying-cam transition through [Subject]'s world, one continuous flight that punches a wall or window and lands in a new room."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to change rooms in one flight. Do not use it between every scene."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to change rooms in one flight. Do not use it between every scene."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pass Through may ignore matter as a straight architectural cheat. FPV Drone is the flight platform; the transition is the designed join into a new space.",
+          "links": [
+            {
+              "text": "Pass Through",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+            },
+            {
+              "text": "FPV Drone",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Set Transition is the broader idea of a designed join. Through-object uses a cup or keyhole, not a wall as tunnel.",
+          "links": [
+            {
+              "text": "Set Transition",
+              "url": "https://melies.co/cinematic-techniques/editing/set-transition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pass ThroughCut the building, not the film.",
+          "displayText": "Pass Through\nCut the building, not the film.",
+          "links": [
+            {
+              "text": "Pass ThroughCut the building, not the film.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "displayText": "FPV Drone\nImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "links": [
+            {
+              "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Set TransitionGeography itself edits.",
+          "displayText": "Set Transition\nGeography itself edits.",
+          "links": [
+            {
+              "text": "Set TransitionGeography itself edits.",
+              "url": "https://melies.co/cinematic-techniques/editing/set-transition"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Pass Through",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+        },
+        {
+          "text": "FPV Drone",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "Set Transition",
+          "url": "https://melies.co/cinematic-techniques/editing/set-transition"
+        },
+        {
+          "text": "Pass ThroughCut the building, not the film.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+        },
+        {
+          "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "Set TransitionGeography itself edits.",
+          "url": "https://melies.co/cinematic-techniques/editing/set-transition"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/fbf0bd56427103cd8c1bddba257f87f6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pass-through-pass-through-mini.webp",
+          "alt": "Pass Through"
+        },
+        {
+          "kind": "video",
+          "path": "media/53e07ed3dfae32434db4e68d811d8750.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pass-through-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+          "alt": "FPV Drone"
+        },
+        {
+          "kind": "video",
+          "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/dc48ad33dbf1c785614c7826f783ae39.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/set-transition-07-set-transition-mini.webp",
+          "alt": "Set Transition"
+        },
+        {
+          "kind": "video",
+          "path": "media/38d42ddfa56e83318d71d8aecb642538.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/07-set-transition-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Pass Through may ignore matter as a straight architectural cheat. FPV Drone is the flight platform; the transition is the designed join into a new space.Set Transition is the broader idea of a designed join. Through-object uses a cup or keyhole, not a wall as tunnel.Pass ThroughCut the building, not the film.FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.Set TransitionGeography itself edits."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Enter the Void flies through walls and windows as continuous travel. Birdman treats continuity of space as a stunt, punching thresholds without a cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: flight plus a hole plus a landing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Enter the Void flies through walls and windows as continuous travel. Birdman treats continuity of space as a stunt, punching thresholds without a cut.Grammar: flight plus a hole plus a landing."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the threshold and the landing. Still: Flying-cam transition through [Subject]'s world, one continuous flight that punches a wall or window and lands in a new room."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera flies through architecture around [Subject], passing a threshold into a new space. Show the hole."
+        },
+        {
+          "type": "paragraph",
+          "text": "One move."
+        },
+        {
+          "type": "quote",
+          "text": "The camera flies through architecture around [Subject], passing a threshold into a new space."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+flies+through+architecture+around+[Subject],+passing+a+threshold+into+a+new+space."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the threshold and the landing. Still: Flying-cam transition through [Subject]'s world, one continuous flight that punches a wall or window and lands in a new room.Video: The camera flies through architecture around [Subject], passing a threshold into a new space. Show the hole.One move.Copy promptUse in Video GeneratorThe camera flies through architecture around [Subject], passing a threshold into a new space.The camera flies through architecture around [Subject], passing a threshold into a new space."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an invisible cut on a dark frame. The tell: a pop into a new room with no travel through a hole."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: fly through a named threshold and land; keep geography readable."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an invisible cut on a dark frame. The tell: a pop into a new room with no travel through a hole.The fix: fly through a named threshold and land; keep geography readable."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Flying Cam Transition in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A flying cam transition is one continuous flight that punches a wall or window and lands in a new room, changing spaces without a cut."
+        },
+        {
+          "type": "heading",
+          "text": "Flying Cam Transition vs Pass Through",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Pass-through is the matter-optional path. Flying cam transition is specifically a flight that uses architecture as a tunnel and lands as a designed join."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Flying Cam Transition?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to change rooms in one flight, for intros or dream geography. Do not use it as a default scene join."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Flying Cam Transition for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write one flight through a named threshold into a new space. Example: Flying-cam transition through [Subject]'s world, one continuous flight that punches a wall or window and lands in a new room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Flying Cam Transition in film?A flying cam transition is one continuous flight that punches a wall or window and lands in a new room, changing spaces without a cut.Flying Cam Transition vs Pass ThroughPass-through is the matter-optional path. Flying cam transition is specifically a flight that uses architecture as a tunnel and lands as a designed join.When should I use Flying Cam Transition?Use it to change rooms in one flight, for intros or dream geography. Do not use it as a default scene join.How do I prompt Flying Cam Transition for AI image or video?Write one flight through a named threshold into a new space. Example: Flying-cam transition through [Subject]'s world, one continuous flight that punches a wall or window and lands in a new room."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the threshold and the landing. Still: Flying-cam transition through [Subject]'s world, one continuous flight that punches a wall or window and lands in a new room.",
+      "Video: The camera flies through architecture around [Subject], passing a threshold into a new space. Show the hole.",
+      "One move."
+    ],
+    "example": "The camera flies through architecture around [Subject], passing a threshold into a new space."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/db237d1a7258083fb0a9213465b2ffd5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/flying-cam-transition-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bcae88aaa8c33c504860c42799f33a67.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/flying-cam-transition-flying-cam-transition-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2c75044e53f9b51e922d93427ce9bc41.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/flying-cam-transition.jpg",
+      "alt": "Flying Cam Transition frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/fbf0bd56427103cd8c1bddba257f87f6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pass-through-pass-through-mini.webp",
+      "alt": "Pass Through"
+    },
+    {
+      "kind": "video",
+      "path": "media/53e07ed3dfae32434db4e68d811d8750.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pass-through-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+      "alt": "FPV Drone"
+    },
+    {
+      "kind": "video",
+      "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dc48ad33dbf1c785614c7826f783ae39.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/set-transition-07-set-transition-mini.webp",
+      "alt": "Set Transition"
+    },
+    {
+      "kind": "video",
+      "path": "media/38d42ddfa56e83318d71d8aecb642538.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/07-set-transition-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/535f08d852c0943ed63df68919f7216c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/flying-cam-transition/hero.jpg",
+      "alt": "Flying Cam Transition",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "a5e2cacd64865505ccecbc9c92c10933e0b3e858c1ba21b0d7c9b13144250e13"
+}

@@ -1,0 +1,461 @@
+{
+  "id": "lighting/backlight",
+  "slug": "backlight",
+  "title": "Backlight",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/backlight",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+  "detail": "details/lighting/backlight.json",
+  "aliases": [
+    "hair light when on hair",
+    "Volumetric shafts",
+    "Light beams in haze"
+  ],
+  "description": "Backlight in backlight cinematography is light coming from behind the subject toward the camera, tracing edges and lifting the figure off the background. It may stay a thin rim or, in haze, become a visible shaft.",
+  "thumbnail": "media/8b8527501bd80817d093e945987be5fe.webp",
+  "video": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A dark coat in a dark room disappears without an edge. Backlight draws that edge on hair, shoulders, and hat brim so the cutout reads."
+        },
+        {
+          "type": "paragraph",
+          "text": "In rain, dust, or smoke the same rear source can turn into volume, implying a world outside the frame: a searchlight, a high window, the sun. It is the wrong tool when you need the face, not the outline."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you expose for the backlight, you get a silhouette. If you wrap it around to the cheek, you have started a kicker, not a true back.",
+          "links": [
+            {
+              "text": "silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            },
+            {
+              "text": "kicker",
+              "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "kicker",
+          "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A dark coat in a dark room disappears without an edge. Backlight draws that edge on hair, shoulders, and hat brim so the cutout reads.In rain, dust, or smoke the same rear source can turn into volume, implying a world outside the frame: a searchlight, a high window, the sun. It is the wrong tool when you need the face, not the outline.If you expose for the backlight, you get a silhouette. If you wrap it around to the cheek, you have started a kicker, not a true back."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place the source behind and usually above, aimed toward camera, flagged so it does not flare unless you want veil. Hardness can be hard (sun, PAR, searchlight) for a sharp rim or softer for a glow in hair."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is often warmer than the key so the edge reads as sun or tungsten. Suspended particles make the beam itself photograph; without them you only see the rim on the body."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Backlight on [Subject] from behind, rim of light tracing edges, slight veil, separation from background."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place the source behind and usually above, aimed toward camera, flagged so it does not flare unless you want veil. Hardness can be hard (sun, PAR, searchlight) for a sharp rim or softer for a glow in hair.Color is often warmer than the key so the edge reads as sun or tungsten. Suspended particles make the beam itself photograph; without them you only see the rim on the body.Prompt: Backlight on [Subject] from behind, rim of light tracing edges, slight veil, separation from background."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to separate a dark figure from a dark world, as in a smoky interior with one high window behind. Do not use it as the only light on a scene that still needs a face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to separate a dark figure from a dark world, as in a smoky interior with one high window behind. Do not use it as the only light on a scene that still needs a face."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rim light is the thin highlight backlight can produce when tightly flagged. Kicker sits behind and to the side, kissing jaw or shoulder rather than wrapping the whole outline.",
+          "links": [
+            {
+              "text": "Rim light",
+              "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+            },
+            {
+              "text": "Kicker",
+              "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Silhouette exposes for the bright ground and lets the figure go black. Volumetric light needs haze so the beam, not just the rim, is visible.",
+          "links": [
+            {
+              "text": "Silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            },
+            {
+              "text": "Volumetric light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hair light is backlight aimed only at the hair.",
+          "links": [
+            {
+              "text": "Hair light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hair-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rim LightGraphic silhouette with just enough flesh.",
+          "displayText": "Rim Light\nGraphic silhouette with just enough flesh.",
+          "links": [
+            {
+              "text": "Rim LightGraphic silhouette with just enough flesh.",
+              "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SilhouetteIdentity is less important than shape.",
+          "displayText": "Silhouette\nIdentity is less important than shape.",
+          "links": [
+            {
+              "text": "SilhouetteIdentity is less important than shape.",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Rim light",
+          "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+        },
+        {
+          "text": "Kicker",
+          "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+        },
+        {
+          "text": "Silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Volumetric light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "Hair light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hair-light"
+        },
+        {
+          "text": "Rim LightGraphic silhouette with just enough flesh.",
+          "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+        },
+        {
+          "text": "SilhouetteIdentity is less important than shape.",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/24ba922f93c8786e2def76713b970c9f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rim-light.webp",
+          "alt": "Rim Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/b5d6146a73c5baa985f280578740ef59.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/silhouette-049-silhouette-as-graphic-storytelling-mini.webp",
+          "alt": "Silhouette"
+        },
+        {
+          "kind": "video",
+          "path": "media/aa375d20479989e1dab53b000981e0c5.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/049-silhouette-as-graphic-storytelling-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Rim light is the thin highlight backlight can produce when tightly flagged. Kicker sits behind and to the side, kissing jaw or shoulder rather than wrapping the whole outline.Silhouette exposes for the bright ground and lets the figure go black. Volumetric light needs haze so the beam, not just the rim, is visible.Hair light is backlight aimed only at the hair.Rim LightGraphic silhouette with just enough flesh.SilhouetteIdentity is less important than shape.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blade Runner cuts searchlights through smoky interiors so backlight becomes architecture. The Exorcist uses a powerful house light behind Merrin as he arrives."
+        },
+        {
+          "type": "paragraph",
+          "text": "Days of Heaven and Blade Runner 2049 keep the sun or a hard rear source as the edge that holds a figure in a bright or dusty ground."
+        },
+        {
+          "type": "list-item",
+          "text": "Blade Runner 1982Searchlights and hard shafts cut through smoky interiors.",
+          "displayText": "Blade Runner 1982\nSearchlights and hard shafts cut through smoky interiors."
+        },
+        {
+          "type": "list-item",
+          "text": "The Exorcist 1973Merrin arrives beneath the powerful light from the house.",
+          "displayText": "The Exorcist 1973\nMerrin arrives beneath the powerful light from the house."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/680e64a308024d979d14f58f2124334f.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/backlight/famous/00-blade-runner-1982.jpg",
+          "alt": "Blade Runner 1982"
+        },
+        {
+          "kind": "image",
+          "path": "media/d576b64d086abb773d6a95e0f139d736.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/backlight/famous/01-the-exorcist-1973.jpg",
+          "alt": "The Exorcist 1973"
+        }
+      ],
+      "sourceText": "In film Blade Runner cuts searchlights through smoky interiors so backlight becomes architecture. The Exorcist uses a powerful house light behind Merrin as he arrives.Days of Heaven and Blade Runner 2049 keep the sun or a hard rear source as the edge that holds a figure in a bright or dusty ground.Blade Runner 1982Searchlights and hard shafts cut through smoky interiors.The Exorcist 1973Merrin arrives beneath the powerful light from the house."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the source behind the body, not on the nose. \" Name hair, coat edge, and whether haze is present."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not ask for a glowing outline sticker."
+        },
+        {
+          "type": "quote",
+          "text": "A conservator enters a dark archive where one high window sends a narrow hard shaft through suspended dust. Her body briefly interrupts the beam, producing a coherent moving shadow in the haze. Deep room, restrained atmosphere, no magical glowing particles."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+conservator+enters+a+dark+archive+where+one+high+window+sends+a+narrow+hard+shaft+through+suspended+dust.+Her+body+briefly+interrupts+the+beam,+producing+a+coherent+moving+shadow+in+the+haze.+Deep+room,+restrained+atmosphere,+no+magical+glowing+particles."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Put the source behind the body, not on the nose. \" Name hair, coat edge, and whether haze is present.Do not ask for a glowing outline sticker.Copy promptUse in Video GeneratorA conservator enters a dark archive where one high window sends a narrow hard shaft through suspended dust. Her body briefly interrupts the beam, producing a coherent moving shadow in the haze. Deep room, restrained atmosphere, no magical glowing particles.A conservator enters a dark archive where one high window sends a narrow hard shaft through suspended dust. Her body briefly interrupts the beam, producing a coherent moving shadow in the haze. Deep room, restrained atmosphere, no magical glowing particles."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a silhouette or a neon stroke. The tell is zero facial exposure, or a cartoon ring disconnected from any lamp.",
+          "links": [
+            {
+              "text": "silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by exposing a little of the key side and attaching the rim to a real rear source."
+        }
+      ],
+      "links": [
+        {
+          "text": "silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a silhouette or a neon stroke. The tell is zero facial exposure, or a cartoon ring disconnected from any lamp.Fix it by exposing a little of the key side and attaching the rim to a real rear source."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is backlight in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Light from behind the subject toward the camera. It separates the figure with an edge, and in particles it can show a beam."
+        },
+        {
+          "type": "heading",
+          "text": "Backlight vs rim light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Backlight is the direction. Rim light is the narrow highlight that direction can paint on the outline when the source is flagged tight."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use backlight?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a dark subject would otherwise merge with a dark background, or when a rear sun or window should halo the figure."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt backlight for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Say the lamp or sun is behind the subject, name the edges that catch, and say whether the face stays dark. Add haze only if you want a visible shaft."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is backlight in film?Light from behind the subject toward the camera. It separates the figure with an edge, and in particles it can show a beam.Backlight vs rim lightBacklight is the direction. Rim light is the narrow highlight that direction can paint on the outline when the source is flagged tight.When should I use backlight?Use it when a dark subject would otherwise merge with a dark background, or when a rear sun or window should halo the figure.How do I prompt backlight for AI image or video?Say the lamp or sun is behind the subject, name the edges that catch, and say whether the face stays dark. Add haze only if you want a visible shaft."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Put the source behind the body, not on the nose. \" Name hair, coat edge, and whether haze is present.",
+      "Do not ask for a glowing outline sticker."
+    ],
+    "example": "A conservator enters a dark archive where one high window sends a narrow hard shaft through suspended dust. Her body briefly interrupts the beam, producing a coherent moving shadow in the haze. Deep room, restrained atmosphere, no magical glowing particles."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3043b43031d9734d2b33dc63e6951e8b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/backlight.jpg",
+      "alt": "Backlight frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/24ba922f93c8786e2def76713b970c9f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rim-light.webp",
+      "alt": "Rim Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/b5d6146a73c5baa985f280578740ef59.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/silhouette-049-silhouette-as-graphic-storytelling-mini.webp",
+      "alt": "Silhouette"
+    },
+    {
+      "kind": "video",
+      "path": "media/aa375d20479989e1dab53b000981e0c5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/049-silhouette-as-graphic-storytelling-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/680e64a308024d979d14f58f2124334f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/backlight/famous/00-blade-runner-1982.jpg",
+      "alt": "Blade Runner 1982"
+    },
+    {
+      "kind": "image",
+      "path": "media/d576b64d086abb773d6a95e0f139d736.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/backlight/famous/01-the-exorcist-1973.jpg",
+      "alt": "The Exorcist 1973"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb7504d0a56c4da7a339b620f70d89d7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/backlight/hero.jpg",
+      "alt": "Backlight",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "07ee3c563d967f2a444c5dbaf27a6663bee8c393b11f472fd24777039e093667"
+}

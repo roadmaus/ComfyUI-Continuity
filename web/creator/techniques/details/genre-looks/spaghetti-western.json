@@ -1,0 +1,428 @@
+{
+  "id": "genre-looks/spaghetti-western",
+  "slug": "spaghetti-western",
+  "title": "Spaghetti Western",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/spaghetti-western.webp",
+  "detail": "details/genre-looks/spaghetti-western.json",
+  "aliases": [],
+  "description": "Spaghetti western cinematography restages western iconography on Techniscope 2.35: dusty ochre landscapes, hard sun as the only key, and cuts from a 24mm plaza wide to a telephoto extreme close-up of eyes. Moral ambiguity sits in the hold on a face before anyone draws.",
+  "thumbnail": "media/396709b7ac4ac372cf575f14795b8536.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Myth is dirt, sweat, and a horizon that refuses shade. The sun is a weapon."
+        },
+        {
+          "type": "paragraph",
+          "text": "A Cowboy Shot shows the holster. An Extreme Close-Up of the eyes shows the decision.",
+          "links": [
+            {
+              "text": "Cowboy Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            },
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The land is wide. The soul is a few millimeters of iris."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a clean studio western or a misted martial landscape. American A-westerns often fill the faces and keep the sky polite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wuxia uses silk, mist, and wire, not ochre and hard noon.",
+          "links": [
+            {
+              "text": "Wuxia",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/wuxia-look"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cowboy Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        },
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Wuxia",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/wuxia-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Myth is dirt, sweat, and a horizon that refuses shade. The sun is a weapon.A Cowboy Shot shows the holster. An Extreme Close-Up of the eyes shows the decision.The land is wide. The soul is a few millimeters of iris.It is the wrong tool for a clean studio western or a misted martial landscape. American A-westerns often fill the faces and keep the sky polite.Wuxia uses silk, mist, and wire, not ochre and hard noon."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "35 spherical. Pair a 24mm or 28mm for the town and ridge with a 75mm to 135mm (historically much longer) for the eye."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard sun as key, little or no fill, dust as diffusion. Grade: burnt umber, bleached sky, dry highlights."
+        },
+        {
+          "type": "paragraph",
+          "text": "Blocking: hip-level cowboy size for guns, then the operatic hold on the face. Prompt Techniscope grit, dusty ochre, extreme close-ups of eyes, sun as a weapon."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works 35 spherical. Pair a 24mm or 28mm for the town and ridge with a 75mm to 135mm (historically much longer) for the eye.Hard sun as key, little or no fill, dust as diffusion. Grade: burnt umber, bleached sky, dry highlights.Blocking: hip-level cowboy size for guns, then the operatic hold on the face. Prompt Techniscope grit, dusty ochre, extreme close-ups of eyes, sun as a weapon."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a standoff needs dirt, a hard sun, and a cut from landscape to iris. Do not use it for a polished sunset ride or for martial-arts mist."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a standoff needs dirt, a hard sun, and a cut from landscape to iris. Do not use it for a polished sunset ride or for martial-arts mist."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Spaghetti Western is hard sun, ochre, Techniscope, and eye ECUs. Cowboy Shot is only the size (mid-thigh).",
+          "links": [
+            {
+              "text": "Spaghetti Western",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western"
+            },
+            {
+              "text": "Cowboy Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Extreme Close-Up is only the size of the eye. Hard Light is the source.",
+          "links": [
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            },
+            {
+              "text": "Hard Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The look is those tools in a dusty, morally dirty western, not a filled Hollywood campfire. Wuxia is the cousin in landscape myth with the opposite weather.",
+          "links": [
+            {
+              "text": "Wuxia",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/wuxia-look"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cowboy ShotShow hands, weapons, or stance without going full body.",
+          "displayText": "Cowboy Shot\nShow hands, weapons, or stance without going full body.",
+          "links": [
+            {
+              "text": "Cowboy ShotShow hands, weapons, or stance without going full body.",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "displayText": "Hard Light\nGrit, noon sun, or interrogation.",
+          "links": [
+            {
+              "text": "Hard LightGrit, noon sun, or interrogation.",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Spaghetti Western",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western"
+        },
+        {
+          "text": "Cowboy Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        },
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Hard Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Wuxia",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/wuxia-look"
+        },
+        {
+          "text": "Cowboy ShotShow hands, weapons, or stance without going full body.",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/c60ed76a9d57c2a52bc1d3433036ec10.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cowboy-shot.webp",
+          "alt": "Cowboy Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+          "alt": "Hard Light"
+        }
+      ],
+      "sourceText": "Compared with similar shots Spaghetti Western is hard sun, ochre, Techniscope, and eye ECUs. Cowboy Shot is only the size (mid-thigh).Extreme Close-Up is only the size of the eye. Hard Light is the source.The look is those tools in a dusty, morally dirty western, not a filled Hollywood campfire. Wuxia is the cousin in landscape myth with the opposite weather.Cowboy ShotShow hands, weapons, or stance without going full body.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.Hard LightGrit, noon sun, or interrogation."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Good, the Bad and the Ugly (plaza wides against eye close-ups, bleached sun). Once Upon a Time in the West (operatic holds, Harmonica's face as a landscape)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Good, the Bad and the Ugly (plaza wides against eye close-ups, bleached sun). Once Upon a Time in the West (operatic holds, Harmonica's face as a landscape).Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "35, dusty ochre, hard noon sun, no fill, extreme close-up of eyes cut against a 24mm ridge. Name the dust and the holster height."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not prompt a clean golden-hour poster western."
+        },
+        {
+          "type": "quote",
+          "text": "Spaghetti-western frame of [Subject], Techniscope grit, dusty ochre, extreme close-ups of eyes, sun as a weapon."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Spaghetti-western+frame+of+[Subject],+Techniscope+grit,+dusty+ochre,+extreme+close-ups+of+eyes,+sun+as+a+weapon."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it 35, dusty ochre, hard noon sun, no fill, extreme close-up of eyes cut against a 24mm ridge. Name the dust and the holster height.Do not prompt a clean golden-hour poster western.Copy promptUse in Image GeneratorSpaghetti-western frame of [Subject], Techniscope grit, dusty ochre, extreme close-ups of eyes, sun as a weapon.Spaghetti-western frame of [Subject], Techniscope grit, dusty ochre, extreme close-ups of eyes, sun as a weapon."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a glossy adventure western or Wuxia: rim-lit horses, polite skies, or bamboo mist. The tell is filled faces, teal-orange grade, and no eye ECU.",
+          "links": [
+            {
+              "text": "Wuxia",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/wuxia-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: kill the fill, bleach the sky, add dust, and jump from a wide plaza to the eyes."
+        }
+      ],
+      "links": [
+        {
+          "text": "Wuxia",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/wuxia-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a glossy adventure western or Wuxia: rim-lit horses, polite skies, or bamboo mist. The tell is filled faces, teal-orange grade, and no eye ECU.Fix: kill the fill, bleach the sky, add dust, and jump from a wide plaza to the eyes."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Spaghetti Western in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A western look built in Italy and Spain: Techniscope wides, hard sun, ochre dust, cowboy-size gun coverage, and telephoto eyes. The rhythm is operatic. The morals are dirty."
+        },
+        {
+          "type": "heading",
+          "text": "Spaghetti Western vs Wuxia",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Both use landscape as myth. Spaghetti western is dry, hard, and ochre, with eye close-ups. Wuxia is mist, silk, and wire-assisted paths. Different weather, different lens pair."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Spaghetti Western?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a standoff or a ridge arrival needs dirt and an unfilled sun. Skip it for martial mist, for IMAX-clean adventure gloss, or for night neon crime."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Spaghetti Western for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Spaghetti-western frame of [Subject], Techniscope grit, dusty ochre, hard sun, no fill, extreme close-up of eyes, cowboy-shot holster. Do not ask for a clean sunset poster."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Spaghetti Western in film?A western look built in Italy and Spain: Techniscope wides, hard sun, ochre dust, cowboy-size gun coverage, and telephoto eyes. The rhythm is operatic. The morals are dirty.Spaghetti Western vs WuxiaBoth use landscape as myth. Spaghetti western is dry, hard, and ochre, with eye close-ups. Wuxia is mist, silk, and wire-assisted paths. Different weather, different lens pair.When should I use Spaghetti Western?When a standoff or a ridge arrival needs dirt and an unfilled sun. Skip it for martial mist, for IMAX-clean adventure gloss, or for night neon crime.How do I prompt Spaghetti Western for AI image or video?Write: Spaghetti-western frame of [Subject], Techniscope grit, dusty ochre, hard sun, no fill, extreme close-up of eyes, cowboy-shot holster. Do not ask for a clean sunset poster."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "35, dusty ochre, hard noon sun, no fill, extreme close-up of eyes cut against a 24mm ridge. Name the dust and the holster height.",
+      "Do not prompt a clean golden-hour poster western."
+    ],
+    "example": "Spaghetti-western frame of [Subject], Techniscope grit, dusty ochre, extreme close-ups of eyes, sun as a weapon."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/396709b7ac4ac372cf575f14795b8536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/spaghetti-western.webp",
+      "alt": "Spaghetti Western example"
+    },
+    {
+      "kind": "image",
+      "path": "media/c60ed76a9d57c2a52bc1d3433036ec10.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cowboy-shot.webp",
+      "alt": "Cowboy Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+      "alt": "Hard Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/5df26838872f0fb023bd5fa0325b3b33.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/spaghetti-western/hero.jpg",
+      "alt": "Spaghetti Western",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "3842477b63bba7da28e66d5f2e176bc12189b1ae722572967d3854609a9500f2"
+}

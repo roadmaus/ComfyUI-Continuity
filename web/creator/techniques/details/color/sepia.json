@@ -1,0 +1,414 @@
+{
+  "id": "color/sepia",
+  "slug": "sepia",
+  "title": "Sepia",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/sepia",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/sepia.webp",
+  "detail": "details/color/sepia.json",
+  "aliases": [],
+  "description": "Sepia tone in sepia tone film maps the grey scale onto brown-gold instead of neutral silver, so whites go toward faded paper and blacks toward umber. It is a color of the past as chemistry, not a warm grade on a full-hue world.",
+  "thumbnail": "media/27d44f2045293177ba051bc1ca87626c.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A story that already happened often arrives in this brown. Photographs, memory inserts, and period chapters use it because the audience has been trained by albumen and toned prints."
+        },
+        {
+          "type": "paragraph",
+          "text": "Faded whites, tobacco mids, no true cyan sky. It is the wrong tool when the present should still have a full palette that happens to be warm."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is Warm Amber or a Filmic Faded print with hues intact. It is also the wrong tool for true Monochrome silver.",
+          "links": [
+            {
+              "text": "Warm Amber",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            },
+            {
+              "text": "Filmic Faded",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            },
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the whole movie is a dusty yellow-brown but still has distinct reds and greens, you are in a restricted Palette or a period DI, not sepia toning.",
+          "links": [
+            {
+              "text": "Palette",
+              "url": "https://melies.co/cinematic-techniques/color/palette"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Warm Amber",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        },
+        {
+          "text": "Filmic Faded",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Palette",
+          "url": "https://melies.co/cinematic-techniques/color/palette"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A story that already happened often arrives in this brown. Photographs, memory inserts, and period chapters use it because the audience has been trained by albumen and toned prints.Faded whites, tobacco mids, no true cyan sky. It is the wrong tool when the present should still have a full palette that happens to be warm.That is Warm Amber or a Filmic Faded print with hues intact. It is also the wrong tool for true Monochrome silver.If the whole movie is a dusty yellow-brown but still has distinct reds and greens, you are in a restricted Palette or a period DI, not sepia toning."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Start from a monochrome or low-chroma image and tone highlights toward paper-gold, mids toward brown, shadows toward umber. Keep cyan and clean white out."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grain can sit in the mids as in a print. Do not overlay a brown sticker on a saturated modern grade and call it sepia."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Sepia tonality on [Subject], brown-gold memory, faded whites, the past as a color, not a filter sticker."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Start from a monochrome or low-chroma image and tone highlights toward paper-gold, mids toward brown, shadows toward umber. Keep cyan and clean white out.Grain can sit in the mids as in a print. Do not overlay a brown sticker on a saturated modern grade and call it sepia.Prompt: Sepia tonality on [Subject], brown-gold memory, faded whites, the past as a color, not a filter sticker."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a chapter that already happened: a memory, a found photograph, a prologue. Do not use it as a synonym for any warm movie, and do not leave full modern chroma under the brown."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a chapter that already happened: a memory, a found photograph, a prologue. Do not use it as a synonym for any warm movie, and do not leave full modern chroma under the brown."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Monochrome is neutral silver. Warm Amber keeps full color in a honey world.",
+          "links": [
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            },
+            {
+              "text": "Warm Amber",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Filmic Faded lifts blacks and rolls highlights while usually retaining hues. Vintage is a broader period chemistry look that may include sepia but also dye fade and Halation.",
+          "links": [
+            {
+              "text": "Filmic Faded",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            },
+            {
+              "text": "Vintage",
+              "url": "https://melies.co/cinematic-techniques/color/vintage"
+            },
+            {
+              "text": "Halation",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Filmic FadedNot HDR. A print.",
+          "displayText": "Filmic Faded\nNot HDR. A print.",
+          "links": [
+            {
+              "text": "Filmic FadedNot HDR. A print.",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Warm AmberHome, memory, or invitation.",
+          "displayText": "Warm Amber\nHome, memory, or invitation.",
+          "links": [
+            {
+              "text": "Warm AmberHome, memory, or invitation.",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Warm Amber",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        },
+        {
+          "text": "Filmic Faded",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Vintage",
+          "url": "https://melies.co/cinematic-techniques/color/vintage"
+        },
+        {
+          "text": "Halation",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "Filmic FadedNot HDR. A print.",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Warm AmberHome, memory, or invitation.",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6c5de4fbb1a2ea3e097921b0637da37f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/filmic-faded.webp",
+          "alt": "Filmic Faded"
+        },
+        {
+          "kind": "image",
+          "path": "media/fc71119f525bca52371384855ac969b0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/warm-amber.webp",
+          "alt": "Warm Amber"
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Monochrome is neutral silver. Warm Amber keeps full color in a honey world.Filmic Faded lifts blacks and rolls highlights while usually retaining hues. Vintage is a broader period chemistry look that may include sepia but also dye fade and Halation.Filmic FadedNot HDR. A print.Warm AmberHome, memory, or invitation.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Godfather Part II uses warmer, aged memory color for earlier time. O Brother, Where Art Thou?"
+        },
+        {
+          "type": "paragraph",
+          "text": "is a digital period finish in dusty yellow-brown, a cousin often cited when people say sepia. Treat those as grammar for past-as-tone, not as frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Godfather Part II uses warmer, aged memory color for earlier time. O Brother, Where Art Thou?is a digital period finish in dusty yellow-brown, a cousin often cited when people say sepia. Treat those as grammar for past-as-tone, not as frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Map the scale to brown-gold. Sepia tonality on [Subject], brown-gold memory, faded whites, the past as a color, not a filter sticker."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban cyan skies and saturated reds. Do not write warm amber full color."
+        },
+        {
+          "type": "quote",
+          "text": "Sepia tonality on [Subject], brown-gold memory, faded whites, the past as a color, not a filter sticker."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Sepia+tonality+on+[Subject],+brown-gold+memory,+faded+whites,+the+past+as+a+color,+not+a+filter+sticker."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Map the scale to brown-gold. Sepia tonality on [Subject], brown-gold memory, faded whites, the past as a color, not a filter sticker.Ban cyan skies and saturated reds. Do not write warm amber full color.Copy promptUse in Image GeneratorSepia tonality on [Subject], brown-gold memory, faded whites, the past as a color, not a filter sticker.Sepia tonality on [Subject], brown-gold memory, faded whites, the past as a color, not a filter sticker."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Warm Amber (full hue, honey mids) or a Instagram brown on a color image. The tell is green trees and blue jeans still speaking as themselves under a wash.",
+          "links": [
+            {
+              "text": "Warm Amber",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: brown-gold scale, faded whites, almost no leftover modern hue."
+        }
+      ],
+      "links": [
+        {
+          "text": "Warm Amber",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Warm Amber (full hue, honey mids) or a Instagram brown on a color image. The tell is green trees and blue jeans still speaking as themselves under a wash.Fix: brown-gold scale, faded whites, almost no leftover modern hue."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is sepia in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a toning of the grey scale into brown-gold, like a chemical print. The past reads as a color. It is not simply a warm grade on a modern palette."
+        },
+        {
+          "type": "heading",
+          "text": "Sepia vs Warm Amber",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Warm amber keeps reds, skin, and lamps as full color in a honey world. Sepia replaces the grey scale with brown-gold and drops modern chroma. One is a grade of a color image. The other is a toned print."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use sepia?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a story already happened and should look like a toned photograph or memory chapter. Skip it for present-tense warm interiors."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt sepia for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Sepia tonality on [Subject], brown-gold memory, faded whites, the past as a color, not a filter sticker. Forbid cyan, saturated primaries, and a full-color amber grade."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is sepia in film?It is a toning of the grey scale into brown-gold, like a chemical print. The past reads as a color. It is not simply a warm grade on a modern palette.Sepia vs Warm AmberWarm amber keeps reds, skin, and lamps as full color in a honey world. Sepia replaces the grey scale with brown-gold and drops modern chroma. One is a grade of a color image. The other is a toned print.When should I use sepia?Use it when a story already happened and should look like a toned photograph or memory chapter. Skip it for present-tense warm interiors.How do I prompt sepia for AI image or video?Write: Sepia tonality on [Subject], brown-gold memory, faded whites, the past as a color, not a filter sticker. Forbid cyan, saturated primaries, and a full-color amber grade."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Map the scale to brown-gold. Sepia tonality on [Subject], brown-gold memory, faded whites, the past as a color, not a filter sticker.",
+      "Ban cyan skies and saturated reds. Do not write warm amber full color."
+    ],
+    "example": "Sepia tonality on [Subject], brown-gold memory, faded whites, the past as a color, not a filter sticker."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/27d44f2045293177ba051bc1ca87626c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/sepia.webp",
+      "alt": "Sepia example"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c5de4fbb1a2ea3e097921b0637da37f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/filmic-faded.webp",
+      "alt": "Filmic Faded"
+    },
+    {
+      "kind": "image",
+      "path": "media/fc71119f525bca52371384855ac969b0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/warm-amber.webp",
+      "alt": "Warm Amber"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/c7a1c4b47c15b016db30f176990da00b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/sepia/hero.jpg",
+      "alt": "Sepia",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "e2df43b084d8d3082a2b6d452599c5a20851c7265438e6ead7f7361b9a2694fb"
+}

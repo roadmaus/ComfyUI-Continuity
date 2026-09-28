@@ -1,0 +1,417 @@
+{
+  "id": "atmosphere/mist",
+  "slug": "mist",
+  "title": "Mist",
+  "categoryId": "atmosphere",
+  "categoryTitle": "Atmosphere and Weather",
+  "sourceUrl": "https://melies.co/cinematic-techniques/atmosphere/mist",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mist.webp",
+  "detail": "details/atmosphere/mist.json",
+  "aliases": [],
+  "description": "Mist is a thinner water suspension than fog: pale layered air that still lets you read the next plane. Droplets are matter, but the veil is lyric, a morning or mountain breath rather than a wall.",
+  "thumbnail": "media/011706e10e626fcdf7bc8085edc5d79c.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ridges stack as paler copies of themselves. A horse is readable, then a second ridge, then a paler third."
+        },
+        {
+          "type": "paragraph",
+          "text": "Softer mystery than fog. Lyric, not monster."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for dawn, river valleys, high cold air, a courtyard that should glow rather than vanish. It is the wrong tool when a killer should appear at two meters with no yard behind them: that is Fog.",
+          "links": [
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the paleness is only far, far away over desert: that is Atmospheric Haze. If you cannot see the subject at all, you overshot into fog.",
+          "links": [
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If every plane is equally sharp, you have no mist."
+        }
+      ],
+      "links": [
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Ridges stack as paler copies of themselves. A horse is readable, then a second ridge, then a paler third.Softer mystery than fog. Lyric, not monster.Use it for dawn, river valleys, high cold air, a courtyard that should glow rather than vanish. It is the wrong tool when a killer should appear at two meters with no yard behind them: that is Fog.It is the wrong tool when the paleness is only far, far away over desert: that is Atmospheric Haze. If you cannot see the subject at all, you overshot into fog.If every plane is equally sharp, you have no mist."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use a light density of droplets or a real inversion layer. Backlight the layers so each plane separates (aerial perspective at short-to-medium range)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep contrast on the near subject; let receding planes lift in value and lose saturation. Prompt: light mist around [Subject], softer than fog, morning or mountain breath, layers of pale air."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Use a light density of droplets or a real inversion layer. Backlight the layers so each plane separates (aerial perspective at short-to-medium range).Keep contrast on the near subject; let receding planes lift in value and lose saturation. Prompt: light mist around [Subject], softer than fog, morning or mountain breath, layers of pale air."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a hunt at dawn, a mountain pass, a wet garden. Do not use it as horror soup, and do not fill an interior with it unless the windows are open on a cold morning."
+        },
+        {
+          "type": "paragraph",
+          "text": "Interiors with volume are often Smoke or haze juice, not mist.",
+          "links": [
+            {
+              "text": "Smoke",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Smoke",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it for a hunt at dawn, a mountain pass, a wet garden. Do not use it as horror soup, and do not fill an interior with it unless the windows are open on a cold morning.Interiors with volume are often Smoke or haze juice, not mist."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fog hides. Atmospheric Haze is scattering over long distance, often without local wetness on skin.",
+          "links": [
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            },
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Smoke has a source. Rain falls.",
+          "links": [
+            {
+              "text": "Smoke",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+            },
+            {
+              "text": "Rain",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Mist hangs, layers, and remains see-through at working distance."
+        },
+        {
+          "type": "list-item",
+          "text": "FogHide geography. Delay the reveal.",
+          "displayText": "Fog\nHide geography. Delay the reveal.",
+          "links": [
+            {
+              "text": "FogHide geography. Delay the reveal.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "displayText": "Atmospheric Haze\nShow kilometers, not just meters.",
+          "links": [
+            {
+              "text": "Atmospheric HazeShow kilometers, not just meters.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "RainMake the air visible and the ground reflective.",
+          "displayText": "Rain\nMake the air visible and the ground reflective.",
+          "links": [
+            {
+              "text": "RainMake the air visible and the ground reflective.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Smoke",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+        },
+        {
+          "text": "Rain",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        },
+        {
+          "text": "FogHide geography. Delay the reveal.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "RainMake the air visible and the ground reflective.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a8973955095d2a7214fd549c40d15a8a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fog.webp",
+          "alt": "Fog"
+        },
+        {
+          "kind": "image",
+          "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+          "alt": "Atmospheric Haze"
+        },
+        {
+          "kind": "image",
+          "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+          "alt": "Rain"
+        }
+      ],
+      "sourceText": "Compared with similar shots Fog hides. Atmospheric Haze is scattering over long distance, often without local wetness on skin.Smoke has a source. Rain falls.Mist hangs, layers, and remains see-through at working distance.FogHide geography. Delay the reveal.Atmospheric HazeShow kilometers, not just meters.RainMake the air visible and the ground reflective."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Revenant uses morning and mountain moisture as stacked pale planes around bodies. Raise the Red Lantern lets courtyard air go milky without erasing architecture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use layered breath, not a white-out."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Revenant uses morning and mountain moisture as stacked pale planes around bodies. Raise the Red Lantern lets courtyard air go milky without erasing architecture.Use layered breath, not a white-out."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Light mist around [Subject], softer than fog, morning or mountain breath, layers of pale air. Name near-subject readability, paler far planes, and a backlight or low sun."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, slow drift of layers, no wall of white, no falling rain unless you add it."
+        },
+        {
+          "type": "quote",
+          "text": "Light mist around [Subject], softer than fog, morning or mountain breath, layers of pale air."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Light+mist+around+[Subject],+softer+than+fog,+morning+or+mountain+breath,+layers+of+pale+air."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Light mist around [Subject], softer than fog, morning or mountain breath, layers of pale air. Name near-subject readability, paler far planes, and a backlight or low sun.For video, slow drift of layers, no wall of white, no falling rain unless you add it.Copy promptUse in Image GeneratorLight mist around [Subject], softer than fog, morning or mountain breath, layers of pale air.Light mist around [Subject], softer than fog, morning or mountain breath, layers of pale air."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Fog (too dense) or Atmospheric Haze (only the horizon pales). The tell: the hero vanishes, or only the skyline is pale while mid-ground is hard.",
+          "links": [
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            },
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: keep the subject readable, stack two or three paler planes, backlight the moisture."
+        }
+      ],
+      "links": [
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Fog (too dense) or Atmospheric Haze (only the horizon pales). The tell: the hero vanishes, or only the skyline is pale while mid-ground is hard.The fix: keep the subject readable, stack two or three paler planes, backlight the moisture."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Mist in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Mist is a light suspension of water droplets that layers the air without erasing the subject. It is thicker than clear air and thinner than fog."
+        },
+        {
+          "type": "heading",
+          "text": "Mist vs Fog",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fog collapses depth at short range and delays figures. Mist leaves the near ground readable and stacks pale planes. One is a wall; the other is breath."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Mist?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for morning, mountains, and lyric distance at human scale. Do not use it when geography must disappear for a scare."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Mist for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for layered pale air and a readable subject. Example: light mist around [Subject], softer than fog, morning or mountain breath. Specify backlight and forbid a white-out."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Mist in film?Mist is a light suspension of water droplets that layers the air without erasing the subject. It is thicker than clear air and thinner than fog.Mist vs FogFog collapses depth at short range and delays figures. Mist leaves the near ground readable and stacks pale planes. One is a wall; the other is breath.When should I use Mist?Use it for morning, mountains, and lyric distance at human scale. Do not use it when geography must disappear for a scare.How do I prompt Mist for AI image or video?Ask for layered pale air and a readable subject. Example: light mist around [Subject], softer than fog, morning or mountain breath. Specify backlight and forbid a white-out."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Light mist around [Subject], softer than fog, morning or mountain breath, layers of pale air. Name near-subject readability, paler far planes, and a backlight or low sun.",
+      "For video, slow drift of layers, no wall of white, no falling rain unless you add it."
+    ],
+    "example": "Light mist around [Subject], softer than fog, morning or mountain breath, layers of pale air."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/011706e10e626fcdf7bc8085edc5d79c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mist.webp",
+      "alt": "Mist example"
+    },
+    {
+      "kind": "image",
+      "path": "media/a8973955095d2a7214fd549c40d15a8a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fog.webp",
+      "alt": "Fog"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+      "alt": "Atmospheric Haze"
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+      "alt": "Rain"
+    },
+    {
+      "kind": "image",
+      "path": "media/2eda309ab7d0cb1944e80900b5728dd4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/mist/hero.jpg",
+      "alt": "Mist",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "01e4a4bb6e443030df6e82325c76cb0c81ef30ea5487b2a6874104b90d69d9dc"
+}

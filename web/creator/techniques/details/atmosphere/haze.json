@@ -1,0 +1,404 @@
+{
+  "id": "atmosphere/haze",
+  "slug": "haze",
+  "title": "Atmospheric Haze",
+  "categoryId": "atmosphere",
+  "categoryTitle": "Atmosphere and Weather",
+  "sourceUrl": "https://melies.co/cinematic-techniques/atmosphere/haze",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+  "detail": "details/atmosphere/haze.json",
+  "aliases": [
+    "haze",
+    "fog",
+    "smoke",
+    "dust",
+    "rain",
+    "snow",
+    "steam"
+  ],
+  "description": "Atmospheric haze is scattering over distance: far planes go paler and often cooler, so kilometers of air become the depth cue. The particles are too small to read as drops; the air is matter you measure in ridges, not in globes around a near lamp.",
+  "thumbnail": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A citadel sits in a paler key than the rider. The next cliff is paler still."
+        },
+        {
+          "type": "paragraph",
+          "text": "Show kilometers, not just meters. Depth is weather, not a second fog machine at the actor's feet."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for desert, city, sea, any wide that must recede. It is the wrong tool when the next person should vanish at five meters (Fog) or when you want a shaft you can cut with a hand (Volumetric Light in a smoky room).",
+          "links": [
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            },
+            {
+              "text": "Volumetric Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Haze is aerial perspective, not a local veil. If the foreground is milky, you hazed the lens, not the distance."
+        }
+      ],
+      "links": [
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Volumetric Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A citadel sits in a paler key than the rider. The next cliff is paler still.Show kilometers, not just meters. Depth is weather, not a second fog machine at the actor's feet.Use it for desert, city, sea, any wide that must recede. It is the wrong tool when the next person should vanish at five meters (Fog) or when you want a shaft you can cut with a hand (Volumetric Light in a smoky room).Haze is aerial perspective, not a local veil. If the foreground is milky, you hazed the lens, not the distance."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the near ground relatively clean. Let successive planes lift in value, lose contrast, and often shift toward the sky color."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dust, humidity, or pollution can be real; a graded aerial perspective can stand in if the physics hold. Hard sun through haze becomes a disk."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: atmospheric haze stacking distance around [Subject], aerial perspective, far planes paler, depth as weather."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Keep the near ground relatively clean. Let successive planes lift in value, lose contrast, and often shift toward the sky color.Dust, humidity, or pollution can be real; a graded aerial perspective can stand in if the physics hold. Hard sun through haze becomes a disk.Prompt: atmospheric haze stacking distance around [Subject], aerial perspective, far planes paler, depth as weather."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it on a ridge, a skyline, a valley, a megacity grid. Do not use it to hide a monster in a corridor."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the scare is in the room, use fog, smoke, or darkness."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it on a ridge, a skyline, a valley, a megacity grid. Do not use it to hide a monster in a corridor.If the scare is in the room, use fog, smoke, or darkness."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mist is local layered moisture at human distances. Fog is dense and near.",
+          "links": [
+            {
+              "text": "Mist",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+            },
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Volumetric Light is a beam made visible by particles, often indoors. Dust and Sand is wind-driven grit that attacks the near ground too.",
+          "links": [
+            {
+              "text": "Volumetric Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            },
+            {
+              "text": "Dust and Sand",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/dust-storm"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Haze leaves the subject sharp and sends the world backward."
+        },
+        {
+          "type": "list-item",
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "displayText": "Volumetric Light\nAir has to be photographed, not just the subject.",
+          "links": [
+            {
+              "text": "Volumetric LightAir has to be photographed, not just the subject.",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MistSofter mystery than fog. Lyric, not monster.",
+          "displayText": "Mist\nSofter mystery than fog. Lyric, not monster.",
+          "links": [
+            {
+              "text": "MistSofter mystery than fog. Lyric, not monster.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "RainMake the air visible and the ground reflective.",
+          "displayText": "Rain\nMake the air visible and the ground reflective.",
+          "links": [
+            {
+              "text": "RainMake the air visible and the ground reflective.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Mist",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+        },
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Volumetric Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "Dust and Sand",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/dust-storm"
+        },
+        {
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "MistSofter mystery than fog. Lyric, not monster.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+        },
+        {
+          "text": "RainMake the air visible and the ground reflective.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+          "alt": "Volumetric Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/011706e10e626fcdf7bc8085edc5d79c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mist.webp",
+          "alt": "Mist"
+        },
+        {
+          "kind": "image",
+          "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+          "alt": "Rain"
+        }
+      ],
+      "sourceText": "Compared with similar shots Mist is local layered moisture at human distances. Fog is dense and near.Volumetric Light is a beam made visible by particles, often indoors. Dust and Sand is wind-driven grit that attacks the near ground too.Haze leaves the subject sharp and sends the world backward.Volumetric LightAir has to be photographed, not just the subject.MistSofter mystery than fog. Lyric, not monster.RainMake the air visible and the ground reflective."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lawrence of Arabia lets desert distance go paler until armies are weather. Blade Runner 2049 stacks orange and pale planes so the city has kilometers."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use successive paler ridges, not a fogged close-up."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Lawrence of Arabia lets desert distance go paler until armies are weather. Blade Runner 2049 stacks orange and pale planes so the city has kilometers.Use successive paler ridges, not a fogged close-up."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Atmospheric haze stacking distance around [Subject], aerial perspective, far planes paler, depth as weather. Keep the near subject contrasty; name two or three receding planes."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, stable long-distance paleness, not swirling soup around the lens. No globes on a foreground practical unless you also have local fog."
+        },
+        {
+          "type": "quote",
+          "text": "Atmospheric haze stacking distance around [Subject], aerial perspective, far planes paler, depth as weather."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Atmospheric+haze+stacking+distance+around+[Subject],+aerial+perspective,+far+planes+paler,+depth+as+weather."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Atmospheric haze stacking distance around [Subject], aerial perspective, far planes paler, depth as weather. Keep the near subject contrasty; name two or three receding planes.For video, stable long-distance paleness, not swirling soup around the lens. No globes on a foreground practical unless you also have local fog.Copy promptUse in Image GeneratorAtmospheric haze stacking distance around [Subject], aerial perspective, far planes paler, depth as weather.Atmospheric haze stacking distance around [Subject], aerial perspective, far planes paler, depth as weather."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Fog on the actor, or a low-contrast grade on every plane. The tell: the face is milky, or the far citadel is as sharp as the horse.",
+          "links": [
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: sharp near, paler far, several stacked distances, particles too small to resolve."
+        }
+      ],
+      "links": [
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Fog on the actor, or a low-contrast grade on every plane. The tell: the face is milky, or the far citadel is as sharp as the horse.The fix: sharp near, paler far, several stacked distances, particles too small to resolve."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Atmospheric Haze in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Atmospheric haze is air scattering over long distance. Far planes go paler and lower in contrast while the near subject stays readable, so kilometers become visible."
+        },
+        {
+          "type": "heading",
+          "text": "Atmospheric Haze vs Mist",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Mist is a local, often wet veil at walking distances. Haze is aerial perspective over kilometers. Mist can wet your coat; haze pales a mountain range."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Atmospheric Haze?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a wide must recede: desert, city, sea, valley. Do not use it to hide a figure in a room."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Atmospheric Haze for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the subject sharp and pale the distance. Example: atmospheric haze stacking distance around [Subject], far planes paler. Name successive ridges or blocks of city, not a fog bank at the lens."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Atmospheric Haze in film?Atmospheric haze is air scattering over long distance. Far planes go paler and lower in contrast while the near subject stays readable, so kilometers become visible.Atmospheric Haze vs MistMist is a local, often wet veil at walking distances. Haze is aerial perspective over kilometers. Mist can wet your coat; haze pales a mountain range.When should I use Atmospheric Haze?Use it when a wide must recede: desert, city, sea, valley. Do not use it to hide a figure in a room.How do I prompt Atmospheric Haze for AI image or video?Keep the subject sharp and pale the distance. Example: atmospheric haze stacking distance around [Subject], far planes paler. Name successive ridges or blocks of city, not a fog bank at the lens."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Atmospheric haze stacking distance around [Subject], aerial perspective, far planes paler, depth as weather. Keep the near subject contrasty; name two or three receding planes.",
+      "For video, stable long-distance paleness, not swirling soup around the lens. No globes on a foreground practical unless you also have local fog."
+    ],
+    "example": "Atmospheric haze stacking distance around [Subject], aerial perspective, far planes paler, depth as weather."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+      "alt": "Atmospheric Haze example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+      "alt": "Volumetric Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/011706e10e626fcdf7bc8085edc5d79c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mist.webp",
+      "alt": "Mist"
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+      "alt": "Rain"
+    },
+    {
+      "kind": "image",
+      "path": "media/bdd7ca881456eb5875af7ec22079b8ba.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/haze/hero.jpg",
+      "alt": "Atmospheric Haze",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "22ae88d7b89b4b88806e9e32249eed0caee91ed1b3de92afd351a44bb816d962"
+}

@@ -1,0 +1,441 @@
+{
+  "id": "composition/foreground-interest",
+  "slug": "foreground-interest",
+  "title": "Foreground Interest",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/foreground-interest",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/foreground-interest.webp",
+  "detail": "details/composition/foreground-interest.json",
+  "aliases": [
+    "foreground anchor",
+    "foreground element",
+    "Dirty frame",
+    "Occluded observation"
+  ],
+  "description": "Foreground interest (a foreground anchor or occluded observation) puts a salient near object between the lens and the subject: flowers, a fence, glass, a table, or a body. The near layer creates depth, scale, a visual entry, or partial concealment, so air and obstacle sit between us and them.",
+  "thumbnail": "media/8175d3a232dbdeb67405c9ffbd646e6d.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The diagram now has a landlord in front of the camera. A bedpost, a shoulder, a glass of whisky can own the near third while the scene happens beyond."
+        },
+        {
+          "type": "paragraph",
+          "text": "We feel physically situated. Sometimes we feel we should not be there."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the near object covers the decisive face or when it is random clutter. A plant in focus in front of an important mouth is not depth."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a mistake. Foreground interest can be sharp (a gun on a table, Kane's objects) or soft (flowers as a veil)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sharp near matter stages power. Soft near matter stages eavesdropping."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The diagram now has a landlord in front of the camera. A bedpost, a shoulder, a glass of whisky can own the near third while the scene happens beyond.We feel physically situated. Sometimes we feel we should not be there.It is the wrong tool when the near object covers the decisive face or when it is random clutter. A plant in focus in front of an important mouth is not depth.It is a mistake. Foreground interest can be sharp (a gun on a table, Kane's objects) or soft (flowers as a veil).Sharp near matter stages power. Soft near matter stages eavesdropping."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place a real object close to the lens, on a plane that reads as obstacle. Coordinate its edge with eyes and hands so it conceals by design."
+        },
+        {
+          "type": "paragraph",
+          "text": "A wide or moderate wide (24mm to 40mm) exaggerates the near mass. Open the aperture if the layer should melt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stop down if the near object is information. Prompt: Strong foreground object between lens and [Subject], dirty aperture of flowers, fence, or glass, layered depth."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place a real object close to the lens, on a plane that reads as obstacle. Coordinate its edge with eyes and hands so it conceals by design.A wide or moderate wide (24mm to 40mm) exaggerates the near mass. Open the aperture if the layer should melt.Stop down if the near object is information. Prompt: Strong foreground object between lens and [Subject], dirty aperture of flowers, fence, or glass, layered depth."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to put the camera in a room that already has stuff, to spy, or to show a power object in front of a distant person. Do not let the foreground eat the expression you came for."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to put the camera in a room that already has stuff, to spy, or to show a power object in front of a distant person. Do not let the foreground eat the expression you came for."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dirty Frame specifically chews the outer edges, often all around, as voyeur layers. Foreground interest can be a designed object in the lower frame without dirty corners.",
+          "links": [
+            {
+              "text": "Dirty Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Layered Depth asks midground and background to carry action too, not just a pretty veil. Frame within Frame uses a hard inner rectangle rather than an object.",
+          "links": [
+            {
+              "text": "Layered Depth",
+              "url": "https://melies.co/cinematic-techniques/composition/layered-depth"
+            },
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Voyeur is the concealment ethic that often uses this layer.",
+          "links": [
+            {
+              "text": "Voyeur",
+              "url": "https://melies.co/cinematic-techniques/composition/voyeur"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dirty FrameWe are not supposed to have this view.",
+          "displayText": "Dirty Frame\nWe are not supposed to have this view.",
+          "links": [
+            {
+              "text": "Dirty FrameWe are not supposed to have this view.",
+              "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Layered DepthA shot should be walkable.",
+          "displayText": "Layered Depth\nA shot should be walkable.",
+          "links": [
+            {
+              "text": "Layered DepthA shot should be walkable.",
+              "url": "https://melies.co/cinematic-techniques/composition/layered-depth"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dirty Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+        },
+        {
+          "text": "Layered Depth",
+          "url": "https://melies.co/cinematic-techniques/composition/layered-depth"
+        },
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Voyeur",
+          "url": "https://melies.co/cinematic-techniques/composition/voyeur"
+        },
+        {
+          "text": "Dirty FrameWe are not supposed to have this view.",
+          "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+        },
+        {
+          "text": "Layered DepthA shot should be walkable.",
+          "url": "https://melies.co/cinematic-techniques/composition/layered-depth"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/42192cfbcaa98a313c7df38d8a897967.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dirty-frame-040-foreground-obstruction-mini.webp",
+          "alt": "Dirty Frame"
+        },
+        {
+          "kind": "video",
+          "path": "media/d734365fbad1668a19694f50f3ad0d8e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/040-foreground-obstruction-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/47c2f2a4219b4a46900cd429c8828630.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/layered-depth-039-deep-space-staging-mini.webp",
+          "alt": "Layered Depth"
+        },
+        {
+          "kind": "video",
+          "path": "media/3da50c27545f0cee9650df39199c5aef.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/039-deep-space-staging-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Dirty Frame specifically chews the outer edges, often all around, as voyeur layers. Foreground interest can be a designed object in the lower frame without dirty corners.Layered Depth asks midground and background to carry action too, not just a pretty veil. Frame within Frame uses a hard inner rectangle rather than an object.Voyeur is the concealment ethic that often uses this layer.Dirty FrameWe are not supposed to have this view.Layered DepthA shot should be walkable.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Citizen Kane loads tables and objects in the near plane while deals happen beyond. The Graduate frames Benjamin through Mrs."
+        },
+        {
+          "type": "paragraph",
+          "text": "Robinson's bent leg, a joke of obstruction and power. In the Mood for Love watches through walls and gaps."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Revenant uses brush, breath, and near nature as obstacles, not stickers."
+        },
+        {
+          "type": "list-item",
+          "text": "In the Mood for Love 2000Characters are seen through doorways, walls and narrow architectural gaps.",
+          "displayText": "In the Mood for Love 2000\nCharacters are seen through doorways, walls and narrow architectural gaps."
+        },
+        {
+          "type": "list-item",
+          "text": "The Graduate 1967Benjamin is framed through Mrs. Robinson’s bent leg.",
+          "displayText": "The Graduate 1967\nBenjamin is framed through Mrs. Robinson’s bent leg."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/36a729afbdaec8c947934b67a387b857.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/foreground-interest/famous/00-in-the-mood-for-love-2000.jpg",
+          "alt": "In the Mood for Love 2000"
+        },
+        {
+          "kind": "image",
+          "path": "media/c4e1e82d927a89109ae7b3ffcf8f6b21.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/foreground-interest/famous/01-the-graduate-1967.jpg",
+          "alt": "The Graduate 1967"
+        }
+      ],
+      "sourceText": "In film Citizen Kane loads tables and objects in the near plane while deals happen beyond. The Graduate frames Benjamin through Mrs.Robinson's bent leg, a joke of obstruction and power. In the Mood for Love watches through walls and gaps.The Revenant uses brush, breath, and near nature as obstacles, not stickers.In the Mood for Love 2000Characters are seen through doorways, walls and narrow architectural gaps.The Graduate 1967Benjamin is framed through Mrs. Robinson’s bent leg."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the near object and whether it is sharp. Strong foreground object between lens and [Subject], dirty aperture of flowers, fence, or glass, layered depth."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say between lens and subject, and what the object is. If it should stay readable, say foreground sharp."
+        },
+        {
+          "type": "paragraph",
+          "text": "If it is a veil, say out of focus foreground."
+        },
+        {
+          "type": "quote",
+          "text": "Observe two neighbors speaking softly in a stairwell through a narrow gap between a door and its frame. A dark blurred door edge occupies one third of the image. The camera remains hidden and still; both faces remain readable when they lean toward the light."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Observe+two+neighbors+speaking+softly+in+a+stairwell+through+a+narrow+gap+between+a+door+and+its+frame.+A+dark+blurred+door+edge+occupies+one+third+of+the+image.+The+camera+remains+hidden+and+still;+both+faces+remain+readable+when+they+lean+toward+the+light."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the near object and whether it is sharp. Strong foreground object between lens and [Subject], dirty aperture of flowers, fence, or glass, layered depth.Say between lens and subject, and what the object is. If it should stay readable, say foreground sharp.If it is a veil, say out of focus foreground.Copy promptUse in Video GeneratorObserve two neighbors speaking softly in a stairwell through a narrow gap between a door and its frame. A dark blurred door edge occupies one third of the image. The camera remains hidden and still; both faces remain readable when they lean toward the light.Observe two neighbors speaking softly in a stairwell through a narrow gap between a door and its frame. A dark blurred door edge occupies one third of the image. The camera remains hidden and still; both faces remain readable when they lean toward the light."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is accidental clutter. The tell is a menu board or a head slicing a mouth with no relationship to the beat."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to choose the object, place its edge, and pick focus on purpose. Random foreground is not occluded observation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is accidental clutter. The tell is a menu board or a head slicing a mouth with no relationship to the beat.The fix is to choose the object, place its edge, and pick focus on purpose. Random foreground is not occluded observation."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is foreground interest in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A near object sits between lens and subject and does a job: depth, scale, entry, or concealment. Flowers, fence, glass, a table, a body. The camera is in a place, not on a seamless studio axis."
+        },
+        {
+          "type": "heading",
+          "text": "Foreground Interest vs Dirty Frame",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Foreground interest is a salient near layer, which may sit in one region of the picture. A dirty frame occupies the edges, often around the whole aperture, with out-of-focus matter. A whisky glass on a table can be foreground interest in a otherwise clean frame."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use foreground interest?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when we should feel situated, blocked, or complicit: eavesdropping, a power object in front of a deal, nature in front of a figure. Do not cover the decisive expression by accident."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt foreground interest for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the object and the focus. Example: Strong foreground object between lens and [Subject], dirty aperture of flowers, fence, or glass, layered depth. Replace the object with the actual thing. State whether that layer is sharp or soft."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is foreground interest in film?A near object sits between lens and subject and does a job: depth, scale, entry, or concealment. Flowers, fence, glass, a table, a body. The camera is in a place, not on a seamless studio axis.Foreground Interest vs Dirty FrameForeground interest is a salient near layer, which may sit in one region of the picture. A dirty frame occupies the edges, often around the whole aperture, with out-of-focus matter. A whisky glass on a table can be foreground interest in a otherwise clean frame.When should I use foreground interest?Use it when we should feel situated, blocked, or complicit: eavesdropping, a power object in front of a deal, nature in front of a figure. Do not cover the decisive expression by accident.How do I prompt foreground interest for AI image or video?Name the object and the focus. Example: Strong foreground object between lens and [Subject], dirty aperture of flowers, fence, or glass, layered depth. Replace the object with the actual thing. State whether that layer is sharp or soft."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the near object and whether it is sharp. Strong foreground object between lens and [Subject], dirty aperture of flowers, fence, or glass, layered depth.",
+      "Say between lens and subject, and what the object is. If it should stay readable, say foreground sharp.",
+      "If it is a veil, say out of focus foreground."
+    ],
+    "example": "Observe two neighbors speaking softly in a stairwell through a narrow gap between a door and its frame. A dark blurred door edge occupies one third of the image. The camera remains hidden and still; both faces remain readable when they lean toward the light."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/8175d3a232dbdeb67405c9ffbd646e6d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/foreground-interest.webp",
+      "alt": "Foreground Interest example"
+    },
+    {
+      "kind": "image",
+      "path": "media/42192cfbcaa98a313c7df38d8a897967.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dirty-frame-040-foreground-obstruction-mini.webp",
+      "alt": "Dirty Frame"
+    },
+    {
+      "kind": "video",
+      "path": "media/d734365fbad1668a19694f50f3ad0d8e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/040-foreground-obstruction-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47c2f2a4219b4a46900cd429c8828630.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/layered-depth-039-deep-space-staging-mini.webp",
+      "alt": "Layered Depth"
+    },
+    {
+      "kind": "video",
+      "path": "media/3da50c27545f0cee9650df39199c5aef.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/039-deep-space-staging-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/36a729afbdaec8c947934b67a387b857.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/foreground-interest/famous/00-in-the-mood-for-love-2000.jpg",
+      "alt": "In the Mood for Love 2000"
+    },
+    {
+      "kind": "image",
+      "path": "media/c4e1e82d927a89109ae7b3ffcf8f6b21.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/foreground-interest/famous/01-the-graduate-1967.jpg",
+      "alt": "The Graduate 1967"
+    },
+    {
+      "kind": "image",
+      "path": "media/69396cd238e185393775b35f6d70a1ba.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/foreground-interest/hero.jpg",
+      "alt": "Foreground Interest",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "5835151b585f0a286863adb2cd2d0ce8ec1017c042e4ee2957dfac2e5dab4363"
+}

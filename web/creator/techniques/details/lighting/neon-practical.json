@@ -1,0 +1,399 @@
+{
+  "id": "lighting/neon-practical",
+  "slug": "neon-practical",
+  "title": "Neon Practicals",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/neon-practical",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+  "detail": "details/lighting/neon-practical.json",
+  "aliases": [],
+  "description": "Neon practicals are visible neon or similar sign tubes used as actual keys or strong accents, coloring the subject with magenta, cyan, or other tube hues instead of a hidden white source. The city fixture is the lamp.",
+  "thumbnail": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Night streets, hotels, and rain: the sign is not decoration. Wet pavement bounces the same hue back up."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mixed gels are honest because different signs disagree. Faces pick up the nearest tube as a key and the next one as a kicker."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a daylight office, or for a teal-and-orange grade with no tubes in frame. If the neon is only in the background and a white key lights the face, you have set dressing, not neon practicals."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Night streets, hotels, and rain: the sign is not decoration. Wet pavement bounces the same hue back up.Mixed gels are honest because different signs disagree. Faces pick up the nearest tube as a key and the next one as a kicker.It is the wrong tool for a daylight office, or for a teal-and-orange grade with no tubes in frame. If the neon is only in the background and a white key lights the face, you have set dressing, not neon practicals."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put working tubes in frame close enough to expose. Hardness is that of a long, thin source: relatively soft along the tube, harder across it, with specular lines in eyes and on wet cloth."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is the gas and the gel: magenta, cyan, red, green, often mixed. Wet-down helps bounce."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Neon practicals coloring [Subject], magenta and cyan signs as real keys, wet bounce, mixed gels, night-city chromatics."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put working tubes in frame close enough to expose. Hardness is that of a long, thin source: relatively soft along the tube, harder across it, with specular lines in eyes and on wet cloth.Color is the gas and the gel: magenta, cyan, red, green, often mixed. Wet-down helps bounce.Prompt: Neon practicals coloring [Subject], magenta and cyan signs as real keys, wet bounce, mixed gels, night-city chromatics."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the city is the lighting department, a wet street, a motel sign, a night market. Do not use a white key and a neon wallpaper."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the city is the lighting department, a wet street, a motel sign, a night market. Do not use a white key and a neon wallpaper."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Practical lighting is the parent class. Motivated lighting can hide units that match a sign's hue.",
+          "links": [
+            {
+              "text": "Practical lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            },
+            {
+              "text": "Motivated lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Blue hour often mixes with neon as warm and cool together. Cool blue and warm amber are grades; neon is a physical tube.",
+          "links": [
+            {
+              "text": "Blue hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            },
+            {
+              "text": "Cool blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            },
+            {
+              "text": "warm amber",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cross lighting happens when two signs oppose.",
+          "links": [
+            {
+              "text": "Cross lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Practical LightingLet the set light the face.",
+          "displayText": "Practical Lighting\nLet the set light the face.",
+          "links": [
+            {
+              "text": "Practical LightingLet the set light the face.",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Key LightDecide where the world is lit from. Everything else follows.",
+          "displayText": "Key Light\nDecide where the world is lit from. Everything else follows.",
+          "links": [
+            {
+              "text": "Key LightDecide where the world is lit from. Everything else follows.",
+              "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Practical lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "Motivated lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Blue hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        },
+        {
+          "text": "Cool blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "warm amber",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        },
+        {
+          "text": "Cross lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+        },
+        {
+          "text": "Practical LightingLet the set light the face.",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        },
+        {
+          "text": "Key LightDecide where the world is lit from. Everything else follows.",
+          "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e57ccee4dac77a8b92955074bb2f3c0a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/practical-lighting-065-practical-source-motivation-mini.webp",
+          "alt": "Practical Lighting"
+        },
+        {
+          "kind": "video",
+          "path": "media/1aa504cae7d8c87fc765f9694501981f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/065-practical-source-motivation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/060335b879d527a7f44190f4b1d160cf.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/key-light.webp",
+          "alt": "Key Light"
+        }
+      ],
+      "sourceText": "Compared with similar shots Practical lighting is the parent class. Motivated lighting can hide units that match a sign's hue.Blue hour often mixes with neon as warm and cool together. Cool blue and warm amber are grades; neon is a physical tube.Cross lighting happens when two signs oppose.Practical LightingLet the set light the face.Three-Point LightingTeachable portrait. Start here, then break it.Key LightDecide where the world is lit from. Everything else follows."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blade Runner uses signage and tubes as interior and street keys. Chungking Express lets Hong Kong neon hit faces at mixed hues."
+        },
+        {
+          "type": "paragraph",
+          "text": "Drive keeps magenta and cyan signs as real contributors on wet night streets."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Blade Runner uses signage and tubes as interior and street keys. Chungking Express lets Hong Kong neon hit faces at mixed hues.Drive keeps magenta and cyan signs as real contributors on wet night streets."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Make the signs the keys. \" Name which tube hits which cheek."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a white beauty key."
+        },
+        {
+          "type": "quote",
+          "text": "Neon practicals coloring [Subject], magenta and cyan signs as real keys, wet bounce, mixed gels, night-city chromatics."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Neon+practicals+coloring+[Subject],+magenta+and+cyan+signs+as+real+keys,+wet+bounce,+mixed+gels,+night-city+chromatics."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Make the signs the keys. \" Name which tube hits which cheek.Forbid a white beauty key.Copy promptUse in Image GeneratorNeon practicals coloring [Subject], magenta and cyan signs as real keys, wet bounce, mixed gels, night-city chromatics.Neon practicals coloring [Subject], magenta and cyan signs as real keys, wet bounce, mixed gels, night-city chromatics."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a white key plus neon bokeh. The tell is neutral skin in front of colored circles.",
+          "links": [
+            {
+              "text": "key",
+              "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by letting the nearest tube be the key and allowing mixed color on the face."
+        }
+      ],
+      "links": [
+        {
+          "text": "key",
+          "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a white key plus neon bokeh. The tell is neutral skin in front of colored circles.Fix it by letting the nearest tube be the key and allowing mixed color on the face."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is neon practical lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Visible neon or similar signs used as real lights on the subject. The tube's color becomes the key or a strong accent, often with wet bounce."
+        },
+        {
+          "type": "heading",
+          "text": "Neon practicals vs practical lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Practical lighting includes any visible fixture. Neon practicals are the subset where gas tubes or similar signs supply the hue and the exposure."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use neon practicals?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use them for night-city faces that should be colored by signs. Skip them if the neon is only background decoration."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt neon practicals for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "State magenta and cyan signs as real keys, wet bounce, mixed gels. The face takes the tube color. No hidden white movie key."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is neon practical lighting in film?Visible neon or similar signs used as real lights on the subject. The tube's color becomes the key or a strong accent, often with wet bounce.Neon practicals vs practical lightingPractical lighting includes any visible fixture. Neon practicals are the subset where gas tubes or similar signs supply the hue and the exposure.When should I use neon practicals?Use them for night-city faces that should be colored by signs. Skip them if the neon is only background decoration.How do I prompt neon practicals for AI image or video?State magenta and cyan signs as real keys, wet bounce, mixed gels. The face takes the tube color. No hidden white movie key."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Make the signs the keys. \" Name which tube hits which cheek.",
+      "Forbid a white beauty key."
+    ],
+    "example": "Neon practicals coloring [Subject], magenta and cyan signs as real keys, wet bounce, mixed gels, night-city chromatics."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+      "alt": "Neon Practicals example"
+    },
+    {
+      "kind": "image",
+      "path": "media/e57ccee4dac77a8b92955074bb2f3c0a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/practical-lighting-065-practical-source-motivation-mini.webp",
+      "alt": "Practical Lighting"
+    },
+    {
+      "kind": "video",
+      "path": "media/1aa504cae7d8c87fc765f9694501981f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/065-practical-source-motivation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/060335b879d527a7f44190f4b1d160cf.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/key-light.webp",
+      "alt": "Key Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/2a47738b2a6f7dc6c5879859238c0073.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/neon-practical/hero.jpg",
+      "alt": "Neon Practicals",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "df6fae26aabfec17a13fcd0456cf5a7ef0f621830ccb9b9e64349ed42a95ee25"
+}

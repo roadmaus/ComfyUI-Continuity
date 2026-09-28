@@ -1,0 +1,404 @@
+{
+  "id": "composition/symmetry",
+  "slug": "symmetry",
+  "title": "Symmetry",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/symmetry",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/symmetry.webp",
+  "detail": "details/composition/symmetry.json",
+  "aliases": [],
+  "description": "Symmetry in a symmetrical composition balances visual masses around an axis, usually the vertical centerline, so left answers right. The world looks designed, or it is pretending to be, whether or not a person occupies the middle.",
+  "thumbnail": "media/433ff490835bf3f002cef6f2447f05d3.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "When left mirrors right, nobody owns a secret side of the frame. Space is ceremonial."
+        },
+        {
+          "type": "paragraph",
+          "text": "A small break (a crooked tie, a missing lamp, a person one step off axis) becomes the whole event. It is the wrong tool when life should feel unarranged."
+        },
+        {
+          "type": "paragraph",
+          "text": "A kitchen argument, a chase, a documentary street: forcing a mirror there is a lie unless the lie is the point (a showroom, a regime, a dream). Symmetry is not the same as centering a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "A mirrored corridor can swallow a figure who is slightly late to their mark. The architecture still owns the diagram."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function When left mirrors right, nobody owns a secret side of the frame. Space is ceremonial.A small break (a crooked tie, a missing lamp, a person one step off axis) becomes the whole event. It is the wrong tool when life should feel unarranged.A kitchen argument, a chase, a documentary street: forcing a mirror there is a lie unless the lie is the point (a showroom, a regime, a dream). Symmetry is not the same as centering a face.A mirrored corridor can swallow a figure who is slightly late to their mark. The architecture still owns the diagram."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place the camera on the centerline of the set. Match practicals, furniture, and verticals."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use a level. One-point architecture helps but is not required: a flat elevation of a facade can be a mirror without a vanishing tunnel."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stop down if both wings must stay sharp. Prompt: Perfect symmetry around [Subject], mirrored architecture, a central axis, obsessive order."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place the camera on the centerline of the set. Match practicals, furniture, and verticals.Use a level. One-point architecture helps but is not required: a flat elevation of a facade can be a mirror without a vanishing tunnel.Stop down if both wings must stay sharp. Prompt: Perfect symmetry around [Subject], mirrored architecture, a central axis, obsessive order."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the location is a machine of order: hotel, chapel, spaceship, courtroom, dollhouse. Do not use it as wallpaper on a location that has no axis."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the location is a machine of order: hotel, chapel, spaceship, courtroom, dollhouse. Do not use it as wallpaper on a location that has no axis."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Centered Composition plants a subject on the axis. Symmetry mirrors the field, with or without that subject.",
+          "links": [
+            {
+              "text": "Centered Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "One-Point Perspective is a perspective construction that often produces symmetry, but two wings can match in a flat, shallow picture with no tunnel. Repetition and Pattern repeats units without requiring a mirror.",
+          "links": [
+            {
+              "text": "One-Point Perspective",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            },
+            {
+              "text": "Repetition and Pattern",
+              "url": "https://melies.co/cinematic-techniques/composition/repetition-pattern"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Asymmetry is the refusal.",
+          "links": [
+            {
+              "text": "Asymmetry",
+              "url": "https://melies.co/cinematic-techniques/composition/asymmetry"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "displayText": "Centered Composition\nControl, ritual, comedy, or fate.",
+          "links": [
+            {
+              "text": "Centered CompositionControl, ritual, comedy, or fate.",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "One-Point PerspectiveDestiny has a vanishing point.",
+          "displayText": "One-Point Perspective\nDestiny has a vanishing point.",
+          "links": [
+            {
+              "text": "One-Point PerspectiveDestiny has a vanishing point.",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Centered Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "One-Point Perspective",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Repetition and Pattern",
+          "url": "https://melies.co/cinematic-techniques/composition/repetition-pattern"
+        },
+        {
+          "text": "Asymmetry",
+          "url": "https://melies.co/cinematic-techniques/composition/asymmetry"
+        },
+        {
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "One-Point PerspectiveDestiny has a vanishing point.",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+          "alt": "Centered Composition"
+        },
+        {
+          "kind": "video",
+          "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fd42e6b828b510faf2cf566bcbd2d93b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-point-perspective-037-symmetry-and-one-point-perspective-mini.webp",
+          "alt": "One-Point Perspective"
+        },
+        {
+          "kind": "video",
+          "path": "media/6a0595c4b52cce7843ef5c4ab8eb4adf.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/037-symmetry-and-one-point-perspective-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Centered Composition plants a subject on the axis. Symmetry mirrors the field, with or without that subject.One-Point Perspective is a perspective construction that often produces symmetry, but two wings can match in a flat, shallow picture with no tunnel. Repetition and Pattern repeats units without requiring a mirror.Asymmetry is the refusal.Centered CompositionControl, ritual, comedy, or fate.One-Point PerspectiveDestiny has a vanishing point.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Grand Budapest Hotel treats hotels as mirrored diagrams of service. 2001: A Space Odyssey uses axial, bilateral order as a claim that the future is designed."
+        },
+        {
+          "type": "paragraph",
+          "text": "A fingerprint on that order reads as error or omen. Grammar, not a filter."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Grand Budapest Hotel treats hotels as mirrored diagrams of service. 2001: A Space Odyssey uses axial, bilateral order as a claim that the future is designed.A fingerprint on that order reads as error or omen. Grammar, not a filter."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand the mirror. Perfect symmetry around [Subject], mirrored architecture, a central axis, obsessive order."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name matching lamps, windows, columns. Say camera on the centerline, verticals true."
+        },
+        {
+          "type": "paragraph",
+          "text": "If a break matters, name the one unmatched object."
+        },
+        {
+          "type": "quote",
+          "text": "Perfect symmetry around [Subject], mirrored architecture, a central axis, obsessive order."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Perfect+symmetry+around+[Subject],+mirrored+architecture,+a+central+axis,+obsessive+order."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Demand the mirror. Perfect symmetry around [Subject], mirrored architecture, a central axis, obsessive order.Name matching lamps, windows, columns. Say camera on the centerline, verticals true.If a break matters, name the one unmatched object.Copy promptUse in Image GeneratorPerfect symmetry around [Subject], mirrored architecture, a central axis, obsessive order.Perfect symmetry around [Subject], mirrored architecture, a central axis, obsessive order."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a centered actor in an unmatched room. The tell is a bullseye face and a window only on the left."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to move the camera onto the architectural axis, or to drop the claim and shoot Asymmetry with real counterweight.",
+          "links": [
+            {
+              "text": "Asymmetry",
+              "url": "https://melies.co/cinematic-techniques/composition/asymmetry"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Asymmetry",
+          "url": "https://melies.co/cinematic-techniques/composition/asymmetry"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a centered actor in an unmatched room. The tell is a bullseye face and a window only on the left.The fix is to move the camera onto the architectural axis, or to drop the claim and shoot Asymmetry with real counterweight."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is symmetry in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a frame whose masses balance around an axis, usually the vertical center. Left answers right. The world looks designed. A person may sit on the axis, or the architecture may be the symmetrical subject."
+        },
+        {
+          "type": "heading",
+          "text": "Symmetry vs Centered Composition",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Centered composition is about the subject's seat on the axis. Symmetry is about mirrored masses. You can center a person in an asymmetric room, and you can shoot a mirrored hall with the actor late to center. They often travel together. They are not the same diagram."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use symmetry?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when order is the meaning: ritual, comedy of control, science-fiction design, a regime's architecture. Do not glue it onto a street that has no axis."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt symmetry for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for a mirror and an axis. Example: Perfect symmetry around [Subject], mirrored architecture, a central axis, obsessive order. Specify matching practicals and a camera on the centerline. Name one break if the story is the unmatched thing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is symmetry in film?It is a frame whose masses balance around an axis, usually the vertical center. Left answers right. The world looks designed. A person may sit on the axis, or the architecture may be the symmetrical subject.Symmetry vs Centered CompositionCentered composition is about the subject's seat on the axis. Symmetry is about mirrored masses. You can center a person in an asymmetric room, and you can shoot a mirrored hall with the actor late to center. They often travel together. They are not the same diagram.When should I use symmetry?Use it when order is the meaning: ritual, comedy of control, science-fiction design, a regime's architecture. Do not glue it onto a street that has no axis.How do I prompt symmetry for AI image or video?Ask for a mirror and an axis. Example: Perfect symmetry around [Subject], mirrored architecture, a central axis, obsessive order. Specify matching practicals and a camera on the centerline. Name one break if the story is the unmatched thing."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Demand the mirror. Perfect symmetry around [Subject], mirrored architecture, a central axis, obsessive order.",
+      "Name matching lamps, windows, columns. Say camera on the centerline, verticals true.",
+      "If a break matters, name the one unmatched object."
+    ],
+    "example": "Perfect symmetry around [Subject], mirrored architecture, a central axis, obsessive order."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/433ff490835bf3f002cef6f2447f05d3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/symmetry.webp",
+      "alt": "Symmetry example"
+    },
+    {
+      "kind": "image",
+      "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+      "alt": "Centered Composition"
+    },
+    {
+      "kind": "video",
+      "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fd42e6b828b510faf2cf566bcbd2d93b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-point-perspective-037-symmetry-and-one-point-perspective-mini.webp",
+      "alt": "One-Point Perspective"
+    },
+    {
+      "kind": "video",
+      "path": "media/6a0595c4b52cce7843ef5c4ab8eb4adf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/037-symmetry-and-one-point-perspective-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/bf2dfffdcf94446d7b4584a98274f3e0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/symmetry/hero.jpg",
+      "alt": "Symmetry",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "b944ec0bdf0252246747c494c79f53adff4547e13847534e76cfa9f9d4213a73"
+}

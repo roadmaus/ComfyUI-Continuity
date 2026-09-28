@@ -1,0 +1,433 @@
+{
+  "id": "color/vintage",
+  "slug": "vintage",
+  "title": "Vintage",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/vintage",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vintage.webp",
+  "detail": "details/color/vintage.json",
+  "aliases": [],
+  "description": "A vintage film look treats the image as past chemistry: faded dyes, possible Halation, softened contrast, and period color that has drifted. It is a whole-file costume of time, not only old glass and not only a lifted print curve.",
+  "thumbnail": "media/1dd780cdfc8833b72f3528b59cc24a02.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "It already happened. Dyes have wandered."
+        },
+        {
+          "type": "paragraph",
+          "text": "Whites are not video-white. The past is chemistry, not a sticker of scratches."
+        },
+        {
+          "type": "paragraph",
+          "text": "A 1970s still, a memory sitcom, a period film that wants the stock to confess its age: the treatment says archive even when the camera is new. It is the wrong tool when the only thing you wanted was Cooke swirl on a contemporary story (Vintage Cine Glass).",
+          "links": [
+            {
+              "text": "Vintage Cine Glass",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you only wanted toe and shoulder of a print (Filmic Faded) with modern dyes intact. Sepia is one brown-gold path through the past; vintage can stay in faded color.",
+          "links": [
+            {
+              "text": "Filmic Faded",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            },
+            {
+              "text": "Sepia",
+              "url": "https://melies.co/cinematic-techniques/color/sepia"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add random specks and call it time."
+        }
+      ],
+      "links": [
+        {
+          "text": "Vintage Cine Glass",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Filmic Faded",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Sepia",
+          "url": "https://melies.co/cinematic-techniques/color/sepia"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function It already happened. Dyes have wandered.Whites are not video-white. The past is chemistry, not a sticker of scratches.A 1970s still, a memory sitcom, a period film that wants the stock to confess its age: the treatment says archive even when the camera is new. It is the wrong tool when the only thing you wanted was Cooke swirl on a contemporary story (Vintage Cine Glass).It is the wrong tool when you only wanted toe and shoulder of a print (Filmic Faded) with modern dyes intact. Sepia is one brown-gold path through the past; vintage can stay in faded color.Do not add random specks and call it time."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fade dyes (cyan often goes first in some stocks, or reds go brick), add gentle Halation on practicals, keep contrast modest, and optionally add period-accurate Film Grain. Separate dirt and weave: they are extra claims.",
+          "links": [
+            {
+              "text": "Halation",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            },
+            {
+              "text": "Film Grain",
+              "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Vintage treatment of [Subject], faded dyes, halation, the past as chemistry, not a sticker."
+        }
+      ],
+      "links": [
+        {
+          "text": "Halation",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "Film Grain",
+          "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Fade dyes (cyan often goes first in some stocks, or reds go brick), add gentle Halation on practicals, keep contrast modest, and optionally add period-accurate Film Grain. Separate dirt and weave: they are extra claims.Prompt: Vintage treatment of [Subject], faded dyes, halation, the past as chemistry, not a sticker."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the image should already have happened as an artifact of time. Do not use it as a substitute for vintage glass on a present-tense scene, and do not reduce it to a scratch overlay."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the image should already have happened as an artifact of time. Do not use it as a substitute for vintage glass on a present-tense scene, and do not reduce it to a scratch overlay."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vintage Cine Glass is the taking lens. Filmic Faded is print curve.",
+          "links": [
+            {
+              "text": "Vintage Cine Glass",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            },
+            {
+              "text": "Filmic Faded",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Sepia is brown-gold tone. Halation is bloom on highlights, one ingredient.",
+          "links": [
+            {
+              "text": "Sepia",
+              "url": "https://melies.co/cinematic-techniques/color/sepia"
+            },
+            {
+              "text": "Halation",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vintage is the combined period chemistry claim."
+        },
+        {
+          "type": "list-item",
+          "text": "Filmic FadedNot HDR. A print.",
+          "displayText": "Filmic Faded\nNot HDR. A print.",
+          "links": [
+            {
+              "text": "Filmic FadedNot HDR. A print.",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "displayText": "Halation\nHighlights should bleed like film, not clip like video.",
+          "links": [
+            {
+              "text": "HalationHighlights should bleed like film, not clip like video.",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SepiaA story that already happened.",
+          "displayText": "Sepia\nA story that already happened.",
+          "links": [
+            {
+              "text": "SepiaA story that already happened.",
+              "url": "https://melies.co/cinematic-techniques/color/sepia"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Vintage Cine Glass",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Filmic Faded",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Sepia",
+          "url": "https://melies.co/cinematic-techniques/color/sepia"
+        },
+        {
+          "text": "Halation",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "Filmic FadedNot HDR. A print.",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "SepiaA story that already happened.",
+          "url": "https://melies.co/cinematic-techniques/color/sepia"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6c5de4fbb1a2ea3e097921b0637da37f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/filmic-faded.webp",
+          "alt": "Filmic Faded"
+        },
+        {
+          "kind": "image",
+          "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+          "alt": "Halation"
+        },
+        {
+          "kind": "video",
+          "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/27d44f2045293177ba051bc1ca87626c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/sepia.webp",
+          "alt": "Sepia"
+        }
+      ],
+      "sourceText": "Compared with similar shots Vintage Cine Glass is the taking lens. Filmic Faded is print curve.Sepia is brown-gold tone. Halation is bloom on highlights, one ingredient.Vintage is the combined period chemistry claim.Filmic FadedNot HDR. A print.HalationHighlights should bleed like film, not clip like video.SepiaA story that already happened."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Master can sit in period-adjacent chemistry as well as character glass; the vintage claim is the whole file looking of an age. Memory-television language (The Wonder Years and similar) treats the past as a softer, drifted color world."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of faded dyes, not a still to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Master can sit in period-adjacent chemistry as well as character glass; the vintage claim is the whole file looking of an age. Memory-television language (The Wonder Years and similar) treats the past as a softer, drifted color world.Grammar of faded dyes, not a still to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name dyes and bloom, not stickers. Vintage treatment of [Subject], faded dyes, halation, the past as chemistry, not a sticker."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep it color unless you also want sepia. Do not write scratch overlay as the whole look, and do not confuse it with Cooke swirl alone."
+        },
+        {
+          "type": "quote",
+          "text": "Vintage treatment of [Subject], faded dyes, halation, the past as chemistry, not a sticker."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Vintage+treatment+of+[Subject],+faded+dyes,+halation,+the+past+as+chemistry,+not+a+sticker."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name dyes and bloom, not stickers. Vintage treatment of [Subject], faded dyes, halation, the past as chemistry, not a sticker.Keep it color unless you also want sepia. Do not write scratch overlay as the whole look, and do not confuse it with Cooke swirl alone.Copy promptUse in Image GeneratorVintage treatment of [Subject], faded dyes, halation, the past as chemistry, not a sticker.Vintage treatment of [Subject], faded dyes, halation, the past as chemistry, not a sticker."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Vintage Cine Glass (glass only) or a dirty overlay on a modern grade. The tell is sharp modern contrast with specks, or swirl bokeh with contemporary dyes.",
+          "links": [
+            {
+              "text": "Vintage Cine Glass",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: drifted dyes, modest contrast, halation on lamps, time as chemistry."
+        }
+      ],
+      "links": [
+        {
+          "text": "Vintage Cine Glass",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Vintage Cine Glass (glass only) or a dirty overlay on a modern grade. The tell is sharp modern contrast with specks, or swirl bokeh with contemporary dyes.Fix: drifted dyes, modest contrast, halation on lamps, time as chemistry."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is vintage in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a period chemistry look: faded dyes, possible halation, and contrast that sits like an aged print or stock. The past is in the file, not only in the costumes."
+        },
+        {
+          "type": "heading",
+          "text": "Vintage vs Vintage Cine Glass",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Vintage cine is the lens: coatings and aberrations. Vintage as a grade or treatment is dye fade and period color chemistry. You can shoot old glass in a modern grade, or modern glass with a vintage treatment."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use vintage?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the image should read as already past, as chemistry. Skip it if you only needed old glass, a print curve, or a brown tone."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt vintage for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Vintage treatment of [Subject], faded dyes, halation, the past as chemistry, not a sticker. Forbid scratch-only overlays and clinical modern contrast."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is vintage in film?It is a period chemistry look: faded dyes, possible halation, and contrast that sits like an aged print or stock. The past is in the file, not only in the costumes.Vintage vs Vintage Cine GlassVintage cine is the lens: coatings and aberrations. Vintage as a grade or treatment is dye fade and period color chemistry. You can shoot old glass in a modern grade, or modern glass with a vintage treatment.When should I use vintage?Use it when the image should read as already past, as chemistry. Skip it if you only needed old glass, a print curve, or a brown tone.How do I prompt vintage for AI image or video?Write: Vintage treatment of [Subject], faded dyes, halation, the past as chemistry, not a sticker. Forbid scratch-only overlays and clinical modern contrast."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name dyes and bloom, not stickers. Vintage treatment of [Subject], faded dyes, halation, the past as chemistry, not a sticker.",
+      "Keep it color unless you also want sepia. Do not write scratch overlay as the whole look, and do not confuse it with Cooke swirl alone."
+    ],
+    "example": "Vintage treatment of [Subject], faded dyes, halation, the past as chemistry, not a sticker."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/1dd780cdfc8833b72f3528b59cc24a02.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vintage.webp",
+      "alt": "Vintage example"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c5de4fbb1a2ea3e097921b0637da37f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/filmic-faded.webp",
+      "alt": "Filmic Faded"
+    },
+    {
+      "kind": "image",
+      "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+      "alt": "Halation"
+    },
+    {
+      "kind": "video",
+      "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/27d44f2045293177ba051bc1ca87626c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/sepia.webp",
+      "alt": "Sepia"
+    },
+    {
+      "kind": "image",
+      "path": "media/5b8022b6f85ca0607db244be07d05d41.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/vintage/hero.jpg",
+      "alt": "Vintage",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "978bc5a0845babddf4c7de73b2128904aa5e9704e8c3f03f09f2e8057b41b7d1"
+}

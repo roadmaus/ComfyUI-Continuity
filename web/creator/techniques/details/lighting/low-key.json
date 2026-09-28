@@ -1,0 +1,373 @@
+{
+  "id": "lighting/low-key",
+  "slug": "low-key",
+  "title": "Low-Key Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/low-key",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+  "detail": "details/lighting/low-key.json",
+  "aliases": [],
+  "description": "Low-key lighting, or low key lighting, uses high contrast, selective illumination, and substantial shadow so most of the frame can sit near black. One pool of light is often enough; the dark is designed, not an accident of underexposure.",
+  "thumbnail": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mystery, crime, and moral night live here because the audience cannot see the whole room. A face, a gun, a doorway gets the pool; the rest is withheld."
+        },
+        {
+          "type": "paragraph",
+          "text": "The ratio is the story: who is visible, who is not. It is the wrong tool for comedy timing that needs both eyes, or for a location you must geography-read."
+        },
+        {
+          "type": "paragraph",
+          "text": "Diming a fully lit office until it is muddy is not low-key. That is just a dark even room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Mystery, crime, and moral night live here because the audience cannot see the whole room. A face, a gun, a doorway gets the pool; the rest is withheld.The ratio is the story: who is visible, who is not. It is the wrong tool for comedy timing that needs both eyes, or for a location you must geography-read.Diming a fully lit office until it is muddy is not low-key. That is just a dark even room."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place a motivated key, kill bounce with flags and black wrap, and keep fill several stops down (often 8:1 or more). Hardness is frequently hard so shadow edges stay graphic, but soft low-key exists if the source is large and still isolated."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is often tungsten in a black room, or a single cool slash. Prompt: Low-key lighting on [Subject], most of the frame in deep shadow, one pool of light, 8:1 contrast, darkness as a designed space."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place a motivated key, kill bounce with flags and black wrap, and keep fill several stops down (often 8:1 or more). Hardness is frequently hard so shadow edges stay graphic, but soft low-key exists if the source is large and still isolated.Color is often tungsten in a black room, or a single cool slash. Prompt: Low-key lighting on [Subject], most of the frame in deep shadow, one pool of light, 8:1 contrast, darkness as a designed space."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a crime close-up, a night office, a corridor with one practical. Do not underexpose an evenly lit room and call it low-key."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a crime close-up, a night office, a corridor with one practical. Do not underexpose an evenly lit room and call it low-key."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Chiaroscuro is low-key used to model volume with a painter's moral contrast; not every low-key frame is chiaroscuro. Hard light often serves low-key but is a quality, not the ratio.",
+          "links": [
+            {
+              "text": "Chiaroscuro",
+              "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+            },
+            {
+              "text": "Hard light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "High-key lighting is the opposite. Cameo lighting erases the environment entirely; low-key can still imply a room in the dark.",
+          "links": [
+            {
+              "text": "High-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            },
+            {
+              "text": "Cameo lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "ChiaroscuroLight is moral. Darkness hides or judges.",
+          "displayText": "Chiaroscuro\nLight is moral. Darkness hides or judges.",
+          "links": [
+            {
+              "text": "ChiaroscuroLight is moral. Darkness hides or judges.",
+              "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "displayText": "Hard Light\nGrit, noon sun, or interrogation.",
+          "links": [
+            {
+              "text": "Hard LightGrit, noon sun, or interrogation.",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Chiaroscuro",
+          "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+        },
+        {
+          "text": "Hard light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "High-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Cameo lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "ChiaroscuroLight is moral. Darkness hides or judges.",
+          "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+        },
+        {
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/574be572bd18fb911661cfde31c02f26.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/chiaroscuro-063-low-key-chiaroscuro-mini.webp",
+          "alt": "Chiaroscuro"
+        },
+        {
+          "kind": "video",
+          "path": "media/02a6da7712d15780d0526991b4982c3c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/063-low-key-chiaroscuro-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+          "alt": "Hard Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Chiaroscuro is low-key used to model volume with a painter's moral contrast; not every low-key frame is chiaroscuro. Hard light often serves low-key but is a quality, not the ratio.High-key lighting is the opposite. Cameo lighting erases the environment entirely; low-key can still imply a room in the dark.ChiaroscuroLight is moral. Darkness hides or judges.Hard LightGrit, noon sun, or interrogation.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Godfather keeps offices in selective pools against the bright wedding outside. The Big Combo and Se7en use high-contrast night as a working space, not a grade slapped on a bright master."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the pool and the flags, not a grain preset."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Godfather keeps offices in selective pools against the bright wedding outside. The Big Combo and Se7en use high-contrast night as a working space, not a grade slapped on a bright master.Borrow the pool and the flags, not a grain preset."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the pool and the black. \" Name the single source and forbid extra fill."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not write moody if you have not placed the lamp."
+        },
+        {
+          "type": "quote",
+          "text": "Low-key lighting on [Subject], most of the frame in deep shadow, one pool of light, 8:1 contrast, noir darkness as a character."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Low-key+lighting+on+[Subject],+most+of+the+frame+in+deep+shadow,+one+pool+of+light,+8:1+contrast,+noir+darkness+as+a+character."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the pool and the black. \" Name the single source and forbid extra fill.Do not write moody if you have not placed the lamp.Copy promptUse in Image GeneratorLow-key lighting on [Subject], most of the frame in deep shadow, one pool of light, 8:1 contrast, noir darkness as a character.Low-key lighting on [Subject], most of the frame in deep shadow, one pool of light, 8:1 contrast, noir darkness as a character."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a dark high-key (everything dimmed equally) or crushed blacks with no face. The tell is no key direction.",
+          "links": [
+            {
+              "text": "high-key",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by placing one source and flagging spill, then exposing for that pool."
+        }
+      ],
+      "links": [
+        {
+          "text": "high-key",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a dark high-key (everything dimmed equally) or crushed blacks with no face. The tell is no key direction.Fix it by placing one source and flagging spill, then exposing for that pool."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is low-key lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A high-contrast setup with selective illumination and substantial shadow. Darkness is shaped, not merely underexposed."
+        },
+        {
+          "type": "heading",
+          "text": "Low-key lighting vs chiaroscuro",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Low-key is the contrast strategy. Chiaroscuro uses that contrast to model volume and often a moral split between light and dark."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use low-key lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for mystery, crime, or any night that should withhold space. Do not use it when the geography of the room is the joke or the plot."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt low-key lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Put most of the frame in deep shadow, name one pool of light, and state a high ratio such as 8:1. Name the single source."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is low-key lighting in film?A high-contrast setup with selective illumination and substantial shadow. Darkness is shaped, not merely underexposed.Low-key lighting vs chiaroscuroLow-key is the contrast strategy. Chiaroscuro uses that contrast to model volume and often a moral split between light and dark.When should I use low-key lighting?Use it for mystery, crime, or any night that should withhold space. Do not use it when the geography of the room is the joke or the plot.How do I prompt low-key lighting for AI image or video?Put most of the frame in deep shadow, name one pool of light, and state a high ratio such as 8:1. Name the single source."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the pool and the black. \" Name the single source and forbid extra fill.",
+      "Do not write moody if you have not placed the lamp."
+    ],
+    "example": "Low-key lighting on [Subject], most of the frame in deep shadow, one pool of light, 8:1 contrast, noir darkness as a character."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+      "alt": "Low-Key Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/574be572bd18fb911661cfde31c02f26.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/chiaroscuro-063-low-key-chiaroscuro-mini.webp",
+      "alt": "Chiaroscuro"
+    },
+    {
+      "kind": "video",
+      "path": "media/02a6da7712d15780d0526991b4982c3c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/063-low-key-chiaroscuro-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+      "alt": "Hard Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/4d3e93f252af2d3df62e2187a647ae87.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-key/hero.jpg",
+      "alt": "Low-Key Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "02953572f7f60e55866de70c38c4c205c2a8179c370d897f39fabb57693c1ebd"
+}

@@ -1,0 +1,455 @@
+{
+  "id": "camera-angles/hip-level",
+  "slug": "hip-level",
+  "title": "Hip Level",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/hip-level",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hip-level-046-low-seated-viewpoint-mini.webp",
+  "detail": "details/camera-angles/hip-level.json",
+  "aliases": [],
+  "description": "A hip-level shot sits the camera around belt or holster height so hands, gait, and weapons share the plane of focus. It is a height choice, usually with a level horizon: the hands will decide.",
+  "thumbnail": "media/363fbc8dbca91433cd87a2cb782fc3c5.webp",
+  "video": "media/39804e966923979a23b95cff11606326.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/046-low-seated-viewpoint-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Westerns minted it because a draw happens at the belt. The face is still in the upper frame, but the story is in the fingers, the buckle, the coat hem at the wrist."
+        },
+        {
+          "type": "paragraph",
+          "text": "Tension reads before anyone looks up. Crime films stole the height for a gun that might come out during a talk."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not a Cowboy Shot, which is a frame size from mid-thigh up and can be taken from eye height. It is not a Low Angle unless you also pitch up.",
+          "links": [
+            {
+              "text": "Cowboy Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            },
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hip-level can stay level and still make the holster the equator of the picture."
+        }
+      ],
+      "links": [
+        {
+          "text": "Cowboy Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Westerns minted it because a draw happens at the belt. The face is still in the upper frame, but the story is in the fingers, the buckle, the coat hem at the wrist.Tension reads before anyone looks up. Crime films stole the height for a gun that might come out during a talk.It is not a Cowboy Shot, which is a frame size from mid-thigh up and can be taken from eye height. It is not a Low Angle unless you also pitch up.Hip-level can stay level and still make the holster the equator of the picture."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pedestal to belt height on a standing adult (roughly 90 to 110 cm). Keep roll level."
+        },
+        {
+          "type": "paragraph",
+          "text": "A slight look-up is optional; a true hip-level often aims through the hands toward the far figure. Depth of field should hold the holster and the facing body."
+        },
+        {
+          "type": "paragraph",
+          "text": "A wider lens at this height will stretch legs; a longer lens compresses the standoff. Prompt: hip-level camera, gunbelt height, hands and holster in the plane of focus."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Pedestal to belt height on a standing adult (roughly 90 to 110 cm). Keep roll level.A slight look-up is optional; a true hip-level often aims through the hands toward the far figure. Depth of field should hold the holster and the facing body.A wider lens at this height will stretch legs; a longer lens compresses the standoff. Prompt: hip-level camera, gunbelt height, hands and holster in the plane of focus."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the hands will decide: a standoff, a pocketed weapon, a key passed at waist height. Concrete beat: two standing figures, belts in a line, fingers idle near leather."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it when the face is the only event; rise to Shoulder Level or Eye Level.",
+          "links": [
+            {
+              "text": "Shoulder Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/shoulder-level"
+            },
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Shoulder Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/shoulder-level"
+        },
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it when the hands will decide: a standoff, a pocketed weapon, a key passed at waist height. Concrete beat: two standing figures, belts in a line, fingers idle near leather.Do not use it when the face is the only event; rise to Shoulder Level or Eye Level."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cowboy Shot crops mid-thigh as a size; hip-level is where the lens sits. Ground Level is on the dirt and privileges boots.",
+          "links": [
+            {
+              "text": "Cowboy Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            },
+            {
+              "text": "Ground Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Low Angle pitches up for monument. Shoulder Level is a walking companion, closer to the face.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "Shoulder Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/shoulder-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Eye Level ignores the belt.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cowboy ShotShow hands, weapons, or stance without going full body.",
+          "displayText": "Cowboy Shot\nShow hands, weapons, or stance without going full body.",
+          "links": [
+            {
+              "text": "Cowboy ShotShow hands, weapons, or stance without going full body.",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Ground LevelStart from the dirt.",
+          "displayText": "Ground Level\nStart from the dirt.",
+          "links": [
+            {
+              "text": "Ground LevelStart from the dirt.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cowboy Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        },
+        {
+          "text": "Ground Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Shoulder Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/shoulder-level"
+        },
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Cowboy ShotShow hands, weapons, or stance without going full body.",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        },
+        {
+          "text": "Ground LevelStart from the dirt.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/c60ed76a9d57c2a52bc1d3433036ec10.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cowboy-shot.webp",
+          "alt": "Cowboy Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/90e4116fa502af93f97dc97b380107b3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ground-level.webp",
+          "alt": "Ground Level"
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        }
+      ],
+      "sourceText": "Compared with similar shots Cowboy Shot crops mid-thigh as a size; hip-level is where the lens sits. Ground Level is on the dirt and privileges boots.Low Angle pitches up for monument. Shoulder Level is a walking companion, closer to the face.Eye Level ignores the belt.Cowboy ShotShow hands, weapons, or stance without going full body.Ground LevelStart from the dirt.Eye LevelDefault honesty. Do not look down or up unless you mean it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Good, the Bad and the Ugly keeps holsters and hands alive in the line of the lens during standoffs. No Country for Old Men works at belt and pocket height so a captured bolt pistol is as present as a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the height of the hands, not a copied desert."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Good, the Bad and the Ugly keeps holsters and hands alive in the line of the lens during standoffs. No Country for Old Men works at belt and pocket height so a captured bolt pistol is as present as a face.Borrow the height of the hands, not a copied desert."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name belt height, not low camera. Quote: Hip-level camera on [Subject], gunbelt height, Western stance, hands and holster in the plane of focus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: horizon through the hands, level roll, face still in the upper frame, not a worm's-eye, not mid-thigh crop unless you also want a cowboy size."
+        },
+        {
+          "type": "quote",
+          "text": "Hip-level camera on [Subject], gunbelt height, Western stance, hands and holster in the plane of focus."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Hip-level+camera+on+[Subject],+gunbelt+height,+Western+stance,+hands+and+holster+in+the+plane+of+focus."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name belt height, not low camera. Quote: Hip-level camera on [Subject], gunbelt height, Western stance, hands and holster in the plane of focus.Add: horizon through the hands, level roll, face still in the upper frame, not a worm's-eye, not mid-thigh crop unless you also want a cowboy size.Copy promptUse in Image GeneratorHip-level camera on [Subject], gunbelt height, Western stance, hands and holster in the plane of focus.Hip-level camera on [Subject], gunbelt height, Western stance, hands and holster in the plane of focus."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Low Angle power tilt or a Cowboy Shot from standing eye height. Tell: nostrils and ceiling, or a mid-thigh crop taken from above the chest.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "Cowboy Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: camera at belt, looking through the hands, horizon level. If only boots are sharp, you dropped to Ground Level.",
+          "links": [
+            {
+              "text": "Ground Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Cowboy Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        },
+        {
+          "text": "Ground Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Low Angle power tilt or a Cowboy Shot from standing eye height. Tell: nostrils and ceiling, or a mid-thigh crop taken from above the chest.Fix: camera at belt, looking through the hands, horizon level. If only boots are sharp, you dropped to Ground Level."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is hip level in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A hip-level shot places the camera at belt or holster height. Hands, gait, and weapons sit in the plane of focus; the face remains in the upper frame."
+        },
+        {
+          "type": "heading",
+          "text": "Hip level vs cowboy shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Hip level is camera height at the belt. A cowboy shot is a frame size from mid-thigh up. You can combine them, but a cowboy can also be taken from eye height."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use hip level?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when hands and a possible draw are the beat. Do not use it for a seated talk or a face that needs to fill the frame."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt hip level for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Hip-level camera on [Subject], gunbelt height, hands and holster in the plane of focus, horizon through the hands, not a low-angle tilt."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is hip level in film?A hip-level shot places the camera at belt or holster height. Hands, gait, and weapons sit in the plane of focus; the face remains in the upper frame.Hip level vs cowboy shotHip level is camera height at the belt. A cowboy shot is a frame size from mid-thigh up. You can combine them, but a cowboy can also be taken from eye height.When should I use hip level?Use it when hands and a possible draw are the beat. Do not use it for a seated talk or a face that needs to fill the frame.How do I prompt hip level for AI image or video?Write: Hip-level camera on [Subject], gunbelt height, hands and holster in the plane of focus, horizon through the hands, not a low-angle tilt."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name belt height, not low camera. Quote: Hip-level camera on [Subject], gunbelt height, Western stance, hands and holster in the plane of focus.",
+      "Add: horizon through the hands, level roll, face still in the upper frame, not a worm's-eye, not mid-thigh crop unless you also want a cowboy size."
+    ],
+    "example": "Hip-level camera on [Subject], gunbelt height, Western stance, hands and holster in the plane of focus."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/39804e966923979a23b95cff11606326.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/046-low-seated-viewpoint-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/363fbc8dbca91433cd87a2cb782fc3c5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hip-level-046-low-seated-viewpoint-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bcc3ee8647be7a13b1244cb2fbacb09.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/hip-level.jpg",
+      "alt": "Hip Level frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/c60ed76a9d57c2a52bc1d3433036ec10.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cowboy-shot.webp",
+      "alt": "Cowboy Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/90e4116fa502af93f97dc97b380107b3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ground-level.webp",
+      "alt": "Ground Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/fade239d81eedec009b18527d43167aa.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/hip-level/hero.jpg",
+      "alt": "Hip Level",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "df99343df7e04bd716a6cc23d03aee064bc788038d8b3fc8b13800e930c6a188"
+}

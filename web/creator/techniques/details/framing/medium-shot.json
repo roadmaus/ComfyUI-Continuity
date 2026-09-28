@@ -1,0 +1,380 @@
+{
+  "id": "framing/medium-shot",
+  "slug": "medium-shot",
+  "title": "Medium Shot (MS)",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/medium-shot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-shot.webp",
+  "detail": "details/framing/medium-shot.json",
+  "aliases": [
+    "MS",
+    "waist shot"
+  ],
+  "description": "A medium shot frames a person from approximately the waist upward, so face and gesture share the rectangle. It is the workhorse size of coverage, sometimes called a waist shot.",
+  "thumbnail": "media/b869235be06ac8ef80d61080013dc3b1.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Most scenes live in the medium shot because people talk with their hands. A glass, a phone, a cigarette, a slammed notebook all happen between waist and face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Geography is still a little present (a booth, a window, a doorway) without becoming the subject. It is the wrong tool when the story is a walk, a costume from head to toe, or a face that must be the only landscape."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you never leave this size, blocking becomes a radio play with heads and belts. Change size when the waist line no longer contains the fact."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Most scenes live in the medium shot because people talk with their hands. A glass, a phone, a cigarette, a slammed notebook all happen between waist and face.Geography is still a little present (a booth, a window, a doorway) without becoming the subject. It is the wrong tool when the story is a walk, a costume from head to toe, or a face that must be the only landscape.If you never leave this size, blocking becomes a radio play with heads and belts. Change size when the waist line no longer contains the fact."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bottom frame at the waist or belt. Hands at rest should be in."
+        },
+        {
+          "type": "paragraph",
+          "text": "A 40mm to 50mm at conversational standing or sitting distance keeps perspective ordinary; the catalog 50mm is a default, not a law. Camera often at chest to eye height."
+        },
+        {
+          "type": "paragraph",
+          "text": "You should still read a bit of set, not a full room map. Prompt: Medium shot of [Subject] from the waist up, gesture and face in balance."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Bottom frame at the waist or belt. Hands at rest should be in.A 40mm to 50mm at conversational standing or sitting distance keeps perspective ordinary; the catalog 50mm is a default, not a law. Camera often at chest to eye height.You should still read a bit of set, not a full room map. Prompt: Medium shot of [Subject] from the waist up, gesture and face in balance."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it as workhorse coverage: overlapping dialogue, a booth conversation, someone waiting with a suitcase handle in frame. Do not use it when the information is a holster below the hip, the feet, or a micro-expression that needs a closer crop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it as workhorse coverage: overlapping dialogue, a booth conversation, someone waiting with a suitcase handle in frame. Do not use it when the information is a holster below the hip, the feet, or a micro-expression that needs a closer crop."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Medium Close-Up starts at the chest and throws the waist away. A Cowboy Shot drops the bottom frame to mid-thigh so hands at the holster line stay in.",
+          "links": [
+            {
+              "text": "Medium Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            },
+            {
+              "text": "Cowboy Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Medium is the waist sentence, not MCU and not cowboy. A Close-Up is a different sentence entirely: the face outranks gesture.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cowboy ShotShow hands, weapons, or stance without going full body.",
+          "displayText": "Cowboy Shot\nShow hands, weapons, or stance without going full body.",
+          "links": [
+            {
+              "text": "Cowboy ShotShow hands, weapons, or stance without going full body.",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Medium Close-UpTalk without losing body language.",
+          "displayText": "Medium Close-Up\nTalk without losing body language.",
+          "links": [
+            {
+              "text": "Medium Close-UpTalk without losing body language.",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Medium Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        },
+        {
+          "text": "Cowboy Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Cowboy ShotShow hands, weapons, or stance without going full body.",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        },
+        {
+          "text": "Medium Close-UpTalk without losing body language.",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/c60ed76a9d57c2a52bc1d3433036ec10.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cowboy-shot.webp",
+          "alt": "Cowboy Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/7df131a7bb3865fbb2b48a5c82d56f2b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-close-up.webp",
+          "alt": "Medium Close-Up"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Medium Close-Up starts at the chest and throws the waist away. A Cowboy Shot drops the bottom frame to mid-thigh so hands at the holster line stay in.Medium is the waist sentence, not MCU and not cowboy. A Close-Up is a different sentence entirely: the face outranks gesture.Cowboy ShotShow hands, weapons, or stance without going full body.Medium Close-UpTalk without losing body language.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "His Girl Friday runs talk and gesture in this band so overlapping dialogue still has cigarettes, phones, and desks. Lost in Translation uses waist-up hotel and bar distance where two people can exist without becoming portraits or wide maps."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: conversation with hands."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film His Girl Friday runs talk and gesture in this band so overlapping dialogue still has cigarettes, phones, and desks. Lost in Translation uses waist-up hotel and bar distance where two people can exist without becoming portraits or wide maps.Grammar: conversation with hands."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say waist. Example: Medium shot of [Subject] from the waist up, conversational distance, 50mm, gesture and face in balance."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not write chest up, mid-thigh, or head and shoulders. For video, if the camera drifts down to the knees you have entered cowboy territory."
+        },
+        {
+          "type": "quote",
+          "text": "Medium shot of [Subject] from the waist up, conversational distance, 50mm, gesture and face in balance."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Medium+shot+of+[Subject]+from+the+waist+up,+conversational+distance,+50mm,+gesture+and+face+in+balance."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say waist. Example: Medium shot of [Subject] from the waist up, conversational distance, 50mm, gesture and face in balance.Do not write chest up, mid-thigh, or head and shoulders. For video, if the camera drifts down to the knees you have entered cowboy territory.Copy promptUse in Image GeneratorMedium shot of [Subject] from the waist up, conversational distance, 50mm, gesture and face in balance.Medium shot of [Subject] from the waist up, conversational distance, 50mm, gesture and face in balance."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Cowboy Shot (knees or mid-thigh in) or a Medium Close-Up (belt gone). The tell is either a gunbelt or a floating chest.",
+          "links": [
+            {
+              "text": "Cowboy Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            },
+            {
+              "text": "Medium Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: crop at the waist. Another tell is calling every talky frame a medium shot when it is an MCU."
+        }
+      ],
+      "links": [
+        {
+          "text": "Cowboy Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        },
+        {
+          "text": "Medium Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Cowboy Shot (knees or mid-thigh in) or a Medium Close-Up (belt gone). The tell is either a gunbelt or a floating chest.Fix: crop at the waist. Another tell is calling every talky frame a medium shot when it is an MCU."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Medium Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A medium shot usually frames a person from the waist up so face and gesture share the frame. It is a size, sometimes called a waist shot, and it is the default band for a lot of scene coverage."
+        },
+        {
+          "type": "heading",
+          "text": "Medium Shot vs Cowboy Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A cowboy shot frames from mid-thigh or the knees up so hanging hands and a holster line remain. A medium shot cuts at the waist, so anything below the belt is out. If you can see thigh, you are not in a medium shot."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Medium Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when talk and hand business are the scene: tables, phones, glasses, notes. Do not use it when you need feet, a gunbelt, a full costume, or a face with no torso."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Medium Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Medium shot of [Subject] from the waist up, conversational distance, 50mm. Keep hands in. Do not say cowboy, full body, or chest up."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Medium Shot in film?A medium shot usually frames a person from the waist up so face and gesture share the frame. It is a size, sometimes called a waist shot, and it is the default band for a lot of scene coverage.Medium Shot vs Cowboy ShotA cowboy shot frames from mid-thigh or the knees up so hanging hands and a holster line remain. A medium shot cuts at the waist, so anything below the belt is out. If you can see thigh, you are not in a medium shot.When should I use Medium Shot?Use it when talk and hand business are the scene: tables, phones, glasses, notes. Do not use it when you need feet, a gunbelt, a full costume, or a face with no torso.How do I prompt Medium Shot for AI image or video?Write Medium shot of [Subject] from the waist up, conversational distance, 50mm. Keep hands in. Do not say cowboy, full body, or chest up."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say waist. Example: Medium shot of [Subject] from the waist up, conversational distance, 50mm, gesture and face in balance.",
+      "Do not write chest up, mid-thigh, or head and shoulders. For video, if the camera drifts down to the knees you have entered cowboy territory."
+    ],
+    "example": "Medium shot of [Subject] from the waist up, conversational distance, 50mm, gesture and face in balance."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/b869235be06ac8ef80d61080013dc3b1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-shot.webp",
+      "alt": "Medium Shot example"
+    },
+    {
+      "kind": "image",
+      "path": "media/c60ed76a9d57c2a52bc1d3433036ec10.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cowboy-shot.webp",
+      "alt": "Cowboy Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/7df131a7bb3865fbb2b48a5c82d56f2b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-close-up.webp",
+      "alt": "Medium Close-Up"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/da7f7bf87cba3a44e4a99471e4897c69.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/medium-shot/hero.jpg",
+      "alt": "Medium Shot (MS)",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "0f42734106b7ca511718445455abcccc6b68d64114cfd4fe1d42f5f79d70b3b4"
+}

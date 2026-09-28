@@ -1,0 +1,420 @@
+{
+  "id": "viral-looks/lsd",
+  "slug": "lsd",
+  "title": "LSD",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/lsd",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lsd-lsd-mini.webp",
+  "detail": "details/viral-looks/lsd.json",
+  "aliases": [],
+  "description": "LSD, the lsd visual look, is an optical state: light trails, slight double edges, oversaturated practicals, walls on a slow inhale. Perception is the set, not a scene of drug use and not a rainbow LUT.",
+  "thumbnail": "media/8ae3a5e5bf6f4c1e2b94742ff30758ea.webp",
+  "video": "media/b5487a839469e188787750488bd137ce.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lsd-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Altered nights, music, a breakdown: one street or one room that will not stay put, a readable human so it remains a shot. Architecture breathes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lamps trail. Acid is the burned-print cousin."
+        },
+        {
+          "type": "paragraph",
+          "text": "This one is still wet. It is the wrong tool in a courtroom, a procedural, or any beat that needs carpenter-straight walls."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the lamps do not trail and the room is still, you shot neon-noir."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Altered nights, music, a breakdown: one street or one room that will not stay put, a readable human so it remains a shot. Architecture breathes.Lamps trail. Acid is the burned-print cousin.This one is still wet. It is the wrong tool in a courtroom, a procedural, or any beat that needs carpenter-straight walls.If the lamps do not trail and the room is still, you shot neon-noir."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock off or a slow drift, eye height, 35mm. Keep one geography."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt light trails, slight Double Exposure, oversaturated practicals, walls that breathe. No paraphernalia.",
+          "links": [
+            {
+              "text": "Double Exposure",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "No kaleidoscope pack. Prompt: LSD look on [Subject], trails, breathing walls, too much chroma, a room that will not stay put."
+        }
+      ],
+      "links": [
+        {
+          "text": "Double Exposure",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Lock off or a slow drift, eye height, 35mm. Keep one geography.Prompt light trails, slight Double Exposure, oversaturated practicals, walls that breathe. No paraphernalia.No kaleidoscope pack. Prompt: LSD look on [Subject], trails, breathing walls, too much chroma, a room that will not stay put."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A night that will not stay still, a music still, a breakdown. Do not use it on a courtroom, and do not add drug props."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A night that will not stay still, a music still, a breakdown. Do not use it on a courtroom, and do not add drug props."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Acid is a ruined print: melted dyes, sun-damaged edges. LSD is wet perception in a room that still has a body in it.",
+          "links": [
+            {
+              "text": "Acid",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/acid"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Altered State is the wider optical family. Color Shift moves hues without breathing architecture.",
+          "links": [
+            {
+              "text": "Altered State",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            },
+            {
+              "text": "Color Shift",
+              "url": "https://melies.co/cinematic-techniques/color/color-shift"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AcidThe dyes should misbehave.",
+          "displayText": "Acid\nThe dyes should misbehave.",
+          "links": [
+            {
+              "text": "AcidThe dyes should misbehave.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/acid"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Altered StateThe mind is the location.",
+          "displayText": "Altered State\nThe mind is the location.",
+          "links": [
+            {
+              "text": "Altered StateThe mind is the location.",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Color ShiftColor is the event.",
+          "displayText": "Color Shift\nColor is the event.",
+          "links": [
+            {
+              "text": "Color ShiftColor is the event.",
+              "url": "https://melies.co/cinematic-techniques/color/color-shift"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Acid",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/acid"
+        },
+        {
+          "text": "Altered State",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        },
+        {
+          "text": "Color Shift",
+          "url": "https://melies.co/cinematic-techniques/color/color-shift"
+        },
+        {
+          "text": "AcidThe dyes should misbehave.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/acid"
+        },
+        {
+          "text": "Altered StateThe mind is the location.",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        },
+        {
+          "text": "Color ShiftColor is the event.",
+          "url": "https://melies.co/cinematic-techniques/color/color-shift"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/4d5be8932be7eed4df71041bfaf39267.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/acid-acid-mini.webp",
+          "alt": "Acid"
+        },
+        {
+          "kind": "video",
+          "path": "media/e8413cc7e5b233fecd5621b960575a6a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/acid-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/a3332f43e9375fea06874056e78399cb.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/altered-state-altered-state-mini.webp",
+          "alt": "Altered State"
+        },
+        {
+          "kind": "video",
+          "path": "media/b50cc309bf7987ba369a61c9377d7e86.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/altered-state-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/c1119b0bb78c6019a158ece5f04ca1a3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/color-shift-075-monochrome-to-color-revelation-mini.webp",
+          "alt": "Color Shift"
+        },
+        {
+          "kind": "video",
+          "path": "media/53c4936722d73fe80e13125c1316da31.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/075-monochrome-to-color-revelation-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Acid is a ruined print: melted dyes, sun-damaged edges. LSD is wet perception in a room that still has a body in it.Altered State is the wider optical family. Color Shift moves hues without breathing architecture.AcidThe dyes should misbehave.Altered StateThe mind is the location.Color ShiftColor is the event."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Enter the Void turns streets into trailing, oversaturated perception. The Trip (1967) treats rooms as unstable optics."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the optics, not a poster."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Enter the Void turns streets into trailing, oversaturated perception. The Trip (1967) treats rooms as unstable optics.Borrow the optics, not a poster."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "One room, a readable human, then the optics. LSD look on [Subject], trails, breathing walls, too much chroma, a room that will not stay put."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add lock-off or slow drift, practicals that trail, no paraphernalia. Motion: walls inhale, trails persist, identity holds."
+        },
+        {
+          "type": "quote",
+          "text": "LSD look on [Subject], trails, breathing walls, too much chroma, a room that will not stay put."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=LSD+look+on+[Subject],+trails,+breathing+walls,+too+much+chroma,+a+room+that+will+not+stay+put."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it One room, a readable human, then the optics. LSD look on [Subject], trails, breathing walls, too much chroma, a room that will not stay put.Add lock-off or slow drift, practicals that trail, no paraphernalia. Motion: walls inhale, trails persist, identity holds.Copy promptUse in Image GeneratorLSD look on [Subject], trails, breathing walls, too much chroma, a room that will not stay put.LSD look on [Subject], trails, breathing walls, too much chroma, a room that will not stay put."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A rainbow LUT, or a mash with Acid melt and a kaleidoscope pack. The tell is straight architecture and lamps that do not trail.",
+          "links": [
+            {
+              "text": "Acid",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/acid"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: one room, trails, breathing walls, hold the face."
+        }
+      ],
+      "links": [
+        {
+          "text": "Acid",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/acid"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A rainbow LUT, or a mash with Acid melt and a kaleidoscope pack. The tell is straight architecture and lamps that do not trail.Fix it: one room, trails, breathing walls, hold the face."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is LSD in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An optical recipe: trails, breathing walls, too much chroma, a room that will not stay put. It is perception as set, not a scene of use."
+        },
+        {
+          "type": "heading",
+          "text": "LSD vs Acid",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "LSD is wet, trailing, architectural inhale. Acid is a print left in the sun: burned chroma, melting edges. Pick one. Trails belong to LSD. Damage belongs to acid."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use LSD?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Altered nights, music, breakdowns. Skip courtrooms and any coverage that needs stable walls."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt LSD for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "One street or room, readable [Subject], then: LSD look on [Subject], trails, breathing walls, too much chroma, a room that will not stay put. No paraphernalia. No extra media packs."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is LSD in film?An optical recipe: trails, breathing walls, too much chroma, a room that will not stay put. It is perception as set, not a scene of use.LSD vs AcidLSD is wet, trailing, architectural inhale. Acid is a print left in the sun: burned chroma, melting edges. Pick one. Trails belong to LSD. Damage belongs to acid.When should I use LSD?Altered nights, music, breakdowns. Skip courtrooms and any coverage that needs stable walls.How do I prompt LSD for AI image or video?One street or room, readable [Subject], then: LSD look on [Subject], trails, breathing walls, too much chroma, a room that will not stay put. No paraphernalia. No extra media packs."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "One room, a readable human, then the optics. LSD look on [Subject], trails, breathing walls, too much chroma, a room that will not stay put.",
+      "Add lock-off or slow drift, practicals that trail, no paraphernalia. Motion: walls inhale, trails persist, identity holds."
+    ],
+    "example": "LSD look on [Subject], trails, breathing walls, too much chroma, a room that will not stay put."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/b5487a839469e188787750488bd137ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lsd-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8ae3a5e5bf6f4c1e2b94742ff30758ea.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lsd-lsd-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a192abbe6ad8ca9856769ea76f42614.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/lsd.jpg",
+      "alt": "LSD frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/4d5be8932be7eed4df71041bfaf39267.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/acid-acid-mini.webp",
+      "alt": "Acid"
+    },
+    {
+      "kind": "video",
+      "path": "media/e8413cc7e5b233fecd5621b960575a6a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/acid-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a3332f43e9375fea06874056e78399cb.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/altered-state-altered-state-mini.webp",
+      "alt": "Altered State"
+    },
+    {
+      "kind": "video",
+      "path": "media/b50cc309bf7987ba369a61c9377d7e86.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/altered-state-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c1119b0bb78c6019a158ece5f04ca1a3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/color-shift-075-monochrome-to-color-revelation-mini.webp",
+      "alt": "Color Shift"
+    },
+    {
+      "kind": "video",
+      "path": "media/53c4936722d73fe80e13125c1316da31.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/075-monochrome-to-color-revelation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/71f0af9fdebb178affcfedf16b9505e8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/lsd/hero.jpg",
+      "alt": "LSD",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "50450888c903ac155bc85ef4e1073f611e38b61c6bd9ca7224f0d41c44e298fc"
+}

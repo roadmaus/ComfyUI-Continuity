@@ -1,0 +1,388 @@
+{
+  "id": "lenses/200mm-long",
+  "slug": "200mm-long",
+  "title": "200mm Long Telephoto",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/200mm-long",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/200mm-long.webp",
+  "detail": "details/lenses/200mm-long.json",
+  "aliases": [],
+  "description": "A 200mm long telephoto in 200mm cinematography is an extreme long lens used from a very distant stand so size differences between planes almost vanish. Heat shimmer, stacked terrain, and sniper intimacy are the physical leftovers of that throw.",
+  "thumbnail": "media/19dabd2802012e5f2a121979db970f34.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "At 200mm you are often so far that the air itself becomes part of the optic: heat, dust, and haze sit in layers. A walker seems not to approach."
+        },
+        {
+          "type": "paragraph",
+          "text": "A face can be in their pores while the desert, the compound, or the crowd is a flat wall glued to their shoulders. It is the wrong tool for any scene that must explain left and right in a room."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool if you only wanted portrait isolation; 85mm already does that without the shimmer and the unreachable camera. If the stack is a city street rather than a desert or a sniper line, 135mm Telephoto is usually enough.",
+          "links": [
+            {
+              "text": "135mm Telephoto",
+              "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "135mm Telephoto",
+          "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function At 200mm you are often so far that the air itself becomes part of the optic: heat, dust, and haze sit in layers. A walker seems not to approach.A face can be in their pores while the desert, the compound, or the crowd is a flat wall glued to their shoulders. It is the wrong tool for any scene that must explain left and right in a room.It is also the wrong tool if you only wanted portrait isolation; 85mm already does that without the shimmer and the unreachable camera. If the stack is a city street rather than a desert or a sniper line, 135mm Telephoto is usually enough."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stand very far first, then restore size with 200mm. Support the camera; angular shake is huge at this length."
+        },
+        {
+          "type": "paragraph",
+          "text": "Focus is unforgiving. Expect a thin slice of sharpness and, outdoors, visible atmospheric disturbance along the path."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not confuse this with digital zoom from a 50mm stand: that crop has no compression because you never moved. Prompt: 200mm long lens on [Subject], extreme compression, heat shimmer, isolated from a distance, sniper intimacy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Stand very far first, then restore size with 200mm. Support the camera; angular shake is huge at this length.Focus is unforgiving. Expect a thin slice of sharpness and, outdoors, visible atmospheric disturbance along the path.Do not confuse this with digital zoom from a 50mm stand: that crop has no compression because you never moved. Prompt: 200mm long lens on [Subject], extreme compression, heat shimmer, isolated from a distance, sniper intimacy."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when you must be far away and still in their pores: a desert rider, a compound watch, a face across a canyon of air. Do not use it for dialogue coverage or for a portrait you could have made at 85mm."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when you must be far away and still in their pores: a desert rider, a compound watch, a face across a canyon of air. Do not use it for dialogue coverage or for a portrait you could have made at 85mm."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "135mm Telephoto is the nearer long lens, stacked but less extreme. Telephoto Compression names the viewpoint effect 200mm often shows.",
+          "links": [
+            {
+              "text": "135mm Telephoto",
+              "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+            },
+            {
+              "text": "Telephoto Compression",
+              "url": "https://melies.co/cinematic-techniques/lenses/compression"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "85mm Portrait is intimacy from a portrait stand, not this throw. Macro is the opposite: inches, not hundreds of meters.",
+          "links": [
+            {
+              "text": "85mm Portrait",
+              "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+            },
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "135mm TelephotoSurveillance, sports, or stacked city.",
+          "displayText": "135mm Telephoto\nSurveillance, sports, or stacked city.",
+          "links": [
+            {
+              "text": "135mm TelephotoSurveillance, sports, or stacked city.",
+              "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Telephoto CompressionThe city or army is right on their back.",
+          "displayText": "Telephoto Compression\nThe city or army is right on their back.",
+          "links": [
+            {
+              "text": "Telephoto CompressionThe city or army is right on their back.",
+              "url": "https://melies.co/cinematic-techniques/lenses/compression"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "135mm Telephoto",
+          "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+        },
+        {
+          "text": "Telephoto Compression",
+          "url": "https://melies.co/cinematic-techniques/lenses/compression"
+        },
+        {
+          "text": "85mm Portrait",
+          "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+        },
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "135mm TelephotoSurveillance, sports, or stacked city.",
+          "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+        },
+        {
+          "text": "Telephoto CompressionThe city or army is right on their back.",
+          "url": "https://melies.co/cinematic-techniques/lenses/compression"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/722dfd2bdae65decf4f175762ccc4f03.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/135mm-telephoto-056-telephoto-compression-mini.webp",
+          "alt": "135mm Telephoto"
+        },
+        {
+          "kind": "video",
+          "path": "media/f149ff24f98f3c3b5f56e817f9a37f22.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/056-telephoto-compression-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bb9f186ff1e59a3a5117a4ce07884347.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/compression.webp",
+          "alt": "Telephoto Compression"
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots 135mm Telephoto is the nearer long lens, stacked but less extreme. Telephoto Compression names the viewpoint effect 200mm often shows.85mm Portrait is intimacy from a portrait stand, not this throw. Macro is the opposite: inches, not hundreds of meters.135mm TelephotoSurveillance, sports, or stacked city.Telephoto CompressionThe city or army is right on their back.14mm Ultra-WidePut the audience inside a space that is too big or too close."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lawrence of Arabia uses heat telephotos so distant riders take an age to arrive through shimmer. Zero Dark Thirty uses long glass as watcher's distance on compounds and streets."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of throw and air, not a poster of a silhouette."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Lawrence of Arabia uses heat telephotos so distant riders take an age to arrive through shimmer. Zero Dark Thirty uses long glass as watcher's distance on compounds and streets.Grammar of throw and air, not a poster of a silhouette."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the extreme throw and the air. 200mm long lens on [Subject], extreme compression, heat shimmer, isolated from a distance, sniper intimacy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say the camera is hundreds of feet away. Do not write portrait 85mm, and do not ask for a wide establishing field."
+        },
+        {
+          "type": "quote",
+          "text": "200mm long lens on [Subject], extreme compression, heat shimmer, isolated from a distance, sniper intimacy."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=200mm+long+lens+on+[Subject],+extreme+compression,+heat+shimmer,+isolated+from+a+distance,+sniper+intimacy."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the extreme throw and the air. 200mm long lens on [Subject], extreme compression, heat shimmer, isolated from a distance, sniper intimacy.Say the camera is hundreds of feet away. Do not write portrait 85mm, and do not ask for a wide establishing field.Copy promptUse in Image Generator200mm long lens on [Subject], extreme compression, heat shimmer, isolated from a distance, sniper intimacy.200mm long lens on [Subject], extreme compression, heat shimmer, isolated from a distance, sniper intimacy."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is 135mm Telephoto or a cropped 50mm labeled 200mm. The tell is too much remaining depth, or no atmospheric stack.",
+          "links": [
+            {
+              "text": "135mm Telephoto",
+              "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: put real distance between camera and subject, let planes glue together, allow haze or heat if outdoors."
+        }
+      ],
+      "links": [
+        {
+          "text": "135mm Telephoto",
+          "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is 135mm Telephoto or a cropped 50mm labeled 200mm. The tell is too much remaining depth, or no atmospheric stack.Fix: put real distance between camera and subject, let planes glue together, allow haze or heat if outdoors."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is 200mm long telephoto in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is an extreme long lens used from a very distant stand. Planes stack until there is almost no escape in depth, and air or heat often sits in the image."
+        },
+        {
+          "type": "heading",
+          "text": "200mm Long Telephoto vs 135mm Telephoto",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Both stack space from far away. 200mm needs more throw, compresses harder, and more often shows heat shimmer or sniper distance. 135mm is stacked city or sports. 200mm is the farther wall."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use 200mm long telephoto?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for desert approaches, compound surveillance, or any beat that must stay far and still read pores. Skip it for rooms, talk, and ordinary portraits."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt 200mm long telephoto for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: 200mm long lens on [Subject], extreme compression, heat shimmer, isolated from a distance, sniper intimacy. State the huge throw. Forbid wide fields and close-stand faces."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is 200mm long telephoto in film?It is an extreme long lens used from a very distant stand. Planes stack until there is almost no escape in depth, and air or heat often sits in the image.200mm Long Telephoto vs 135mm TelephotoBoth stack space from far away. 200mm needs more throw, compresses harder, and more often shows heat shimmer or sniper distance. 135mm is stacked city or sports. 200mm is the farther wall.When should I use 200mm long telephoto?Use it for desert approaches, compound surveillance, or any beat that must stay far and still read pores. Skip it for rooms, talk, and ordinary portraits.How do I prompt 200mm long telephoto for AI image or video?Write: 200mm long lens on [Subject], extreme compression, heat shimmer, isolated from a distance, sniper intimacy. State the huge throw. Forbid wide fields and close-stand faces."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the extreme throw and the air. 200mm long lens on [Subject], extreme compression, heat shimmer, isolated from a distance, sniper intimacy.",
+      "Say the camera is hundreds of feet away. Do not write portrait 85mm, and do not ask for a wide establishing field."
+    ],
+    "example": "200mm long lens on [Subject], extreme compression, heat shimmer, isolated from a distance, sniper intimacy."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/19dabd2802012e5f2a121979db970f34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/200mm-long.webp",
+      "alt": "200mm Long Telephoto example"
+    },
+    {
+      "kind": "image",
+      "path": "media/722dfd2bdae65decf4f175762ccc4f03.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/135mm-telephoto-056-telephoto-compression-mini.webp",
+      "alt": "135mm Telephoto"
+    },
+    {
+      "kind": "video",
+      "path": "media/f149ff24f98f3c3b5f56e817f9a37f22.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/056-telephoto-compression-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bb9f186ff1e59a3a5117a4ce07884347.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/compression.webp",
+      "alt": "Telephoto Compression"
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/22d97e594f923218381d7d4bb0cda712.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/200mm-long/hero.jpg",
+      "alt": "200mm Long Telephoto",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "4586b3839a31476bcf15b5e538aa6e9528ed15b053b11c85315c341d2773abc9"
+}

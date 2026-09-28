@@ -1,0 +1,220 @@
+{
+  "version": 1,
+  "locale": "ko",
+  "id": "lighting/chiaroscuro",
+  "sourceHtmlSha256": "b34880cbe359678baf83457f2f31d31e7a00dca7dafd23a090b2ffb1b2d1de65",
+  "description": "Chiaroscuro 조명은 강한 명암 대비로 입체감을 드러내고, 도덕적·심리적·극적인 긴장을 만듭니다. 어둠은 정보를 감추고, 빛을 받는 면은 장면이 관객에게 허용하는 정보만 보여 줍니다.",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "서사적 역할",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "따뜻한 광원 하나, 빛을 향해 돌아서는 얼굴, 어둠 속으로 사라지는 나머지 공간을 통해 관객은 보이는 부분만으로 인물을 해석합니다. Tenebrism은 이를 극단적으로 사용하는 방식으로, 팔이 닿는 범위 너머를 모두 검게 만듭니다."
+        },
+        {
+          "index": 1,
+          "text": "범죄물, 시대극의 야간 장면, 종교적 의심을 다루는 장면은 모두 같은 빛의 원리를 활용합니다. 건축물의 구조를 보여 줘야 하는 와이드 샷이나, 그림자 속 두 번째 얼굴도 보여야 하는 코미디에는 적합하지 않습니다."
+        },
+        {
+          "index": 2,
+          "text": "균일하게 밝힌 방을 단순히 노출 부족으로 찍는 것은 Chiaroscuro가 아닙니다. 주광을 배치하고 빛이 약해지는 정도를 이용해 밝은 영역과 어두운 영역을 나눠야 합니다."
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "how",
+      "title": "작동 원리",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "장면 속 광원으로 설명되는 주광 하나(창, 램프, 촛불)를 배치하고, 보조광을 줄이며 차광판으로 새는 빛을 막습니다. 주광은 대개 따뜻한 색으로 약간 높은 위치에 두며, 빛의 영향이 빠르게 줄어들도록 광원의 크기를 작게 잡습니다."
+        },
+        {
+          "index": 1,
+          "text": "얼굴의 면에 따라 명암이 빠르게 바뀌도록 빛을 다소 단단하게 만들 수 있습니다. 빛이 닿는 영역 안에서는 눈과 손을 알아볼 수 있을 만큼 명암을 구분해 두세요."
+        },
+        {
+          "index": 2,
+          "text": "프롬프트: [Subject]의 Chiaroscuro 조명, Caravaggio tenebrism, 단일 따뜻한 소스, 팔이 닿지 않는 모든 것이 검게 변합니다."
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "when",
+      "title": "활용 시점",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "빛이 도덕적 의미를 띠고 어둠이 무언가를 숨기거나 심판하는 장면에 사용합니다. 예를 들어 책상 램프를 사이에 둔 고백 장면이 그렇습니다. 낮의 거리 장면 전체에 입히는 색보정처럼 사용하지 마세요."
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "vs",
+      "title": "비슷한 기법과 비교",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "Low-key lighting은 더 넓은 의미의 명암 대비 전략입니다. Chiaroscuro는 단지 화면을 어둡게 만드는 것이 아니라, 명암으로 입체감을 표현하는 데 중점을 둡니다. Rembrandt lighting은 그림자 쪽 볼에 삼각형 빛을 만드는 구체적인 패턴이며, Chiaroscuro 안에서 함께 사용되는 경우가 많습니다."
+        },
+        {
+          "index": 1,
+          "text": "Cameo lighting은 빈 어둠을 배경으로 대상을 분리해, 공간을 무대의 평면 장식처럼 보이게 할 수 있습니다. 단단한 빛은 경계를 나누는 데 도움이 되지만, 빛의 감쇠가 충분히 빠르면 반드시 필요한 것은 아닙니다."
+        },
+        {
+          "index": 2,
+          "text": "Low-Key Lighting\n미스터리, 범죄 또는 도덕적인 밤."
+        },
+        {
+          "index": 3,
+          "text": "Rembrandt Lighting\n고전적인 극적인 초상화."
+        },
+        {
+          "index": 4,
+          "text": "Three-Point Lighting\n가르칠 수 있는 초상화. 여기서 시작한 다음 중단하세요."
+        }
+      ],
+      "media": [
+        {
+          "index": 0,
+          "alt": "Low-Key Lighting"
+        },
+        {
+          "index": 1,
+          "alt": "Rembrandt Lighting"
+        },
+        {
+          "index": 2,
+          "alt": "Three-Point Lighting"
+        }
+      ]
+    },
+    {
+      "id": "examples-film",
+      "title": "영화 속 활용 사례",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "The Godfather에서 어두운 사무실과 바깥의 결혼식이 대비되는 장면은 정보를 감추는 조명의 대표적인 예입니다. The Third Man은 빈의 밤을 이용해 설계된 어둠 속에서 인물들이 나타나고 사라지게 합니다."
+        },
+        {
+          "index": 1,
+          "text": "Barry Lyndon과 The Night of the Hunter는 모두 광원 하나로 얼굴의 입체감을 드러내고, 나머지 방 안은 어둠 속에 잠기게 합니다."
+        },
+        {
+          "index": 2,
+          "text": "The Godfather 1972\n돈의 어두운 사무실은 야외 결혼식과 대조를 이룬다."
+        },
+        {
+          "index": 3,
+          "text": "The Third Man 1949\n비엔나의 밤거리와 숨겨진 인물들."
+        }
+      ],
+      "media": [
+        {
+          "index": 0,
+          "alt": "The Godfather 1972"
+        },
+        {
+          "index": 1,
+          "alt": "The Third Man 1949"
+        }
+      ]
+    },
+    {
+      "id": "prompt",
+      "title": "영문 프롬프트",
+      "blocks": [],
+      "media": []
+    },
+    {
+      "id": "mistakes",
+      "title": "흔한 실수와 해결 방법",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "흔한 오류는 그저 탁하고 어둡게 노출 부족으로 처리하는 것입니다. 주광의 방향이 불분명하고 암부의 디테일이 사라졌다면 이런 경우입니다."
+        },
+        {
+          "index": 1,
+          "text": "따뜻한 색의 광원 하나를 배치하고, 차광판으로 반사광을 막으며, 빛을 받는 면을 기준으로 노출을 맞추세요."
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "faq",
+      "title": "자주 묻는 질문",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "영화에서 명암대비란 무엇인가요?"
+        },
+        {
+          "index": 1,
+          "text": "강한 명암 대비를 이용해 입체감을 드러내고 긴장을 만드는 기법입니다. 선택한 영역만 비추고, 화면의 상당 부분은 의도적으로 어둡게 남깁니다."
+        },
+        {
+          "index": 2,
+          "text": "Chiaroscuro 대 Rembrandt lighting"
+        },
+        {
+          "index": 3,
+          "text": "Chiaroscuro는 전체적인 명암 대비의 표현 방식입니다. Rembrandt lighting은 인물 조명의 구체적인 패턴으로, 그림자 쪽 볼에 삼각형 빛을 만듭니다."
+        },
+        {
+          "index": 4,
+          "text": "언제 명암법을 사용해야 합니까?"
+        },
+        {
+          "index": 5,
+          "text": "숨겨진 것이 보이는 것만큼 중요한 고백, 범죄, 밤의 거래 같은 장면에 사용하세요. 방 전체의 구조가 한눈에 읽혀야 한다면 사용하지 않는 편이 좋습니다."
+        },
+        {
+          "index": 6,
+          "text": "AI 이미지 또는 비디오에 대해 chiaroscuro를 요청하려면 어떻게 해야 합니까?"
+        },
+        {
+          "index": 7,
+          "text": "따뜻한 광원 하나, 명암으로 입체감이 드러나는 얼굴, 팔이 닿는 범위 밖은 모두 검게 가라앉는 구도를 지정하세요. 추가 보조광이나 방 전체를 균일하게 밝히는 조명은 넣지 않습니다."
+        }
+      ],
+      "media": []
+    }
+  ],
+  "media": [
+    {
+      "index": 2,
+      "alt": "시간 경과에 따른 명암대비 프레임"
+    },
+    {
+      "index": 3,
+      "alt": "Low-Key Lighting"
+    },
+    {
+      "index": 4,
+      "alt": "Rembrandt Lighting"
+    },
+    {
+      "index": 5,
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "index": 6,
+      "alt": "The Godfather 1972"
+    },
+    {
+      "index": 7,
+      "alt": "The Third Man 1949"
+    },
+    {
+      "index": 8,
+      "alt": "키아로스쿠로"
+    }
+  ]
+}

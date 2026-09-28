@@ -1,0 +1,376 @@
+{
+  "id": "viral-looks/puffin-ride",
+  "slug": "puffin-ride",
+  "title": "Puffin Ride",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/puffin-ride",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/puffin-ride-puffin-ride-mini.webp",
+  "detail": "details/viral-looks/puffin-ride.json",
+  "aliases": [],
+  "description": "Puffin ride, as a puffin ride preset, is a commute on the wrong bird: a person mounted on a puffin against cliffs and spray, orange beak readable, played straight. A puffin next to a hiker is not the gag.",
+  "thumbnail": "media/628b72c25bae8ac8c26f3bb7607fa9d2.webp",
+  "video": "media/0f6605054ac7f0c02041989ed8b24c4c.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/puffin-ride-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Gags and dream travel: documentary camera, cliffs, surf, a flying or perched seabird as engine. Dolphin ride stays in water."
+        },
+        {
+          "type": "paragraph",
+          "text": "Penguin ride stays on ice or city slush. Puffin ride can leave the water because the bird can fly, which is the extra joke if you still play it as a commute."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for wildlife films that respect puffin colonies, and the wrong tool if the bird is only in the background. Mounted."
+        },
+        {
+          "type": "paragraph",
+          "text": "Moving. Spray in the air."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Gags and dream travel: documentary camera, cliffs, surf, a flying or perched seabird as engine. Dolphin ride stays in water.Penguin ride stays on ice or city slush. Puffin ride can leave the water because the bird can fly, which is the extra joke if you still play it as a commute.It is the wrong tool for wildlife films that respect puffin colonies, and the wrong tool if the bird is only in the background. Mounted.Moving. Spray in the air."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wide, cliffs in frame, 24mm to 35mm, rider height or a little below on the rock. Overcast North-Atlantic light or hard coastal sun."
+        },
+        {
+          "type": "paragraph",
+          "text": "Animal readable, orange beak, person mounted. Still: Puffin-ride of [Subject], an absurd seabird mount, cliffs and spray, a commute on the wrong bird."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: [Subject] rides a puffin against cliffs or surf, a straight-faced gag."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Wide, cliffs in frame, 24mm to 35mm, rider height or a little below on the rock. Overcast North-Atlantic light or hard coastal sun.Animal readable, orange beak, person mounted. Still: Puffin-ride of [Subject], an absurd seabird mount, cliffs and spray, a commute on the wrong bird.Video: [Subject] rides a puffin against cliffs or surf, a straight-faced gag."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A gag commute, cliff tourism that cannot be true. Do not use it as a hiker-plus-puffin wildlife still."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A gag commute, cliff tourism that cannot be true. Do not use it as a hiker-plus-puffin wildlife still."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Penguin Ride is ice and a flightless mount. Dolphin Ride is bright water and a cetacean.",
+          "links": [
+            {
+              "text": "Penguin Ride",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/penguin-ride"
+            },
+            {
+              "text": "Dolphin Ride",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/dolphin-ride"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Puffin ride is cliffs, spray, a seabird that can fly, same postcard law. If there is no cliff and no beak, you are on the wrong animal."
+        },
+        {
+          "type": "list-item",
+          "text": "Penguin RideThe vehicle is the joke.",
+          "displayText": "Penguin Ride\nThe vehicle is the joke.",
+          "links": [
+            {
+              "text": "Penguin RideThe vehicle is the joke.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/penguin-ride"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dolphin RideThe gag is the vehicle.",
+          "displayText": "Dolphin Ride\nThe gag is the vehicle.",
+          "links": [
+            {
+              "text": "Dolphin RideThe gag is the vehicle.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/dolphin-ride"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Penguin Ride",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/penguin-ride"
+        },
+        {
+          "text": "Dolphin Ride",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/dolphin-ride"
+        },
+        {
+          "text": "Penguin RideThe vehicle is the joke.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/penguin-ride"
+        },
+        {
+          "text": "Dolphin RideThe gag is the vehicle.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/dolphin-ride"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/63b1162883c67f3a759b3e3cae07df69.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/penguin-ride-penguin-ride-mini.webp",
+          "alt": "Penguin Ride"
+        },
+        {
+          "kind": "video",
+          "path": "media/a87a2591dbdbd3e5746b5a9aa99d52f8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/penguin-ride-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/712cfdcdd4c1727734dcb641639f6b95.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolphin-ride-dolphin-ride-mini.webp",
+          "alt": "Dolphin Ride"
+        },
+        {
+          "kind": "video",
+          "path": "media/af8e388232811dc06457f90921274fb2.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolphin-ride-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Penguin Ride is ice and a flightless mount. Dolphin Ride is bright water and a cetacean.Puffin ride is cliffs, spray, a seabird that can fly, same postcard law. If there is no cliff and no beak, you are on the wrong animal.Penguin RideThe vehicle is the joke.Dolphin RideThe gag is the vehicle.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "There is no canonical puffin-ride feature. Borrow cliff-and-spray grammar from North-Atlantic wildlife coverage and play the mount as viral impossible tourism."
+        },
+        {
+          "type": "paragraph",
+          "text": "Postcard law."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film There is no canonical puffin-ride feature. Borrow cliff-and-spray grammar from North-Atlantic wildlife coverage and play the mount as viral impossible tourism.Postcard law."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cliffs, spray, mounted seabird. Puffin-ride of [Subject], an absurd seabird mount, cliffs and spray, a commute on the wrong bird."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add readable puffin, orange beak, face committed, no logos. Video: [Subject] rides a puffin against cliffs or surf, a straight-faced gag."
+        },
+        {
+          "type": "quote",
+          "text": "[Subject] rides a puffin against cliffs or surf, a straight-faced gag."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=[Subject]+rides+a+puffin+against+cliffs+or+surf,+a+straight-faced+gag."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Cliffs, spray, mounted seabird. Puffin-ride of [Subject], an absurd seabird mount, cliffs and spray, a commute on the wrong bird.Add readable puffin, orange beak, face committed, no logos. Video: [Subject] rides a puffin against cliffs or surf, a straight-faced gag.Copy promptUse in Video Generator[Subject] rides a puffin against cliffs or surf, a straight-faced gag.[Subject] rides a puffin against cliffs or surf, a straight-faced gag."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A puffin next to a hiker, or a penguin on ice labeled as this. The tell is no mount, or the wrong bird."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: they are on the puffin, cliffs, spray, commute played straight."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong A puffin next to a hiker, or a penguin on ice labeled as this. The tell is no mount, or the wrong bird.Fix it: they are on the puffin, cliffs, spray, commute played straight."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Puffin Ride in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A straight-faced mount gag on a puffin, usually against cliffs and spray. The bird is the engine. A wildlife companion shot does not count."
+        },
+        {
+          "type": "heading",
+          "text": "Puffin Ride vs Penguin Ride",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Penguin ride is ice or city, flightless. Puffin ride is cliffs and a flying seabird. Same postcard law, different geography and animal."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Puffin Ride?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Gags and dream cliff commutes. Skip respectful puffin documentaries."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Puffin Ride for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Cliffs, mounted [Subject], then: Puffin-ride of [Subject], an absurd seabird mount, cliffs and spray, a commute on the wrong bird. Video: [Subject] rides a puffin against cliffs or surf. Face committed."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Puffin Ride in film?A straight-faced mount gag on a puffin, usually against cliffs and spray. The bird is the engine. A wildlife companion shot does not count.Puffin Ride vs Penguin RidePenguin ride is ice or city, flightless. Puffin ride is cliffs and a flying seabird. Same postcard law, different geography and animal.When should I use Puffin Ride?Gags and dream cliff commutes. Skip respectful puffin documentaries.How do I prompt Puffin Ride for AI image or video?Cliffs, mounted [Subject], then: Puffin-ride of [Subject], an absurd seabird mount, cliffs and spray, a commute on the wrong bird. Video: [Subject] rides a puffin against cliffs or surf. Face committed."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Cliffs, spray, mounted seabird. Puffin-ride of [Subject], an absurd seabird mount, cliffs and spray, a commute on the wrong bird.",
+      "Add readable puffin, orange beak, face committed, no logos. Video: [Subject] rides a puffin against cliffs or surf, a straight-faced gag."
+    ],
+    "example": "[Subject] rides a puffin against cliffs or surf, a straight-faced gag."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/0f6605054ac7f0c02041989ed8b24c4c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/puffin-ride-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/628b72c25bae8ac8c26f3bb7607fa9d2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/puffin-ride-puffin-ride-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cf46b1878f5018185680fb280624d8ab.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/puffin-ride.jpg",
+      "alt": "Puffin Ride frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/63b1162883c67f3a759b3e3cae07df69.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/penguin-ride-penguin-ride-mini.webp",
+      "alt": "Penguin Ride"
+    },
+    {
+      "kind": "video",
+      "path": "media/a87a2591dbdbd3e5746b5a9aa99d52f8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/penguin-ride-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/712cfdcdd4c1727734dcb641639f6b95.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolphin-ride-dolphin-ride-mini.webp",
+      "alt": "Dolphin Ride"
+    },
+    {
+      "kind": "video",
+      "path": "media/af8e388232811dc06457f90921274fb2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolphin-ride-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/c582d7da378fc695eb8dfd8f53942282.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/puffin-ride/hero.jpg",
+      "alt": "Puffin Ride",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "8ab143c966736f0ee50caa8ed5e42b7aa0d7d4a7c7ed94cd663abcadb64ce761"
+}

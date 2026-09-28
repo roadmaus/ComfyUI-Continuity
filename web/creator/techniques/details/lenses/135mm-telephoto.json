@@ -1,0 +1,400 @@
+{
+  "id": "lenses/135mm-telephoto",
+  "slug": "135mm-telephoto",
+  "title": "135mm Telephoto",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/135mm-telephoto-056-telephoto-compression-mini.webp",
+  "detail": "details/lenses/135mm-telephoto.json",
+  "aliases": [],
+  "description": "A 135mm telephoto in 135mm cinematography is a long lens used from a distant stand so planes stack and the background crowds the figure. The image feels like eavesdropping: you are far away, yet the world presses in.",
+  "thumbnail": "media/722dfd2bdae65decf4f175762ccc4f03.webp",
+  "video": "media/f149ff24f98f3c3b5f56e817f9a37f22.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/056-telephoto-compression-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "From across a street, a parking lot, or a sports field, 135mm restores a person to usable size and collapses the air between them and whatever sits behind. Cars, crowds, and buildings become a wall."
+        },
+        {
+          "type": "paragraph",
+          "text": "Approaches take forever. Isolation here is not portrait softness; it is surveillance distance."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool inside a small room. You cannot get far enough, and if you force it the blocking dies."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool for a tender head-and-shoulders that should still feel like a conversation: that is 85mm Portrait. If the stack must be extreme, with heat shimmer and sniper intimacy, you wanted 200mm Long Telephoto.",
+          "links": [
+            {
+              "text": "85mm Portrait",
+              "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+            },
+            {
+              "text": "200mm Long Telephoto",
+              "url": "https://melies.co/cinematic-techniques/lenses/200mm-long"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "85mm Portrait",
+          "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+        },
+        {
+          "text": "200mm Long Telephoto",
+          "url": "https://melies.co/cinematic-techniques/lenses/200mm-long"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function From across a street, a parking lot, or a sports field, 135mm restores a person to usable size and collapses the air between them and whatever sits behind. Cars, crowds, and buildings become a wall.Approaches take forever. Isolation here is not portrait softness; it is surveillance distance.It is the wrong tool inside a small room. You cannot get far enough, and if you force it the blocking dies.It is also the wrong tool for a tender head-and-shoulders that should still feel like a conversation: that is 85mm Portrait. If the stack must be extreme, with heat shimmer and sniper intimacy, you wanted 200mm Long Telephoto."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Walk far away first. 135mm then crops that distant view tightly."
+        },
+        {
+          "type": "paragraph",
+          "text": "Compression is the distant viewpoint; the long lens only chooses how much of it to keep. Expect a thin depth of field even at moderate apertures, and expect atmospheric haze or heat if the throw is long enough."
+        },
+        {
+          "type": "paragraph",
+          "text": "A stick or beanbag beats handheld at this length. Prompt: 135mm telephoto on [Subject], stacked planes, eavesdropping compression, background crowding the figure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Walk far away first. 135mm then crops that distant view tightly.Compression is the distant viewpoint; the long lens only chooses how much of it to keep. Expect a thin depth of field even at moderate apertures, and expect atmospheric haze or heat if the throw is long enough.A stick or beanbag beats handheld at this length. Prompt: 135mm telephoto on [Subject], stacked planes, eavesdropping compression, background crowding the figure."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for surveillance, sports, or a stacked city: a figure watched from a rooftop, a runner against a wall of spectators. Do not use it for table coverage or any scene whose geography needs deep, receding space."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for surveillance, sports, or a stacked city: a figure watched from a rooftop, a runner against a wall of spectators. Do not use it for table coverage or any scene whose geography needs deep, receding space."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "85mm Portrait is the nearer telephoto: isolation without the eavesdrop. 200mm Long Telephoto is farther and harder, with more shimmer and less escape in depth.",
+          "links": [
+            {
+              "text": "85mm Portrait",
+              "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+            },
+            {
+              "text": "200mm Long Telephoto",
+              "url": "https://melies.co/cinematic-techniques/lenses/200mm-long"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Telephoto Compression is the perspective effect itself, which 135mm often frames. Macro is close-up scale, the opposite throw.",
+          "links": [
+            {
+              "text": "Telephoto Compression",
+              "url": "https://melies.co/cinematic-techniques/lenses/compression"
+            },
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "200mm Long TelephotoFar away and still in their pores.",
+          "displayText": "200mm Long Telephoto\nFar away and still in their pores.",
+          "links": [
+            {
+              "text": "200mm Long TelephotoFar away and still in their pores.",
+              "url": "https://melies.co/cinematic-techniques/lenses/200mm-long"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "85mm PortraitA person is the landscape.",
+          "displayText": "85mm Portrait\nA person is the landscape.",
+          "links": [
+            {
+              "text": "85mm PortraitA person is the landscape.",
+              "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "85mm Portrait",
+          "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+        },
+        {
+          "text": "200mm Long Telephoto",
+          "url": "https://melies.co/cinematic-techniques/lenses/200mm-long"
+        },
+        {
+          "text": "Telephoto Compression",
+          "url": "https://melies.co/cinematic-techniques/lenses/compression"
+        },
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "200mm Long TelephotoFar away and still in their pores.",
+          "url": "https://melies.co/cinematic-techniques/lenses/200mm-long"
+        },
+        {
+          "text": "85mm PortraitA person is the landscape.",
+          "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/19dabd2802012e5f2a121979db970f34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/200mm-long.webp",
+          "alt": "200mm Long Telephoto"
+        },
+        {
+          "kind": "image",
+          "path": "media/f0701a4a46018686692cc73d442a80ae.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/85mm-portrait.webp",
+          "alt": "85mm Portrait"
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots 85mm Portrait is the nearer telephoto: isolation without the eavesdrop. 200mm Long Telephoto is farther and harder, with more shimmer and less escape in depth.Telephoto Compression is the perspective effect itself, which 135mm often frames. Macro is close-up scale, the opposite throw.200mm Long TelephotoFar away and still in their pores.85mm PortraitA person is the landscape.14mm Ultra-WidePut the audience inside a space that is too big or too close."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Conversation uses long glass as listening: Harry is in the crowd and apart from it. Heat stacks Los Angeles so bodies and city occupy the same plane."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those films treat distance as a moral fact. Borrow the throw and the stack, not a matching still."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Conversation uses long glass as listening: Harry is in the crowd and apart from it. Heat stacks Los Angeles so bodies and city occupy the same plane.Those films treat distance as a moral fact. Borrow the throw and the stack, not a matching still."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the distant stand and the crowded background. 135mm telephoto on [Subject], stacked planes, eavesdropping compression, background crowding the figure."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add across-the-street or parking-lot throw. Do not write 85mm portrait, and do not ask for wide environmental stretch."
+        },
+        {
+          "type": "quote",
+          "text": "135mm telephoto on [Subject], stacked planes, eavesdropping compression, background crowding the figure."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=135mm+telephoto+on+[Subject],+stacked+planes,+eavesdropping+compression,+background+crowding+the+figure."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the distant stand and the crowded background. 135mm telephoto on [Subject], stacked planes, eavesdropping compression, background crowding the figure.Add across-the-street or parking-lot throw. Do not write 85mm portrait, and do not ask for wide environmental stretch.Copy promptUse in Image Generator135mm telephoto on [Subject], stacked planes, eavesdropping compression, background crowding the figure.135mm telephoto on [Subject], stacked planes, eavesdropping compression, background crowding the figure."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is 85mm Portrait (too near, too kind) or a wide shot labeled telephoto. The tell is a readable receding street, or a close conversational background.",
+          "links": [
+            {
+              "text": "85mm Portrait",
+              "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: put the camera far away, stack the background against the body, keep the throw obvious."
+        }
+      ],
+      "links": [
+        {
+          "text": "85mm Portrait",
+          "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is 85mm Portrait (too near, too kind) or a wide shot labeled telephoto. The tell is a readable receding street, or a close conversational background.Fix: put the camera far away, stack the background against the body, keep the throw obvious."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is 135mm telephoto in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a long lens used from a distant stand so depth planes stack and the background crowds the subject. The feeling is surveillance or sports distance, not a close conversation."
+        },
+        {
+          "type": "heading",
+          "text": "135mm Telephoto vs 85mm Portrait",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "85mm isolates a face from a portrait working distance. 135mm requires more throw, stacks the world harder, and reads as eavesdropping. 85mm is intimacy. 135mm is watching from away."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use 135mm telephoto?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for surveillance, sports, or a city that should press against a person. Skip it for small-room coverage and ordinary talk."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt 135mm telephoto for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: 135mm telephoto on [Subject], stacked planes, eavesdropping compression, background crowding the figure. Name the long throw. Forbid wide stretch and close-stand portraits."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is 135mm telephoto in film?It is a long lens used from a distant stand so depth planes stack and the background crowds the subject. The feeling is surveillance or sports distance, not a close conversation.135mm Telephoto vs 85mm Portrait85mm isolates a face from a portrait working distance. 135mm requires more throw, stacks the world harder, and reads as eavesdropping. 85mm is intimacy. 135mm is watching from away.When should I use 135mm telephoto?Use it for surveillance, sports, or a city that should press against a person. Skip it for small-room coverage and ordinary talk.How do I prompt 135mm telephoto for AI image or video?Write: 135mm telephoto on [Subject], stacked planes, eavesdropping compression, background crowding the figure. Name the long throw. Forbid wide stretch and close-stand portraits."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the distant stand and the crowded background. 135mm telephoto on [Subject], stacked planes, eavesdropping compression, background crowding the figure.",
+      "Add across-the-street or parking-lot throw. Do not write 85mm portrait, and do not ask for wide environmental stretch."
+    ],
+    "example": "135mm telephoto on [Subject], stacked planes, eavesdropping compression, background crowding the figure."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/f149ff24f98f3c3b5f56e817f9a37f22.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/056-telephoto-compression-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/722dfd2bdae65decf4f175762ccc4f03.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/135mm-telephoto-056-telephoto-compression-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3de40912b867dbdfba7a1e4c9a350ae3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/135mm-telephoto.jpg",
+      "alt": "135mm Telephoto frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/19dabd2802012e5f2a121979db970f34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/200mm-long.webp",
+      "alt": "200mm Long Telephoto"
+    },
+    {
+      "kind": "image",
+      "path": "media/f0701a4a46018686692cc73d442a80ae.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/85mm-portrait.webp",
+      "alt": "85mm Portrait"
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/3706ef811dd89c94997d02852df01784.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/135mm-telephoto/hero.jpg",
+      "alt": "135mm Telephoto",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "cf84e9f363876f963078e717a9de6a678ee25f6214273e42a2fcd39f6f2005ed"
+}

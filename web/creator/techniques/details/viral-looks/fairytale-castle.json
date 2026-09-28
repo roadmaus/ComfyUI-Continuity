@@ -1,0 +1,358 @@
+{
+  "id": "viral-looks/fairytale-castle",
+  "slug": "fairytale-castle",
+  "title": "Fairytale Castle",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/fairytale-castle",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fairytale-castle.webp",
+  "detail": "details/viral-looks/fairytale-castle.json",
+  "aliases": [],
+  "description": "Fairytale castle, the fairytale castle look, puts storybook stone and impossible turrets around a small figure, with dusk treated as illustration. Place first, person second: the name is a location law, not a camera move.",
+  "thumbnail": "media/4da9253acc2f6b7d4072dde1a14afff5.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The arrival, the exile, the love story that needs a kingdom: a causeway, window grids, indigo-and-gold hour, one person small enough that the building still speaks. Stone should look drawn and real at once, like a children's plate that grew up."
+        },
+        {
+          "type": "paragraph",
+          "text": "Weather has to exist. A plastic CGI battlement with no hour is a matte, not this look."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a tourist establishing shot of a real European site, unless tourists are the joke. If the figure is hero-large, the castle becomes a backdrop and the tale dies."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The arrival, the exile, the love story that needs a kingdom: a causeway, window grids, indigo-and-gold hour, one person small enough that the building still speaks. Stone should look drawn and real at once, like a children's plate that grew up.Weather has to exist. A plastic CGI battlement with no hour is a matte, not this look.It is the wrong tool for a tourist establishing shot of a real European site, unless tourists are the joke. If the figure is hero-large, the castle becomes a backdrop and the tale dies."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wide locked camera, slightly low or eye height on the path, 24mm to 35mm. The figure occupies a third or less."
+        },
+        {
+          "type": "paragraph",
+          "text": "Key is dusk: indigo air, gold on stone edges. Ask for illustration-grade stone and photochemical haze, not game-engine brick."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the path to the door. Prompt: Fairytale-castle world around [Subject], storybook stone, impossible turrets, dusk as illustration."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Wide locked camera, slightly low or eye height on the path, 24mm to 35mm. The figure occupies a third or less.Key is dusk: indigo air, gold on stone edges. Ask for illustration-grade stone and photochemical haze, not game-engine brick.Name the path to the door. Prompt: Fairytale-castle world around [Subject], storybook stone, impossible turrets, dusk as illustration."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An arrival at a kingdom, an exile looking back, a love story that needs architecture as fate. Do not use it as a postcard of a real castle with a couple in the foreground."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it An arrival at a kingdom, an exile looking back, a love story that needs architecture as fate. Do not use it as a postcard of a real castle with a couple in the foreground."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Magical Realism keeps real air and adds one impossible law. Fairytale castle makes the architecture itself a tale.",
+          "links": [
+            {
+              "text": "Magical Realism",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/magical-realism"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Diorama is toy scale on a table. Lost in a Book uses a page as the door into that world.",
+          "links": [
+            {
+              "text": "Diorama",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            },
+            {
+              "text": "Lost in a Book",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/lost-in-a-book"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Magical RealismMiracle without spectacle.",
+          "displayText": "Magical Realism\nMiracle without spectacle.",
+          "links": [
+            {
+              "text": "Magical RealismMiracle without spectacle.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/magical-realism"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DioramaShrink the epic until it fits a shelf.",
+          "displayText": "Diorama\nShrink the epic until it fits a shelf.",
+          "links": [
+            {
+              "text": "DioramaShrink the epic until it fits a shelf.",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Magical Realism",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/magical-realism"
+        },
+        {
+          "text": "Diorama",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        },
+        {
+          "text": "Lost in a Book",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/lost-in-a-book"
+        },
+        {
+          "text": "Magical RealismMiracle without spectacle.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/magical-realism"
+        },
+        {
+          "text": "DioramaShrink the epic until it fits a shelf.",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/408fa07d4330f163bdf3bb4f178ff90f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/magical-realism.webp",
+          "alt": "Magical Realism"
+        },
+        {
+          "kind": "image",
+          "path": "media/181d3dd7ea713bbb349f3475266cdf7f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diorama-diorama-mini.webp",
+          "alt": "Diorama"
+        },
+        {
+          "kind": "video",
+          "path": "media/4a23017cfb59808a2d3cee76a9fc5a28.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/diorama-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Magical Realism keeps real air and adds one impossible law. Fairytale castle makes the architecture itself a tale.Diorama is toy scale on a table. Lost in a Book uses a page as the door into that world.Magical RealismMiracle without spectacle.DioramaShrink the epic until it fits a shelf.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Fall builds kingdoms as illustrated space around a body. Pan's Labyrinth lets stone and dusk obey storybook law."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the law of space, not a studio's castle."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Fall builds kingdoms as illustrated space around a body. Pan's Labyrinth lets stone and dusk obey storybook law.Borrow the law of space, not a studio's castle."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Start with the building, then the small person. Fairytale-castle world around [Subject], storybook stone, impossible turrets, dusk as illustration."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add causeway, window grids, indigo-gold hour, 24mm lock-off, figure small, photochemical air. No plastic battlements."
+        },
+        {
+          "type": "quote",
+          "text": "Fairytale-castle world around [Subject], storybook stone, impossible turrets, dusk as illustration."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Fairytale-castle+world+around+[Subject],+storybook+stone,+impossible+turrets,+dusk+as+illustration."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Start with the building, then the small person. Fairytale-castle world around [Subject], storybook stone, impossible turrets, dusk as illustration.Add causeway, window grids, indigo-gold hour, 24mm lock-off, figure small, photochemical air. No plastic battlements.Copy promptUse in Image GeneratorFairytale-castle world around [Subject], storybook stone, impossible turrets, dusk as illustration.Fairytale-castle world around [Subject], storybook stone, impossible turrets, dusk as illustration."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Generic fantasy mattes with no weather, or a tourist wide. The tell is game-engine brick and a hero who fills the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: name the hour, the path, illustration-grade stone, and one small figure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Generic fantasy mattes with no weather, or a tourist wide. The tell is game-engine brick and a hero who fills the frame.Fix it: name the hour, the path, illustration-grade stone, and one small figure."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Fairytale Castle in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A location look: impossible turrets and storybook stone at dusk, with the person small enough that the building remains the sentence. It is production design plus hour, not a crane."
+        },
+        {
+          "type": "heading",
+          "text": "Fairytale Castle vs Magical Realism",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Magical realism is ordinary air with one impossible rule. Fairytale castle is architecture that already belongs to a tale. If the street is real and a fish talks, you wanted the cousin."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Fairytale Castle?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Arrivals, exile, a love story that needs a kingdom. Skip real tourist sites and any wide where the person is larger than the gate."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Fairytale Castle for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write the castle, the path, the dusk, a small [Subject], then: Fairytale-castle world around [Subject], storybook stone, impossible turrets, dusk as illustration. Lock a wide lens. Keep the figure small."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Fairytale Castle in film?A location look: impossible turrets and storybook stone at dusk, with the person small enough that the building remains the sentence. It is production design plus hour, not a crane.Fairytale Castle vs Magical RealismMagical realism is ordinary air with one impossible rule. Fairytale castle is architecture that already belongs to a tale. If the street is real and a fish talks, you wanted the cousin.When should I use Fairytale Castle?Arrivals, exile, a love story that needs a kingdom. Skip real tourist sites and any wide where the person is larger than the gate.How do I prompt Fairytale Castle for AI image or video?Write the castle, the path, the dusk, a small [Subject], then: Fairytale-castle world around [Subject], storybook stone, impossible turrets, dusk as illustration. Lock a wide lens. Keep the figure small."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Start with the building, then the small person. Fairytale-castle world around [Subject], storybook stone, impossible turrets, dusk as illustration.",
+      "Add causeway, window grids, indigo-gold hour, 24mm lock-off, figure small, photochemical air. No plastic battlements."
+    ],
+    "example": "Fairytale-castle world around [Subject], storybook stone, impossible turrets, dusk as illustration."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/4da9253acc2f6b7d4072dde1a14afff5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fairytale-castle.webp",
+      "alt": "Fairytale Castle example"
+    },
+    {
+      "kind": "image",
+      "path": "media/408fa07d4330f163bdf3bb4f178ff90f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/magical-realism.webp",
+      "alt": "Magical Realism"
+    },
+    {
+      "kind": "image",
+      "path": "media/181d3dd7ea713bbb349f3475266cdf7f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diorama-diorama-mini.webp",
+      "alt": "Diorama"
+    },
+    {
+      "kind": "video",
+      "path": "media/4a23017cfb59808a2d3cee76a9fc5a28.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/diorama-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/df28ac43666761f4bc746ef0c46a9c70.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fairytale-castle/hero.jpg",
+      "alt": "Fairytale Castle",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "ba15c567c21388d5a65de8706ce8714d951083e851bb22ebee5701777a0de530"
+}

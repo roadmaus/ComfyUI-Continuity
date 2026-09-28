@@ -1,0 +1,380 @@
+{
+  "id": "effects/projection-mapping",
+  "slug": "projection-mapping",
+  "title": "Projections",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/projection-mapping",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/projection-mapping.webp",
+  "detail": "details/effects/projection-mapping.json",
+  "aliases": [
+    "Reflective-screen projection"
+  ],
+  "description": "Projections in projection mapping film put a pictured image onto a surface that the taking camera then photographs: front projection onto a retroreflective screen, rear projection behind a window or windshield, or video mapped onto architecture. The projector is a light source, and the set is also a screen.",
+  "thumbnail": "media/23aa0e3237311f54e671d0b7288f89a5.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Actors stand on a rocky foreground. Behind them a desert plate is thrown, coaxial with the lens, onto Scotchlite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Or a car process shot: performers in a cockpit, a plate on a screen beyond the glass. Or a city that wears moving faces."
+        },
+        {
+          "type": "paragraph",
+          "text": "Media is the set. Use it when a large environment must coexist with live foreground, or when architecture itself is the display."
+        },
+        {
+          "type": "paragraph",
+          "text": "Front projection and rear projection are in-camera composites. Mapping is the same family with a three-dimensional screen."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you mean a double exposure (two records in the emulsion, no projector) or a digital backdrop that never hits a surface. A generated image can imitate the look."
+        },
+        {
+          "type": "paragraph",
+          "text": "It cannot prove a projector was used."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Actors stand on a rocky foreground. Behind them a desert plate is thrown, coaxial with the lens, onto Scotchlite.Or a car process shot: performers in a cockpit, a plate on a screen beyond the glass. Or a city that wears moving faces.Media is the set. Use it when a large environment must coexist with live foreground, or when architecture itself is the display.Front projection and rear projection are in-camera composites. Mapping is the same family with a three-dimensional screen.It is the wrong tool when you mean a double exposure (two records in the emulsion, no projector) or a digital backdrop that never hits a surface. A generated image can imitate the look.It cannot prove a projector was used."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Front projection: camera and projector aligned through a beam splitter, retroreflective screen, foreground lit so it does not wash the plate. Rear projection: a translucent screen behind the action, plate brightness matched to the foreground key."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mapping: projectors registered to architecture, then recaptured. Prompt: projected imagery on walls or a screen behind [Subject], shared viewpoint, foreground lit to match, not a ghost overlay."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Front projection: camera and projector aligned through a beam splitter, retroreflective screen, foreground lit so it does not wash the plate. Rear projection: a translucent screen behind the action, plate brightness matched to the foreground key.Mapping: projectors registered to architecture, then recaptured. Prompt: projected imagery on walls or a screen behind [Subject], shared viewpoint, foreground lit to match, not a ghost overlay."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A rocky foreground merging into a still desert panorama, performers lit to the horizon plate, locked wide. Do not drift the mountain independently of the camera, and do not stack a translucent face over the room unless you mean double exposure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A rocky foreground merging into a still desert panorama, performers lit to the horizon plate, locked wide. Do not drift the mountain independently of the camera, and do not stack a translucent face over the room unless you mean double exposure."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Double Exposure combines two photographic records without a projector writing on a set. Practical Lighting is lamps in the scene.",
+          "links": [
+            {
+              "text": "Double Exposure",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            },
+            {
+              "text": "Practical Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A projector can be a practical, but projection is imagery, not just illumination. Rear-projection driving in Hitchcock is the same family as 2001's Dawn of Man front projection: a plate on a surface, recaptured."
+        },
+        {
+          "type": "list-item",
+          "text": "Double ExposureTwo times or two selves occupy one frame.",
+          "displayText": "Double Exposure\nTwo times or two selves occupy one frame.",
+          "links": [
+            {
+              "text": "Double ExposureTwo times or two selves occupy one frame.",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Practical LightingLet the set light the face.",
+          "displayText": "Practical Lighting\nLet the set light the face.",
+          "links": [
+            {
+              "text": "Practical LightingLet the set light the face.",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Double Exposure",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        },
+        {
+          "text": "Practical Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "Double ExposureTwo times or two selves occupy one frame.",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        },
+        {
+          "text": "Practical LightingLet the set light the face.",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+          "alt": "Double Exposure"
+        },
+        {
+          "kind": "image",
+          "path": "media/e57ccee4dac77a8b92955074bb2f3c0a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/practical-lighting-065-practical-source-motivation-mini.webp",
+          "alt": "Practical Lighting"
+        },
+        {
+          "kind": "video",
+          "path": "media/1aa504cae7d8c87fc765f9694501981f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/065-practical-source-motivation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Double Exposure combines two photographic records without a projector writing on a set. Practical Lighting is lamps in the scene.A projector can be a practical, but projection is imagery, not just illumination. Rear-projection driving in Hitchcock is the same family as 2001's Dawn of Man front projection: a plate on a surface, recaptured.Double ExposureTwo times or two selves occupy one frame.Practical LightingLet the set light the face.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "2001: A Space Odyssey uses front projection for Dawn of Man landscapes. To Catch a Thief and Vertigo use process projection for driving conversations."
+        },
+        {
+          "type": "paragraph",
+          "text": "Blade Runner 2049 and Ghost in the Shell treat building-scale imagery as architecture."
+        },
+        {
+          "type": "list-item",
+          "text": "2001: A Space Odyssey 1968Dawn of Man environments combine foreground staging with projected landscape imagery.",
+          "displayText": "2001: A Space Odyssey 1968\nDawn of Man environments combine foreground staging with projected landscape imagery."
+        },
+        {
+          "type": "list-item",
+          "text": "To Catch a Thief 1955Driving conversations combine foreground performers with moving scenery.",
+          "displayText": "To Catch a Thief 1955\nDriving conversations combine foreground performers with moving scenery."
+        },
+        {
+          "type": "list-item",
+          "text": "Vertigo 1958Driving scenes use a controlled foreground against photographed surroundings.",
+          "displayText": "Vertigo 1958\nDriving scenes use a controlled foreground against photographed surroundings."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film 2001: A Space Odyssey uses front projection for Dawn of Man landscapes. To Catch a Thief and Vertigo use process projection for driving conversations.Blade Runner 2049 and Ghost in the Shell treat building-scale imagery as architecture.2001: A Space Odyssey 1968Dawn of Man environments combine foreground staging with projected landscape imagery.To Catch a Thief 1955Driving conversations combine foreground performers with moving scenery.Vertigo 1958Driving scenes use a controlled foreground against photographed surroundings."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the image on a surface. Example: Projected imagery crawling over [Subject] and architecture, a plate on a screen or faces on walls, foreground lit to match the projection, in-camera process not a double-exposure ghost."
+        },
+        {
+          "type": "quote",
+          "text": "A small practical-looking rocky foreground merges into an immense still desert panorama. Locked wide camera, performers lit to match the horizon photograph, subtle boundary between physical foreground and distant projected landscape. No drifting mountain geometry or independently moving horizon."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+small+practical-looking+rocky+foreground+merges+into+an+immense+still+desert+panorama.+Locked+wide+camera,+performers+lit+to+match+the+horizon+photograph,+subtle+boundary+between+physical+foreground+and+distant+projected+landscape.+No+drifting+mountain+geometry+or+independently+moving+horizon."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Put the image on a surface. Example: Projected imagery crawling over [Subject] and architecture, a plate on a screen or faces on walls, foreground lit to match the projection, in-camera process not a double-exposure ghost.Copy promptUse in Video GeneratorA small practical-looking rocky foreground merges into an immense still desert panorama. Locked wide camera, performers lit to match the horizon photograph, subtle boundary between physical foreground and distant projected landscape. No drifting mountain geometry or independently moving horizon.A small practical-looking rocky foreground merges into an immense still desert panorama. Locked wide camera, performers lit to match the horizon photograph, subtle boundary between physical foreground and distant projected landscape. No drifting mountain geometry or independently moving horizon."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: double exposure, or a floating hologram with no surface. Tell: a translucent overlay that ignores walls, mismatched vanishing points, or a background that parallax-slides against the foreground."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: shared viewpoint, projection on a named surface, matched key, restrained plate motion."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: double exposure, or a floating hologram with no surface. Tell: a translucent overlay that ignores walls, mismatched vanishing points, or a background that parallax-slides against the foreground.Fix: shared viewpoint, projection on a named surface, matched key, restrained plate motion."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is projection mapping in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Throwing a pictured image onto a screen or onto architecture, then photographing the result. Front projection, rear projection, and mapped video all belong to this family."
+        },
+        {
+          "type": "heading",
+          "text": "Projections vs double exposure",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Double exposure stacks two records in the image. Projection writes one record onto a physical surface in the set. One is an overlay. The other is a lamp that is a picture."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use projections?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the environment is a plate or the building is a display, and foreground performers must share that light. Do not use it as a synonym for any composite."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt projections for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the surface (screen, wall, windshield), keep a common viewpoint, match foreground light to the plate, and forbid a ghost overlay or drifting horizon."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is projection mapping in film?Throwing a pictured image onto a screen or onto architecture, then photographing the result. Front projection, rear projection, and mapped video all belong to this family.Projections vs double exposureDouble exposure stacks two records in the image. Projection writes one record onto a physical surface in the set. One is an overlay. The other is a lamp that is a picture.When should I use projections?When the environment is a plate or the building is a display, and foreground performers must share that light. Do not use it as a synonym for any composite.How do I prompt projections for AI image or video?Name the surface (screen, wall, windshield), keep a common viewpoint, match foreground light to the plate, and forbid a ghost overlay or drifting horizon."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Put the image on a surface. Example: Projected imagery crawling over [Subject] and architecture, a plate on a screen or faces on walls, foreground lit to match the projection, in-camera process not a double-exposure ghost."
+    ],
+    "example": "A small practical-looking rocky foreground merges into an immense still desert panorama. Locked wide camera, performers lit to match the horizon photograph, subtle boundary between physical foreground and distant projected landscape. No drifting mountain geometry or independently moving horizon."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/23aa0e3237311f54e671d0b7288f89a5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/projection-mapping.webp",
+      "alt": "Projections example"
+    },
+    {
+      "kind": "image",
+      "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+      "alt": "Double Exposure"
+    },
+    {
+      "kind": "image",
+      "path": "media/e57ccee4dac77a8b92955074bb2f3c0a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/practical-lighting-065-practical-source-motivation-mini.webp",
+      "alt": "Practical Lighting"
+    },
+    {
+      "kind": "video",
+      "path": "media/1aa504cae7d8c87fc765f9694501981f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/065-practical-source-motivation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b4f0ceff794a4a7c076fac10b5adbe47.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/projection-mapping/hero.jpg",
+      "alt": "Projections",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "ee9c916a9dc82795225078bb118d3bd2f1ee8014f8054e43a54068afc3ff2d71"
+}

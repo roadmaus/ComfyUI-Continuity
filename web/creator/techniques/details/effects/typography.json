@@ -1,0 +1,410 @@
+{
+  "id": "effects/typography",
+  "slug": "typography",
+  "title": "Typography",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/typography",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/typography-typography-mini.webp",
+  "detail": "details/effects/typography.json",
+  "aliases": [
+    "Narrative main titles",
+    "Graphic opening sequence"
+  ],
+  "description": "Kinetic typography puts words in the world of the shot as objects: titles that occupy space, letters with scale, parallax, and a surface. The sentence is in the picture, not parked as a caption.",
+  "thumbnail": "media/81b1f876fe5e16bb270d26421a1dbb15.webp",
+  "video": "media/8103d2a433b486f00ca65f195f8bae83.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/typography-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A name walks the street. A credit is scratched into a notebook."
+        },
+        {
+          "type": "paragraph",
+          "text": "Type pursues a figure. Use it when the film should teach its pattern before or during the action, and when letters are part of the blocking."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a lower-third, and a single handsome card is not yet a title sequence. If live action, drawing, and stock collide as equal media, you are in mixed media."
+        },
+        {
+          "type": "paragraph",
+          "text": "If paper layers tear without readable words as objects, you are in collage."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A name walks the street. A credit is scratched into a notebook.Type pursues a figure. Use it when the film should teach its pattern before or during the action, and when letters are part of the blocking.It is the wrong tool for a lower-third, and a single handsome card is not yet a title sequence. If live action, drawing, and stock collide as equal media, you are in mixed media.If paper layers tear without readable words as objects, you are in collage."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose one visual rule: ink that becomes a map, letters that stand in the set, type that tracks a body. Light in-world letters as surfaces (a key, an edge)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Reserve space for exact spelling. Animate progression before dropping credits."
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera can dolly so type parallax against walls. Prompt typography in the world of the subject: words as objects, titles that occupy space, kinetic type."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Choose one visual rule: ink that becomes a map, letters that stand in the set, type that tracks a body. Light in-world letters as surfaces (a key, an edge).Reserve space for exact spelling. Animate progression before dropping credits.The camera can dolly so type parallax against walls. Prompt typography in the world of the subject: words as objects, titles that occupy space, kinetic type."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when a word must share space with a person, or when an opening must tell a miniature story in letters. Do not use it as unreadable scribble over a portrait."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when a word must share space with a person, or when an opening must tell a miniature story in letters. Do not use it as unreadable scribble over a portrait."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mixed Media collides several capture modes. Typography can live inside a single photographed world.",
+          "links": [
+            {
+              "text": "Mixed Media",
+              "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Collage layers images. Type may appear there, but collage does not require words as blocking.",
+          "links": [
+            {
+              "text": "Collage",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Mixed MediaNo single medium owns the truth.",
+          "displayText": "Mixed Media\nNo single medium owns the truth.",
+          "links": [
+            {
+              "text": "Mixed MediaNo single medium owns the truth.",
+              "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CollageOne image is not enough; stack them.",
+          "displayText": "Collage\nOne image is not enough; stack them.",
+          "links": [
+            {
+              "text": "CollageOne image is not enough; stack them.",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Mixed Media",
+          "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+        },
+        {
+          "text": "Collage",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        },
+        {
+          "text": "Mixed MediaNo single medium owns the truth.",
+          "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+        },
+        {
+          "text": "CollageOne image is not enough; stack them.",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/83d2cb5611a01b24c14f80d7066eb566.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mixed-media-mixed-media-mini.webp",
+          "alt": "Mixed Media"
+        },
+        {
+          "kind": "video",
+          "path": "media/d444dde0403cf42d4c72951f133ce07c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mixed-media-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+          "alt": "Collage"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Mixed Media collides several capture modes. Typography can live inside a single photographed world.Collage layers images. Type may appear there, but collage does not require words as blocking.Mixed MediaNo single medium owns the truth.CollageOne image is not enough; stack them.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vertigo's spiral opening sets a pattern of obsession in letter and shape. Se7en builds credits from hands, notebooks, and material type."
+        },
+        {
+          "type": "paragraph",
+          "text": "Catch Me If You Can condenses pursuit into animated letterforms. Annie Hall and Scott Pilgrim vs."
+        },
+        {
+          "type": "paragraph",
+          "text": "the World put sentences into the scene. Grammar, not frames to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "Vertigo 1958The spiral-based opening establishes a pattern of obsession and instability.",
+          "displayText": "Vertigo 1958\nThe spiral-based opening establishes a pattern of obsession and instability."
+        },
+        {
+          "type": "list-item",
+          "text": "Se7en 1995Hands, notebooks and material fragments construct a disturbing preparatory ritual.",
+          "displayText": "Se7en 1995\nHands, notebooks and material fragments construct a disturbing preparatory ritual."
+        },
+        {
+          "type": "list-item",
+          "text": "Catch Me If You Can 2002Animated pursuit imagery condenses the film’s identity game.",
+          "displayText": "Catch Me If You Can 2002\nAnimated pursuit imagery condenses the film’s identity game."
+        },
+        {
+          "type": "list-item",
+          "text": "Annie Hall 1977Subtitles expose thoughts that differ from the spoken rooftop conversation.",
+          "displayText": "Annie Hall 1977\nSubtitles expose thoughts that differ from the spoken rooftop conversation."
+        },
+        {
+          "type": "list-item",
+          "text": "Scott Pilgrim vs. the World 2010Words and graphic marks become part of the film’s expressive action.",
+          "displayText": "Scott Pilgrim vs. the World 2010\nWords and graphic marks become part of the film’s expressive action."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Vertigo's spiral opening sets a pattern of obsession in letter and shape. Se7en builds credits from hands, notebooks, and material type.Catch Me If You Can condenses pursuit into animated letterforms. Annie Hall and Scott Pilgrim vs.the World put sentences into the scene. Grammar, not frames to copy.Vertigo 1958The spiral-based opening establishes a pattern of obsession and instability.Se7en 1995Hands, notebooks and material fragments construct a disturbing preparatory ritual.Catch Me If You Can 2002Animated pursuit imagery condenses the film’s identity game.Annie Hall 1977Subtitles expose thoughts that differ from the spoken rooftop conversation.Scott Pilgrim vs. the World 2010Words and graphic marks become part of the film’s expressive action."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Typography in the world of [Subject], words as objects, titles that occupy space, kinetic type. Name the words, the surface they sit on, and the light."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban decorative gibberish and ban a floating caption with no place in the room."
+        },
+        {
+          "type": "quote",
+          "text": "Design a forty-second title sequence for a film about a missing cartographer. A single ink line becomes a street, a fingerprint ridge and a coastline before vanishing at the edge of a map. Generate visual elements separately; animate the transformations and add exact credits in a motion-graphics timeline. No arbitrary stock-footage montage."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Design+a+forty-second+title+sequence+for+a+film+about+a+missing+cartographer.+A+single+ink+line+becomes+a+street,+a+fingerprint+ridge+and+a+coastline+before+vanishing+at+the+edge+of+a+map.+Generate+visual+elements+separately;+animate+the+transformations+and+add+exact+credits+in+a+motion-graphics+timeline.+No+arbitrary+stock-footage+montage."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Typography in the world of [Subject], words as objects, titles that occupy space, kinetic type. Name the words, the surface they sit on, and the light.Ban decorative gibberish and ban a floating caption with no place in the room.Copy promptUse in Video GeneratorDesign a forty-second title sequence for a film about a missing cartographer. A single ink line becomes a street, a fingerprint ridge and a coastline before vanishing at the edge of a map. Generate visual elements separately; animate the transformations and add exact credits in a motion-graphics timeline. No arbitrary stock-footage montage.Design a forty-second title sequence for a film about a missing cartographer. A single ink line becomes a street, a fingerprint ridge and a coastline before vanishing at the edge of a map. Generate visual elements separately; animate the transformations and add exact credits in a motion-graphics timeline. No arbitrary stock-footage montage."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a title card or a caption. The tell is unreadable AI lettering, or type glued to the frame with no space in the set."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is exact words, a surface, and a rule that progresses."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a title card or a caption. The tell is unreadable AI lettering, or type glued to the frame with no space in the set.The fix is exact words, a surface, and a rule that progresses."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is typography in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Typography here is kinetic type in the world of the shot: words as objects, titles that occupy space. A sentence lives in the picture rather than as a caption."
+        },
+        {
+          "type": "heading",
+          "text": "Typography vs mixed media",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Mixed media collides live action, drawing, type, and stock. Typography can be letters inside one photographed space. The letters are the event, not one of several crashing media."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use typography?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when words must occupy the scene or when an opening needs a miniature story in letters. Skip it for a simple name card or unreadable overlay."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt typography for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Typography in the world of [Subject], words as objects, kinetic type. Specify the exact words, the surface, and the light. Do not ask for decorative lettering you cannot read."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is typography in film?Typography here is kinetic type in the world of the shot: words as objects, titles that occupy space. A sentence lives in the picture rather than as a caption.Typography vs mixed mediaMixed media collides live action, drawing, type, and stock. Typography can be letters inside one photographed space. The letters are the event, not one of several crashing media.When should I use typography?Use it when words must occupy the scene or when an opening needs a miniature story in letters. Skip it for a simple name card or unreadable overlay.How do I prompt typography for AI image or video?Write Typography in the world of [Subject], words as objects, kinetic type. Specify the exact words, the surface, and the light. Do not ask for decorative lettering you cannot read."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Typography in the world of [Subject], words as objects, titles that occupy space, kinetic type. Name the words, the surface they sit on, and the light.",
+      "Ban decorative gibberish and ban a floating caption with no place in the room."
+    ],
+    "example": "Design a forty-second title sequence for a film about a missing cartographer. A single ink line becomes a street, a fingerprint ridge and a coastline before vanishing at the edge of a map. Generate visual elements separately; animate the transformations and add exact credits in a motion-graphics timeline. No arbitrary stock-footage montage."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/8103d2a433b486f00ca65f195f8bae83.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/typography-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/81b1f876fe5e16bb270d26421a1dbb15.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/typography-typography-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3409865aec878ff11c94b214917fcc43.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/typography.jpg",
+      "alt": "Typography frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/83d2cb5611a01b24c14f80d7066eb566.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mixed-media-mixed-media-mini.webp",
+      "alt": "Mixed Media"
+    },
+    {
+      "kind": "video",
+      "path": "media/d444dde0403cf42d4c72951f133ce07c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mixed-media-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+      "alt": "Collage"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/641557fc0d0739f766a968fc56a73898.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/typography/hero.jpg",
+      "alt": "Typography",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "dd9f33ec7ba544d5123f6f1a80d118928f2504213134d99de94db3008a1d81ae"
+}

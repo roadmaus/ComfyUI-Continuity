@@ -1,0 +1,450 @@
+{
+  "id": "camera-movement/through-object-in",
+  "slug": "through-object-in",
+  "title": "Through Object In",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/through-object-in",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/through-object-in-through-object-in-mini.webp",
+  "detail": "details/camera-movement/through-object-in.json",
+  "aliases": [
+    "Virtual camera",
+    "Camera through solid objects"
+  ],
+  "description": "Through object in sends the camera into a cup, keyhole, speaker, or mouth, matter as a door, then arrives on the subject. Scale often changes along a coherent 3D route that a physical camera could not take.",
+  "thumbnail": "media/f50d3a0400b8aff3510a0542238ce407.webp",
+  "video": "media/09420a56235cbfd2a069fdf804510ad5.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/through-object-in-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Enter through a thing. Impossible reveals, jokes, a house tour that ignores walls: the named object is the door, not a generic wall."
+        },
+        {
+          "type": "paragraph",
+          "text": "Objects must keep thickness and shape during the passage. A cut from a cup to a face is not this."
+        },
+        {
+          "type": "paragraph",
+          "text": "Flying-cam transition punches architecture; this punches a prop. The practical task is continuity of space."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Enter through a thing. Impossible reveals, jokes, a house tour that ignores walls: the named object is the door, not a generic wall.Objects must keep thickness and shape during the passage. A cut from a cup to a face is not this.Flying-cam transition punches architecture; this punches a prop. The practical task is continuity of space."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Build a 3D route and connect plates to digital interiors. Choose believable lens behavior and speed changes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the object, the travel through it, and the arrival. Prompt: Through-object-in on [Subject], the camera entering via a cup, keyhole, speaker, or mouth, matter as a door."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Build a 3D route and connect plates to digital interiors. Choose believable lens behavior and speed changes.Name the object, the travel through it, and the arrival. Prompt: Through-object-in on [Subject], the camera entering via a cup, keyhole, speaker, or mouth, matter as a door."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for an impossible reveal through a named object. Do not use a straight cut and call it a pass."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for an impossible reveal through a named object. Do not use a straight cut and call it a pass."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pass Through uses walls or bodies. Object Portal is the object-as-door idea.",
+          "links": [
+            {
+              "text": "Pass Through",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+            },
+            {
+              "text": "Object Portal",
+              "url": "https://melies.co/cinematic-techniques/effects/object-portal"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Through Object Out is the reverse exit. Through-object-in arrives on the subject after the prop.",
+          "links": [
+            {
+              "text": "Through Object Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/through-object-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pass ThroughCut the building, not the film.",
+          "displayText": "Pass Through\nCut the building, not the film.",
+          "links": [
+            {
+              "text": "Pass ThroughCut the building, not the film.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Object PortalA prop is a wormhole.",
+          "displayText": "Object Portal\nA prop is a wormhole.",
+          "links": [
+            {
+              "text": "Object PortalA prop is a wormhole.",
+              "url": "https://melies.co/cinematic-techniques/effects/object-portal"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Through Object OutLeave through a thing.",
+          "displayText": "Through Object Out\nLeave through a thing.",
+          "links": [
+            {
+              "text": "Through Object OutLeave through a thing.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/through-object-out"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Pass Through",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+        },
+        {
+          "text": "Object Portal",
+          "url": "https://melies.co/cinematic-techniques/effects/object-portal"
+        },
+        {
+          "text": "Through Object Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/through-object-out"
+        },
+        {
+          "text": "Pass ThroughCut the building, not the film.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+        },
+        {
+          "text": "Object PortalA prop is a wormhole.",
+          "url": "https://melies.co/cinematic-techniques/effects/object-portal"
+        },
+        {
+          "text": "Through Object OutLeave through a thing.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/through-object-out"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/fbf0bd56427103cd8c1bddba257f87f6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pass-through-pass-through-mini.webp",
+          "alt": "Pass Through"
+        },
+        {
+          "kind": "video",
+          "path": "media/53e07ed3dfae32434db4e68d811d8750.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pass-through-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/eb0b73ad7e6099db4d24e843e9ce6226.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/object-portal-object-portal-mini.webp",
+          "alt": "Object Portal"
+        },
+        {
+          "kind": "video",
+          "path": "media/0a077e954932ba77489876d3a6d39e77.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/object-portal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/2d5da937b46bdb0e89ca21d9ccd98aa0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/through-object-out-through-object-out-mini.webp",
+          "alt": "Through Object Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/c3c3001a333a0b11f52f0d38c016f8ab.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/through-object-out-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Pass Through uses walls or bodies. Object Portal is the object-as-door idea.Through Object Out is the reverse exit. Through-object-in arrives on the subject after the prop.Pass ThroughCut the building, not the film.Object PortalA prop is a wormhole.Through Object OutLeave through a thing."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Panic Room explores a townhouse through physically inaccessible openings. Fight Club opens from microscopic neural imagery into the narrator's predicament."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Secret in Their Eyes passes from aerial into a crowd as if continuous. Being John Malkovich treats a portal as a door in a thing."
+        },
+        {
+          "type": "list-item",
+          "text": "Panic Room 2002The camera explores the townhouse and passes through physically inaccessible openings.",
+          "displayText": "Panic Room 2002\nThe camera explores the townhouse and passes through physically inaccessible openings."
+        },
+        {
+          "type": "list-item",
+          "text": "Fight Club 1999The opening travels from microscopic neural imagery to the narrator’s immediate predicament.",
+          "displayText": "Fight Club 1999\nThe opening travels from microscopic neural imagery to the narrator’s immediate predicament."
+        },
+        {
+          "type": "list-item",
+          "text": "The Secret in Their Eyes 2009The stadium approach and pursuit create an apparently continuous passage from an aerial view into the crowd.",
+          "displayText": "The Secret in Their Eyes 2009\nThe stadium approach and pursuit create an apparently continuous passage from an aerial view into the crowd."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/c9259b2462b54553de5d7cb0f35e346e.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/through-object-in/famous/00-panic-room-2002.jpg",
+          "alt": "Panic Room 2002"
+        },
+        {
+          "kind": "image",
+          "path": "media/f6da63a44bb301205377ebd849437d56.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/through-object-in/famous/01-fight-club-1999.jpg",
+          "alt": "Fight Club 1999"
+        },
+        {
+          "kind": "image",
+          "path": "media/2817df83337d2d5ec53dcfe041ecf35e.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/through-object-in/famous/02-the-secret-in-their-eyes-2009.jpg",
+          "alt": "The Secret in Their Eyes 2009"
+        }
+      ],
+      "sourceText": "In film Panic Room explores a townhouse through physically inaccessible openings. Fight Club opens from microscopic neural imagery into the narrator's predicament.The Secret in Their Eyes passes from aerial into a crowd as if continuous. Being John Malkovich treats a portal as a door in a thing.Panic Room 2002The camera explores the townhouse and passes through physically inaccessible openings.Fight Club 1999The opening travels from microscopic neural imagery to the narrator’s immediate predicament.The Secret in Their Eyes 2009The stadium approach and pursuit create an apparently continuous passage from an aerial view into the crowd."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the object and the arrival. Still: Through-object-in on [Subject], the camera entering via a cup, keyhole, speaker, or mouth, matter as a door."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera travels into an object and arrives on [Subject] on the other side. Keep thickness."
+        },
+        {
+          "type": "paragraph",
+          "text": "One continuous move."
+        },
+        {
+          "type": "quote",
+          "text": "A single virtual camera glides from a dark kitchen, through the narrow handle opening of a kettle, across the room and through a keyhole into a lit study. Rigid continuous architecture, physically coherent perspective, controlled acceleration, no melting surfaces. Previsualize the route in 3D and use generated textures or plates rather than relying on one unconstrained generation."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+single+virtual+camera+glides+from+a+dark+kitchen,+through+the+narrow+handle+opening+of+a+kettle,+across+the+room+and+through+a+keyhole+into+a+lit+study.+Rigid+continuous+architecture,+physically+coherent+perspective,+controlled+acceleration,+no+melting+surfaces.+Previsualize+the+route+in+3D+and+use+generated+textures+or+plates+rather+than+relying+on+one+unconstrained+generation."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the object and the arrival. Still: Through-object-in on [Subject], the camera entering via a cup, keyhole, speaker, or mouth, matter as a door.Video: The camera travels into an object and arrives on [Subject] on the other side. Keep thickness.One continuous move.Copy promptUse in Video GeneratorA single virtual camera glides from a dark kitchen, through the narrow handle opening of a kettle, across the room and through a keyhole into a lit study. Rigid continuous architecture, physically coherent perspective, controlled acceleration, no melting surfaces. Previsualize the route in 3D and use generated textures or plates rather than relying on one unconstrained generation.A single virtual camera glides from a dark kitchen, through the narrow handle opening of a kettle, across the room and through a keyhole into a lit study. Rigid continuous architecture, physically coherent perspective, controlled acceleration, no melting surfaces. Previsualize the route in 3D and use generated textures or plates rather than relying on one unconstrained generation."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a cut from a cup to a face. The tell: no interior of the object, no thickness."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: travel through the named prop, keep its shape, arrive on the far side."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a cut from a cup to a face. The tell: no interior of the object, no thickness.The fix: travel through the named prop, keep its shape, arrive on the far side."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Through Object In in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Through object in is a continuous camera path that enters via a named object (keyhole, cup, speaker, mouth) and arrives on the subject, often changing scale."
+        },
+        {
+          "type": "heading",
+          "text": "Through Object In vs Pass Through",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Pass-through uses architecture or a body. Through-object-in uses a named prop as the door and often includes a scale change."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Through Object In?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to enter a scene through a thing: a joke, an impossible house tour, a portal. Do not fake it with a cut."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Through Object In for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the object, the travel, and the arrival. Example: Through-object-in on [Subject], the camera entering via a cup, keyhole, speaker, or mouth, matter as a door."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Through Object In in film?Through object in is a continuous camera path that enters via a named object (keyhole, cup, speaker, mouth) and arrives on the subject, often changing scale.Through Object In vs Pass ThroughPass-through uses architecture or a body. Through-object-in uses a named prop as the door and often includes a scale change.When should I use Through Object In?Use it to enter a scene through a thing: a joke, an impossible house tour, a portal. Do not fake it with a cut.How do I prompt Through Object In for AI image or video?Name the object, the travel, and the arrival. Example: Through-object-in on [Subject], the camera entering via a cup, keyhole, speaker, or mouth, matter as a door."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the object and the arrival. Still: Through-object-in on [Subject], the camera entering via a cup, keyhole, speaker, or mouth, matter as a door.",
+      "Video: The camera travels into an object and arrives on [Subject] on the other side. Keep thickness.",
+      "One continuous move."
+    ],
+    "example": "A single virtual camera glides from a dark kitchen, through the narrow handle opening of a kettle, across the room and through a keyhole into a lit study. Rigid continuous architecture, physically coherent perspective, controlled acceleration, no melting surfaces. Previsualize the route in 3D and use generated textures or plates rather than relying on one unconstrained generation."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/09420a56235cbfd2a069fdf804510ad5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/through-object-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f50d3a0400b8aff3510a0542238ce407.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/through-object-in-through-object-in-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7d3eaf27294aadd1737a24c734c9f602.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/through-object-in.jpg",
+      "alt": "Through Object In frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/fbf0bd56427103cd8c1bddba257f87f6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pass-through-pass-through-mini.webp",
+      "alt": "Pass Through"
+    },
+    {
+      "kind": "video",
+      "path": "media/53e07ed3dfae32434db4e68d811d8750.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pass-through-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/eb0b73ad7e6099db4d24e843e9ce6226.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/object-portal-object-portal-mini.webp",
+      "alt": "Object Portal"
+    },
+    {
+      "kind": "video",
+      "path": "media/0a077e954932ba77489876d3a6d39e77.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/object-portal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2d5da937b46bdb0e89ca21d9ccd98aa0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/through-object-out-through-object-out-mini.webp",
+      "alt": "Through Object Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/c3c3001a333a0b11f52f0d38c016f8ab.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/through-object-out-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c9259b2462b54553de5d7cb0f35e346e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/through-object-in/famous/00-panic-room-2002.jpg",
+      "alt": "Panic Room 2002"
+    },
+    {
+      "kind": "image",
+      "path": "media/f6da63a44bb301205377ebd849437d56.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/through-object-in/famous/01-fight-club-1999.jpg",
+      "alt": "Fight Club 1999"
+    },
+    {
+      "kind": "image",
+      "path": "media/2817df83337d2d5ec53dcfe041ecf35e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/through-object-in/famous/02-the-secret-in-their-eyes-2009.jpg",
+      "alt": "The Secret in Their Eyes 2009"
+    },
+    {
+      "kind": "image",
+      "path": "media/e0d5f5af4c162519651b1bd129af9758.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/through-object-in/hero.jpg",
+      "alt": "Through Object In",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "27db4e813be1ddd1032ff0dab803f975b49b2ccacc478b01bed987a39c533c81"
+}

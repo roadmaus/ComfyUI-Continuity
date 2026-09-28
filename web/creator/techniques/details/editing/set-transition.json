@@ -1,0 +1,456 @@
+{
+  "id": "editing/set-transition",
+  "slug": "set-transition",
+  "title": "Set Transition",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/set-transition",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/set-transition-07-set-transition-mini.webp",
+  "detail": "details/editing/set-transition.json",
+  "aliases": [],
+  "description": "A set transition lets the location change in camera: walls walk, architecture rewrites, one space becomes another without a hard cut. Both sides of the join are geographies that share a continuous camera path; the set itself is the editor.",
+  "thumbnail": "media/dc48ad33dbf1c785614c7826f783ae39.webp",
+  "video": "media/38d42ddfa56e83318d71d8aecb642538.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/07-set-transition-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A dressing room wall slides and you are in a nightclub. A theatre door is a street."
+        },
+        {
+          "type": "paragraph",
+          "text": "Geography itself edits. The subject may not have cut; the world did."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the story's spaces are porous: backstage as mind, city as stage, a lobby that rewrites under fire. It is the wrong tool when you only need to hide a splice in a whip: that is an Invisible Cut.",
+          "links": [
+            {
+              "text": "Invisible Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when A melts into B as a picture: that is Morphing. If the camera passes through a wall into another place as a portal gag, you are next to Pass Through.",
+          "links": [
+            {
+              "text": "Morphing",
+              "url": "https://melies.co/cinematic-techniques/effects/morphing"
+            },
+            {
+              "text": "Pass Through",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Set transition is the room changing around the body."
+        }
+      ],
+      "links": [
+        {
+          "text": "Invisible Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+        },
+        {
+          "text": "Morphing",
+          "url": "https://melies.co/cinematic-techniques/effects/morphing"
+        },
+        {
+          "text": "Pass Through",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A dressing room wall slides and you are in a nightclub. A theatre door is a street.Geography itself edits. The subject may not have cut; the world did.Use it when the story's spaces are porous: backstage as mind, city as stage, a lobby that rewrites under fire. It is the wrong tool when you only need to hide a splice in a whip: that is an Invisible Cut.It is the wrong tool when A melts into B as a picture: that is Morphing. If the camera passes through a wall into another place as a portal gag, you are next to Pass Through.Set transition is the room changing around the body."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Build two (or more) complete spaces that can physically or digitally replace each other on a continuous move: sliding flats, revolving walls, a stitch on a doorway, a digital set extension that rewrites. Keep lighting motivated as the space changes, or let the lights change as part of the trick."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: set transition around [Subject], the location transforming in camera, walls walking, one space becoming another. Motion brief: the set around [Subject] transforms into a new location without a hard cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Build two (or more) complete spaces that can physically or digitally replace each other on a continuous move: sliding flats, revolving walls, a stitch on a doorway, a digital set extension that rewrites. Keep lighting motivated as the space changes, or let the lights change as part of the trick.Prompt: set transition around [Subject], the location transforming in camera, walls walking, one space becoming another. Motion brief: the set around [Subject] transforms into a new location without a hard cut."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to walk from rehearsal into performance, from memory into a street, from one building into another without admitting an edit. Do not use it if a hard cut or a wipe would tell the truth faster."
+        },
+        {
+          "type": "paragraph",
+          "text": "Virtuosity with nothing new in the second space is empty."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to walk from rehearsal into performance, from memory into a street, from one building into another without admitting an edit. Do not use it if a hard cut or a wipe would tell the truth faster.Virtuosity with nothing new in the second space is empty."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An Invisible Cut conceals a splice; the set may stay the same. A Pass Through drives the camera through a surface into another space.",
+          "links": [
+            {
+              "text": "Invisible Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+            },
+            {
+              "text": "Pass Through",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Morphing interpolates the image. A set transition rewrites architecture along a continuous path, theatrical or digital.",
+          "links": [
+            {
+              "text": "Morphing",
+              "url": "https://melies.co/cinematic-techniques/effects/morphing"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Match Motion can change worlds on a body vector without the walls walking.",
+          "links": [
+            {
+              "text": "Match Motion",
+              "url": "https://melies.co/cinematic-techniques/editing/match-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pass ThroughCut the building, not the film.",
+          "displayText": "Pass Through\nCut the building, not the film.",
+          "links": [
+            {
+              "text": "Pass ThroughCut the building, not the film.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MorphingBecoming is visible.",
+          "displayText": "Morphing\nBecoming is visible.",
+          "links": [
+            {
+              "text": "MorphingBecoming is visible.",
+              "url": "https://melies.co/cinematic-techniques/effects/morphing"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Invisible Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+        },
+        {
+          "text": "Pass Through",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+        },
+        {
+          "text": "Morphing",
+          "url": "https://melies.co/cinematic-techniques/effects/morphing"
+        },
+        {
+          "text": "Match Motion",
+          "url": "https://melies.co/cinematic-techniques/editing/match-motion"
+        },
+        {
+          "text": "Pass ThroughCut the building, not the film.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+        },
+        {
+          "text": "MorphingBecoming is visible.",
+          "url": "https://melies.co/cinematic-techniques/effects/morphing"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/fbf0bd56427103cd8c1bddba257f87f6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pass-through-pass-through-mini.webp",
+          "alt": "Pass Through"
+        },
+        {
+          "kind": "video",
+          "path": "media/53e07ed3dfae32434db4e68d811d8750.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pass-through-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/3e0961caa225ee0edff07ce811460ef7.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/morphing-morphing-mini.webp",
+          "alt": "Morphing"
+        },
+        {
+          "kind": "video",
+          "path": "media/0f4148849d67d9c9aa6bfff44212963f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/morphing-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots An Invisible Cut conceals a splice; the set may stay the same. A Pass Through drives the camera through a surface into another space.Morphing interpolates the image. A set transition rewrites architecture along a continuous path, theatrical or digital.Match Motion can change worlds on a body vector without the walls walking.Pass ThroughCut the building, not the film.MorphingBecoming is visible.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Birdman lets theatre and city feel like one porous set. 1917 hides joins so trenches, ruins, and fields play as continuous geography."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Matrix lobby rewrites a space through action and spatial continuity. Use the porous building, not a copied tracking path."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Birdman lets theatre and city feel like one porous set. 1917 hides joins so trenches, ruins, and fields play as continuous geography.The Matrix lobby rewrites a space through action and spatial continuity. Use the porous building, not a copied tracking path."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Set transition around [Subject], the location transforming in camera, walls walking, one space becoming another. Name the starting architecture, the ending architecture, and that the camera does not hard-cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video: the set around [Subject] transforms into a new location without a hard cut. No morphing faces; the room is what changes."
+        },
+        {
+          "type": "quote",
+          "text": "The set around [Subject] transforms into a new location without a hard cut."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+set+around+[Subject]+transforms+into+a+new+location+without+a+hard+cut."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Set transition around [Subject], the location transforming in camera, walls walking, one space becoming another. Name the starting architecture, the ending architecture, and that the camera does not hard-cut.For video: the set around [Subject] transforms into a new location without a hard cut. No morphing faces; the room is what changes.Copy promptUse in Video GeneratorThe set around [Subject] transforms into a new location without a hard cut.The set around [Subject] transforms into a new location without a hard cut."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Morphing the actor, or a visible cut in a doorway. The tell: the person melts, or there is a pop at the threshold.",
+          "links": [
+            {
+              "text": "Morphing",
+              "url": "https://melies.co/cinematic-techniques/effects/morphing"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: keep the body continuous, let walls or set extension rewrite, hide or omit the splice, match lighting across the change."
+        }
+      ],
+      "links": [
+        {
+          "text": "Morphing",
+          "url": "https://melies.co/cinematic-techniques/effects/morphing"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Morphing the actor, or a visible cut in a doorway. The tell: the person melts, or there is a pop at the threshold.The fix: keep the body continuous, let walls or set extension rewrite, hide or omit the splice, match lighting across the change."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Set Transition in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A set transition changes location in camera as architecture rewrites around the subject. Both sides of the join are places on one continuous path, not two shots with a hard cut."
+        },
+        {
+          "type": "heading",
+          "text": "Set Transition vs Invisible Cut",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An invisible cut hides an edit; the set might not change. A set transition makes geography the edit: walls walk, rooms become other rooms. One conceals a splice; the other rewrites space."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Set Transition?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when spaces should feel porous and the camera should not admit a cut. Do not use it as a flex when a straight scene change would be clearer."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Set Transition for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name both locations and a continuous camera. Example: Set transition around [Subject], walls walking, one space becoming another. Video: the set transforms without a hard cut. Keep the body stable."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Set Transition in film?A set transition changes location in camera as architecture rewrites around the subject. Both sides of the join are places on one continuous path, not two shots with a hard cut.Set Transition vs Invisible CutAn invisible cut hides an edit; the set might not change. A set transition makes geography the edit: walls walk, rooms become other rooms. One conceals a splice; the other rewrites space.When should I use Set Transition?Use it when spaces should feel porous and the camera should not admit a cut. Do not use it as a flex when a straight scene change would be clearer.How do I prompt Set Transition for AI image or video?Name both locations and a continuous camera. Example: Set transition around [Subject], walls walking, one space becoming another. Video: the set transforms without a hard cut. Keep the body stable."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Set transition around [Subject], the location transforming in camera, walls walking, one space becoming another. Name the starting architecture, the ending architecture, and that the camera does not hard-cut.",
+      "For video: the set around [Subject] transforms into a new location without a hard cut. No morphing faces; the room is what changes."
+    ],
+    "example": "The set around [Subject] transforms into a new location without a hard cut."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/38d42ddfa56e83318d71d8aecb642538.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/07-set-transition-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dc48ad33dbf1c785614c7826f783ae39.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/set-transition-07-set-transition-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5c9d432b8fed7f5bff209509e66e5b49.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/set-transition.jpg",
+      "alt": "Set Transition frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/fbf0bd56427103cd8c1bddba257f87f6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pass-through-pass-through-mini.webp",
+      "alt": "Pass Through"
+    },
+    {
+      "kind": "video",
+      "path": "media/53e07ed3dfae32434db4e68d811d8750.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pass-through-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3e0961caa225ee0edff07ce811460ef7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/morphing-morphing-mini.webp",
+      "alt": "Morphing"
+    },
+    {
+      "kind": "video",
+      "path": "media/0f4148849d67d9c9aa6bfff44212963f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/morphing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0225411072381fb27c5723d5733b0a22.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/set-transition/hero.jpg",
+      "alt": "Set Transition",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "477edc03eecbae6899f4364fd44834ff0e3e0ed261d367d97c3f1b3876ae3c09"
+}

@@ -1,0 +1,404 @@
+{
+  "id": "camera-movement/slider",
+  "slug": "slider",
+  "title": "Slider Shot",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/slider",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slider-slider-mini.webp",
+  "detail": "details/camera-movement/slider.json",
+  "aliases": [],
+  "description": "A slider shot is a short, precise linear move on a compact rail, often 60 to 120 centimeters. It adds parallax to an interview, product, or lock-off without a full dolly track.",
+  "thumbnail": "media/f1dee0264d5fcfe33b4f6b855f7e4826.webp",
+  "video": "media/8fb32413e94f777afa7c393d7a719984.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/slider-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A full dolly is too much. A few centimeters of travel can prove the room has depth: a microphone in the foreground slides against a face, a bottle turns against a window."
+        },
+        {
+          "type": "paragraph",
+          "text": "The move is small on purpose. It is the wrong tool for a city block, and the wrong tool if you needed a curve around a product."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the rail is meters long, you are dollying. If the path is a circle, you are orbiting."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A full dolly is too much. A few centimeters of travel can prove the room has depth: a microphone in the foreground slides against a face, a bottle turns against a window.The move is small on purpose. It is the wrong tool for a city block, and the wrong tool if you needed a curve around a product.If the rail is meters long, you are dollying. If the path is a circle, you are orbiting."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Clamp a short rail, level it, choose a constant speed. Keep the move lateral or a tiny push; do not hide a zoom inside it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a short slider move, 60 to 120 centimeters of lateral travel, product or interview parallax, precise and small."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Clamp a short rail, level it, choose a constant speed. Keep the move lateral or a tiny push; do not hide a zoom inside it.Prompt a short slider move, 60 to 120 centimeters of lateral travel, product or interview parallax, precise and small."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a full dolly is too much and a lock-off needs a little parallax. Concrete beat: an interview single with a lamp sliding in the foreground over 6 seconds."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not slider a chase."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a full dolly is too much and a lock-off needs a little parallax. Concrete beat: an interview single with a lamp sliding in the foreground over 6 seconds.Do not slider a chase."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Dolly Left is the same linear idea at room or street scale. An 360-Degree Orbit is curved and long.",
+          "links": [
+            {
+              "text": "Dolly Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+            },
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Push In may use a slider as the rail, but push in is the Z-axis thought; slider names the short linear tool. Slider is compact travel, not a path through architecture.",
+          "links": [
+            {
+              "text": "Push In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly LeftSurvey a space or stay with a walker without turning the camera.",
+          "displayText": "Dolly Left\nSurvey a space or stay with a walker without turning the camera.",
+          "links": [
+            {
+              "text": "Dolly LeftSurvey a space or stay with a walker without turning the camera.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "displayText": "360-Degree Orbit\nTime collapses around one person: kiss, threat, or product hero.",
+          "links": [
+            {
+              "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+        },
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Push In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+        },
+        {
+          "text": "Dolly LeftSurvey a space or stay with a walker without turning the camera.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+        },
+        {
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e2e77ae4ea56a45d3c76c9e60a24b34d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-left-05-dolly-left-v2-mini.webp",
+          "alt": "Dolly Left"
+        },
+        {
+          "kind": "video",
+          "path": "media/f8eff4182735e9f303660c4a932ac13b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/05-dolly-left-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+          "alt": "360-Degree Orbit"
+        },
+        {
+          "kind": "video",
+          "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Dolly Left is the same linear idea at room or street scale. An 360-Degree Orbit is curved and long.A Push In may use a slider as the rail, but push in is the Z-axis thought; slider names the short linear tool. Slider is compact travel, not a path through architecture.Dolly LeftSurvey a space or stay with a walker without turning the camera.360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The grammar is commercial and interview more than a single famous scene: tabletop product films, documentary talking heads, small table moves inside features. Use the 60-to-120-centimeter parallax, not a particular ad to clone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The grammar is commercial and interview more than a single famous scene: tabletop product films, documentary talking heads, small table moves inside features. Use the 60-to-120-centimeter parallax, not a particular ad to clone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Short slider move across [Subject], 60 to 120 centimeters of lateral travel, product or interview parallax, precise and small. For motion: a short slider move laterally across [Subject], subtle parallax, 6 seconds."
+        },
+        {
+          "type": "quote",
+          "text": "A short slider move laterally across [Subject], subtle parallax, 6 seconds."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+short+slider+move+laterally+across+[Subject],+subtle+parallax,+6+seconds."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Short slider move across [Subject], 60 to 120 centimeters of lateral travel, product or interview parallax, precise and small. For motion: a short slider move laterally across [Subject], subtle parallax, 6 seconds.Copy promptUse in Video GeneratorA short slider move laterally across [Subject], subtle parallax, 6 seconds.A short slider move laterally across [Subject], subtle parallax, 6 seconds."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a full Dolly Left or a tiny 360-Degree Orbit. The tell is meters of travel, or a curve.",
+          "links": [
+            {
+              "text": "Dolly Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+            },
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: name the short rail, linear path, subtle parallax, end still in the same room."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+        },
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a full Dolly Left or a tiny 360-Degree Orbit. The tell is meters of travel, or a curve.The fix: name the short rail, linear path, subtle parallax, end still in the same room."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Slider Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a short linear camera move on a compact rail, typically under about 120 centimeters, used to add small parallax to a still setup."
+        },
+        {
+          "type": "heading",
+          "text": "Slider Shot vs Dolly Left",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly left can travel a room or a street. A slider is the compact rail version: interview, product, a lamp sliding against a face."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Slider Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a lock-off feels dead and a full track would be too much. Do not use it as a substitute for covering a walk."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Slider Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write short slider, 60 to 120 centimeters, lateral, subtle parallax, 6 seconds. Ban a long dolly and ban a circular orbit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Slider Shot in film?It is a short linear camera move on a compact rail, typically under about 120 centimeters, used to add small parallax to a still setup.Slider Shot vs Dolly LeftDolly left can travel a room or a street. A slider is the compact rail version: interview, product, a lamp sliding against a face.When should I use Slider Shot?When a lock-off feels dead and a full track would be too much. Do not use it as a substitute for covering a walk.How do I prompt Slider Shot for AI image or video?Write short slider, 60 to 120 centimeters, lateral, subtle parallax, 6 seconds. Ban a long dolly and ban a circular orbit."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Short slider move across [Subject], 60 to 120 centimeters of lateral travel, product or interview parallax, precise and small. For motion: a short slider move laterally across [Subject], subtle parallax, 6 seconds."
+    ],
+    "example": "A short slider move laterally across [Subject], subtle parallax, 6 seconds."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/8fb32413e94f777afa7c393d7a719984.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/slider-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f1dee0264d5fcfe33b4f6b855f7e4826.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slider-slider-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/691a016f983b82a372f592aee55154f0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/slider.jpg",
+      "alt": "Slider Shot frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/e2e77ae4ea56a45d3c76c9e60a24b34d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-left-05-dolly-left-v2-mini.webp",
+      "alt": "Dolly Left"
+    },
+    {
+      "kind": "video",
+      "path": "media/f8eff4182735e9f303660c4a932ac13b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/05-dolly-left-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+      "alt": "360-Degree Orbit"
+    },
+    {
+      "kind": "video",
+      "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e6f4b33835c1b3b481e2d93f915b60ec.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slider/hero.jpg",
+      "alt": "Slider Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "c86bc3975455f3562480e811008b7ed0b3c5f0e48fa057e52d4857915feb93f6"
+}

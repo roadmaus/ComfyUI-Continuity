@@ -1,0 +1,404 @@
+{
+  "id": "camera-movement/hyperlapse",
+  "slug": "hyperlapse",
+  "title": "Hyperlapse",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/hyperlapse",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hyperlapse-hyperlapse-mini.webp",
+  "detail": "details/camera-movement/hyperlapse.json",
+  "aliases": [],
+  "description": "A hyperlapse combines time-lapse with significant camera movement through space. Time is compressed while the camera advances in steps that assemble into a glide, so crowds and weather race along a real path.",
+  "thumbnail": "media/d0eb328bcb7de97a20c1d02beeb96044.webp",
+  "video": "media/192f9c64ef09ea5e3e6fb2397c00c9b0.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/hyperlapse-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Duration becomes velocity. A walk that would take an afternoon becomes a few seconds, but unlike a locked time-lapse the station point travels: streets are traversed, not merely watched from one roof."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for real-time tracking, and the wrong tool for a tripod time-lapse of clouds over a still city. If the camera did not move between frames, it is not a hyperlapse."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Duration becomes velocity. A walk that would take an afternoon becomes a few seconds, but unlike a locked time-lapse the station point travels: streets are traversed, not merely watched from one roof.It is the wrong tool for real-time tracking, and the wrong tool for a tripod time-lapse of clouds over a still city. If the camera did not move between frames, it is not a hyperlapse."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shoot discrete frames along a surveyed path (or simulate that in 3D), then play them at time-lapse rates. Align each frame so the move reads as a glide."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crowds, traffic, and shadows should race. Prompt a hyperlapse toward or around the subject, time compressed, crowds and weather racing, camera advancing in steps that become a glide."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Shoot discrete frames along a surveyed path (or simulate that in 3D), then play them at time-lapse rates. Align each frame so the move reads as a glide.Crowds, traffic, and shadows should race. Prompt a hyperlapse toward or around the subject, time compressed, crowds and weather racing, camera advancing in steps that become a glide."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to show duration as velocity along a path. Concrete beat: approaching a monument while hours of foot traffic smear."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not hyperlapse a 6-second real-time conversation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to show duration as velocity along a path. Concrete beat: approaching a monument while hours of foot traffic smear.Do not hyperlapse a 6-second real-time conversation."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Time-Lapse is often a locked or slowly panned interval. Tracking Shot is real-time travel.",
+          "links": [
+            {
+              "text": "Time-Lapse",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            },
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hyperlapse is both: interval shooting plus significant displacement. A Slider Shot interval on 100 centimeters is a tiny cousin, not a city traverse.",
+          "links": [
+            {
+              "text": "Slider Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slider"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+          "displayText": "Time-Lapse\nShow weather, construction, or a night becoming morning.",
+          "links": [
+            {
+              "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "displayText": "Tracking Shot\nAccompany a walker. The shot is a journey, not a picture.",
+          "links": [
+            {
+              "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Time-Lapse",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Slider Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slider"
+        },
+        {
+          "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/59f00cc372fa5e18d3dc936d0959e111.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/time-lapse-084-time-lapse-and-accelerated-systems-mini.webp",
+          "alt": "Time-Lapse"
+        },
+        {
+          "kind": "video",
+          "path": "media/98976fbe19bbaefa951c514246128a5b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/084-time-lapse-and-accelerated-systems-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+          "alt": "Tracking Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Time-Lapse is often a locked or slowly panned interval. Tracking Shot is real-time travel.Hyperlapse is both: interval shooting plus significant displacement. A Slider Shot interval on 100 centimeters is a tiny cousin, not a city traverse.Time-LapseShow weather, construction, or a night becoming morning.Tracking ShotAccompany a walker. The shot is a journey, not a picture.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Koyaanisqatsi compresses traffic and weather into velocity, sometimes from moving viewpoints. Baraka and related city-interval work sit in the same family."
+        },
+        {
+          "type": "paragraph",
+          "text": "Music-video hyperlapse made the stepped camera path a popular grammar. Use time plus travel, not a particular skyline."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Koyaanisqatsi compresses traffic and weather into velocity, sometimes from moving viewpoints. Baraka and related city-interval work sit in the same family.Music-video hyperlapse made the stepped camera path a popular grammar. Use time plus travel, not a particular skyline."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hyperlapse toward or around [Subject], time compressed, crowds and weather racing, camera advancing in steps that become a glide. For motion: hyperlapse: the camera advances through the space around [Subject] while time is compressed, clouds and traffic racing."
+        },
+        {
+          "type": "quote",
+          "text": "Hyperlapse: the camera advances through the space around [Subject] while time is compressed, clouds and traffic racing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Hyperlapse:+the+camera+advances+through+the+space+around+[Subject]+while+time+is+compressed,+clouds+and+traffic+racing."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Hyperlapse toward or around [Subject], time compressed, crowds and weather racing, camera advancing in steps that become a glide. For motion: hyperlapse: the camera advances through the space around [Subject] while time is compressed, clouds and traffic racing.Copy promptUse in Video GeneratorHyperlapse: the camera advances through the space around [Subject] while time is compressed, clouds and traffic racing.Hyperlapse: the camera advances through the space around [Subject] while time is compressed, clouds and traffic racing."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a locked Time-Lapse or a real-time Tracking Shot shot with a speed ramp. The tell is a still station point, or real-time gait.",
+          "links": [
+            {
+              "text": "Time-Lapse",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            },
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: camera position changes between frames, time compressed, path readable as a glide."
+        }
+      ],
+      "links": [
+        {
+          "text": "Time-Lapse",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a locked Time-Lapse or a real-time Tracking Shot shot with a speed ramp. The tell is a still station point, or real-time gait.The fix: camera position changes between frames, time compressed, path readable as a glide."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Hyperlapse in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is time-lapse shot while the camera moves a significant distance, so both time and viewpoint are compressed into one glide."
+        },
+        {
+          "type": "heading",
+          "text": "Hyperlapse vs Time-Lapse",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A classic time-lapse often sits on a locked tripod. Hyperlapse relocates the camera between frames, traversing space as hours pass."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Hyperlapse?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a long approach or a city's duration should play as speed. Do not use it for real-time dialogue."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Hyperlapse for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write hyperlapse, camera advancing through space, time compressed, crowds and clouds racing. Ban a locked tripod time-lapse and ban real-time tracking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Hyperlapse in film?It is time-lapse shot while the camera moves a significant distance, so both time and viewpoint are compressed into one glide.Hyperlapse vs Time-LapseA classic time-lapse often sits on a locked tripod. Hyperlapse relocates the camera between frames, traversing space as hours pass.When should I use Hyperlapse?When a long approach or a city's duration should play as speed. Do not use it for real-time dialogue.How do I prompt Hyperlapse for AI image or video?Write hyperlapse, camera advancing through space, time compressed, crowds and clouds racing. Ban a locked tripod time-lapse and ban real-time tracking."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Hyperlapse toward or around [Subject], time compressed, crowds and weather racing, camera advancing in steps that become a glide. For motion: hyperlapse: the camera advances through the space around [Subject] while time is compressed, clouds and traffic racing."
+    ],
+    "example": "Hyperlapse: the camera advances through the space around [Subject] while time is compressed, clouds and traffic racing."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/192f9c64ef09ea5e3e6fb2397c00c9b0.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/hyperlapse-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d0eb328bcb7de97a20c1d02beeb96044.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hyperlapse-hyperlapse-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/364d903c9e5890f2cd15ae870cfe3a04.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/hyperlapse.jpg",
+      "alt": "Hyperlapse frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/59f00cc372fa5e18d3dc936d0959e111.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/time-lapse-084-time-lapse-and-accelerated-systems-mini.webp",
+      "alt": "Time-Lapse"
+    },
+    {
+      "kind": "video",
+      "path": "media/98976fbe19bbaefa951c514246128a5b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/084-time-lapse-and-accelerated-systems-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+      "alt": "Tracking Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/51fdf1c273ea158a605702eabf2f149d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/hyperlapse/hero.jpg",
+      "alt": "Hyperlapse",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "5e140cd6ee5b53f156c5a681975f1d96aad1fbb95c5934320927c9e1ae5a1f37"
+}

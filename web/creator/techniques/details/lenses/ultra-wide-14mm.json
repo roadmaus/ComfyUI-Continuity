@@ -1,0 +1,462 @@
+{
+  "id": "lenses/ultra-wide-14mm",
+  "slug": "ultra-wide-14mm",
+  "title": "14mm Ultra-Wide",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+  "detail": "details/lenses/ultra-wide-14mm.json",
+  "aliases": [
+    "Intimate wide lens",
+    "Exaggerated near perspective"
+  ],
+  "description": "A 14mm ultra-wide in 14mm cinematography is a very short focal length that, from a close stand, takes in a huge field and exaggerates near-to-far size. The close camera position, not the millimeter stamp alone, is what balloons a foreground face or object against a receding room.",
+  "thumbnail": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stand an arm's length from a person and a 14mm still holds the ceiling, the corridor, and the street behind them. Near masses swell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Far walls drop away. The figure is inside a space that will not stay polite, which is why the same glass can feel intimate and confrontational at once."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a flattering head-and-shoulders. Edge stretch cartoons ears and cheeks unless the face stays near the optical axis."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you only wanted a body plus a readable room without heroic geometry, step back and use 24mm Wide. If the walls must bow, that is Fisheye, not a rectilinear 14mm.",
+          "links": [
+            {
+              "text": "24mm Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            },
+            {
+              "text": "Fisheye",
+              "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "24mm Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        },
+        {
+          "text": "Fisheye",
+          "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Stand an arm's length from a person and a 14mm still holds the ceiling, the corridor, and the street behind them. Near masses swell.Far walls drop away. The figure is inside a space that will not stay polite, which is why the same glass can feel intimate and confrontational at once.It is the wrong tool for a flattering head-and-shoulders. Edge stretch cartoons ears and cheeks unless the face stays near the optical axis.If you only wanted a body plus a readable room without heroic geometry, step back and use 24mm Wide. If the walls must bow, that is Fisheye, not a rectilinear 14mm."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stand first, then choose glass. Park the nodal point close enough that a hand, a table, or a face owns scale, then let 14mm include the rest."
+        },
+        {
+          "type": "paragraph",
+          "text": "Rectilinear 14mm keeps straight lines straighter than a fisheye; remaining stretch is perspective from that close viewpoint. Keep faces off the extreme frame edges unless further stretching is intended."
+        },
+        {
+          "type": "paragraph",
+          "text": "Architecture will fan from the lens axis. Prompt: 14mm ultra-wide on [Subject], exaggerated perspective, looming foreground, stretched architecture, slight heroic distortion."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Stand first, then choose glass. Park the nodal point close enough that a hand, a table, or a face owns scale, then let 14mm include the rest.Rectilinear 14mm keeps straight lines straighter than a fisheye; remaining stretch is perspective from that close viewpoint. Keep faces off the extreme frame edges unless further stretching is intended.Architecture will fan from the lens axis. Prompt: 14mm ultra-wide on [Subject], exaggerated perspective, looming foreground, stretched architecture, slight heroic distortion."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the audience must sit inside a space that is too big or too close: a face in a hotel lobby that still owns the ceiling. Do not use 14mm as a default portrait lens, or as a sticker that means wide."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the audience must sit inside a space that is too big or too close: a face in a hotel lobby that still owns the ceiling. Do not use 14mm as a default portrait lens, or as a sticker that means wide."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "24mm Wide is the next stop: person plus place without this much ballooning. Fisheye bends those straight lines on purpose.",
+          "links": [
+            {
+              "text": "24mm Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            },
+            {
+              "text": "Fisheye",
+              "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "50mm Normal from the same close stand still crops the room out; 14mm is inclusion plus exaggeration. Forced Perspective is a staging trick along the axis; 14mm is an optical field from a close stand.",
+          "links": [
+            {
+              "text": "50mm Normal",
+              "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+            },
+            {
+              "text": "Forced Perspective",
+              "url": "https://melies.co/cinematic-techniques/effects/forced-perspective"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "24mm WidePerson plus place, neither winning.",
+          "displayText": "24mm Wide\nPerson plus place, neither winning.",
+          "links": [
+            {
+              "text": "24mm WidePerson plus place, neither winning.",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "FisheyeThe mind is warped, or the space is a dome.",
+          "displayText": "Fisheye\nThe mind is warped, or the space is a dome.",
+          "links": [
+            {
+              "text": "FisheyeThe mind is warped, or the space is a dome.",
+              "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "35mm Moderate WideMost narrative coverage. Human but not telephoto.",
+          "displayText": "35mm Moderate Wide\nMost narrative coverage. Human but not telephoto.",
+          "links": [
+            {
+              "text": "35mm Moderate WideMost narrative coverage. Human but not telephoto.",
+              "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "24mm Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        },
+        {
+          "text": "Fisheye",
+          "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+        },
+        {
+          "text": "50mm Normal",
+          "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+        },
+        {
+          "text": "Forced Perspective",
+          "url": "https://melies.co/cinematic-techniques/effects/forced-perspective"
+        },
+        {
+          "text": "24mm WidePerson plus place, neither winning.",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        },
+        {
+          "text": "FisheyeThe mind is warped, or the space is a dome.",
+          "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+        },
+        {
+          "text": "35mm Moderate WideMost narrative coverage. Human but not telephoto.",
+          "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/628b32ea127fbd2eb64660fbc452f455.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/24mm-wide-055-close-wide-angle-distortion-mini.webp",
+          "alt": "24mm Wide"
+        },
+        {
+          "kind": "video",
+          "path": "media/7426a29d0521c2e8cebe331ee900e38c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/055-close-wide-angle-distortion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/b4071aa0661c71f8a9389dce80bf833c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fisheye-059-fisheye-space-distortion-mini.webp",
+          "alt": "Fisheye"
+        },
+        {
+          "kind": "video",
+          "path": "media/3c8bcf6380e4b2040179ecc443e9bdf3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/059-fisheye-space-distortion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/192baaa553dac5fb337404d41c596029.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/35mm-moderate.webp",
+          "alt": "35mm Moderate Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots 24mm Wide is the next stop: person plus place without this much ballooning. Fisheye bends those straight lines on purpose.50mm Normal from the same close stand still crops the room out; 14mm is inclusion plus exaggeration. Forced Perspective is a staging trick along the axis; 14mm is an optical field from a close stand.24mm WidePerson plus place, neither winning.FisheyeThe mind is warped, or the space is a dome.35mm Moderate WideMost narrative coverage. Human but not telephoto."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Revenant often works this close in weather so bodies and trees share one aggressive space. Birdman keeps wide glass in tight interiors so rooms never let the actors go."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fallen Angels films faces against expanded urban night. Fear and Loathing in Las Vegas uses close wide proximity as subjective unease."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the stand and the field, not a still."
+        },
+        {
+          "type": "list-item",
+          "text": "Fallen Angels 1995Faces and bodies are filmed very close against strongly expanded urban space.",
+          "displayText": "Fallen Angels 1995\nFaces and bodies are filmed very close against strongly expanded urban space."
+        },
+        {
+          "type": "list-item",
+          "text": "Fear and Loathing in Las Vegas 1998Distorted close proximity intensifies subjective unease.",
+          "displayText": "Fear and Loathing in Las Vegas 1998\nDistorted close proximity intensifies subjective unease."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1392bddbf45f261f879187016770abba.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/ultra-wide-14mm/famous/00-fallen-angels-1995.jpg",
+          "alt": "Fallen Angels 1995"
+        },
+        {
+          "kind": "image",
+          "path": "media/507997cf50fac0c0fd44bec0576e5b38.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/ultra-wide-14mm/famous/01-fear-and-loathing-in-las-vegas-1998.jpg",
+          "alt": "Fear and Loathing in Las Vegas 1998"
+        }
+      ],
+      "sourceText": "In film The Revenant often works this close in weather so bodies and trees share one aggressive space. Birdman keeps wide glass in tight interiors so rooms never let the actors go.Fallen Angels films faces against expanded urban night. Fear and Loathing in Las Vegas uses close wide proximity as subjective unease.Borrow the stand and the field, not a still.Fallen Angels 1995Faces and bodies are filmed very close against strongly expanded urban space.Fear and Loathing in Las Vegas 1998Distorted close proximity intensifies subjective unease."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the stand and the stretch. 14mm ultra-wide on [Subject], exaggerated perspective, looming foreground, stretched architecture, slight heroic distortion."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say how close the camera is (arm's length, over the table, in the doorway) and keep the face near center unless edge stretch is the point. Do not write distorted as a sticker, and do not ask for oval bokeh."
+        },
+        {
+          "type": "quote",
+          "text": "Very close wide-angle portrait of a tired night cook leaning toward the camera in a tiny kitchen. His near hand appears larger, the room stretches strongly behind him, walls remain rigid. Expressive perspective, natural facial anatomy, no fisheye circle."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Very+close+wide-angle+portrait+of+a+tired+night+cook+leaning+toward+the+camera+in+a+tiny+kitchen.+His+near+hand+appears+larger,+the+room+stretches+strongly+behind+him,+walls+remain+rigid.+Expressive+perspective,+natural+facial+anatomy,+no+fisheye+circle."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the stand and the stretch. 14mm ultra-wide on [Subject], exaggerated perspective, looming foreground, stretched architecture, slight heroic distortion.Say how close the camera is (arm's length, over the table, in the doorway) and keep the face near center unless edge stretch is the point. Do not write distorted as a sticker, and do not ask for oval bokeh.Copy promptUse in Video GeneratorVery close wide-angle portrait of a tired night cook leaning toward the camera in a tiny kitchen. His near hand appears larger, the room stretches strongly behind him, walls remain rigid. Expressive perspective, natural facial anatomy, no fisheye circle.Very close wide-angle portrait of a tired night cook leaning toward the camera in a tiny kitchen. His near hand appears larger, the room stretches strongly behind him, walls remain rigid. Expressive perspective, natural facial anatomy, no fisheye circle."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Fisheye (bowed walls) or a distant 24mm Wide labeled 14mm. The tell is either curvilinear bowing or a calm environmental portrait with no looming foreground.",
+          "links": [
+            {
+              "text": "Fisheye",
+              "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+            },
+            {
+              "text": "24mm Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: move close, keep lines mostly straight, let the near object own scale. Wide angle does not automatically distort a face from every distance; viewpoint is the dominant variable."
+        }
+      ],
+      "links": [
+        {
+          "text": "Fisheye",
+          "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+        },
+        {
+          "text": "24mm Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Fisheye (bowed walls) or a distant 24mm Wide labeled 14mm. The tell is either curvilinear bowing or a calm environmental portrait with no looming foreground.Fix: move close, keep lines mostly straight, let the near object own scale. Wide angle does not automatically distort a face from every distance; viewpoint is the dominant variable."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is 14mm ultra-wide in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a very short rectilinear focal length used from a close stand so the field is huge and near objects dwarf far ones. The close camera position, not the 14mm label alone, creates that exaggeration."
+        },
+        {
+          "type": "heading",
+          "text": "14mm Ultra-Wide vs 24mm Wide",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "14mm from close makes foregrounds loom and rooms recede hard. 24mm still holds person plus place, but the stretch is moderate and faces survive better away from center. If the beat is reportage rather than intrusion, use 24mm."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use 14mm ultra-wide?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a face or object must stay close while the surrounding world remains intrusive. Skip it for ordinary portraits, and skip it if you actually want fisheye bowing."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt 14mm ultra-wide for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: 14mm ultra-wide on [Subject], exaggerated perspective, looming foreground, stretched architecture, slight heroic distortion. Name the close stand. Forbid barrel distortion unless you want fisheye."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is 14mm ultra-wide in film?It is a very short rectilinear focal length used from a close stand so the field is huge and near objects dwarf far ones. The close camera position, not the 14mm label alone, creates that exaggeration.14mm Ultra-Wide vs 24mm Wide14mm from close makes foregrounds loom and rooms recede hard. 24mm still holds person plus place, but the stretch is moderate and faces survive better away from center. If the beat is reportage rather than intrusion, use 24mm.When should I use 14mm ultra-wide?Use it when a face or object must stay close while the surrounding world remains intrusive. Skip it for ordinary portraits, and skip it if you actually want fisheye bowing.How do I prompt 14mm ultra-wide for AI image or video?Write: 14mm ultra-wide on [Subject], exaggerated perspective, looming foreground, stretched architecture, slight heroic distortion. Name the close stand. Forbid barrel distortion unless you want fisheye."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the stand and the stretch. 14mm ultra-wide on [Subject], exaggerated perspective, looming foreground, stretched architecture, slight heroic distortion.",
+      "Say how close the camera is (arm's length, over the table, in the doorway) and keep the face near center unless edge stretch is the point. Do not write distorted as a sticker, and do not ask for oval bokeh."
+    ],
+    "example": "Very close wide-angle portrait of a tired night cook leaning toward the camera in a tiny kitchen. His near hand appears larger, the room stretches strongly behind him, walls remain rigid. Expressive perspective, natural facial anatomy, no fisheye circle."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide example"
+    },
+    {
+      "kind": "image",
+      "path": "media/628b32ea127fbd2eb64660fbc452f455.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/24mm-wide-055-close-wide-angle-distortion-mini.webp",
+      "alt": "24mm Wide"
+    },
+    {
+      "kind": "video",
+      "path": "media/7426a29d0521c2e8cebe331ee900e38c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/055-close-wide-angle-distortion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b4071aa0661c71f8a9389dce80bf833c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fisheye-059-fisheye-space-distortion-mini.webp",
+      "alt": "Fisheye"
+    },
+    {
+      "kind": "video",
+      "path": "media/3c8bcf6380e4b2040179ecc443e9bdf3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/059-fisheye-space-distortion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/192baaa553dac5fb337404d41c596029.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/35mm-moderate.webp",
+      "alt": "35mm Moderate Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/1392bddbf45f261f879187016770abba.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/ultra-wide-14mm/famous/00-fallen-angels-1995.jpg",
+      "alt": "Fallen Angels 1995"
+    },
+    {
+      "kind": "image",
+      "path": "media/507997cf50fac0c0fd44bec0576e5b38.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/ultra-wide-14mm/famous/01-fear-and-loathing-in-las-vegas-1998.jpg",
+      "alt": "Fear and Loathing in Las Vegas 1998"
+    },
+    {
+      "kind": "image",
+      "path": "media/f1caeeb1e4721144d90f54c6848a2cd8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/ultra-wide-14mm/hero.jpg",
+      "alt": "14mm Ultra-Wide",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "eec08ec0dbf96f1b327de6a2daf793582b112d9a80bda6cd6a4979d4ddea9e8a"
+}

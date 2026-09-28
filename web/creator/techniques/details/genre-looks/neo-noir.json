@@ -1,0 +1,443 @@
+{
+  "id": "genre-looks/neo-noir",
+  "slug": "neo-noir",
+  "title": "Neo-Noir",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/neo-noir",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neo-noir.webp",
+  "detail": "details/genre-looks/neo-noir.json",
+  "aliases": [],
+  "description": "Neo-noir cinematography keeps noir's hard keys and isolated blocking but replaces silver night with color: sodium vapor, neon practicals, and tungsten that stain rain and skin. The camera still hunts faces in shadow, yet the palette is contemporary, often cyan signage against warm flesh, not black-and-white contrast alone.",
+  "thumbnail": "media/ea5ae8a2e30baa75c39a22cd02fb3d7b.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The city is still a trap, but the trap has a hue. Rain carries magenta and cyan."
+        },
+        {
+          "type": "paragraph",
+          "text": "A sodium streetlamp turns a raincoat mustard. The moral geometry (half a face, a wet street, a figure stranded in a pool of light) survives."
+        },
+        {
+          "type": "paragraph",
+          "text": "Only the stock is color. It is the wrong tool when you need period silver, future screens as the only keys, or candy primaries as threat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Classic Film Noir has no neon to name. Tech Noir puts crime inside a digital city.",
+          "links": [
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            },
+            {
+              "text": "Tech Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vaporwave uses pink-cyan without guilt or investigation.",
+          "links": [
+            {
+              "text": "Vaporwave",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Tech Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+        },
+        {
+          "text": "Vaporwave",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The city is still a trap, but the trap has a hue. Rain carries magenta and cyan.A sodium streetlamp turns a raincoat mustard. The moral geometry (half a face, a wet street, a figure stranded in a pool of light) survives.Only the stock is color. It is the wrong tool when you need period silver, future screens as the only keys, or candy primaries as threat.Classic Film Noir has no neon to name. Tech Noir puts crime inside a digital city.Vaporwave uses pink-cyan without guilt or investigation."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep a hard key 45 to 90 degrees off, but let practical color do the fill: neon in rain, sodium overhead, a tungsten interior leaking onto wet asphalt. Contrast stays high."
+        },
+        {
+          "type": "paragraph",
+          "text": "Skin may go teal-shadow, orange-highlight, or stay mixed on purpose. Lens: 35mm or 40mm anamorphic, or spherical 35mm, often at night with rain as the volume."
+        },
+        {
+          "type": "paragraph",
+          "text": "Camera: locked wides, slow tracking, occasional push-in on a face. Prompt color where classic noir was silver, name the neon practicals, and keep the rain."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Keep a hard key 45 to 90 degrees off, but let practical color do the fill: neon in rain, sodium overhead, a tungsten interior leaking onto wet asphalt. Contrast stays high.Skin may go teal-shadow, orange-highlight, or stay mixed on purpose. Lens: 35mm or 40mm anamorphic, or spherical 35mm, often at night with rain as the volume.Camera: locked wides, slow tracking, occasional push-in on a face. Prompt color where classic noir was silver, name the neon practicals, and keep the rain."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a present-day or period-color crime scene needs melancholy and rain, not a 1940s silver print. Do not use it as a teal-and-orange grade on a scene with no hard key and no guilty blocking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a present-day or period-color crime scene needs melancholy and rain, not a 1940s silver print. Do not use it as a teal-and-orange grade on a scene with no hard key and no guilty blocking."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Neo-Noir is color noir: same isolation, new practicals. Film Noir is the silver original.",
+          "links": [
+            {
+              "text": "Neo-Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            },
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tech Noir adds science-fiction production design and screens as sources. Teal and Orange is a grade, not a genre look; you can grade a comedy teal-orange and still have no noir blocking.",
+          "links": [
+            {
+              "text": "Tech Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+            },
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Neon Practicals is the lamp. Neo-noir is the lamp plus the crime geometry.",
+          "links": [
+            {
+              "text": "Neon Practicals",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "displayText": "Neon Practicals\nThe city is the lighting department.",
+          "links": [
+            {
+              "text": "Neon PracticalsThe city is the lighting department.",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Neo-Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        },
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Tech Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Neon Practicals",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        },
+        {
+          "kind": "image",
+          "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+          "alt": "Neon Practicals"
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Neo-Noir is color noir: same isolation, new practicals. Film Noir is the silver original.Tech Noir adds science-fiction production design and screens as sources. Teal and Orange is a grade, not a genre look; you can grade a comedy teal-orange and still have no noir blocking.Neon Practicals is the lamp. Neo-noir is the lamp plus the crime geometry.Film NoirCrime, guilt, and streetlamps.Neon PracticalsThe city is the lighting department.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Chinatown (period color, hard sun and venetian interiors, investigation as a trap). Blade Runner (rain, smoke, neon as key, still a detective picture)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Drive (night exteriors, pink-cyan practicals, locked-off melancholy). Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Chinatown (period color, hard sun and venetian interiors, investigation as a trap). Blade Runner (rain, smoke, neon as key, still a detective picture).Drive (night exteriors, pink-cyan practicals, locked-off melancholy). Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Neo-noir look on [Subject], color where classic noir was silver, neon practicals, rain, contemporary crime blocking, hard key, unfilled far cheek. Name the hue of the signage and whether the camera is locked or tracking."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not write only teal and orange."
+        },
+        {
+          "type": "quote",
+          "text": "Neo-noir look on [Subject], color where classic noir was silver, neon practicals, rain, contemporary crime melancholy."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Neo-noir+look+on+[Subject],+color+where+classic+noir+was+silver,+neon+practicals,+rain,+contemporary+crime+melancholy."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Neo-noir look on [Subject], color where classic noir was silver, neon practicals, rain, contemporary crime blocking, hard key, unfilled far cheek. Name the hue of the signage and whether the camera is locked or tracking.Do not write only teal and orange.Copy promptUse in Image GeneratorNeo-noir look on [Subject], color where classic noir was silver, neon practicals, rain, contemporary crime melancholy.Neo-noir look on [Subject], color where classic noir was silver, neon practicals, rain, contemporary crime melancholy."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Film Noir (you asked for color and got a black-and-white fedora) or a Teal and Orange grade with no key. The tell is a filled, even night or a palette with no motivated practical.",
+          "links": [
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            },
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: add a named neon or sodium source, keep the hard ratio, and wet the ground."
+        }
+      ],
+      "links": [
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Film Noir (you asked for color and got a black-and-white fedora) or a Teal and Orange grade with no key. The tell is a filled, even night or a palette with no motivated practical.Fix: add a named neon or sodium source, keep the hard ratio, and wet the ground."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Neo-Noir in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Noir themes and blocking restaged after color: hard keys, rain, isolation, and crime, lit by sodium, neon, and tungsten instead of silver nitrate night."
+        },
+        {
+          "type": "heading",
+          "text": "Neo-Noir vs Film Noir",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Film noir withholds with black-and-white contrast and tungsten gobos. Neo-noir withholds with color practicals. Same guilty geometry, different stock. If the frame has no hue you can name, it is not neo-noir."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Neo-Noir?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a color crime scene needs rain, neon, and a face half in shadow. Skip it for 1940s silver, for future-corporate screens (Tech Noir), or for pastel mall nostalgia (Vaporwave).",
+          "links": [
+            {
+              "text": "Tech Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+            },
+            {
+              "text": "Vaporwave",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Neo-Noir for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Neo-noir look on [Subject], color where classic noir was silver, neon practicals, rain, hard key, unfilled cheek, contemporary crime blocking. Name cyan or magenta signage. Do not stop at a teal-orange slider."
+        }
+      ],
+      "links": [
+        {
+          "text": "Tech Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+        },
+        {
+          "text": "Vaporwave",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "Questions What is Neo-Noir in film?Noir themes and blocking restaged after color: hard keys, rain, isolation, and crime, lit by sodium, neon, and tungsten instead of silver nitrate night.Neo-Noir vs Film NoirFilm noir withholds with black-and-white contrast and tungsten gobos. Neo-noir withholds with color practicals. Same guilty geometry, different stock. If the frame has no hue you can name, it is not neo-noir.When should I use Neo-Noir?When a color crime scene needs rain, neon, and a face half in shadow. Skip it for 1940s silver, for future-corporate screens (Tech Noir), or for pastel mall nostalgia (Vaporwave).How do I prompt Neo-Noir for AI image or video?Write: Neo-noir look on [Subject], color where classic noir was silver, neon practicals, rain, hard key, unfilled cheek, contemporary crime blocking. Name cyan or magenta signage. Do not stop at a teal-orange slider."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Neo-noir look on [Subject], color where classic noir was silver, neon practicals, rain, contemporary crime blocking, hard key, unfilled far cheek. Name the hue of the signage and whether the camera is locked or tracking.",
+      "Do not write only teal and orange."
+    ],
+    "example": "Neo-noir look on [Subject], color where classic noir was silver, neon practicals, rain, contemporary crime melancholy."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/ea5ae8a2e30baa75c39a22cd02fb3d7b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neo-noir.webp",
+      "alt": "Neo-Noir example"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+      "alt": "Neon Practicals"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/53d557a08f7d712f0a0b8c157ef9745c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/neo-noir/hero.jpg",
+      "alt": "Neo-Noir",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "18d0f22441a0bf6bdb31ba78b0891f4dbb43bfe36d9d4e5a9695941feb06ecaf"
+}

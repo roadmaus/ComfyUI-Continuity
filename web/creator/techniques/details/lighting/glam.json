@@ -1,0 +1,416 @@
+{
+  "id": "lighting/glam",
+  "slug": "glam",
+  "title": "Glam",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/glam",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/glam.webp",
+  "detail": "details/lighting/glam.json",
+  "aliases": [],
+  "description": "Glam lighting, in glam lighting terms, is a large beauty key with catchlights in the eyes and a little diffusion on skin, built to sell the face. It is a package of size, frontal or near-frontal placement, and skin treatment, not a single nose-shadow pattern.",
+  "thumbnail": "media/d0c6118ba609a42d93a75e2dc10200d3.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fashion, stardom, a singer at a mirror: pores calm down, eyes live, the face is a product the camera can love. The key is large, often slightly high, and fill is generous enough that neither cheek dies."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for grit, illness, or a liar in a dark bar. Glam is not butterfly by default (butterfly is the Paramount nose shadow; glam can be loop or almost frontal).",
+          "links": [
+            {
+              "text": "butterfly",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not high-key unless the whole set is also bright. It is not generic soft light; a large side key can be soft and still un-glamorous.",
+          "links": [
+            {
+              "text": "high-key",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            },
+            {
+              "text": "soft light",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "butterfly",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        },
+        {
+          "text": "high-key",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "soft light",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Fashion, stardom, a singer at a mirror: pores calm down, eyes live, the face is a product the camera can love. The key is large, often slightly high, and fill is generous enough that neither cheek dies.It is the wrong tool for grit, illness, or a liar in a dark bar. Glam is not butterfly by default (butterfly is the Paramount nose shadow; glam can be loop or almost frontal).It is not high-key unless the whole set is also bright. It is not generic soft light; a large side key can be soft and still un-glamorous."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use a large source near camera, slightly above the lens, with optional bounce below so sockets do not hole. Hardness is soft."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is beauty-neutral or slightly warm (tungsten or daylight, not sick green). Add a weak hair edge if the set is dark."
+        },
+        {
+          "type": "paragraph",
+          "text": "Diffusion on the lens or source keeps speculars kind. Catchlights should sit in the irises as lamps, not grids projected on the face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Soft beauty key on [Subject], large source, catchlights inside the eyes, a little diffusion on skin. No projected squares or grids on the face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Use a large source near camera, slightly above the lens, with optional bounce below so sockets do not hole. Hardness is soft.Color is beauty-neutral or slightly warm (tungsten or daylight, not sick green). Add a weak hair edge if the set is dark.Diffusion on the lens or source keeps speculars kind. Catchlights should sit in the irises as lamps, not grids projected on the face.Prompt: Soft beauty key on [Subject], large source, catchlights inside the eyes, a little diffusion on skin. No projected squares or grids on the face."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to sell the face, a star close-up, a beauty still, a romantic hero the story wants us to want. Do not use it on a corpse, a boxing cut, or a documentary interview that should look found."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to sell the face, a star close-up, a beauty still, a romantic hero the story wants us to want. Do not use it on a corpse, a boxing cut, or a documentary interview that should look found."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Butterfly lighting is a specific high on-axis nose shadow often used inside glam. Soft light is only hardness.",
+          "links": [
+            {
+              "text": "Butterfly lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            },
+            {
+              "text": "Soft light",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "High-key lighting is frame contrast. Eye light is the catchlight subset.",
+          "links": [
+            {
+              "text": "High-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            },
+            {
+              "text": "Eye light",
+              "url": "https://melies.co/cinematic-techniques/lighting/eye-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Three-point lighting can be glamorous if the key is large and frontal enough, but three-point includes a back that glam may skip. Naturalistic ambient hides this package on purpose.",
+          "links": [
+            {
+              "text": "Three-point lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            },
+            {
+              "text": "Naturalistic ambient",
+              "url": "https://melies.co/cinematic-techniques/lighting/naturalistic-ambient"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Butterfly LightingBeauty lighting with structure.",
+          "displayText": "Butterfly Lighting\nBeauty lighting with structure.",
+          "links": [
+            {
+              "text": "Butterfly LightingBeauty lighting with structure.",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Soft LightBeauty, memory, or kindness.",
+          "displayText": "Soft Light\nBeauty, memory, or kindness.",
+          "links": [
+            {
+              "text": "Soft LightBeauty, memory, or kindness.",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Butterfly lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        },
+        {
+          "text": "Soft light",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "High-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Eye light",
+          "url": "https://melies.co/cinematic-techniques/lighting/eye-light"
+        },
+        {
+          "text": "Three-point lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        },
+        {
+          "text": "Naturalistic ambient",
+          "url": "https://melies.co/cinematic-techniques/lighting/naturalistic-ambient"
+        },
+        {
+          "text": "Butterfly LightingBeauty lighting with structure.",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        },
+        {
+          "text": "Soft LightBeauty, memory, or kindness.",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a0bc77407f831c1eb1760bbae139236c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/butterfly-lighting.webp",
+          "alt": "Butterfly Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+          "alt": "Soft Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Butterfly lighting is a specific high on-axis nose shadow often used inside glam. Soft light is only hardness.High-key lighting is frame contrast. Eye light is the catchlight subset.Three-point lighting can be glamorous if the key is large and frontal enough, but three-point includes a back that glam may skip. Naturalistic ambient hides this package on purpose.Butterfly LightingBeauty lighting with structure.Soft LightBeauty, memory, or kindness.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Star Is Born (both the concert close-ups and the makeover grammar) uses large beauty keys when stardom is the product. Fashion films and work in the neighborhood of Carol or Phantom Thread sell faces with size, catchlights, and controlled skin, then withdraw the package when the story turns ugly."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film A Star Is Born (both the concert close-ups and the makeover grammar) uses large beauty keys when stardom is the product. Fashion films and work in the neighborhood of Carol or Phantom Thread sell faces with size, catchlights, and controlled skin, then withdraw the package when the story turns ugly."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sell the face with physics, not a mood word. Use: \"Soft beauty key on [Subject], large source, catchlights inside the eyes, a little diffusion on skin."
+        },
+        {
+          "type": "paragraph",
+          "text": "\" Keep the key near camera. Forbid hard splits and overhead skulls."
+        },
+        {
+          "type": "quote",
+          "text": "Soft beauty key on [Subject], large source, catchlights inside the eyes, a little diffusion on skin. No projected squares or grids on the face."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Soft+beauty+key+on+[Subject],+large+source,+catchlights+inside+the+eyes,+a+little+diffusion+on+skin.+No+projected+squares+or+grids+on+the+face."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Sell the face with physics, not a mood word. Use: \"Soft beauty key on [Subject], large source, catchlights inside the eyes, a little diffusion on skin.\" Keep the key near camera. Forbid hard splits and overhead skulls.Copy promptUse in Image GeneratorSoft beauty key on [Subject], large source, catchlights inside the eyes, a little diffusion on skin. No projected squares or grids on the face.Soft beauty key on [Subject], large source, catchlights inside the eyes, a little diffusion on skin. No projected squares or grids on the face."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is butterfly with a small hard source, or a grid of catchlights printed on the skin. The tell is a razor nose shadow, hollow sockets, or square projections on the cheeks.",
+          "links": [
+            {
+              "text": "butterfly",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by enlarging the key, moving it near the lens, and keeping catchlights inside the irises only."
+        }
+      ],
+      "links": [
+        {
+          "text": "butterfly",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is butterfly with a small hard source, or a grid of catchlights printed on the skin. The tell is a razor nose shadow, hollow sockets, or square projections on the cheeks.Fix it by enlarging the key, moving it near the lens, and keeping catchlights inside the irises only."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is glam in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A large beauty key with catchlights and slight diffusion, designed to sell the face. It is a package of source size and placement, not a mood word."
+        },
+        {
+          "type": "heading",
+          "text": "Glam vs butterfly lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Butterfly is a high, on-axis key that makes a small shadow under the nose. Glam often uses that pattern but can be a large near-frontal key without a strict butterfly. Glam also includes catchlights and skin diffusion."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use glam lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the face is the product: fashion, stardom, romance the story wants to sell. Skip it for grit, horror, and found documentary."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt glam for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify a large soft beauty key, catchlights inside the eyes, a little diffusion on skin, no projected grids on the face. Keep the key near camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is glam in film?A large beauty key with catchlights and slight diffusion, designed to sell the face. It is a package of source size and placement, not a mood word.Glam vs butterfly lightingButterfly is a high, on-axis key that makes a small shadow under the nose. Glam often uses that pattern but can be a large near-frontal key without a strict butterfly. Glam also includes catchlights and skin diffusion.When should I use glam lighting?Use it when the face is the product: fashion, stardom, romance the story wants to sell. Skip it for grit, horror, and found documentary.How do I prompt glam for AI image or video?Specify a large soft beauty key, catchlights inside the eyes, a little diffusion on skin, no projected grids on the face. Keep the key near camera."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Sell the face with physics, not a mood word. Use: \"Soft beauty key on [Subject], large source, catchlights inside the eyes, a little diffusion on skin.",
+      "\" Keep the key near camera. Forbid hard splits and overhead skulls."
+    ],
+    "example": "Soft beauty key on [Subject], large source, catchlights inside the eyes, a little diffusion on skin. No projected squares or grids on the face."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/d0c6118ba609a42d93a75e2dc10200d3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/glam.webp",
+      "alt": "Glam example"
+    },
+    {
+      "kind": "image",
+      "path": "media/a0bc77407f831c1eb1760bbae139236c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/butterfly-lighting.webp",
+      "alt": "Butterfly Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+      "alt": "Soft Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/8078b98863c47963249dbda2bcabba58.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/glam/hero.jpg",
+      "alt": "Glam",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "886e90ae8511a4d7ea7e517bc8d4e571af34c593bf2a108337fa0636b9bb09ec"
+}

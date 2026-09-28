@@ -1,0 +1,418 @@
+{
+  "id": "lighting/rembrandt",
+  "slug": "rembrandt",
+  "title": "Rembrandt Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/rembrandt",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rembrandt.webp",
+  "detail": "details/lighting/rembrandt.json",
+  "aliases": [],
+  "description": "Rembrandt lighting, in rembrandt lighting terms, is a portrait pattern in which the key sits high and about 45 degrees off axis so the nose shadow joins the shadow cheek, leaving a small triangle of light under the shadow-side eye. The rest of that cheek stays dark.",
+  "thumbnail": "media/0731eeefead98e8a64c8429a412becb9.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The face becomes a painting with one lit plane and a pocket of light that proves the far eye still exists. Drama likes it because the head has volume without the graphic half-and-half of a split."
+        },
+        {
+          "type": "paragraph",
+          "text": "Period interiors and serious close-ups use it when the key could be a high window or a lamp. It is the wrong tool for a beauty close-up that should open both cheeks evenly, or for a character you want fully public."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the nose shadow does not connect to the cheek shadow, you have loop lighting, not Rembrandt.",
+          "links": [
+            {
+              "text": "loop lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "loop lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The face becomes a painting with one lit plane and a pocket of light that proves the far eye still exists. Drama likes it because the head has volume without the graphic half-and-half of a split.Period interiors and serious close-ups use it when the key could be a high window or a lamp. It is the wrong tool for a beauty close-up that should open both cheeks evenly, or for a character you want fully public.If the nose shadow does not connect to the cheek shadow, you have loop lighting, not Rembrandt."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put a moderately hard or softly hard key high and roughly 45 degrees to one side, high enough that the nose shadow falls down and across until it meets the cheek shadow. The triangle sits below the far eye and should not spill across the whole far cheek."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fill is low or absent. Color follows the source: warm interior, cooler window."
+        },
+        {
+          "type": "paragraph",
+          "text": "Short lighting (key on the far cheek) is the usual pairing. Prompt: Key light high and 45 degrees on [Subject], the near cheek in light, a small triangle of light on the shadow-side cheek, the rest of that cheek dark."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put a moderately hard or softly hard key high and roughly 45 degrees to one side, high enough that the nose shadow falls down and across until it meets the cheek shadow. The triangle sits below the far eye and should not spill across the whole far cheek.Fill is low or absent. Color follows the source: warm interior, cooler window.Short lighting (key on the far cheek) is the usual pairing. Prompt: Key light high and 45 degrees on [Subject], the near cheek in light, a small triangle of light on the shadow-side cheek, the rest of that cheek dark."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a classic dramatic portrait, a period close-up, a bargainer across a table. Do not use it when you need an even glamour wrap or a literal half-lit mask."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a classic dramatic portrait, a period close-up, a bargainer across a table. Do not use it when you need an even glamour wrap or a literal half-lit mask."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Loop lighting makes a small nose shadow that does not connect to the cheek shadow. Split lighting keys at 90 degrees and divides the face in half with no triangle.",
+          "links": [
+            {
+              "text": "Loop lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+            },
+            {
+              "text": "Split lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Butterfly lighting puts the key on axis, high, with a shadow under the nose, both cheeks open. Chiaroscuro is the larger contrast language this pattern often sits in.",
+          "links": [
+            {
+              "text": "Butterfly lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            },
+            {
+              "text": "Chiaroscuro",
+              "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Bounce light would wrap the triangle away. Motivated lighting can create Rembrandt if the window sits in that high 45, but motivated is a justification, not this pattern.",
+          "links": [
+            {
+              "text": "Bounce light",
+              "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+            },
+            {
+              "text": "Motivated lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Loop LightingNatural portrait that is still shaped.",
+          "displayText": "Loop Lighting\nNatural portrait that is still shaped.",
+          "links": [
+            {
+              "text": "Loop LightingNatural portrait that is still shaped.",
+              "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "ChiaroscuroLight is moral. Darkness hides or judges.",
+          "displayText": "Chiaroscuro\nLight is moral. Darkness hides or judges.",
+          "links": [
+            {
+              "text": "ChiaroscuroLight is moral. Darkness hides or judges.",
+              "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Loop lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+        },
+        {
+          "text": "Split lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+        },
+        {
+          "text": "Butterfly lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        },
+        {
+          "text": "Chiaroscuro",
+          "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+        },
+        {
+          "text": "Bounce light",
+          "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+        },
+        {
+          "text": "Motivated lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Loop LightingNatural portrait that is still shaped.",
+          "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+        },
+        {
+          "text": "ChiaroscuroLight is moral. Darkness hides or judges.",
+          "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/71bb1f150be1ca6edd65b3043aaab886.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/loop-lighting.webp",
+          "alt": "Loop Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/574be572bd18fb911661cfde31c02f26.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/chiaroscuro-063-low-key-chiaroscuro-mini.webp",
+          "alt": "Chiaroscuro"
+        },
+        {
+          "kind": "video",
+          "path": "media/02a6da7712d15780d0526991b4982c3c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/063-low-key-chiaroscuro-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Loop lighting makes a small nose shadow that does not connect to the cheek shadow. Split lighting keys at 90 degrees and divides the face in half with no triangle.Butterfly lighting puts the key on axis, high, with a shadow under the nose, both cheeks open. Chiaroscuro is the larger contrast language this pattern often sits in.Bounce light would wrap the triangle away. Motivated lighting can create Rembrandt if the window sits in that high 45, but motivated is a justification, not this pattern.Loop LightingNatural portrait that is still shaped.ChiaroscuroLight is moral. Darkness hides or judges.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fanny and Alexander uses painterly window keys that often land in this triangle. Road to Perdition, with Conrad Hall's portrait work, leans on Rembrandt-like faces in dark interiors."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the cheek geometry, not a still to duplicate."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Fanny and Alexander uses painterly window keys that often land in this triangle. Road to Perdition, with Conrad Hall's portrait work, leans on Rembrandt-like faces in dark interiors.Use the cheek geometry, not a still to duplicate."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand the triangle by name. \" Say the nose shadow connects to the cheek shadow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a half-and-half split."
+        },
+        {
+          "type": "quote",
+          "text": "Key light high and 45 degrees on [Subject], the near cheek in light, a small triangle of light on the shadow-side cheek, the rest of that cheek dark."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Key+light+high+and+45+degrees+on+[Subject],+the+near+cheek+in+light,+a+small+triangle+of+light+on+the+shadow-side+cheek,+the+rest+of+that+cheek+dark."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Demand the triangle by name. \" Say the nose shadow connects to the cheek shadow.Forbid a half-and-half split.Copy promptUse in Image GeneratorKey light high and 45 degrees on [Subject], the near cheek in light, a small triangle of light on the shadow-side cheek, the rest of that cheek dark.Key light high and 45 degrees on [Subject], the near cheek in light, a small triangle of light on the shadow-side cheek, the rest of that cheek dark."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is loop or split. The tell is a floating nose comma that never meets the cheek, or a face divided down the center with no triangle.",
+          "links": [
+            {
+              "text": "loop",
+              "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+            },
+            {
+              "text": "split",
+              "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by raising and swinging the key until the shadows join, leaving a small lit triangle under the far eye."
+        }
+      ],
+      "links": [
+        {
+          "text": "loop",
+          "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+        },
+        {
+          "text": "split",
+          "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is loop or split. The tell is a floating nose comma that never meets the cheek, or a face divided down the center with no triangle.Fix it by raising and swinging the key until the shadows join, leaving a small lit triangle under the far eye."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Rembrandt lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A portrait setup with the key high and about 45 degrees off axis so a triangle of light appears on the shadow-side cheek under the eye."
+        },
+        {
+          "type": "heading",
+          "text": "Rembrandt lighting vs loop lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "In loop, the nose shadow is a small loop that does not touch the cheek shadow. In Rembrandt, that shadow connects, isolating a triangle of light on the far cheek."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Rembrandt lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for a dramatic portrait that still shows both eyes, one in a pocket of light. Skip it for glamour evenness or a literal split face."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Rembrandt lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Place the key high and 45 degrees off axis. Specify a small triangle of light on the shadow-side cheek, the rest of that cheek dark, nose shadow connected."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Rembrandt lighting in film?A portrait setup with the key high and about 45 degrees off axis so a triangle of light appears on the shadow-side cheek under the eye.Rembrandt lighting vs loop lightingIn loop, the nose shadow is a small loop that does not touch the cheek shadow. In Rembrandt, that shadow connects, isolating a triangle of light on the far cheek.When should I use Rembrandt lighting?Use it for a dramatic portrait that still shows both eyes, one in a pocket of light. Skip it for glamour evenness or a literal split face.How do I prompt Rembrandt lighting for AI image or video?Place the key high and 45 degrees off axis. Specify a small triangle of light on the shadow-side cheek, the rest of that cheek dark, nose shadow connected."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Demand the triangle by name. \" Say the nose shadow connects to the cheek shadow.",
+      "Forbid a half-and-half split."
+    ],
+    "example": "Key light high and 45 degrees on [Subject], the near cheek in light, a small triangle of light on the shadow-side cheek, the rest of that cheek dark."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/0731eeefead98e8a64c8429a412becb9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rembrandt.webp",
+      "alt": "Rembrandt Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/71bb1f150be1ca6edd65b3043aaab886.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/loop-lighting.webp",
+      "alt": "Loop Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/574be572bd18fb911661cfde31c02f26.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/chiaroscuro-063-low-key-chiaroscuro-mini.webp",
+      "alt": "Chiaroscuro"
+    },
+    {
+      "kind": "video",
+      "path": "media/02a6da7712d15780d0526991b4982c3c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/063-low-key-chiaroscuro-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/b3b40201829df1815e6f5acb6a5d5829.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/rembrandt/hero.jpg",
+      "alt": "Rembrandt Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "5fd265d0667c1ba3001154e5a41c26a4310bddd8107582188c88923342a64ddc"
+}

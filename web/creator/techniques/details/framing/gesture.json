@@ -1,0 +1,404 @@
+{
+  "id": "framing/gesture",
+  "slug": "gesture",
+  "title": "Gesture",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/gesture",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gesture.webp",
+  "detail": "details/framing/gesture.json",
+  "aliases": [],
+  "description": "Gesture cinematography sizes and times a shot around a discrete expressive body movement: a hand, a glance, a weight shift. The plot is in the motion, not in an object sitting still.",
+  "thumbnail": "media/a9e6aaa369a7e6c83756dda7cb1ee085.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sometimes the scene is not the face and not the prop, but the almost-touch, the glove tightening, the look that does not land. Gesture coverage treats that small action as the beat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Duration matters: the movement has a start, a peak, and a settle. It is the wrong tool when the object is the fact (a key, a letter) rather than what the body does."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool as a wide master where fingers die in the noise of a room. Get close enough that the motion reads, then let it finish."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Sometimes the scene is not the face and not the prop, but the almost-touch, the glove tightening, the look that does not land. Gesture coverage treats that small action as the beat.Duration matters: the movement has a start, a peak, and a settle. It is the wrong tool when the object is the fact (a key, a letter) rather than what the body does.It is also the wrong tool as a wide master where fingers die in the noise of a room. Get close enough that the motion reads, then let it finish."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Frame for the moving part. Hands often want a close crop without becoming a product shot; a glance may live in a Close-Up of the eyes.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the body connected enough that the motion has a source (wrist, shoulder). Light to separate fingers from background."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Gesture close on [Subject], the meaning in a hand, a glance, a weight shift, coverage of the small action."
+        }
+      ],
+      "links": [
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Frame for the moving part. Hands often want a close crop without becoming a product shot; a glance may live in a Close-Up of the eyes.Keep the body connected enough that the motion has a source (wrist, shoulder). Light to separate fingers from background.Prompt: Gesture close on [Subject], the meaning in a hand, a glance, a weight shift, coverage of the small action."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the plot is in the fingers: an almost-touch in a corridor, a glove, a glass that does not quite rise. Do not cover it so wide the motion dies, and do not freeze it into an object insert."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the plot is in the fingers: an almost-touch in a corridor, a glove, a glass that does not quite rise. Do not cover it so wide the motion dies, and do not freeze it into an object insert."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An Insert Shot is usually the object as fact. A Close-Up is a size that may hold a gesture, or may hold a still face.",
+          "links": [
+            {
+              "text": "Insert Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            },
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Extreme Close-Up can be a fingertip as texture rather than as action. Gesture means the expressive movement is the subject.",
+          "links": [
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If nothing moves, you probably wanted an insert."
+        },
+        {
+          "type": "list-item",
+          "text": "Insert ShotPoint at the thing that will matter later.",
+          "displayText": "Insert Shot\nPoint at the thing that will matter later.",
+          "links": [
+            {
+              "text": "Insert ShotPoint at the thing that will matter later.",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "displayText": "Close-Up\nRead micro-expression. Default for important dialogue.",
+          "links": [
+            {
+              "text": "Close-UpRead micro-expression. Default for important dialogue.",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Insert Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Insert ShotPoint at the thing that will matter later.",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b5bb789f90144033b393ce87e620564d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/insert-095-narrative-insert-mini.webp",
+          "alt": "Insert Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/53a13c456f43ab42d2e3d1f277d87138.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/095-narrative-insert-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/95136909e657a1816141551e20893339.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+          "alt": "Close-Up"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots An Insert Shot is usually the object as fact. A Close-Up is a size that may hold a gesture, or may hold a still face.An Extreme Close-Up can be a fingertip as texture rather than as action. Gesture means the expressive movement is the subject.If nothing moves, you probably wanted an insert.Insert ShotPoint at the thing that will matter later.Close-UpRead micro-expression. Default for important dialogue.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In the Mood for Love builds withheld romance out of hands, glances, and slow weight shifts more than out of speeches. Drive lets gloves, a wheel, and small body decisions carry threat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: the small action is the line."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film In the Mood for Love builds withheld romance out of hands, glances, and slow weight shifts more than out of speeches. Drive lets gloves, a wheel, and small body decisions carry threat.Grammar: the small action is the line."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the movement. Example: Gesture close on [Subject], the meaning in a hand, a glance, a weight shift, coverage of the small action."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say what the body does (fingers almost touching, a look away). For video, one motion with a settle; do not add a camera tour."
+        },
+        {
+          "type": "quote",
+          "text": "Gesture close on [Subject], the meaning in a hand, a glance, a weight shift, coverage of the small action."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Gesture+close+on+[Subject],+the+meaning+in+a+hand,+a+glance,+a+weight+shift,+coverage+of+the+small+action."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the movement. Example: Gesture close on [Subject], the meaning in a hand, a glance, a weight shift, coverage of the small action.Say what the body does (fingers almost touching, a look away). For video, one motion with a settle; do not add a camera tour.Copy promptUse in Image GeneratorGesture close on [Subject], the meaning in a hand, a glance, a weight shift, coverage of the small action.Gesture close on [Subject], the meaning in a hand, a glance, a weight shift, coverage of the small action."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an Insert Shot of a still object, or a Close-Up of a face that never moves. The tell is a static prop hero, or a wide where the hand is a blur.",
+          "links": [
+            {
+              "text": "Insert Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            },
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: size to the moving part, let the action complete."
+        }
+      ],
+      "links": [
+        {
+          "text": "Insert Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an Insert Shot of a still object, or a Close-Up of a face that never moves. The tell is a static prop hero, or a wide where the hand is a blur.Fix: size to the moving part, let the action complete."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Gesture in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Gesture coverage is a shot sized and timed for a discrete expressive body movement: a hand, a glance, a shift of weight. The meaning is the action, not a still object and not a wide master of the room."
+        },
+        {
+          "type": "heading",
+          "text": "Gesture vs Insert Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An insert shows a story object or detail, often still enough to read as a fact. Gesture shows what a body does with or without that object. A key in the palm can be an insert; the hesitation before the hand closes is gesture."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Gesture?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the beat is a small body action the wide cannot prove. Do not use it for a still product-like object, and do not bury the motion in a master."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Gesture for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Gesture close on [Subject], and name the hand, glance, or weight shift. For video, describe one motion and a settle. Keep the camera still unless the technique is a move."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Gesture in film?Gesture coverage is a shot sized and timed for a discrete expressive body movement: a hand, a glance, a shift of weight. The meaning is the action, not a still object and not a wide master of the room.Gesture vs Insert ShotAn insert shows a story object or detail, often still enough to read as a fact. Gesture shows what a body does with or without that object. A key in the palm can be an insert; the hesitation before the hand closes is gesture.When should I use Gesture?Use it when the beat is a small body action the wide cannot prove. Do not use it for a still product-like object, and do not bury the motion in a master.How do I prompt Gesture for AI image or video?Write Gesture close on [Subject], and name the hand, glance, or weight shift. For video, describe one motion and a settle. Keep the camera still unless the technique is a move."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the movement. Example: Gesture close on [Subject], the meaning in a hand, a glance, a weight shift, coverage of the small action.",
+      "Say what the body does (fingers almost touching, a look away). For video, one motion with a settle; do not add a camera tour."
+    ],
+    "example": "Gesture close on [Subject], the meaning in a hand, a glance, a weight shift, coverage of the small action."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/a9e6aaa369a7e6c83756dda7cb1ee085.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gesture.webp",
+      "alt": "Gesture example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b5bb789f90144033b393ce87e620564d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/insert-095-narrative-insert-mini.webp",
+      "alt": "Insert Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/53a13c456f43ab42d2e3d1f277d87138.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/095-narrative-insert-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/95136909e657a1816141551e20893339.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+      "alt": "Close-Up"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2ab1f5ebd7293c8dd5ff3d7f07754b4b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/gesture/hero.jpg",
+      "alt": "Gesture",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "1eb1c9d233f8889c7420050bda2780d574e72c3101d44083ef6a3014dc65b3c9"
+}

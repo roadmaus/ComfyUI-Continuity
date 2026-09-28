@@ -1,0 +1,403 @@
+{
+  "id": "framing/long-shot",
+  "slug": "long-shot",
+  "title": "Long Shot (WS)",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/long-shot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/long-shot.webp",
+  "detail": "details/framing/long-shot.json",
+  "aliases": [
+    "wide shot",
+    "WS",
+    "LS"
+  ],
+  "description": "A long shot in cinematography shows the full subject plus a substantial portion of the environment, so a person sits small in geography. The figure is still locatable as a human; the world is large enough to ignore them.",
+  "thumbnail": "media/ebfd2f3da0e7c019989512b68773f278.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A long shot places a human in a world that could continue without them. You still recognize a body, a walk, a horse, but land, street, or weather takes most of the rectangle."
+        },
+        {
+          "type": "paragraph",
+          "text": "The sentence is person-in-world, not person-as-portrait. It is the wrong tool when you need the face, the holster, or a complete figure that still owns the height of the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool when the person has become an unreadable speck: that is farther still. Use it to locate a body in a place, then go closer for the decision."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A long shot places a human in a world that could continue without them. You still recognize a body, a walk, a horse, but land, street, or weather takes most of the rectangle.The sentence is person-in-world, not person-as-portrait. It is the wrong tool when you need the face, the holster, or a complete figure that still owns the height of the frame.It is also the wrong tool when the person has become an unreadable speck: that is farther still. Use it to locate a body in a place, then go closer for the decision."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep a full figure readable, then add enough architecture or terrain that the person does not fill the height. Working from farther back with a 24mm to 35mm, or from a ridge with a longer lens, both can get you here; the crop is the size."
+        },
+        {
+          "type": "paragraph",
+          "text": "Deep enough focus that the place reads. Prompt: Long shot of [Subject] small in a large environment, full figure plus geography."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Keep a full figure readable, then add enough architecture or terrain that the person does not fill the height. Working from farther back with a 24mm to 35mm, or from a ridge with a longer lens, both can get you here; the crop is the size.Deep enough focus that the place reads. Prompt: Long shot of [Subject] small in a large environment, full figure plus geography."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to place a human in a world that could ignore them: a rider on a ridge, a coat on a platform, a body in a square. Do not use it to read an eyelid, and do not use it when you only needed head-to-toe as a portrait."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to place a human in a world that could ignore them: a rider on a ridge, a coat on a platform, a body in a square. Do not use it to read an eyelid, and do not use it when you only needed head-to-toe as a portrait."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Full Body keeps the person large, head to toe, with place as a border. A Wide Shot is environment-forward coverage: place still speaks, often as the map of a scene.",
+          "links": [
+            {
+              "text": "Full Body",
+              "url": "https://melies.co/cinematic-techniques/framing/full-body"
+            },
+            {
+              "text": "Wide Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Extreme Long Shot turns the figure into a speck and gives the land the subject. Long shot is full figure plus geography, not those three.",
+          "links": [
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Establishing Shot is a job (where and when), which may use this size.",
+          "links": [
+            {
+              "text": "Establishing Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Long ShotScale is the emotion.",
+          "displayText": "Extreme Long Shot\nScale is the emotion.",
+          "links": [
+            {
+              "text": "Extreme Long ShotScale is the emotion.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Establishing ShotOpen a scene. Tell us where and when.",
+          "displayText": "Establishing Shot\nOpen a scene. Tell us where and when.",
+          "links": [
+            {
+              "text": "Establishing ShotOpen a scene. Tell us where and when.",
+              "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Full Body",
+          "url": "https://melies.co/cinematic-techniques/framing/full-body"
+        },
+        {
+          "text": "Wide Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+        },
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Establishing Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+        },
+        {
+          "text": "Extreme Long ShotScale is the emotion.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Establishing ShotOpen a scene. Tell us where and when.",
+          "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+          "alt": "Extreme Long Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/36a71bb159fb3a26051fe83669a032ee.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/establishing-shot-096-establishing-and-reestablishing-shots-mini.webp",
+          "alt": "Establishing Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/3749142ffcb30b9332f50b8ac15c9fb6.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/096-establishing-and-reestablishing-shots-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Full Body keeps the person large, head to toe, with place as a border. A Wide Shot is environment-forward coverage: place still speaks, often as the map of a scene.An Extreme Long Shot turns the figure into a speck and gives the land the subject. Long shot is full figure plus geography, not those three.An Establishing Shot is a job (where and when), which may use this size.Extreme Long ShotScale is the emotion.Establishing ShotOpen a scene. Tell us where and when.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lawrence of Arabia sets riders in desert so the person is still a figure and the land is already huge. Seven Samurai plants bodies in village dirt and fields the same way."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: locatable human, large world, not a postage-stamp speck and not a costume portrait."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Lawrence of Arabia sets riders in desert so the person is still a figure and the land is already huge. Seven Samurai plants bodies in village dirt and fields the same way.Grammar: locatable human, large world, not a postage-stamp speck and not a costume portrait."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say full figure plus geography. Example: Long shot of [Subject] small in a large environment, full figure plus geography."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not write head to toe as a hero portrait, and do not write speck against vast terrain. For video, keep the body identifiable; if they vanish into texture, you have gone to extreme long shot."
+        },
+        {
+          "type": "quote",
+          "text": "Long shot of [Subject] small in a large environment, full figure plus geography, mythic placement of a person in land."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Long+shot+of+[Subject]+small+in+a+large+environment,+full+figure+plus+geography,+mythic+placement+of+a+person+in+land."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say full figure plus geography. Example: Long shot of [Subject] small in a large environment, full figure plus geography.Do not write head to toe as a hero portrait, and do not write speck against vast terrain. For video, keep the body identifiable; if they vanish into texture, you have gone to extreme long shot.Copy promptUse in Image GeneratorLong shot of [Subject] small in a large environment, full figure plus geography, mythic placement of a person in land.Long shot of [Subject] small in a large environment, full figure plus geography, mythic placement of a person in land."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Full Body (person fills the height) or an Extreme Long Shot (speck). The tell is either a fashion lookbook figure or a landscape with no readable human.",
+          "links": [
+            {
+              "text": "Full Body",
+              "url": "https://melies.co/cinematic-techniques/framing/full-body"
+            },
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: full figure visible, world dominant, person still a person."
+        }
+      ],
+      "links": [
+        {
+          "text": "Full Body",
+          "url": "https://melies.co/cinematic-techniques/framing/full-body"
+        },
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Full Body (person fills the height) or an Extreme Long Shot (speck). The tell is either a fashion lookbook figure or a landscape with no readable human.Fix: full figure visible, world dominant, person still a person."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Long Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A long shot shows a full subject and a substantial portion of the environment, so a person is small in a large place but still readable as a figure. It is a size, not automatically an establishing shot."
+        },
+        {
+          "type": "heading",
+          "text": "Long Shot vs Wide Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A long shot is the person-in-world size: full figure plus geography. A wide shot is environment-forward coverage whose job is to let place speak and not isolate yet. They overlap in the wild, but wide is a coverage attitude; long is the figure-plus-land sentence."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Long Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to locate a human in a place large enough to ignore them. Do not use it for faces, and do not use it when you wanted a full-body portrait or a speck-scale landscape."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Long Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Long shot of [Subject] small in a large environment, full figure plus geography. Keep the body identifiable. Do not say head-to-toe hero and do not say speck."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Long Shot in film?A long shot shows a full subject and a substantial portion of the environment, so a person is small in a large place but still readable as a figure. It is a size, not automatically an establishing shot.Long Shot vs Wide ShotA long shot is the person-in-world size: full figure plus geography. A wide shot is environment-forward coverage whose job is to let place speak and not isolate yet. They overlap in the wild, but wide is a coverage attitude; long is the figure-plus-land sentence.When should I use Long Shot?Use it to locate a human in a place large enough to ignore them. Do not use it for faces, and do not use it when you wanted a full-body portrait or a speck-scale landscape.How do I prompt Long Shot for AI image or video?Write Long shot of [Subject] small in a large environment, full figure plus geography. Keep the body identifiable. Do not say head-to-toe hero and do not say speck."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say full figure plus geography. Example: Long shot of [Subject] small in a large environment, full figure plus geography.",
+      "Do not write head to toe as a hero portrait, and do not write speck against vast terrain. For video, keep the body identifiable; if they vanish into texture, you have gone to extreme long shot."
+    ],
+    "example": "Long shot of [Subject] small in a large environment, full figure plus geography, mythic placement of a person in land."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/ebfd2f3da0e7c019989512b68773f278.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/long-shot.webp",
+      "alt": "Long Shot example"
+    },
+    {
+      "kind": "image",
+      "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+      "alt": "Extreme Long Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/36a71bb159fb3a26051fe83669a032ee.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/establishing-shot-096-establishing-and-reestablishing-shots-mini.webp",
+      "alt": "Establishing Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/3749142ffcb30b9332f50b8ac15c9fb6.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/096-establishing-and-reestablishing-shots-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fee18e899e6ee5df56641f77bf3069b9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/long-shot/hero.jpg",
+      "alt": "Long Shot (WS)",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "90d8fc0e880b65b33c6ef8fc31e2376ebaee074b6060ee2d997f7229aa0f8439"
+}

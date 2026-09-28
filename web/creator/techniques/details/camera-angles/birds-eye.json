@@ -1,0 +1,449 @@
+{
+  "id": "camera-angles/birds-eye",
+  "slug": "birds-eye",
+  "title": "Bird's-Eye View",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/birds-eye",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+  "detail": "details/camera-angles/birds-eye.json",
+  "aliases": [
+    "top down",
+    "overhead still"
+  ],
+  "description": "A bird's-eye view shot looks steeply or directly down from a great height so people and furniture become a map. Height, not just distance, is the point of view: life reads as a board game or a ritual seen from above.",
+  "thumbnail": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+  "video": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "From up there the body is a token. Circulation, grouping, and the shape of a courtyard or a table take over."
+        },
+        {
+          "type": "paragraph",
+          "text": "You use it to turn a fight, a dinner, or a street into a pattern the participants cannot see. The camera is high enough that the floor is the picture, but unlike a close Overhead Top-Down you still feel drop: altitude, not a light stand over a desk.",
+          "links": [
+            {
+              "text": "Overhead Top-Down",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you need a face, a line of dialogue, or a simple sense that someone is small in a room. That last job is often a High Angle from a balcony.",
+          "links": [
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the model flies and tours, you have left the still viewpoint for a drone move."
+        }
+      ],
+      "links": [
+        {
+          "text": "Overhead Top-Down",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        },
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function From up there the body is a token. Circulation, grouping, and the shape of a courtyard or a table take over.You use it to turn a fight, a dinner, or a street into a pattern the participants cannot see. The camera is high enough that the floor is the picture, but unlike a close Overhead Top-Down you still feel drop: altitude, not a light stand over a desk.It is the wrong tool when you need a face, a line of dialogue, or a simple sense that someone is small in a room. That last job is often a High Angle from a balcony.If the model flies and tours, you have left the still viewpoint for a drone move."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place the camera well above the action and pitch it steeply down, approaching 70 to 90 degrees. Great height is required: a ceiling corner of a lobby, a crane, a rooftop, a high grid."
+        },
+        {
+          "type": "paragraph",
+          "text": "Anatomy foreshortens; heads and shoulders become discs. Keep extra limbs out of a seated tableau or the map grows a mutant."
+        },
+        {
+          "type": "paragraph",
+          "text": "Light from above will flatten; a raking key throws shadows as drawing on the floor. Prompt: bird's-eye straight down from a great height, floor as a map, no extra limbs."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place the camera well above the action and pitch it steeply down, approaching 70 to 90 degrees. Great height is required: a ceiling corner of a lobby, a crane, a rooftop, a high grid.Anatomy foreshortens; heads and shoulders become discs. Keep extra limbs out of a seated tableau or the map grows a mutant.Light from above will flatten; a raking key throws shadows as drawing on the floor. Prompt: bird's-eye straight down from a great height, floor as a map, no extra limbs."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to turn life into a board game or a ritual. Concrete beat: one seated person and a table seen from the ceiling so plates and hands are the story."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it as a sightseeing flyover when the beat is still a person."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to turn life into a board game or a ritual. Concrete beat: one seated person and a table seen from the ceiling so plates and hands are the story.Do not use it as a sightseeing flyover when the beat is still a person."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "High Angle looks down obliquely; the face remains a face. Overhead Top-Down is a 90-degree top-down, often closer, a flat-lay or room plan whose tabletop must stay rectangular.",
+          "links": [
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            },
+            {
+              "text": "Overhead Top-Down",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Crane Over is the path that can arrive at a bird's-eye. Aerial and FPV Drone add flight; bird's-eye can be a locked steep look.",
+          "links": [
+            {
+              "text": "Crane Over",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-over"
+            },
+            {
+              "text": "Aerial",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial"
+            },
+            {
+              "text": "FPV Drone",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Overhead Top-DownTable, crime scene, or dance formation.",
+          "displayText": "Overhead Top-Down\nTable, crime scene, or dance formation.",
+          "links": [
+            {
+              "text": "Overhead Top-DownTable, crime scene, or dance formation.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "displayText": "High Angle\nVulnerability, surveillance, or a map of a room.",
+          "links": [
+            {
+              "text": "High AngleVulnerability, surveillance, or a map of a room.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Overhead Top-Down",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        },
+        {
+          "text": "Crane Over",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-over"
+        },
+        {
+          "text": "Aerial",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial"
+        },
+        {
+          "text": "FPV Drone",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "Overhead Top-DownTable, crime scene, or dance formation.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        },
+        {
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e38c926247e6d32a842471e279499092.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/overhead-overhead-mini.webp",
+          "alt": "Overhead Top-Down"
+        },
+        {
+          "kind": "video",
+          "path": "media/26a0d54296bd8cd0d0f7613e6420795a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/overhead-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+          "alt": "High Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        }
+      ],
+      "sourceText": "Compared with similar shots High Angle looks down obliquely; the face remains a face. Overhead Top-Down is a 90-degree top-down, often closer, a flat-lay or room plan whose tabletop must stay rectangular.Crane Over is the path that can arrive at a bird's-eye. Aerial and FPV Drone add flight; bird's-eye can be a locked steep look.Overhead Top-DownTable, crime scene, or dance formation.High AngleVulnerability, surveillance, or a map of a room.Eye LevelDefault honesty. Do not look down or up unless you mean it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Grand Budapest Hotel uses steep downward views so hotels, desks, and ceremonies read as designed diagrams. Requiem for a Dream looks down until apartments and bodies are patterns of habit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the altitude and the map, not a copied lobby."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Grand Budapest Hotel uses steep downward views so hotels, desks, and ceremonies read as designed diagrams. Requiem for a Dream looks down until apartments and bodies are patterns of habit.Use the altitude and the map, not a copied lobby."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock height and pitch. Quote: Bird's-eye view straight down on [Subject], camera over one seated person and a table, floor as a map, no extra limbs."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: great height, steeply downward, people as pieces, not an oblique high angle, not a tabletop product flat-lay unless the scale is a room seen from the ceiling."
+        },
+        {
+          "type": "quote",
+          "text": "Bird's-eye view straight down on [Subject], camera over one seated person and a table, floor as a map, no extra limbs."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Bird's-eye+view+straight+down+on+[Subject],+camera+over+one+seated+person+and+a+table,+floor+as+a+map,+no+extra+limbs."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lock height and pitch. Quote: Bird's-eye view straight down on [Subject], camera over one seated person and a table, floor as a map, no extra limbs.Add: great height, steeply downward, people as pieces, not an oblique high angle, not a tabletop product flat-lay unless the scale is a room seen from the ceiling.Copy promptUse in Image GeneratorBird's-eye view straight down on [Subject], camera over one seated person and a table, floor as a map, no extra limbs.Bird's-eye view straight down on [Subject], camera over one seated person and a table, floor as a map, no extra limbs."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a mild High Angle (too little height) or a close Overhead Top-Down (too little altitude, too much product photography). Tell: a readable standing portrait from a step-stool, or a desk filling the frame with no drop.",
+          "links": [
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            },
+            {
+              "text": "Overhead Top-Down",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: camera high above, looking steeply down, bodies foreshortened, floor as geography. Ban extra arms in seated groups."
+        }
+      ],
+      "links": [
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Overhead Top-Down",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a mild High Angle (too little height) or a close Overhead Top-Down (too little altitude, too much product photography). Tell: a readable standing portrait from a step-stool, or a desk filling the frame with no drop.Fix: camera high above, looking steeply down, bodies foreshortened, floor as geography. Ban extra arms in seated groups."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is bird's-eye view in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A bird's-eye view looks steeply or straight down from a great height. People and furniture become a map; altitude is the viewpoint."
+        },
+        {
+          "type": "heading",
+          "text": "Bird's-eye view vs overhead",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Bird's-eye implies great height and a map of a place. Overhead top-down is 90 degrees and often closer: a table, a crime scene, or a dance as a graphic plan."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use bird's-eye view?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when grouping, ritual, or circulation should win over any one face. Do not use it for dialogue or for a product lying on a table."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt bird's-eye view for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Bird's-eye view straight down on [Subject] from a great height, floor as a map, bodies foreshortened, no extra limbs. Say not a high-angle portrait and not a 90-degree desk flat-lay."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is bird's-eye view in film?A bird's-eye view looks steeply or straight down from a great height. People and furniture become a map; altitude is the viewpoint.Bird's-eye view vs overheadBird's-eye implies great height and a map of a place. Overhead top-down is 90 degrees and often closer: a table, a crime scene, or a dance as a graphic plan.When should I use bird's-eye view?Use it when grouping, ritual, or circulation should win over any one face. Do not use it for dialogue or for a product lying on a table.How do I prompt bird's-eye view for AI image or video?Write: Bird's-eye view straight down on [Subject] from a great height, floor as a map, bodies foreshortened, no extra limbs. Say not a high-angle portrait and not a 90-degree desk flat-lay."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lock height and pitch. Quote: Bird's-eye view straight down on [Subject], camera over one seated person and a table, floor as a map, no extra limbs.",
+      "Add: great height, steeply downward, people as pieces, not an oblique high angle, not a tabletop product flat-lay unless the scale is a room seen from the ceiling."
+    ],
+    "example": "Bird's-eye view straight down on [Subject], camera over one seated person and a table, floor as a map, no extra limbs."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/04d4166980f987197283eaae78a02815.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/birds-eye.jpg",
+      "alt": "Bird's-Eye View frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/e38c926247e6d32a842471e279499092.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/overhead-overhead-mini.webp",
+      "alt": "Overhead Top-Down"
+    },
+    {
+      "kind": "video",
+      "path": "media/26a0d54296bd8cd0d0f7613e6420795a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/overhead-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+      "alt": "High Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/09e4b2c5f6be67a14cde372807f4eb22.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/birds-eye/hero.jpg",
+      "alt": "Bird's-Eye View",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "d02e49094dda4a86c5c3d6a954c9ff896c8c705d2d4edd4db52e09412e90b565"
+}

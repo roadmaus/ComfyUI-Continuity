@@ -1,0 +1,432 @@
+{
+  "id": "color/cool-blue",
+  "slug": "cool-blue",
+  "title": "Cool Blue",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/cool-blue",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cool-blue.webp",
+  "detail": "details/color/cool-blue.json",
+  "aliases": [],
+  "description": "A cool blue grade in cool color grade work shifts the image toward steel, cyan, or moonlight blues across shadows and often midtones. Warmth, if it survives, is reserved for a practical or a face that the story wants to save.",
+  "thumbnail": "media/9ac5d96fc611ee97ab52dc9132feb3fa.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cold institutions, night, or alienation live in this family. A hospital, a CIA office, a pre-dawn street: the air has no honey."
+        },
+        {
+          "type": "paragraph",
+          "text": "Skin goes toward porcelain or grey-pink. One tungsten desk lamp, if you allow it, becomes the only hearth."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you are faking night with underexposed sun. That is Day for Night, a capture trick, not only a blue LUT.",
+          "links": [
+            {
+              "text": "Day for Night",
+              "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for sculpted moon as a key on a dark set: Moonlight Gel is a lighting decision. It is also the wrong tool if the complementary split of Teal and Orange is what you actually wanted (warm skin, teal air, not an overall steel wash).",
+          "links": [
+            {
+              "text": "Moonlight Gel",
+              "url": "https://melies.co/cinematic-techniques/color/moonlight-gel"
+            },
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Day for Night",
+          "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+        },
+        {
+          "text": "Moonlight Gel",
+          "url": "https://melies.co/cinematic-techniques/color/moonlight-gel"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Cold institutions, night, or alienation live in this family. A hospital, a CIA office, a pre-dawn street: the air has no honey.Skin goes toward porcelain or grey-pink. One tungsten desk lamp, if you allow it, becomes the only hearth.It is the wrong tool when you are faking night with underexposed sun. That is Day for Night, a capture trick, not only a blue LUT.It is the wrong tool for sculpted moon as a key on a dark set: Moonlight Gel is a lighting decision. It is also the wrong tool if the complementary split of Teal and Orange is what you actually wanted (warm skin, teal air, not an overall steel wash)."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bias white balance or the grade toward high Kelvin in the mids and shadows. Hold or isolate a warm practical if the scene needs one hearth."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep skin just readable; full cyan faces look sick unless that is the line. Night windows and fluorescent rooms already help."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Cool blue grade on [Subject], steel shadows, hospital or moonlight, warmth reserved for one practical if any."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Bias white balance or the grade toward high Kelvin in the mids and shadows. Hold or isolate a warm practical if the scene needs one hearth.Keep skin just readable; full cyan faces look sick unless that is the line. Night windows and fluorescent rooms already help.Prompt: Cool blue grade on [Subject], steel shadows, hospital or moonlight, warmth reserved for one practical if any."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for cold institutions, night, or alienation: a lawyer in a glass tower at 5 a.m., a clinic corridor. Do not use it as a synonym for day-for-night, and do not steel every romance interior."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for cold institutions, night, or alienation: a lawyer in a glass tower at 5 a.m., a clinic corridor. Do not use it as a synonym for day-for-night, and do not steel every romance interior."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blue Hour is actual dusk light, a capture window. Day for Night turns daylight into a night reading.",
+          "links": [
+            {
+              "text": "Blue Hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            },
+            {
+              "text": "Day for Night",
+              "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Moonlight Gel is a cool key on set. Warm Amber is the opposing overall grade.",
+          "links": [
+            {
+              "text": "Moonlight Gel",
+              "url": "https://melies.co/cinematic-techniques/color/moonlight-gel"
+            },
+            {
+              "text": "Warm Amber",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Teal and Orange keeps skin warm on purpose.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Blue HourDay is gone but the sky still works.",
+          "displayText": "Blue Hour\nDay is gone but the sky still works.",
+          "links": [
+            {
+              "text": "Blue HourDay is gone but the sky still works.",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Day for NightYou cannot wait for night, or night must still show terrain.",
+          "displayText": "Day for Night\nYou cannot wait for night, or night must still show terrain.",
+          "links": [
+            {
+              "text": "Day for NightYou cannot wait for night, or night must still show terrain.",
+              "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Blue Hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        },
+        {
+          "text": "Day for Night",
+          "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+        },
+        {
+          "text": "Moonlight Gel",
+          "url": "https://melies.co/cinematic-techniques/color/moonlight-gel"
+        },
+        {
+          "text": "Warm Amber",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Blue HourDay is gone but the sky still works.",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        },
+        {
+          "text": "Day for NightYou cannot wait for night, or night must still show terrain.",
+          "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/afeaf073c169bf136864eccfa0d68e92.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blue-hour.webp",
+          "alt": "Blue Hour"
+        },
+        {
+          "kind": "image",
+          "path": "media/7e92537ac15a45b034ae6f579d107c77.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/day-for-night-071-day-for-night-landscape-mini.webp",
+          "alt": "Day for Night"
+        },
+        {
+          "kind": "video",
+          "path": "media/ae3bfb9cc8af2b1e00fefe11a1f48942.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/071-day-for-night-landscape-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Blue Hour is actual dusk light, a capture window. Day for Night turns daylight into a night reading.Moonlight Gel is a cool key on set. Warm Amber is the opposing overall grade.Teal and Orange keeps skin warm on purpose.Blue HourDay is gone but the sky still works.Day for NightYou cannot wait for night, or night must still show terrain.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Bourne Ultimatum runs steel-green-blue through offices, streets, and stations so the institution never thaws. Michael Clayton uses cold corporate and night hues against the few warmer domestic scraps."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of withheld warmth, not a copied still."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Bourne Ultimatum runs steel-green-blue through offices, streets, and stations so the institution never thaws. Michael Clayton uses cold corporate and night hues against the few warmer domestic scraps.Grammar of withheld warmth, not a copied still."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the steel and the reserved hearth. Cool blue grade on [Subject], steel shadows, hospital or moonlight, warmth reserved for one practical if any."
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify whether skin goes cool or stays slightly protected. Do not write day-for-night sun, and do not add orange complementary punch unless you mean teal-orange."
+        },
+        {
+          "type": "quote",
+          "text": "Cool blue grade on [Subject], steel shadows, hospital or moonlight, warmth reserved for one practical if any."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Cool+blue+grade+on+[Subject],+steel+shadows,+hospital+or+moonlight,+warmth+reserved+for+one+practical+if+any."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the steel and the reserved hearth. Cool blue grade on [Subject], steel shadows, hospital or moonlight, warmth reserved for one practical if any.Specify whether skin goes cool or stays slightly protected. Do not write day-for-night sun, and do not add orange complementary punch unless you mean teal-orange.Copy promptUse in Image GeneratorCool blue grade on [Subject], steel shadows, hospital or moonlight, warmth reserved for one practical if any.Cool blue grade on [Subject], steel shadows, hospital or moonlight, warmth reserved for one practical if any."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Teal and Orange (skin stays warm) or Day for Night (hard shadows from a high sun). The tell is peach faces against cyan, or daytime sky structure.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            },
+            {
+              "text": "Day for Night",
+              "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: overall cool bias, maybe one warm practical, no high-sun day cues."
+        }
+      ],
+      "links": [
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Day for Night",
+          "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Teal and Orange (skin stays warm) or Day for Night (hard shadows from a high sun). The tell is peach faces against cyan, or daytime sky structure.Fix: overall cool bias, maybe one warm practical, no high-sun day cues."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is cool blue in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is an overall cool color grade: steel, cyan, or moonlight blues in shadows and mids. Warmth is scarce and usually limited to a chosen practical."
+        },
+        {
+          "type": "heading",
+          "text": "Cool Blue vs Teal and Orange",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Teal-orange protects warm skin and splits the rest toward cyan. Cool blue chills the whole world, faces included unless you reserve one lamp. One is a complementary split. The other is a cold wash."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use cool blue?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for institutions, night, or alienation. Skip it when you needed complementary punch, sculpted moon lighting, or a day-for-night capture."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt cool blue for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Cool blue grade on [Subject], steel shadows, hospital or moonlight, warmth reserved for one practical if any. Forbid peach-and-teal complementary splits and obvious daytime sun."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is cool blue in film?It is an overall cool color grade: steel, cyan, or moonlight blues in shadows and mids. Warmth is scarce and usually limited to a chosen practical.Cool Blue vs Teal and OrangeTeal-orange protects warm skin and splits the rest toward cyan. Cool blue chills the whole world, faces included unless you reserve one lamp. One is a complementary split. The other is a cold wash.When should I use cool blue?Use it for institutions, night, or alienation. Skip it when you needed complementary punch, sculpted moon lighting, or a day-for-night capture.How do I prompt cool blue for AI image or video?Write: Cool blue grade on [Subject], steel shadows, hospital or moonlight, warmth reserved for one practical if any. Forbid peach-and-teal complementary splits and obvious daytime sun."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the steel and the reserved hearth. Cool blue grade on [Subject], steel shadows, hospital or moonlight, warmth reserved for one practical if any.",
+      "Specify whether skin goes cool or stays slightly protected. Do not write day-for-night sun, and do not add orange complementary punch unless you mean teal-orange."
+    ],
+    "example": "Cool blue grade on [Subject], steel shadows, hospital or moonlight, warmth reserved for one practical if any."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/9ac5d96fc611ee97ab52dc9132feb3fa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cool-blue.webp",
+      "alt": "Cool Blue example"
+    },
+    {
+      "kind": "image",
+      "path": "media/afeaf073c169bf136864eccfa0d68e92.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blue-hour.webp",
+      "alt": "Blue Hour"
+    },
+    {
+      "kind": "image",
+      "path": "media/7e92537ac15a45b034ae6f579d107c77.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/day-for-night-071-day-for-night-landscape-mini.webp",
+      "alt": "Day for Night"
+    },
+    {
+      "kind": "video",
+      "path": "media/ae3bfb9cc8af2b1e00fefe11a1f48942.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/071-day-for-night-landscape-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/dba82caba42c89a3a0ef95716b3c9d6e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cool-blue/hero.jpg",
+      "alt": "Cool Blue",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "fb624bd0d23e976068e18c8f23bfec2756c512b2ae3c04cb80fbedd0fea72880"
+}

@@ -1,0 +1,463 @@
+{
+  "id": "time-and-motion/low-shutter",
+  "slug": "low-shutter",
+  "title": "Low Shutter",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/low-shutter",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-shutter-03-low-shutter-mini.webp",
+  "detail": "details/time-and-motion/low-shutter.json",
+  "aliases": [
+    "Crisp motion cadence",
+    "Reduced motion blur"
+  ],
+  "description": "Low shutter cinematography uses a short shutter angle or short exposure so moving edges stay sharp inside each frame. Normal-rate action then feels abrupt and staccato because this is reduced motion blur, not a long-exposure smear.",
+  "thumbnail": "media/79f6ebc1c25d0a74ab530c0497b6c07a.webp",
+  "video": "media/75b38b7b0b8b275b1cbd4178c4d102a1.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-low-shutter-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when impact and sensory stress should feel exposed: rain as beads, limbs as chopped positions, a landing that does not silk over. You are not speeding the scene."
+        },
+        {
+          "type": "paragraph",
+          "text": "You are removing the blur that usually glues fragments together. Combat and panic live here."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for night-traffic ribbons, lyric smear, or silk slow motion. Photography says 'low shutter speed' for long exposure."
+        },
+        {
+          "type": "paragraph",
+          "text": "Film says low shutter angle for the opposite. If every lamp paints a ribbon, you shot motion blur."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not skip frames and call that short shutter."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when impact and sensory stress should feel exposed: rain as beads, limbs as chopped positions, a landing that does not silk over. You are not speeding the scene.You are removing the blur that usually glues fragments together. Combat and panic live here.It is the wrong tool for night-traffic ribbons, lyric smear, or silk slow motion. Photography says 'low shutter speed' for long exposure.Film says low shutter angle for the opposite. If every lamp paints a ribbon, you shot motion blur.Do not skip frames and call that short shutter."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "At 24 fps, a 180-degree shutter is about 1/48 s. A 45-degree shutter is about 1/192 s: less blur, more light required."
+        },
+        {
+          "type": "paragraph",
+          "text": "Compensate exposure. In generated footage, request low motion blur and crisp droplets, not missing frames."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Low-shutter (short shutter angle) of [Subject], reduced motion blur, crisp rain and limb edges, staccato cadence."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works At 24 fps, a 180-degree shutter is about 1/48 s. A 45-degree shutter is about 1/192 s: less blur, more light required.Compensate exposure. In generated footage, request low motion blur and crisp droplets, not missing frames.Prompt: Low-shutter (short shutter angle) of [Subject], reduced motion blur, crisp rain and limb edges, staccato cadence."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it on a landing, a rescue run, or a fight that should feel like discrete fragments, such as Omaha-style rain and bodies. Do not use it when lamps should drag as ribbons."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it on a landing, a rescue run, or a fight that should feel like discrete fragments, such as Omaha-style rain and bodies. Do not use it when lamps should drag as ribbons."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Low shutter here is the inverse of Motion Blur. A Whip Pan smears by rotating fast, usually with a normal or long shutter.",
+          "links": [
+            {
+              "text": "Motion Blur",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur"
+            },
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Slow Motion can look sharp because high fps shortens each exposure, but the clock is stretched. Stutter / Stop-Stutter drops frames.",
+          "links": [
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            },
+            {
+              "text": "Stutter / Stop-Stutter",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/stutter"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Short shutter, low frame rate, skipped frames, and speed changes are separate controls."
+        },
+        {
+          "type": "list-item",
+          "text": "Motion BlurSpeed or trauma. Clarity would be false.",
+          "displayText": "Motion Blur\nSpeed or trauma. Clarity would be false.",
+          "links": [
+            {
+              "text": "Motion BlurSpeed or trauma. Clarity would be false.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "displayText": "Whip Pan\nTransition, punchline, or sudden attention shift.",
+          "links": [
+            {
+              "text": "Whip PanTransition, punchline, or sudden attention shift.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Motion Blur",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Stutter / Stop-Stutter",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/stutter"
+        },
+        {
+          "text": "Motion BlurSpeed or trauma. Clarity would be false.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur"
+        },
+        {
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/45f47ac4b0f511f8963d348e2dc5703f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motion-blur-01-motion-blur-mini.webp",
+          "alt": "Motion Blur"
+        },
+        {
+          "kind": "video",
+          "path": "media/1d6ce568ecc4c211fd8227f75c32f3b3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-motion-blur-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+          "alt": "Whip Pan"
+        },
+        {
+          "kind": "video",
+          "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Low shutter here is the inverse of Motion Blur. A Whip Pan smears by rotating fast, usually with a normal or long shutter.Slow Motion can look sharp because high fps shortens each exposure, but the clock is stretched. Stutter / Stop-Stutter drops frames.Short shutter, low frame rate, skipped frames, and speed changes are separate controls.Motion BlurSpeed or trauma. Clarity would be false.Whip PanTransition, punchline, or sudden attention shift.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Saving Private Ryan's Omaha Beach landing is the grammar: sharp, harshly segmented movement. Gladiator uses aggressive, discontinuous-looking motion on selected battle images."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cloverfield is listed nearby for chaos, but much of that chaos is handheld smear, the cousin."
+        },
+        {
+          "type": "list-item",
+          "text": "Saving Private Ryan 1998The Omaha Beach landing has sharp, harshly segmented movement.",
+          "displayText": "Saving Private Ryan 1998\nThe Omaha Beach landing has sharp, harshly segmented movement."
+        },
+        {
+          "type": "list-item",
+          "text": "Gladiator 2000Selected battle imagery uses aggressive, discontinuous-looking motion treatment.",
+          "displayText": "Gladiator 2000\nSelected battle imagery uses aggressive, discontinuous-looking motion treatment."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f2d2a568896b8de76a8508d0b8712da5.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-shutter/famous/00-saving-private-ryan-1998.jpg",
+          "alt": "Saving Private Ryan 1998"
+        },
+        {
+          "kind": "image",
+          "path": "media/b3cfc6beb532f5be4065599e2a2efa59.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-shutter/famous/01-gladiator-2000.jpg",
+          "alt": "Gladiator 2000"
+        }
+      ],
+      "sourceText": "In film Saving Private Ryan's Omaha Beach landing is the grammar: sharp, harshly segmented movement. Gladiator uses aggressive, discontinuous-looking motion on selected battle images.Cloverfield is listed nearby for chaos, but much of that chaos is handheld smear, the cousin.Saving Private Ryan 1998The Omaha Beach landing has sharp, harshly segmented movement.Gladiator 2000Selected battle imagery uses aggressive, discontinuous-looking motion treatment."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Adapt the catalog line toward the physics: short shutter, not long smear. Still: crisp droplets and defined moving limbs in a tense handheld frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Handheld close action of [Subject], normal playback speed, short-exposure droplets, sharply segmented body movement, no smooth slow motion, no artificial frame skipping."
+        },
+        {
+          "type": "quote",
+          "text": "Handheld close action of a rescue crew running through heavy rain, normal playback speed but crisp short-exposure droplets and sharply segmented body movement. Readable geography, restrained shake, no smooth slow motion, no artificial frame skipping."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Handheld+close+action+of+a+rescue+crew+running+through+heavy+rain,+normal+playback+speed+but+crisp+short-exposure+droplets+and+sharply+segmented+body+movement.+Readable+geography,+restrained+shake,+no+smooth+slow+motion,+no+artificial+frame+skipping."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Adapt the catalog line toward the physics: short shutter, not long smear. Still: crisp droplets and defined moving limbs in a tense handheld frame.Video: Handheld close action of [Subject], normal playback speed, short-exposure droplets, sharply segmented body movement, no smooth slow motion, no artificial frame skipping.Copy promptUse in Video GeneratorHandheld close action of a rescue crew running through heavy rain, normal playback speed but crisp short-exposure droplets and sharply segmented body movement. Readable geography, restrained shake, no smooth slow motion, no artificial frame skipping.Handheld close action of a rescue crew running through heavy rain, normal playback speed but crisp short-exposure droplets and sharply segmented body movement. Readable geography, restrained shake, no smooth slow motion, no artificial frame skipping."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Motion Blur (and the phrase 'low shutter speed'). The tell is ribbons of light and unreadable rain.",
+          "links": [
+            {
+              "text": "Motion Blur",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: specify short shutter angle or 1/200 s class exposure, reduced motion blur, staccato edges. If you wanted paint, go to motion blur."
+        }
+      ],
+      "links": [
+        {
+          "text": "Motion Blur",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Motion Blur (and the phrase 'low shutter speed'). The tell is ribbons of light and unreadable rain.Fix: specify short shutter angle or 1/200 s class exposure, reduced motion blur, staccato edges. If you wanted paint, go to motion blur."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Low Shutter in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Low shutter here means a short shutter angle: each frame is exposed briefly, so motion stays crisp and staccato instead of smeared."
+        },
+        {
+          "type": "heading",
+          "text": "Low Shutter vs Motion Blur",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Motion blur streaks because the shutter stays open during movement. Low shutter angle cuts that blur so fragments of action stay sharp."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Low Shutter?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a hit, a run, or a landing should feel like exposed fragments at normal speed, not like silk and not like night-traffic ribbons."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Low Shutter for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write short shutter angle, reduced motion blur, and crisp rain or limbs at normal playback. Do not ask for long-exposure streaks."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Low Shutter in film?Low shutter here means a short shutter angle: each frame is exposed briefly, so motion stays crisp and staccato instead of smeared.Low Shutter vs Motion BlurMotion blur streaks because the shutter stays open during movement. Low shutter angle cuts that blur so fragments of action stay sharp.When should I use Low Shutter?When a hit, a run, or a landing should feel like exposed fragments at normal speed, not like silk and not like night-traffic ribbons.How do I prompt Low Shutter for AI image or video?Write short shutter angle, reduced motion blur, and crisp rain or limbs at normal playback. Do not ask for long-exposure streaks."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Adapt the catalog line toward the physics: short shutter, not long smear. Still: crisp droplets and defined moving limbs in a tense handheld frame.",
+      "Video: Handheld close action of [Subject], normal playback speed, short-exposure droplets, sharply segmented body movement, no smooth slow motion, no artificial frame skipping."
+    ],
+    "example": "Handheld close action of a rescue crew running through heavy rain, normal playback speed but crisp short-exposure droplets and sharply segmented body movement. Readable geography, restrained shake, no smooth slow motion, no artificial frame skipping."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/75b38b7b0b8b275b1cbd4178c4d102a1.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-low-shutter-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/79f6ebc1c25d0a74ab530c0497b6c07a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-shutter-03-low-shutter-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/99ae3f3e3c3a78deaa5df0ba24805ad0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/low-shutter.jpg",
+      "alt": "Low Shutter frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/45f47ac4b0f511f8963d348e2dc5703f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motion-blur-01-motion-blur-mini.webp",
+      "alt": "Motion Blur"
+    },
+    {
+      "kind": "video",
+      "path": "media/1d6ce568ecc4c211fd8227f75c32f3b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-motion-blur-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+      "alt": "Whip Pan"
+    },
+    {
+      "kind": "video",
+      "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f2d2a568896b8de76a8508d0b8712da5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-shutter/famous/00-saving-private-ryan-1998.jpg",
+      "alt": "Saving Private Ryan 1998"
+    },
+    {
+      "kind": "image",
+      "path": "media/b3cfc6beb532f5be4065599e2a2efa59.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-shutter/famous/01-gladiator-2000.jpg",
+      "alt": "Gladiator 2000"
+    },
+    {
+      "kind": "image",
+      "path": "media/58c079b0bb9f501a8c7ae99f5058536c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-shutter/hero.jpg",
+      "alt": "Low Shutter",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "3e17a7588b6f3a4940b1289b478996cceec3170c85a0b3921c14c66607c57231"
+}

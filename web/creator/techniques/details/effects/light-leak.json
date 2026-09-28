@@ -1,0 +1,395 @@
+{
+  "id": "effects/light-leak",
+  "slug": "light-leak",
+  "title": "Light Leak",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/light-leak",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/light-leak.webp",
+  "detail": "details/effects/light-leak.json",
+  "aliases": [],
+  "description": "A light leak in light leak film is unfiltered light that reaches the emulsion or sensor without passing through the taking lens, usually through a gap in the body, magazine, or gate. It fogs from the edge or along a scratch in the film path, often orange or red on color negative because it hits the base side.",
+  "thumbnail": "media/722f29356ed237fedec07d560c90f258.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The frame is wounded at the border. A wash of orange, red, or white eats density that the lens never saw."
+        },
+        {
+          "type": "paragraph",
+          "text": "It feels like damaged time: a Super 8 cartridge, a clock not seated, a magazine door. The pictured lamps are innocent."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for memory, accident, or analog failure, when the camera body is part of the story. A leak can punctuate a cut or stain a whole take."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool as a default nostalgia grade on a clean digital interior. If the wash sits in the middle of the frame and tracks a pictured sun, you are describing flare, not a leak."
+        },
+        {
+          "type": "paragraph",
+          "text": "If only highlight edges glow, that is halation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The frame is wounded at the border. A wash of orange, red, or white eats density that the lens never saw.It feels like damaged time: a Super 8 cartridge, a clock not seated, a magazine door. The pictured lamps are innocent.Use it for memory, accident, or analog failure, when the camera body is part of the story. A leak can punctuate a cut or stain a whole take.It is the wrong tool as a default nostalgia grade on a clean digital interior. If the wash sits in the middle of the frame and tracks a pictured sun, you are describing flare, not a leak.If only highlight edges glow, that is halation."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Physically: open a gap at the magazine, leave a clock loose, or flash the film in loading. The fog often blooms from one edge and may shift as the film advances."
+        },
+        {
+          "type": "paragraph",
+          "text": "Recreating it: edge-based, warm, additive fog that can clip, unrelated to sources in the set. Prompt: analog leak from the frame edge, orange or red, emulsion wound, not a lens flare from a lamp."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Physically: open a gap at the magazine, leave a clock loose, or flash the film in loading. The fog often blooms from one edge and may shift as the film advances.Recreating it: edge-based, warm, additive fog that can clip, unrelated to sources in the set. Prompt: analog leak from the frame edge, orange or red, emulsion wound, not a lens flare from a lamp."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An apartment portrait with an orange bite coming in from the left, as if the cartridge failed, while the window practicals remain ordinary. Do not center a golden wash on the sun in frame and call it a leak."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it An apartment portrait with an orange bite coming in from the left, as if the cartridge failed, while the window practicals remain ordinary. Do not center a golden wash on the sun in frame and call it a leak."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lens Flare enters through the glass and ghosts the source. A leak bypasses the glass.",
+          "links": [
+            {
+              "text": "Lens Flare",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Halation is a halo around highlights already imaged. Film Grain is texture, not fog.",
+          "links": [
+            {
+              "text": "Halation",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            },
+            {
+              "text": "Film Grain",
+              "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Light Flash is a temporal blowout of the whole frame, often as a cut. A leak is a spatial stain, usually from the edge.",
+          "links": [
+            {
+              "text": "Light Flash",
+              "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "displayText": "Halation\nHighlights should bleed like film, not clip like video.",
+          "links": [
+            {
+              "text": "HalationHighlights should bleed like film, not clip like video.",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film GrainThe image should feel developed, not rendered.",
+          "displayText": "Film Grain\nThe image should feel developed, not rendered.",
+          "links": [
+            {
+              "text": "Film GrainThe image should feel developed, not rendered.",
+              "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Lens Flare",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "Halation",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "Film Grain",
+          "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+        },
+        {
+          "text": "Light Flash",
+          "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+        },
+        {
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "Film GrainThe image should feel developed, not rendered.",
+          "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+          "alt": "Halation"
+        },
+        {
+          "kind": "video",
+          "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/5fca5d01511d1b273f967622f709e9a3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-grain-076-archival-or-damaged-medium-texture-mini.webp",
+          "alt": "Film Grain"
+        },
+        {
+          "kind": "video",
+          "path": "media/1d7683ea283deb5b71800203fb729749.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/076-archival-or-damaged-medium-texture-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Lens Flare enters through the glass and ghosts the source. A leak bypasses the glass.Halation is a halo around highlights already imaged. Film Grain is texture, not fog.Light Flash is a temporal blowout of the whole frame, often as a cut. A leak is a spatial stain, usually from the edge.HalationHighlights should bleed like film, not clip like video.Film GrainThe image should feel developed, not rendered.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Spring Breakers uses analog damage, including leaks and blown edges, as party-memory texture. Super 8 (2011) treats cartridge wounds as period accident."
+        },
+        {
+          "type": "paragraph",
+          "text": "Home-movie Super 8 diaries are the grammar: edge fog, not a pictured lamp."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Spring Breakers uses analog damage, including leaks and blown edges, as party-memory texture. Super 8 (2011) treats cartridge wounds as period accident.Home-movie Super 8 diaries are the grammar: edge fog, not a pictured lamp."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the wound on the edge, not on the sun. Example: Analog light leak washing [Subject], orange or red fog eating the frame edge, unfiltered light on the emulsion, not a source-linked lens flare."
+        },
+        {
+          "type": "quote",
+          "text": "Analog light leak washing [Subject], orange or red flare eating the frame edge, a wound in the emulsion."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Analog+light+leak+washing+[Subject],+orange+or+red+flare+eating+the+frame+edge,+a+wound+in+the+emulsion."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Put the wound on the edge, not on the sun. Example: Analog light leak washing [Subject], orange or red fog eating the frame edge, unfiltered light on the emulsion, not a source-linked lens flare.Copy promptUse in Image GeneratorAnalog light leak washing [Subject], orange or red flare eating the frame edge, a wound in the emulsion.Analog light leak washing [Subject], orange or red flare eating the frame edge, a wound in the emulsion."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: lens flare or halation. Tell: the colored wash tracks a lamp in shot, or a red ring around a bulb with a clean frame edge."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: originate the fog from a body gap at the border, independent of pictured sources."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: lens flare or halation. Tell: the colored wash tracks a lamp in shot, or a red ring around a bulb with a clean frame edge.Fix: originate the fog from a body gap at the border, independent of pictured sources."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a light leak in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Light that hits the film or sensor without going through the taking lens, usually from a gap in the camera body. It fogs the image, often from the edge."
+        },
+        {
+          "type": "heading",
+          "text": "Light leak vs lens flare",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Flare is scatter inside the optic from a pictured or near-frame source. A leak bypasses the lens entirely. One ghosts a lamp. The other stains the emulsion."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a light leak?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When memory or analog accident should mark the frame. Do not use it as a default warmth filter, or when the sun in shot is the real cause."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a light leak for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify edge-origin orange or red fog, emulsion damage, and independence from lamps in the scene. Ban source-linked streaks."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a light leak in film?Light that hits the film or sensor without going through the taking lens, usually from a gap in the camera body. It fogs the image, often from the edge.Light leak vs lens flareFlare is scatter inside the optic from a pictured or near-frame source. A leak bypasses the lens entirely. One ghosts a lamp. The other stains the emulsion.When should I use a light leak?When memory or analog accident should mark the frame. Do not use it as a default warmth filter, or when the sun in shot is the real cause.How do I prompt a light leak for AI image or video?Specify edge-origin orange or red fog, emulsion damage, and independence from lamps in the scene. Ban source-linked streaks."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Put the wound on the edge, not on the sun. Example: Analog light leak washing [Subject], orange or red fog eating the frame edge, unfiltered light on the emulsion, not a source-linked lens flare."
+    ],
+    "example": "Analog light leak washing [Subject], orange or red flare eating the frame edge, a wound in the emulsion."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/722f29356ed237fedec07d560c90f258.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/light-leak.webp",
+      "alt": "Light Leak example"
+    },
+    {
+      "kind": "image",
+      "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+      "alt": "Halation"
+    },
+    {
+      "kind": "video",
+      "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5fca5d01511d1b273f967622f709e9a3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-grain-076-archival-or-damaged-medium-texture-mini.webp",
+      "alt": "Film Grain"
+    },
+    {
+      "kind": "video",
+      "path": "media/1d7683ea283deb5b71800203fb729749.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/076-archival-or-damaged-medium-texture-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/36177afb5c6db1069f8f76a9ed5d0c17.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/light-leak/hero.jpg",
+      "alt": "Light Leak",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "65afbf2c4ec9876c77ccf8ee6a5a539576a9d2670e1d9c8d2cee2a1f9cff1687"
+}

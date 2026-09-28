@@ -1,0 +1,492 @@
+{
+  "id": "framing/over-the-shoulder-frame",
+  "slug": "over-the-shoulder-frame",
+  "title": "Over-the-Shoulder Coverage (OTS)",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/over-the-shoulder-frame-088-over-the-shoulder-coverage-mini.webp",
+  "detail": "details/framing/over-the-shoulder-frame.json",
+  "aliases": [
+    "OTS",
+    "Amorce épaule"
+  ],
+  "description": "Over-the-shoulder coverage, or an over the shoulder shot, puts a near shoulder or head in the foreground while the far face stays sharp. Paired reverses preserve relational space.",
+  "thumbnail": "media/d65f275fff8e870e92c86c8d7270a51e.webp",
+  "video": "media/f20fdb7d226138aaf5dd59721e8bcc91.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/088-over-the-shoulder-coverage-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "OTS is default dialogue coverage with spatial glue. The partner remains physically present even in a close view."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shoulder size and how much it obstructs can make the observer feel dominant, intimate, or trapped. It is the wrong tool when you need to isolate someone as if the other person had left the room: that is a clean single."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool if both faces are equally sharp and complete: that is a two-shot. An over-the-shoulder shot is a framing choice."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shot/reverse shot is an editing pattern. They are not synonyms."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function OTS is default dialogue coverage with spatial glue. The partner remains physically present even in a close view.Shoulder size and how much it obstructs can make the observer feel dominant, intimate, or trapped. It is the wrong tool when you need to isolate someone as if the other person had left the room: that is a clean single.It is also the wrong tool if both faces are equally sharp and complete: that is a two-shot. An over-the-shoulder shot is a framing choice.Shot/reverse shot is an editing pattern. They are not synonyms."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place the camera beside one body, looking past a soft near shoulder at the far face. The far person looks at the near person, toward that shoulder, never into the lens."
+        },
+        {
+          "type": "paragraph",
+          "text": "Match foreground body position, head size, and eyeline on the reverse. The 180-degree line is the axis between the two bodies."
+        },
+        {
+          "type": "paragraph",
+          "text": "OTS coverage lives on one side of that line. If the near shoulder sits camera-right, the far face looks camera-right."
+        },
+        {
+          "type": "paragraph",
+          "text": "The reverse OTS swaps who is near, but it stays on the same side of the axis so screen direction does not flip. Crossing the line is not a style choice in this coverage: it makes two people look like they share a bench instead of a conversation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use focus and lighting to keep the speaking face sharp and the near cloth soft. Prompt: Over-the-shoulder framing of [Subject], near shoulder soft in foreground, the far face sharp, looking toward the near shoulder, 180-line held."
+        },
+        {
+          "type": "paragraph",
+          "text": "Never cross the 180-degree line. Draw the axis between the two people and keep the camera on one side of it. Far face looks at the near shoulder. The reverse stays on the same side of the axis. If they look into the lens or away from each other, it is no longer OTS coverage."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place the camera beside one body, looking past a soft near shoulder at the far face. The far person looks at the near person, toward that shoulder, never into the lens.Match foreground body position, head size, and eyeline on the reverse. The 180-degree line is the axis between the two bodies.OTS coverage lives on one side of that line. If the near shoulder sits camera-right, the far face looks camera-right.The reverse OTS swaps who is near, but it stays on the same side of the axis so screen direction does not flip. Crossing the line is not a style choice in this coverage: it makes two people look like they share a bench instead of a conversation.Use focus and lighting to keep the speaking face sharp and the near cloth soft. Prompt: Over-the-shoulder framing of [Subject], near shoulder soft in foreground, the far face sharp, looking toward the near shoulder, 180-line held.Never cross the 180-degree line. Draw the axis between the two people and keep the camera on one side of it. Far face looks at the near shoulder. The reverse stays on the same side of the axis. If they look into the lens or away from each other, it is no longer OTS coverage."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it as default dialogue coverage when you want the relationship to stay in the picture: a diner, a deposition, an interview through glass. Do not mismatch shoulder size on the reverse, and do not call a clean single an OTS."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it as default dialogue coverage when you want the relationship to stay in the picture: a diner, a deposition, an interview through glass. Do not mismatch shoulder size on the reverse, and do not call a clean single an OTS."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Two-Shot gives both faces authorship. A Single removes the foreground partner; a dirty single may chew the edge without a true shoulder anchor.",
+          "links": [
+            {
+              "text": "Two-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            },
+            {
+              "text": "Single",
+              "url": "https://melies.co/cinematic-techniques/framing/single"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Reaction Shot may be taken as OTS or as a single. OTS means: near body fragment, far face subject.",
+          "links": [
+            {
+              "text": "Reaction Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Match the pair."
+        },
+        {
+          "type": "list-item",
+          "text": "Two-ShotThe relationship is the shot.",
+          "displayText": "Two-Shot\nThe relationship is the shot.",
+          "links": [
+            {
+              "text": "Two-ShotThe relationship is the shot.",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SingleIsolate. The other person is gone even if they are in the room.",
+          "displayText": "Single\nIsolate. The other person is gone even if they are in the room.",
+          "links": [
+            {
+              "text": "SingleIsolate. The other person is gone even if they are in the room.",
+              "url": "https://melies.co/cinematic-techniques/framing/single"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Two-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        },
+        {
+          "text": "Single",
+          "url": "https://melies.co/cinematic-techniques/framing/single"
+        },
+        {
+          "text": "Reaction Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+        },
+        {
+          "text": "Two-ShotThe relationship is the shot.",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        },
+        {
+          "text": "SingleIsolate. The other person is gone even if they are in the room.",
+          "url": "https://melies.co/cinematic-techniques/framing/single"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ebc6a9329d13b0c650bddc57d3a8808d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/two-shot-048-profile-two-shot-mini.webp",
+          "alt": "Two-Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/c2b51a507b8e5b9e6dbb06fe2e90d474.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/048-profile-two-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/808603679a1bd66241e5ffada35ce0ac.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/single.webp",
+          "alt": "Single"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Two-Shot gives both faces authorship. A Single removes the foreground partner; a dirty single may chew the edge without a true shoulder anchor.A Reaction Shot may be taken as OTS or as a single. OTS means: near body fragment, far face subject.Match the pair.Two-ShotThe relationship is the shot.SingleIsolate. The other person is gone even if they are in the room.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Social Network runs confrontations and depositions in this geometry. Heat's diner uses shared geography and opposing coverage between the two-shot and the tighter work."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Silence of the Lambs interviews live on whose shoulder, whose glass, whose face. The Stendhal Syndrome connects a person and a painting through alternating views, related grammar of looking past one thing at another."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: relation still in the foreground."
+        },
+        {
+          "type": "list-item",
+          "text": "The Social Network 2010Confrontational conversations and deposition coverage.",
+          "displayText": "The Social Network 2010\nConfrontational conversations and deposition coverage."
+        },
+        {
+          "type": "list-item",
+          "text": "Heat 1995The diner exchange uses shared geography and opposing coverage.",
+          "displayText": "Heat 1995\nThe diner exchange uses shared geography and opposing coverage."
+        },
+        {
+          "type": "list-item",
+          "text": "Heat 1995The diner conversation between Hanna and McCauley.",
+          "displayText": "Heat 1995\nThe diner conversation between Hanna and McCauley."
+        },
+        {
+          "type": "list-item",
+          "text": "The Silence of the Lambs 1991Clarice and Lecter’s interviews.",
+          "displayText": "The Silence of the Lambs 1991\nClarice and Lecter’s interviews."
+        },
+        {
+          "type": "list-item",
+          "text": "The Stendhal Syndrome 1996Anna and the painting are connected through alternating views.",
+          "displayText": "The Stendhal Syndrome 1996\nAnna and the painting are connected through alternating views."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d66ece1cd6f5fa5429e6af70ec13391a.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/over-the-shoulder-frame/famous/00-heat-1995.jpg",
+          "alt": "Heat 1995"
+        },
+        {
+          "kind": "image",
+          "path": "media/95c01c90f21a0521dea8dc935171168c.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/over-the-shoulder-frame/famous/01-the-silence-of-the-lambs-1991.jpg",
+          "alt": "The Silence of the Lambs 1991"
+        }
+      ],
+      "sourceText": "In film The Social Network runs confrontations and depositions in this geometry. Heat's diner uses shared geography and opposing coverage between the two-shot and the tighter work.The Silence of the Lambs interviews live on whose shoulder, whose glass, whose face. The Stendhal Syndrome connects a person and a painting through alternating views, related grammar of looking past one thing at another.Grammar: relation still in the foreground.The Social Network 2010Confrontational conversations and deposition coverage.Heat 1995The diner exchange uses shared geography and opposing coverage.Heat 1995The diner conversation between Hanna and McCauley.The Silence of the Lambs 1991Clarice and Lecter’s interviews.The Stendhal Syndrome 1996Anna and the painting are connected through alternating views."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the near shoulder and the far face. Example: Over-the-shoulder framing of [Subject], near shoulder soft in foreground, the far face sharp, looking toward the near shoulder, 180-line held."
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify which body is near. For a pair, generate a matched reverse on the same side of the axis, same table and key."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not put both full faces to camera, and do not let the far person look into the lens."
+        },
+        {
+          "type": "quote",
+          "text": "Generate two matching over-the-shoulder shots of a tense café conversation. A: the man’s blurred shoulder frames the woman’s face. B: her blurred shoulder frames his face. Preserve seat positions, cup placement and light direction. Edit on changing reactions, not every spoken word."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Generate+two+matching+over-the-shoulder+shots+of+a+tense+caf%C3%A9+conversation.+A:+the+man%E2%80%99s+blurred+shoulder+frames+the+woman%E2%80%99s+face.+B:+her+blurred+shoulder+frames+his+face.+Preserve+seat+positions,+cup+placement+and+light+direction.+Edit+on+changing+reactions,+not+every+spoken+word."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the near shoulder and the far face. Example: Over-the-shoulder framing of [Subject], near shoulder soft in foreground, the far face sharp, looking toward the near shoulder, 180-line held.Specify which body is near. For a pair, generate a matched reverse on the same side of the axis, same table and key.Do not put both full faces to camera, and do not let the far person look into the lens.Copy promptUse in Video GeneratorGenerate two matching over-the-shoulder shots of a tense café conversation. A: the man’s blurred shoulder frames the woman’s face. B: her blurred shoulder frames his face. Preserve seat positions, cup placement and light direction. Edit on changing reactions, not every spoken word.Generate two matching over-the-shoulder shots of a tense café conversation. A: the man’s blurred shoulder frames the woman’s face. B: her blurred shoulder frames his face. Preserve seat positions, cup placement and light direction. Edit on changing reactions, not every spoken word."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Two-Shot (both faces complete) or a Single (no shoulder). The tell is two people equally sharp, or a clean portrait.",
+          "links": [
+            {
+              "text": "Two-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            },
+            {
+              "text": "Single",
+              "url": "https://melies.co/cinematic-techniques/framing/single"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The worse tell is a broken 180: the far person looks into the lens or away from the near shoulder, so the reverse would make them appear to sit on the same side. Fix: one soft shoulder, one sharp face looking at that shoulder, matched reverse, line held."
+        }
+      ],
+      "links": [
+        {
+          "text": "Two-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        },
+        {
+          "text": "Single",
+          "url": "https://melies.co/cinematic-techniques/framing/single"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Two-Shot (both faces complete) or a Single (no shoulder). The tell is two people equally sharp, or a clean portrait.The worse tell is a broken 180: the far person looks into the lens or away from the near shoulder, so the reverse would make them appear to sit on the same side. Fix: one soft shoulder, one sharp face looking at that shoulder, matched reverse, line held."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Over-the-Shoulder Coverage in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Over-the-shoulder coverage frames the far person as the subject while a near shoulder or head anchors the foreground. Paired OTS shots keep two people in a shared geometry even when we are close on one face."
+        },
+        {
+          "type": "heading",
+          "text": "Over-the-Shoulder Coverage vs Single",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A single is one principal with no partner owning the foreground. OTS keeps a near shoulder or head in frame as a spatial glue. If the other person is gone from the rectangle, you have a single, even if they are still in the room."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Over-the-Shoulder Coverage?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for dialogue that should keep the relationship physically present. Do not use it when isolation is the point, and do not mismatch the reverse."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Over-the-Shoulder Coverage for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Over-the-shoulder framing of [Subject], near shoulder soft in foreground, the far face sharp, looking toward the near shoulder. Name who is near. Hold the 180. For video, generate a matched reverse as a second shot on the same side of the line, rather than spinning the camera around them."
+        },
+        {
+          "type": "heading",
+          "text": "Does an over-the-shoulder shot break the 180-degree rule?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "No. A correct OTS is how you hold the 180. The camera stays on one side of the line between the two people. The far face looks toward the near shoulder, not into the lens. Crossing that line flips screen direction and is a coverage error, not a look."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Over-the-Shoulder Coverage in film?Over-the-shoulder coverage frames the far person as the subject while a near shoulder or head anchors the foreground. Paired OTS shots keep two people in a shared geometry even when we are close on one face.Over-the-Shoulder Coverage vs SingleA single is one principal with no partner owning the foreground. OTS keeps a near shoulder or head in frame as a spatial glue. If the other person is gone from the rectangle, you have a single, even if they are still in the room.When should I use Over-the-Shoulder Coverage?Use it for dialogue that should keep the relationship physically present. Do not use it when isolation is the point, and do not mismatch the reverse.How do I prompt Over-the-Shoulder Coverage for AI image or video?Write Over-the-shoulder framing of [Subject], near shoulder soft in foreground, the far face sharp, looking toward the near shoulder. Name who is near. Hold the 180. For video, generate a matched reverse as a second shot on the same side of the line, rather than spinning the camera around them.Does an over-the-shoulder shot break the 180-degree rule?No. A correct OTS is how you hold the 180. The camera stays on one side of the line between the two people. The far face looks toward the near shoulder, not into the lens. Crossing that line flips screen direction and is a coverage error, not a look."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the near shoulder and the far face. Example: Over-the-shoulder framing of [Subject], near shoulder soft in foreground, the far face sharp, looking toward the near shoulder, 180-line held.",
+      "Specify which body is near. For a pair, generate a matched reverse on the same side of the axis, same table and key.",
+      "Do not put both full faces to camera, and do not let the far person look into the lens."
+    ],
+    "example": "Generate two matching over-the-shoulder shots of a tense café conversation. A: the man’s blurred shoulder frames the woman’s face. B: her blurred shoulder frames his face. Preserve seat positions, cup placement and light direction. Edit on changing reactions, not every spoken word."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/f20fdb7d226138aaf5dd59721e8bcc91.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/088-over-the-shoulder-coverage-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d65f275fff8e870e92c86c8d7270a51e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/over-the-shoulder-frame-088-over-the-shoulder-coverage-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f00a730e3e60101aee689884daab2148.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/over-the-shoulder-frame.jpg",
+      "alt": "Over-the-Shoulder Coverage frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/ebc6a9329d13b0c650bddc57d3a8808d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/two-shot-048-profile-two-shot-mini.webp",
+      "alt": "Two-Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/c2b51a507b8e5b9e6dbb06fe2e90d474.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/048-profile-two-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/808603679a1bd66241e5ffada35ce0ac.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/single.webp",
+      "alt": "Single"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d66ece1cd6f5fa5429e6af70ec13391a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/over-the-shoulder-frame/famous/00-heat-1995.jpg",
+      "alt": "Heat 1995"
+    },
+    {
+      "kind": "image",
+      "path": "media/95c01c90f21a0521dea8dc935171168c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/over-the-shoulder-frame/famous/01-the-silence-of-the-lambs-1991.jpg",
+      "alt": "The Silence of the Lambs 1991"
+    },
+    {
+      "kind": "image",
+      "path": "media/16f502e7c55fc6feed914e7aa67f141e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/over-the-shoulder-frame/hero-180.jpg",
+      "alt": "Over-the-Shoulder Coverage (OTS)",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "0184d71eff33ef80d681d4d03c163d8e2bbb4f6dcc11263896ed6ec79876905f"
+}

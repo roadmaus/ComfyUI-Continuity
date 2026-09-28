@@ -1,0 +1,386 @@
+{
+  "id": "camera-movement/lazy-susan",
+  "slug": "lazy-susan",
+  "title": "Lazy Susan",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lazy-susan-lazy-susan-mini.webp",
+  "detail": "details/camera-movement/lazy-susan.json",
+  "aliases": [],
+  "description": "A lazy susan shot rotates the subject on a motorized turntable while the camera stays put, or the camera circles at a fixed product-hero radius. Distance holds, so scale does not change, and the far wall barely shears if the disc is what turns.",
+  "thumbnail": "media/e08a5e61f13e45920f57f62e20326731.webp",
+  "video": "media/de412fdb77aeb52f922e9ab38017a869.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lazy-susan-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to inspect. A coat, a bottle, a weapon, a figure treated as merchandise: every azimuth is offered without a cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "Light should stay consistent so the object, not the room, is what changes. It is the wrong tool when geography matters."
+        },
+        {
+          "type": "paragraph",
+          "text": "If walls, extras, and lamps must slide to prove a living space, you want an orbit. A conversation, a chase, a blocked room: those need the camera to travel."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it to inspect. A coat, a bottle, a weapon, a figure treated as merchandise: every azimuth is offered without a cut.Light should stay consistent so the object, not the room, is what changes. It is the wrong tool when geography matters.If walls, extras, and lamps must slide to prove a living space, you want an orbit. A conversation, a chase, a blocked room: those need the camera to travel."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The classic rig is a motorized disc under the subject; the camera is locked on sticks at eye or product height, often 50 to 85mm so the silhouette stays clean. Alternate: a circular slider at constant radius with the subject locked."
+        },
+        {
+          "type": "paragraph",
+          "text": "Either way, nodal distance is constant. Prompt a slow turntable rotation or a camera circling at product-hero distance, one revolution or a 90-degree reveal, no zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works The classic rig is a motorized disc under the subject; the camera is locked on sticks at eye or product height, often 50 to 85mm so the silhouette stays clean. Alternate: a circular slider at constant radius with the subject locked.Either way, nodal distance is constant. Prompt a slow turntable rotation or a camera circling at product-hero distance, one revolution or a 90-degree reveal, no zoom."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Show an object or costume from every side: a dress on a dummy, a car on a cyc, a relic on glass. Do not use it for a talk; faces in dialogue do not need a spin."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Show an object or costume from every side: a dress on a dummy, a car on a cyc, a relic on glass. Do not use it for a talk; faces in dialogue do not need a spin."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "360-Degree Orbit walks the camera around a living space so walls and extras shear. A lazy susan keeps radius and usually the room still.",
+          "links": [
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "3D Rotation treats the figure as a virtual sculpture in computed space. An Arc is a partial circle that still faces a person in a real room.",
+          "links": [
+            {
+              "text": "3D Rotation",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/3d-rotation"
+            },
+            {
+              "text": "Arc",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "displayText": "360-Degree Orbit\nTime collapses around one person: kiss, threat, or product hero.",
+          "links": [
+            {
+              "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom OutReveal context, isolation, or a joke that was off-screen.",
+          "displayText": "Slow Zoom Out\nReveal context, isolation, or a joke that was off-screen.",
+          "links": [
+            {
+              "text": "Slow Zoom OutReveal context, isolation, or a joke that was off-screen.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "3D Rotation",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/3d-rotation"
+        },
+        {
+          "text": "Arc",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc"
+        },
+        {
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        },
+        {
+          "text": "Slow Zoom OutReveal context, isolation, or a joke that was off-screen.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+          "alt": "360-Degree Orbit"
+        },
+        {
+          "kind": "video",
+          "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4ac31249e720e1115c85ec7206f447e1.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-out-02-slow-zoom-out-v2-mini.webp",
+          "alt": "Slow Zoom Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4dcf30309cadb6112f74b8f705e8d05.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-slow-zoom-out-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots 360-Degree Orbit walks the camera around a living space so walls and extras shear. A lazy susan keeps radius and usually the room still.3D Rotation treats the figure as a virtual sculpture in computed space. An Arc is a partial circle that still faces a person in a real room.360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.Slow Zoom OutReveal context, isolation, or a joke that was off-screen."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Product films and music-video costume spins are the grammar: perfume turntables, album-cover rotations, a hero prop shown as a specimen. These are inspection uses, not a narrative street orbit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Product films and music-video costume spins are the grammar: perfume turntables, album-cover rotations, a hero prop shown as a specimen. These are inspection uses, not a narrative street orbit."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Quote the move, not a mood. Still: Lazy-Susan rotation of [Subject] on a turntable while the camera stays put, or the camera circles a static product, commercial 360 hero."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: [Subject] rotates slowly as if on a turntable, or the camera circles at product-hero distance. Name the object, keep distance constant, forbid a zoom."
+        },
+        {
+          "type": "quote",
+          "text": "[Subject] rotates slowly as if on a turntable, or the camera circles at product-hero distance."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=[Subject]+rotates+slowly+as+if+on+a+turntable,+or+the+camera+circles+at+product-hero+distance."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Quote the move, not a mood. Still: Lazy-Susan rotation of [Subject] on a turntable while the camera stays put, or the camera circles a static product, commercial 360 hero.Video: [Subject] rotates slowly as if on a turntable, or the camera circles at product-hero distance. Name the object, keep distance constant, forbid a zoom.Copy promptUse in Video Generator[Subject] rotates slowly as if on a turntable, or the camera circles at product-hero distance.[Subject] rotates slowly as if on a turntable, or the camera circles at product-hero distance."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an orbit. The tell: background sliding, a lamp shearing, the room turning."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: lock the camera or lock the subject to a disc, keep radius constant, let only the object rotate."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an orbit. The tell: background sliding, a lamp shearing, the room turning.The fix: lock the camera or lock the subject to a disc, keep radius constant, let only the object rotate."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Lazy Susan in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A lazy susan shot rotates the subject on a turntable with the camera locked, or circles the object at a fixed product-hero distance, so every side is shown without a change in scale."
+        },
+        {
+          "type": "heading",
+          "text": "Lazy Susan vs 360-Degree Orbit",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An orbit moves the camera through a real room so parallax of walls and extras is the proof. A lazy susan keeps the radius and usually the background still; the object turns like a specimen."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Lazy Susan?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to show a costume, product, or relic from every side. Skip it when the location has to act; then orbit or arc instead."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Lazy Susan for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a turntable rotation or a camera circling at product-hero distance. Name the object, hold distance, and say no zoom. Example: Lazy-Susan rotation of [Subject] on a turntable while the camera stays put."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Lazy Susan in film?A lazy susan shot rotates the subject on a turntable with the camera locked, or circles the object at a fixed product-hero distance, so every side is shown without a change in scale.Lazy Susan vs 360-Degree OrbitAn orbit moves the camera through a real room so parallax of walls and extras is the proof. A lazy susan keeps the radius and usually the background still; the object turns like a specimen.When should I use Lazy Susan?Use it to show a costume, product, or relic from every side. Skip it when the location has to act; then orbit or arc instead.How do I prompt Lazy Susan for AI image or video?Write a turntable rotation or a camera circling at product-hero distance. Name the object, hold distance, and say no zoom. Example: Lazy-Susan rotation of [Subject] on a turntable while the camera stays put."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Quote the move, not a mood. Still: Lazy-Susan rotation of [Subject] on a turntable while the camera stays put, or the camera circles a static product, commercial 360 hero.",
+      "Video: [Subject] rotates slowly as if on a turntable, or the camera circles at product-hero distance. Name the object, keep distance constant, forbid a zoom."
+    ],
+    "example": "[Subject] rotates slowly as if on a turntable, or the camera circles at product-hero distance."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/de412fdb77aeb52f922e9ab38017a869.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lazy-susan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e08a5e61f13e45920f57f62e20326731.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lazy-susan-lazy-susan-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2d6455d2920fe18803b8ecee034e691f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/lazy-susan.jpg",
+      "alt": "Lazy Susan frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+      "alt": "360-Degree Orbit"
+    },
+    {
+      "kind": "video",
+      "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4ac31249e720e1115c85ec7206f447e1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-out-02-slow-zoom-out-v2-mini.webp",
+      "alt": "Slow Zoom Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4dcf30309cadb6112f74b8f705e8d05.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-slow-zoom-out-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d357925ba5ed12bbd1c3b938148aef2f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/lazy-susan/hero.jpg",
+      "alt": "Lazy Susan",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "5f9a62a5434a4f74012209904a2aa364cda96dab0040e3b2af379f3b89b0ed07"
+}

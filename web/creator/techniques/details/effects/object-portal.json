@@ -1,0 +1,389 @@
+{
+  "id": "effects/object-portal",
+  "slug": "object-portal",
+  "title": "Object Portal",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/object-portal",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/object-portal-object-portal-mini.webp",
+  "detail": "details/effects/object-portal.json",
+  "aliases": [],
+  "description": "An object portal effect treats a prop as a wormhole: a bag, a screen, or a doorway that should not lead there, opening onto another space. The thing is the cut.",
+  "thumbnail": "media/eb0b73ad7e6099db4d24e843e9ce6226.webp",
+  "video": "media/0a077e954932ba77489876d3a6d39e77.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/object-portal-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A filing cabinet leads to a tunnel. A mirror becomes a corridor."
+        },
+        {
+          "type": "paragraph",
+          "text": "A phone swallows a body. Use it when geography must jump through an object we already believe in as a prop."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the camera itself punches through a wall with no special object, or when a wall is only a screen of light. If matter is optional for the lens, that is a pass-through."
+        },
+        {
+          "type": "paragraph",
+          "text": "If pictures crawl on architecture, that is a projection."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A filing cabinet leads to a tunnel. A mirror becomes a corridor.A phone swallows a body. Use it when geography must jump through an object we already believe in as a prop.It is the wrong tool when the camera itself punches through a wall with no special object, or when a wall is only a screen of light. If matter is optional for the lens, that is a pass-through.If pictures crawl on architecture, that is a projection."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Photograph the prop as a real object with thickness, rim, and a key. Composite or project the far space inside its opening."
+        },
+        {
+          "type": "paragraph",
+          "text": "Parallax the rim against the interior so the hole has depth. The room around the prop stays this world."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hands, edges, and contact shadows sell the aperture. Prompt an object portal through the subject: a thing opening onto another space, a bag, a screen, a doorway that should not lead there."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Photograph the prop as a real object with thickness, rim, and a key. Composite or project the far space inside its opening.Parallax the rim against the interior so the hole has depth. The room around the prop stays this world.Hands, edges, and contact shadows sell the aperture. Prompt an object portal through the subject: a thing opening onto another space, a bag, a screen, a doorway that should not lead there."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when a character climbs into a prop and arrives somewhere the room cannot contain. Do not use it as a generic glow around a door that is just a door."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when a character climbs into a prop and arrives somewhere the room cannot contain. Do not use it as a generic glow around a door that is just a door."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pass Through travels the camera through architecture as if matter were optional. An object portal needs a prop as the aperture.",
+          "links": [
+            {
+              "text": "Pass Through",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Projections put pictures on surfaces. A portal opens onto another space inside the object.",
+          "links": [
+            {
+              "text": "Projections",
+              "url": "https://melies.co/cinematic-techniques/effects/projection-mapping"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pass ThroughCut the building, not the film.",
+          "displayText": "Pass Through\nCut the building, not the film.",
+          "links": [
+            {
+              "text": "Pass ThroughCut the building, not the film.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "displayText": "Anamorphic Flare\nNight lights and headlights should write on the lens.",
+          "links": [
+            {
+              "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+              "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Pass Through",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+        },
+        {
+          "text": "Projections",
+          "url": "https://melies.co/cinematic-techniques/effects/projection-mapping"
+        },
+        {
+          "text": "Pass ThroughCut the building, not the film.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/fbf0bd56427103cd8c1bddba257f87f6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pass-through-pass-through-mini.webp",
+          "alt": "Pass Through"
+        },
+        {
+          "kind": "video",
+          "path": "media/53e07ed3dfae32434db4e68d811d8750.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pass-through-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/dd60ac3e349447877925814c6440f811.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+          "alt": "Anamorphic Flare"
+        }
+      ],
+      "sourceText": "Compared with similar shots Pass Through travels the camera through architecture as if matter were optional. An object portal needs a prop as the aperture.Projections put pictures on surfaces. A portal opens onto another space inside the object.Pass ThroughCut the building, not the film.Lens FlareLight is too strong to be polite.Anamorphic FlareNight lights and headlights should write on the lens."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Being John Malkovich sends a body through a small door into a head. The Matrix uses a mirror and other props as passages between worlds."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar for the object as wormhole, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Being John Malkovich sends a body through a small door into a head. The Matrix uses a mirror and other props as passages between worlds.Grammar for the object as wormhole, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Object portal through [Subject], a thing opening onto another space, a bag, a screen, a doorway that should not lead there. Name the prop, the rim, and the far geography inside it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the surrounding room in this world."
+        },
+        {
+          "type": "quote",
+          "text": "Object portal through [Subject], a thing opening onto another space, a bag, a screen, a doorway that should not lead there."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Object+portal+through+[Subject],+a+thing+opening+onto+another+space,+a+bag,+a+screen,+a+doorway+that+should+not+lead+there."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Object portal through [Subject], a thing opening onto another space, a bag, a screen, a doorway that should not lead there. Name the prop, the rim, and the far geography inside it.Keep the surrounding room in this world.Copy promptUse in Image GeneratorObject portal through [Subject], a thing opening onto another space, a bag, a screen, a doorway that should not lead there.Object portal through [Subject], a thing opening onto another space, a bag, a screen, a doorway that should not lead there."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a glowing doorway or a Pass Through through a wall. The tell is no prop with thickness, or the whole set melting.",
+          "links": [
+            {
+              "text": "Pass Through",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is a readable object, a hole with parallax, and two geographies meeting at the rim."
+        }
+      ],
+      "links": [
+        {
+          "text": "Pass Through",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pass-through"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a glowing doorway or a Pass Through through a wall. The tell is no prop with thickness, or the whole set melting.The fix is a readable object, a hole with parallax, and two geographies meeting at the rim."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is an object portal in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An object portal treats a prop as a wormhole. A bag, screen, or doorway opens onto another space that the room should not contain. The object is the cut."
+        },
+        {
+          "type": "heading",
+          "text": "Object portal vs pass through",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A pass-through sends the camera through a wall or body as if matter were optional. An object portal requires a thing with a rim: the far world is inside that object."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use object portal?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a character or look must travel through a prop into another space. Skip it when you only need to fly the camera through architecture."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt object portal for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Object portal through [Subject], a thing opening onto another space. Name the prop, its thickness, and the geography inside the opening. Keep the outer room stable."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is an object portal in film?An object portal treats a prop as a wormhole. A bag, screen, or doorway opens onto another space that the room should not contain. The object is the cut.Object portal vs pass throughA pass-through sends the camera through a wall or body as if matter were optional. An object portal requires a thing with a rim: the far world is inside that object.When should I use object portal?Use it when a character or look must travel through a prop into another space. Skip it when you only need to fly the camera through architecture.How do I prompt object portal for AI image or video?Write Object portal through [Subject], a thing opening onto another space. Name the prop, its thickness, and the geography inside the opening. Keep the outer room stable."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Object portal through [Subject], a thing opening onto another space, a bag, a screen, a doorway that should not lead there. Name the prop, the rim, and the far geography inside it.",
+      "Keep the surrounding room in this world."
+    ],
+    "example": "Object portal through [Subject], a thing opening onto another space, a bag, a screen, a doorway that should not lead there."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/0a077e954932ba77489876d3a6d39e77.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/object-portal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/eb0b73ad7e6099db4d24e843e9ce6226.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/object-portal-object-portal-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cc9aa0de264b68287e52d9d6e325fffd.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/object-portal.jpg",
+      "alt": "Object Portal frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/fbf0bd56427103cd8c1bddba257f87f6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pass-through-pass-through-mini.webp",
+      "alt": "Pass Through"
+    },
+    {
+      "kind": "video",
+      "path": "media/53e07ed3dfae32434db4e68d811d8750.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pass-through-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dd60ac3e349447877925814c6440f811.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+      "alt": "Anamorphic Flare"
+    },
+    {
+      "kind": "image",
+      "path": "media/4ef96bfe9a9070036801fb74c365e4c1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/object-portal/hero.jpg",
+      "alt": "Object Portal",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "a503665d285722d331a1a629da1a3b6c8c12ef09d37ad07f7ed27f5c75820d90"
+}

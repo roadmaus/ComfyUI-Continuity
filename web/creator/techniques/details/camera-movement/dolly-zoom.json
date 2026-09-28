@@ -1,0 +1,473 @@
+{
+  "id": "camera-movement/dolly-zoom",
+  "slug": "dolly-zoom",
+  "title": "Dolly Zoom",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-zoom-001-dolly-zoom-mini.webp",
+  "detail": "details/camera-movement/dolly-zoom.json",
+  "aliases": [
+    "vertigo effect",
+    "zolly",
+    "trombone shot",
+    "Contra-zoom",
+    "Travelling contrarié"
+  ],
+  "description": "A dolly zoom combines camera movement and opposite zooming to preserve subject size while distorting perspective. It is not a zoom with a digital background stretch: translation and focal length work against each other.",
+  "thumbnail": "media/9bfde942aacd6bd3cf29bdf633c0744b.webp",
+  "video": "media/2443c10f4fa2c3ab2067b035732d8843.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/001-dolly-zoom-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The person appears fixed while the world becomes unreliable. Recognition, fear, or vertigo becomes a spatial event rather than merely a reaction close-up."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use once; repeating it turns a contradiction into a trick. It is the wrong tool for a normal approach, and the wrong tool if subject size also changes."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the crop simply grows, you zoomed. If the person grows and the room slides, you dollied."
+        },
+        {
+          "type": "paragraph",
+          "text": "The effect needs both, opposed."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The person appears fixed while the world becomes unreliable. Recognition, fear, or vertigo becomes a spatial event rather than merely a reaction close-up.Use once; repeating it turns a contradiction into a trick. It is the wrong tool for a normal approach, and the wrong tool if subject size also changes.If the crop simply grows, you zoomed. If the person grows and the room slides, you dollied.The effect needs both, opposed."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rehearse a dolly-in with zoom-out, or dolly-out with zoom-in. Match subject scale at both ends and coordinate focus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Background perspective stretches or compresses while the chosen subject holds size. Prompt a dolly zoom: camera dollies while the lens counter-zooms so the figure stays the same size as the background warps."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Rehearse a dolly-in with zoom-out, or dolly-out with zoom-in. Match subject scale at both ends and coordinate focus.Background perspective stretches or compresses while the chosen subject holds size. Prompt a dolly zoom: camera dollies while the lens counter-zooms so the figure stays the same size as the background warps."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a realization that the ground is not stable, and use it once. Concrete beat: a seated watcher understands the water is no longer safe, body size holds, beach warps."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it as a stylish walk-up."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a realization that the ground is not stable, and use it once. Concrete beat: a seated watcher understands the water is no longer safe, body size holds, beach warps.Do not use it as a stylish walk-up."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Dolly In changes subject size and perspective together. A Slow Zoom In changes size without walking.",
+          "links": [
+            {
+              "text": "Dolly In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            },
+            {
+              "text": "Slow Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly zoom holds size and breaks perspective. That opposition is the whole technique."
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "displayText": "Dolly In\nEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "links": [
+            {
+              "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom OutReveal context, isolation, or a joke that was off-screen.",
+          "displayText": "Slow Zoom Out\nReveal context, isolation, or a joke that was off-screen.",
+          "links": [
+            {
+              "text": "Slow Zoom OutReveal context, isolation, or a joke that was off-screen.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Slow Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        },
+        {
+          "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Slow Zoom OutReveal context, isolation, or a joke that was off-screen.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+          "alt": "Dolly In"
+        },
+        {
+          "kind": "video",
+          "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4ac31249e720e1115c85ec7206f447e1.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-out-02-slow-zoom-out-v2-mini.webp",
+          "alt": "Slow Zoom Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4dcf30309cadb6112f74b8f705e8d05.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-slow-zoom-out-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Dolly In changes subject size and perspective together. A Slow Zoom In changes size without walking.Dolly zoom holds size and breaks perspective. That opposition is the whole technique.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.Slow Zoom OutReveal context, isolation, or a joke that was off-screen."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vertigo looks down the bell-tower stairwell as space flexes. Jaws holds Brody's size on the beach while the background warps."
+        },
+        {
+          "type": "paragraph",
+          "text": "Goodfellas uses the diner talk near the end as a trap in stretched space. La Haine has a well-known rooftop cousin."
+        },
+        {
+          "type": "paragraph",
+          "text": "Geometry, not a face to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "Vertigo 1958Scottie looks down the bell-tower stairwell.",
+          "displayText": "Vertigo 1958\nScottie looks down the bell-tower stairwell."
+        },
+        {
+          "type": "list-item",
+          "text": "Jaws 1975Brody reacts to the shark attack while sitting on the beach.",
+          "displayText": "Jaws 1975\nBrody reacts to the shark attack while sitting on the beach."
+        },
+        {
+          "type": "list-item",
+          "text": "Goodfellas 1990Henry and Jimmy talk in the diner near the end.",
+          "displayText": "Goodfellas 1990\nHenry and Jimmy talk in the diner near the end."
+        },
+        {
+          "type": "list-item",
+          "text": "La Haine 1995The rooftop perspective change overlooking the city.",
+          "displayText": "La Haine 1995\nThe rooftop perspective change overlooking the city."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/20ddf39205f94ea893869e1346da894f.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-zoom/famous/00-vertigo-1958.jpg",
+          "alt": "Vertigo 1958"
+        },
+        {
+          "kind": "image",
+          "path": "media/c657a7e9ace8d1ded1fa48c4852159ad.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-zoom/famous/01-jaws-1975.jpg",
+          "alt": "Jaws 1975"
+        },
+        {
+          "kind": "image",
+          "path": "media/600467de3ed9bd87bf79392ac51def8b.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-zoom/famous/02-goodfellas-1990.jpg",
+          "alt": "Goodfellas 1990"
+        },
+        {
+          "kind": "image",
+          "path": "media/6158cd75453ce2cf98d53dc3dd87dae8.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-zoom/famous/03-la-haine-1995.jpg",
+          "alt": "La Haine 1995"
+        }
+      ],
+      "sourceText": "In film Vertigo looks down the bell-tower stairwell as space flexes. Jaws holds Brody's size on the beach while the background warps.Goodfellas uses the diner talk near the end as a trap in stretched space. La Haine has a well-known rooftop cousin.Geometry, not a face to copy.Vertigo 1958Scottie looks down the bell-tower stairwell.Jaws 1975Brody reacts to the shark attack while sitting on the beach.Goodfellas 1990Henry and Jimmy talk in the diner near the end.La Haine 1995The rooftop perspective change overlooking the city."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dolly zoom on [Subject], camera dollies in while the lens zooms out so the figure stays the same size as the background warps, vertigo spatial contradiction, sickly perspective stretch. For motion: dolly zoom on [Subject]: the camera dollies while the lens counter-zooms so the subject size holds and the background warps."
+        },
+        {
+          "type": "quote",
+          "text": "One continuous six-second shot of a station attendant realizing a train is missing. Dolly straight backward while optically zooming in at the compensating rate. Keep her head exactly the same height and centered; the long platform behind her appears to compress. She barely moves. Stable facial identity, rigid architecture, no cut, no ordinary push-in."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=One+continuous+six-second+shot+of+a+station+attendant+realizing+a+train+is+missing.+Dolly+straight+backward+while+optically+zooming+in+at+the+compensating+rate.+Keep+her+head+exactly+the+same+height+and+centered;+the+long+platform+behind+her+appears+to+compress.+She+barely+moves.+Stable+facial+identity,+rigid+architecture,+no+cut,+no+ordinary+push-in."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Dolly zoom on [Subject], camera dollies in while the lens zooms out so the figure stays the same size as the background warps, vertigo spatial contradiction, sickly perspective stretch. For motion: dolly zoom on [Subject]: the camera dollies while the lens counter-zooms so the subject size holds and the background warps.Copy promptUse in Video GeneratorOne continuous six-second shot of a station attendant realizing a train is missing. Dolly straight backward while optically zooming in at the compensating rate. Keep her head exactly the same height and centered; the long platform behind her appears to compress. She barely moves. Stable facial identity, rigid architecture, no cut, no ordinary push-in.One continuous six-second shot of a station attendant realizing a train is missing. Dolly straight backward while optically zooming in at the compensating rate. Keep her head exactly the same height and centered; the long platform behind her appears to compress. She barely moves. Stable facial identity, rigid architecture, no cut, no ordinary push-in."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Slow Zoom In or a background warp in post. The tell is a changing subject size, or a stretch with no camera travel.",
+          "links": [
+            {
+              "text": "Slow Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: opposite dolly and zoom, subject scale matched at both ends, perspective actually changing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Slow Zoom In or a background warp in post. The tell is a changing subject size, or a stretch with no camera travel.The fix: opposite dolly and zoom, subject scale matched at both ends, perspective actually changing."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dolly Zoom in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a simultaneous dolly and opposite zoom that keeps a subject roughly the same size while the surrounding perspective stretches or compresses."
+        },
+        {
+          "type": "heading",
+          "text": "Dolly Zoom vs Dolly In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly in walks closer and the person grows. Dolly zoom walks and counter-zooms so the person holds while the world becomes geometrically untrustworthy."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dolly Zoom?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When fear or recognition should happen in space itself. Use it once. Do not use it as a default push."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dolly Zoom for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write dolly in while zooming out (or the reverse), subject size constant, background warping. Ban a digital stretch without camera travel."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dolly Zoom in film?It is a simultaneous dolly and opposite zoom that keeps a subject roughly the same size while the surrounding perspective stretches or compresses.Dolly Zoom vs Dolly InDolly in walks closer and the person grows. Dolly zoom walks and counter-zooms so the person holds while the world becomes geometrically untrustworthy.When should I use Dolly Zoom?When fear or recognition should happen in space itself. Use it once. Do not use it as a default push.How do I prompt Dolly Zoom for AI image or video?Write dolly in while zooming out (or the reverse), subject size constant, background warping. Ban a digital stretch without camera travel."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Dolly zoom on [Subject], camera dollies in while the lens zooms out so the figure stays the same size as the background warps, vertigo spatial contradiction, sickly perspective stretch. For motion: dolly zoom on [Subject]: the camera dollies while the lens counter-zooms so the subject size holds and the background warps."
+    ],
+    "example": "One continuous six-second shot of a station attendant realizing a train is missing. Dolly straight backward while optically zooming in at the compensating rate. Keep her head exactly the same height and centered; the long platform behind her appears to compress. She barely moves. Stable facial identity, rigid architecture, no cut, no ordinary push-in."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/2443c10f4fa2c3ab2067b035732d8843.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/001-dolly-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9bfde942aacd6bd3cf29bdf633c0744b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-zoom-001-dolly-zoom-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/63fb4607bcd1f56be10313cafa6928bf.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/dolly-zoom.jpg",
+      "alt": "Dolly Zoom frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+      "alt": "Dolly In"
+    },
+    {
+      "kind": "video",
+      "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4ac31249e720e1115c85ec7206f447e1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-out-02-slow-zoom-out-v2-mini.webp",
+      "alt": "Slow Zoom Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4dcf30309cadb6112f74b8f705e8d05.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-slow-zoom-out-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/20ddf39205f94ea893869e1346da894f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-zoom/famous/00-vertigo-1958.jpg",
+      "alt": "Vertigo 1958"
+    },
+    {
+      "kind": "image",
+      "path": "media/c657a7e9ace8d1ded1fa48c4852159ad.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-zoom/famous/01-jaws-1975.jpg",
+      "alt": "Jaws 1975"
+    },
+    {
+      "kind": "image",
+      "path": "media/600467de3ed9bd87bf79392ac51def8b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-zoom/famous/02-goodfellas-1990.jpg",
+      "alt": "Goodfellas 1990"
+    },
+    {
+      "kind": "image",
+      "path": "media/6158cd75453ce2cf98d53dc3dd87dae8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-zoom/famous/03-la-haine-1995.jpg",
+      "alt": "La Haine 1995"
+    },
+    {
+      "kind": "image",
+      "path": "media/395efd4bd51ba47f21b0b23ec733f6c7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-zoom/hero.jpg",
+      "alt": "Dolly Zoom",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "54d0dac6c7aabd90ead42ab192467053c698f73f3467ed8eadea65c8d1efdcdb"
+}

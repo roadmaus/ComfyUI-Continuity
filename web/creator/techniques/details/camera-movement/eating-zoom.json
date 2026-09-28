@@ -1,0 +1,399 @@
+{
+  "id": "camera-movement/eating-zoom",
+  "slug": "eating-zoom",
+  "title": "Eating Zoom",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/eating-zoom",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eating-zoom-eating-zoom-mini.webp",
+  "detail": "details/camera-movement/eating-zoom.json",
+  "aliases": [],
+  "description": "An eating zoom is a crash into the bite, chopsticks or spoon as the last foreground, appetite as a punch-in. The move is optical and short; the dish should be nameable in the last frame.",
+  "thumbnail": "media/7acd10096e85efe07609a189dafedc8c.webp",
+  "video": "media/1f110a62bde4c8db9d01515690bd0df9.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/eating-zoom-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The bite is the cut. Noodles, a first date, a villain who eats too well: the camera snaps to food meeting mouth."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comic or sensual depends on how kind the light is. A wide dinner master does not want this."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you still see the restaurant, you did not crash. If there is no food in the last frame, you shot a mouth-in."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The bite is the cut. Noodles, a first date, a villain who eats too well: the camera snaps to food meeting mouth.Comic or sensual depends on how kind the light is. A wide dinner master does not want this.If you still see the restaurant, you did not crash. If there is no food in the last frame, you shot a mouth-in."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write a snap zoom, under a second, ending on the bite. Hold."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not dolly. Show steam, gloss, or dripping as proof of the food."
+        },
+        {
+          "type": "paragraph",
+          "text": "The face can be partial. Prompt: Eating zoom on [Subject], a crash into the bite, chopsticks or spoon as the last foreground, appetite as a punch-in."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Write a snap zoom, under a second, ending on the bite. Hold.Do not dolly. Show steam, gloss, or dripping as proof of the food.The face can be partial. Prompt: Eating zoom on [Subject], a crash into the bite, chopsticks or spoon as the last foreground, appetite as a punch-in."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the bite is the event. Do not use it on an empty plate or a whole table."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the bite is the event. Do not use it on an empty plate or a whole table."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Crash Zoom In can land on anything; this one must land on food meeting mouth. Mouth In travels into the orifice without requiring the dish.",
+          "links": [
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            },
+            {
+              "text": "Mouth In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/mouth-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Macro is a scale, often locked, not a crash.",
+          "links": [
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "displayText": "Crash Zoom In\nPunctuate a hit, a realization, or a comic sting.",
+          "links": [
+            {
+              "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Mouth InSpeech or hunger is the scene.",
+          "displayText": "Mouth In\nSpeech or hunger is the scene.",
+          "links": [
+            {
+              "text": "Mouth InSpeech or hunger is the scene.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/mouth-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MacroThe plot is microscopic.",
+          "displayText": "Macro\nThe plot is microscopic.",
+          "links": [
+            {
+              "text": "MacroThe plot is microscopic.",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Mouth In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/mouth-in"
+        },
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Mouth InSpeech or hunger is the scene.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/mouth-in"
+        },
+        {
+          "text": "MacroThe plot is microscopic.",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+          "alt": "Crash Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ddd9d09cf91c46eb1e8e38f56f855f47.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mouth-in-mouth-in-mini.webp",
+          "alt": "Mouth In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59234568de5cd8001820c1207faf15b7.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mouth-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/79fc44234e86f0ee60b85636698e0f64.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/macro-058-macro-insert-mini.webp",
+          "alt": "Macro"
+        },
+        {
+          "kind": "video",
+          "path": "media/48dce430df7bb8986d91dc405cf98e2c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/058-macro-insert-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Crash Zoom In can land on anything; this one must land on food meeting mouth. Mouth In travels into the orifice without requiring the dish.Macro is a scale, often locked, not a crash.Crash Zoom InPunctuate a hit, a realization, or a comic sting.Mouth InSpeech or hunger is the scene.MacroThe plot is microscopic."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tampopo treats the bite as the scene. ASMR tables stole the grammar and made it soft."
+        },
+        {
+          "type": "paragraph",
+          "text": "The still should let you name the dish."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Tampopo treats the bite as the scene. ASMR tables stole the grammar and made it soft.The still should let you name the dish."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crash, food, hold. Still: Eating zoom on [Subject], a crash into the bite, chopsticks or spoon as the last foreground, appetite as a punch-in."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Crash zoom into [Subject] taking a bite, food and mouth filling the frame. Name the dish."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a dolly."
+        },
+        {
+          "type": "quote",
+          "text": "Crash zoom into [Subject] taking a bite, food and mouth filling the frame."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Crash+zoom+into+[Subject]+taking+a+bite,+food+and+mouth+filling+the+frame."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Crash, food, hold. Still: Eating zoom on [Subject], a crash into the bite, chopsticks or spoon as the last foreground, appetite as a punch-in.Video: Crash zoom into [Subject] taking a bite, food and mouth filling the frame. Name the dish.Forbid a dolly.Copy promptUse in Video GeneratorCrash zoom into [Subject] taking a bite, food and mouth filling the frame.Crash zoom into [Subject] taking a bite, food and mouth filling the frame."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a mouth-in or a restaurant wide. The tell: no food in the last frame, or the whole dining room still visible."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: snap into the bite, utensil as last foreground, hold."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a mouth-in or a restaurant wide. The tell: no food in the last frame, or the whole dining room still visible.The fix: snap into the bite, utensil as last foreground, hold."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Eating Zoom in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An eating zoom is a crash zoom into a bite, with food or a utensil as the last foreground. Appetite is the punch-in."
+        },
+        {
+          "type": "heading",
+          "text": "Eating Zoom vs Mouth In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Mouth in enters the mouth as landscape. Eating zoom is optical and food-first: the crash ends on the bite."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Eating Zoom?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the bite is the event. Do not use it as coverage of a whole dinner table."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Eating Zoom for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a snap into food meeting mouth. Example: Eating zoom on [Subject], a crash into the bite, chopsticks or spoon as the last foreground."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Eating Zoom in film?An eating zoom is a crash zoom into a bite, with food or a utensil as the last foreground. Appetite is the punch-in.Eating Zoom vs Mouth InMouth in enters the mouth as landscape. Eating zoom is optical and food-first: the crash ends on the bite.When should I use Eating Zoom?Use it when the bite is the event. Do not use it as coverage of a whole dinner table.How do I prompt Eating Zoom for AI image or video?Write a snap into food meeting mouth. Example: Eating zoom on [Subject], a crash into the bite, chopsticks or spoon as the last foreground."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Crash, food, hold. Still: Eating zoom on [Subject], a crash into the bite, chopsticks or spoon as the last foreground, appetite as a punch-in.",
+      "Video: Crash zoom into [Subject] taking a bite, food and mouth filling the frame. Name the dish.",
+      "Forbid a dolly."
+    ],
+    "example": "Crash zoom into [Subject] taking a bite, food and mouth filling the frame."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/1f110a62bde4c8db9d01515690bd0df9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/eating-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7acd10096e85efe07609a189dafedc8c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eating-zoom-eating-zoom-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8beccd31b36ef04fc91ea9bf6ea83441.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/eating-zoom.jpg",
+      "alt": "Eating Zoom frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": "Crash Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ddd9d09cf91c46eb1e8e38f56f855f47.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mouth-in-mouth-in-mini.webp",
+      "alt": "Mouth In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59234568de5cd8001820c1207faf15b7.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mouth-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/79fc44234e86f0ee60b85636698e0f64.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/macro-058-macro-insert-mini.webp",
+      "alt": "Macro"
+    },
+    {
+      "kind": "video",
+      "path": "media/48dce430df7bb8986d91dc405cf98e2c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/058-macro-insert-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5b3729f20991c26e8c992f04fb7d33c6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/eating-zoom/hero.jpg",
+      "alt": "Eating Zoom",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "56844b411a03d629de19dae08801a8db5bd0b1c2695be5503f8f35ed617bf71b"
+}

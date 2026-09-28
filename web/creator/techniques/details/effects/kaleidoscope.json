@@ -1,0 +1,378 @@
+{
+  "id": "effects/kaleidoscope",
+  "slug": "kaleidoscope",
+  "title": "Kaleidoscope",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/kaleidoscope",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/kaleidoscope.webp",
+  "detail": "details/effects/kaleidoscope.json",
+  "aliases": [],
+  "description": "Kaleidoscope cinematography fragments the image with mirrors or radial repetition so one subject becomes a symmetric pattern. The camera looks into angled glass, or the staging itself is a kaleidoscope: bodies arranged around an axis, often from above.",
+  "thumbnail": "media/5ede83e45262e78398144de105f26f7b.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A shard repeats. A face, a limb, a lamp becomes an ornament."
+        },
+        {
+          "type": "paragraph",
+          "text": "Busby Berkeley built this with dancers and an overhead camera. A kaleidoscope adapter builds it with mirrors in front of the lens."
+        },
+        {
+          "type": "paragraph",
+          "text": "Chorus girls, jewels, a subjective break: the picture is multiplication, not smear. Use it when pattern is the point: a musical number, a jewel-box interior, a decorative fracture of a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a stargate of streaks, for a simple birds-eye that does not repeat, or for a collage of torn edges. If there is no mirror logic and no radial repeat, it is just a busy frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A shard repeats. A face, a limb, a lamp becomes an ornament.Busby Berkeley built this with dancers and an overhead camera. A kaleidoscope adapter builds it with mirrors in front of the lens.Chorus girls, jewels, a subjective break: the picture is multiplication, not smear. Use it when pattern is the point: a musical number, a jewel-box interior, a decorative fracture of a face.It is the wrong tool for a stargate of streaks, for a simple birds-eye that does not repeat, or for a collage of torn edges. If there is no mirror logic and no radial repeat, it is just a busy frame."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Physical: kaleidoscope prism or three-mirror tube on the lens, or a mirrored set. Staging: radial choreography shot from Bird's-Eye View.",
+          "links": [
+            {
+              "text": "Bird's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep a clear axis of symmetry and repeating shards. Prompt: kaleidoscopic fragmentation, mirrored shards, radial repeat of [Subject], not slit-scan streaks."
+        }
+      ],
+      "links": [
+        {
+          "text": "Bird's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Physical: kaleidoscope prism or three-mirror tube on the lens, or a mirrored set. Staging: radial choreography shot from Bird's-Eye View.Keep a clear axis of symmetry and repeating shards. Prompt: kaleidoscopic fragmentation, mirrored shards, radial repeat of [Subject], not slit-scan streaks."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A figure in a red dress multiplied into mirrored shards, jewel symmetry, like looking into a toy kaleidoscope. Do not stretch her along a vanishing-point tunnel and call it kaleidoscope."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A figure in a red dress multiplied into mirrored shards, jewel symmetry, like looking into a toy kaleidoscope. Do not stretch her along a vanishing-point tunnel and call it kaleidoscope."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Slit-Scan smears time into a corridor. Kaleidoscope repeats space with mirrors.",
+          "links": [
+            {
+              "text": "Slit-Scan",
+              "url": "https://melies.co/cinematic-techniques/effects/slit-scan"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Repetition and Pattern is compositional repeat in a normal photograph (windows, soldiers). Kaleidoscope is optical or staged radial multiplication.",
+          "links": [
+            {
+              "text": "Repetition and Pattern",
+              "url": "https://melies.co/cinematic-techniques/composition/repetition-pattern"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Bird's-Eye View is the overhead angle Berkeley used. Without mirroring or radial design it is only a top view.",
+          "links": [
+            {
+              "text": "Bird's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Repetition and PatternSystems, armies, hotels, factories.",
+          "displayText": "Repetition and Pattern\nSystems, armies, hotels, factories.",
+          "links": [
+            {
+              "text": "Repetition and PatternSystems, armies, hotels, factories.",
+              "url": "https://melies.co/cinematic-techniques/composition/repetition-pattern"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+          "displayText": "Bird's-Eye View\nTurn life into a board game or a ritual.",
+          "links": [
+            {
+              "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Slit-Scan",
+          "url": "https://melies.co/cinematic-techniques/effects/slit-scan"
+        },
+        {
+          "text": "Repetition and Pattern",
+          "url": "https://melies.co/cinematic-techniques/composition/repetition-pattern"
+        },
+        {
+          "text": "Bird's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        },
+        {
+          "text": "Repetition and PatternSystems, armies, hotels, factories.",
+          "url": "https://melies.co/cinematic-techniques/composition/repetition-pattern"
+        },
+        {
+          "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/61d5be392d8c6ec44bb5d1ce08a9a464.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/repetition-pattern.webp",
+          "alt": "Repetition and Pattern"
+        },
+        {
+          "kind": "image",
+          "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+          "alt": "Bird's-Eye View"
+        },
+        {
+          "kind": "video",
+          "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Slit-Scan smears time into a corridor. Kaleidoscope repeats space with mirrors.Repetition and Pattern is compositional repeat in a normal photograph (windows, soldiers). Kaleidoscope is optical or staged radial multiplication.Bird's-Eye View is the overhead angle Berkeley used. Without mirroring or radial design it is only a top view.Repetition and PatternSystems, armies, hotels, factories.Bird's-Eye ViewTurn life into a board game or a ritual.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Busby Berkeley numbers (42nd Street, Gold Diggers of 1933) turn chorus girls into kaleidoscopic geometry from above. 2001: A Space Odyssey also uses radial, jewel-like fragmentation in passages of the Star Gate, which is a cousin of the mirror, not the slit alone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Busby Berkeley numbers (42nd Street, Gold Diggers of 1933) turn chorus girls into kaleidoscopic geometry from above. 2001: A Space Odyssey also uses radial, jewel-like fragmentation in passages of the Star Gate, which is a cousin of the mirror, not the slit alone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand mirrors or radial shards. Example: Kaleidoscopic fragmentation of [Subject], mirrored shards, radial symmetry, Busby Berkeley from inside a jewel, not a slit-scan tunnel."
+        },
+        {
+          "type": "quote",
+          "text": "Kaleidoscopic fragmentation of [Subject], mirrored shards, Busby Berkeley from inside a jewel."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Kaleidoscopic+fragmentation+of+[Subject],+mirrored+shards,+Busby+Berkeley+from+inside+a+jewel."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Demand mirrors or radial shards. Example: Kaleidoscopic fragmentation of [Subject], mirrored shards, radial symmetry, Busby Berkeley from inside a jewel, not a slit-scan tunnel.Copy promptUse in Image GeneratorKaleidoscopic fragmentation of [Subject], mirrored shards, Busby Berkeley from inside a jewel.Kaleidoscopic fragmentation of [Subject], mirrored shards, Busby Berkeley from inside a jewel."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: slit-scan, birds-eye without repeat, or collage. Tell: streaks to a vanishing point, a plain overhead, or torn paper layers."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: clear mirror axes, repeating fragments of the same subject, jewel symmetry."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: slit-scan, birds-eye without repeat, or collage. Tell: streaks to a vanishing point, a plain overhead, or torn paper layers.Fix: clear mirror axes, repeating fragments of the same subject, jewel symmetry."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is kaleidoscope in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An image multiplied by mirrors or by radial staging so one subject becomes a symmetric pattern. It is repetition in space, not a time smear."
+        },
+        {
+          "type": "heading",
+          "text": "Kaleidoscope vs slit-scan",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Slit-scan accumulates through a slit over time into streaks. Kaleidoscope reflects a fragment around an axis. Corridor versus jewel."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use kaleidoscope?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "For ornament, musical geometry, or a mirrored subjective beat. Do not use it when you need a structured light tunnel or a documentary overhead."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt kaleidoscope for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for mirrored shards, radial symmetry, and a repeating subject. Forbid slit-scan corridors and torn-collage edges unless those are separate."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is kaleidoscope in film?An image multiplied by mirrors or by radial staging so one subject becomes a symmetric pattern. It is repetition in space, not a time smear.Kaleidoscope vs slit-scanSlit-scan accumulates through a slit over time into streaks. Kaleidoscope reflects a fragment around an axis. Corridor versus jewel.When should I use kaleidoscope?For ornament, musical geometry, or a mirrored subjective beat. Do not use it when you need a structured light tunnel or a documentary overhead.How do I prompt kaleidoscope for AI image or video?Ask for mirrored shards, radial symmetry, and a repeating subject. Forbid slit-scan corridors and torn-collage edges unless those are separate."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Demand mirrors or radial shards. Example: Kaleidoscopic fragmentation of [Subject], mirrored shards, radial symmetry, Busby Berkeley from inside a jewel, not a slit-scan tunnel."
+    ],
+    "example": "Kaleidoscopic fragmentation of [Subject], mirrored shards, Busby Berkeley from inside a jewel."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/5ede83e45262e78398144de105f26f7b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/kaleidoscope.webp",
+      "alt": "Kaleidoscope example"
+    },
+    {
+      "kind": "image",
+      "path": "media/61d5be392d8c6ec44bb5d1ce08a9a464.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/repetition-pattern.webp",
+      "alt": "Repetition and Pattern"
+    },
+    {
+      "kind": "image",
+      "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+      "alt": "Bird's-Eye View"
+    },
+    {
+      "kind": "video",
+      "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f9e7fc07be2c756cd8e52c7af9be49da.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/kaleidoscope/hero.jpg",
+      "alt": "Kaleidoscope",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "9b7b5e5ea1a537a3ffbfdc91034427c5cda6102ddc10ad5ef75f31eaaa6874ae"
+}

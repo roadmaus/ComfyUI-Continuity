@@ -1,0 +1,381 @@
+{
+  "id": "camera-movement/robo-arm",
+  "slug": "robo-arm",
+  "title": "Robo Arm",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/robo-arm",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/robo-arm-robo-arm-mini.webp",
+  "detail": "details/camera-movement/robo-arm.json",
+  "aliases": [],
+  "description": "A robotic camera arm runs a programmed path with inhuman precision, repeatable every take for product geometry or a stunt match. No operator shake; the spline is the performance.",
+  "thumbnail": "media/2d5b32d7c4f51e8c11c0ba95e60be244.webp",
+  "video": "media/52452f562387a9aebf2acab34e8e083c.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/robo-arm-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The path must be identical every take. Commercials, previs stages, a bottle that must match a CGI pass, a stunt that must fit a plate: the arm does not interpret."
+        },
+        {
+          "type": "paragraph",
+          "text": "A human dolly will drift. An orbit-360 can be walked and will breathe."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bolt cam is a throw, not a repeatable spline (unless the throw is itself robotic). If you want error and life, do not use the arm."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The path must be identical every take. Commercials, previs stages, a bottle that must match a CGI pass, a stunt that must fit a plate: the arm does not interpret.A human dolly will drift. An orbit-360 can be walked and will breathe.Bolt cam is a throw, not a repeatable spline (unless the throw is itself robotic). If you want error and life, do not use the arm."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Motion-control arm or a six-axis robot, programmed XYZ and pan/tilt/roll. Speed can be inhumanly even or inhumanly fast."
+        },
+        {
+          "type": "paragraph",
+          "text": "Product tables, crash pads, or a repeatable orbit. Prompt: Robotic arm move around [Subject], programmed path, inhuman precision, product or stunt geometry."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Motion-control arm or a six-axis robot, programmed XYZ and pan/tilt/roll. Speed can be inhumanly even or inhumanly fast.Product tables, crash pads, or a repeatable orbit. Prompt: Robotic arm move around [Subject], programmed path, inhuman precision, product or stunt geometry."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when takes must match: VFX, product, a stunt plate. Do not use it for a scene that needs human drift."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when takes must match: VFX, product, a stunt plate. Do not use it for a scene that needs human drift."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "360-Degree Orbit can be a human walk or a circular dolly with breath. Bolt Cam is a crash throw aimed at impact.",
+          "links": [
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            },
+            {
+              "text": "Bolt Cam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/bolt-cam"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Robo-arm is the repeatable spline, any shape, no shake."
+        },
+        {
+          "type": "list-item",
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "displayText": "360-Degree Orbit\nTime collapses around one person: kiss, threat, or product hero.",
+          "links": [
+            {
+              "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bolt CamThe camera itself is the punch.",
+          "displayText": "Bolt Cam\nThe camera itself is the punch.",
+          "links": [
+            {
+              "text": "Bolt CamThe camera itself is the punch.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/bolt-cam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Bolt Cam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/bolt-cam"
+        },
+        {
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Bolt CamThe camera itself is the punch.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/bolt-cam"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+          "alt": "360-Degree Orbit"
+        },
+        {
+          "kind": "video",
+          "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7566c5efa8cbb7bb79b46028e003b077.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bolt-cam-bolt-cam-mini.webp",
+          "alt": "Bolt Cam"
+        },
+        {
+          "kind": "video",
+          "path": "media/ac4104f5c3e41dd46e8eba076083ce9d.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/bolt-cam-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots 360-Degree Orbit can be a human walk or a circular dolly with breath. Bolt Cam is a crash throw aimed at impact.Robo-arm is the repeatable spline, any shape, no shake.360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.Bolt CamThe camera itself is the punch.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Commercials and previs stages are the native grammar: bottles, cars, and stunt geometry that must composite. The precision is the style."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Commercials and previs stages are the native grammar: bottles, cars, and stunt geometry that must composite. The precision is the style."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Programmed, repeatable, no shake. Still: Robotic arm move around [Subject], programmed path, inhuman precision, product or stunt geometry."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: A precise robotic-arm path around [Subject], repeatable, no human shake. Name the path shape."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid handheld error."
+        },
+        {
+          "type": "quote",
+          "text": "A precise robotic-arm path around [Subject], repeatable, no human shake."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+precise+robotic-arm+path+around+[Subject],+repeatable,+no+human+shake."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Programmed, repeatable, no shake. Still: Robotic arm move around [Subject], programmed path, inhuman precision, product or stunt geometry.Video: A precise robotic-arm path around [Subject], repeatable, no human shake. Name the path shape.Forbid handheld error.Copy promptUse in Video GeneratorA precise robotic-arm path around [Subject], repeatable, no human shake.A precise robotic-arm path around [Subject], repeatable, no human shake."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a steadicam orbit. The tell: a little sway, a human accel."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: write programmed path, identical takes, no operator shake."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a steadicam orbit. The tell: a little sway, a human accel.The fix: write programmed path, identical takes, no operator shake."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Robo Arm in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A robo arm is a robotic camera on a programmed path, repeatable every take, with no human shake. Product and stunt geometry live here."
+        },
+        {
+          "type": "heading",
+          "text": "Robo Arm vs 360-Degree Orbit",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An orbit-360 is a circular walk or dolly and can breathe. A robo arm can orbit, but the point is a programmed spline that matches take to take."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Robo Arm?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the path must be identical: VFX plates, product, stunts. Do not use it when you want human error."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Robo Arm for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a programmed path with no shake. Example: Robotic arm move around [Subject], programmed path, inhuman precision, product or stunt geometry."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Robo Arm in film?A robo arm is a robotic camera on a programmed path, repeatable every take, with no human shake. Product and stunt geometry live here.Robo Arm vs 360-Degree OrbitAn orbit-360 is a circular walk or dolly and can breathe. A robo arm can orbit, but the point is a programmed spline that matches take to take.When should I use Robo Arm?Use it when the path must be identical: VFX plates, product, stunts. Do not use it when you want human error.How do I prompt Robo Arm for AI image or video?Write a programmed path with no shake. Example: Robotic arm move around [Subject], programmed path, inhuman precision, product or stunt geometry."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Programmed, repeatable, no shake. Still: Robotic arm move around [Subject], programmed path, inhuman precision, product or stunt geometry.",
+      "Video: A precise robotic-arm path around [Subject], repeatable, no human shake. Name the path shape.",
+      "Forbid handheld error."
+    ],
+    "example": "A precise robotic-arm path around [Subject], repeatable, no human shake."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/52452f562387a9aebf2acab34e8e083c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/robo-arm-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2d5b32d7c4f51e8c11c0ba95e60be244.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/robo-arm-robo-arm-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d12fc54ace14261b65dd1c0686bebd70.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/robo-arm.jpg",
+      "alt": "Robo Arm frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+      "alt": "360-Degree Orbit"
+    },
+    {
+      "kind": "video",
+      "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7566c5efa8cbb7bb79b46028e003b077.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bolt-cam-bolt-cam-mini.webp",
+      "alt": "Bolt Cam"
+    },
+    {
+      "kind": "video",
+      "path": "media/ac4104f5c3e41dd46e8eba076083ce9d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/bolt-cam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/90a3c8e3e601685c3be426086fa21949.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/robo-arm/hero.jpg",
+      "alt": "Robo Arm",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "e7ce21e41151ffaf037791091104663a815e147add3ac0af40275a8e39ac0fd9"
+}

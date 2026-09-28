@@ -1,0 +1,348 @@
+{
+  "id": "viral-looks/modern",
+  "slug": "modern",
+  "title": "Modern",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/modern",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/modern.webp",
+  "detail": "details/viral-looks/modern.json",
+  "aliases": [],
+  "description": "Modern, in modern architecture cinematography, makes the room the thesis: glass planes, a designed void, a person small in Mies-or-Ando geometry. Production design first, and a loft with string lights is not this.",
+  "thumbnail": "media/cbf2dd76dbaa890baa2829a51c3e958c.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Alienation, wealth, a talk that should feel like a showroom: large planes, daylight as a blade, few objects, a palette of two greys and maybe one warm wood. Contemporary fashion is not the look."
+        },
+        {
+          "type": "paragraph",
+          "text": "The building is the other actor. It is the wrong tool in a cluttered kitchen, and the wrong tool if you count too many objects."
+        },
+        {
+          "type": "paragraph",
+          "text": "Modern is empty on purpose. Generic apartments fail."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Alienation, wealth, a talk that should feel like a showroom: large planes, daylight as a blade, few objects, a palette of two greys and maybe one warm wood. Contemporary fashion is not the look.The building is the other actor. It is the wrong tool in a cluttered kitchen, and the wrong tool if you count too many objects.Modern is empty on purpose. Generic apartments fail."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Locked architectural camera, eye height or slightly high, 35mm. One figure."
+        },
+        {
+          "type": "paragraph",
+          "text": "Daylight as a blade through glass. Few objects."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Modern architecture around [Subject], glass planes, a designed void, the room as the thesis."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Locked architectural camera, eye height or slightly high, 35mm. One figure.Daylight as a blade through glass. Few objects.Prompt: Modern architecture around [Subject], glass planes, a designed void, the room as the thesis."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Alienation, wealth, a showroom talk. Do not use it in clutter, and do not use string lights."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Alienation, wealth, a showroom talk. Do not use it in clutter, and do not use string lights."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Negative Space is the empty area as composition. Symmetry is the axis.",
+          "links": [
+            {
+              "text": "Negative Space",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            },
+            {
+              "text": "Symmetry",
+              "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Modern is the building law that often uses both: glass, plane, designed void. If the room is cluttered, you failed the look even if the frame is centered."
+        },
+        {
+          "type": "list-item",
+          "text": "Negative SpaceLoneliness needs room.",
+          "displayText": "Negative Space\nLoneliness needs room.",
+          "links": [
+            {
+              "text": "Negative SpaceLoneliness needs room.",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SymmetryThe world is designed. Or pretending to be.",
+          "displayText": "Symmetry\nThe world is designed. Or pretending to be.",
+          "links": [
+            {
+              "text": "SymmetryThe world is designed. Or pretending to be.",
+              "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Negative Space",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Symmetry",
+          "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+        },
+        {
+          "text": "Negative SpaceLoneliness needs room.",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "SymmetryThe world is designed. Or pretending to be.",
+          "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+          "alt": "Negative Space"
+        },
+        {
+          "kind": "video",
+          "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/433ff490835bf3f002cef6f2447f05d3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/symmetry.webp",
+          "alt": "Symmetry"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Negative Space is the empty area as composition. Symmetry is the axis.Modern is the building law that often uses both: glass, plane, designed void. If the room is cluttered, you failed the look even if the frame is centered.Negative SpaceLoneliness needs room.SymmetryThe world is designed. Or pretending to be.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Playtime makes modern architecture the other actor, a designed void that swallows people. Architecture films and The International's glass banks are usable grammar."
+        },
+        {
+          "type": "paragraph",
+          "text": "The building is the sentence, not a loft stock photo."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Playtime makes modern architecture the other actor, a designed void that swallows people. Architecture films and The International's glass banks are usable grammar.The building is the sentence, not a loft stock photo."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Planes, glass, one figure, few objects. Modern architecture around [Subject], glass planes, a designed void, the room as the thesis."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add 35mm lock-off, daylight as a blade, two greys, count the objects and delete extras."
+        },
+        {
+          "type": "quote",
+          "text": "Modern architecture around [Subject], glass planes, a designed void, the room as the thesis."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Modern+architecture+around+[Subject],+glass+planes,+a+designed+void,+the+room+as+the+thesis."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Planes, glass, one figure, few objects. Modern architecture around [Subject], glass planes, a designed void, the room as the thesis.Add 35mm lock-off, daylight as a blade, two greys, count the objects and delete extras.Copy promptUse in Image GeneratorModern architecture around [Subject], glass planes, a designed void, the room as the thesis.Modern architecture around [Subject], glass planes, a designed void, the room as the thesis."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A generic apartment with string lights, or too many objects. The tell is clutter."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: empty on purpose, glass planes, one person, daylight as a blade."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong A generic apartment with string lights, or too many objects. The tell is clutter.Fix it: empty on purpose, glass planes, one person, daylight as a blade."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Modern in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An architecture look: glass planes, designed void, the room as thesis, a person small in it. Not contemporary fashion, not a cluttered loft."
+        },
+        {
+          "type": "heading",
+          "text": "Modern vs Negative Space",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Negative space is empty area in the frame. Modern is a building that produces that emptiness as law. You can have negative space in a field. This is glass and plane."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Modern?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Alienation, wealth, showroom talks. Skip cluttered kitchens and string lights."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Modern for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "One figure, few objects, then: Modern architecture around [Subject], glass planes, a designed void, the room as the thesis. Daylight as a blade. Lock the camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Modern in film?An architecture look: glass planes, designed void, the room as thesis, a person small in it. Not contemporary fashion, not a cluttered loft.Modern vs Negative SpaceNegative space is empty area in the frame. Modern is a building that produces that emptiness as law. You can have negative space in a field. This is glass and plane.When should I use Modern?Alienation, wealth, showroom talks. Skip cluttered kitchens and string lights.How do I prompt Modern for AI image or video?One figure, few objects, then: Modern architecture around [Subject], glass planes, a designed void, the room as the thesis. Daylight as a blade. Lock the camera."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Planes, glass, one figure, few objects. Modern architecture around [Subject], glass planes, a designed void, the room as the thesis.",
+      "Add 35mm lock-off, daylight as a blade, two greys, count the objects and delete extras."
+    ],
+    "example": "Modern architecture around [Subject], glass planes, a designed void, the room as the thesis."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/cbf2dd76dbaa890baa2829a51c3e958c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/modern.webp",
+      "alt": "Modern example"
+    },
+    {
+      "kind": "image",
+      "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+      "alt": "Negative Space"
+    },
+    {
+      "kind": "video",
+      "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/433ff490835bf3f002cef6f2447f05d3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/symmetry.webp",
+      "alt": "Symmetry"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/c56dc021bbed5b5f833c6ebaa8925dd3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/modern/hero.jpg",
+      "alt": "Modern",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "bf81f5bae15886281c8e954dfea6146cf335eaf176669ed1be2e5f8b1350c0f0"
+}

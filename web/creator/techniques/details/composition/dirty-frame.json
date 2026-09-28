@@ -1,0 +1,418 @@
+{
+  "id": "composition/dirty-frame",
+  "slug": "dirty-frame",
+  "title": "Dirty Frame",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/dirty-frame",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dirty-frame-040-foreground-obstruction-mini.webp",
+  "detail": "details/composition/dirty-frame.json",
+  "aliases": [],
+  "description": "A dirty frame in dirty frame cinematography lets out-of-focus shoulders, glass, foliage, or crowd chew the edges of the picture so the aperture is occupied. The camera sits inside a populated space, not on a seamless studio axis.",
+  "thumbnail": "media/42192cfbcaa98a313c7df38d8a897967.webp",
+  "video": "media/d734365fbad1668a19694f50f3ad0d8e.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/040-foreground-obstruction-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dirty versus clean edges is a moral diagram. Clean edges say the picture was granted."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dirty edges say it was stolen, crowded, or survived. A shoulder in the foreground, a plant slicing a corner, rain on a window: someone else owns the near space."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a product, a formal portrait, or a ritual altar. If the edges are dirty because the set was not cleared, you have clutter, not voyeur layers."
+        },
+        {
+          "type": "paragraph",
+          "text": "A dirty frame can still be composed. The chew should be intentional shapes, not a boom or a coffee cup."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Dirty versus clean edges is a moral diagram. Clean edges say the picture was granted.Dirty edges say it was stolen, crowded, or survived. A shoulder in the foreground, a plant slicing a corner, rain on a window: someone else owns the near space.It is the wrong tool for a product, a formal portrait, or a ritual altar. If the edges are dirty because the set was not cleared, you have clutter, not voyeur layers.A dirty frame can still be composed. The chew should be intentional shapes, not a boom or a coffee cup."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put matter close to the four edges or to the ones that should feel occupied. Open the aperture so that matter melts, unless a sharp shoulder is the eavesdropper."
+        },
+        {
+          "type": "paragraph",
+          "text": "A longer lens compresses crowd into the edges. A wider lens needs objects truly near the glass."
+        },
+        {
+          "type": "paragraph",
+          "text": "Check that faces still clear a hole in the middle. Prompt: Dirty frame around [Subject], out-of-focus shoulders, glass, foliage, or crowd chewing the edges, voyeur layers."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put matter close to the four edges or to the ones that should feel occupied. Open the aperture so that matter melts, unless a sharp shoulder is the eavesdropper.A longer lens compresses crowd into the edges. A wider lens needs objects truly near the glass.Check that faces still clear a hole in the middle. Prompt: Dirty frame around [Subject], out-of-focus shoulders, glass, foliage, or crowd chewing the edges, voyeur layers."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for surveillance, parties, streets, and any view that should feel unauthorized or crowded. Do not dirty a ceremonial single or a product hold."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for surveillance, parties, streets, and any view that should feel unauthorized or crowded. Do not dirty a ceremonial single or a product hold."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Foreground Interest is a salient near object that may sit in one region. Dirty frame is specifically about edges being occupied, often all around.",
+          "links": [
+            {
+              "text": "Foreground Interest",
+              "url": "https://melies.co/cinematic-techniques/composition/foreground-interest"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Frame within Frame cuts a hard inner rectangle. Dirty matter is usually soft and irregular.",
+          "links": [
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Voyeur is the concealment position that often produces dirty edges. Clean Frame is the opposite ethic: empty edges, isolation by tidiness.",
+          "links": [
+            {
+              "text": "Voyeur",
+              "url": "https://melies.co/cinematic-techniques/composition/voyeur"
+            },
+            {
+              "text": "Clean Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/clean-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Layered Depth may keep those edge layers sharp if they carry action.",
+          "links": [
+            {
+              "text": "Layered Depth",
+              "url": "https://melies.co/cinematic-techniques/composition/layered-depth"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Foreground InterestPut air and obstacle between us and them.",
+          "displayText": "Foreground Interest\nPut air and obstacle between us and them.",
+          "links": [
+            {
+              "text": "Foreground InterestPut air and obstacle between us and them.",
+              "url": "https://melies.co/cinematic-techniques/composition/foreground-interest"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+          "displayText": "Frame within Frame\nSomeone is watched, trapped, or pictured.",
+          "links": [
+            {
+              "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Foreground Interest",
+          "url": "https://melies.co/cinematic-techniques/composition/foreground-interest"
+        },
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Voyeur",
+          "url": "https://melies.co/cinematic-techniques/composition/voyeur"
+        },
+        {
+          "text": "Clean Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/clean-frame"
+        },
+        {
+          "text": "Layered Depth",
+          "url": "https://melies.co/cinematic-techniques/composition/layered-depth"
+        },
+        {
+          "text": "Foreground InterestPut air and obstacle between us and them.",
+          "url": "https://melies.co/cinematic-techniques/composition/foreground-interest"
+        },
+        {
+          "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8175d3a232dbdeb67405c9ffbd646e6d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/foreground-interest.webp",
+          "alt": "Foreground Interest"
+        },
+        {
+          "kind": "image",
+          "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+          "alt": "Frame within Frame"
+        },
+        {
+          "kind": "video",
+          "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Foreground Interest is a salient near object that may sit in one region. Dirty frame is specifically about edges being occupied, often all around.Frame within Frame cuts a hard inner rectangle. Dirty matter is usually soft and irregular.Voyeur is the concealment position that often produces dirty edges. Clean Frame is the opposite ethic: empty edges, isolation by tidiness.Layered Depth may keep those edge layers sharp if they carry action.Foreground InterestPut air and obstacle between us and them.Frame within FrameSomeone is watched, trapped, or pictured.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Conversation watches through crowds, glass, and occupied space so privacy is already compromised. Children of Men keeps debris, bodies, and near matter in the aperture so the future never grants a poster."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of occupancy, not a blur sticker."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Conversation watches through crowds, glass, and occupied space so privacy is already compromised. Children of Men keeps debris, bodies, and near matter in the aperture so the future never grants a poster.Grammar of occupancy, not a blur sticker."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Occupy the edges and name the matter. Dirty frame around [Subject], out-of-focus shoulders, glass, foliage, or crowd chewing the edges, voyeur layers."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say which edges (left shoulder, bottom foliage, rain-streaked glass). Keep a readable hole for the subject."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid clean margins."
+        },
+        {
+          "type": "quote",
+          "text": "Dirty frame around [Subject], out-of-focus shoulders, glass, foliage, or crowd chewing the edges, voyeur layers."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Dirty+frame+around+[Subject],+out-of-focus+shoulders,+glass,+foliage,+or+crowd+chewing+the+edges,+voyeur+layers."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Occupy the edges and name the matter. Dirty frame around [Subject], out-of-focus shoulders, glass, foliage, or crowd chewing the edges, voyeur layers.Say which edges (left shoulder, bottom foliage, rain-streaked glass). Keep a readable hole for the subject.Forbid clean margins.Copy promptUse in Image GeneratorDirty frame around [Subject], out-of-focus shoulders, glass, foliage, or crowd chewing the edges, voyeur layers.Dirty frame around [Subject], out-of-focus shoulders, glass, foliage, or crowd chewing the edges, voyeur layers."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is accidental clutter, or a Clean Frame with a fake vignette. The tell is a boom, a logo, or a blurry oval that is not an object.",
+          "links": [
+            {
+              "text": "Clean Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/clean-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to choose the occluders, place them on the edges, and open the lens so they melt without covering the mouth."
+        }
+      ],
+      "links": [
+        {
+          "text": "Clean Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/clean-frame"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is accidental clutter, or a Clean Frame with a fake vignette. The tell is a boom, a logo, or a blurry oval that is not an object.The fix is to choose the occluders, place them on the edges, and open the lens so they melt without covering the mouth."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a dirty frame in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Out-of-focus or near matter chews the edges: shoulders, glass, foliage, crowd. The view is occupied. The camera feels inside a space we were not invited to stand in, or inside a crowd that will not clear."
+        },
+        {
+          "type": "heading",
+          "text": "Dirty Frame vs Clean Frame",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dirty frame occupies the edges. A clean frame keeps them empty of accident. One isolates by obstruction and complicity. The other isolates by tidiness. Choose the ethic. Do not mix them by forgetting to clear a table."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a dirty frame?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the view should feel stolen, crowded, or physically situated: surveillance, parties, streets, affairs. Do not use it on a formal altar or a product."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt dirty frame for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the occluders and the edges. Example: Dirty frame around [Subject], out-of-focus shoulders, glass, foliage, or crowd chewing the edges, voyeur layers. Models default to clean margins. You must demand occupied edges."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a dirty frame in film?Out-of-focus or near matter chews the edges: shoulders, glass, foliage, crowd. The view is occupied. The camera feels inside a space we were not invited to stand in, or inside a crowd that will not clear.Dirty Frame vs Clean FrameA dirty frame occupies the edges. A clean frame keeps them empty of accident. One isolates by obstruction and complicity. The other isolates by tidiness. Choose the ethic. Do not mix them by forgetting to clear a table.When should I use a dirty frame?Use it when the view should feel stolen, crowded, or physically situated: surveillance, parties, streets, affairs. Do not use it on a formal altar or a product.How do I prompt dirty frame for AI image or video?Name the occluders and the edges. Example: Dirty frame around [Subject], out-of-focus shoulders, glass, foliage, or crowd chewing the edges, voyeur layers. Models default to clean margins. You must demand occupied edges."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Occupy the edges and name the matter. Dirty frame around [Subject], out-of-focus shoulders, glass, foliage, or crowd chewing the edges, voyeur layers.",
+      "Say which edges (left shoulder, bottom foliage, rain-streaked glass). Keep a readable hole for the subject.",
+      "Forbid clean margins."
+    ],
+    "example": "Dirty frame around [Subject], out-of-focus shoulders, glass, foliage, or crowd chewing the edges, voyeur layers."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/d734365fbad1668a19694f50f3ad0d8e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/040-foreground-obstruction-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/42192cfbcaa98a313c7df38d8a897967.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dirty-frame-040-foreground-obstruction-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4055c04a3af5772762792f32bc9fe4ca.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/dirty-frame.jpg",
+      "alt": "Dirty Frame frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/8175d3a232dbdeb67405c9ffbd646e6d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/foreground-interest.webp",
+      "alt": "Foreground Interest"
+    },
+    {
+      "kind": "image",
+      "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+      "alt": "Frame within Frame"
+    },
+    {
+      "kind": "video",
+      "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/705cad8fee217909db43039f418f7db8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dirty-frame/hero.jpg",
+      "alt": "Dirty Frame",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "5e1bd4db935ac8d11d4dab7849b7c5fc122b9b9d13c078c67a457d46c9cf8b3f"
+}

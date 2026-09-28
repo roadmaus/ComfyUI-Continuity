@@ -1,0 +1,408 @@
+{
+  "id": "camera-movement/arc-left",
+  "slug": "arc-left",
+  "title": "Arc Left",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/arc-left",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-left-arc-left-mini.webp",
+  "detail": "details/camera-movement/arc-left.json",
+  "aliases": [],
+  "description": "An arc left is a curved dolly that travels partway around the subject while staying aimed at them. The camera's axis on the conversation or room changes without a cut, usually about a quarter-orbit.",
+  "thumbnail": "media/d272f82a8824765861ad77fb975af55e.webp",
+  "video": "media/9f0cfe2921cd4a52ee9f3bb03b669001.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-left-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You change who owns the background. A three-quarter face can become a profile, a window can replace a wall, the other half of a room can arrive."
+        },
+        {
+          "type": "paragraph",
+          "text": "The subject stays the center; the world slides. It is the wrong tool when you needed a full spin, a straight truck, or a pan from sticks."
+        },
+        {
+          "type": "paragraph",
+          "text": "If radius collapses, you accidentally pushed in."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function You change who owns the background. A three-quarter face can become a profile, a window can replace a wall, the other half of a room can arrive.The subject stays the center; the world slides. It is the wrong tool when you needed a full spin, a straight truck, or a pan from sticks.If radius collapses, you accidentally pushed in."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lay a curved track or walk a measured radius, always facing the figure. Keep distance roughly constant."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ninety degrees is enough for most coverage. Prompt a 90-degree arc left around the subject, curved dolly, always facing the figure, background sliding."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lay a curved track or walk a measured radius, always facing the figure. Keep distance roughly constant.Ninety degrees is enough for most coverage. Prompt a 90-degree arc left around the subject, curved dolly, always facing the figure, background sliding."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to change the axis of a conversation or reveal the other half of a room. Concrete beat: from a frontal two-shot into a profile that discloses a listener in the doorway."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not complete 360 unless spectacle is the job."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to change the axis of a conversation or reveal the other half of a room. Concrete beat: from a frontal two-shot into a profile that discloses a listener in the doorway.Do not complete 360 unless spectacle is the job."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "360-Degree Orbit finishes the circle. Arc Right is the other direction: pick the side that produces the new wall.",
+          "links": [
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            },
+            {
+              "text": "Arc Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc-right"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Dolly Left is linear, not curved, so distance to the subject will change unless they also move. Arc left is a partial azimuth on a radius.",
+          "links": [
+            {
+              "text": "Dolly Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Arc RightSame as arc left, other side.",
+          "displayText": "Arc Right\nSame as arc left, other side.",
+          "links": [
+            {
+              "text": "Arc RightSame as arc left, other side.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc-right"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "displayText": "360-Degree Orbit\nTime collapses around one person: kiss, threat, or product hero.",
+          "links": [
+            {
+              "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Arc Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc-right"
+        },
+        {
+          "text": "Dolly Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+        },
+        {
+          "text": "Arc RightSame as arc left, other side.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc-right"
+        },
+        {
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/627c7500d384beb2260120a87573cbff.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-right-arc-right-mini.webp",
+          "alt": "Arc Right"
+        },
+        {
+          "kind": "video",
+          "path": "media/9498695f34b770931d6614351a9561a9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-right-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+          "alt": "360-Degree Orbit"
+        },
+        {
+          "kind": "video",
+          "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots 360-Degree Orbit finishes the circle. Arc Right is the other direction: pick the side that produces the new wall.A Dolly Left is linear, not curved, so distance to the subject will change unless they also move. Arc left is a partial azimuth on a radius.Arc RightSame as arc left, other side.360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Goodfellas uses curved approaches as social weather, distinct from its straight Copa track. Atonement's long beach and house passages include arcing camera to re-axis crowds and rooms."
+        },
+        {
+          "type": "paragraph",
+          "text": "Take the quarter-turn, not the whole set-piece."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Goodfellas uses curved approaches as social weather, distinct from its straight Copa track. Atonement's long beach and house passages include arcing camera to re-axis crowds and rooms.Take the quarter-turn, not the whole set-piece."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "90-degree arc left around [Subject], curved dolly, always facing the figure, background sliding, a quarter-orbit instead of a full spin. For motion: the camera arcs left about 90 degrees around [Subject], always facing them."
+        },
+        {
+          "type": "quote",
+          "text": "The camera arcs left about 90 degrees around [Subject], always facing them."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+arcs+left+about+90+degrees+around+[Subject],+always+facing+them."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it 90-degree arc left around [Subject], curved dolly, always facing the figure, background sliding, a quarter-orbit instead of a full spin. For motion: the camera arcs left about 90 degrees around [Subject], always facing them.Copy promptUse in Video GeneratorThe camera arcs left about 90 degrees around [Subject], always facing them.The camera arcs left about 90 degrees around [Subject], always facing them."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Dolly Left or a full 360-Degree Orbit. The tell is a straight track that loses the subject, or a spin that never stops.",
+          "links": [
+            {
+              "text": "Dolly Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+            },
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: curved path, constant radius, about 90 degrees, lens on the person."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+        },
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Dolly Left or a full 360-Degree Orbit. The tell is a straight track that loses the subject, or a spin that never stops.The fix: curved path, constant radius, about 90 degrees, lens on the person."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Arc Left in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a partial leftward orbit: the camera travels a curve around a subject while remaining aimed at them, changing background and face angle."
+        },
+        {
+          "type": "heading",
+          "text": "Arc Left vs 360-Degree Orbit",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A 360 orbit completes the circle and often becomes the event. Arc left is a coverage curve, usually about 90 degrees, to change axis."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Arc Left?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a conversation or a room needs a new axis without a cut. Do not use a full orbit for that job."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Arc Left for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write 90-degree arc left, curved dolly, always facing [Subject], constant distance, background sliding. Ban a full 360 unless you change technique."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Arc Left in film?It is a partial leftward orbit: the camera travels a curve around a subject while remaining aimed at them, changing background and face angle.Arc Left vs 360-Degree OrbitA 360 orbit completes the circle and often becomes the event. Arc left is a coverage curve, usually about 90 degrees, to change axis.When should I use Arc Left?When a conversation or a room needs a new axis without a cut. Do not use a full orbit for that job.How do I prompt Arc Left for AI image or video?Write 90-degree arc left, curved dolly, always facing [Subject], constant distance, background sliding. Ban a full 360 unless you change technique."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "90-degree arc left around [Subject], curved dolly, always facing the figure, background sliding, a quarter-orbit instead of a full spin. For motion: the camera arcs left about 90 degrees around [Subject], always facing them."
+    ],
+    "example": "The camera arcs left about 90 degrees around [Subject], always facing them."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/9f0cfe2921cd4a52ee9f3bb03b669001.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-left-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d272f82a8824765861ad77fb975af55e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-left-arc-left-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8f3c7963bc0f6175281f5c567cfbc70a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/arc-left.jpg",
+      "alt": "Arc Left frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/627c7500d384beb2260120a87573cbff.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-right-arc-right-mini.webp",
+      "alt": "Arc Right"
+    },
+    {
+      "kind": "video",
+      "path": "media/9498695f34b770931d6614351a9561a9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-right-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+      "alt": "360-Degree Orbit"
+    },
+    {
+      "kind": "video",
+      "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d902c0ee9a20d5a32ceb8b35e10f7d3f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/arc-left/hero.jpg",
+      "alt": "Arc Left",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "f1e46d87619f9e5dd99bc7487729c545b4d46f10df3a04bb6fd7dae8570ebfd8"
+}

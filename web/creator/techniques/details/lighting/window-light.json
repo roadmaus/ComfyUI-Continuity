@@ -1,0 +1,393 @@
+{
+  "id": "lighting/window-light",
+  "slug": "window-light",
+  "title": "Window Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/window-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/window-light.webp",
+  "detail": "details/lighting/window-light.json",
+  "aliases": [],
+  "description": "Window light in window light cinematography is illumination shaped to appear as light entering through a window: a large, directional source with falloff into the room. The architecture is the modifier.",
+  "thumbnail": "media/b40f77c3fa856d3a1ad6b3c98e9753de.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Day interiors without looking lit. A figure sits in the falloff, one side toward glass, the far wall dying."
+        },
+        {
+          "type": "paragraph",
+          "text": "Painterly rooms, period houses, and quiet dramas use the window as the only key so the hour is readable. It is the wrong tool at night (unless moonlight through glass is the story), or when you need a hard bulb."
+        },
+        {
+          "type": "paragraph",
+          "text": "A window is not automatically bounce; bounce happens after the light hits a wall. A window can be hard if the sun is direct and small in the frame of the glass.",
+          "links": [
+            {
+              "text": "bounce",
+              "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "bounce",
+          "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Day interiors without looking lit. A figure sits in the falloff, one side toward glass, the far wall dying.Painterly rooms, period houses, and quiet dramas use the window as the only key so the hour is readable. It is the wrong tool at night (unless moonlight through glass is the story), or when you need a hard bulb.A window is not automatically bounce; bounce happens after the light hits a wall. A window can be hard if the sun is direct and small in the frame of the glass."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use real sky or a large source outside the glass, plus sheers if you want wrap. Direction is the window's side."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness: overcast or north light is soft; direct sun through dirty glass is harder and may throw a patch. Color is daylight, cooler if north sky, warmer late."
+        },
+        {
+          "type": "paragraph",
+          "text": "Let inverse-square and flags create falloff toward the room. Prompt: Window light as the only key on [Subject], large soft directional source, falloff into the room, painterly interior."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Use real sky or a large source outside the glass, plus sheers if you want wrap. Direction is the window's side.Hardness: overcast or north light is soft; direct sun through dirty glass is harder and may throw a patch. Color is daylight, cooler if north sky, warmer late.Let inverse-square and flags create falloff toward the room. Prompt: Window light as the only key on [Subject], large soft directional source, falloff into the room, painterly interior."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a day interior that should not look studio-lit, a sitting room, a workshop. Do not use a frontal silk that ignores the window's actual wall."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a day interior that should not look studio-lit, a sitting room, a workshop. Do not use a frontal silk that ignores the window's actual wall."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Soft light is the usual quality of north windows. Motivated lighting is the logic that lets you hide a source outside that window.",
+          "links": [
+            {
+              "text": "Soft light",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            },
+            {
+              "text": "Motivated lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Bounce is the wall ricochet after entry. Available light uses the real window without adding.",
+          "links": [
+            {
+              "text": "Bounce",
+              "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+            },
+            {
+              "text": "Available light",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Golden hour through a window is a specific color and angle of this source.",
+          "links": [
+            {
+              "text": "Golden hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Soft LightBeauty, memory, or kindness.",
+          "displayText": "Soft Light\nBeauty, memory, or kindness.",
+          "links": [
+            {
+              "text": "Soft LightBeauty, memory, or kindness.",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Motivated LightingRealism with control. Light like a world, not a studio.",
+          "displayText": "Motivated Lighting\nRealism with control. Light like a world, not a studio.",
+          "links": [
+            {
+              "text": "Motivated LightingRealism with control. Light like a world, not a studio.",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Soft light",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "Motivated lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Bounce",
+          "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+        },
+        {
+          "text": "Available light",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Golden hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+        },
+        {
+          "text": "Soft LightBeauty, memory, or kindness.",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "Motivated LightingRealism with control. Light like a world, not a studio.",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+          "alt": "Soft Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/72b4a8abf049e156a7fe62f44ecbdf57.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motivated-lighting.webp",
+          "alt": "Motivated Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Soft light is the usual quality of north windows. Motivated lighting is the logic that lets you hide a source outside that window.Bounce is the wall ricochet after entry. Available light uses the real window without adding.Golden hour through a window is a specific color and angle of this source.Soft LightBeauty, memory, or kindness.Motivated LightingRealism with control. Light like a world, not a studio.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Girl with a Pearl Earring (2003) builds interiors as if Vermeer's window were the key. The Danish Girl uses large directional day interiors with falloff."
+        },
+        {
+          "type": "paragraph",
+          "text": "The grammar is glass, falloff, and one side, not a painting to clone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Girl with a Pearl Earring (2003) builds interiors as if Vermeer's window were the key. The Danish Girl uses large directional day interiors with falloff.The grammar is glass, falloff, and one side, not a painting to clone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Make the window the only key. Use: \"Window light as the only key on [Subject], large soft directional source, falloff into the room, painterly interior.\" Name which wall holds the glass and whether the sky is overcast or late sun."
+        },
+        {
+          "type": "quote",
+          "text": "Window light as the only key on [Subject], large soft directional source, falloff into the room, painterly interior."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Window+light+as+the+only+key+on+[Subject],+large+soft+directional+source,+falloff+into+the+room,+painterly+interior."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Make the window the only key. Use: \"Window light as the only key on [Subject], large soft directional source, falloff into the room, painterly interior.\" Name which wall holds the glass and whether the sky is overcast or late sun.Copy promptUse in Image GeneratorWindow light as the only key on [Subject], large soft directional source, falloff into the room, painterly interior.Window light as the only key on [Subject], large soft directional source, falloff into the room, painterly interior."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a frontal soft key that does not match the window wall, or a hard gobo of blinds when you asked for wrap. The tell is a key from a blank wall.",
+          "links": [
+            {
+              "text": "soft",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            },
+            {
+              "text": "gobo",
+              "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by putting the bright side on the glass and letting the room fall off."
+        }
+      ],
+      "links": [
+        {
+          "text": "soft",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "gobo",
+          "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a frontal soft key that does not match the window wall, or a hard gobo of blinds when you asked for wrap. The tell is a key from a blank wall.Fix it by putting the bright side on the glass and letting the room fall off."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is window light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Light shaped as if it enters through a window: large, directional, with falloff into the room. The window is the source and the modifier."
+        },
+        {
+          "type": "heading",
+          "text": "Window light vs bounce light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Window light is the entry from glass and sky. Bounce is a ricochet off a surface, which a window may cause once it hits a wall, but bounce is not the window itself."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use window light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for day interiors that should feel architectural rather than studio-lit. Skip it when the story is a night bulb."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt window light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "State window light as the only key, large directional source, falloff into the room. Name the window wall and the sky condition."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is window light in film?Light shaped as if it enters through a window: large, directional, with falloff into the room. The window is the source and the modifier.Window light vs bounce lightWindow light is the entry from glass and sky. Bounce is a ricochet off a surface, which a window may cause once it hits a wall, but bounce is not the window itself.When should I use window light?Use it for day interiors that should feel architectural rather than studio-lit. Skip it when the story is a night bulb.How do I prompt window light for AI image or video?State window light as the only key, large directional source, falloff into the room. Name the window wall and the sky condition."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Make the window the only key. Use: \"Window light as the only key on [Subject], large soft directional source, falloff into the room, painterly interior.\" Name which wall holds the glass and whether the sky is overcast or late sun."
+    ],
+    "example": "Window light as the only key on [Subject], large soft directional source, falloff into the room, painterly interior."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/b40f77c3fa856d3a1ad6b3c98e9753de.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/window-light.webp",
+      "alt": "Window Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+      "alt": "Soft Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/72b4a8abf049e156a7fe62f44ecbdf57.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motivated-lighting.webp",
+      "alt": "Motivated Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/aa0455cc81bb5ea5ff3e0c5ebb806202.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/window-light/hero.jpg",
+      "alt": "Window Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "d671880982d5b7c605697061ae3ddce15c78e61347be976e7928c32201403fda"
+}

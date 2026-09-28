@@ -1,0 +1,378 @@
+{
+  "id": "camera-movement/falling",
+  "slug": "falling",
+  "title": "Falling",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/falling",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/falling-falling-mini.webp",
+  "detail": "details/camera-movement/falling.json",
+  "aliases": [],
+  "description": "A falling camera drops the lens through air with weight and wind, a body or viewpoint in free fall. Gravity is the path: the ground rises, air rushes, and the horizon may not stay polite.",
+  "thumbnail": "media/3002a60ee79525d8dc1a0daa720fd81e.webp",
+  "video": "media/2e16cf279b0e1e7eb5a07ea20738b4c5.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/falling-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Gravity is the plot. A jump, a slip, a body leaving a roof: the shot lasts as long as the drop, often a few seconds, and the camera either falls with the subject or is the subject."
+        },
+        {
+          "type": "paragraph",
+          "text": "A crane down is not a fall. If the arm is supported and the speed is chosen, you have a boom, not weight."
+        },
+        {
+          "type": "paragraph",
+          "text": "A drone that eases down is also not this shot."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Gravity is the plot. A jump, a slip, a body leaving a roof: the shot lasts as long as the drop, often a few seconds, and the camera either falls with the subject or is the subject.A crane down is not a fall. If the arm is supported and the speed is chosen, you have a boom, not weight.A drone that eases down is also not this shot."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The camera is dropped, thrown, or flown on a path that accelerates downward: wire, descender, or a digital fall with the same acceleration. Wide or moderate-wide helps the ground grow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Falling camera with [Subject], the lens dropping through air, weight, and wind, a body or viewpoint in free fall. Video: six seconds of drop, rushing air, ground rising."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works The camera is dropped, thrown, or flown on a path that accelerates downward: wire, descender, or a digital fall with the same acceleration. Wide or moderate-wide helps the ground grow.Prompt: Falling camera with [Subject], the lens dropping through air, weight, and wind, a body or viewpoint in free fall. Video: six seconds of drop, rushing air, ground rising."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the beat is a drop: a leap, a slip, a body leaving structure. Do not use it as a stylish way to enter a lobby."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the beat is a drop: a leap, a slip, a body leaving structure. Do not use it as a stylish way to enter a lobby."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An FPV Drone can fall, but it can also turn, climb, and thread. Falling is committed to gravity.",
+          "links": [
+            {
+              "text": "FPV Drone",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Ground Level is a height at the end, not the drop. A Crane Down is a supported boom with chosen speed.",
+          "links": [
+            {
+              "text": "Ground Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            },
+            {
+              "text": "Crane Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "displayText": "FPV Drone\nImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "links": [
+            {
+              "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Ground LevelStart from the dirt.",
+          "displayText": "Ground Level\nStart from the dirt.",
+          "links": [
+            {
+              "text": "Ground LevelStart from the dirt.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "FPV Drone",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "Ground Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        },
+        {
+          "text": "Crane Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        },
+        {
+          "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "Ground LevelStart from the dirt.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+          "alt": "FPV Drone"
+        },
+        {
+          "kind": "video",
+          "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/90e4116fa502af93f97dc97b380107b3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ground-level.webp",
+          "alt": "Ground Level"
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots An FPV Drone can fall, but it can also turn, climb, and thread. Falling is committed to gravity.Ground Level is a height at the end, not the drop. A Crane Down is a supported boom with chosen speed.FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.Ground LevelStart from the dirt.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Walk puts viewpoint and body into air above a city. Point Break uses freefall as the scene, not as a garnish."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: weight, wind, ground rising."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Walk puts viewpoint and body into air above a city. Point Break uses freefall as the scene, not as a garnish.Grammar: weight, wind, ground rising."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the drop and the ground. Still: Falling camera with [Subject], the lens dropping through air, weight, and wind, a body or viewpoint in free fall."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera falls with [Subject], rushing air, ground rising, six seconds of drop. Forbid a gentle crane."
+        },
+        {
+          "type": "quote",
+          "text": "The camera falls with [Subject], rushing air, ground rising, six seconds of drop."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+falls+with+[Subject],+rushing+air,+ground+rising,+six+seconds+of+drop."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the drop and the ground. Still: Falling camera with [Subject], the lens dropping through air, weight, and wind, a body or viewpoint in free fall.Video: The camera falls with [Subject], rushing air, ground rising, six seconds of drop. Forbid a gentle crane.Copy promptUse in Video GeneratorThe camera falls with [Subject], rushing air, ground rising, six seconds of drop.The camera falls with [Subject], rushing air, ground rising, six seconds of drop."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a crane down or a drone descend. The tell: constant speed, stable horizon, no sense of weight."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: accelerate down, let the ground rise, add wind and a short duration."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a crane down or a drone descend. The tell: constant speed, stable horizon, no sense of weight.The fix: accelerate down, let the ground rise, add wind and a short duration."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Falling in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A falling camera drops through air under gravity, with the ground rising and wind in the frame. The path is a fall, not a supported boom."
+        },
+        {
+          "type": "heading",
+          "text": "Falling vs Crane Down",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A crane down is a chosen, supported descent. Falling accelerates with weight; the camera is in free fall with or as the body."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Falling?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when gravity is the beat: a jump, a slip, a drop from a roof. Do not use it to enter a room in style."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Falling for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a drop, rushing air, and ground rising. Example: Falling camera with [Subject], the lens dropping through air, weight, and wind, a body or viewpoint in free fall."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Falling in film?A falling camera drops through air under gravity, with the ground rising and wind in the frame. The path is a fall, not a supported boom.Falling vs Crane DownA crane down is a chosen, supported descent. Falling accelerates with weight; the camera is in free fall with or as the body.When should I use Falling?Use it when gravity is the beat: a jump, a slip, a drop from a roof. Do not use it to enter a room in style.How do I prompt Falling for AI image or video?Write a drop, rushing air, and ground rising. Example: Falling camera with [Subject], the lens dropping through air, weight, and wind, a body or viewpoint in free fall."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the drop and the ground. Still: Falling camera with [Subject], the lens dropping through air, weight, and wind, a body or viewpoint in free fall.",
+      "Video: The camera falls with [Subject], rushing air, ground rising, six seconds of drop. Forbid a gentle crane."
+    ],
+    "example": "The camera falls with [Subject], rushing air, ground rising, six seconds of drop."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/2e16cf279b0e1e7eb5a07ea20738b4c5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/falling-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3002a60ee79525d8dc1a0daa720fd81e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/falling-falling-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3d94b6ba06aaea2342ad22fd79900add.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/falling.jpg",
+      "alt": "Falling frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+      "alt": "FPV Drone"
+    },
+    {
+      "kind": "video",
+      "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/90e4116fa502af93f97dc97b380107b3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ground-level.webp",
+      "alt": "Ground Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/81a00977db30c817ab94dc407a9132ac.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/falling/hero.jpg",
+      "alt": "Falling",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "2f3b48a8f99f89a2f44c9e97af6a55dcc4745fecd77994593d2c536ea5391157"
+}

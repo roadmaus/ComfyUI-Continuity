@@ -1,0 +1,390 @@
+{
+  "id": "camera-movement/conveyor",
+  "slug": "conveyor",
+  "title": "Conveyor",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/conveyor",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/conveyor-conveyor-mini.webp",
+  "detail": "details/camera-movement/conveyor.json",
+  "aliases": [],
+  "description": "A conveyor camera treats the world as a belt: relentless lateral travel at constant speed, factory or infinite product-line geometry. The subject can stand still while the line delivers the next unit past the frame.",
+  "thumbnail": "media/bdd15e69386b97cf22801f85fcc19365.webp",
+  "video": "media/23fd71e14834422fab08cd83f48894e9.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/conveyor-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Industry, process, no escape from the line. The shot says labor is a machine: bodies, boxes, or faces arrive and leave at one speed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comedy and paranoia both live here. It is the wrong tool for a walker you are meant to accompany."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the person is choosing a path, truck or track with them. A conveyor that speeds up and slows with emotion is no longer a belt."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Industry, process, no escape from the line. The shot says labor is a machine: bodies, boxes, or faces arrive and leave at one speed.Comedy and paranoia both live here. It is the wrong tool for a walker you are meant to accompany.If the person is choosing a path, truck or track with them. A conveyor that speeds up and slows with emotion is no longer a belt."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lateral dolly, slider, or a treadmill-like set, constant velocity, often a wide or moderate-wide so units repeat. Foreground machinery should cross faster than the far wall."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exposure can be industrial: hard practicals, green or sodium, no beauty key. Prompt: Conveyor move past [Subject], the world sliding on a belt, factory or infinite product line, relentless lateral travel."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lateral dolly, slider, or a treadmill-like set, constant velocity, often a wide or moderate-wide so units repeat. Foreground machinery should cross faster than the far wall.Exposure can be industrial: hard practicals, green or sodium, no beauty key. Prompt: Conveyor move past [Subject], the world sliding on a belt, factory or infinite product line, relentless lateral travel."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a factory, an assembly of faces, a process that will not stop. Do not use it beside a casual sidewalk chat."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a factory, an assembly of faces, a process that will not stop. Do not use it beside a casual sidewalk chat."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Trucking stays beside a walker; speed is human. Tracking Shot follows a chosen path.",
+          "links": [
+            {
+              "text": "Trucking",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/trucking"
+            },
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Conveyor is the line that does not care. A Dolly can go any direction; this one is lateral and metronomic.",
+          "links": [
+            {
+              "text": "Dolly",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "displayText": "Tracking Shot\nAccompany a walker. The shot is a journey, not a picture.",
+          "links": [
+            {
+              "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "TruckingStay beside a walker.",
+          "displayText": "Trucking\nStay beside a walker.",
+          "links": [
+            {
+              "text": "TruckingStay beside a walker.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/trucking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Trucking",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/trucking"
+        },
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Dolly",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly"
+        },
+        {
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "TruckingStay beside a walker.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/trucking"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+          "alt": "Tracking Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d6fc7d13471e307a07c528839c480dfe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/trucking-trucking-mini.webp",
+          "alt": "Trucking"
+        },
+        {
+          "kind": "video",
+          "path": "media/2cb7b8f0be76d3f327a03381d626f0b9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/trucking-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Trucking stays beside a walker; speed is human. Tracking Shot follows a chosen path.Conveyor is the line that does not care. A Dolly can go any direction; this one is lateral and metronomic.Tracking ShotAccompany a walker. The shot is a journey, not a picture.TruckingStay beside a walker.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Modern Times turns the factory into a belt the body cannot leave. The Parallax View uses industrial process and test-film geometry as a trap."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: constant lateral speed, repeating units."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Modern Times turns the factory into a belt the body cannot leave. The Parallax View uses industrial process and test-film geometry as a trap.Grammar: constant lateral speed, repeating units."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the belt and the constant speed. Still: Conveyor move past [Subject], the world sliding on a belt, factory or infinite product line, relentless lateral travel."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The world slides past [Subject] as if on a conveyor, constant lateral speed. Forbid a halt in the middle unless the line jams on purpose."
+        },
+        {
+          "type": "quote",
+          "text": "The world slides past [Subject] as if on a conveyor, constant lateral speed."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+world+slides+past+[Subject]+as+if+on+a+conveyor,+constant+lateral+speed."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the belt and the constant speed. Still: Conveyor move past [Subject], the world sliding on a belt, factory or infinite product line, relentless lateral travel.Video: The world slides past [Subject] as if on a conveyor, constant lateral speed. Forbid a halt in the middle unless the line jams on purpose.Copy promptUse in Video GeneratorThe world slides past [Subject] as if on a conveyor, constant lateral speed.The world slides past [Subject] as if on a conveyor, constant lateral speed."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a trucking shot with a walker. The tell: the subject is strolling and the camera is being polite."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: constant lateral speed, repeating units, the person as another item on the line."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a trucking shot with a walker. The tell: the subject is strolling and the camera is being polite.The fix: constant lateral speed, repeating units, the person as another item on the line."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Conveyor in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A conveyor camera is relentless lateral travel at constant speed, as if the world were a factory belt. The subject can be still while units keep arriving."
+        },
+        {
+          "type": "heading",
+          "text": "Conveyor vs Trucking",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Trucking stays beside a person walking. Conveyor is industrial: one speed, repeating units, process without escape."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Conveyor?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for factories, process, and systems that swallow people. Do not use it for a casual walk-and-talk."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Conveyor for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write constant lateral speed and a belt or product line. Example: Conveyor move past [Subject], the world sliding on a belt, factory or infinite product line, relentless lateral travel."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Conveyor in film?A conveyor camera is relentless lateral travel at constant speed, as if the world were a factory belt. The subject can be still while units keep arriving.Conveyor vs TruckingTrucking stays beside a person walking. Conveyor is industrial: one speed, repeating units, process without escape.When should I use Conveyor?Use it for factories, process, and systems that swallow people. Do not use it for a casual walk-and-talk.How do I prompt Conveyor for AI image or video?Write constant lateral speed and a belt or product line. Example: Conveyor move past [Subject], the world sliding on a belt, factory or infinite product line, relentless lateral travel."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the belt and the constant speed. Still: Conveyor move past [Subject], the world sliding on a belt, factory or infinite product line, relentless lateral travel.",
+      "Video: The world slides past [Subject] as if on a conveyor, constant lateral speed. Forbid a halt in the middle unless the line jams on purpose."
+    ],
+    "example": "The world slides past [Subject] as if on a conveyor, constant lateral speed."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/23fd71e14834422fab08cd83f48894e9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/conveyor-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bdd15e69386b97cf22801f85fcc19365.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/conveyor-conveyor-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4e5a7cd14c1d81edaae3e62a3be6a5bd.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/conveyor.jpg",
+      "alt": "Conveyor frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+      "alt": "Tracking Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d6fc7d13471e307a07c528839c480dfe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/trucking-trucking-mini.webp",
+      "alt": "Trucking"
+    },
+    {
+      "kind": "video",
+      "path": "media/2cb7b8f0be76d3f327a03381d626f0b9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/trucking-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8a6c660bcf90556cb23c7900e1fc7d5e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/conveyor/hero.jpg",
+      "alt": "Conveyor",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "f48d4ad7424246d55ca3e8edfc267456f647270bbc07007cf6cfe829602a0b65"
+}

@@ -1,0 +1,431 @@
+{
+  "id": "time-and-motion/stop-motion",
+  "slug": "stop-motion",
+  "title": "Stop Motion",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/stop-motion",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/stop-motion-150-stop-motion-animation-mini.webp",
+  "detail": "details/time-and-motion/stop-motion.json",
+  "aliases": [
+    "Frame-by-frame object animation",
+    "Replacement animation"
+  ],
+  "description": "Stop motion cinematography photographs physical objects incrementally, adjusting them between exposures so successive poses create apparent movement. The cadence is pose to pose and slightly staccato, with tactile materials in the light.",
+  "thumbnail": "media/d04b4ce391fdef45e21cc39bc134ce2c.webp",
+  "video": "media/caeeda8a94eba7dc76f037c54f23b46a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/150-stop-motion-animation-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when motion should feel made: puppets, replacement faces, dinosaurs that are sculptures, a fox whose fur is fabric. Weight, texture, and small irregularities are the performance."
+        },
+        {
+          "type": "paragraph",
+          "text": "Live-action smoothness would be the wrong world. It is the wrong tool for a choppy filter on a real actor, or for step-printed streets."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the fox's fur flows like photographed animal hair, you left the craft. A generated 'stop-motion look' is an aesthetic."
+        },
+        {
+          "type": "paragraph",
+          "text": "Frame-by-frame production is a method. Say which one you want."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when motion should feel made: puppets, replacement faces, dinosaurs that are sculptures, a fox whose fur is fabric. Weight, texture, and small irregularities are the performance.Live-action smoothness would be the wrong world. It is the wrong tool for a choppy filter on a real actor, or for step-printed streets.If the fox's fur flows like photographed animal hair, you left the craft. A generated 'stop-motion look' is an aesthetic.Frame-by-frame production is a method. Say which one you want."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock the camera. Repeat the lighting."
+        },
+        {
+          "type": "paragraph",
+          "text": "Plan pose spacing. Secure the model so it does not drift."
+        },
+        {
+          "type": "paragraph",
+          "text": "Replacement animation swaps parts (mouths, lids) between frames. For generated approximations, specify consistent materials, visible joints, and deliberate increments."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Stop-motion of [Subject], stepped poses, tactile increment, time built by hand."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock the camera. Repeat the lighting.Plan pose spacing. Secure the model so it does not drift.Replacement animation swaps parts (mouths, lids) between frames. For generated approximations, specify consistent materials, visible joints, and deliberate increments.Prompt: Stop-motion of [Subject], stepped poses, tactile increment, time built by hand."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a puppet or object should perform as a photographed sculpture, such as a fox folding paper on a miniature desk. Do not use it as a jitter preset on live action."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a puppet or object should perform as a photographed sculpture, such as a fox folding paper on a miniature desk. Do not use it as a jitter preset on live action."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stop motion is not Step Printing of live footage. It is a branch of Animation, specifically frame-by-frame object animation, including replacement animation.",
+          "links": [
+            {
+              "text": "Step Printing",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+            },
+            {
+              "text": "Animation",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Stutter / Stop-Stutter skip-frames living time. Low Shutter makes live action staccato without posing a model.",
+          "links": [
+            {
+              "text": "Stutter / Stop-Stutter",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/stutter"
+            },
+            {
+              "text": "Low Shutter",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/low-shutter"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Step PrintingLonging that cannot move at normal speed.",
+          "displayText": "Step Printing\nLonging that cannot move at normal speed.",
+          "links": [
+            {
+              "text": "Step PrintingLonging that cannot move at normal speed.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AnimationThe world is constructed, not captured.",
+          "displayText": "Animation\nThe world is constructed, not captured.",
+          "links": [
+            {
+              "text": "AnimationThe world is constructed, not captured.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Step Printing",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+        },
+        {
+          "text": "Animation",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        },
+        {
+          "text": "Stutter / Stop-Stutter",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/stutter"
+        },
+        {
+          "text": "Low Shutter",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/low-shutter"
+        },
+        {
+          "text": "Step PrintingLonging that cannot move at normal speed.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+        },
+        {
+          "text": "AnimationThe world is constructed, not captured.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ddf553d30941e6f3586104451a1b324f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/step-printing-083-step-printing-and-smeared-motion-mini.webp",
+          "alt": "Step Printing"
+        },
+        {
+          "kind": "video",
+          "path": "media/917e3ac6fea636f9034c88a2d59e5fcb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/083-step-printing-and-smeared-motion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/f57edf0bd31cd8fedb8a8cc5427f2511.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/animation.webp",
+          "alt": "Animation"
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Stop motion is not Step Printing of live footage. It is a branch of Animation, specifically frame-by-frame object animation, including replacement animation.Stutter / Stop-Stutter skip-frames living time. Low Shutter makes live action staccato without posing a model.Step PrintingLonging that cannot move at normal speed.AnimationThe world is constructed, not captured.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "King Kong (1933) animates Kong and prehistoric creatures as physical models. Jason and the Argonauts combines Harryhausen figures with live action in the skeleton fight."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Nightmare Before Christmas and Coraline perform with puppets and miniatures. Fantastic Mr."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fox keeps tactile fur and handmade increment as the world's law."
+        },
+        {
+          "type": "list-item",
+          "text": "King Kong 1933Kong and prehistoric creatures are animated as physical models.",
+          "displayText": "King Kong 1933\nKong and prehistoric creatures are animated as physical models."
+        },
+        {
+          "type": "list-item",
+          "text": "Jason and the Argonauts 1963The skeleton fight combines animated figures and live action.",
+          "displayText": "Jason and the Argonauts 1963\nThe skeleton fight combines animated figures and live action."
+        },
+        {
+          "type": "list-item",
+          "text": "Coraline 2009Puppet performances and miniature environments.",
+          "displayText": "Coraline 2009\nPuppet performances and miniature environments."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film King Kong (1933) animates Kong and prehistoric creatures as physical models. Jason and the Argonauts combines Harryhausen figures with live action in the skeleton fight.The Nightmare Before Christmas and Coraline perform with puppets and miniatures. Fantastic Mr.Fox keeps tactile fur and handmade increment as the world's law.King Kong 1933Kong and prehistoric creatures are animated as physical models.Jason and the Argonauts 1963The skeleton fight combines animated figures and live action.Coraline 2009Puppet performances and miniature environments."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write materials and increments, not a filter. Still: a puppet or object mid-pose, visible construction, coherent joints."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Stop-motion cadence of [Subject], pose to pose, slightly staccato. Stable lights and set, readable hand-object contact, no fluid live-action fur."
+        },
+        {
+          "type": "quote",
+          "text": "An articulated paper-and-wire fox carefully folds a paper boat on a miniature desk. Tactile materials, consistent joint construction, deliberate frame-by-frame posing and small controlled increments. Stable lighting and set, readable hand-object contact, no fluid live-action fur or continuously melting paper."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=An+articulated+paper-and-wire+fox+carefully+folds+a+paper+boat+on+a+miniature+desk.+Tactile+materials,+consistent+joint+construction,+deliberate+frame-by-frame+posing+and+small+controlled+increments.+Stable+lighting+and+set,+readable+hand-object+contact,+no+fluid+live-action+fur+or+continuously+melting+paper."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write materials and increments, not a filter. Still: a puppet or object mid-pose, visible construction, coherent joints.Video: Stop-motion cadence of [Subject], pose to pose, slightly staccato. Stable lights and set, readable hand-object contact, no fluid live-action fur.Copy promptUse in Video GeneratorAn articulated paper-and-wire fox carefully folds a paper boat on a miniature desk. Tactile materials, consistent joint construction, deliberate frame-by-frame posing and small controlled increments. Stable lighting and set, readable hand-object contact, no fluid live-action fur or continuously melting paper.An articulated paper-and-wire fox carefully folds a paper boat on a miniature desk. Tactile materials, consistent joint construction, deliberate frame-by-frame posing and small controlled increments. Stable lighting and set, readable hand-object contact, no fluid live-action fur or continuously melting paper."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a live-action jitter or Step Printing. The tell is morphing materials, melting paper, or continuously flowing hair.",
+          "links": [
+            {
+              "text": "Step Printing",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: consistent model, deliberate pose changes, locked camera, repeatable light."
+        }
+      ],
+      "links": [
+        {
+          "text": "Step Printing",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a live-action jitter or Step Printing. The tell is morphing materials, melting paper, or continuously flowing hair.Fix: consistent model, deliberate pose changes, locked camera, repeatable light."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Stop Motion in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Stop motion is frame-by-frame photography of adjusted objects or puppets, so their successive poses create movement."
+        },
+        {
+          "type": "heading",
+          "text": "Stop Motion vs Step Printing",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Step printing reprints live-action frames into a smear-and-step cadence. Stop motion builds each frame by moving a physical (or consistent digital) model."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Stop Motion?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the world should feel handmade: puppets, miniatures, objects that perform. Not when you only want live action to hitch."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Stop Motion for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write stepped poses, tactile materials, pose-to-pose cadence, and a stable camera. Forbid fluid live-action motion and choppy-filter shortcuts."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Stop Motion in film?Stop motion is frame-by-frame photography of adjusted objects or puppets, so their successive poses create movement.Stop Motion vs Step PrintingStep printing reprints live-action frames into a smear-and-step cadence. Stop motion builds each frame by moving a physical (or consistent digital) model.When should I use Stop Motion?When the world should feel handmade: puppets, miniatures, objects that perform. Not when you only want live action to hitch.How do I prompt Stop Motion for AI image or video?Write stepped poses, tactile materials, pose-to-pose cadence, and a stable camera. Forbid fluid live-action motion and choppy-filter shortcuts."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write materials and increments, not a filter. Still: a puppet or object mid-pose, visible construction, coherent joints.",
+      "Video: Stop-motion cadence of [Subject], pose to pose, slightly staccato. Stable lights and set, readable hand-object contact, no fluid live-action fur."
+    ],
+    "example": "An articulated paper-and-wire fox carefully folds a paper boat on a miniature desk. Tactile materials, consistent joint construction, deliberate frame-by-frame posing and small controlled increments. Stable lighting and set, readable hand-object contact, no fluid live-action fur or continuously melting paper."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/caeeda8a94eba7dc76f037c54f23b46a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/150-stop-motion-animation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d04b4ce391fdef45e21cc39bc134ce2c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/stop-motion-150-stop-motion-animation-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bdade3f1e76ff5ac148f2addbc007988.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/stop-motion.jpg",
+      "alt": "Stop Motion frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/ddf553d30941e6f3586104451a1b324f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/step-printing-083-step-printing-and-smeared-motion-mini.webp",
+      "alt": "Step Printing"
+    },
+    {
+      "kind": "video",
+      "path": "media/917e3ac6fea636f9034c88a2d59e5fcb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/083-step-printing-and-smeared-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f57edf0bd31cd8fedb8a8cc5427f2511.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/animation.webp",
+      "alt": "Animation"
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/22ce230469a5ac0ee4570d7c52ebd0de.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/stop-motion/hero.jpg",
+      "alt": "Stop Motion",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "052af1434c3aef55cb7e1deaf60f6c836b7c9e43bbc862b88901c6c4edade693"
+}

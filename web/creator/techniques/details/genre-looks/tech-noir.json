@@ -1,0 +1,418 @@
+{
+  "id": "genre-looks/tech-noir",
+  "slug": "tech-noir",
+  "title": "Tech Noir",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/tech-noir",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tech-noir.webp",
+  "detail": "details/genre-looks/tech-noir.json",
+  "aliases": [
+    "future noir",
+    "cyber-noir",
+    "cyber noir"
+  ],
+  "description": "Tech noir (also called future noir or cyber-noir) fuses noir's hard keys, rain, and guilty blocking with science-fiction production design: screens, LEDs, and corporate towers as practical sources. Analog crime grammar sits inside a digital city.",
+  "thumbnail": "media/f204273b7002661d384f3e4d9eeb8c11.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The future is wet and guilty. A detective, a fugitive, or a machine walks rain that is lit by advertisements and monitors."
+        },
+        {
+          "type": "paragraph",
+          "text": "The face is still half in shadow. The key is no longer only a streetlamp."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a billboard, a terminal, a police scanner. It is not all dystopia and not all neo-noir."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dystopian can be daylight bureaucracy and civic scale with no crime plot. Neo-Noir can be a present-day parking garage with sodium lamps and no future tech.",
+          "links": [
+            {
+              "text": "Dystopian",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dystopian"
+            },
+            {
+              "text": "Neo-Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tech noir needs both the investigation geometry and the machine city."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dystopian",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dystopian"
+        },
+        {
+          "text": "Neo-Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The future is wet and guilty. A detective, a fugitive, or a machine walks rain that is lit by advertisements and monitors.The face is still half in shadow. The key is no longer only a streetlamp.It is a billboard, a terminal, a police scanner. It is not all dystopia and not all neo-noir.Dystopian can be daylight bureaucracy and civic scale with no crime plot. Neo-Noir can be a present-day parking garage with sodium lamps and no future tech.Tech noir needs both the investigation geometry and the machine city."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep noir ratios: hard key, unfilled cheek, wet ground. Replace tungsten with screens and LEDs as motivated keys, plus residual sodium or neon."
+        },
+        {
+          "type": "paragraph",
+          "text": "Smoke or rain for volume. 35mm or 40mm anamorphic, night exteriors, occasional long-lens compression of towers."
+        },
+        {
+          "type": "paragraph",
+          "text": "Blocking: figures small under signage, then a close-up keyed by a display. Prompt future crime, screens as practicals, rain, corporate night, analog noir in a digital city."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Keep noir ratios: hard key, unfilled cheek, wet ground. Replace tungsten with screens and LEDs as motivated keys, plus residual sodium or neon.Smoke or rain for volume. 35mm or 40mm anamorphic, night exteriors, occasional long-lens compression of towers.Blocking: figures small under signage, then a close-up keyed by a display. Prompt future crime, screens as practicals, rain, corporate night, analog noir in a digital city."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a future city is also a crime scene and the screens light the guilt. Do not use it for a clean utopian interface, or for present-day noir with no speculative design."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a future city is also a crime scene and the screens light the guilt. Do not use it for a clean utopian interface, or for present-day noir with no speculative design."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tech Noir is noir plus science-fiction sources. Neo-Noir is color noir without requiring future tech.",
+          "links": [
+            {
+              "text": "Tech Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+            },
+            {
+              "text": "Neo-Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dystopian is the used civic system, often in daylight, with the state as antagonist. Neon Practicals is the lamp.",
+          "links": [
+            {
+              "text": "Dystopian",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dystopian"
+            },
+            {
+              "text": "Neon Practicals",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Film Noir is the silver ancestor. If there is no screen, tower, or machine as light, you are still in neo-noir.",
+          "links": [
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Neo-NoirNoir after color was invented.",
+          "displayText": "Neo-Noir\nNoir after color was invented.",
+          "links": [
+            {
+              "text": "Neo-NoirNoir after color was invented.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "displayText": "Neon Practicals\nThe city is the lighting department.",
+          "links": [
+            {
+              "text": "Neon PracticalsThe city is the lighting department.",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Tech Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+        },
+        {
+          "text": "Neo-Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        },
+        {
+          "text": "Dystopian",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dystopian"
+        },
+        {
+          "text": "Neon Practicals",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Neo-NoirNoir after color was invented.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        },
+        {
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ea5ae8a2e30baa75c39a22cd02fb3d7b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neo-noir.webp",
+          "alt": "Neo-Noir"
+        },
+        {
+          "kind": "image",
+          "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+          "alt": "Neon Practicals"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Tech Noir is noir plus science-fiction sources. Neo-Noir is color noir without requiring future tech.Dystopian is the used civic system, often in daylight, with the state as antagonist. Neon Practicals is the lamp.Film Noir is the silver ancestor. If there is no screen, tower, or machine as light, you are still in neo-noir.Neo-NoirNoir after color was invented.Neon PracticalsThe city is the lighting department.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blade Runner (rain, neon, and a detective plot inside a machine city). The Terminator (1984 night, tech-noir club and streets, analog crime against a future machine)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ghost in the Shell (1995) (screens, rain, and investigation as identity). Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Blade Runner (rain, neon, and a detective plot inside a machine city). The Terminator (1984 night, tech-noir club and streets, analog crime against a future machine).Ghost in the Shell (1995) (screens, rain, and investigation as identity). Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tech-noir on [Subject], future crime, screens as practicals, rain, corporate night, hard unfilled key, analog noir in a digital city. Name the display that lights the face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not prompt a present-day alley with no speculative design."
+        },
+        {
+          "type": "quote",
+          "text": "Tech-noir on [Subject], future crime, screens as practicals, rain, corporate night, analog noir in a digital city."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Tech-noir+on+[Subject],+future+crime,+screens+as+practicals,+rain,+corporate+night,+analog+noir+in+a+digital+city."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Tech-noir on [Subject], future crime, screens as practicals, rain, corporate night, hard unfilled key, analog noir in a digital city. Name the display that lights the face.Do not prompt a present-day alley with no speculative design.Copy promptUse in Image GeneratorTech-noir on [Subject], future crime, screens as practicals, rain, corporate night, analog noir in a digital city.Tech-noir on [Subject], future crime, screens as practicals, rain, corporate night, analog noir in a digital city."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Neo-Noir or generic Dystopian: contemporary neon crime, or a grey megacity with no investigation geometry. The tell is no screen as a source, or daylight civic haze with no wet guilty night.",
+          "links": [
+            {
+              "text": "Neo-Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            },
+            {
+              "text": "Dystopian",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dystopian"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: add a display key, rain, towers, and a crime blocking of isolation."
+        }
+      ],
+      "links": [
+        {
+          "text": "Neo-Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        },
+        {
+          "text": "Dystopian",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dystopian"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Neo-Noir or generic Dystopian: contemporary neon crime, or a grey megacity with no investigation geometry. The tell is no screen as a source, or daylight civic haze with no wet guilty night.Fix: add a display key, rain, towers, and a crime blocking of isolation."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Tech Noir in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A fusion of noir lighting and crime structure with science-fiction design. Screens and corporate night become the practicals. Rain stays. Guilt stays. The city is digital. The grammar is still investigation."
+        },
+        {
+          "type": "heading",
+          "text": "Tech Noir vs Neo-Noir",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Neo-noir is color noir in a later or present world. Tech noir requires speculative technology as light and as threat. Blade Runner is both. A 2010s parking-garage crime film may be neo-noir only."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Tech Noir?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the future is a wet crime scene and a screen lights the face. Skip it for silver 1940s noir, for daylight civic dystopia, or for pastel vaporwave with no investigation."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Tech Noir for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Tech-noir on [Subject], future crime, screens as practicals, rain, corporate night, hard unfilled key. Name the display. Do not stop at neon rain with no speculative city."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Tech Noir in film?A fusion of noir lighting and crime structure with science-fiction design. Screens and corporate night become the practicals. Rain stays. Guilt stays. The city is digital. The grammar is still investigation.Tech Noir vs Neo-NoirNeo-noir is color noir in a later or present world. Tech noir requires speculative technology as light and as threat. Blade Runner is both. A 2010s parking-garage crime film may be neo-noir only.When should I use Tech Noir?When the future is a wet crime scene and a screen lights the face. Skip it for silver 1940s noir, for daylight civic dystopia, or for pastel vaporwave with no investigation.How do I prompt Tech Noir for AI image or video?Write: Tech-noir on [Subject], future crime, screens as practicals, rain, corporate night, hard unfilled key. Name the display. Do not stop at neon rain with no speculative city."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Tech-noir on [Subject], future crime, screens as practicals, rain, corporate night, hard unfilled key, analog noir in a digital city. Name the display that lights the face.",
+      "Do not prompt a present-day alley with no speculative design."
+    ],
+    "example": "Tech-noir on [Subject], future crime, screens as practicals, rain, corporate night, analog noir in a digital city."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/f204273b7002661d384f3e4d9eeb8c11.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tech-noir.webp",
+      "alt": "Tech Noir example"
+    },
+    {
+      "kind": "image",
+      "path": "media/ea5ae8a2e30baa75c39a22cd02fb3d7b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neo-noir.webp",
+      "alt": "Neo-Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+      "alt": "Neon Practicals"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/5a2a39e0bb8282ed6ec571ae7fbce8d7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tech-noir/hero.jpg",
+      "alt": "Tech Noir",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "83d3a282e0b1123ff55687b71ea9846d43d5c4bba78ce59ff6f9df34417983e6"
+}

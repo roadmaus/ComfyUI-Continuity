@@ -1,0 +1,459 @@
+{
+  "id": "effects/deep-focus",
+  "slug": "deep-focus",
+  "title": "Deep Focus",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/deep-focus",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/deep-focus-051-deep-focus-mini.webp",
+  "detail": "details/effects/deep-focus.json",
+  "aliases": [
+    "Extended depth of field",
+    "Grande profondeur de champ"
+  ],
+  "description": "Deep focus in deep focus cinematography keeps multiple near and far planes legibly sharp in one image. It is a continuous depth of field, not merely action arranged in depth while the glass stays selective.",
+  "thumbnail": "media/2085760298012aaa946dc04506a877fe.webp",
+  "video": "media/3b7ec49068c390bdc3af6487abab0eaf.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/051-deep-focus-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A hand stamps a form near the lens. A visitor waits in a distant doorway."
+        },
+        {
+          "type": "paragraph",
+          "text": "Both are readable. The audience may look at either without a pull or a cut dictating the choice."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cause and effect share the room. Use it when the story is the whole space: a child outside a window while adults sign papers, a street and a face, two rooms through a doorway."
+        },
+        {
+          "type": "paragraph",
+          "text": "Staging does the directing. The lens declines to choose."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for intimacy that should exclude the world, or when light cannot support a small aperture. Two sharp planes with a blur belt between them are a split diopter or a composite, not deep focus."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A hand stamps a form near the lens. A visitor waits in a distant doorway.Both are readable. The audience may look at either without a pull or a cut dictating the choice.Cause and effect share the room. Use it when the story is the whole space: a child outside a window while adults sign papers, a street and a face, two rooms through a doorway.Staging does the directing. The lens declines to choose.It is the wrong tool for intimacy that should exclude the world, or when light cannot support a small aperture. Two sharp planes with a blur belt between them are a split diopter or a composite, not deep focus."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Balance shorter focal length, smaller aperture, enough illumination, and subject distances that the stop can cover. Some famous deep-focus-looking shots also used in-camera composites."
+        },
+        {
+          "type": "paragraph",
+          "text": "The screen result does not prove a single-pass method. Prompt: everything sharp from a named near object to the far plane, no rack, no seam, continuous space."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Balance shorter focal length, smaller aperture, enough illumination, and subject distances that the stop can cover. Some famous deep-focus-looking shots also used in-camera composites.The screen result does not prove a single-pass method. Prompt: everything sharp from a named near object to the far plane, no rack, no seam, continuous space."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A clerk's hand in the near field and an anxious visitor in a far doorway, both sharp, locked wide. Do not claim deep focus if a blur boundary splits the frame in two."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A clerk's hand in the near field and an anxious visitor in a far doorway, both sharp, locked wide. Do not claim deep focus if a blur boundary splits the frame in two."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shallow Focus isolates one plane. Deep focus refuses that isolation.",
+          "links": [
+            {
+              "text": "Shallow Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Split Diopter cheats two sharp distances with a visible or hidden seam and a soft belt. Layered Depth is compositional stacking.",
+          "links": [
+            {
+              "text": "Split Diopter",
+              "url": "https://melies.co/cinematic-techniques/lenses/split-diopter"
+            },
+            {
+              "text": "Layered Depth",
+              "url": "https://melies.co/cinematic-techniques/composition/layered-depth"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It can be shot shallow or deep. Rack Focus would choose for the audience.",
+          "links": [
+            {
+              "text": "Rack Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Deep focus leaves the choice open. Forced Perspective may need deep focus so the scale lie is not exposed by blur.",
+          "links": [
+            {
+              "text": "Forced Perspective",
+              "url": "https://melies.co/cinematic-techniques/effects/forced-perspective"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Layered DepthA shot should be walkable.",
+          "displayText": "Layered Depth\nA shot should be walkable.",
+          "links": [
+            {
+              "text": "Layered DepthA shot should be walkable.",
+              "url": "https://melies.co/cinematic-techniques/composition/layered-depth"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Split DiopterTwo distances must both be true at once.",
+          "displayText": "Split Diopter\nTwo distances must both be true at once.",
+          "links": [
+            {
+              "text": "Split DiopterTwo distances must both be true at once.",
+              "url": "https://melies.co/cinematic-techniques/lenses/split-diopter"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Shallow Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "Split Diopter",
+          "url": "https://melies.co/cinematic-techniques/lenses/split-diopter"
+        },
+        {
+          "text": "Layered Depth",
+          "url": "https://melies.co/cinematic-techniques/composition/layered-depth"
+        },
+        {
+          "text": "Rack Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+        },
+        {
+          "text": "Forced Perspective",
+          "url": "https://melies.co/cinematic-techniques/effects/forced-perspective"
+        },
+        {
+          "text": "Layered DepthA shot should be walkable.",
+          "url": "https://melies.co/cinematic-techniques/composition/layered-depth"
+        },
+        {
+          "text": "Split DiopterTwo distances must both be true at once.",
+          "url": "https://melies.co/cinematic-techniques/lenses/split-diopter"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/47c2f2a4219b4a46900cd429c8828630.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/layered-depth-039-deep-space-staging-mini.webp",
+          "alt": "Layered Depth"
+        },
+        {
+          "kind": "video",
+          "path": "media/3da50c27545f0cee9650df39199c5aef.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/039-deep-space-staging-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/9ca16cd086644cbf4c2f2dd79c809a72.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-diopter-054-split-diopter-focus-mini.webp",
+          "alt": "Split Diopter"
+        },
+        {
+          "kind": "video",
+          "path": "media/6918a9b50ffd37951a502deb6b96e1b3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/054-split-diopter-focus-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Shallow Focus isolates one plane. Deep focus refuses that isolation.Split Diopter cheats two sharp distances with a visible or hidden seam and a soft belt. Layered Depth is compositional stacking.It can be shot shallow or deep. Rack Focus would choose for the audience.Deep focus leaves the choice open. Forced Perspective may need deep focus so the scale lie is not exposed by blur.Layered DepthA shot should be walkable.Split DiopterTwo distances must both be true at once.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Citizen Kane keeps young Kane readable outside the window behind the adults. Touch of Evil holds near and distant figures in the same legible compositions."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Best Years of Our Lives uses deep space so a whole room can act at once."
+        },
+        {
+          "type": "list-item",
+          "text": "Citizen Kane 1941The young Kane outside the window remains legible behind the adults.",
+          "displayText": "Citizen Kane 1941\nThe young Kane outside the window remains legible behind the adults."
+        },
+        {
+          "type": "list-item",
+          "text": "Touch of Evil 1958Near and distant figures share strongly legible compositions.",
+          "displayText": "Touch of Evil 1958\nNear and distant figures share strongly legible compositions."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8e184c803b53cc56bd8ae974241afbf6.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/deep-focus/famous/00-citizen-kane-1941.jpg",
+          "alt": "Citizen Kane 1941"
+        },
+        {
+          "kind": "image",
+          "path": "media/e8302e8dd0b14d82f673293785932bc9.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/deep-focus/famous/01-touch-of-evil-1958.jpg",
+          "alt": "Touch of Evil 1958"
+        }
+      ],
+      "sourceText": "In film Citizen Kane keeps young Kane readable outside the window behind the adults. Touch of Evil holds near and distant figures in the same legible compositions.The Best Years of Our Lives uses deep space so a whole room can act at once.Citizen Kane 1941The young Kane outside the window remains legible behind the adults.Touch of Evil 1958Near and distant figures share strongly legible compositions."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand continuous sharpness, not two cut planes. Example: Deep focus on [Subject] and the far plane, near action and distant doorway both sharp, no rack focus, no split-diopter seam, the eye may wander."
+        },
+        {
+          "type": "quote",
+          "text": "Locked wide shot of a courthouse office: a clerk’s hand stamps a form near the lens while an anxious visitor stands in a distant doorway. Both near and far action remain sharply readable, natural perspective, no rack focus, no artificial split-screen seam."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Locked+wide+shot+of+a+courthouse+office:+a+clerk%E2%80%99s+hand+stamps+a+form+near+the+lens+while+an+anxious+visitor+stands+in+a+distant+doorway.+Both+near+and+far+action+remain+sharply+readable,+natural+perspective,+no+rack+focus,+no+artificial+split-screen+seam."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Demand continuous sharpness, not two cut planes. Example: Deep focus on [Subject] and the far plane, near action and distant doorway both sharp, no rack focus, no split-diopter seam, the eye may wander.Copy promptUse in Video GeneratorLocked wide shot of a courthouse office: a clerk’s hand stamps a form near the lens while an anxious visitor stands in a distant doorway. Both near and far action remain sharply readable, natural perspective, no rack focus, no artificial split-screen seam.Locked wide shot of a courthouse office: a clerk’s hand stamps a form near the lens while an anxious visitor stands in a distant doorway. Both near and far action remain sharply readable, natural perspective, no rack focus, no artificial split-screen seam."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: split diopter or a composite of two sharp layers with mush in the middle. Tell: a vertical blur stripe, mismatched grain between planes, or a rack hiding in the still."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: one continuous volume, matched perspective, both distances sharp without a join."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: split diopter or a composite of two sharp layers with mush in the middle. Tell: a vertical blur stripe, mismatched grain between planes, or a rack hiding in the still.Fix: one continuous volume, matched perspective, both distances sharp without a join."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is deep focus in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A large range of distances appearing acceptably sharp in one image, so near and far action can be read together without a focus pull."
+        },
+        {
+          "type": "heading",
+          "text": "Deep focus vs split diopter",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Deep focus is continuous sharpness through space. A split diopter is a half-lens that sharpens two planes and leaves a blur seam between them."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use deep focus?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the audience should find the story in the whole room. Do not use it when isolation is the point, or when the stop would underexpose the set."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt deep focus for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name a near object and a far plane, require both sharp, forbid rack focus and a split seam, and keep perspective continuous."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is deep focus in film?A large range of distances appearing acceptably sharp in one image, so near and far action can be read together without a focus pull.Deep focus vs split diopterDeep focus is continuous sharpness through space. A split diopter is a half-lens that sharpens two planes and leaves a blur seam between them.When should I use deep focus?When the audience should find the story in the whole room. Do not use it when isolation is the point, or when the stop would underexpose the set.How do I prompt deep focus for AI image or video?Name a near object and a far plane, require both sharp, forbid rack focus and a split seam, and keep perspective continuous."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Demand continuous sharpness, not two cut planes. Example: Deep focus on [Subject] and the far plane, near action and distant doorway both sharp, no rack focus, no split-diopter seam, the eye may wander."
+    ],
+    "example": "Locked wide shot of a courthouse office: a clerk’s hand stamps a form near the lens while an anxious visitor stands in a distant doorway. Both near and far action remain sharply readable, natural perspective, no rack focus, no artificial split-screen seam."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/3b7ec49068c390bdc3af6487abab0eaf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/051-deep-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2085760298012aaa946dc04506a877fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/deep-focus-051-deep-focus-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6b6075fb8749697cbedbf311157dc02f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/deep-focus.jpg",
+      "alt": "Deep Focus frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/47c2f2a4219b4a46900cd429c8828630.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/layered-depth-039-deep-space-staging-mini.webp",
+      "alt": "Layered Depth"
+    },
+    {
+      "kind": "video",
+      "path": "media/3da50c27545f0cee9650df39199c5aef.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/039-deep-space-staging-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9ca16cd086644cbf4c2f2dd79c809a72.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-diopter-054-split-diopter-focus-mini.webp",
+      "alt": "Split Diopter"
+    },
+    {
+      "kind": "video",
+      "path": "media/6918a9b50ffd37951a502deb6b96e1b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/054-split-diopter-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8e184c803b53cc56bd8ae974241afbf6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/deep-focus/famous/00-citizen-kane-1941.jpg",
+      "alt": "Citizen Kane 1941"
+    },
+    {
+      "kind": "image",
+      "path": "media/e8302e8dd0b14d82f673293785932bc9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/deep-focus/famous/01-touch-of-evil-1958.jpg",
+      "alt": "Touch of Evil 1958"
+    },
+    {
+      "kind": "image",
+      "path": "media/3fa41db825d82f0357075ea26f8b0dce.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/deep-focus/hero.jpg",
+      "alt": "Deep Focus",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "08c239397d3eb4cb049bcb1a1802f204aabb934c3ab4f36a482380f2f3a768c2"
+}

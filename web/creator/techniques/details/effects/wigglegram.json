@@ -1,0 +1,421 @@
+{
+  "id": "effects/wigglegram",
+  "slug": "wigglegram",
+  "title": "Wigglegram",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/wigglegram",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wigglegram-wigglegram-mini.webp",
+  "detail": "details/effects/wigglegram.json",
+  "aliases": [],
+  "description": "A wigglegram is a short stereo shiver: two or three frames rocking so depth reads as a fidget. The viewpoints are a few centimeters apart, so depth is a twitch, not a dolly.",
+  "thumbnail": "media/8f079dda1e98f299001cd590eef7ee33.webp",
+  "video": "media/4b23775d72fc68e883116117f676e82b.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/wigglegram-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A postcard comes alive as a cheap lenticular. The subject stays almost still."
+        },
+        {
+          "type": "paragraph",
+          "text": "The room jumps between two eyes. Use it when you want stereo without a move, a GIF of depth."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a real tracking shot, and it is not camera shake. If planes peel continuously, you have parallax from travel."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the same viewpoint chatters, you have a wiggle or a stutter."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A postcard comes alive as a cheap lenticular. The subject stays almost still.The room jumps between two eyes. Use it when you want stereo without a move, a GIF of depth.It is the wrong tool for a real tracking shot, and it is not camera shake. If planes peel continuously, you have parallax from travel.If the same viewpoint chatters, you have a wiggle or a stutter."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock two (or three) stills on a stereo baseline of a few centimeters, same height, same lens. Flicker A-B-A."
+        },
+        {
+          "type": "paragraph",
+          "text": "Foreground shifts more than the back, which is the disparity. No motion blur from a pan."
+        },
+        {
+          "type": "paragraph",
+          "text": "Light both frames with the same key so only position changes. Prompt a wigglegram of the subject: two or three frames rocking, a cheap stereo shiver."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, a short wiggle between two viewpoints."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock two (or three) stills on a stereo baseline of a few centimeters, same height, same lens. Flicker A-B-A.Foreground shifts more than the back, which is the disparity. No motion blur from a pan.Light both frames with the same key so only position changes. Prompt a wigglegram of the subject: two or three frames rocking, a cheap stereo shiver.For video, a short wiggle between two viewpoints."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat that should feel like a lenticular or a stereo GIF: a portrait, a product, a joke of depth. Do not use it in place of a dolly through a room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat that should feel like a lenticular or a stereo GIF: a portrait, a product, a joke of depth. Do not use it in place of a dolly through a room."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Parallax comes from the camera traveling so planes peel at different speeds. A wigglegram only rocks between two locked viewpoints.",
+          "links": [
+            {
+              "text": "Parallax",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/parallax"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Stutter / Stop-Stutter is a temporal step of one take. Wiggle is a tiny tremor of the support, not a stereo pair.",
+          "links": [
+            {
+              "text": "Stutter / Stop-Stutter",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/stutter"
+            },
+            {
+              "text": "Wiggle",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/wiggle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "ParallaxProve the world has layers.",
+          "displayText": "Parallax\nProve the world has layers.",
+          "links": [
+            {
+              "text": "ParallaxProve the world has layers.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/parallax"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Stutter / Stop-StutterThe mind skips.",
+          "displayText": "Stutter / Stop-Stutter\nThe mind skips.",
+          "links": [
+            {
+              "text": "Stutter / Stop-StutterThe mind skips.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/stutter"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Parallax",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/parallax"
+        },
+        {
+          "text": "Stutter / Stop-Stutter",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/stutter"
+        },
+        {
+          "text": "Wiggle",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/wiggle"
+        },
+        {
+          "text": "ParallaxProve the world has layers.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/parallax"
+        },
+        {
+          "text": "Stutter / Stop-StutterThe mind skips.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/stutter"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/3a1d3091de6e3fca4df2e2e0c4eda88e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/parallax-parallax-mini.webp",
+          "alt": "Parallax"
+        },
+        {
+          "kind": "video",
+          "path": "media/2784a85fa36f42e8edd95c3211f83dd3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/parallax-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fda5cd6d4de3d5a0b33956b6c61103ac.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/stutter-086-short-shutter-staccato-action-mini.webp",
+          "alt": "Stutter / Stop-Stutter"
+        },
+        {
+          "kind": "video",
+          "path": "media/920fc45aa4a3a7f6709e3aa1962fca0d.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/086-short-shutter-staccato-action-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Parallax comes from the camera traveling so planes peel at different speeds. A wigglegram only rocks between two locked viewpoints.Stutter / Stop-Stutter is a temporal step of one take. Wiggle is a tiny tremor of the support, not a stereo pair.ParallaxProve the world has layers.Stutter / Stop-StutterThe mind skips.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lenticular photos and GIF stereo are the well-known uses: postcards, early web 3D fidgets, social stereo stills. Cinema borrows that twitch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of two eyes, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Lenticular photos and GIF stereo are the well-known uses: postcards, early web 3D fidgets, social stereo stills. Cinema borrows that twitch.Grammar of two eyes, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wigglegram of [Subject], two or three frames rocking, a cheap stereo shiver, depth as a fidget. Video: A short wiggle between two viewpoints of [Subject], stereoscopic shiver."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name a small baseline and a locked subject. Ban a dolly and ban handheld shake."
+        },
+        {
+          "type": "quote",
+          "text": "A short wiggle between two viewpoints of [Subject], stereoscopic shiver."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+short+wiggle+between+two+viewpoints+of+[Subject],+stereoscopic+shiver."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Wigglegram of [Subject], two or three frames rocking, a cheap stereo shiver, depth as a fidget. Video: A short wiggle between two viewpoints of [Subject], stereoscopic shiver.Name a small baseline and a locked subject. Ban a dolly and ban handheld shake.Copy promptUse in Video GeneratorA short wiggle between two viewpoints of [Subject], stereoscopic shiver.A short wiggle between two viewpoints of [Subject], stereoscopic shiver."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousins are Wiggle shake and a mini Dolly In. The tell is blur from motion, or a continuous path.",
+          "links": [
+            {
+              "text": "Wiggle",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/wiggle"
+            },
+            {
+              "text": "Dolly In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is two sharp stills a few centimeters apart, flickering."
+        }
+      ],
+      "links": [
+        {
+          "text": "Wiggle",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/wiggle"
+        },
+        {
+          "text": "Dolly In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousins are Wiggle shake and a mini Dolly In. The tell is blur from motion, or a continuous path.The fix is two sharp stills a few centimeters apart, flickering."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is wigglegram in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A wigglegram rocks two or three frames from slightly different viewpoints so depth reads as a stereo shiver. It is a fidget of disparity, not a camera move."
+        },
+        {
+          "type": "heading",
+          "text": "Wigglegram vs parallax",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Parallax is continuous relative motion of planes as the camera travels. A wigglegram is a short loop between two locked stereo stills. One is a path. The other is a twitch."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a wigglegram?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when depth should feel like a lenticular postcard or a stereo GIF. Skip it when the scene needs a real tracking shot."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt wigglegram for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Wigglegram of [Subject], two or three frames rocking, a cheap stereo shiver. For video, a short wiggle between two viewpoints. Keep the subject still and the baseline small."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is wigglegram in film?A wigglegram rocks two or three frames from slightly different viewpoints so depth reads as a stereo shiver. It is a fidget of disparity, not a camera move.Wigglegram vs parallaxParallax is continuous relative motion of planes as the camera travels. A wigglegram is a short loop between two locked stereo stills. One is a path. The other is a twitch.When should I use a wigglegram?Use it when depth should feel like a lenticular postcard or a stereo GIF. Skip it when the scene needs a real tracking shot.How do I prompt wigglegram for AI image or video?Write Wigglegram of [Subject], two or three frames rocking, a cheap stereo shiver. For video, a short wiggle between two viewpoints. Keep the subject still and the baseline small."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Wigglegram of [Subject], two or three frames rocking, a cheap stereo shiver, depth as a fidget. Video: A short wiggle between two viewpoints of [Subject], stereoscopic shiver.",
+      "Name a small baseline and a locked subject. Ban a dolly and ban handheld shake."
+    ],
+    "example": "A short wiggle between two viewpoints of [Subject], stereoscopic shiver."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/4b23775d72fc68e883116117f676e82b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/wigglegram-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8f079dda1e98f299001cd590eef7ee33.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wigglegram-wigglegram-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3c991d2eec6e979b62e2564ba634f667.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/wigglegram.jpg",
+      "alt": "Wigglegram frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/3a1d3091de6e3fca4df2e2e0c4eda88e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/parallax-parallax-mini.webp",
+      "alt": "Parallax"
+    },
+    {
+      "kind": "video",
+      "path": "media/2784a85fa36f42e8edd95c3211f83dd3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/parallax-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fda5cd6d4de3d5a0b33956b6c61103ac.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/stutter-086-short-shutter-staccato-action-mini.webp",
+      "alt": "Stutter / Stop-Stutter"
+    },
+    {
+      "kind": "video",
+      "path": "media/920fc45aa4a3a7f6709e3aa1962fca0d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/086-short-shutter-staccato-action-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/198958937b3f29965884a6a72ebfd14a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/wigglegram/hero.jpg",
+      "alt": "Wigglegram",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "a953d003427e57d533fe613c532f81681060be0bf01db3ac8963eb76a760ce2b"
+}

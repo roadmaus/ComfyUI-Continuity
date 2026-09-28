@@ -1,0 +1,404 @@
+{
+  "id": "camera-movement/aerial-push",
+  "slug": "aerial-push",
+  "title": "Aerial Push In",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/aerial-push",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-push-aerial-push-mini.webp",
+  "detail": "details/camera-movement/aerial-push.json",
+  "aliases": [],
+  "description": "An aerial push in starts high and descends or tightens until a single figure reads in the map. It picks one human out of a city, crowd, or terrain from altitude.",
+  "thumbnail": "media/26412ba8012f48fc56e40df46b2c3466.webp",
+  "video": "media/261517ae40cfd28cfe577de09beff8c1.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/aerial-push-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A system is shown first, then a person is found inside it. The audience is not asked to care before they see the grid, the convoy, or the desert that contains the body."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you are already at eye height, and the wrong tool if a crane-down from a rooftop would reach the face. Altitude is the point of origin."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A system is shown first, then a person is found inside it. The audience is not asked to care before they see the grid, the convoy, or the desert that contains the body.It is the wrong tool when you are already at eye height, and the wrong tool if a crane-down from a rooftop would reach the face. Altitude is the point of origin."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Begin in a true aerial, then descend and/or push while keeping orientation readable. Do not snap-zoom from a still map; translate."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt an aerial push in from high altitude, descending and tightening from map to person."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Begin in a true aerial, then descend and/or push while keeping orientation readable. Do not snap-zoom from a still map; translate.Prompt an aerial push in from high altitude, descending and tightening from map to person."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to pick one human out of a system. Concrete beat: a border desert, then one unmarked police SUV, then a face in a window."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not start the move already on a close-up."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to pick one human out of a system. Concrete beat: a border desert, then one unmarked police SUV, then a face in a window.Do not start the move already on a close-up."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aerial Pullback is the reverse, person to map. Crane Down starts on an arm, usually from building height, not from thousands of feet.",
+          "links": [
+            {
+              "text": "Aerial Pullback",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            },
+            {
+              "text": "Crane Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Establishing Shot may be the still first frame. Aerial push is the ride from map to someone.",
+          "links": [
+            {
+              "text": "Establishing Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "displayText": "Aerial Pullback\nClose a chapter. Geography wins.",
+          "links": [
+            {
+              "text": "Aerial PullbackClose a chapter. Geography wins.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane DownArrive from god-view into a person.",
+          "displayText": "Crane Down\nArrive from god-view into a person.",
+          "links": [
+            {
+              "text": "Crane DownArrive from god-view into a person.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Aerial Pullback",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Crane Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        },
+        {
+          "text": "Establishing Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+        },
+        {
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Crane DownArrive from god-view into a person.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+          "alt": "Aerial Pullback"
+        },
+        {
+          "kind": "video",
+          "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/aa53863e7f0a44b5d017fc87459915f3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-down-011-crane-down-detail-reveal-mini.webp",
+          "alt": "Crane Down"
+        },
+        {
+          "kind": "video",
+          "path": "media/8a7719557669858db37b76f7c7c1f596.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/011-crane-down-detail-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Aerial Pullback is the reverse, person to map. Crane Down starts on an arm, usually from building height, not from thousands of feet.An Establishing Shot may be the still first frame. Aerial push is the ride from map to someone.Aerial PullbackClose a chapter. Geography wins.Crane DownArrive from god-view into a person.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sicario finds figures inside desert and border infrastructure from the air. Children of Men uses high-to-ground pressure so a person is located inside a collapsing public space."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the find, not the politics as wallpaper."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Sicario finds figures inside desert and border infrastructure from the air. Children of Men uses high-to-ground pressure so a person is located inside a collapsing public space.Use the find, not the politics as wallpaper."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aerial push in toward [Subject] from high altitude, descending and tightening from map to person, a high view finding a face. For motion: the camera descends and pushes in from a high aerial toward [Subject]."
+        },
+        {
+          "type": "quote",
+          "text": "The camera descends and pushes in from a high aerial toward [Subject]."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+descends+and+pushes+in+from+a+high+aerial+toward+[Subject]."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Aerial push in toward [Subject] from high altitude, descending and tightening from map to person, a high view finding a face. For motion: the camera descends and pushes in from a high aerial toward [Subject].Copy promptUse in Video GeneratorThe camera descends and pushes in from a high aerial toward [Subject].The camera descends and pushes in from a high aerial toward [Subject]."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Crane Down or a Slow Zoom In on a wide still. The tell is jib height, or optical enlargement with no descent.",
+          "links": [
+            {
+              "text": "Crane Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            },
+            {
+              "text": "Slow Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: start at altitude, translate down and in, land on a readable person."
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        },
+        {
+          "text": "Slow Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Crane Down or a Slow Zoom In on a wide still. The tell is jib height, or optical enlargement with no descent.The fix: start at altitude, translate down and in, land on a readable person."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Aerial Push In in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a high camera that descends and/or advances until one person or vehicle becomes readable inside a landscape or city."
+        },
+        {
+          "type": "heading",
+          "text": "Aerial Push In vs Crane Down",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Crane down is an arm descent from local height. Aerial push in begins as true aerial, from helicopter or high drone, then finds a human."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Aerial Push In?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a system should be visible before a person is chosen. Do not use it if you are already in a street-level master."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Aerial Push In for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write high aerial start, camera descends and pushes in toward [Subject], from map to person, continuous, no snap zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Aerial Push In in film?It is a high camera that descends and/or advances until one person or vehicle becomes readable inside a landscape or city.Aerial Push In vs Crane DownCrane down is an arm descent from local height. Aerial push in begins as true aerial, from helicopter or high drone, then finds a human.When should I use Aerial Push In?When a system should be visible before a person is chosen. Do not use it if you are already in a street-level master.How do I prompt Aerial Push In for AI image or video?Write high aerial start, camera descends and pushes in toward [Subject], from map to person, continuous, no snap zoom."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Aerial push in toward [Subject] from high altitude, descending and tightening from map to person, a high view finding a face. For motion: the camera descends and pushes in from a high aerial toward [Subject]."
+    ],
+    "example": "The camera descends and pushes in from a high aerial toward [Subject]."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/261517ae40cfd28cfe577de09beff8c1.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/aerial-push-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/26412ba8012f48fc56e40df46b2c3466.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-push-aerial-push-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/80250223fc1f4aec44d0366a75ebe1de.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/aerial-push.jpg",
+      "alt": "Aerial Push In frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+      "alt": "Aerial Pullback"
+    },
+    {
+      "kind": "video",
+      "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aa53863e7f0a44b5d017fc87459915f3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-down-011-crane-down-detail-reveal-mini.webp",
+      "alt": "Crane Down"
+    },
+    {
+      "kind": "video",
+      "path": "media/8a7719557669858db37b76f7c7c1f596.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/011-crane-down-detail-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/829eb2924bba25b2673393c7fb8e6acf.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/aerial-push/hero.jpg",
+      "alt": "Aerial Push In",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "fd03cc93f1fa1d14c76dd85ebf7d26ff723b6195b85c8c51e0f102ceb48e6da9"
+}

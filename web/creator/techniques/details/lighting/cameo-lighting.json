@@ -1,0 +1,425 @@
+{
+  "id": "lighting/cameo-lighting",
+  "slug": "cameo-lighting",
+  "title": "Cameo Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/cameo-lighting",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cameo-lighting.webp",
+  "detail": "details/lighting/cameo-lighting.json",
+  "aliases": [],
+  "description": "Cameo lighting isolates a lit subject against a predominantly dark environment, so the figure sits in a pool and the world falls to black. The person remains modeled; the set is withheld.",
+  "thumbnail": "media/eb2b22619f7f3f03ae5875d0cbf8986f.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Erase the world, keep the person. Theatre-to-screen work, interrogation, and some comic-book night use a pool that does not describe architecture."
+        },
+        {
+          "type": "paragraph",
+          "text": "The audience gets a bust or a full figure as if cut from a void. It is the wrong tool when geography is the plot, or when you still want rain, furniture, and city in the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the figure is also unmodeled and the ground is bright, you have a silhouette, the inverse. If a hard circle with a visible edge is the point, prefer spotlight.",
+          "links": [
+            {
+              "text": "silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            },
+            {
+              "text": "spotlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/spotlight"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "spotlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/spotlight"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Erase the world, keep the person. Theatre-to-screen work, interrogation, and some comic-book night use a pool that does not describe architecture.The audience gets a bust or a full figure as if cut from a void. It is the wrong tool when geography is the plot, or when you still want rain, furniture, and city in the frame.If the figure is also unmodeled and the ground is bright, you have a silhouette, the inverse. If a hard circle with a visible edge is the point, prefer spotlight."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Key the subject (any portrait pattern) and kill all ambient and bounce with black wrap, distance, and flags. The background goes underexposed to black, not to a dimly readable room (low-key can still imply walls).",
+          "links": [
+            {
+              "text": "low-key",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness and color are free; isolation is the job. Prompt: Cameo lighting on [Subject], figure isolated in a pool against a black void, theatrical isolation, no environment."
+        }
+      ],
+      "links": [
+        {
+          "text": "low-key",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Key the subject (any portrait pattern) and kill all ambient and bounce with black wrap, distance, and flags. The background goes underexposed to black, not to a dimly readable room (low-key can still imply walls).Hardness and color are free; isolation is the job. Prompt: Cameo lighting on [Subject], figure isolated in a pool against a black void, theatrical isolation, no environment."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the world should vanish and the person remain, a confession, a stage aside. Do not use it for a chase that needs corridors."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the world should vanish and the person remain, a confession, a stage aside. Do not use it for a chase that needs corridors."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Spotlight is a hard-edged theatrical pool from a focused instrument. Cameo is the isolation result, which can use a softer key.",
+          "links": [
+            {
+              "text": "Spotlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/spotlight"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Low-key lighting still allows a dark room to exist. High-key lighting is the opposite field.",
+          "links": [
+            {
+              "text": "Low-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            },
+            {
+              "text": "High-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Epiphany is a change of light timed to thought, not a static void. Silhouette puts a dark figure on a bright field.",
+          "links": [
+            {
+              "text": "Epiphany",
+              "url": "https://melies.co/cinematic-techniques/lighting/epiphany"
+            },
+            {
+              "text": "Silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "displayText": "Low-Key Lighting\nMystery, crime, or moral night.",
+          "links": [
+            {
+              "text": "Low-Key LightingMystery, crime, or moral night.",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+          "displayText": "High-Key Lighting\nComedy, heaven, hospital, or candy.",
+          "links": [
+            {
+              "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Spotlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/spotlight"
+        },
+        {
+          "text": "Low-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "High-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Epiphany",
+          "url": "https://melies.co/cinematic-techniques/lighting/epiphany"
+        },
+        {
+          "text": "Silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+          "alt": "Low-Key Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/633961526d0799af2b516a1929d04ff7.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-key-064-high-key-brightness-mini.webp",
+          "alt": "High-Key Lighting"
+        },
+        {
+          "kind": "video",
+          "path": "media/501404f06979d708f24c98a578ccaf9a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/064-high-key-brightness-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Spotlight is a hard-edged theatrical pool from a focused instrument. Cameo is the isolation result, which can use a softer key.Low-key lighting still allows a dark room to exist. High-key lighting is the opposite field.Epiphany is a change of light timed to thought, not a static void. Silhouette puts a dark figure on a bright field.Low-Key LightingMystery, crime, or moral night.High-Key LightingComedy, heaven, hospital, or candy.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Batman isolates figures in pools against withheld environments. Stage-to-screen work, including dark-stage passages in Birdman, treats the actor as a cutout in black."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Elephant Man also parks bodies in isolated pools. The set is missing on purpose."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Batman isolates figures in pools against withheld environments. Stage-to-screen work, including dark-stage passages in Birdman, treats the actor as a cutout in black.The Elephant Man also parks bodies in isolated pools. The set is missing on purpose."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Kill the room. \" Keep the face modeled."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a readable set and a bright sky."
+        },
+        {
+          "type": "quote",
+          "text": "Cameo lighting on [Subject], figure isolated in a pool against a black void, theatrical spotlight, no environment."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Cameo+lighting+on+[Subject],+figure+isolated+in+a+pool+against+a+black+void,+theatrical+spotlight,+no+environment."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Kill the room. \" Keep the face modeled.Forbid a readable set and a bright sky.Copy promptUse in Image GeneratorCameo lighting on [Subject], figure isolated in a pool against a black void, theatrical spotlight, no environment.Cameo lighting on [Subject], figure isolated in a pool against a black void, theatrical spotlight, no environment."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is low-key with a still-visible room, or silhouette. The tell is furniture in the dark, or an unlit figure on a bright ground.",
+          "links": [
+            {
+              "text": "low-key",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            },
+            {
+              "text": "silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by exposing the person and letting the background go truly black."
+        }
+      ],
+      "links": [
+        {
+          "text": "low-key",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is low-key with a still-visible room, or silhouette. The tell is furniture in the dark, or an unlit figure on a bright ground.Fix it by exposing the person and letting the background go truly black."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is cameo lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A lit, modeled subject isolated against a predominantly dark or black environment. The world is withheld; the figure remains."
+        },
+        {
+          "type": "heading",
+          "text": "Cameo lighting vs spotlight",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Cameo is the isolation: figure on void. A spotlight is a focused hard pool with a visible circle, one way of making a cameo, not the only way."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use cameo lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the person is the only geography that matters. Skip it when the room, street, or weather must remain."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt cameo lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Isolate the figure in a pool against a black void, no environment, face still modeled. Not a silhouette and not a dim but readable room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is cameo lighting in film?A lit, modeled subject isolated against a predominantly dark or black environment. The world is withheld; the figure remains.Cameo lighting vs spotlightCameo is the isolation: figure on void. A spotlight is a focused hard pool with a visible circle, one way of making a cameo, not the only way.When should I use cameo lighting?Use it when the person is the only geography that matters. Skip it when the room, street, or weather must remain.How do I prompt cameo lighting for AI image or video?Isolate the figure in a pool against a black void, no environment, face still modeled. Not a silhouette and not a dim but readable room."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Kill the room. \" Keep the face modeled.",
+      "Forbid a readable set and a bright sky."
+    ],
+    "example": "Cameo lighting on [Subject], figure isolated in a pool against a black void, theatrical spotlight, no environment."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/eb2b22619f7f3f03ae5875d0cbf8986f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cameo-lighting.webp",
+      "alt": "Cameo Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+      "alt": "Low-Key Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/633961526d0799af2b516a1929d04ff7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-key-064-high-key-brightness-mini.webp",
+      "alt": "High-Key Lighting"
+    },
+    {
+      "kind": "video",
+      "path": "media/501404f06979d708f24c98a578ccaf9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/064-high-key-brightness-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/b065b00ed1df0494dc5d5030d6ed05ac.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cameo-lighting/hero.jpg",
+      "alt": "Cameo Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "936f2cfbcd0abe1ed47e9c8fa4e1b91686298a74c430b1cb78f831c8faae9519"
+}

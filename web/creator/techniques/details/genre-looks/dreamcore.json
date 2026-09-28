@@ -1,0 +1,430 @@
+{
+  "id": "genre-looks/dreamcore",
+  "slug": "dreamcore",
+  "title": "Dreamcore",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/dreamcore",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dreamcore.webp",
+  "detail": "details/genre-looks/dreamcore.json",
+  "aliases": [],
+  "description": "The dreamcore aesthetic is a soft, liminal interior look: empty rooms, pools, and suburban halls lit by childhood practicals gone slightly wrong, with low contrast and unresolved space. Nostalgia is present. Safety is not.",
+  "thumbnail": "media/f3b6c79e809226ceda09f46eeebf2c7d.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A corridor continues too far. A fluorescent is a little green."
+        },
+        {
+          "type": "paragraph",
+          "text": "A window is over-bloomed like a memory. The person may be small or absent."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nothing jumps. The dread is that the room will not resolve into a place you can leave."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Weirdcore (low-res digital, captions, early-web jokes that threaten). It is not Altered State (smear, afterimage, unhooked color as perception failure).",
+          "links": [
+            {
+              "text": "Weirdcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/weirdcore"
+            },
+            {
+              "text": "Altered State",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Magical Realism (a recognizable world with one impossible fact treated as weather). Dreamcore is the memory-room.",
+          "links": [
+            {
+              "text": "Magical Realism",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/magical-realism"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Weirdcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/weirdcore"
+        },
+        {
+          "text": "Altered State",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        },
+        {
+          "text": "Magical Realism",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/magical-realism"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A corridor continues too far. A fluorescent is a little green.A window is over-bloomed like a memory. The person may be small or absent.Nothing jumps. The dread is that the room will not resolve into a place you can leave.It is not Weirdcore (low-res digital, captions, early-web jokes that threaten). It is not Altered State (smear, afterimage, unhooked color as perception failure).It is not Magical Realism (a recognizable world with one impossible fact treated as weather). Dreamcore is the memory-room."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wide 24mm to 35mm, eye level, often locked. Soft sources: fluorescent, a cheap tungsten lamp, a blown window."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep contrast low. Fog the blacks a little."
+        },
+        {
+          "type": "paragraph",
+          "text": "Palette: 1990s suburban pastel or pool cyan, slightly sick. Empty the mid-ground."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt liminal rooms, soft dread, childhood lighting gone wrong, a memory that will not resolve."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Wide 24mm to 35mm, eye level, often locked. Soft sources: fluorescent, a cheap tungsten lamp, a blown window.Keep contrast low. Fog the blacks a little.Palette: 1990s suburban pastel or pool cyan, slightly sick. Empty the mid-ground.Prompt liminal rooms, soft dread, childhood lighting gone wrong, a memory that will not resolve."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when nostalgia must lose its safety in an empty interior. Do not use it for JPEG horror, for a miracle in daylight realism, or for a warped trip sequence."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when nostalgia must lose its safety in an empty interior. Do not use it for JPEG horror, for a miracle in daylight realism, or for a warped trip sequence."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dreamcore is soft analog liminal space. Weirdcore is degraded digital and captioned.",
+          "links": [
+            {
+              "text": "Dreamcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+            },
+            {
+              "text": "Weirdcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/weirdcore"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Altered State warps the image physically. Magical Realism keeps ordinary light and one impossible fact.",
+          "links": [
+            {
+              "text": "Altered State",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            },
+            {
+              "text": "Magical Realism",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/magical-realism"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If you add clipart and 240p, you have left dreamcore."
+        },
+        {
+          "type": "list-item",
+          "text": "WeirdcoreThe familiar is incorrectly rendered.",
+          "displayText": "Weirdcore\nThe familiar is incorrectly rendered.",
+          "links": [
+            {
+              "text": "WeirdcoreThe familiar is incorrectly rendered.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/weirdcore"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Altered StateThe mind is the location.",
+          "displayText": "Altered State\nThe mind is the location.",
+          "links": [
+            {
+              "text": "Altered StateThe mind is the location.",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dreamcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+        },
+        {
+          "text": "Weirdcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/weirdcore"
+        },
+        {
+          "text": "Altered State",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        },
+        {
+          "text": "Magical Realism",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/magical-realism"
+        },
+        {
+          "text": "WeirdcoreThe familiar is incorrectly rendered.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/weirdcore"
+        },
+        {
+          "text": "Altered StateThe mind is the location.",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/eb4f15d8bb2dd5a4da9195b9010aca70.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/weirdcore.webp",
+          "alt": "Weirdcore"
+        },
+        {
+          "kind": "image",
+          "path": "media/a3332f43e9375fea06874056e78399cb.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/altered-state-altered-state-mini.webp",
+          "alt": "Altered State"
+        },
+        {
+          "kind": "video",
+          "path": "media/b50cc309bf7987ba369a61c9377d7e86.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/altered-state-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Dreamcore is soft analog liminal space. Weirdcore is degraded digital and captioned.Altered State warps the image physically. Magical Realism keeps ordinary light and one impossible fact.If you add clipart and 240p, you have left dreamcore.WeirdcoreThe familiar is incorrectly rendered.Altered StateThe mind is the location.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Synecdoche, New York (rooms that replicate and will not end, theater as a memory warehouse). The Backrooms culture (liminal empty interiors as internet folklore)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Synecdoche, New York (rooms that replicate and will not end, theater as a memory warehouse). The Backrooms culture (liminal empty interiors as internet folklore).Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dreamcore image of [Subject], liminal rooms, soft fluorescent or blown window, childhood lighting gone wrong, low contrast, a memory that will not resolve. Name the empty hall or pool."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add JPEG captions or psychedelic smear."
+        },
+        {
+          "type": "quote",
+          "text": "Dreamcore image of [Subject], liminal rooms, soft dread, childhood lighting gone wrong, a memory that will not resolve."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Dreamcore+image+of+[Subject],+liminal+rooms,+soft+dread,+childhood+lighting+gone+wrong,+a+memory+that+will+not+resolve."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Dreamcore image of [Subject], liminal rooms, soft fluorescent or blown window, childhood lighting gone wrong, low contrast, a memory that will not resolve. Name the empty hall or pool.Do not add JPEG captions or psychedelic smear.Copy promptUse in Image GeneratorDreamcore image of [Subject], liminal rooms, soft dread, childhood lighting gone wrong, a memory that will not resolve.Dreamcore image of [Subject], liminal rooms, soft dread, childhood lighting gone wrong, a memory that will not resolve."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Weirdcore or Altered State: chunky artifacts and captions, or trailing edges. The tell is low-res clipart or a trip warp.",
+          "links": [
+            {
+              "text": "Weirdcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/weirdcore"
+            },
+            {
+              "text": "Altered State",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: keep resolution continuous, soften the key, empty the corridor, and let the light be almost-childhood."
+        }
+      ],
+      "links": [
+        {
+          "text": "Weirdcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/weirdcore"
+        },
+        {
+          "text": "Altered State",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Weirdcore or Altered State: chunky artifacts and captions, or trailing edges. The tell is low-res clipart or a trip warp.Fix: keep resolution continuous, soften the key, empty the corridor, and let the light be almost-childhood."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dreamcore in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A liminal, soft-interior look: empty rooms, childhood practicals gone wrong, low contrast, and unresolved space. Nostalgia remains. Safety does not."
+        },
+        {
+          "type": "heading",
+          "text": "Dreamcore vs Weirdcore",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dreamcore is analog-soft and spatial. Weirdcore is early-web: low-res, cropped, captioned, a joke that threatens. One is a room you almost remember. The other is a file you should not have opened."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dreamcore?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When an empty interior must feel like a memory with the safety removed. Skip it for captioned JPEG horror, for perception smear, or for a daylight miracle in a real town."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dreamcore for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Dreamcore image of [Subject], liminal rooms, soft dread, childhood lighting gone wrong, low contrast, empty hall. Do not add captions, JPEG crunch, or trip smear."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dreamcore in film?A liminal, soft-interior look: empty rooms, childhood practicals gone wrong, low contrast, and unresolved space. Nostalgia remains. Safety does not.Dreamcore vs WeirdcoreDreamcore is analog-soft and spatial. Weirdcore is early-web: low-res, cropped, captioned, a joke that threatens. One is a room you almost remember. The other is a file you should not have opened.When should I use Dreamcore?When an empty interior must feel like a memory with the safety removed. Skip it for captioned JPEG horror, for perception smear, or for a daylight miracle in a real town.How do I prompt Dreamcore for AI image or video?Write: Dreamcore image of [Subject], liminal rooms, soft dread, childhood lighting gone wrong, low contrast, empty hall. Do not add captions, JPEG crunch, or trip smear."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Dreamcore image of [Subject], liminal rooms, soft fluorescent or blown window, childhood lighting gone wrong, low contrast, a memory that will not resolve. Name the empty hall or pool.",
+      "Do not add JPEG captions or psychedelic smear."
+    ],
+    "example": "Dreamcore image of [Subject], liminal rooms, soft dread, childhood lighting gone wrong, a memory that will not resolve."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/f3b6c79e809226ceda09f46eeebf2c7d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dreamcore.webp",
+      "alt": "Dreamcore example"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb4f15d8bb2dd5a4da9195b9010aca70.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/weirdcore.webp",
+      "alt": "Weirdcore"
+    },
+    {
+      "kind": "image",
+      "path": "media/a3332f43e9375fea06874056e78399cb.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/altered-state-altered-state-mini.webp",
+      "alt": "Altered State"
+    },
+    {
+      "kind": "video",
+      "path": "media/b50cc309bf7987ba369a61c9377d7e86.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/altered-state-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/b0bed8f664be42a70ca7a6abe96ba39c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dreamcore/hero.jpg",
+      "alt": "Dreamcore",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "fb127d9d6ff327a05e21d684e784e99adf87fed08442cd920ffa4198d08f21d9"
+}

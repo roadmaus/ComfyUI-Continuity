@@ -1,0 +1,431 @@
+{
+  "id": "camera-movement/earth-zoom",
+  "slug": "earth-zoom",
+  "title": "Earth Zoom",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/earth-zoom",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/earth-zoom-earth-zoom-mini.webp",
+  "detail": "details/camera-movement/earth-zoom.json",
+  "aliases": [
+    "Powers-of-ten journey",
+    "Micro-to-macro transition"
+  ],
+  "description": "An earth zoom is a continuous or apparently continuous rush from satellite scale down to a face, continent to street to person. Nested geography collapses along one axis; a smooth zoom is not proof of real travel speed.",
+  "thumbnail": "media/c918376e997c0aae13c11ad708571977.webp",
+  "video": "media/2b79c1787147c42c13a4eb6d657bcf65.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/earth-zoom-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Start from the planet. Introduce a person as a point on Earth, or punch a joke from cosmos to porch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Landmarks should shrink in order: cloud, coast, grid, roof, face. Once per film is plenty."
+        },
+        {
+          "type": "paragraph",
+          "text": "A conversation does not need the planet. A generic aerial that never reaches the person is not this."
+        },
+        {
+          "type": "paragraph",
+          "text": "A crash zoom that starts on a rooftop is not this. Keep identity stable from wide to tight or the face at the end is a stranger."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Start from the planet. Introduce a person as a point on Earth, or punch a joke from cosmos to porch.Landmarks should shrink in order: cloud, coast, grid, roof, face. Once per film is plenty.A conversation does not need the planet. A generic aerial that never reaches the person is not this.A crash zoom that starts on a rooftop is not this. Keep identity stable from wide to tight or the face at the end is a stranger."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Design nested environments and scale transitions in 3D or compositing. Preserve direction and visual anchors."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the start as satellite or stratosphere, the end as eyes or feet, the path as one continuous zoom. Do not add a pan or an orbit on the way down."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Earth zoom into [Subject], satellite to street in one rush, the planet collapsing into a face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Design nested environments and scale transitions in 3D or compositing. Preserve direction and visual anchors.Name the start as satellite or stratosphere, the end as eyes or feet, the path as one continuous zoom. Do not add a pan or an orbit on the way down.Prompt: Earth zoom into [Subject], satellite to street in one rush, the planet collapsing into a face."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to place a person on Earth in one rush, or as a scale gag. Do not use it to open a dialogue scene."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to place a person on Earth in one rush, or as a scale gag. Do not use it to open a dialogue scene."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aerial Push In approaches from the air inside one place-scale. Crash Zoom In is an optical punch from a locked camera, usually starting in a room or a street.",
+          "links": [
+            {
+              "text": "Aerial Push In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-push"
+            },
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Earth zoom starts at orbit and nested scales."
+        },
+        {
+          "type": "list-item",
+          "text": "Aerial Push InPick one human out of a system.",
+          "displayText": "Aerial Push In\nPick one human out of a system.",
+          "links": [
+            {
+              "text": "Aerial Push InPick one human out of a system.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-push"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "displayText": "Crash Zoom In\nPunctuate a hit, a realization, or a comic sting.",
+          "links": [
+            {
+              "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Aerial Push In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-push"
+        },
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Aerial Push InPick one human out of a system.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-push"
+        },
+        {
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/26412ba8012f48fc56e40df46b2c3466.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-push-aerial-push-mini.webp",
+          "alt": "Aerial Push In"
+        },
+        {
+          "kind": "video",
+          "path": "media/261517ae40cfd28cfe577de09beff8c1.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/aerial-push-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+          "alt": "Crash Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Aerial Push In approaches from the air inside one place-scale. Crash Zoom In is an optical punch from a locked camera, usually starting in a room or a street.Earth zoom starts at orbit and nested scales.Aerial Push InPick one human out of a system.Crash Zoom InPunctuate a hit, a realization, or a comic sting.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Contact's opening withdraws from Earth into larger cosmic scales (the reverse direction of the same grammar). Powers of Ten runs outward and inward from a picnic."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Simpsons couch gags punch from cosmos to porch. Reverence and joke are the same funnel."
+        },
+        {
+          "type": "list-item",
+          "text": "Contact 1997The opening withdraws from Earth into progressively larger cosmic scales.",
+          "displayText": "Contact 1997\nThe opening withdraws from Earth into progressively larger cosmic scales."
+        },
+        {
+          "type": "list-item",
+          "text": "Powers of Ten 1977The outward and inward scale journey from a picnic scene.",
+          "displayText": "Powers of Ten 1977\nThe outward and inward scale journey from a picnic scene."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8bde36013ea6d2cb13421f2dada9dc73.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/earth-zoom/famous/00-contact-1997.jpg",
+          "alt": "Contact 1997"
+        },
+        {
+          "kind": "image",
+          "path": "media/6ca3513fd07cd412bc049b97a7514a98.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/earth-zoom/famous/01-powers-of-ten-1977.jpg",
+          "alt": "Powers of Ten 1977"
+        }
+      ],
+      "sourceText": "In film Contact's opening withdraws from Earth into larger cosmic scales (the reverse direction of the same grammar). Powers of Ten runs outward and inward from a picnic.The Simpsons couch gags punch from cosmos to porch. Reverence and joke are the same funnel.Contact 1997The opening withdraws from Earth into progressively larger cosmic scales.Powers of Ten 1977The outward and inward scale journey from a picnic scene."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Satellite to face, one axis. Still: Earth zoom into [Subject], satellite to street in one rush, the planet collapsing into a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: A zoom from orbit down onto [Subject], continent to street to face. Ordered landmarks."
+        },
+        {
+          "type": "paragraph",
+          "text": "No pan. Identity held."
+        },
+        {
+          "type": "quote",
+          "text": "Begin on a dew drop on one leaf. Pull backward continuously through the garden, neighborhood, coastline and cloud layer, ending above the planet. Keep one coherent outward axis, smooth logarithmic-feeling changes in scale and consistent daylight. Build as matched scale segments with composited handoffs; no random galaxy substitutions."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Begin+on+a+dew+drop+on+one+leaf.+Pull+backward+continuously+through+the+garden,+neighborhood,+coastline+and+cloud+layer,+ending+above+the+planet.+Keep+one+coherent+outward+axis,+smooth+logarithmic-feeling+changes+in+scale+and+consistent+daylight.+Build+as+matched+scale+segments+with+composited+handoffs;+no+random+galaxy+substitutions."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Satellite to face, one axis. Still: Earth zoom into [Subject], satellite to street in one rush, the planet collapsing into a face.Video: A zoom from orbit down onto [Subject], continent to street to face. Ordered landmarks.No pan. Identity held.Copy promptUse in Video GeneratorBegin on a dew drop on one leaf. Pull backward continuously through the garden, neighborhood, coastline and cloud layer, ending above the planet. Keep one coherent outward axis, smooth logarithmic-feeling changes in scale and consistent daylight. Build as matched scale segments with composited handoffs; no random galaxy substitutions.Begin on a dew drop on one leaf. Pull backward continuously through the garden, neighborhood, coastline and cloud layer, ending above the planet. Keep one coherent outward axis, smooth logarithmic-feeling changes in scale and consistent daylight. Build as matched scale segments with composited handoffs; no random galaxy substitutions."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a generic aerial or a rooftop crash zoom. The tell: you cannot feel continents, or the face at the end is a new person."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: start at orbit, collapse nested scales in order, keep identity."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a generic aerial or a rooftop crash zoom. The tell: you cannot feel continents, or the face at the end is a new person.The fix: start at orbit, collapse nested scales in order, keep identity."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Earth Zoom in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An earth zoom is a continuous scale rush from satellite or orbit down to a person, continent to street to face, along one axis."
+        },
+        {
+          "type": "heading",
+          "text": "Earth Zoom vs Aerial Push In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An aerial push approaches from the air inside a location. Earth zoom starts at planetary scale and collapses nested geographies until a face is the map."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Earth Zoom?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to place a person on Earth, or as a scale gag. Do not use it for a conversation."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Earth Zoom for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write orbit to street to face on one axis. Example: Earth zoom into [Subject], satellite to street in one rush, the planet collapsing into a face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Earth Zoom in film?An earth zoom is a continuous scale rush from satellite or orbit down to a person, continent to street to face, along one axis.Earth Zoom vs Aerial Push InAn aerial push approaches from the air inside a location. Earth zoom starts at planetary scale and collapses nested geographies until a face is the map.When should I use Earth Zoom?Use it to place a person on Earth, or as a scale gag. Do not use it for a conversation.How do I prompt Earth Zoom for AI image or video?Write orbit to street to face on one axis. Example: Earth zoom into [Subject], satellite to street in one rush, the planet collapsing into a face."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Satellite to face, one axis. Still: Earth zoom into [Subject], satellite to street in one rush, the planet collapsing into a face.",
+      "Video: A zoom from orbit down onto [Subject], continent to street to face. Ordered landmarks.",
+      "No pan. Identity held."
+    ],
+    "example": "Begin on a dew drop on one leaf. Pull backward continuously through the garden, neighborhood, coastline and cloud layer, ending above the planet. Keep one coherent outward axis, smooth logarithmic-feeling changes in scale and consistent daylight. Build as matched scale segments with composited handoffs; no random galaxy substitutions."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/2b79c1787147c42c13a4eb6d657bcf65.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/earth-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c918376e997c0aae13c11ad708571977.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/earth-zoom-earth-zoom-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a4638b98ba6dca55b96ba9cd14dba0a3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/earth-zoom.jpg",
+      "alt": "Earth Zoom frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/26412ba8012f48fc56e40df46b2c3466.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-push-aerial-push-mini.webp",
+      "alt": "Aerial Push In"
+    },
+    {
+      "kind": "video",
+      "path": "media/261517ae40cfd28cfe577de09beff8c1.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/aerial-push-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": "Crash Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8bde36013ea6d2cb13421f2dada9dc73.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/earth-zoom/famous/00-contact-1997.jpg",
+      "alt": "Contact 1997"
+    },
+    {
+      "kind": "image",
+      "path": "media/6ca3513fd07cd412bc049b97a7514a98.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/earth-zoom/famous/01-powers-of-ten-1977.jpg",
+      "alt": "Powers of Ten 1977"
+    },
+    {
+      "kind": "image",
+      "path": "media/2b84945982bc361d75b6a899fab35cc0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/earth-zoom/hero.jpg",
+      "alt": "Earth Zoom",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "42279d2d38e6fa6b7b3e8dce681f4e00a93b3d38875fb9fc8cdda52e570817a6"
+}

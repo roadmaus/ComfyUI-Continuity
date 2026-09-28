@@ -1,0 +1,440 @@
+{
+  "id": "color/monochrome",
+  "slug": "monochrome",
+  "title": "Monochrome",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/monochrome",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monochrome-073-selective-color-in-monochrome-mini.webp",
+  "detail": "details/color/monochrome.json",
+  "aliases": [
+    "black and white"
+  ],
+  "description": "Monochrome, including black and white cinematography, removes or does not record chromatic information so the image is value, texture, and shape. Hue is gone; contrast, grain, and outline do the talking.",
+  "thumbnail": "media/cdf5189c733a215f8f6312b537573dbd.webp",
+  "video": "media/7a3685f47ea79cd2485426ecee14655b.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/073-selective-color-in-monochrome-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Strip to drawing. A lighthouse, a boxing ring, a list of names: without hue, costume and light have to carry rank."
+        },
+        {
+          "type": "paragraph",
+          "text": "Skin becomes a grey. Blood becomes a density."
+        },
+        {
+          "type": "paragraph",
+          "text": "The audience reads edges and tones the way they read a print. It is the wrong tool when leftover color is the point."
+        },
+        {
+          "type": "paragraph",
+          "text": "Desaturation still lets a red coat or a yellow lamp speak. Bleach Bypass keeps a little chroma under silver.",
+          "links": [
+            {
+              "text": "Desaturation",
+              "url": "https://melies.co/cinematic-techniques/color/desaturation"
+            },
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Sepia is not black and white; it is a brown-gold world. If a single object must arrive in hue inside a grey film, that is a Color Shift or a selective hold-out, not this technique used honestly.",
+          "links": [
+            {
+              "text": "Sepia",
+              "url": "https://melies.co/cinematic-techniques/color/sepia"
+            },
+            {
+              "text": "Color Shift",
+              "url": "https://melies.co/cinematic-techniques/color/color-shift"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Desaturation",
+          "url": "https://melies.co/cinematic-techniques/color/desaturation"
+        },
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Sepia",
+          "url": "https://melies.co/cinematic-techniques/color/sepia"
+        },
+        {
+          "text": "Color Shift",
+          "url": "https://melies.co/cinematic-techniques/color/color-shift"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Strip to drawing. A lighthouse, a boxing ring, a list of names: without hue, costume and light have to carry rank.Skin becomes a grey. Blood becomes a density.The audience reads edges and tones the way they read a print. It is the wrong tool when leftover color is the point.Desaturation still lets a red coat or a yellow lamp speak. Bleach Bypass keeps a little chroma under silver.Sepia is not black and white; it is a brown-gold world. If a single object must arrive in hue inside a grey film, that is a Color Shift or a selective hold-out, not this technique used honestly."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Capture in color or in a panchromatic/orthochromatic black-and-white workflow, then discard chroma or never record it. Expose for a full grey scale: hats, skies, and faces need separation that hue is no longer providing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Orthochromatic stocks darken lips and skies differently than panchromatic; if you specify a stock era, keep that physics. Prompt: Monochrome treatment of [Subject], silver highlights, deep blacks, no chroma, shape and light only."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Capture in color or in a panchromatic/orthochromatic black-and-white workflow, then discard chroma or never record it. Expose for a full grey scale: hats, skies, and faces need separation that hue is no longer providing.Orthochromatic stocks darken lips and skies differently than panchromatic; if you specify a stock era, keep that physics. Prompt: Monochrome treatment of [Subject], silver highlights, deep blacks, no chroma, shape and light only."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the scene should be a drawing: a confession in a tower, a fight, a historical record. Do not use it if a leftover color accent is doing the emotional work, and do not confuse it with a brown memory tone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the scene should be a drawing: a confession in a tower, a fight, a historical record. Do not use it if a leftover color accent is doing the emotional work, and do not confuse it with a brown memory tone."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Desaturation keeps hue at a lower intensity. Bleach Bypass drains and densifies but is not fully grey.",
+          "links": [
+            {
+              "text": "Desaturation",
+              "url": "https://melies.co/cinematic-techniques/color/desaturation"
+            },
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Sepia tints the whole scale brown-gold. Tonal Contrast is how blacks and whites are placed; monochrome is the missing chroma.",
+          "links": [
+            {
+              "text": "Sepia",
+              "url": "https://melies.co/cinematic-techniques/color/sepia"
+            },
+            {
+              "text": "Tonal Contrast",
+              "url": "https://melies.co/cinematic-techniques/composition/contrast-composition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "displayText": "Bleach Bypass\nWar, crime, or a world without mercy.",
+          "links": [
+            {
+              "text": "Bleach BypassWar, crime, or a world without mercy.",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tonal ContrastMake a poster out of a frame.",
+          "displayText": "Tonal Contrast\nMake a poster out of a frame.",
+          "links": [
+            {
+              "text": "Tonal ContrastMake a poster out of a frame.",
+              "url": "https://melies.co/cinematic-techniques/composition/contrast-composition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Desaturation",
+          "url": "https://melies.co/cinematic-techniques/color/desaturation"
+        },
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Sepia",
+          "url": "https://melies.co/cinematic-techniques/color/sepia"
+        },
+        {
+          "text": "Tonal Contrast",
+          "url": "https://melies.co/cinematic-techniques/composition/contrast-composition"
+        },
+        {
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Tonal ContrastMake a poster out of a frame.",
+          "url": "https://melies.co/cinematic-techniques/composition/contrast-composition"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+          "alt": "Bleach Bypass"
+        },
+        {
+          "kind": "video",
+          "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4e25cab2b250aeef87cc81fad7db7f47.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/contrast-composition.webp",
+          "alt": "Tonal Contrast"
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Desaturation keeps hue at a lower intensity. Bleach Bypass drains and densifies but is not fully grey.Sepia tints the whole scale brown-gold. Tonal Contrast is how blacks and whites are placed; monochrome is the missing chroma.Bleach BypassWar, crime, or a world without mercy.Tonal ContrastMake a poster out of a frame.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Lighthouse commits to a hard black-and-white world of texture and rank. Raging Bull uses monochrome so boxing becomes tone and impact."
+        },
+        {
+          "type": "paragraph",
+          "text": "Schindler's List is largely black and white, with controlled exceptions that are a different technique. Grammar of value, not a poster."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Lighthouse commits to a hard black-and-white world of texture and rank. Raging Bull uses monochrome so boxing becomes tone and impact.Schindler's List is largely black and white, with controlled exceptions that are a different technique. Grammar of value, not a poster."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ban hue explicitly. Monochrome treatment of [Subject], silver highlights, deep blacks, no chroma, shape and light only."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the grey scale (deep blacks, silver highlights). Do not write sepia, and do not leave a teal wash."
+        },
+        {
+          "type": "quote",
+          "text": "Monochrome treatment of [Subject], silver highlights, deep blacks, no chroma, shape and light only."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Monochrome+treatment+of+[Subject],+silver+highlights,+deep+blacks,+no+chroma,+shape+and+light+only."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Ban hue explicitly. Monochrome treatment of [Subject], silver highlights, deep blacks, no chroma, shape and light only.Name the grey scale (deep blacks, silver highlights). Do not write sepia, and do not leave a teal wash.Copy promptUse in Image GeneratorMonochrome treatment of [Subject], silver highlights, deep blacks, no chroma, shape and light only.Monochrome treatment of [Subject], silver highlights, deep blacks, no chroma, shape and light only."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Desaturation or Sepia. The tell is leftover blue in shadows, or a brown wash calling itself black and white.",
+          "links": [
+            {
+              "text": "Desaturation",
+              "url": "https://melies.co/cinematic-techniques/color/desaturation"
+            },
+            {
+              "text": "Sepia",
+              "url": "https://melies.co/cinematic-techniques/color/sepia"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: zero chroma, a real grey scale, texture carrying the image."
+        }
+      ],
+      "links": [
+        {
+          "text": "Desaturation",
+          "url": "https://melies.co/cinematic-techniques/color/desaturation"
+        },
+        {
+          "text": "Sepia",
+          "url": "https://melies.co/cinematic-techniques/color/sepia"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Desaturation or Sepia. The tell is leftover blue in shadows, or a brown wash calling itself black and white.Fix: zero chroma, a real grey scale, texture carrying the image."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is monochrome in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is an image with no hue: black and white or another single-scale treatment where value, texture, and shape replace color. Chromatic information is removed or never recorded."
+        },
+        {
+          "type": "heading",
+          "text": "Monochrome vs Bleach Bypass",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Bleach bypass crushes color and adds silver density but usually leaves some hue. Monochrome has no chroma. If you can still name a leftover green or brown as a color in the world, you are not fully mono."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use monochrome?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the picture should be a drawing of light and shape. Skip it when leftover color, a brown memory, or a complementary split is the sentence."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt monochrome for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Monochrome treatment of [Subject], silver highlights, deep blacks, no chroma, shape and light only. Forbid sepia, teal, and residual color accents unless you want a different technique."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is monochrome in film?It is an image with no hue: black and white or another single-scale treatment where value, texture, and shape replace color. Chromatic information is removed or never recorded.Monochrome vs Bleach BypassBleach bypass crushes color and adds silver density but usually leaves some hue. Monochrome has no chroma. If you can still name a leftover green or brown as a color in the world, you are not fully mono.When should I use monochrome?Use it when the picture should be a drawing of light and shape. Skip it when leftover color, a brown memory, or a complementary split is the sentence.How do I prompt monochrome for AI image or video?Write: Monochrome treatment of [Subject], silver highlights, deep blacks, no chroma, shape and light only. Forbid sepia, teal, and residual color accents unless you want a different technique."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Ban hue explicitly. Monochrome treatment of [Subject], silver highlights, deep blacks, no chroma, shape and light only.",
+      "Name the grey scale (deep blacks, silver highlights). Do not write sepia, and do not leave a teal wash."
+    ],
+    "example": "Monochrome treatment of [Subject], silver highlights, deep blacks, no chroma, shape and light only."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/7a3685f47ea79cd2485426ecee14655b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/073-selective-color-in-monochrome-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cdf5189c733a215f8f6312b537573dbd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monochrome-073-selective-color-in-monochrome-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c7c489f8e99294494862174c0c8f4e68.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/monochrome.jpg",
+      "alt": "Monochrome frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+      "alt": "Bleach Bypass"
+    },
+    {
+      "kind": "video",
+      "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4e25cab2b250aeef87cc81fad7db7f47.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/contrast-composition.webp",
+      "alt": "Tonal Contrast"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/86f3746c106b6bbffae8d685af4045ee.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/monochrome/hero.jpg",
+      "alt": "Monochrome",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "4f1e2b547946dcff3a928932acbc4fc4c5e4e49c8d34a34ca61c831bd7c34ffa"
+}

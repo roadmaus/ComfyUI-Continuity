@@ -1,0 +1,439 @@
+{
+  "id": "lenses/vintage-cine",
+  "slug": "vintage-cine",
+  "title": "Vintage Cine Glass",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/vintage-cine",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vintage-cine.webp",
+  "detail": "details/lenses/vintage-cine.json",
+  "aliases": [],
+  "description": "Vintage cine glass is older motion-picture optics whose coatings, contrast, and aberrations differ from modern clinical primes. Lower contrast, gentle halation, and sometimes swirling or rolling edges are properties of the lens, not a grade slapped on sharp digital.",
+  "thumbnail": "media/7212173f77d2735523edd8889390416b.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put a face on Cooke, K35, or similar older glass and the image rolls off instead of biting. Highlights bloom a little."
+        },
+        {
+          "type": "paragraph",
+          "text": "Contrast sits down. Backgrounds can swirl or breathe at the edges."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memory, period, or beauty over resolution is the job of the optic, before anyone touches the timeline. It is the wrong tool when you need hard edges for VFX or a documentary fact."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool if you only wanted a faded grade on modern glass: that is Filmic Faded or a Vintage treatment, not this lens. Halation can be stock or a filter; vintage cine may contribute similar bloom, but the swirl and the contrast live in the glass.",
+          "links": [
+            {
+              "text": "Filmic Faded",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            },
+            {
+              "text": "Vintage",
+              "url": "https://melies.co/cinematic-techniques/color/vintage"
+            },
+            {
+              "text": "Halation",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Filmic Faded",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Vintage",
+          "url": "https://melies.co/cinematic-techniques/color/vintage"
+        },
+        {
+          "text": "Halation",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Put a face on Cooke, K35, or similar older glass and the image rolls off instead of biting. Highlights bloom a little.Contrast sits down. Backgrounds can swirl or breathe at the edges.Memory, period, or beauty over resolution is the job of the optic, before anyone touches the timeline. It is the wrong tool when you need hard edges for VFX or a documentary fact.It is also the wrong tool if you only wanted a faded grade on modern glass: that is Filmic Faded or a Vintage treatment, not this lens. Halation can be stock or a filter; vintage cine may contribute similar bloom, but the swirl and the contrast live in the glass."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose actual vintage or vintage-inspired cine primes and shoot them wide enough to show the aberrations. Do not stop down until they behave like modern glass if those aberrations are the point."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep skin highlights just hot enough to halate. Separate this from anamorphic squeeze: many vintage cine lenses are Spherical.",
+          "links": [
+            {
+              "text": "Spherical",
+              "url": "https://melies.co/cinematic-techniques/lenses/spherical"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Vintage cine glass on [Subject], lower contrast, gentle halation, swirling edges, Cooke or K35 character, not clinical sharpness."
+        }
+      ],
+      "links": [
+        {
+          "text": "Spherical",
+          "url": "https://melies.co/cinematic-techniques/lenses/spherical"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Choose actual vintage or vintage-inspired cine primes and shoot them wide enough to show the aberrations. Do not stop down until they behave like modern glass if those aberrations are the point.Keep skin highlights just hot enough to halate. Separate this from anamorphic squeeze: many vintage cine lenses are Spherical.Prompt: Vintage cine glass on [Subject], lower contrast, gentle halation, swirling edges, Cooke or K35 character, not clinical sharpness."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for memory, period, or a face that should not look like a catalog. Do not use it as a synonym for a faded LUT on a modern zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for memory, period, or a face that should not look like a catalog. Do not use it as a synonym for a faded LUT on a modern zoom."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Anamorphic is a squeeze system; some vintage glass is anamorphic, most of this entry is about spherical old coatings. Halation is highlight bloom, one trait.",
+          "links": [
+            {
+              "text": "Anamorphic",
+              "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+            },
+            {
+              "text": "Halation",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Filmic Faded is a print-emulation grade. Vintage is a whole period treatment.",
+          "links": [
+            {
+              "text": "Filmic Faded",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            },
+            {
+              "text": "Vintage",
+              "url": "https://melies.co/cinematic-techniques/color/vintage"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vintage cine is the taking lens."
+        },
+        {
+          "type": "list-item",
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "displayText": "Halation\nHighlights should bleed like film, not clip like video.",
+          "links": [
+            {
+              "text": "HalationHighlights should bleed like film, not clip like video.",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AnamorphicYou want the frame to announce it is a movie.",
+          "displayText": "Anamorphic\nYou want the frame to announce it is a movie.",
+          "links": [
+            {
+              "text": "AnamorphicYou want the frame to announce it is a movie.",
+              "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Anamorphic",
+          "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+        },
+        {
+          "text": "Halation",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "Filmic Faded",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Vintage",
+          "url": "https://melies.co/cinematic-techniques/color/vintage"
+        },
+        {
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "AnamorphicYou want the frame to announce it is a movie.",
+          "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+          "alt": "Halation"
+        },
+        {
+          "kind": "video",
+          "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/b11a08fb15e0ac7dcd89ec2184cb65da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-057-anamorphic-optical-character-mini.webp",
+          "alt": "Anamorphic"
+        },
+        {
+          "kind": "video",
+          "path": "media/df5fddd2498117a9636a23f7270ff4b4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/057-anamorphic-optical-character-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots Anamorphic is a squeeze system; some vintage glass is anamorphic, most of this entry is about spherical old coatings. Halation is highlight bloom, one trait.Filmic Faded is a print-emulation grade. Vintage is a whole period treatment.Vintage cine is the taking lens.HalationHighlights should bleed like film, not clip like video.AnamorphicYou want the frame to announce it is a movie.14mm Ultra-WidePut the audience inside a space that is too big or too close."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Master and Phantom Thread are often cited for older or character glass on faces: lower bite, gentle bloom, a refusal of clinical digital edges. Use that as grammar for optic character, not as a still to match pixel for pixel."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Master and Phantom Thread are often cited for older or character glass on faces: lower bite, gentle bloom, a refusal of clinical digital edges. Use that as grammar for optic character, not as a still to match pixel for pixel."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the glass, not a sticker. Vintage cine glass on [Subject], lower contrast, gentle halation, swirling edges, Cooke or K35 character, not clinical sharpness."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add spherical unless you also want anamorphic ovals. Do not write faded LUT only, and do not add heavy grain as a substitute for the lens."
+        },
+        {
+          "type": "quote",
+          "text": "Vintage cine glass on [Subject], lower contrast, gentle halation, swirling edges, Cooke or K35 romance, not clinical sharpness."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Vintage+cine+glass+on+[Subject],+lower+contrast,+gentle+halation,+swirling+edges,+Cooke+or+K35+romance,+not+clinical+sharpness."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the glass, not a sticker. Vintage cine glass on [Subject], lower contrast, gentle halation, swirling edges, Cooke or K35 character, not clinical sharpness.Add spherical unless you also want anamorphic ovals. Do not write faded LUT only, and do not add heavy grain as a substitute for the lens.Copy promptUse in Image GeneratorVintage cine glass on [Subject], lower contrast, gentle halation, swirling edges, Cooke or K35 romance, not clinical sharpness.Vintage cine glass on [Subject], lower contrast, gentle halation, swirling edges, Cooke or K35 romance, not clinical sharpness."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Filmic Faded grade or a Vintage dye fade on sharp modern glass. The tell is crunchy edges with a brown LUT, or grain with no optical swirl or halation.",
+          "links": [
+            {
+              "text": "Filmic Faded",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            },
+            {
+              "text": "Vintage",
+              "url": "https://melies.co/cinematic-techniques/color/vintage"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: lower contrast in the taking image, gentle highlight bloom, edge character from the lens."
+        }
+      ],
+      "links": [
+        {
+          "text": "Filmic Faded",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Vintage",
+          "url": "https://melies.co/cinematic-techniques/color/vintage"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Filmic Faded grade or a Vintage dye fade on sharp modern glass. The tell is crunchy edges with a brown LUT, or grain with no optical swirl or halation.Fix: lower contrast in the taking image, gentle highlight bloom, edge character from the lens."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is vintage cine glass in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is older motion-picture lenses with coatings and aberrations that lower contrast, bloom highlights, and sometimes swirl the edges. The character is optical, not only a grade."
+        },
+        {
+          "type": "heading",
+          "text": "Vintage Cine Glass vs Filmic Faded",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Filmic faded is a print-emulation grade: lifted blacks, rolled highlights. Vintage cine is the lens: coatings, swirl, optical bloom. You can have one without the other."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use vintage cine glass?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the taking optic should be gentler than modern primes: memory, period, a face that should not look clinical. Skip it for hard VFX plates."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt vintage cine glass for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Vintage cine glass on [Subject], lower contrast, gentle halation, swirling edges, Cooke or K35 character, not clinical sharpness. Forbid LUT-only fade and anamorphic squeeze unless you want those too."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is vintage cine glass in film?It is older motion-picture lenses with coatings and aberrations that lower contrast, bloom highlights, and sometimes swirl the edges. The character is optical, not only a grade.Vintage Cine Glass vs Filmic FadedFilmic faded is a print-emulation grade: lifted blacks, rolled highlights. Vintage cine is the lens: coatings, swirl, optical bloom. You can have one without the other.When should I use vintage cine glass?Use it when the taking optic should be gentler than modern primes: memory, period, a face that should not look clinical. Skip it for hard VFX plates.How do I prompt vintage cine glass for AI image or video?Write: Vintage cine glass on [Subject], lower contrast, gentle halation, swirling edges, Cooke or K35 character, not clinical sharpness. Forbid LUT-only fade and anamorphic squeeze unless you want those too."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the glass, not a sticker. Vintage cine glass on [Subject], lower contrast, gentle halation, swirling edges, Cooke or K35 character, not clinical sharpness.",
+      "Add spherical unless you also want anamorphic ovals. Do not write faded LUT only, and do not add heavy grain as a substitute for the lens."
+    ],
+    "example": "Vintage cine glass on [Subject], lower contrast, gentle halation, swirling edges, Cooke or K35 romance, not clinical sharpness."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/7212173f77d2735523edd8889390416b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vintage-cine.webp",
+      "alt": "Vintage Cine Glass example"
+    },
+    {
+      "kind": "image",
+      "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+      "alt": "Halation"
+    },
+    {
+      "kind": "video",
+      "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b11a08fb15e0ac7dcd89ec2184cb65da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-057-anamorphic-optical-character-mini.webp",
+      "alt": "Anamorphic"
+    },
+    {
+      "kind": "video",
+      "path": "media/df5fddd2498117a9636a23f7270ff4b4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/057-anamorphic-optical-character-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/cdad3e88ed485c4c786c89527d61b1b2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/vintage-cine/hero.jpg",
+      "alt": "Vintage Cine Glass",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "1521fd266db369468870647058536866261c137f53c04b516e0140c9e5a07720"
+}

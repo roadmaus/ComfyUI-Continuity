@@ -1,0 +1,436 @@
+{
+  "id": "color/day-for-night",
+  "slug": "day-for-night",
+  "title": "Day for Night",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/day-for-night",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/day-for-night-071-day-for-night-landscape-mini.webp",
+  "detail": "details/color/day-for-night.json",
+  "aliases": [
+    "Nuit américaine",
+    "Daylight transformed into night"
+  ],
+  "description": "Day for night cinematography photographs daylight so it will read as nighttime while still showing terrain that true night might hide. Exposure, sky, and highlight control do the lying; a blue wash alone is not the technique.",
+  "thumbnail": "media/7e92537ac15a45b034ae6f579d107c77.webp",
+  "video": "media/ae3bfb9cc8af2b1e00fefe11a1f48942.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/071-day-for-night-landscape-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You cannot wait for night, or night must still show a desert, a ranch, a ridge. The sun is skipped, flagged, or placed as a hard moon."
+        },
+        {
+          "type": "paragraph",
+          "text": "Underexposure and a cool bias sell darkness, but headlights, windows, and eyes must still find something to see. It is the wrong tool when you can light a real night with a sculpted moon (Moonlight Gel) and do not need miles of terrain.",
+          "links": [
+            {
+              "text": "Moonlight Gel",
+              "url": "https://melies.co/cinematic-techniques/color/moonlight-gel"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool if you only grade a day interior steel (Cool Blue) without hiding day cues: blue sky, short hard shadows from high sun, warm unlit windows. Ordinary day-for-night and a special high-sensitivity or infrared capture system are not the same production method.",
+          "links": [
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Moonlight Gel",
+          "url": "https://melies.co/cinematic-techniques/color/moonlight-gel"
+        },
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function You cannot wait for night, or night must still show a desert, a ranch, a ridge. The sun is skipped, flagged, or placed as a hard moon.Underexposure and a cool bias sell darkness, but headlights, windows, and eyes must still find something to see. It is the wrong tool when you can light a real night with a sculpted moon (Moonlight Gel) and do not need miles of terrain.It is the wrong tool if you only grade a day interior steel (Cool Blue) without hiding day cues: blue sky, short hard shadows from high sun, warm unlit windows. Ordinary day-for-night and a special high-sensitivity or infrared capture system are not the same production method."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Control daylight direction, often shooting when the sun is lower or back, and underexpose. Avoid obvious daytime cues (pale blue zenith, visible sun disc, lit-looking clouds)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Reshape color toward moonlight. More advanced approaches combine differently sensitive captures."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not equate the technique with simply making footage blue. Prompt: Day-for-night treatment of [Subject], underexposed daylight, blue wash, skipped-over sun, moonlight as a lie that reads."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Control daylight direction, often shooting when the sun is lower or back, and underexpose. Avoid obvious daytime cues (pale blue zenith, visible sun disc, lit-looking clouds).Reshape color toward moonlight. More advanced approaches combine differently sensitive captures.Do not equate the technique with simply making footage blue. Prompt: Day-for-night treatment of [Subject], underexposed daylight, blue wash, skipped-over sun, moonlight as a lie that reads."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when you cannot wait for night, or night must still show terrain: a desert chase, a ranch under a false moon. Do not use it as a blue LUT on a sunny street with the sun in frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when you cannot wait for night, or night must still show terrain: a desert chase, a ranch under a false moon. Do not use it as a blue LUT on a sunny street with the sun in frame."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cool Blue is a grade, including on true night or interiors. Moonlight Gel is a cool key you hang.",
+          "links": [
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            },
+            {
+              "text": "Moonlight Gel",
+              "url": "https://melies.co/cinematic-techniques/color/moonlight-gel"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Blue Hour is real twilight. Tungsten Balance can turn daylight windows blue as mixed color, which is not the same as selling a whole landscape as night.",
+          "links": [
+            {
+              "text": "Blue Hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            },
+            {
+              "text": "Tungsten Balance",
+              "url": "https://melies.co/cinematic-techniques/color/tungsten-balance"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cool BlueCold institutions, night, or alienation.",
+          "displayText": "Cool Blue\nCold institutions, night, or alienation.",
+          "links": [
+            {
+              "text": "Cool BlueCold institutions, night, or alienation.",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Moonlight GelNight that is still sculpted.",
+          "displayText": "Moonlight Gel\nNight that is still sculpted.",
+          "links": [
+            {
+              "text": "Moonlight GelNight that is still sculpted.",
+              "url": "https://melies.co/cinematic-techniques/color/moonlight-gel"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "Moonlight Gel",
+          "url": "https://melies.co/cinematic-techniques/color/moonlight-gel"
+        },
+        {
+          "text": "Blue Hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        },
+        {
+          "text": "Tungsten Balance",
+          "url": "https://melies.co/cinematic-techniques/color/tungsten-balance"
+        },
+        {
+          "text": "Cool BlueCold institutions, night, or alienation.",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "Moonlight GelNight that is still sculpted.",
+          "url": "https://melies.co/cinematic-techniques/color/moonlight-gel"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9ac5d96fc611ee97ab52dc9132feb3fa.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cool-blue.webp",
+          "alt": "Cool Blue"
+        },
+        {
+          "kind": "image",
+          "path": "media/5288bad199c8f7efb9dfd01bbbe17c93.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/moonlight-gel.webp",
+          "alt": "Moonlight Gel"
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Cool Blue is a grade, including on true night or interiors. Moonlight Gel is a cool key you hang.Blue Hour is real twilight. Tungsten Balance can turn daylight windows blue as mixed color, which is not the same as selling a whole landscape as night.Cool BlueCold institutions, night, or alienation.Moonlight GelNight that is still sculpted.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Classic Westerns often sold day as night to keep horses and mesas readable. Mad Max: Fury Road has stylized blue night passages in the desert."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nope's ranch-at-night work uses a specific capture approach that should not be flattened into ordinary day-for-night. Grammar of terrain-at-night, not a copied sky."
+        },
+        {
+          "type": "list-item",
+          "text": "Nope 2022The ranch and surrounding landscape at apparent night.",
+          "displayText": "Nope 2022\nThe ranch and surrounding landscape at apparent night."
+        },
+        {
+          "type": "list-item",
+          "text": "Mad Max: Fury Road 2015The stylized blue night passages in the desert.",
+          "displayText": "Mad Max: Fury Road 2015\nThe stylized blue night passages in the desert."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/3322cc82f99672a5077aa9038d56b2a3.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/day-for-night/famous/00-nope-2022.jpg",
+          "alt": "Nope 2022"
+        },
+        {
+          "kind": "image",
+          "path": "media/795cfb5e5ab755e3ad7a44181f8671a2.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/day-for-night/famous/01-mad-max-fury-road-2015.jpg",
+          "alt": "Mad Max: Fury Road 2015"
+        }
+      ],
+      "sourceText": "In film Classic Westerns often sold day as night to keep horses and mesas readable. Mad Max: Fury Road has stylized blue night passages in the desert.Nope's ranch-at-night work uses a specific capture approach that should not be flattened into ordinary day-for-night. Grammar of terrain-at-night, not a copied sky.Nope 2022The ranch and surrounding landscape at apparent night.Mad Max: Fury Road 2015The stylized blue night passages in the desert."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hide the day, keep the land. Day-for-night treatment of [Subject], underexposed daylight, blue wash, skipped-over sun, moonlight as a lie that reads."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban a visible sun disc and a pale daytime zenith. Do not write simply blue grade on a sunny street."
+        },
+        {
+          "type": "quote",
+          "text": "A wide horse ranch under apparent moonlight: deep dark sky, subtly readable distant hills, muted color and believable cool low-level illumination. One rider crosses the field. No bright daytime clouds, no obvious noon shadows, no uniform blue overlay. Generate a controlled base and grade sky and terrain separately."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+wide+horse+ranch+under+apparent+moonlight:+deep+dark+sky,+subtly+readable+distant+hills,+muted+color+and+believable+cool+low-level+illumination.+One+rider+crosses+the+field.+No+bright+daytime+clouds,+no+obvious+noon+shadows,+no+uniform+blue+overlay.+Generate+a+controlled+base+and+grade+sky+and+terrain+separately."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Hide the day, keep the land. Day-for-night treatment of [Subject], underexposed daylight, blue wash, skipped-over sun, moonlight as a lie that reads.Ban a visible sun disc and a pale daytime zenith. Do not write simply blue grade on a sunny street.Copy promptUse in Video GeneratorA wide horse ranch under apparent moonlight: deep dark sky, subtly readable distant hills, muted color and believable cool low-level illumination. One rider crosses the field. No bright daytime clouds, no obvious noon shadows, no uniform blue overlay. Generate a controlled base and grade sky and terrain separately.A wide horse ranch under apparent moonlight: deep dark sky, subtly readable distant hills, muted color and believable cool low-level illumination. One rider crosses the field. No bright daytime clouds, no obvious noon shadows, no uniform blue overlay. Generate a controlled base and grade sky and terrain separately."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Cool Blue LUT on obvious day, or underexposed day that still shows a white sky and short noon shadows. The tell is blue-tinted sunlight with the sun in shot.",
+          "links": [
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: skip the sun, underexpose, cool the key, keep terrain, kill daytime sky cues."
+        }
+      ],
+      "links": [
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Cool Blue LUT on obvious day, or underexposed day that still shows a white sky and short noon shadows. The tell is blue-tinted sunlight with the sun in shot.Fix: skip the sun, underexpose, cool the key, keep terrain, kill daytime sky cues."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is day for night in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is daylight photography transformed to read as night while retaining enough information to show large spaces. Exposure, sky, and highlights do the work, not only a blue tint."
+        },
+        {
+          "type": "heading",
+          "text": "Day for Night vs Cool Blue",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Cool blue is a grade you can put on any capture. Day-for-night is a way of shooting or transforming daylight so it passes as night. If the sun and a pale zenith are still obvious, you have only tinted day."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use day for night?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when night must show terrain you cannot light, or when true night is impractical. Skip it when you can sculpt a real moon key, and skip a blue LUT on unhidden day."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt day for night for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Day-for-night treatment of [Subject], underexposed daylight, blue wash, skipped-over sun, moonlight as a lie that reads. Forbid a visible sun and a pale daytime sky."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is day for night in film?It is daylight photography transformed to read as night while retaining enough information to show large spaces. Exposure, sky, and highlights do the work, not only a blue tint.Day for Night vs Cool BlueCool blue is a grade you can put on any capture. Day-for-night is a way of shooting or transforming daylight so it passes as night. If the sun and a pale zenith are still obvious, you have only tinted day.When should I use day for night?Use it when night must show terrain you cannot light, or when true night is impractical. Skip it when you can sculpt a real moon key, and skip a blue LUT on unhidden day.How do I prompt day for night for AI image or video?Write: Day-for-night treatment of [Subject], underexposed daylight, blue wash, skipped-over sun, moonlight as a lie that reads. Forbid a visible sun and a pale daytime sky."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Hide the day, keep the land. Day-for-night treatment of [Subject], underexposed daylight, blue wash, skipped-over sun, moonlight as a lie that reads.",
+      "Ban a visible sun disc and a pale daytime zenith. Do not write simply blue grade on a sunny street."
+    ],
+    "example": "A wide horse ranch under apparent moonlight: deep dark sky, subtly readable distant hills, muted color and believable cool low-level illumination. One rider crosses the field. No bright daytime clouds, no obvious noon shadows, no uniform blue overlay. Generate a controlled base and grade sky and terrain separately."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/ae3bfb9cc8af2b1e00fefe11a1f48942.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/071-day-for-night-landscape-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7e92537ac15a45b034ae6f579d107c77.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/day-for-night-071-day-for-night-landscape-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/860429729d5c3427514846422bd3cc12.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/day-for-night.jpg",
+      "alt": "Day for Night frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/9ac5d96fc611ee97ab52dc9132feb3fa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cool-blue.webp",
+      "alt": "Cool Blue"
+    },
+    {
+      "kind": "image",
+      "path": "media/5288bad199c8f7efb9dfd01bbbe17c93.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/moonlight-gel.webp",
+      "alt": "Moonlight Gel"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/3322cc82f99672a5077aa9038d56b2a3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/day-for-night/famous/00-nope-2022.jpg",
+      "alt": "Nope 2022"
+    },
+    {
+      "kind": "image",
+      "path": "media/795cfb5e5ab755e3ad7a44181f8671a2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/day-for-night/famous/01-mad-max-fury-road-2015.jpg",
+      "alt": "Mad Max: Fury Road 2015"
+    },
+    {
+      "kind": "image",
+      "path": "media/3ef7e7e64bc4fc18d3b1653b49054b7b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/day-for-night/hero.jpg",
+      "alt": "Day for Night",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "82f5b2ea6b8911a02c8ba97152cef8494d83bd8f170063ba6b6620b2d24615f3"
+}

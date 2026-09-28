@@ -1,0 +1,386 @@
+{
+  "id": "effects/chromatic-aberration",
+  "slug": "chromatic-aberration",
+  "title": "Chromatic Aberration",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/chromatic-aberration",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/chromatic-aberration.webp",
+  "detail": "details/effects/chromatic-aberration.json",
+  "aliases": [
+    "lateral chromatic aberration",
+    "longitudinal chromatic aberration"
+  ],
+  "description": "Chromatic aberration in chromatic aberration cinematography is color fringing from different wavelengths focusing at different distances or magnifications. Lateral CA puts red-cyan (or similar) fringes on high-contrast edges, worse toward the frame edge, while longitudinal CA puts different colors in front of and behind the focus plane.",
+  "thumbnail": "media/854faf292f949b0db4646dc6c5a0c347.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cheap, wide, or vintage glass fails to put all colors on the same plane. A branch, a shoulder, a neon sign grows a red or cyan beard."
+        },
+        {
+          "type": "paragraph",
+          "text": "The optic is imperfect on purpose, or it is simply old. Use it when the glass should confess: lo-fi night, a dream that is optical rather than a grade, a wide at full aperture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Tie fringes to contrast edges, stronger in the corners. It is the wrong tool as a full-frame RGB split, which is a channel offset, not aberration."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the whole image is three layers of the same picture, you have a digital treatment, not CA."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Cheap, wide, or vintage glass fails to put all colors on the same plane. A branch, a shoulder, a neon sign grows a red or cyan beard.The optic is imperfect on purpose, or it is simply old. Use it when the glass should confess: lo-fi night, a dream that is optical rather than a grade, a wide at full aperture.Tie fringes to contrast edges, stronger in the corners. It is the wrong tool as a full-frame RGB split, which is a channel offset, not aberration.If the whole image is three layers of the same picture, you have a digital treatment, not CA."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wide angle, wide open, simple or vintage designs. Lateral CA scales with distance from center."
+        },
+        {
+          "type": "paragraph",
+          "text": "Longitudinal CA shows as color bokeh (magenta in front, green behind, or the reverse). Recreate by fringing high-contrast edges, not by sliding entire channels."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: red-cyan fringing at high-contrast edges, stronger at the frame edge, cheap or vintage glass."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Wide angle, wide open, simple or vintage designs. Lateral CA scales with distance from center.Longitudinal CA shows as color bokeh (magenta in front, green behind, or the reverse). Recreate by fringing high-contrast edges, not by sliding entire channels.Prompt: red-cyan fringing at high-contrast edges, stronger at the frame edge, cheap or vintage glass."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A night overpass, raincoat against neon, red-cyan fringes on the brightest sign edges and the silhouette. Do not RGB-split the entire figure as if it were a channel offset."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A night overpass, raincoat against neon, red-cyan fringes on the brightest sign edges and the silhouette. Do not RGB-split the entire figure as if it were a channel offset."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lens Flare is scatter and ghosts, not edge fringes. Fisheye is extreme barrel distortion.",
+          "links": [
+            {
+              "text": "Lens Flare",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            },
+            {
+              "text": "Fisheye",
+              "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It can carry CA but is a geometry, not a color error. Vintage Cine Glass often includes CA plus haze and vignette.",
+          "links": [
+            {
+              "text": "Vintage Cine Glass",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Distortions are spatial warps. CA is a color-focus error on top of, or instead of, those warps.",
+          "links": [
+            {
+              "text": "Distortions",
+              "url": "https://melies.co/cinematic-techniques/effects/distortions"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "FisheyeThe mind is warped, or the space is a dome.",
+          "displayText": "Fisheye\nThe mind is warped, or the space is a dome.",
+          "links": [
+            {
+              "text": "FisheyeThe mind is warped, or the space is a dome.",
+              "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Vintage Cine GlassMemory, period, or beauty over resolution.",
+          "displayText": "Vintage Cine Glass\nMemory, period, or beauty over resolution.",
+          "links": [
+            {
+              "text": "Vintage Cine GlassMemory, period, or beauty over resolution.",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Lens Flare",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "Fisheye",
+          "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+        },
+        {
+          "text": "Vintage Cine Glass",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Distortions",
+          "url": "https://melies.co/cinematic-techniques/effects/distortions"
+        },
+        {
+          "text": "FisheyeThe mind is warped, or the space is a dome.",
+          "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+        },
+        {
+          "text": "Vintage Cine GlassMemory, period, or beauty over resolution.",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b4071aa0661c71f8a9389dce80bf833c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fisheye-059-fisheye-space-distortion-mini.webp",
+          "alt": "Fisheye"
+        },
+        {
+          "kind": "video",
+          "path": "media/3c8bcf6380e4b2040179ecc443e9bdf3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/059-fisheye-space-distortion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7212173f77d2735523edd8889390416b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vintage-cine.webp",
+          "alt": "Vintage Cine Glass"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Lens Flare is scatter and ghosts, not edge fringes. Fisheye is extreme barrel distortion.It can carry CA but is a geometry, not a color error. Vintage Cine Glass often includes CA plus haze and vignette.Distortions are spatial warps. CA is a color-focus error on top of, or instead of, those warps.FisheyeThe mind is warped, or the space is a dome.Vintage Cine GlassMemory, period, or beauty over resolution.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Spring Breakers lets cheap-looking fringing and analog error sit on party lights. Music videos often push lateral CA as a wide-open night look."
+        },
+        {
+          "type": "paragraph",
+          "text": "Enter the Void uses optical error as subjective night, which is grammar, not a template."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Spring Breakers lets cheap-looking fringing and analog error sit on party lights. Music videos often push lateral CA as a wide-open night look.Enter the Void uses optical error as subjective night, which is grammar, not a template."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fringe the edges, do not split the body. Example: Chromatic aberration on [Subject], red-cyan fringing at high-contrast edges, stronger toward the corners, vintage or simple glass, not a full RGB channel offset."
+        },
+        {
+          "type": "quote",
+          "text": "Chromatic aberration on [Subject], red-cyan fringing at high-contrast edges, cheap glass or dream distortion."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Chromatic+aberration+on+[Subject],+red-cyan+fringing+at+high-contrast+edges,+cheap+glass+or+dream+distortion."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Fringe the edges, do not split the body. Example: Chromatic aberration on [Subject], red-cyan fringing at high-contrast edges, stronger toward the corners, vintage or simple glass, not a full RGB channel offset.Copy promptUse in Image GeneratorChromatic aberration on [Subject], red-cyan fringing at high-contrast edges, cheap glass or dream distortion.Chromatic aberration on [Subject], red-cyan fringing at high-contrast edges, cheap glass or dream distortion."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: RGB split, lens flare, or fisheye stretch. Tell: the whole subject is three colored copies, or only a rainbow streak with no edge fringe."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: confine color to high-contrast edges, increase it off center, keep the core image registered."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: RGB split, lens flare, or fisheye stretch. Tell: the whole subject is three colored copies, or only a rainbow streak with no edge fringe.Fix: confine color to high-contrast edges, increase it off center, keep the core image registered."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is chromatic aberration in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Color fringing from wavelengths that do not share a focus or a magnification. Lateral CA beards edges. Longitudinal CA colors the blur in front of and behind the mark."
+        },
+        {
+          "type": "heading",
+          "text": "Chromatic aberration vs lens flare",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Flare is stray light making ghosts and veils. Chromatic aberration is a focusing error that puts different colors on contrast edges. One is scatter. The other is dispersion."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use chromatic aberration?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the optic should look imperfect: vintage glass, wide night work, a slightly untrustworthy image. Do not use a full-frame channel split."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt chromatic aberration for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for red-cyan (or named) fringing on high-contrast edges, stronger at the corners, from cheap or vintage glass. Ban whole-image RGB offsets."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is chromatic aberration in film?Color fringing from wavelengths that do not share a focus or a magnification. Lateral CA beards edges. Longitudinal CA colors the blur in front of and behind the mark.Chromatic aberration vs lens flareFlare is stray light making ghosts and veils. Chromatic aberration is a focusing error that puts different colors on contrast edges. One is scatter. The other is dispersion.When should I use chromatic aberration?When the optic should look imperfect: vintage glass, wide night work, a slightly untrustworthy image. Do not use a full-frame channel split.How do I prompt chromatic aberration for AI image or video?Ask for red-cyan (or named) fringing on high-contrast edges, stronger at the corners, from cheap or vintage glass. Ban whole-image RGB offsets."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Fringe the edges, do not split the body. Example: Chromatic aberration on [Subject], red-cyan fringing at high-contrast edges, stronger toward the corners, vintage or simple glass, not a full RGB channel offset."
+    ],
+    "example": "Chromatic aberration on [Subject], red-cyan fringing at high-contrast edges, cheap glass or dream distortion."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/854faf292f949b0db4646dc6c5a0c347.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/chromatic-aberration.webp",
+      "alt": "Chromatic Aberration example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b4071aa0661c71f8a9389dce80bf833c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fisheye-059-fisheye-space-distortion-mini.webp",
+      "alt": "Fisheye"
+    },
+    {
+      "kind": "video",
+      "path": "media/3c8bcf6380e4b2040179ecc443e9bdf3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/059-fisheye-space-distortion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7212173f77d2735523edd8889390416b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vintage-cine.webp",
+      "alt": "Vintage Cine Glass"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4124fd43fec9d2369066d3e622449ac5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/chromatic-aberration/hero.jpg",
+      "alt": "Chromatic Aberration",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "69b8802a9d445eac0608395c1009dbe6f60b92a09ffbfa92080edadce71b62c0"
+}

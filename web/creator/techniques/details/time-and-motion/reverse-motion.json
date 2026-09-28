@@ -1,0 +1,456 @@
+{
+  "id": "time-and-motion/reverse-motion",
+  "slug": "reverse-motion",
+  "title": "Reverse Motion",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reverse-motion-085-reverse-motion-image-mini.webp",
+  "detail": "details/time-and-motion/reverse-motion.json",
+  "aliases": [
+    "Consequences before causes"
+  ],
+  "description": "Reverse motion plays recorded action backward so causes arrive after their effects inside the shot: rain rises, smoke inhales, a shattered object reassembles. This is reversed playback, not a story told in reverse scene order.",
+  "thumbnail": "media/47fac5326936cfc833f9e558220b5143.webp",
+  "video": "media/508e95075e797a6a8eb1eebddcb1305d.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/085-reverse-motion-image-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for trick photography, grief that wants an undo, or a world whose physics run the other way. The audience reads inverted inertia: water, cloth, sparks, and footsteps all lie."
+        },
+        {
+          "type": "paragraph",
+          "text": "A single reversed gesture can feel like a spell. A whole reversed fight can feel like entropy running downhill in the wrong direction."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you only need a toy loop, or when the plot itself is told from consequence to cause without reversing the footage. A boomerang goes forward then back on the same path."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memento-style chronology reorders scenes at normal playback. Do not mix those machines in one prompt."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it for trick photography, grief that wants an undo, or a world whose physics run the other way. The audience reads inverted inertia: water, cloth, sparks, and footsteps all lie.A single reversed gesture can feel like a spell. A whole reversed fight can feel like entropy running downhill in the wrong direction.It is the wrong tool when you only need a toy loop, or when the plot itself is told from consequence to cause without reversing the footage. A boomerang goes forward then back on the same path.Memento-style chronology reorders scenes at normal playback. Do not mix those machines in one prompt."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shoot the action forward with readable contacts, then reverse the clip. Gravity, fluids, and cloth are the proof."
+        },
+        {
+          "type": "paragraph",
+          "text": "A person putting on a coat forward will look like an impossible undressing in reverse only if the fabric was honest on the way in. Prompt: Reverse motion of [Subject], time running backward, rain rising, a broken thing assembling."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Shoot the action forward with readable contacts, then reverse the clip. Gravity, fluids, and cloth are the proof.A person putting on a coat forward will look like an impossible undressing in reverse only if the fabric was honest on the way in. Prompt: Reverse motion of [Subject], time running backward, rain rising, a broken thing assembling."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a broken object should reassemble, or rain should rise, as a visible undo. Do not use it to mean reverse story order with ordinary-speed scenes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a broken object should reassemble, or rain should rise, as a visible undo. Do not use it to mean reverse story order with ordinary-speed scenes."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Reverse playback is not reverse chronology. Boomerang runs the same action forward then back as a loop.",
+          "links": [
+            {
+              "text": "Boomerang",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Slow Motion only changes rate, not direction. An Infinite Loop sews last frame to first and may stay forward.",
+          "links": [
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            },
+            {
+              "text": "Infinite Loop",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tenet mixes inverted world-lines with true reversed footage. Memento and Irréversible mostly reorder scenes."
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Fast MotionToo much life for real time.",
+          "displayText": "Fast Motion\nToo much life for real time.",
+          "links": [
+            {
+              "text": "Fast MotionToo much life for real time.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Speed RampMark one instant inside a fight or a look.",
+          "displayText": "Speed Ramp\nMark one instant inside a fight or a look.",
+          "links": [
+            {
+              "text": "Speed RampMark one instant inside a fight or a look.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/speed-ramp"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Boomerang",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+        },
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Infinite Loop",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Fast MotionToo much life for real time.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+        },
+        {
+          "text": "Speed RampMark one instant inside a fight or a look.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/speed-ramp"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+          "alt": "Fast Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/5830a4bde5d41dd3d555f54f4119dd65.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/speed-ramp-079-speed-ramp-mini.webp",
+          "alt": "Speed Ramp"
+        },
+        {
+          "kind": "video",
+          "path": "media/1055170f1851ae017a5ed0883f8c29d2.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/079-speed-ramp-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Reverse playback is not reverse chronology. Boomerang runs the same action forward then back as a loop.Slow Motion only changes rate, not direction. An Infinite Loop sews last frame to first and may stay forward.Tenet mixes inverted world-lines with true reversed footage. Memento and Irréversible mostly reorder scenes.Slow MotionA second contains a scene.Fast MotionToo much life for real time.Speed RampMark one instant inside a fight or a look."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tenet lets objects and people move through events against the local clock, including true reversed photography. Cocteau's Orphée and related trick shots reverse ordinary gestures so they read as rites."
+        },
+        {
+          "type": "paragraph",
+          "text": "Memento opens with a Polaroid and a violent action running backward, then tells much of the rest by reverse scene order. Irréversible presents major sections from later to earlier without reversing every shot."
+        },
+        {
+          "type": "list-item",
+          "text": "Memento 2000The color sequences move backward in story order, interwoven with forward-moving monochrome material.",
+          "displayText": "Memento 2000\nThe color sequences move backward in story order, interwoven with forward-moving monochrome material."
+        },
+        {
+          "type": "list-item",
+          "text": "Irréversible 2002The story’s major sections are presented in reverse order.",
+          "displayText": "Irréversible 2002\nThe story’s major sections are presented in reverse order."
+        },
+        {
+          "type": "list-item",
+          "text": "Memento 2000The opening Polaroid and violent action run backward.",
+          "displayText": "Memento 2000\nThe opening Polaroid and violent action run backward."
+        },
+        {
+          "type": "list-item",
+          "text": "Tenet 2020Objects and people can move through events in reverse temporal direction.",
+          "displayText": "Tenet 2020\nObjects and people can move through events in reverse temporal direction."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/bae4f83c44661922c635a3f9b2a94393.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reverse-motion/famous/00-memento-2000.jpg",
+          "alt": "Memento 2000"
+        },
+        {
+          "kind": "image",
+          "path": "media/e0f54f6e64d580763e25481b09021fe5.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reverse-motion/famous/01-tenet-2020.jpg",
+          "alt": "Tenet 2020"
+        }
+      ],
+      "sourceText": "In film Tenet lets objects and people move through events against the local clock, including true reversed photography. Cocteau's Orphée and related trick shots reverse ordinary gestures so they read as rites.Memento opens with a Polaroid and a violent action running backward, then tells much of the rest by reverse scene order. Irréversible presents major sections from later to earlier without reversing every shot.Memento 2000The color sequences move backward in story order, interwoven with forward-moving monochrome material.Irréversible 2002The story’s major sections are presented in reverse order.Memento 2000The opening Polaroid and violent action run backward.Tenet 2020Objects and people can move through events in reverse temporal direction."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name inverted physics, not a shuffled outline. Still: a tell such as rain hanging upward, glass mid-reassembly, smoke drawing in."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The action around [Subject] plays in reverse: rain rising, smoke inhaling, motion undone. Ordinary-speed scenes in reverse order is a different brief."
+        },
+        {
+          "type": "quote",
+          "text": "Create four ordinary-speed scenes about a broken friendship: an unopened apology, a public argument, a misunderstood message and an earlier act of trust. Present them in reverse chronological order. At each transition, reveal a cause that changes the previous scene’s meaning. Do not run the footage backward."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Create+four+ordinary-speed+scenes+about+a+broken+friendship:+an+unopened+apology,+a+public+argument,+a+misunderstood+message+and+an+earlier+act+of+trust.+Present+them+in+reverse+chronological+order.+At+each+transition,+reveal+a+cause+that+changes+the+previous+scene%E2%80%99s+meaning.+Do+not+run+the+footage+backward."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name inverted physics, not a shuffled outline. Still: a tell such as rain hanging upward, glass mid-reassembly, smoke drawing in.Video: The action around [Subject] plays in reverse: rain rising, smoke inhaling, motion undone. Ordinary-speed scenes in reverse order is a different brief.Copy promptUse in Video GeneratorCreate four ordinary-speed scenes about a broken friendship: an unopened apology, a public argument, a misunderstood message and an earlier act of trust. Present them in reverse chronological order. At each transition, reveal a cause that changes the previous scene’s meaning. Do not run the footage backward.Create four ordinary-speed scenes about a broken friendship: an unopened apology, a public argument, a misunderstood message and an earlier act of trust. Present them in reverse chronological order. At each transition, reveal a cause that changes the previous scene’s meaning. Do not run the footage backward."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is reverse chronology or a Boomerang. The tell is a normal-speed scene shuffle, or a clip that goes forward then snaps back.",
+          "links": [
+            {
+              "text": "Boomerang",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: reverse one recorded action and show fluids, cloth, or debris traveling the wrong way along a single path."
+        }
+      ],
+      "links": [
+        {
+          "text": "Boomerang",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is reverse chronology or a Boomerang. The tell is a normal-speed scene shuffle, or a clip that goes forward then snaps back.Fix: reverse one recorded action and show fluids, cloth, or debris traveling the wrong way along a single path."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Reverse Motion in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Reverse motion is recorded action played backward, so inertia, fluids, and contacts run from effect toward cause inside the shot."
+        },
+        {
+          "type": "heading",
+          "text": "Reverse Motion vs Reverse Chronology",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Reverse motion rewinds the footage. Reverse chronology (Memento, Irréversible) reorders ordinary-speed scenes from consequence to cause."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Reverse Motion?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the picture itself must undo physics: rising rain, assembling wreckage, a gesture that should feel like a reversed rite."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Reverse Motion for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write time running backward with rain rising and smoke inhaling. Say the clip is reversed. Do not ask for shuffled scene order unless that is the job."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Reverse Motion in film?Reverse motion is recorded action played backward, so inertia, fluids, and contacts run from effect toward cause inside the shot.Reverse Motion vs Reverse ChronologyReverse motion rewinds the footage. Reverse chronology (Memento, Irréversible) reorders ordinary-speed scenes from consequence to cause.When should I use Reverse Motion?When the picture itself must undo physics: rising rain, assembling wreckage, a gesture that should feel like a reversed rite.How do I prompt Reverse Motion for AI image or video?Write time running backward with rain rising and smoke inhaling. Say the clip is reversed. Do not ask for shuffled scene order unless that is the job."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name inverted physics, not a shuffled outline. Still: a tell such as rain hanging upward, glass mid-reassembly, smoke drawing in.",
+      "Video: The action around [Subject] plays in reverse: rain rising, smoke inhaling, motion undone. Ordinary-speed scenes in reverse order is a different brief."
+    ],
+    "example": "Create four ordinary-speed scenes about a broken friendship: an unopened apology, a public argument, a misunderstood message and an earlier act of trust. Present them in reverse chronological order. At each transition, reveal a cause that changes the previous scene’s meaning. Do not run the footage backward."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/508e95075e797a6a8eb1eebddcb1305d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/085-reverse-motion-image-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47fac5326936cfc833f9e558220b5143.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reverse-motion-085-reverse-motion-image-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6b130a95c3ef9308b866b4e97784f4ad.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/reverse-motion.jpg",
+      "alt": "Reverse Motion frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+      "alt": "Fast Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5830a4bde5d41dd3d555f54f4119dd65.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/speed-ramp-079-speed-ramp-mini.webp",
+      "alt": "Speed Ramp"
+    },
+    {
+      "kind": "video",
+      "path": "media/1055170f1851ae017a5ed0883f8c29d2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/079-speed-ramp-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bae4f83c44661922c635a3f9b2a94393.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reverse-motion/famous/00-memento-2000.jpg",
+      "alt": "Memento 2000"
+    },
+    {
+      "kind": "image",
+      "path": "media/e0f54f6e64d580763e25481b09021fe5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reverse-motion/famous/01-tenet-2020.jpg",
+      "alt": "Tenet 2020"
+    },
+    {
+      "kind": "image",
+      "path": "media/8e3203c340ca94d1d5339229eb2e05b2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reverse-motion/hero.jpg",
+      "alt": "Reverse Motion",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "211dcf9ec6fb8341b4771686e1464fbb8dd519401cefb435dd11cf2c3d6d7833"
+}

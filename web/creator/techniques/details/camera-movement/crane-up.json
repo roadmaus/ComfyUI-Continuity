@@ -1,0 +1,479 @@
+{
+  "id": "camera-movement/crane-up",
+  "slug": "crane-up",
+  "title": "Crane Up",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/crane-up",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+  "detail": "details/camera-movement/crane-up.json",
+  "aliases": [
+    "jib up",
+    "boom up reveal",
+    "Rise and reveal",
+    "Grue ascendante"
+  ],
+  "description": "A crane shot lifts the camera on a jib or Technocrane, often easing backward at the same time, so the frame climbs from a human scale into a wider view of the location. Height change is the point, and a little boom-out keeps the subject from sliding off the bottom of the frame.",
+  "thumbnail": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+  "video": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A crane-up starts at human height and leaves it. The person stays in frame, then the rooftops, then the city."
+        },
+        {
+          "type": "paragraph",
+          "text": "By the end, the figure is one dark coat in a much larger night. Use it when the scene needs to end, or when a private moment has to admit the world that contains it."
+        },
+        {
+          "type": "paragraph",
+          "text": "A tilt up only changes the angle. A crane changes the map."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it as decoration on every wide. If nothing new appears as the camera climbs, the move is empty."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A crane-up starts at human height and leaves it. The person stays in frame, then the rooftops, then the city.By the end, the figure is one dark coat in a much larger night. Use it when the scene needs to end, or when a private moment has to admit the world that contains it.A tilt up only changes the angle. A crane changes the map.Do not use it as decoration on every wide. If nothing new appears as the camera climbs, the move is empty."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The operator rides or remote-heads a crane. The arm can be a few feet (a jib) or tens of feet (a Technocrane)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep a foreground anchor visible during the rise so the newly revealed scale has a reference. Prompt crane up and slightly back, name the start (shoulder height, waist, close-up), and name the reveal (rooftops, canyon, overpass)."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you only write camera goes up, you often get a tilt or a cheap zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works The operator rides or remote-heads a crane. The arm can be a few feet (a jib) or tens of feet (a Technocrane).Keep a foreground anchor visible during the rise so the newly revealed scale has a reference. Prompt crane up and slightly back, name the start (shoulder height, waist, close-up), and name the reveal (rooftops, canyon, overpass).If you only write camera goes up, you often get a tilt or a cheap zoom."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to end a scene, reveal a city, or turn a person into landscape. Concrete beat: a woman on a wet roof, then the square below takes the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not crane up if the last frame shows nothing the first frame did not already imply."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to end a scene, reveal a city, or turn a person into landscape. Concrete beat: a woman on a wet roof, then the square below takes the frame.Do not crane up if the last frame shows nothing the first frame did not already imply."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Tilt Up rotates on a fixed tripod. A Jib Shot is the short-arm version of this family.",
+          "links": [
+            {
+              "text": "Tilt Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            },
+            {
+              "text": "Jib Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/jib"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Aerial Pullback continues until geography wins completely from helicopter or high-drone height. A Pull Out stays at eye height and only retreats.",
+          "links": [
+            {
+              "text": "Aerial Pullback",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            },
+            {
+              "text": "Pull Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Crane Down arrives at a face instead of leaving one.",
+          "links": [
+            {
+              "text": "Crane Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane DownArrive from god-view into a person.",
+          "displayText": "Crane Down\nArrive from god-view into a person.",
+          "links": [
+            {
+              "text": "Crane DownArrive from god-view into a person.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "displayText": "Aerial Pullback\nClose a chapter. Geography wins.",
+          "links": [
+            {
+              "text": "Aerial PullbackClose a chapter. Geography wins.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pull OutShow the container around a feeling.",
+          "displayText": "Pull Out\nShow the container around a feeling.",
+          "links": [
+            {
+              "text": "Pull OutShow the container around a feeling.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Tilt Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        },
+        {
+          "text": "Jib Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/jib"
+        },
+        {
+          "text": "Aerial Pullback",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Pull Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+        },
+        {
+          "text": "Crane Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        },
+        {
+          "text": "Crane DownArrive from god-view into a person.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        },
+        {
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Pull OutShow the container around a feeling.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/aa53863e7f0a44b5d017fc87459915f3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-down-011-crane-down-detail-reveal-mini.webp",
+          "alt": "Crane Down"
+        },
+        {
+          "kind": "video",
+          "path": "media/8a7719557669858db37b76f7c7c1f596.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/011-crane-down-detail-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+          "alt": "Aerial Pullback"
+        },
+        {
+          "kind": "video",
+          "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/37b5595bae8858283390769367c4f5d6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pull-out-pull-out-mini.webp",
+          "alt": "Pull Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/4c02c1f19b8cf15347f8a51749112685.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pull-out-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Tilt Up rotates on a fixed tripod. A Jib Shot is the short-arm version of this family.An Aerial Pullback continues until geography wins completely from helicopter or high-drone height. A Pull Out stays at eye height and only retreats.Crane Down arrives at a face instead of leaving one.Crane DownArrive from god-view into a person.Aerial PullbackClose a chapter. Geography wins.Pull OutShow the container around a feeling."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The opening of Touch of Evil treats the crane as a long sentence through a border town. The wounded-field pullaway in Gone with the Wind turns a person into a statistic of war."
+        },
+        {
+          "type": "paragraph",
+          "text": "La La Land lets hillside and dock cranes sit romance in a real city. The Player opens on studio-lot crane choreography."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "Gone with the Wind 1939Scarlett crosses the Atlanta station area as the view rises over wounded soldiers.",
+          "displayText": "Gone with the Wind 1939\nScarlett crosses the Atlanta station area as the view rises over wounded soldiers."
+        },
+        {
+          "type": "list-item",
+          "text": "The Player 1992The opening studio-lot camera choreography.",
+          "displayText": "The Player 1992\nThe opening studio-lot camera choreography."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/c0e434c2e480b3c5f98c10ef8f249d00.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-up/famous/00-gone-with-the-wind-1939.jpg",
+          "alt": "Gone with the Wind 1939"
+        },
+        {
+          "kind": "image",
+          "path": "media/a412b5579d2de466c546af5682148826.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-up/famous/01-the-player-1992.jpg",
+          "alt": "The Player 1992"
+        }
+      ],
+      "sourceText": "In film The opening of Touch of Evil treats the crane as a long sentence through a border town. The wounded-field pullaway in Gone with the Wind turns a person into a statistic of war.La La Land lets hillside and dock cranes sit romance in a real city. The Player opens on studio-lot crane choreography.Grammar, not frames to copy.Gone with the Wind 1939Scarlett crosses the Atlanta station area as the view rises over wounded soldiers.The Player 1992The opening studio-lot camera choreography."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Majestic crane up from [Subject], camera rising and easing backward on a Technocrane, the individual becoming one figure inside a vast environment, golden or blue-hour air, 35mm Signature Prime. For motion: the camera cranes smoothly upward and slightly backward from shoulder height, rising above [Subject] to reveal the true surrounding scale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Slow 6-second crane up."
+        },
+        {
+          "type": "quote",
+          "text": "Begin at eye level beside one volunteer carrying water. Crane upward and backward to reveal hundreds of orderly relief tents across a dry valley. One continuous shot; the volunteer becomes small but remains trackable. Realistic scale and coherent tent spacing, no sudden aerial cut."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Begin+at+eye+level+beside+one+volunteer+carrying+water.+Crane+upward+and+backward+to+reveal+hundreds+of+orderly+relief+tents+across+a+dry+valley.+One+continuous+shot;+the+volunteer+becomes+small+but+remains+trackable.+Realistic+scale+and+coherent+tent+spacing,+no+sudden+aerial+cut."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Majestic crane up from [Subject], camera rising and easing backward on a Technocrane, the individual becoming one figure inside a vast environment, golden or blue-hour air, 35mm Signature Prime. For motion: the camera cranes smoothly upward and slightly backward from shoulder height, rising above [Subject] to reveal the true surrounding scale.Slow 6-second crane up.Copy promptUse in Video GeneratorBegin at eye level beside one volunteer carrying water. Crane upward and backward to reveal hundreds of orderly relief tents across a dry valley. One continuous shot; the volunteer becomes small but remains trackable. Realistic scale and coherent tent spacing, no sudden aerial cut.Begin at eye level beside one volunteer carrying water. Crane upward and backward to reveal hundreds of orderly relief tents across a dry valley. One continuous shot; the volunteer becomes small but remains trackable. Realistic scale and coherent tent spacing, no sudden aerial cut."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Tilt Up or a cut from close-up to aerial. The tell is no parallax, or a jump in scale with no continuous ascent.",
+          "links": [
+            {
+              "text": "Tilt Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: physical rise plus a little boom-out, a visible foreground anchor, continuity of the figure all the way up."
+        }
+      ],
+      "links": [
+        {
+          "text": "Tilt Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Tilt Up or a cut from close-up to aerial. The tell is no parallax, or a jump in scale with no continuous ascent.The fix: physical rise plus a little boom-out, a visible foreground anchor, continuity of the figure all the way up."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Crane Up in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a physical lift of the camera on a jib or crane, often easing back, so a human-scale frame becomes a wider view of the place."
+        },
+        {
+          "type": "heading",
+          "text": "Crane Up vs Tilt Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A tilt rotates the camera on a fixed tripod. A crane physically moves the camera through space, so foreground, mid-ground, and background change in parallax."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Crane Up?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a scene should close, or a private beat must admit the city, crowd, or land that contains it. Do not use it if the climb reveals nothing new."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Crane Up for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name starting height, crane up and slightly back, and what is revealed. Example: camera cranes up and slightly back from shoulder height, revealing rooftops and the city beyond."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Crane Up in film?It is a physical lift of the camera on a jib or crane, often easing back, so a human-scale frame becomes a wider view of the place.Crane Up vs Tilt UpA tilt rotates the camera on a fixed tripod. A crane physically moves the camera through space, so foreground, mid-ground, and background change in parallax.When should I use Crane Up?When a scene should close, or a private beat must admit the city, crowd, or land that contains it. Do not use it if the climb reveals nothing new.How do I prompt Crane Up for AI image or video?Name starting height, crane up and slightly back, and what is revealed. Example: camera cranes up and slightly back from shoulder height, revealing rooftops and the city beyond."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Majestic crane up from [Subject], camera rising and easing backward on a Technocrane, the individual becoming one figure inside a vast environment, golden or blue-hour air, 35mm Signature Prime. For motion: the camera cranes smoothly upward and slightly backward from shoulder height, rising above [Subject] to reveal the true surrounding scale.",
+      "Slow 6-second crane up."
+    ],
+    "example": "Begin at eye level beside one volunteer carrying water. Crane upward and backward to reveal hundreds of orderly relief tents across a dry valley. One continuous shot; the volunteer becomes small but remains trackable. Realistic scale and coherent tent spacing, no sudden aerial cut."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4b0ed63561e00d1d826958007b0016aa.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/crane-up.jpg",
+      "alt": "Crane Up frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/aa53863e7f0a44b5d017fc87459915f3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-down-011-crane-down-detail-reveal-mini.webp",
+      "alt": "Crane Down"
+    },
+    {
+      "kind": "video",
+      "path": "media/8a7719557669858db37b76f7c7c1f596.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/011-crane-down-detail-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+      "alt": "Aerial Pullback"
+    },
+    {
+      "kind": "video",
+      "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/37b5595bae8858283390769367c4f5d6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pull-out-pull-out-mini.webp",
+      "alt": "Pull Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/4c02c1f19b8cf15347f8a51749112685.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pull-out-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c0e434c2e480b3c5f98c10ef8f249d00.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-up/famous/00-gone-with-the-wind-1939.jpg",
+      "alt": "Gone with the Wind 1939"
+    },
+    {
+      "kind": "image",
+      "path": "media/a412b5579d2de466c546af5682148826.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-up/famous/01-the-player-1992.jpg",
+      "alt": "The Player 1992"
+    },
+    {
+      "kind": "image",
+      "path": "media/4e77dc0e391e7097727bc10e91a977d4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-up/hero.jpg",
+      "alt": "Crane Up",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "14ddade32f8e905142b8c77541db52bb60f091dc565a3ed7f1af310a63e34d5c"
+}

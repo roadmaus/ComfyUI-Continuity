@@ -1,0 +1,386 @@
+{
+  "id": "viral-looks/multiverse",
+  "slug": "multiverse",
+  "title": "Multiverse",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/multiverse",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/multiverse-multiverse-mini.webp",
+  "detail": "details/viral-looks/multiverse.json",
+  "aliases": [
+    "Dream within a dream",
+    "Layered story worlds"
+  ],
+  "description": "Multiverse, the multiverse look, puts the same person in parallel rooms, grades, and costumes at once, so one life is not the inventory. Versions must be separable: a double-exposure mush is not the recipe.",
+  "thumbnail": "media/85d73f0e18fa10dedfccfa996bd5f7ad.webp",
+  "video": "media/d0d89353157aa240656dd93df9c6dcac.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/multiverse-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choice, regret, comic overload: two or three worlds sharing a frame, identity locked so the gag is not strangers. Architecture can repeat with variations."
+        },
+        {
+          "type": "paragraph",
+          "text": "Each copy has a world, not just a ghost. A single honest scene does not need copies."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you cannot name the worlds, or when failure has no stake. Complexity is not a substitute for knowing what a wrong door costs."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Choice, regret, comic overload: two or three worlds sharing a frame, identity locked so the gag is not strangers. Architecture can repeat with variations.Each copy has a world, not just a ghost. A single honest scene does not need copies.It is the wrong tool when you cannot name the worlds, or when failure has no stake. Complexity is not a substitute for knowing what a wrong door costs."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock a frame that can hold two or three distinct setups: split architecture, layered rooms, or repeating corridors. Same face, different wardrobe and grade, no mixed features."
+        },
+        {
+          "type": "paragraph",
+          "text": "Define entry and exit cues. Prompt: Multiverse split of [Subject], many versions, many grades, the same person in parallel rooms."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock a frame that can hold two or three distinct setups: split architecture, layered rooms, or repeating corridors. Same face, different wardrobe and grade, no mixed features.Define entry and exit cues. Prompt: Multiverse split of [Subject], many versions, many grades, the same person in parallel rooms."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A choice that forks, a regret that shows the other life, comic overload of selves. Do not use it on a scene that is already one honest room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A choice that forks, a regret that shows the other life, comic overload of selves. Do not use it on a scene that is already one honest room."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Duplication is extra copies without a world each. Split Screen is the cut law that can hold versions apart.",
+          "links": [
+            {
+              "text": "Duplication",
+              "url": "https://melies.co/cinematic-techniques/effects/duplication"
+            },
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Multiverse needs distinct grades and rooms, identity locked. If you cannot name the worlds, you shot ghosts."
+        },
+        {
+          "type": "list-item",
+          "text": "DuplicationOne person is not a single self.",
+          "displayText": "Duplication\nOne person is not a single self.",
+          "links": [
+            {
+              "text": "DuplicationOne person is not a single self.",
+              "url": "https://melies.co/cinematic-techniques/effects/duplication"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Split ScreenTwo rooms, one moment.",
+          "displayText": "Split Screen\nTwo rooms, one moment.",
+          "links": [
+            {
+              "text": "Split ScreenTwo rooms, one moment.",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Duplication",
+          "url": "https://melies.co/cinematic-techniques/effects/duplication"
+        },
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "DuplicationOne person is not a single self.",
+          "url": "https://melies.co/cinematic-techniques/effects/duplication"
+        },
+        {
+          "text": "Split ScreenTwo rooms, one moment.",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b07a80e569770eac04d41040ec5db8d1.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/duplication-duplication-mini.webp",
+          "alt": "Duplication"
+        },
+        {
+          "kind": "video",
+          "path": "media/23be8e3bb3bf4166b8e3ed97053c9439.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/duplication-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/aa1f55893c6980380f31912c5c293abe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-screen-120-simultaneous-split-screen-mini.webp",
+          "alt": "Split Screen"
+        },
+        {
+          "kind": "video",
+          "path": "media/6b8983f75155ce580e4009fe6c11abb4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/120-simultaneous-split-screen-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Duplication is extra copies without a world each. Split Screen is the cut law that can hold versions apart.Multiverse needs distinct grades and rooms, identity locked. If you cannot name the worlds, you shot ghosts.DuplicationOne person is not a single self.Split ScreenTwo rooms, one moment.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Everything Everywhere All at Once inventories lives as costume and grade. Doctor Strange builds parallel rooms."
+        },
+        {
+          "type": "paragraph",
+          "text": "Inception, eXistenZ, and Paprika nest rules so an exit may be fake. Borrow the parallel law, not a frame."
+        },
+        {
+          "type": "list-item",
+          "text": "Inception 2010The heist operates across nested dream levels.",
+          "displayText": "Inception 2010\nThe heist operates across nested dream levels."
+        },
+        {
+          "type": "list-item",
+          "text": "eXistenZ 1999Game and reality boundaries become uncertain.",
+          "displayText": "eXistenZ 1999\nGame and reality boundaries become uncertain."
+        },
+        {
+          "type": "list-item",
+          "text": "Paprika 2006Dream and waking spaces repeatedly cross.",
+          "displayText": "Paprika 2006\nDream and waking spaces repeatedly cross."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Everything Everywhere All at Once inventories lives as costume and grade. Doctor Strange builds parallel rooms.Inception, eXistenZ, and Paprika nest rules so an exit may be fake. Borrow the parallel law, not a frame.Inception 2010The heist operates across nested dream levels.eXistenZ 1999Game and reality boundaries become uncertain.Paprika 2006Dream and waking spaces repeatedly cross."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Same person, separable worlds. Multiverse split of [Subject], many versions, many grades, the same person in parallel rooms."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add two or three wardrobes, two or three grades, architecture repeating with variations, identity locked. No mush."
+        },
+        {
+          "type": "quote",
+          "text": "Plan three connected worlds: a real hospital room, a dreamed railway station and a deeper childhood kitchen. Give each one distinct sound, light and a recurring object. A falling cup in the hospital creates a distant rumble in the station and a tremor in the kitchen. Generate and edit the levels separately with a consistent causal map."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Plan+three+connected+worlds:+a+real+hospital+room,+a+dreamed+railway+station+and+a+deeper+childhood+kitchen.+Give+each+one+distinct+sound,+light+and+a+recurring+object.+A+falling+cup+in+the+hospital+creates+a+distant+rumble+in+the+station+and+a+tremor+in+the+kitchen.+Generate+and+edit+the+levels+separately+with+a+consistent+causal+map."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Same person, separable worlds. Multiverse split of [Subject], many versions, many grades, the same person in parallel rooms.Add two or three wardrobes, two or three grades, architecture repeating with variations, identity locked. No mush.Copy promptUse in Video GeneratorPlan three connected worlds: a real hospital room, a dreamed railway station and a deeper childhood kitchen. Give each one distinct sound, light and a recurring object. A falling cup in the hospital creates a distant rumble in the station and a tremor in the kitchen. Generate and edit the levels separately with a consistent causal map.Plan three connected worlds: a real hospital room, a dreamed railway station and a deeper childhood kitchen. Give each one distinct sound, light and a recurring object. A falling cup in the hospital creates a distant rumble in the station and a tremor in the kitchen. Generate and edit the levels separately with a consistent causal map."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Double-exposure mush, or copies that look like strangers. The tell is blended faces and unnamed worlds."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: separable versions, locked identity, a stake if a door is wrong."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Double-exposure mush, or copies that look like strangers. The tell is blended faces and unnamed worlds.Fix it: separable versions, locked identity, a stake if a door is wrong."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Multiverse in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A parallel-inventory look: the same person in distinct rooms, grades, and costumes at once. Each copy has a world. Mush is failure."
+        },
+        {
+          "type": "heading",
+          "text": "Multiverse vs Split Screen",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Split screen is a frame division that can show two actions. Multiverse is the content law: parallel lives, distinct grades, one identity. You can use split screen to hold it, but split screen alone is not the look."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Multiverse?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Choice, regret, comic overload. Skip a single honest scene, and skip puzzles with no cost of failure."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Multiverse for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Lock identity, then: Multiverse split of [Subject], many versions, many grades, the same person in parallel rooms. Name two or three separable worlds. No blended faces."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Multiverse in film?A parallel-inventory look: the same person in distinct rooms, grades, and costumes at once. Each copy has a world. Mush is failure.Multiverse vs Split ScreenSplit screen is a frame division that can show two actions. Multiverse is the content law: parallel lives, distinct grades, one identity. You can use split screen to hold it, but split screen alone is not the look.When should I use Multiverse?Choice, regret, comic overload. Skip a single honest scene, and skip puzzles with no cost of failure.How do I prompt Multiverse for AI image or video?Lock identity, then: Multiverse split of [Subject], many versions, many grades, the same person in parallel rooms. Name two or three separable worlds. No blended faces."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Same person, separable worlds. Multiverse split of [Subject], many versions, many grades, the same person in parallel rooms.",
+      "Add two or three wardrobes, two or three grades, architecture repeating with variations, identity locked. No mush."
+    ],
+    "example": "Plan three connected worlds: a real hospital room, a dreamed railway station and a deeper childhood kitchen. Give each one distinct sound, light and a recurring object. A falling cup in the hospital creates a distant rumble in the station and a tremor in the kitchen. Generate and edit the levels separately with a consistent causal map."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/d0d89353157aa240656dd93df9c6dcac.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/multiverse-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/85d73f0e18fa10dedfccfa996bd5f7ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/multiverse-multiverse-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/166e81007f86b5cc7968ce110eb92e5d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/multiverse.jpg",
+      "alt": "Multiverse frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/b07a80e569770eac04d41040ec5db8d1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/duplication-duplication-mini.webp",
+      "alt": "Duplication"
+    },
+    {
+      "kind": "video",
+      "path": "media/23be8e3bb3bf4166b8e3ed97053c9439.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/duplication-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aa1f55893c6980380f31912c5c293abe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-screen-120-simultaneous-split-screen-mini.webp",
+      "alt": "Split Screen"
+    },
+    {
+      "kind": "video",
+      "path": "media/6b8983f75155ce580e4009fe6c11abb4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/120-simultaneous-split-screen-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/168eb98f3bc2f07d7cf8eabc03f93b63.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/multiverse/hero.jpg",
+      "alt": "Multiverse",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "a319271d6c570d6a027c7a0aea564aa19b6e9f8b014835f98e13591ec74e80b1"
+}

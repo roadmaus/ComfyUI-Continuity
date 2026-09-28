@@ -1,0 +1,387 @@
+{
+  "id": "camera-movement/car-grip",
+  "slug": "car-grip",
+  "title": "Car Grip",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/car-grip",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/car-grip-car-grip-mini.webp",
+  "detail": "details/camera-movement/car-grip.json",
+  "aliases": [],
+  "description": "A car mount camera bolts to hood, door, or bumper so bodywork sits in the near plane and asphalt slides underneath. Chrome and road share one rigid relationship because the rig is the machine.",
+  "thumbnail": "media/b269859f5360bfd86e4dba3fa6b00b82.webp",
+  "video": "media/9df5e0b628c0c4cf8794ad194a63589f.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/car-grip-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bolt the camera to the machine. Product, chase punctuation, a car as the hero: we are glued to this one body, dirt on the lens allowed."
+        },
+        {
+          "type": "paragraph",
+          "text": "A tracking shot from another car that never sees this car's body is not grip. Buckle-up is inside; grip is the metal."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Bolt the camera to the machine. Product, chase punctuation, a car as the hero: we are glued to this one body, dirt on the lens allowed.A tracking shot from another car that never sees this car's body is not grip. Buckle-up is inside; grip is the metal."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Suction, hostess, or a rigid cage on hood, door, bumper, or wheel arch. Wide."
+        },
+        {
+          "type": "paragraph",
+          "text": "Part of the body in frame, wheels or asphalt traveling. Prompt: Car-grip mount on [Subject]'s vehicle, hood or door as the rig, chrome and asphalt in one plane."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Suction, hostess, or a rigid cage on hood, door, bumper, or wheel arch. Wide.Part of the body in frame, wheels or asphalt traveling. Prompt: Car-grip mount on [Subject]'s vehicle, hood or door as the rig, chrome and asphalt in one plane."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the machine is the hero or when a chase needs a body-mounted beat. Do not use it for a cabin talk."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the machine is the hero or when a chase needs a body-mounted beat. Do not use it for a cabin talk."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Buckle Up is the cabin. Locked-On is the general glued-to-subject idea.",
+          "links": [
+            {
+              "text": "Buckle Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/buckle-up"
+            },
+            {
+              "text": "Locked-On",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Low Angle is a height that can be static on the street; grip is low because the bumper is low, and the road is sliding because the car is moving.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Buckle UpThe car is the tripod.",
+          "displayText": "Buckle Up\nThe car is the tripod.",
+          "links": [
+            {
+              "text": "Buckle UpThe car is the tripod.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/buckle-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Locked-OnOne thing is the only stable point in a moving world.",
+          "displayText": "Locked-On\nOne thing is the only stable point in a moving world.",
+          "links": [
+            {
+              "text": "Locked-OnOne thing is the only stable point in a moving world.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low AnglePower, monument, or intimidation.",
+          "displayText": "Low Angle\nPower, monument, or intimidation.",
+          "links": [
+            {
+              "text": "Low AnglePower, monument, or intimidation.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Buckle Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/buckle-up"
+        },
+        {
+          "text": "Locked-On",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Buckle UpThe car is the tripod.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/buckle-up"
+        },
+        {
+          "text": "Locked-OnOne thing is the only stable point in a moving world.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+        },
+        {
+          "text": "Low AnglePower, monument, or intimidation.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1a5a91179e81ed04df12f47530b9abda.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/buckle-up-buckle-up-mini.webp",
+          "alt": "Buckle Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/323f164d8eed16c39d56f20d9f2bd54a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/buckle-up-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4790b7e023e1de9ff71cdf19b2f02238.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/locked-on-020-object-locked-moving-camera-mini.webp",
+          "alt": "Locked-On"
+        },
+        {
+          "kind": "video",
+          "path": "media/f1e2073d98c065752bc9f43a7462a2aa.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/020-object-locked-moving-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+          "alt": "Low Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Buckle Up is the cabin. Locked-On is the general glued-to-subject idea.Low Angle is a height that can be static on the street; grip is low because the bumper is low, and the road is sliding because the car is moving.Buckle UpThe car is the tripod.Locked-OnOne thing is the only stable point in a moving world.Low AnglePower, monument, or intimidation."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ronin and Baby Driver use hood and door mounts so metal stays in the near plane while the road travels. Grammar: bodywork plus asphalt in one rigid pair."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Ronin and Baby Driver use hood and door mounts so metal stays in the near plane while the road travels. Grammar: bodywork plus asphalt in one rigid pair."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Show the mount's privilege. Still: Car-grip mount on [Subject]'s vehicle, hood or door as the rig, chrome and asphalt in one plane."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Camera mounted to the car with [Subject], bodywork in the foreground, road sliding underneath. Wide."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dirt allowed."
+        },
+        {
+          "type": "quote",
+          "text": "Camera mounted to the car with [Subject], bodywork in the foreground, road sliding underneath."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Camera+mounted+to+the+car+with+[Subject],+bodywork+in+the+foreground,+road+sliding+underneath."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Show the mount's privilege. Still: Car-grip mount on [Subject]'s vehicle, hood or door as the rig, chrome and asphalt in one plane.Video: Camera mounted to the car with [Subject], bodywork in the foreground, road sliding underneath. Wide.Dirt allowed.Copy promptUse in Video GeneratorCamera mounted to the car with [Subject], bodywork in the foreground, road sliding underneath.Camera mounted to the car with [Subject], bodywork in the foreground, road sliding underneath."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a tracking shot from another vehicle with no bodywork in frame. The tell: a clean three-quarter of a car, camera floating."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: bolt to this car, keep metal in the near plane, let the road slide."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a tracking shot from another vehicle with no bodywork in frame. The tell: a clean three-quarter of a car, camera floating.The fix: bolt to this car, keep metal in the near plane, let the road slide."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Car Grip in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Car grip is a camera bolted to the vehicle's bodywork. Hood, door, or bumper stays in the near plane while the road slides underneath."
+        },
+        {
+          "type": "heading",
+          "text": "Car Grip vs Buckle Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Buckle up is inside the cabin with the people. Car grip is outside on the metal, chrome and asphalt in one plane."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Car Grip?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the machine is the subject or a chase needs a body-mounted beat. Do not use it for a cabin dialogue."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Car Grip for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a mount on hood or door with bodywork in frame. Example: Car-grip mount on [Subject]'s vehicle, hood or door as the rig, chrome and asphalt in one plane."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Car Grip in film?Car grip is a camera bolted to the vehicle's bodywork. Hood, door, or bumper stays in the near plane while the road slides underneath.Car Grip vs Buckle UpBuckle up is inside the cabin with the people. Car grip is outside on the metal, chrome and asphalt in one plane.When should I use Car Grip?Use it when the machine is the subject or a chase needs a body-mounted beat. Do not use it for a cabin dialogue.How do I prompt Car Grip for AI image or video?Write a mount on hood or door with bodywork in frame. Example: Car-grip mount on [Subject]'s vehicle, hood or door as the rig, chrome and asphalt in one plane."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Show the mount's privilege. Still: Car-grip mount on [Subject]'s vehicle, hood or door as the rig, chrome and asphalt in one plane.",
+      "Video: Camera mounted to the car with [Subject], bodywork in the foreground, road sliding underneath. Wide.",
+      "Dirt allowed."
+    ],
+    "example": "Camera mounted to the car with [Subject], bodywork in the foreground, road sliding underneath."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/9df5e0b628c0c4cf8794ad194a63589f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/car-grip-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b269859f5360bfd86e4dba3fa6b00b82.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/car-grip-car-grip-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/64a411fe63d2654a35e037af671ea9a0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/car-grip.jpg",
+      "alt": "Car Grip frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/1a5a91179e81ed04df12f47530b9abda.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/buckle-up-buckle-up-mini.webp",
+      "alt": "Buckle Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/323f164d8eed16c39d56f20d9f2bd54a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/buckle-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4790b7e023e1de9ff71cdf19b2f02238.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/locked-on-020-object-locked-moving-camera-mini.webp",
+      "alt": "Locked-On"
+    },
+    {
+      "kind": "video",
+      "path": "media/f1e2073d98c065752bc9f43a7462a2aa.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/020-object-locked-moving-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+      "alt": "Low Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2f6c1c2e492587877e19ecff885238eb.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/car-grip/hero.jpg",
+      "alt": "Car Grip",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "a9f480256849739ab67904556f650355669305ba6d77c4218589049a25f63493"
+}

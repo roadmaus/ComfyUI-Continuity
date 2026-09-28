@@ -1,0 +1,424 @@
+{
+  "id": "camera-movement/dolly",
+  "slug": "dolly",
+  "title": "Dolly",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/dolly",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-dolly-mini.webp",
+  "detail": "details/camera-movement/dolly.json",
+  "aliases": [
+    "dolly shot",
+    "doorway dolly",
+    "Fisher dolly",
+    "Chapman dolly"
+  ],
+  "description": "A dolly shot places the camera on a wheeled platform so the body translates through space: doorway dolly, Fisher, Chapman. Because the nodal point moves, foreground, mid-ground, and background change in parallax, which a zoom cannot do.",
+  "thumbnail": "media/7c27ab424cba754ccc78025231412b17.webp",
+  "video": "media/b6d096232c8badc07554a2cc4ea3a76c.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolly-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Walk the camera. Change geography."
+        },
+        {
+          "type": "paragraph",
+          "text": "In, out, or beside: the point is that the support rolls, so space is proven by relative motion. A face can grow because you approached, not because the glass got longer."
+        },
+        {
+          "type": "paragraph",
+          "text": "A zoom is the wrong cousin when you need the room to be real. If you only need a tighter crop from sticks, zoom."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the floor cannot take track, say so and use a vest or a crane instead of faking wheels."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Walk the camera. Change geography.In, out, or beside: the point is that the support rolls, so space is proven by relative motion. A face can grow because you approached, not because the glass got longer.A zoom is the wrong cousin when you need the room to be real. If you only need a tighter crop from sticks, zoom.If the floor cannot take track, say so and use a vest or a crane instead of faking wheels."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lay level track or dance the wheels on a floor. Height is set by the column (often eye or chest)."
+        },
+        {
+          "type": "paragraph",
+          "text": "In and out ride the lens axis; a lateral truck is still a dolly. Keep the horizon honest."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Dolly toward or beside [Subject], camera body traveling on a smooth path, true parallax, not a zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lay level track or dance the wheels on a floor. Height is set by the column (often eye or chest).In and out ride the lens axis; a lateral truck is still a dolly. Keep the horizon honest.Prompt: Dolly toward or beside [Subject], camera body traveling on a smooth path, true parallax, not a zoom."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the camera must walk: approach a face, leave a room, slide a corridor. Do not call a zoom a dolly."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the camera must walk: approach a face, leave a room, slide a corridor. Do not call a zoom a dolly."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dolly In and Dolly Out name the axis along the lens. Tracking Shot follows a moving subject.",
+          "links": [
+            {
+              "text": "Dolly In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            },
+            {
+              "text": "Dolly Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+            },
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Zoom changes focal length with the body still, so there is no parallax. A Push In is often a vest or a looser approach; a dolly is wheels and a path.",
+          "links": [
+            {
+              "text": "Zoom",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/zoom"
+            },
+            {
+              "text": "Push In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "displayText": "Dolly In\nEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "links": [
+            {
+              "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly OutLeave someone behind, or show how small they are in the system.",
+          "displayText": "Dolly Out\nLeave someone behind, or show how small they are in the system.",
+          "links": [
+            {
+              "text": "Dolly OutLeave someone behind, or show how small they are in the system.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "displayText": "Tracking Shot\nAccompany a walker. The shot is a journey, not a picture.",
+          "links": [
+            {
+              "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Dolly Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+        },
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Zoom",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/zoom"
+        },
+        {
+          "text": "Push In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+        },
+        {
+          "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Dolly OutLeave someone behind, or show how small they are in the system.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+        },
+        {
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+          "alt": "Dolly In"
+        },
+        {
+          "kind": "video",
+          "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/250b08be437f19b68ce05ee85ac60c70.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-out-04-dolly-out-v2-mini.webp",
+          "alt": "Dolly Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/92e21cccbf00e7cb0422d0c370c86118.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/04-dolly-out-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+          "alt": "Tracking Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Dolly In and Dolly Out name the axis along the lens. Tracking Shot follows a moving subject.A Zoom changes focal length with the body still, so there is no parallax. A Push In is often a vest or a looser approach; a dolly is wheels and a path.Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.Dolly OutLeave someone behind, or show how small they are in the system.Tracking ShotAccompany a walker. The shot is a journey, not a picture."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Shining rolls the camera through hotel geometry until space feels like a trap. Goodfellas uses wheeled and vest travel as continuous geography."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: the body moves, the room shears."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Shining rolls the camera through hotel geometry until space feels like a trap. Goodfellas uses wheeled and vest travel as continuous geography.Grammar: the body moves, the room shears."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say the body travels. Still: Dolly toward or beside [Subject], camera body traveling on a smooth path, true parallax, not a zoom."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera dollies, physically traveling, parallax shifting around [Subject]. Name in, out, or beside."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban the word zoom unless you mean a compound."
+        },
+        {
+          "type": "quote",
+          "text": "The camera dollies, physically traveling, parallax shifting around [Subject]."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+dollies,+physically+traveling,+parallax+shifting+around+[Subject]."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say the body travels. Still: Dolly toward or beside [Subject], camera body traveling on a smooth path, true parallax, not a zoom.Video: The camera dollies, physically traveling, parallax shifting around [Subject]. Name in, out, or beside.Ban the word zoom unless you mean a compound.Copy promptUse in Video GeneratorThe camera dollies, physically traveling, parallax shifting around [Subject].The camera dollies, physically traveling, parallax shifting around [Subject]."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a zoom. The tell: near and far enlarge together, no shear of a lamp or a door frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: write physical travel and true parallax, and name the path."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a zoom. The tell: near and far enlarge together, no shear of a lamp or a door frame.The fix: write physical travel and true parallax, and name the path."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dolly in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dolly shot is a camera on a wheeled platform that translates through space, producing parallax. It is a physical path, not a zoom."
+        },
+        {
+          "type": "heading",
+          "text": "Dolly vs Zoom",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A zoom changes focal length from a locked body, so space flattens or opens without parallax. A dolly moves the camera, so near objects shear against far ones."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dolly?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when geography must change by walking the camera. Do not use the word dolly for a zoom from sticks."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dolly for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a traveling camera body and true parallax. Example: Dolly toward or beside [Subject], camera body traveling on a smooth path, true parallax, not a zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dolly in film?A dolly shot is a camera on a wheeled platform that translates through space, producing parallax. It is a physical path, not a zoom.Dolly vs ZoomA zoom changes focal length from a locked body, so space flattens or opens without parallax. A dolly moves the camera, so near objects shear against far ones.When should I use Dolly?Use it when geography must change by walking the camera. Do not use the word dolly for a zoom from sticks.How do I prompt Dolly for AI image or video?Write a traveling camera body and true parallax. Example: Dolly toward or beside [Subject], camera body traveling on a smooth path, true parallax, not a zoom."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say the body travels. Still: Dolly toward or beside [Subject], camera body traveling on a smooth path, true parallax, not a zoom.",
+      "Video: The camera dollies, physically traveling, parallax shifting around [Subject]. Name in, out, or beside.",
+      "Ban the word zoom unless you mean a compound."
+    ],
+    "example": "The camera dollies, physically traveling, parallax shifting around [Subject]."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/b6d096232c8badc07554a2cc4ea3a76c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolly-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7c27ab424cba754ccc78025231412b17.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-dolly-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b9fd06f1272e65f5dc2870ff47b48dcd.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/dolly.jpg",
+      "alt": "Dolly frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+      "alt": "Dolly In"
+    },
+    {
+      "kind": "video",
+      "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/250b08be437f19b68ce05ee85ac60c70.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-out-04-dolly-out-v2-mini.webp",
+      "alt": "Dolly Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/92e21cccbf00e7cb0422d0c370c86118.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/04-dolly-out-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+      "alt": "Tracking Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e5d225be94fc0faf8b8d26ed7ab2e0eb.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly/hero.jpg",
+      "alt": "Dolly",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "859ad1f42181676ab43db9581f7b7499819a290706a5a0b48b6d72a576cbe30d"
+}

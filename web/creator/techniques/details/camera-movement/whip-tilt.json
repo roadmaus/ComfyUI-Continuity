@@ -1,0 +1,416 @@
+{
+  "id": "camera-movement/whip-tilt",
+  "slug": "whip-tilt",
+  "title": "Whip Tilt",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/whip-tilt",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-tilt-whip-tilt-mini.webp",
+  "detail": "details/camera-movement/whip-tilt.json",
+  "aliases": [],
+  "description": "A whip tilt is a violent, motion-blurred vertical rotation of the camera, then a hard stop. It is the up-or-down cousin of a whip pan: shock through speed, not through traveling the support.",
+  "thumbnail": "media/83da5dc172795cc9dc5c821a5cd30a8c.webp",
+  "video": "media/50d58e90cae2d6f4247f1fc7841d1d8d.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/whip-tilt-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vertical shock instead of a horizontal whip. A body hits the floor, a face is found in a tree, a sign slams down from sky."
+        },
+        {
+          "type": "paragraph",
+          "text": "The middle of the move should be unreadable on purpose. It is the wrong tool for a slow reveal of a tower, and the wrong tool if you needed the camera to fall with a body."
+        },
+        {
+          "type": "paragraph",
+          "text": "Blurred pitch is not a crane collapse."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Vertical shock instead of a horizontal whip. A body hits the floor, a face is found in a tree, a sign slams down from sky.The middle of the move should be unreadable on purpose. It is the wrong tool for a slow reveal of a tower, and the wrong tool if you needed the camera to fall with a body.Blurred pitch is not a crane collapse."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rotate on the horizontal axis past blur, then hard-stop on a composed frame. Match blur if you cut inside it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the tripod planted so you do not add a drop. Prompt a violent vertical whip tilt, the frame ripping up or down with motion blur, then a hard stop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Rotate on the horizontal axis past blur, then hard-stop on a composed frame. Match blur if you cut inside it.Keep the tripod planted so you do not add a drop. Prompt a violent vertical whip tilt, the frame ripping up or down with motion blur, then a hard stop."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for vertical shock instead of a horizontal whip. Concrete beat: from a screaming mouth down onto the weapon that caused it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it to measure a building."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for vertical shock instead of a horizontal whip. Concrete beat: from a screaming mouth down onto the weapon that caused it.Do not use it to measure a building."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Whip Pan blurs on yaw. A Tilt Up or Tilt Down stays readable on the same axis.",
+          "links": [
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            },
+            {
+              "text": "Tilt Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            },
+            {
+              "text": "Tilt Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Crash Zoom In is optical, not a head rotation. Whip tilt is pitch speed, then a stop.",
+          "links": [
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "displayText": "Whip Pan\nTransition, punchline, or sudden attention shift.",
+          "links": [
+            {
+              "text": "Whip PanTransition, punchline, or sudden attention shift.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tilt UpReveal height, awe, or a face last.",
+          "displayText": "Tilt Up\nReveal height, awe, or a face last.",
+          "links": [
+            {
+              "text": "Tilt UpReveal height, awe, or a face last.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Tilt Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        },
+        {
+          "text": "Tilt Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+        },
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Tilt UpReveal height, awe, or a face last.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+          "alt": "Whip Pan"
+        },
+        {
+          "kind": "video",
+          "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ba0d5d532fbf6a3cf122ffc10add8687.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-up-009-tilt-reveal-mini.webp",
+          "alt": "Tilt Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/de2a0060534bd4c5940a383f5d15c5a9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/009-tilt-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Whip Pan blurs on yaw. A Tilt Up or Tilt Down stays readable on the same axis.A Crash Zoom In is optical, not a head rotation. Whip tilt is pitch speed, then a stop.Whip PanTransition, punchline, or sudden attention shift.Tilt UpReveal height, awe, or a face last.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Evil Dead throws the camera through violent vertical reorientations as shock grammar. Crank uses similar speed as body panic."
+        },
+        {
+          "type": "paragraph",
+          "text": "These are references for blur-and-stop, not for copying specific gags."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Evil Dead throws the camera through violent vertical reorientations as shock grammar. Crank uses similar speed as body panic.These are references for blur-and-stop, not for copying specific gags."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Violent vertical whip tilt across [Subject], the frame ripping up or down with motion blur, then a hard stop. For motion: extremely fast vertical whip tilt across [Subject] with motion blur, then a hard stop."
+        },
+        {
+          "type": "quote",
+          "text": "Extremely fast vertical whip tilt across [Subject] with motion blur, then a hard stop."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Extremely+fast+vertical+whip+tilt+across+[Subject]+with+motion+blur,+then+a+hard+stop."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Violent vertical whip tilt across [Subject], the frame ripping up or down with motion blur, then a hard stop. For motion: extremely fast vertical whip tilt across [Subject] with motion blur, then a hard stop.Copy promptUse in Video GeneratorExtremely fast vertical whip tilt across [Subject] with motion blur, then a hard stop.Extremely fast vertical whip tilt across [Subject] with motion blur, then a hard stop."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Whip Pan or a fast Tilt Down that remains readable. The tell is horizontal streaks, or a clear building in the middle of the move.",
+          "links": [
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            },
+            {
+              "text": "Tilt Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: vertical blur, planted support, sharp landing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Tilt Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Whip Pan or a fast Tilt Down that remains readable. The tell is horizontal streaks, or a clear building in the middle of the move.The fix: vertical blur, planted support, sharp landing."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Whip Tilt in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a tilt so fast that the image streaks vertically, then a hard stop on a new high or low composition."
+        },
+        {
+          "type": "heading",
+          "text": "Whip Tilt vs Whip Pan",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Whip pan blurs horizontally by yawing. Whip tilt blurs vertically by pitching. Both plant the support and hide the middle in speed."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Whip Tilt?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the shock is above or below, not beside. Do not use it for a gentle height reveal."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Whip Tilt for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write extremely fast vertical tilt, heavy motion blur, hard stop on a named end frame. Specify up or down. No crane travel."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Whip Tilt in film?It is a tilt so fast that the image streaks vertically, then a hard stop on a new high or low composition.Whip Tilt vs Whip PanWhip pan blurs horizontally by yawing. Whip tilt blurs vertically by pitching. Both plant the support and hide the middle in speed.When should I use Whip Tilt?When the shock is above or below, not beside. Do not use it for a gentle height reveal.How do I prompt Whip Tilt for AI image or video?Write extremely fast vertical tilt, heavy motion blur, hard stop on a named end frame. Specify up or down. No crane travel."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Violent vertical whip tilt across [Subject], the frame ripping up or down with motion blur, then a hard stop. For motion: extremely fast vertical whip tilt across [Subject] with motion blur, then a hard stop."
+    ],
+    "example": "Extremely fast vertical whip tilt across [Subject] with motion blur, then a hard stop."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/50d58e90cae2d6f4247f1fc7841d1d8d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/whip-tilt-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/83da5dc172795cc9dc5c821a5cd30a8c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-tilt-whip-tilt-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/626d14cff9330f6ad7edb92cf0a6ef7a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/whip-tilt.jpg",
+      "alt": "Whip Tilt frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+      "alt": "Whip Pan"
+    },
+    {
+      "kind": "video",
+      "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ba0d5d532fbf6a3cf122ffc10add8687.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-up-009-tilt-reveal-mini.webp",
+      "alt": "Tilt Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/de2a0060534bd4c5940a383f5d15c5a9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/009-tilt-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5cdaf446f8a58fdd6175387cb091910a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/whip-tilt/hero.jpg",
+      "alt": "Whip Tilt",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "45ca783cb475c0deb24a7c417fd701fb3203127c874549c2cd1c762259b0d7ff"
+}

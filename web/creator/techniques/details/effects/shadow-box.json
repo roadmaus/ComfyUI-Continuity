@@ -1,0 +1,413 @@
+{
+  "id": "effects/shadow-box",
+  "slug": "shadow-box",
+  "title": "Shadow Box",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/shadow-box",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shadow-box-shadow-box-mini.webp",
+  "detail": "details/effects/shadow-box.json",
+  "aliases": [],
+  "description": "Shadow-box cinematography tells the story in layered cut-outs, depth as stacked silhouettes, a diorama of darkness. Figures are unfilled, and distance is paper stacked in front of a hard backlight.",
+  "thumbnail": "media/24d1c113daf77909c320e77b12c52bf5.webp",
+  "video": "media/c39426b2b57b3d2d5e70e43a703baf79.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/shadow-box-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A procession of blacks: a rider, a tree, a palace, each on its own plane. Use it when the scene should be read as theatre cut from card, not as a modeled room with fill."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a single backlit person in a real location, and for a miniature that still has painted faces. If there is only one plane of black, you shot a silhouette."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the model is fully dressed and scaled, you shot a diorama."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A procession of blacks: a rider, a tree, a palace, each on its own plane. Use it when the scene should be read as theatre cut from card, not as a modeled room with fill.It is the wrong tool for a single backlit person in a real location, and for a miniature that still has painted faces. If there is only one plane of black, you shot a silhouette.If the model is fully dressed and scaled, you shot a diorama."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cut figures and architecture as separate layers. Space them in depth in front of a hard source."
+        },
+        {
+          "type": "paragraph",
+          "text": "No fill on the faces. Edges stay graphic."
+        },
+        {
+          "type": "paragraph",
+          "text": "Parallax between layers if the camera creeps. The source is behind."
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera is in front. Color, if any, is in the backlight or in a few tinted planes, not in modeled skin."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a shadow-box of the subject: layered cut-outs, depth as stacked silhouettes, a diorama of darkness."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Cut figures and architecture as separate layers. Space them in depth in front of a hard source.No fill on the faces. Edges stay graphic.Parallax between layers if the camera creeps. The source is behind.The camera is in front. Color, if any, is in the backlight or in a few tinted planes, not in modeled skin.Prompt a shadow-box of the subject: layered cut-outs, depth as stacked silhouettes, a diorama of darkness."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat that should feel like a night play made of paper. Do not use it when the face must carry skin and eye light."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat that should feel like a night play made of paper. Do not use it when the face must carry skin and eye light."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Silhouette is one backlit figure, usually in real space. A shadow box stacks many cut-outs.",
+          "links": [
+            {
+              "text": "Silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Diorama is a miniature world with modeled volume. A shadow box is layers of black, not a tiny set with fill.",
+          "links": [
+            {
+              "text": "Diorama",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SilhouetteIdentity is less important than shape.",
+          "displayText": "Silhouette\nIdentity is less important than shape.",
+          "links": [
+            {
+              "text": "SilhouetteIdentity is less important than shape.",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DioramaShrink the epic until it fits a shelf.",
+          "displayText": "Diorama\nShrink the epic until it fits a shelf.",
+          "links": [
+            {
+              "text": "DioramaShrink the epic until it fits a shelf.",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Diorama",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        },
+        {
+          "text": "SilhouetteIdentity is less important than shape.",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "DioramaShrink the epic until it fits a shelf.",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b5d6146a73c5baa985f280578740ef59.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/silhouette-049-silhouette-as-graphic-storytelling-mini.webp",
+          "alt": "Silhouette"
+        },
+        {
+          "kind": "video",
+          "path": "media/aa375d20479989e1dab53b000981e0c5.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/049-silhouette-as-graphic-storytelling-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/181d3dd7ea713bbb349f3475266cdf7f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diorama-diorama-mini.webp",
+          "alt": "Diorama"
+        },
+        {
+          "kind": "video",
+          "path": "media/4a23017cfb59808a2d3cee76a9fc5a28.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/diorama-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Silhouette is one backlit figure, usually in real space. A shadow box stacks many cut-outs.Diorama is a miniature world with modeled volume. A shadow box is layers of black, not a tiny set with fill.SilhouetteIdentity is less important than shape.DioramaShrink the epic until it fits a shelf.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Adventures of Prince Achmed is silhouette animation as stacked theatre. Kara Walker's language of cut-out processions is the still and installation cousin."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of layered black, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Adventures of Prince Achmed is silhouette animation as stacked theatre. Kara Walker's language of cut-out processions is the still and installation cousin.Grammar of layered black, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shadow-box of [Subject], layered cut-outs, depth as stacked silhouettes, a diorama of darkness. Name several planes, a hard backlight, and no fill on the figures."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban painted faces and ban a single silhouette in a real street."
+        },
+        {
+          "type": "quote",
+          "text": "Shadow-box of [Subject], layered cut-outs, depth as stacked silhouettes, a diorama of darkness."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Shadow-box+of+[Subject],+layered+cut-outs,+depth+as+stacked+silhouettes,+a+diorama+of+darkness."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Shadow-box of [Subject], layered cut-outs, depth as stacked silhouettes, a diorama of darkness. Name several planes, a hard backlight, and no fill on the figures.Ban painted faces and ban a single silhouette in a real street.Copy promptUse in Image GeneratorShadow-box of [Subject], layered cut-outs, depth as stacked silhouettes, a diorama of darkness.Shadow-box of [Subject], layered cut-outs, depth as stacked silhouettes, a diorama of darkness."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousins are a lone Silhouette and a lit Diorama. The tell is skin texture, or only one black plane.",
+          "links": [
+            {
+              "text": "Silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            },
+            {
+              "text": "Diorama",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is stacked cut-outs, hard source behind, unfilled figures."
+        }
+      ],
+      "links": [
+        {
+          "text": "Silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Diorama",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousins are a lone Silhouette and a lit Diorama. The tell is skin texture, or only one black plane.The fix is stacked cut-outs, hard source behind, unfilled figures."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a shadow box in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A shadow box tells the story in layered cut-outs. Depth is stacked silhouettes, like a diorama of darkness, not a filled naturalistic space."
+        },
+        {
+          "type": "heading",
+          "text": "Shadow box vs silhouette",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A silhouette is usually one backlit body. A shadow box is many cut-out planes stacked in depth. One is a figure. The other is paper theatre."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a shadow box?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the scene should be read as stacked blacks: a procession, a fable, a night cut from card. Skip it when the face needs skin and a key."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a shadow box for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Shadow-box of [Subject], layered cut-outs, depth as stacked silhouettes. Demand several planes, a hard backlight, and unfilled figures."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a shadow box in film?A shadow box tells the story in layered cut-outs. Depth is stacked silhouettes, like a diorama of darkness, not a filled naturalistic space.Shadow box vs silhouetteA silhouette is usually one backlit body. A shadow box is many cut-out planes stacked in depth. One is a figure. The other is paper theatre.When should I use a shadow box?Use it when the scene should be read as stacked blacks: a procession, a fable, a night cut from card. Skip it when the face needs skin and a key.How do I prompt a shadow box for AI image or video?Write Shadow-box of [Subject], layered cut-outs, depth as stacked silhouettes. Demand several planes, a hard backlight, and unfilled figures."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Shadow-box of [Subject], layered cut-outs, depth as stacked silhouettes, a diorama of darkness. Name several planes, a hard backlight, and no fill on the figures.",
+      "Ban painted faces and ban a single silhouette in a real street."
+    ],
+    "example": "Shadow-box of [Subject], layered cut-outs, depth as stacked silhouettes, a diorama of darkness."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/c39426b2b57b3d2d5e70e43a703baf79.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/shadow-box-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/24d1c113daf77909c320e77b12c52bf5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shadow-box-shadow-box-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/acf9294fbb7b5061efa426a371f4aafc.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/shadow-box.jpg",
+      "alt": "Shadow Box frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/b5d6146a73c5baa985f280578740ef59.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/silhouette-049-silhouette-as-graphic-storytelling-mini.webp",
+      "alt": "Silhouette"
+    },
+    {
+      "kind": "video",
+      "path": "media/aa375d20479989e1dab53b000981e0c5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/049-silhouette-as-graphic-storytelling-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/181d3dd7ea713bbb349f3475266cdf7f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diorama-diorama-mini.webp",
+      "alt": "Diorama"
+    },
+    {
+      "kind": "video",
+      "path": "media/4a23017cfb59808a2d3cee76a9fc5a28.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/diorama-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a5aa64cf69949f0ab868130424914ccf.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/shadow-box/hero.jpg",
+      "alt": "Shadow Box",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "4327615696f7c7b47d3cb8f1aaa933f157aa8d155acdba786a98ff4f03b26314"
+}

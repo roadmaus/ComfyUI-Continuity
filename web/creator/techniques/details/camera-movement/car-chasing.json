@@ -1,0 +1,395 @@
+{
+  "id": "camera-movement/car-chasing",
+  "slug": "car-chasing",
+  "title": "Car Chasing",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/car-chasing",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/car-chasing-car-chasing-mini.webp",
+  "detail": "details/camera-movement/car-chasing.json",
+  "aliases": [],
+  "description": "Car chase cinematography covers pursuit from a second vehicle, matching speed, the road as the set. Two machines stay in a line of action; this is the hunter's lens, not a locked interior.",
+  "thumbnail": "media/d9ac3f5b30f4718d20808488d4833e07.webp",
+  "video": "media/6de27d6baed5a0493cee3d2610833366.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/car-chasing-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Two machines, one argument. The camera is in the chasing car, or in a picture car matching the pair."
+        },
+        {
+          "type": "paragraph",
+          "text": "Trees, lamps, and lane lines shear because both vehicles are moving. A parked conversation does not need it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Two cars in a lot is not a chase. Do not cut to a drone unless you mean aerial; the grammar here is matching speed from another machine."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Two machines, one argument. The camera is in the chasing car, or in a picture car matching the pair.Trees, lamps, and lane lines shear because both vehicles are moving. A parked conversation does not need it.Two cars in a lot is not a chase. Do not cut to a drone unless you mean aerial; the grammar here is matching speed from another machine."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Process trailer, chase vehicle, or a matched virtual path. Long lens compresses the gap; wide includes both machines and the road."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep a line of action. Prompt: Car-chase coverage of [Subject], pursuit from a second vehicle, matching speed, road as the set."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Process trailer, chase vehicle, or a matched virtual path. Long lens compresses the gap; wide includes both machines and the road.Keep a line of action. Prompt: Car-chase coverage of [Subject], pursuit from a second vehicle, matching speed, road as the set."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for pursuit. Do not use it for a single parked car."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for pursuit. Do not use it for a single parked car."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Road Rush is ground-level asphalt as the subject. Buckle Up is inside one cabin.",
+          "links": [
+            {
+              "text": "Road Rush",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/road-rush"
+            },
+            {
+              "text": "Buckle Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/buckle-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tracking Shot can follow a person on foot; here the path is a road and the subject is a vehicle being hunted.",
+          "links": [
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Road RushThe road is the subject.",
+          "displayText": "Road Rush\nThe road is the subject.",
+          "links": [
+            {
+              "text": "Road RushThe road is the subject.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/road-rush"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "displayText": "Tracking Shot\nAccompany a walker. The shot is a journey, not a picture.",
+          "links": [
+            {
+              "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Buckle UpThe car is the tripod.",
+          "displayText": "Buckle Up\nThe car is the tripod.",
+          "links": [
+            {
+              "text": "Buckle UpThe car is the tripod.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/buckle-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Road Rush",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/road-rush"
+        },
+        {
+          "text": "Buckle Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/buckle-up"
+        },
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Road RushThe road is the subject.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/road-rush"
+        },
+        {
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Buckle UpThe car is the tripod.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/buckle-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/daa51a0826c38fc809d7e5bab0bbaf87.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/road-rush-road-rush-mini.webp",
+          "alt": "Road Rush"
+        },
+        {
+          "kind": "video",
+          "path": "media/cb213c03417486dcc41ff8bef4c379a1.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/road-rush-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+          "alt": "Tracking Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1a5a91179e81ed04df12f47530b9abda.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/buckle-up-buckle-up-mini.webp",
+          "alt": "Buckle Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/323f164d8eed16c39d56f20d9f2bd54a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/buckle-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Road Rush is ground-level asphalt as the subject. Buckle Up is inside one cabin.Tracking Shot can follow a person on foot; here the path is a road and the subject is a vehicle being hunted.Road RushThe road is the subject.Tracking ShotAccompany a walker. The shot is a journey, not a picture.Buckle UpThe car is the tripod."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mad Max: Fury Road keeps pursuing machines in relationship while desert tears past. The French Connection argues with a train from a car."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: matching speed, two machines."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Mad Max: Fury Road keeps pursuing machines in relationship while desert tears past. The French Connection argues with a train from a car.Grammar: matching speed, two machines."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Two vehicles, matched speed. Still: Car-chase coverage of [Subject], pursuit from a second vehicle, matching speed, road as the set."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Camera pursues [Subject] from another vehicle, matching speed, road parallax. Keep both machines in a relationship."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a parking-lot still."
+        },
+        {
+          "type": "quote",
+          "text": "Camera pursues [Subject] from another vehicle, matching speed, road parallax."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Camera+pursues+[Subject]+from+another+vehicle,+matching+speed,+road+parallax."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Two vehicles, matched speed. Still: Car-chase coverage of [Subject], pursuit from a second vehicle, matching speed, road as the set.Video: Camera pursues [Subject] from another vehicle, matching speed, road parallax. Keep both machines in a relationship.Forbid a parking-lot still.Copy promptUse in Video GeneratorCamera pursues [Subject] from another vehicle, matching speed, road parallax.Camera pursues [Subject] from another vehicle, matching speed, road parallax."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a beauty pass of one car. The tell: no second machine, no smear, no line of action."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: pursuit from another vehicle, matching speed, something in the world streaking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a beauty pass of one car. The tell: no second machine, no smear, no line of action.The fix: pursuit from another vehicle, matching speed, something in the world streaking."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Car Chasing in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Car chasing is coverage of pursuit from a second vehicle at matching speed, with the road as the set and two machines in one argument."
+        },
+        {
+          "type": "heading",
+          "text": "Car Chasing vs Buckle Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Buckle up is locked inside one cabin. Car chasing is the hunter's lens from another vehicle, keeping a pursuit relationship."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Car Chasing?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when two machines are in pursuit. Do not use it for a parked talk or a single-car product pass."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Car Chasing for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write pursuit from a second vehicle and matching speed. Example: Car-chase coverage of [Subject], pursuit from a second vehicle, matching speed, road as the set."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Car Chasing in film?Car chasing is coverage of pursuit from a second vehicle at matching speed, with the road as the set and two machines in one argument.Car Chasing vs Buckle UpBuckle up is locked inside one cabin. Car chasing is the hunter's lens from another vehicle, keeping a pursuit relationship.When should I use Car Chasing?Use it when two machines are in pursuit. Do not use it for a parked talk or a single-car product pass.How do I prompt Car Chasing for AI image or video?Write pursuit from a second vehicle and matching speed. Example: Car-chase coverage of [Subject], pursuit from a second vehicle, matching speed, road as the set."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Two vehicles, matched speed. Still: Car-chase coverage of [Subject], pursuit from a second vehicle, matching speed, road as the set.",
+      "Video: Camera pursues [Subject] from another vehicle, matching speed, road parallax. Keep both machines in a relationship.",
+      "Forbid a parking-lot still."
+    ],
+    "example": "Camera pursues [Subject] from another vehicle, matching speed, road parallax."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/6de27d6baed5a0493cee3d2610833366.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/car-chasing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d9ac3f5b30f4718d20808488d4833e07.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/car-chasing-car-chasing-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5229a985b7c0fcd93602cb0049a9e3f1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/car-chasing.jpg",
+      "alt": "Car Chasing frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/daa51a0826c38fc809d7e5bab0bbaf87.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/road-rush-road-rush-mini.webp",
+      "alt": "Road Rush"
+    },
+    {
+      "kind": "video",
+      "path": "media/cb213c03417486dcc41ff8bef4c379a1.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/road-rush-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+      "alt": "Tracking Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1a5a91179e81ed04df12f47530b9abda.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/buckle-up-buckle-up-mini.webp",
+      "alt": "Buckle Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/323f164d8eed16c39d56f20d9f2bd54a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/buckle-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1e7d7c0cd3cbdde941b989d1aebf39de.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/car-chasing/hero.jpg",
+      "alt": "Car Chasing",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "faa86f8a5e9739cf3831c0bc5cbce60b748a7c97ac7cd923924b64c9cf5a864e"
+}

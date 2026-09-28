@@ -1,0 +1,395 @@
+{
+  "id": "effects/anthropo",
+  "slug": "anthropo",
+  "title": "Anthropo",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/anthropo",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anthropo-anthropo-mini.webp",
+  "detail": "details/effects/anthropo.json",
+  "aliases": [],
+  "description": "Anthropomorphic cinematography stages an object or animal as a performer: human scale in the frame, a gesture, an eyeline, reaction shots, as if the inanimate had a will. The camera does not need a face so much as an actor's grammar.",
+  "thumbnail": "media/8406bc8def46d36489432e559319a960.webp",
+  "video": "media/860273ad1eb021f98339bdda0e0f2a52.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/anthropo-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A red balloon waits, follows, sulks. A robot tilts its head at a trash cube."
+        },
+        {
+          "type": "paragraph",
+          "text": "The object is not a prop in a still life. It is covered like a person: singles, looks, pauses."
+        },
+        {
+          "type": "paragraph",
+          "text": "Will is implied by blocking and eyeline, not by a drawn smile unless the story needs one. Use it to give a thing agency: a balloon, a machine, a relic, an animal shot as a colleague."
+        },
+        {
+          "type": "paragraph",
+          "text": "The rest of the scene should treat it as a presence. It is the wrong tool when you simply shoot an object from its own optical position (that is object POV) or when a tableau arranges bodies as a picture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Anthropo is performance coverage of a nonhuman. Object POV is a camera mount."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A red balloon waits, follows, sulks. A robot tilts its head at a trash cube.The object is not a prop in a still life. It is covered like a person: singles, looks, pauses.Will is implied by blocking and eyeline, not by a drawn smile unless the story needs one. Use it to give a thing agency: a balloon, a machine, a relic, an animal shot as a colleague.The rest of the scene should treat it as a presence. It is the wrong tool when you simply shoot an object from its own optical position (that is object POV) or when a tableau arranges bodies as a picture.Anthropo is performance coverage of a nonhuman. Object POV is a camera mount."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Assign an eyeline height. Cover the object with the same sizes you would give an actor: wide for entrance, medium for dialogue, close for reaction."
+        },
+        {
+          "type": "paragraph",
+          "text": "Let humans look at it as a partner. Puppet, wire, or animation can supply gesture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: an object or animal given human scale, gesture, or eyeline, the inanimate performing, not a POV from inside the object."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Assign an eyeline height. Cover the object with the same sizes you would give an actor: wide for entrance, medium for dialogue, close for reaction.Let humans look at it as a partner. Puppet, wire, or animation can supply gesture.Prompt: an object or animal given human scale, gesture, or eyeline, the inanimate performing, not a POV from inside the object."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A balloon at head height, held in a single, a child looking to it as if it might answer. Do not bolt the camera to the balloon and call that anthropo."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is object POV."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A balloon at head height, held in a single, a child looking to it as if it might answer. Do not bolt the camera to the balloon and call that anthropo.That is object POV."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Object POV puts the camera in the object's position. Anthropo looks at the object as an actor.",
+          "links": [
+            {
+              "text": "Object POV",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tableau freezes people into a composed picture. Anthropo keeps a will in motion.",
+          "links": [
+            {
+              "text": "Tableau",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Macro can isolate an object as texture without giving it an eyeline.",
+          "links": [
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Object POVThe prop has eyes.",
+          "displayText": "Object POV\nThe prop has eyes.",
+          "links": [
+            {
+              "text": "Object POVThe prop has eyes.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "TableauHold the arrangement.",
+          "displayText": "Tableau\nHold the arrangement.",
+          "links": [
+            {
+              "text": "TableauHold the arrangement.",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Object POV",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+        },
+        {
+          "text": "Tableau",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "Object POVThe prop has eyes.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+        },
+        {
+          "text": "TableauHold the arrangement.",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/fc8020d5f352c3a5a84ef886097c0803.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/object-pov-object-pov-mini.webp",
+          "alt": "Object POV"
+        },
+        {
+          "kind": "video",
+          "path": "media/4a0ca317a754e223f9e0c594ed4c9b2d.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/object-pov-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/a93c30aeb2ed5bcd737dc27a09898a53.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tableau.webp",
+          "alt": "Tableau"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Object POV puts the camera in the object's position. Anthropo looks at the object as an actor.Tableau freezes people into a composed picture. Anthropo keeps a will in motion.Macro can isolate an object as texture without giving it an eyeline.Object POVThe prop has eyes.TableauHold the arrangement.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Red Balloon covers a balloon as a companion, with waits and follows that belong to a performer. WALL-E plays a machine with human gesture and eyeline without needing a human face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those are coverage choices, not mascots to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Red Balloon covers a balloon as a companion, with waits and follows that belong to a performer. WALL-E plays a machine with human gesture and eyeline without needing a human face.Those are coverage choices, not mascots to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cover the thing like a person. Example: Anthropomorphic frame of [Subject], an object or animal given human scale, gesture, or eyeline, singles and looks as if it had a will, not a camera inside the object."
+        },
+        {
+          "type": "quote",
+          "text": "Anthropomorphic frame of [Subject], an object or animal given human scale, gesture, or eyeline, the inanimate performing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Anthropomorphic+frame+of+[Subject],+an+object+or+animal+given+human+scale,+gesture,+or+eyeline,+the+inanimate+performing."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Cover the thing like a person. Example: Anthropomorphic frame of [Subject], an object or animal given human scale, gesture, or eyeline, singles and looks as if it had a will, not a camera inside the object.Copy promptUse in Image GeneratorAnthropomorphic frame of [Subject], an object or animal given human scale, gesture, or eyeline, the inanimate performing.Anthropomorphic frame of [Subject], an object or animal given human scale, gesture, or eyeline, the inanimate performing."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: object POV, a cute sticker face, or a still-life insert. Tell: the camera is mounted in the object, or the object sits as a prop with no eyeline."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: assign a look, a height, and reaction coverage. Let others treat it as a partner."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: object POV, a cute sticker face, or a still-life insert. Tell: the camera is mounted in the object, or the object sits as a prop with no eyeline.Fix: assign a look, a height, and reaction coverage. Let others treat it as a partner."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is anthropo in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Staging and covering an object or animal as if it were a performer: scale, gesture, eyeline, reactions. Agency is in the blocking, not necessarily in a painted face."
+        },
+        {
+          "type": "heading",
+          "text": "Anthropo vs object POV",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Object POV is the camera from the thing's position. Anthropo is the camera looking at the thing as an actor. One is a mount. The other is a performance."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use anthropo?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a nonhuman should have a will in the scene. Do not use it for a mere product insert or for a true POV from inside the object."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt anthropo for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify human scale, a clear eyeline, gesture, and coverage as if the object were a player. Forbid interior POV unless you want that cousin."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is anthropo in film?Staging and covering an object or animal as if it were a performer: scale, gesture, eyeline, reactions. Agency is in the blocking, not necessarily in a painted face.Anthropo vs object POVObject POV is the camera from the thing's position. Anthropo is the camera looking at the thing as an actor. One is a mount. The other is a performance.When should I use anthropo?When a nonhuman should have a will in the scene. Do not use it for a mere product insert or for a true POV from inside the object.How do I prompt anthropo for AI image or video?Specify human scale, a clear eyeline, gesture, and coverage as if the object were a player. Forbid interior POV unless you want that cousin."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Cover the thing like a person. Example: Anthropomorphic frame of [Subject], an object or animal given human scale, gesture, or eyeline, singles and looks as if it had a will, not a camera inside the object."
+    ],
+    "example": "Anthropomorphic frame of [Subject], an object or animal given human scale, gesture, or eyeline, the inanimate performing."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/860273ad1eb021f98339bdda0e0f2a52.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/anthropo-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8406bc8def46d36489432e559319a960.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anthropo-anthropo-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9d15a2796d7267803e5a5817f7d9a706.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/anthropo.jpg",
+      "alt": "Anthropo frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/fc8020d5f352c3a5a84ef886097c0803.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/object-pov-object-pov-mini.webp",
+      "alt": "Object POV"
+    },
+    {
+      "kind": "video",
+      "path": "media/4a0ca317a754e223f9e0c594ed4c9b2d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/object-pov-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a93c30aeb2ed5bcd737dc27a09898a53.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tableau.webp",
+      "alt": "Tableau"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f9d55c2b7be8763ea56a3cd8943d616e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/anthropo/hero.jpg",
+      "alt": "Anthropo",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "e12df9a05c0b7c89f3078a1d362710ae2dc07200de333c647bc7df705208e936"
+}

@@ -1,0 +1,376 @@
+{
+  "id": "composition/leading-lines",
+  "slug": "leading-lines",
+  "title": "Leading Lines",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/leading-lines",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/leading-lines.webp",
+  "detail": "details/composition/leading-lines.json",
+  "aliases": [],
+  "description": "Leading lines in leading lines cinematography are edges, rails, roads, corridors, shadows, or gestures that steer the eye toward or through the image. The lines are vectors in the diagram, not decoration around a centered face.",
+  "thumbnail": "media/13ec67852b1960715c9beedb1ebfdf5b.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "If a corridor, a rail, or a carpet chevron aims at a person, that person owns the destination and the building owns the path. If the lines aim past them, the person is a gate and infinity owns the rest."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the location has no honest vector. Drawing implied arrows in a bland room is a graphic lie."
+        },
+        {
+          "type": "paragraph",
+          "text": "A close-up that needs only a face does not need a railroad. Lines can be one-point, two-point, or even a curve."
+        },
+        {
+          "type": "paragraph",
+          "text": "The job is the same: decide where the eye is forced to land, and whether that landing is a face, a door, or a vanishing field."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function If a corridor, a rail, or a carpet chevron aims at a person, that person owns the destination and the building owns the path. If the lines aim past them, the person is a gate and infinity owns the rest.It is the wrong tool when the location has no honest vector. Drawing implied arrows in a bland room is a graphic lie.A close-up that needs only a face does not need a railroad. Lines can be one-point, two-point, or even a curve.The job is the same: decide where the eye is forced to land, and whether that landing is a face, a door, or a vanishing field."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Find real edges in the set: baseboards, rails, a road, a shadow from a hard source. Place the camera so those edges converge on the intended mass."
+        },
+        {
+          "type": "paragraph",
+          "text": "A wider lens (24mm to 35mm) strengthens convergence. A long lens flattens lines into stacks, which is compression, not pointing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the horizon level unless the line itself is a dutch. Prompt: Leading lines driving the eye to [Subject], rails, corridors, roads, or shadows converging on the figure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Find real edges in the set: baseboards, rails, a road, a shadow from a hard source. Place the camera so those edges converge on the intended mass.A wider lens (24mm to 35mm) strengthens convergence. A long lens flattens lines into stacks, which is compression, not pointing.Keep the horizon level unless the line itself is a dutch. Prompt: Leading lines driving the eye to [Subject], rails, corridors, roads, or shadows converging on the figure."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a location can aim: station, hotel hall, highway, trench, church nave. Do not invent converging furniture in a set that is actually a box of leftovers."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a location can aim: station, hotel hall, highway, trench, church nave. Do not invent converging furniture in a set that is actually a box of leftovers."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vanishing Point is where parallel lines appear to meet. Leading lines may never meet in frame.",
+          "links": [
+            {
+              "text": "Vanishing Point",
+              "url": "https://melies.co/cinematic-techniques/composition/vanishing-point"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "One-Point Perspective is a full axial construction with one dominant vanishing point. Leading lines can be a single railing cutting a messy room.",
+          "links": [
+            {
+              "text": "One-Point Perspective",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Diagonal Composition uses bias energy even when nothing converges. Architexture fills the frame with material until pointing is secondary.",
+          "links": [
+            {
+              "text": "Diagonal Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/diagonal-composition"
+            },
+            {
+              "text": "Architexture",
+              "url": "https://melies.co/cinematic-techniques/composition/architexture"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Vanishing PointThere is a long way still to go.",
+          "displayText": "Vanishing Point\nThere is a long way still to go.",
+          "links": [
+            {
+              "text": "Vanishing PointThere is a long way still to go.",
+              "url": "https://melies.co/cinematic-techniques/composition/vanishing-point"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "One-Point PerspectiveDestiny has a vanishing point.",
+          "displayText": "One-Point Perspective\nDestiny has a vanishing point.",
+          "links": [
+            {
+              "text": "One-Point PerspectiveDestiny has a vanishing point.",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Vanishing Point",
+          "url": "https://melies.co/cinematic-techniques/composition/vanishing-point"
+        },
+        {
+          "text": "One-Point Perspective",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Diagonal Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/diagonal-composition"
+        },
+        {
+          "text": "Architexture",
+          "url": "https://melies.co/cinematic-techniques/composition/architexture"
+        },
+        {
+          "text": "Vanishing PointThere is a long way still to go.",
+          "url": "https://melies.co/cinematic-techniques/composition/vanishing-point"
+        },
+        {
+          "text": "One-Point PerspectiveDestiny has a vanishing point.",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/46c7ac518d22d09212194c30e44b4234.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vanishing-point.webp",
+          "alt": "Vanishing Point"
+        },
+        {
+          "kind": "image",
+          "path": "media/fd42e6b828b510faf2cf566bcbd2d93b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-point-perspective-037-symmetry-and-one-point-perspective-mini.webp",
+          "alt": "One-Point Perspective"
+        },
+        {
+          "kind": "video",
+          "path": "media/6a0595c4b52cce7843ef5c4ab8eb4adf.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/037-symmetry-and-one-point-perspective-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Vanishing Point is where parallel lines appear to meet. Leading lines may never meet in frame.One-Point Perspective is a full axial construction with one dominant vanishing point. Leading lines can be a single railing cutting a messy room.Diagonal Composition uses bias energy even when nothing converges. Architexture fills the frame with material until pointing is secondary.Vanishing PointThere is a long way still to go.One-Point PerspectiveDestiny has a vanishing point.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Shining aims carpets, halls, and a tricycle path at whatever waits. The Deer Hunter uses steel, roads, and industrial edges to shove attention through working space."
+        },
+        {
+          "type": "paragraph",
+          "text": "The lines are geography, not stickers. Grammar, not a maze to clone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Shining aims carpets, halls, and a tricycle path at whatever waits. The Deer Hunter uses steel, roads, and industrial edges to shove attention through working space.The lines are geography, not stickers. Grammar, not a maze to clone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the vector and the landing. Leading lines driving the eye to [Subject], rails, corridors, roads, or shadows converging on the figure."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say what the lines are made of. If they should miss the person and continue, say the figure is a gate, lines continuing to a distant point."
+        },
+        {
+          "type": "quote",
+          "text": "Leading lines driving the eye to [Subject], rails, corridors, roads, or shadows converging on the figure."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Leading+lines+driving+the+eye+to+[Subject],+rails,+corridors,+roads,+or+shadows+converging+on+the+figure."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the vector and the landing. Leading lines driving the eye to [Subject], rails, corridors, roads, or shadows converging on the figure.Say what the lines are made of. If they should miss the person and continue, say the figure is a gate, lines continuing to a distant point.Copy promptUse in Image GeneratorLeading lines driving the eye to [Subject], rails, corridors, roads, or shadows converging on the figure.Leading lines driving the eye to [Subject], rails, corridors, roads, or shadows converging on the figure."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a centered portrait with random architecture. The tell is a face in the middle and walls that do not aim."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to move the camera until an edge actually hits the subject, or to drop the claim and shoot a clean portrait."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a centered portrait with random architecture. The tell is a face in the middle and walls that do not aim.The fix is to move the camera until an edge actually hits the subject, or to drop the claim and shoot a clean portrait."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is leading lines in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "They are real edges in the picture (rails, roads, corridors, shadows, gestures) that steer the eye toward a mass or through the frame. The architecture points. The landing is a choice: face, door, or empty distance."
+        },
+        {
+          "type": "heading",
+          "text": "Leading Lines vs One-Point Perspective",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "One-point perspective is a camera squared to a plane with a single vanishing point, often on axis. Leading lines are any vectors that aim. A diagonal railing in a messy street can lead without being a Kubrick hall."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use leading lines?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use them when the set can honestly point: a hall, a track, a road, a nave. Skip them in a close-up that only needs a face, and skip them in a room with no true edge toward the subject."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt leading lines for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the lines and the target. Example: Leading lines driving the eye to [Subject], rails, corridors, roads, or shadows converging on the figure. Specify material. If the lines should continue past the person, say so."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is leading lines in film?They are real edges in the picture (rails, roads, corridors, shadows, gestures) that steer the eye toward a mass or through the frame. The architecture points. The landing is a choice: face, door, or empty distance.Leading Lines vs One-Point PerspectiveOne-point perspective is a camera squared to a plane with a single vanishing point, often on axis. Leading lines are any vectors that aim. A diagonal railing in a messy street can lead without being a Kubrick hall.When should I use leading lines?Use them when the set can honestly point: a hall, a track, a road, a nave. Skip them in a close-up that only needs a face, and skip them in a room with no true edge toward the subject.How do I prompt leading lines for AI image or video?Name the lines and the target. Example: Leading lines driving the eye to [Subject], rails, corridors, roads, or shadows converging on the figure. Specify material. If the lines should continue past the person, say so."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the vector and the landing. Leading lines driving the eye to [Subject], rails, corridors, roads, or shadows converging on the figure.",
+      "Say what the lines are made of. If they should miss the person and continue, say the figure is a gate, lines continuing to a distant point."
+    ],
+    "example": "Leading lines driving the eye to [Subject], rails, corridors, roads, or shadows converging on the figure."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/13ec67852b1960715c9beedb1ebfdf5b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/leading-lines.webp",
+      "alt": "Leading Lines example"
+    },
+    {
+      "kind": "image",
+      "path": "media/46c7ac518d22d09212194c30e44b4234.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vanishing-point.webp",
+      "alt": "Vanishing Point"
+    },
+    {
+      "kind": "image",
+      "path": "media/fd42e6b828b510faf2cf566bcbd2d93b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-point-perspective-037-symmetry-and-one-point-perspective-mini.webp",
+      "alt": "One-Point Perspective"
+    },
+    {
+      "kind": "video",
+      "path": "media/6a0595c4b52cce7843ef5c4ab8eb4adf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/037-symmetry-and-one-point-perspective-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/62862eac9d033d8dcbf8300ed6e376f3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/leading-lines/hero.jpg",
+      "alt": "Leading Lines",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "7fde79794575a19c28a088592c5c2f44ed17731d8029b8d736ddb89b20652162"
+}

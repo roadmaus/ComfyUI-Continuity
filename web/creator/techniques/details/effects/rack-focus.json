@@ -1,0 +1,461 @@
+{
+  "id": "effects/rack-focus",
+  "slug": "rack-focus",
+  "title": "Rack Focus",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/rack-focus",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rack-focus-053-rack-focus-mini.webp",
+  "detail": "details/effects/rack-focus.json",
+  "aliases": [
+    "focus pull",
+    "slow rack",
+    "snap rack",
+    "multiple rack",
+    "Bascule de point"
+  ],
+  "description": "A rack focus moves the sharp plane from one subject or distance to another during a continuous shot, while the composition stays largely the same. Attention changes because the helical turns, not because the camera cuts or dollies.",
+  "thumbnail": "media/d8621e52db925c8d69c6da997747f829.webp",
+  "video": "media/396e12ac75a8a03a4ec4597dc1dbcafd.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/053-rack-focus-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A brass key is sharp on a desk. The woman in the doorway is soft."
+        },
+        {
+          "type": "paragraph",
+          "text": "Over about two seconds the key goes, her face arrives. Nobody moved."
+        },
+        {
+          "type": "paragraph",
+          "text": "The audience felt a handoff inside one space. Use it to change who owns the shot without cutting: pursuer and pursued, a clue and a face, a listener and the person who just entered."
+        },
+        {
+          "type": "paragraph",
+          "text": "A slow rack is a sentence. A snap rack is a jab."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when both planes must stay sharp (that is deep focus or a split diopter) or when the camera should physically travel. If details morph instead of going in and out of focus, the model invented a dissolve."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A brass key is sharp on a desk. The woman in the doorway is soft.Over about two seconds the key goes, her face arrives. Nobody moved.The audience felt a handoff inside one space. Use it to change who owns the shot without cutting: pursuer and pursued, a clue and a face, a listener and the person who just entered.A slow rack is a sentence. A snap rack is a jab.It is the wrong tool when both planes must stay sharp (that is deep focus or a split diopter) or when the camera should physically travel. If details morph instead of going in and out of focus, the model invented a dissolve."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mark two distances. Rehearse timing with the first AC."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the head still for a clean demonstration, or coordinate the pull with a small move. Wide-open glass makes the rack readable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lens breathing may change field of view slightly. Decide if that is wanted."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: locked camera, named near and far subjects, a two-second pull, shallow depth of field, no zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Mark two distances. Rehearse timing with the first AC.Keep the head still for a clean demonstration, or coordinate the pull with a small move. Wide-open glass makes the rack readable.Lens breathing may change field of view slightly. Decide if that is wanted.Prompt: locked camera, named near and far subjects, a two-second pull, shallow depth of field, no zoom."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Focus holds on a foreground key, then pulls to the figure in the doorway over about two seconds. Do not rack when the scene needs both faces sharp at once, or when a cut would be cleaner."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Focus holds on a foreground key, then pulls to the figure in the doorway over about two seconds. Do not rack when the scene needs both faces sharp at once, or when a cut would be cleaner."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shallow Focus is a static thin plane. A rack is that plane moving.",
+          "links": [
+            {
+              "text": "Shallow Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Split Diopter keeps two distances sharp at once with a seam. Deep Focus keeps a continuous range sharp so no pull is required.",
+          "links": [
+            {
+              "text": "Split Diopter",
+              "url": "https://melies.co/cinematic-techniques/lenses/split-diopter"
+            },
+            {
+              "text": "Deep Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Push In travels the camera. The rack does not change the map, only the focus mark.",
+          "links": [
+            {
+              "text": "Push In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Shallow FocusNothing else is invited.",
+          "displayText": "Shallow Focus\nNothing else is invited.",
+          "links": [
+            {
+              "text": "Shallow FocusNothing else is invited.",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Split DiopterTwo distances must both be true at once.",
+          "displayText": "Split Diopter\nTwo distances must both be true at once.",
+          "links": [
+            {
+              "text": "Split DiopterTwo distances must both be true at once.",
+              "url": "https://melies.co/cinematic-techniques/lenses/split-diopter"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Shallow Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "Split Diopter",
+          "url": "https://melies.co/cinematic-techniques/lenses/split-diopter"
+        },
+        {
+          "text": "Deep Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+        },
+        {
+          "text": "Push In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+        },
+        {
+          "text": "Shallow FocusNothing else is invited.",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "Split DiopterTwo distances must both be true at once.",
+          "url": "https://melies.co/cinematic-techniques/lenses/split-diopter"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+          "alt": "Shallow Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/9ca16cd086644cbf4c2f2dd79c809a72.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-diopter-054-split-diopter-focus-mini.webp",
+          "alt": "Split Diopter"
+        },
+        {
+          "kind": "video",
+          "path": "media/6918a9b50ffd37951a502deb6b96e1b3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/054-split-diopter-focus-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Shallow Focus is a static thin plane. A rack is that plane moving.Split Diopter keeps two distances sharp at once with a seam. Deep Focus keeps a continuous range sharp so no pull is required.Push In travels the camera. The rack does not change the map, only the focus mark.Shallow FocusNothing else is invited.Split DiopterTwo distances must both be true at once.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Peking Opera Blues shifts focus from the pursued figure to the pursuing policeman inside one composition. The Graduate uses selective focus to organize Benjamin against the people around him."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Player treats the pull as a long sentence of attention."
+        },
+        {
+          "type": "list-item",
+          "text": "Peking Opera Blues 1986Focus shifts from the pursued figure to the pursuing policeman.",
+          "displayText": "Peking Opera Blues 1986\nFocus shifts from the pursued figure to the pursuing policeman."
+        },
+        {
+          "type": "list-item",
+          "text": "The Graduate 1967Selective focus organizes attention between Benjamin and surrounding figures.",
+          "displayText": "The Graduate 1967\nSelective focus organizes attention between Benjamin and surrounding figures."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/017e3641d8f77ab480c2213b09bf1188.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/rack-focus/famous/00-peking-opera-blues-1986.jpg",
+          "alt": "Peking Opera Blues 1986"
+        },
+        {
+          "kind": "image",
+          "path": "media/8a848eb25211dd5a17d98daf2bc36da0.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/rack-focus/famous/01-the-graduate-1967.jpg",
+          "alt": "The Graduate 1967"
+        }
+      ],
+      "sourceText": "In film Peking Opera Blues shifts focus from the pursued figure to the pursuing policeman inside one composition. The Graduate uses selective focus to organize Benjamin against the people around him.The Player treats the pull as a long sentence of attention.Peking Opera Blues 1986Focus shifts from the pursued figure to the pursuing policeman.The Graduate 1967Selective focus organizes attention between Benjamin and surrounding figures."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name both planes and the duration. Still: Rack focus between planes around [Subject], a two-second pull from foreground to the figure or the reverse."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Focus racks from a named foreground element onto [Subject] over about two seconds, shallow depth of field, locked camera, no zoom."
+        },
+        {
+          "type": "quote",
+          "text": "Locked composition: a brass key in sharp foreground on a desk, a woman blurred in the doorway behind it. Hold the key, then slowly rack focus to her expression as the key becomes soft. No camera move, no zoom, neither object changes position."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Locked+composition:+a+brass+key+in+sharp+foreground+on+a+desk,+a+woman+blurred+in+the+doorway+behind+it.+Hold+the+key,+then+slowly+rack+focus+to+her+expression+as+the+key+becomes+soft.+No+camera+move,+no+zoom,+neither+object+changes+position."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name both planes and the duration. Still: Rack focus between planes around [Subject], a two-second pull from foreground to the figure or the reverse.Video: Focus racks from a named foreground element onto [Subject] over about two seconds, shallow depth of field, locked camera, no zoom.Copy promptUse in Video GeneratorLocked composition: a brass key in sharp foreground on a desk, a woman blurred in the doorway behind it. Hold the key, then slowly rack focus to her expression as the key becomes soft. No camera move, no zoom, neither object changes position.Locked composition: a brass key in sharp foreground on a desk, a woman blurred in the doorway behind it. Hold the key, then slowly rack focus to her expression as the key becomes soft. No camera move, no zoom, neither object changes position."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: a cut, a morph, or both planes staying sharp. Tell: no defocus, details melting, or a zoom pretending to be a pull."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: hold framing, send one plane soft while the other comes true, and keep identities stable."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: a cut, a morph, or both planes staying sharp. Tell: no defocus, details melting, or a zoom pretending to be a pull.Fix: hold framing, send one plane soft while the other comes true, and keep identities stable."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is rack focus in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A focus pull from one distance plane to another during the shot. The frame stays, attention moves. Also called a focus pull, slow rack, or snap rack."
+        },
+        {
+          "type": "heading",
+          "text": "Rack focus vs shallow focus",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Shallow focus is the state of a thin sharp plane. Rack focus is the act of moving that plane from one subject to another."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use rack focus?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When you need a reveal or a handoff of attention without cutting. Do not use it if both planes must remain sharp."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt rack focus for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, lock the camera, name the near and far subjects, and give a duration (about two seconds). For stills, describe the pull as a pair of planes, one arriving, one leaving."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is rack focus in film?A focus pull from one distance plane to another during the shot. The frame stays, attention moves. Also called a focus pull, slow rack, or snap rack.Rack focus vs shallow focusShallow focus is the state of a thin sharp plane. Rack focus is the act of moving that plane from one subject to another.When should I use rack focus?When you need a reveal or a handoff of attention without cutting. Do not use it if both planes must remain sharp.How do I prompt rack focus for AI image or video?For video, lock the camera, name the near and far subjects, and give a duration (about two seconds). For stills, describe the pull as a pair of planes, one arriving, one leaving."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name both planes and the duration. Still: Rack focus between planes around [Subject], a two-second pull from foreground to the figure or the reverse.",
+      "Video: Focus racks from a named foreground element onto [Subject] over about two seconds, shallow depth of field, locked camera, no zoom."
+    ],
+    "example": "Locked composition: a brass key in sharp foreground on a desk, a woman blurred in the doorway behind it. Hold the key, then slowly rack focus to her expression as the key becomes soft. No camera move, no zoom, neither object changes position."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/396e12ac75a8a03a4ec4597dc1dbcafd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/053-rack-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d8621e52db925c8d69c6da997747f829.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rack-focus-053-rack-focus-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8fb7d33a0f9fd67381647c5a774b3dea.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/rack-focus.jpg",
+      "alt": "Rack Focus frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+      "alt": "Shallow Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9ca16cd086644cbf4c2f2dd79c809a72.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-diopter-054-split-diopter-focus-mini.webp",
+      "alt": "Split Diopter"
+    },
+    {
+      "kind": "video",
+      "path": "media/6918a9b50ffd37951a502deb6b96e1b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/054-split-diopter-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/017e3641d8f77ab480c2213b09bf1188.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/rack-focus/famous/00-peking-opera-blues-1986.jpg",
+      "alt": "Peking Opera Blues 1986"
+    },
+    {
+      "kind": "image",
+      "path": "media/8a848eb25211dd5a17d98daf2bc36da0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/rack-focus/famous/01-the-graduate-1967.jpg",
+      "alt": "The Graduate 1967"
+    },
+    {
+      "kind": "image",
+      "path": "media/e7a2f13c9bf4c6ea3570aae35e8ff49f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/rack-focus/hero.jpg",
+      "alt": "Rack Focus",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "e26e024176e61104680086e3b9672f15a36fdb2635b1f36d83d8c573d9ea35d9"
+}

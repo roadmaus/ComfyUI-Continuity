@@ -1,0 +1,433 @@
+{
+  "id": "effects/shallow-focus",
+  "slug": "shallow-focus",
+  "title": "Shallow Focus",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/shallow-focus",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+  "detail": "details/effects/shallow-focus.json",
+  "aliases": [
+    "Selective focus",
+    "Faible profondeur de champ"
+  ],
+  "description": "Shallow focus keeps a narrow depth range sharp while foreground or background falls off. It is a depth-of-field choice made with distance, focal length, and aperture together, not a button labeled blur.",
+  "thumbnail": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+  "video": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The near eye is true. Ears, wallpaper, and the street outside go."
+        },
+        {
+          "type": "paragraph",
+          "text": "Isolation is optical: the world is still there, the glass has declined to report it. Intimacy is a byproduct of exclusion."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when nothing else is invited: a ticket seller behind glass, a close-up in a crowded station, a face in an apartment. The blur should clarify who we are with."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for blocking that lives in depth, for geography, or for any beat where a background reaction still has to read. If hair is cut out like a mask and the backdrop is a smear without discs, you left photography."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The near eye is true. Ears, wallpaper, and the street outside go.Isolation is optical: the world is still there, the glass has declined to report it. Intimacy is a byproduct of exclusion.Use it when nothing else is invited: a ticket seller behind glass, a close-up in a crowded station, a face in an apartment. The blur should clarify who we are with.It is the wrong tool for blocking that lives in depth, for geography, or for any beat where a background reaction still has to read. If hair is cut out like a mask and the backdrop is a smear without discs, you left photography."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "8), longer glass or closer camera, and real subject-to-background distance. Keep the important eye as the mark, especially if the actor moves."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bokeh character follows the lens. Do not treat aperture as the only control."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt the stop, the sharp plane (near eye), and that the background is optically soft, not replaced."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works 8), longer glass or closer camera, and real subject-to-background distance. Keep the important eye as the mark, especially if the actor moves.Bokeh character follows the lens. Do not treat aperture as the only control.Prompt the stop, the sharp plane (near eye), and that the background is optically soft, not replaced."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An elderly ticket seller, near eye sharp, station crowd reduced to unreadable shapes. Do not use it on a wide that still has to show who entered the far door."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it An elderly ticket seller, near eye sharp, station crowd reduced to unreadable shapes. Do not use it on a wide that still has to show who entered the far door."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bokeh is how the blur looks. Shallow focus is that the blur exists.",
+          "links": [
+            {
+              "text": "Bokeh",
+              "url": "https://melies.co/cinematic-techniques/effects/bokeh"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Deep Focus is the opposite: near and far both legible. Rack Focus starts from shallow focus and moves the mark.",
+          "links": [
+            {
+              "text": "Deep Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+            },
+            {
+              "text": "Rack Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "85mm Portrait often produces this look because of distance and length, but any focal length can go shallow if you get close and open up.",
+          "links": [
+            {
+              "text": "85mm Portrait",
+              "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "BokehOnly one plane may be true.",
+          "displayText": "Bokeh\nOnly one plane may be true.",
+          "links": [
+            {
+              "text": "BokehOnly one plane may be true.",
+              "url": "https://melies.co/cinematic-techniques/effects/bokeh"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Deep FocusLet the audience find the story in the whole room.",
+          "displayText": "Deep Focus\nLet the audience find the story in the whole room.",
+          "links": [
+            {
+              "text": "Deep FocusLet the audience find the story in the whole room.",
+              "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Bokeh",
+          "url": "https://melies.co/cinematic-techniques/effects/bokeh"
+        },
+        {
+          "text": "Deep Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+        },
+        {
+          "text": "Rack Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+        },
+        {
+          "text": "85mm Portrait",
+          "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+        },
+        {
+          "text": "BokehOnly one plane may be true.",
+          "url": "https://melies.co/cinematic-techniques/effects/bokeh"
+        },
+        {
+          "text": "Deep FocusLet the audience find the story in the whole room.",
+          "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/98550ff164c9360ab041da957a11fe4b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bokeh.webp",
+          "alt": "Bokeh"
+        },
+        {
+          "kind": "image",
+          "path": "media/2085760298012aaa946dc04506a877fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/deep-focus-051-deep-focus-mini.webp",
+          "alt": "Deep Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/3b7ec49068c390bdc3af6487abab0eaf.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/051-deep-focus-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Bokeh is how the blur looks. Shallow focus is that the blur exists.Deep Focus is the opposite: near and far both legible. Rack Focus starts from shallow focus and moves the mark.85mm Portrait often produces this look because of distance and length, but any focal length can go shallow if you get close and open up.BokehOnly one plane may be true.Deep FocusLet the audience find the story in the whole room.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Central Station isolates portraits from busy surroundings. Her keeps Theodore in a thin plane against a soft city."
+        },
+        {
+          "type": "paragraph",
+          "text": "In the Mood for Love uses selective focus as crowding and privacy at once. The Master often holds faces in a narrow range against rooms that fall away."
+        },
+        {
+          "type": "list-item",
+          "text": "Central Station 1998Portraits isolate individuals from busy surroundings.",
+          "displayText": "Central Station 1998\nPortraits isolate individuals from busy surroundings."
+        },
+        {
+          "type": "list-item",
+          "text": "Her 2013Intimate close-ups separate Theodore from his environment.",
+          "displayText": "Her 2013\nIntimate close-ups separate Theodore from his environment."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/bc9aa837ea018e0bf8b009edfa5a489b.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/shallow-focus/famous/00-central-station-1998.jpg",
+          "alt": "Central Station 1998"
+        },
+        {
+          "kind": "image",
+          "path": "media/8ee6f28ced180610869088ce2246370e.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/shallow-focus/famous/01-her-2013.jpg",
+          "alt": "Her 2013"
+        }
+      ],
+      "sourceText": "In film Central Station isolates portraits from busy surroundings. Her keeps Theodore in a thin plane against a soft city.In the Mood for Love uses selective focus as crowding and privacy at once. The Master often holds faces in a narrow range against rooms that fall away.Central Station 1998Portraits isolate individuals from busy surroundings.Her 2013Intimate close-ups separate Theodore from his environment."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the mark and the stop. Example: Very shallow focus on [Subject], T1.4, near eye sharp, background dissolved into optical discs, intimacy by exclusion, not a cutout mask."
+        },
+        {
+          "type": "quote",
+          "text": "An elderly ticket seller sits behind glass in a busy station. Tight portrait with the near eye sharp and the crowd reduced to soft, unrecognizable shapes. Tiny natural movements, stable eye focus, no plastic skin, no abrupt background replacement."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=An+elderly+ticket+seller+sits+behind+glass+in+a+busy+station.+Tight+portrait+with+the+near+eye+sharp+and+the+crowd+reduced+to+soft,+unrecognizable+shapes.+Tiny+natural+movements,+stable+eye+focus,+no+plastic+skin,+no+abrupt+background+replacement."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the mark and the stop. Example: Very shallow focus on [Subject], T1.4, near eye sharp, background dissolved into optical discs, intimacy by exclusion, not a cutout mask.Copy promptUse in Video GeneratorAn elderly ticket seller sits behind glass in a busy station. Tight portrait with the near eye sharp and the crowd reduced to soft, unrecognizable shapes. Tiny natural movements, stable eye focus, no plastic skin, no abrupt background replacement.An elderly ticket seller sits behind glass in a busy station. Tight portrait with the near eye sharp and the crowd reduced to soft, unrecognizable shapes. Tiny natural movements, stable eye focus, no plastic skin, no abrupt background replacement."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: a subject cutout, or deep-focus staging with a fake blur. Tell: sticker edges on hair, both ears as sharp as the eye, no disc highlights."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: a real distance gap, one eye as the plane, optical falloff, readable bokeh discs."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: a subject cutout, or deep-focus staging with a fake blur. Tell: sticker edges on hair, both ears as sharp as the eye, no disc highlights.Fix: a real distance gap, one eye as the plane, optical falloff, readable bokeh discs."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is shallow focus in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A narrow distance range in focus, with foreground or background soft. It is depth of field, produced by stop, focal length, and camera-to-subject distance."
+        },
+        {
+          "type": "heading",
+          "text": "Shallow focus vs bokeh",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Shallow focus is the thin sharp plane. Bokeh is the character of the out-of-focus parts. One is a depth choice. The other is glass handwriting."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use shallow focus?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When only one person or object is invited. Do not use it when the room, a far doorway, or a background reaction still has to read."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt shallow focus for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "State T-stop, which plane is sharp (usually the near eye), subject-background separation, and optical blur rather than a masked backdrop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is shallow focus in film?A narrow distance range in focus, with foreground or background soft. It is depth of field, produced by stop, focal length, and camera-to-subject distance.Shallow focus vs bokehShallow focus is the thin sharp plane. Bokeh is the character of the out-of-focus parts. One is a depth choice. The other is glass handwriting.When should I use shallow focus?When only one person or object is invited. Do not use it when the room, a far doorway, or a background reaction still has to read.How do I prompt shallow focus for AI image or video?State T-stop, which plane is sharp (usually the near eye), subject-background separation, and optical blur rather than a masked backdrop."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the mark and the stop. Example: Very shallow focus on [Subject], T1.4, near eye sharp, background dissolved into optical discs, intimacy by exclusion, not a cutout mask."
+    ],
+    "example": "An elderly ticket seller sits behind glass in a busy station. Tight portrait with the near eye sharp and the crowd reduced to soft, unrecognizable shapes. Tiny natural movements, stable eye focus, no plastic skin, no abrupt background replacement."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ab59ef3206c8a07ee67381dec52efcf1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/shallow-focus.jpg",
+      "alt": "Shallow Focus frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/98550ff164c9360ab041da957a11fe4b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bokeh.webp",
+      "alt": "Bokeh"
+    },
+    {
+      "kind": "image",
+      "path": "media/2085760298012aaa946dc04506a877fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/deep-focus-051-deep-focus-mini.webp",
+      "alt": "Deep Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/3b7ec49068c390bdc3af6487abab0eaf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/051-deep-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bc9aa837ea018e0bf8b009edfa5a489b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/shallow-focus/famous/00-central-station-1998.jpg",
+      "alt": "Central Station 1998"
+    },
+    {
+      "kind": "image",
+      "path": "media/8ee6f28ced180610869088ce2246370e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/shallow-focus/famous/01-her-2013.jpg",
+      "alt": "Her 2013"
+    },
+    {
+      "kind": "image",
+      "path": "media/70a11c82f75cae50f4555a88e44b4b29.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/shallow-focus/hero.jpg",
+      "alt": "Shallow Focus",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "50b45aed8a896d4b9f9a3db5c574f8ec555b42e99962b858e9974a58dc48f266"
+}

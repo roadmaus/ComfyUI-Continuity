@@ -1,0 +1,392 @@
+{
+  "id": "lenses/spherical",
+  "slug": "spherical",
+  "title": "Spherical",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/spherical",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/spherical.webp",
+  "detail": "details/lenses/spherical.json",
+  "aliases": [],
+  "description": "A spherical lens in spherical lens cinematography uses rotationally symmetric elements with no anamorphic squeeze, so the image is captured already in its display proportions. Bokeh from a round iris is round, and edges stay rectilinear aside from ordinary wide-angle stretch.",
+  "thumbnail": "media/3e37246c8f59339c5508ddce1d433bf1.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This is default modern capture. You pick a focal length, you stand somewhere, and the optic does not ovalize lamps or streak headlights into bars."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sharpness and control are easier to specify because you are not also managing squeeze, desqueeze, and cylindrical artifacts. It is the wrong tool only when those artifacts are the point."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the beat needs oval highlights and horizontal flares, you wanted Anamorphic. 39:1 still exists: you crop or use a large sensor.",
+          "links": [
+            {
+              "text": "Anamorphic",
+              "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "That is an aspect ratio on spherical glass, not a conversion."
+        }
+      ],
+      "links": [
+        {
+          "text": "Anamorphic",
+          "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function This is default modern capture. You pick a focal length, you stand somewhere, and the optic does not ovalize lamps or streak headlights into bars.Sharpness and control are easier to specify because you are not also managing squeeze, desqueeze, and cylindrical artifacts. It is the wrong tool only when those artifacts are the point.If the beat needs oval highlights and horizontal flares, you wanted Anamorphic. 39:1 still exists: you crop or use a large sensor.That is an aspect ratio on spherical glass, not a conversion."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose a spherical prime or zoom and a stand. Perspective still comes from camera position; 24mm spherical is not 85mm spherical."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the iris in mind if bokeh shape matters: a round iris yields round highlights; a many-bladed iris yields a polygon. No desqueeze in post."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Spherical prime on [Subject], round bokeh, rectilinear edges, clean modern capture, no anamorphic streak."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Choose a spherical prime or zoom and a stand. Perspective still comes from camera position; 24mm spherical is not 85mm spherical.Keep the iris in mind if bokeh shape matters: a round iris yields round highlights; a many-bladed iris yields a polygon. No desqueeze in post.Prompt: Spherical prime on [Subject], round bokeh, rectilinear edges, clean modern capture, no anamorphic streak."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when you want control and sharpness over squeeze romance: most coverage, VFX plates, anything that must stitch or track cleanly. Do not label spherical footage anamorphic because you added black bars."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when you want control and sharpness over squeeze romance: most coverage, VFX plates, anything that must stitch or track cleanly. Do not label spherical footage anamorphic because you added black bars."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Anamorphic squeezes and often ovalizes. 50mm Normal is a focal length you will often shoot spherical.",
+          "links": [
+            {
+              "text": "Anamorphic",
+              "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+            },
+            {
+              "text": "50mm Normal",
+              "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vintage Cine Glass may be spherical glass with older coatings; vintage is not a squeeze. Fisheye is curvilinear spherical or a dedicated projection, still not anamorphic.",
+          "links": [
+            {
+              "text": "Vintage Cine Glass",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            },
+            {
+              "text": "Fisheye",
+              "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AnamorphicYou want the frame to announce it is a movie.",
+          "displayText": "Anamorphic\nYou want the frame to announce it is a movie.",
+          "links": [
+            {
+              "text": "AnamorphicYou want the frame to announce it is a movie.",
+              "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "50mm NormalYou do not want the glass to editorialize.",
+          "displayText": "50mm Normal\nYou do not want the glass to editorialize.",
+          "links": [
+            {
+              "text": "50mm NormalYou do not want the glass to editorialize.",
+              "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Anamorphic",
+          "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+        },
+        {
+          "text": "50mm Normal",
+          "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+        },
+        {
+          "text": "Vintage Cine Glass",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Fisheye",
+          "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+        },
+        {
+          "text": "AnamorphicYou want the frame to announce it is a movie.",
+          "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+        },
+        {
+          "text": "50mm NormalYou do not want the glass to editorialize.",
+          "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b11a08fb15e0ac7dcd89ec2184cb65da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-057-anamorphic-optical-character-mini.webp",
+          "alt": "Anamorphic"
+        },
+        {
+          "kind": "video",
+          "path": "media/df5fddd2498117a9636a23f7270ff4b4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/057-anamorphic-optical-character-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/e9bae839781c16a528f25d7fa4dbf0bc.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/50mm-normal.webp",
+          "alt": "50mm Normal"
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots Anamorphic squeezes and often ovalizes. 50mm Normal is a focal length you will often shoot spherical.Vintage Cine Glass may be spherical glass with older coatings; vintage is not a squeeze. Fisheye is curvilinear spherical or a dedicated projection, still not anamorphic.AnamorphicYou want the frame to announce it is a movie.50mm NormalYou do not want the glass to editorialize.14mm Ultra-WidePut the audience inside a space that is too big or too close."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Most modern digital cinema is spherical unless the production states otherwise. Use that as a reminder: round lamps, no horizontal streak from the taking lens, geometry that matches a prime's field."
+        },
+        {
+          "type": "paragraph",
+          "text": "The look is the stand and the length, not a flare pack."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Most modern digital cinema is spherical unless the production states otherwise. Use that as a reminder: round lamps, no horizontal streak from the taking lens, geometry that matches a prime's field.The look is the stand and the length, not a flare pack."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the lack of squeeze. Spherical prime on [Subject], round bokeh, rectilinear edges, clean modern capture, no anamorphic streak."
+        },
+        {
+          "type": "paragraph",
+          "text": "Then name the actual focal length (35mm, 50mm, 85mm). Do not add oval highlights or blue horizontal flares."
+        },
+        {
+          "type": "quote",
+          "text": "Spherical prime on [Subject], round bokeh, rectilinear edges, clean modern capture, no anamorphic streak."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Spherical+prime+on+[Subject],+round+bokeh,+rectilinear+edges,+clean+modern+capture,+no+anamorphic+streak."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the lack of squeeze. Spherical prime on [Subject], round bokeh, rectilinear edges, clean modern capture, no anamorphic streak.Then name the actual focal length (35mm, 50mm, 85mm). Do not add oval highlights or blue horizontal flares.Copy promptUse in Image GeneratorSpherical prime on [Subject], round bokeh, rectilinear edges, clean modern capture, no anamorphic streak.Spherical prime on [Subject], round bokeh, rectilinear edges, clean modern capture, no anamorphic streak."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Anamorphic stickers on a round-bokeh image. The tell is letterbox plus circular lamps plus random streaks.",
+          "links": [
+            {
+              "text": "Anamorphic",
+              "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: round bokeh, no squeeze, rectilinear edges, and a named spherical focal length."
+        }
+      ],
+      "links": [
+        {
+          "text": "Anamorphic",
+          "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Anamorphic stickers on a round-bokeh image. The tell is letterbox plus circular lamps plus random streaks.Fix: round bokeh, no squeeze, rectilinear edges, and a named spherical focal length."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is spherical in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Spherical lenses capture an unsqueezed image with rotationally symmetric optics. Highlights through a round iris stay round, and there is no anamorphic desqueeze."
+        },
+        {
+          "type": "heading",
+          "text": "Spherical vs Anamorphic",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Spherical: no squeeze, typically round bokeh, rectilinear field. Anamorphic: squeeze at capture, oval bokeh, often directional flares. Cropping spherical footage to widescreen does not make it anamorphic."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use spherical?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it as default glass when you need control, sharpness, or clean plates. Skip it only when the squeeze artifacts themselves are the sentence."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt spherical for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Spherical prime on [Subject], round bokeh, rectilinear edges, clean modern capture, no anamorphic streak. Add a real focal length. Forbid oval bokeh and horizontal flares."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is spherical in film?Spherical lenses capture an unsqueezed image with rotationally symmetric optics. Highlights through a round iris stay round, and there is no anamorphic desqueeze.Spherical vs AnamorphicSpherical: no squeeze, typically round bokeh, rectilinear field. Anamorphic: squeeze at capture, oval bokeh, often directional flares. Cropping spherical footage to widescreen does not make it anamorphic.When should I use spherical?Use it as default glass when you need control, sharpness, or clean plates. Skip it only when the squeeze artifacts themselves are the sentence.How do I prompt spherical for AI image or video?Write: Spherical prime on [Subject], round bokeh, rectilinear edges, clean modern capture, no anamorphic streak. Add a real focal length. Forbid oval bokeh and horizontal flares."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the lack of squeeze. Spherical prime on [Subject], round bokeh, rectilinear edges, clean modern capture, no anamorphic streak.",
+      "Then name the actual focal length (35mm, 50mm, 85mm). Do not add oval highlights or blue horizontal flares."
+    ],
+    "example": "Spherical prime on [Subject], round bokeh, rectilinear edges, clean modern capture, no anamorphic streak."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/3e37246c8f59339c5508ddce1d433bf1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/spherical.webp",
+      "alt": "Spherical example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b11a08fb15e0ac7dcd89ec2184cb65da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-057-anamorphic-optical-character-mini.webp",
+      "alt": "Anamorphic"
+    },
+    {
+      "kind": "video",
+      "path": "media/df5fddd2498117a9636a23f7270ff4b4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/057-anamorphic-optical-character-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e9bae839781c16a528f25d7fa4dbf0bc.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/50mm-normal.webp",
+      "alt": "50mm Normal"
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/d5546f4982bae218bacbb928337cd1ee.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/spherical/hero.jpg",
+      "alt": "Spherical",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "63729aa929ff96106ecf34495662b50796bc437d6da07717cdc5c5faf7feb668"
+}

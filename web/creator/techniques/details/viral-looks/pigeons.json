@@ -1,0 +1,400 @@
+{
+  "id": "viral-looks/pigeons",
+  "slug": "pigeons",
+  "title": "Pigeons",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/pigeons",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pigeons-pigeons-mini.webp",
+  "detail": "details/viral-looks/pigeons.json",
+  "aliases": [],
+  "description": "Pigeons, as a pigeons video preset, is a city takeoff: a stable person and a flock bursting as confetti, wings filling the air, then settling. The flock is the move, and the person is the hold.",
+  "thumbnail": "media/c7e06132b60e69a58674015b9b5318ed.webp",
+  "video": "media/a56ca1c4fa0d32a4419af6e02d8d43c0.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pigeons-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "City punctuation: a meeting that scatters, a fashion frame that needs weather, a square that panics and looks like joy. The still is the peak of the takeoff, face visible through wings."
+        },
+        {
+          "type": "paragraph",
+          "text": "Three birds on a ledge is not the recipe. The air should be mostly pigeon."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool indoors, and the wrong tool if you freeze the birds unless you mean frozen-in-motion of a flock. If the camera tours the square, you lost the gag."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function City punctuation: a meeting that scatters, a fashion frame that needs weather, a square that panics and looks like joy. The still is the peak of the takeoff, face visible through wings.Three birds on a ledge is not the recipe. The air should be mostly pigeon.It is the wrong tool indoors, and the wrong tool if you freeze the birds unless you mean frozen-in-motion of a flock. If the camera tours the square, you lost the gag."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Chest height to slightly low in a plaza, 24mm to 35mm so wings occupy volume. Lock-off or Handheld that does not chase every bird.",
+          "links": [
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Key is hard sun or stone bounce. Write a burst of wings around a stable figure, feathers as particles."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt still: Pigeons bursting around [Subject], a city takeoff, wings as confetti, the square exploding into birds. Motion: A flock explodes around [Subject], wings filling the air, then settling."
+        }
+      ],
+      "links": [
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Chest height to slightly low in a plaza, 24mm to 35mm so wings occupy volume. Lock-off or Handheld that does not chase every bird.Key is hard sun or stone bounce. Write a burst of wings around a stable figure, feathers as particles.Prompt still: Pigeons bursting around [Subject], a city takeoff, wings as confetti, the square exploding into birds. Motion: A flock explodes around [Subject], wings filling the air, then settling."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A plaza scatter, an arrival that startles the square, a city fashion still. Do not use it in an interior, and do not settle for three birds."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A plaza scatter, an arrival that startles the square, a city fashion still. Do not use it in an interior, and do not settle for three birds."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Particles is generic bits in air (dust, sparks, pollen). Pigeons is a specific animal cloud with takeoff physics.",
+          "links": [
+            {
+              "text": "Particles",
+              "url": "https://melies.co/cinematic-techniques/effects/particles"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Handheld is the operator, not the flock. Keep the face.",
+          "links": [
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The birds are weather."
+        },
+        {
+          "type": "list-item",
+          "text": "ParticlesThe air should be countable.",
+          "displayText": "Particles\nThe air should be countable.",
+          "links": [
+            {
+              "text": "ParticlesThe air should be countable.",
+              "url": "https://melies.co/cinematic-techniques/effects/particles"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "displayText": "Handheld\nUrgency, documentary truth, or a mind that cannot sit still.",
+          "links": [
+            {
+              "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Particles",
+          "url": "https://melies.co/cinematic-techniques/effects/particles"
+        },
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "ParticlesThe air should be countable.",
+          "url": "https://melies.co/cinematic-techniques/effects/particles"
+        },
+        {
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d3e34f0291639924a4c5ff1898e55451.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/particles-particles-mini.webp",
+          "alt": "Particles"
+        },
+        {
+          "kind": "video",
+          "path": "media/ddfc39957e978e9062f724fbb3c58908.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/particles-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+          "alt": "Handheld"
+        },
+        {
+          "kind": "video",
+          "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Particles is generic bits in air (dust, sparks, pollen). Pigeons is a specific animal cloud with takeoff physics.Handheld is the operator, not the flock. Keep the face.The birds are weather.ParticlesThe air should be countable.HandheldUrgency, documentary truth, or a mind that cannot sit still.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mary Poppins uses a square of birds as urban weather around a person. Plaza takeoffs in crime films, including The Godfather's public spaces, treat a flock as sudden public panic."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of air, not a frame to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Mary Poppins uses a square of birds as urban weather around a person. Plaza takeoffs in crime films, including The Godfather's public spaces, treat a flock as sudden public panic.Grammar of air, not a frame to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hold the person, explode the flock. Pigeons bursting around [Subject], a city takeoff, wings as confetti, the square exploding into birds."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add plaza, 24mm, sun or stone bounce, face visible through wings. Video: A flock explodes around [Subject], wings filling the air, then settling."
+        },
+        {
+          "type": "quote",
+          "text": "A flock explodes around [Subject], wings filling the air, then settling."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+flock+explodes+around+[Subject],+wings+filling+the+air,+then+settling."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Hold the person, explode the flock. Pigeons bursting around [Subject], a city takeoff, wings as confetti, the square exploding into birds.Add plaza, 24mm, sun or stone bounce, face visible through wings. Video: A flock explodes around [Subject], wings filling the air, then settling.Copy promptUse in Video GeneratorA flock explodes around [Subject], wings filling the air, then settling.A flock explodes around [Subject], wings filling the air, then settling."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Three birds, or a face lost in a cloud, or a cut to Particles glitter. The tell is a ledge with pigeons sitting.",
+          "links": [
+            {
+              "text": "Particles",
+              "url": "https://melies.co/cinematic-techniques/effects/particles"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: burst, volume of wings, stable figure, peak of takeoff."
+        }
+      ],
+      "links": [
+        {
+          "text": "Particles",
+          "url": "https://melies.co/cinematic-techniques/effects/particles"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong Three birds, or a face lost in a cloud, or a cut to Particles glitter. The tell is a ledge with pigeons sitting.Fix it: burst, volume of wings, stable figure, peak of takeoff."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Pigeons in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A named flock gag: a still person, a square exploding into birds, wings as confetti. The flock is the motion. The camera mostly holds."
+        },
+        {
+          "type": "heading",
+          "text": "Pigeons vs Particles",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Particles is dust, sparks, pollen, a weather of bits. Pigeons is animal takeoff with wings and panic. If the bits have no anatomy, you wanted particles."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Pigeons?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "City punctuation and plaza scatter. Skip interiors and any still of three birds sitting."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Pigeons for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Plaza, stable [Subject], then: Pigeons bursting around [Subject], a city takeoff, wings as confetti, the square exploding into birds. For video, the flock explodes and settles. Keep the face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Pigeons in film?A named flock gag: a still person, a square exploding into birds, wings as confetti. The flock is the motion. The camera mostly holds.Pigeons vs ParticlesParticles is dust, sparks, pollen, a weather of bits. Pigeons is animal takeoff with wings and panic. If the bits have no anatomy, you wanted particles.When should I use Pigeons?City punctuation and plaza scatter. Skip interiors and any still of three birds sitting.How do I prompt Pigeons for AI image or video?Plaza, stable [Subject], then: Pigeons bursting around [Subject], a city takeoff, wings as confetti, the square exploding into birds. For video, the flock explodes and settles. Keep the face."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Hold the person, explode the flock. Pigeons bursting around [Subject], a city takeoff, wings as confetti, the square exploding into birds.",
+      "Add plaza, 24mm, sun or stone bounce, face visible through wings. Video: A flock explodes around [Subject], wings filling the air, then settling."
+    ],
+    "example": "A flock explodes around [Subject], wings filling the air, then settling."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/a56ca1c4fa0d32a4419af6e02d8d43c0.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pigeons-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c7e06132b60e69a58674015b9b5318ed.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pigeons-pigeons-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6ae2978f5c661f445a4669822bc30196.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/pigeons.jpg",
+      "alt": "Pigeons frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/d3e34f0291639924a4c5ff1898e55451.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/particles-particles-mini.webp",
+      "alt": "Particles"
+    },
+    {
+      "kind": "video",
+      "path": "media/ddfc39957e978e9062f724fbb3c58908.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/particles-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+      "alt": "Handheld"
+    },
+    {
+      "kind": "video",
+      "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/0a65b9617797ebb554883b371348ee5e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pigeons/hero.jpg",
+      "alt": "Pigeons",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "3671fd5f08cbddd599c2210a2ca764ec9cee60bf086314b3af0fb17d2c23dfdc"
+}

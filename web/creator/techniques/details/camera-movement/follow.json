@@ -1,0 +1,413 @@
+{
+  "id": "camera-movement/follow",
+  "slug": "follow",
+  "title": "Follow Shot",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/follow",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/follow-005-rear-follow-tracking-mini.webp",
+  "detail": "details/camera-movement/follow.json",
+  "aliases": [
+    "lead shot",
+    "side-follow",
+    "chase shot",
+    "walk-and-talk"
+  ],
+  "description": "A follow shot trails a moving subject at a fixed offset, usually from behind. The back of the head becomes foreground and the world opens ahead, so pursuit, haunting, or arrival is felt as walking into space.",
+  "thumbnail": "media/a7bc425f0a599a10087bd220430c8237.webp",
+  "video": "media/34b8caffffd437c5db4a6c75123761fd.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/005-rear-follow-tracking-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You are taken with them, not shown beside them. Doorways reveal themselves as they would to a stalker or a guardian."
+        },
+        {
+          "type": "paragraph",
+          "text": "The face is withheld, which can be predatory or intimate depending on distance and height. It is the wrong tool when the audience must read both faces of a conversation, and the wrong tool if the camera is bolted to the chest looking back at the actor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Behind is a choice; body-mount is another."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function You are taken with them, not shown beside them. Doorways reveal themselves as they would to a stalker or a guardian.The face is withheld, which can be predatory or intimate depending on distance and height. It is the wrong tool when the audience must read both faces of a conversation, and the wrong tool if the camera is bolted to the chest looking back at the actor.Behind is a choice; body-mount is another."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Match movement through the space at a fixed offset. Steadicam, gimbal, or handheld can execute it; the grammar is the trailing station, not the vest."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the head as a stable foreground mass. Prompt a follow shot behind the subject, camera trailing at a fixed offset, back of the head as foreground, the world opening ahead."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Match movement through the space at a fixed offset. Steadicam, gimbal, or handheld can execute it; the grammar is the trailing station, not the vest.Keep the head as a stable foreground mass. Prompt a follow shot behind the subject, camera trailing at a fixed offset, back of the head as foreground, the world opening ahead."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for pursuit, haunting, or walking someone into a room. Concrete beat: behind a child on a tricycle as the corridor keeps producing corners."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not follow if the scene is a two-hander that needs eyes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for pursuit, haunting, or walking someone into a room. Concrete beat: behind a child on a tricycle as the corridor keeps producing corners.Do not follow if the scene is a two-hander that needs eyes."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tracking Shot often rides beside and shows the body's full action. Steadicam is a common support for follow.",
+          "links": [
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            },
+            {
+              "text": "Steadicam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A SnorriCam is mounted to the performer and faces them, so the face is pinned and the world sloshes. Follow looks at their back, not into their face from a chest rig.",
+          "links": [
+            {
+              "text": "SnorriCam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "displayText": "Tracking Shot\nAccompany a walker. The shot is a journey, not a picture.",
+          "links": [
+            {
+              "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "displayText": "Steadicam\nLong connecting moves through architecture. Neither handheld nor dolly.",
+          "links": [
+            {
+              "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SnorriCamTrap the audience in a body that cannot get out.",
+          "displayText": "SnorriCam\nTrap the audience in a body that cannot get out.",
+          "links": [
+            {
+              "text": "SnorriCamTrap the audience in a body that cannot get out.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Steadicam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "SnorriCam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        },
+        {
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "SnorriCamTrap the audience in a body that cannot get out.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+          "alt": "Tracking Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+          "alt": "Steadicam"
+        },
+        {
+          "kind": "video",
+          "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/a377ca603c759f0f3e573588303d2336.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snorricam-018-body-mounted-face-camera-mini.webp",
+          "alt": "SnorriCam"
+        },
+        {
+          "kind": "video",
+          "path": "media/03868d02fedb015bdcc173c26c4c7b3e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/018-body-mounted-face-camera-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Tracking Shot often rides beside and shows the body's full action. Steadicam is a common support for follow.A SnorriCam is mounted to the performer and faces them, so the face is pinned and the world sloshes. Follow looks at their back, not into their face from a chest rig.Tracking ShotAccompany a walker. The shot is a journey, not a picture.SteadicamLong connecting moves through architecture. Neither handheld nor dolly.SnorriCamTrap the audience in a body that cannot get out."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Shining puts us behind Danny in the hotel so corners arrive as he arrives. Enter the Void uses trailing and floating follow as afterlife grammar."
+        },
+        {
+          "type": "paragraph",
+          "text": "Goodfellas' Copa entrance is a follow that becomes a social descent into a room. Path grammar, not a hotel to rebuild."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Shining puts us behind Danny in the hotel so corners arrive as he arrives. Enter the Void uses trailing and floating follow as afterlife grammar.Goodfellas' Copa entrance is a follow that becomes a social descent into a room. Path grammar, not a hotel to rebuild."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Follow shot behind [Subject], camera trailing at a fixed offset, the back of the head as foreground, the world opening ahead. For motion: the camera follows behind [Subject], matching their movement through the space."
+        },
+        {
+          "type": "quote",
+          "text": "The camera follows behind [Subject], matching their movement through the space."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+follows+behind+[Subject],+matching+their+movement+through+the+space."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Follow shot behind [Subject], camera trailing at a fixed offset, the back of the head as foreground, the world opening ahead. For motion: the camera follows behind [Subject], matching their movement through the space.Copy promptUse in Video GeneratorThe camera follows behind [Subject], matching their movement through the space.The camera follows behind [Subject], matching their movement through the space."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a side Tracking Shot shot or a SnorriCam. The tell is a full profile, or a pinned face with a sliding world.",
+          "links": [
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            },
+            {
+              "text": "SnorriCam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: behind, fixed offset, head as foreground, space opening ahead."
+        }
+      ],
+      "links": [
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "SnorriCam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a side Tracking Shot shot or a SnorriCam. The tell is a full profile, or a pinned face with a sliding world.The fix: behind, fixed offset, head as foreground, space opening ahead."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Follow Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a camera that trails a mover, usually from behind, matching their path so we enter rooms as they do."
+        },
+        {
+          "type": "heading",
+          "text": "Follow Shot vs Tracking Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Tracking is the family of subject-locked travel and is often lateral. Follow specifies the trailing station: back of the head, world ahead."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Follow Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When pursuit or entrance should be experienced from behind. Do not use it when both faces of a talk must read."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Follow Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write camera follows behind [Subject], fixed offset, back of the head in foreground, matching movement. Ban a side track and ban a chest-mounted face cam."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Follow Shot in film?It is a camera that trails a mover, usually from behind, matching their path so we enter rooms as they do.Follow Shot vs Tracking ShotTracking is the family of subject-locked travel and is often lateral. Follow specifies the trailing station: back of the head, world ahead.When should I use Follow Shot?When pursuit or entrance should be experienced from behind. Do not use it when both faces of a talk must read.How do I prompt Follow Shot for AI image or video?Write camera follows behind [Subject], fixed offset, back of the head in foreground, matching movement. Ban a side track and ban a chest-mounted face cam."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Follow shot behind [Subject], camera trailing at a fixed offset, the back of the head as foreground, the world opening ahead. For motion: the camera follows behind [Subject], matching their movement through the space."
+    ],
+    "example": "The camera follows behind [Subject], matching their movement through the space."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/34b8caffffd437c5db4a6c75123761fd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/005-rear-follow-tracking-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a7bc425f0a599a10087bd220430c8237.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/follow-005-rear-follow-tracking-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1cce27cfa9e6e47d79149be601af5f05.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/follow.jpg",
+      "alt": "Follow Shot frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+      "alt": "Tracking Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+      "alt": "Steadicam"
+    },
+    {
+      "kind": "video",
+      "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a377ca603c759f0f3e573588303d2336.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snorricam-018-body-mounted-face-camera-mini.webp",
+      "alt": "SnorriCam"
+    },
+    {
+      "kind": "video",
+      "path": "media/03868d02fedb015bdcc173c26c4c7b3e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/018-body-mounted-face-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9d56384e169984dc0bc35376d82a16a1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/follow/hero.jpg",
+      "alt": "Follow Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "80db4dc489333b72432f44f10edae49f3b76d86f5235cdfff991711eb6c12f2d"
+}

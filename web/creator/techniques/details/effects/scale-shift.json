@@ -1,0 +1,401 @@
+{
+  "id": "effects/scale-shift",
+  "slug": "scale-shift",
+  "title": "Scale Shift",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/scale-shift",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/scale-shift-scale-shift-mini.webp",
+  "detail": "details/effects/scale-shift.json",
+  "aliases": [
+    "Dunkirk temporal convergence"
+  ],
+  "description": "Scale shift cinematography changes a body's size against the same room so the figure is suddenly giant or tiny: Alice physics as an optical event. Furniture, shadows, and contact have to match the new ratio.",
+  "thumbnail": "media/6691c384cb30e915170c3701a7282d54.webp",
+  "video": "media/3900aca8a944e2291671c7d8799beddd.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/scale-shift-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A person stands in a kitchen and the table is a landscape. Or a hand is a building."
+        },
+        {
+          "type": "paragraph",
+          "text": "The geography did not cut. The scale did."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when relative size is the plot of the shot. The same name is sometimes used for unequal story-time strands, as in Dunkirk's land, sea, and air clocks."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is editorial scale, not optical size. Do not mix the two tools in one prompt."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A person stands in a kitchen and the table is a landscape. Or a hand is a building.The geography did not cut. The scale did.Use it when relative size is the plot of the shot. The same name is sometimes used for unequal story-time strands, as in Dunkirk's land, sea, and air clocks.That is editorial scale, not optical size. Do not mix the two tools in one prompt."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock the room plate. Resize the figure with oversized furniture, miniatures, split-scale composites, or a cut that reprints the body at a new height in the same architecture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shadows and contact must match the new size: a giant throws a larger shadow from the same key. Forced perspective can help as a static alignment of two real sizes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a scale shift of the subject: the body suddenly giant or tiny against the same room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock the room plate. Resize the figure with oversized furniture, miniatures, split-scale composites, or a cut that reprints the body at a new height in the same architecture.Shadows and contact must match the new size: a giant throws a larger shadow from the same key. Forced perspective can help as a static alignment of two real sizes.Prompt a scale shift of the subject: the body suddenly giant or tiny against the same room."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when a person becomes a toy in their own hallway, or a monster in a dollhouse. Do not use it as a simple close-up that only magnifies a detail without changing the body-to-room ratio."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when a person becomes a toy in their own hallway, or a monster in a dollhouse. Do not use it as a simple close-up that only magnifies a detail without changing the body-to-room ratio."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Forced Perspective aligns two real sizes on one focal plane so they look like one scale. Scale shift is the change of that relationship.",
+          "links": [
+            {
+              "text": "Forced Perspective",
+              "url": "https://melies.co/cinematic-techniques/effects/forced-perspective"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Magnification goes closer than a close-up, a world inside a centimeter. It does not make the whole body tiny in the room.",
+          "links": [
+            {
+              "text": "Magnification",
+              "url": "https://melies.co/cinematic-techniques/lenses/magnification"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Forced PerspectiveChange size without VFX.",
+          "displayText": "Forced Perspective\nChange size without VFX.",
+          "links": [
+            {
+              "text": "Forced PerspectiveChange size without VFX.",
+              "url": "https://melies.co/cinematic-techniques/effects/forced-perspective"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MagnificationGo closer than a close-up.",
+          "displayText": "Magnification\nGo closer than a close-up.",
+          "links": [
+            {
+              "text": "MagnificationGo closer than a close-up.",
+              "url": "https://melies.co/cinematic-techniques/lenses/magnification"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Forced Perspective",
+          "url": "https://melies.co/cinematic-techniques/effects/forced-perspective"
+        },
+        {
+          "text": "Magnification",
+          "url": "https://melies.co/cinematic-techniques/lenses/magnification"
+        },
+        {
+          "text": "Forced PerspectiveChange size without VFX.",
+          "url": "https://melies.co/cinematic-techniques/effects/forced-perspective"
+        },
+        {
+          "text": "MagnificationGo closer than a close-up.",
+          "url": "https://melies.co/cinematic-techniques/lenses/magnification"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/47eb6933699b353186630c52b97cede8.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/forced-perspective-143-forced-perspective-and-scale-illusion-mini.webp",
+          "alt": "Forced Perspective"
+        },
+        {
+          "kind": "video",
+          "path": "media/df55c234331c9b2aefb91e526852904a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/143-forced-perspective-and-scale-illusion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d98e16a4afac1b5ad62e0cb823ecc2e4.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/magnification.webp",
+          "alt": "Magnification"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Forced Perspective aligns two real sizes on one focal plane so they look like one scale. Scale shift is the change of that relationship.Magnification goes closer than a close-up, a world inside a centimeter. It does not make the whole body tiny in the room.Forced PerspectiveChange size without VFX.MagnificationGo closer than a close-up.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Honey, I Shrunk the Kids and Ant-Man stage bodies against furniture and grass at the wrong size. Dunkirk and Inception appear in the catalog as temporal-scale cousins: unequal clocks, not Alice rooms."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the first pair for optical size. Keep the second pair for editorial time."
+        },
+        {
+          "type": "list-item",
+          "text": "Dunkirk 2017Land, sea and air strands span different durations before converging.",
+          "displayText": "Dunkirk 2017\nLand, sea and air strands span different durations before converging."
+        },
+        {
+          "type": "list-item",
+          "text": "Inception 2010Different dream levels unfold at different apparent rates.",
+          "displayText": "Inception 2010\nDifferent dream levels unfold at different apparent rates."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Honey, I Shrunk the Kids and Ant-Man stage bodies against furniture and grass at the wrong size. Dunkirk and Inception appear in the catalog as temporal-scale cousins: unequal clocks, not Alice rooms.Use the first pair for optical size. Keep the second pair for editorial time.Dunkirk 2017Land, sea and air strands span different durations before converging.Inception 2010Different dream levels unfold at different apparent rates."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Scale shift of [Subject], the body suddenly giant or tiny against the same room, Alice physics. Name the room, the new size, and matching shadows."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban a mere close-up and ban stretching the architecture."
+        },
+        {
+          "type": "quote",
+          "text": "Design an intercut rescue story: a mountain team’s six-hour ascent, a driver’s thirty-minute approach and a climber’s final two-minute wait. Build a timeline showing exactly where they converge. Generate separate location strands and edit them toward one shared radio call, not as falsely equal real-time durations."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Design+an+intercut+rescue+story:+a+mountain+team%E2%80%99s+six-hour+ascent,+a+driver%E2%80%99s+thirty-minute+approach+and+a+climber%E2%80%99s+final+two-minute+wait.+Build+a+timeline+showing+exactly+where+they+converge.+Generate+separate+location+strands+and+edit+them+toward+one+shared+radio+call,+not+as+falsely+equal+real-time+durations."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Scale shift of [Subject], the body suddenly giant or tiny against the same room, Alice physics. Name the room, the new size, and matching shadows.Ban a mere close-up and ban stretching the architecture.Copy promptUse in Video GeneratorDesign an intercut rescue story: a mountain team’s six-hour ascent, a driver’s thirty-minute approach and a climber’s final two-minute wait. Build a timeline showing exactly where they converge. Generate separate location strands and edit them toward one shared radio call, not as falsely equal real-time durations.Design an intercut rescue story: a mountain team’s six-hour ascent, a driver’s thirty-minute approach and a climber’s final two-minute wait. Build a timeline showing exactly where they converge. Generate separate location strands and edit them toward one shared radio call, not as falsely equal real-time durations."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousins are a Close-Up and a zoom. The tell is a big face with a normal room, or a lens punch with no furniture scale change.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is the same architecture, a new body-to-room ratio, and contact that fits."
+        }
+      ],
+      "links": [
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousins are a Close-Up and a zoom. The tell is a big face with a normal room, or a lens punch with no furniture scale change.The fix is the same architecture, a new body-to-room ratio, and contact that fits."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is scale shift in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A scale shift makes a body giant or tiny against the same room. Relative size changes as an optical event. A separate editorial meaning uses unequal story-time strands."
+        },
+        {
+          "type": "heading",
+          "text": "Scale shift vs forced perspective",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Forced perspective is a static alignment of two real sizes so they read as one scale. Scale shift is the change: the body becomes the wrong size in a room we already know."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use scale shift?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when size is the joke or the threat inside a known space. Skip it when you only need a closer lens, and do not confuse it with intercutting unequal clocks."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt scale shift for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Scale shift of [Subject], the body suddenly giant or tiny against the same room. Keep the architecture, match the shadows, and name the new size."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is scale shift in film?A scale shift makes a body giant or tiny against the same room. Relative size changes as an optical event. A separate editorial meaning uses unequal story-time strands.Scale shift vs forced perspectiveForced perspective is a static alignment of two real sizes so they read as one scale. Scale shift is the change: the body becomes the wrong size in a room we already know.When should I use scale shift?Use it when size is the joke or the threat inside a known space. Skip it when you only need a closer lens, and do not confuse it with intercutting unequal clocks.How do I prompt scale shift for AI image or video?Write Scale shift of [Subject], the body suddenly giant or tiny against the same room. Keep the architecture, match the shadows, and name the new size."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Scale shift of [Subject], the body suddenly giant or tiny against the same room, Alice physics. Name the room, the new size, and matching shadows.",
+      "Ban a mere close-up and ban stretching the architecture."
+    ],
+    "example": "Design an intercut rescue story: a mountain team’s six-hour ascent, a driver’s thirty-minute approach and a climber’s final two-minute wait. Build a timeline showing exactly where they converge. Generate separate location strands and edit them toward one shared radio call, not as falsely equal real-time durations."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/3900aca8a944e2291671c7d8799beddd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/scale-shift-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6691c384cb30e915170c3701a7282d54.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/scale-shift-scale-shift-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/91cc7f2606da7a77cb2f072147db4419.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/scale-shift.jpg",
+      "alt": "Scale Shift frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/47eb6933699b353186630c52b97cede8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/forced-perspective-143-forced-perspective-and-scale-illusion-mini.webp",
+      "alt": "Forced Perspective"
+    },
+    {
+      "kind": "video",
+      "path": "media/df55c234331c9b2aefb91e526852904a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/143-forced-perspective-and-scale-illusion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d98e16a4afac1b5ad62e0cb823ecc2e4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/magnification.webp",
+      "alt": "Magnification"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/72b38f3c30ba949229172d52554c57c7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/scale-shift/hero.jpg",
+      "alt": "Scale Shift",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "f16f130161efd39e73c76ef6ccebc741415c381ce325cac5d20f944cab93d037"
+}

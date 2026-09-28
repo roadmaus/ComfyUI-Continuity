@@ -1,0 +1,378 @@
+{
+  "id": "composition/golden-ratio",
+  "slug": "golden-ratio",
+  "title": "Golden Ratio",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/golden-ratio",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-ratio.webp",
+  "detail": "details/composition/golden-ratio.json",
+  "aliases": [],
+  "description": "Golden ratio composition organizes the frame with proportional relationships near phi, about eight to five, as a phi grid or a logarithmic spiral rather than a 3x3. The main mass sits closer to center than a third, and the eye is asked to travel a curve through secondary masses instead of jumping cell to cell.",
+  "thumbnail": "media/820f9b78f9bd93714cc8ce3feb2a5f5f.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Phi is a more secret order than thirds. The diagram still asks who owns space, but the large field is not a blunt two-thirds slab."
+        },
+        {
+          "type": "paragraph",
+          "text": "A spiral from a corner through a face, then through a doorway, then into empty weather, can feel inevitable without announcing a grid. It is the wrong tool when the audience needs the diagram in one glance."
+        },
+        {
+          "type": "paragraph",
+          "text": "Action geography, comedy blocking, and most coverage live on simpler axes. If you cannot point to a curve the eye actually rides, you are decorating with math."
+        },
+        {
+          "type": "paragraph",
+          "text": "Painters used these proportions because canvases hold still. In a moving shot the spiral has to survive a pan, a walk, and a focus change."
+        },
+        {
+          "type": "paragraph",
+          "text": "Design the still first, then see if the move keeps the curve."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Phi is a more secret order than thirds. The diagram still asks who owns space, but the large field is not a blunt two-thirds slab.A spiral from a corner through a face, then through a doorway, then into empty weather, can feel inevitable without announcing a grid. It is the wrong tool when the audience needs the diagram in one glance.Action geography, comedy blocking, and most coverage live on simpler axes. If you cannot point to a curve the eye actually rides, you are decorating with math.Painters used these proportions because canvases hold still. In a moving shot the spiral has to survive a pan, a walk, and a focus change.Design the still first, then see if the move keeps the curve."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A phi grid places lines at about 38 percent and 62 percent, inward of a thirds overlay. A golden spiral is a path, not a stamp: start at a quiet corner and coil toward the face or the object of the look."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the camera level. Moderate glass (40mm to 65mm) preserves the proportions."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ultra-wide will fake a spiral by bending the room. Prompt: Golden-ratio spiral composition around [Subject], the eye traveling a harmonic curve rather than a grid."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works A phi grid places lines at about 38 percent and 62 percent, inward of a thirds overlay. A golden spiral is a path, not a stamp: start at a quiet corner and coil toward the face or the object of the look.Keep the camera level. Moderate glass (40mm to 65mm) preserves the proportions.Ultra-wide will fake a spiral by bending the room. Prompt: Golden-ratio spiral composition around [Subject], the eye traveling a harmonic curve rather than a grid."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it on a painterly hold: a portrait in a designed room, a landscape where a path, a tree, and a figure actually coil. Do not overlay a spiral on a shot whose masses do not sit on that curve."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it on a painterly hold: a portrait in a designed room, a landscape where a path, a tree, and a figure actually coil. Do not overlay a spiral on a shot whose masses do not sit on that curve."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rule of Thirds is the coarser default, lines at one-third, faster to set. Centered Composition plants the subject on the axis and ignores the spiral.",
+          "links": [
+            {
+              "text": "Rule of Thirds",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            },
+            {
+              "text": "Centered Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Leading Lines can trace the same curve if the architecture supplies it, but leading lines do not require phi. If the picture is a bullseye, you wanted Central Framing.",
+          "links": [
+            {
+              "text": "Leading Lines",
+              "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+            },
+            {
+              "text": "Central Framing",
+              "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "displayText": "Centered Composition\nControl, ritual, comedy, or fate.",
+          "links": [
+            {
+              "text": "Centered CompositionControl, ritual, comedy, or fate.",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Central FramingPut them on the crosshairs.",
+          "displayText": "Central Framing\nPut them on the crosshairs.",
+          "links": [
+            {
+              "text": "Central FramingPut them on the crosshairs.",
+              "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Rule of Thirds",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        },
+        {
+          "text": "Centered Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Leading Lines",
+          "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+        },
+        {
+          "text": "Central Framing",
+          "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        },
+        {
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Central FramingPut them on the crosshairs.",
+          "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        },
+        {
+          "kind": "image",
+          "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+          "alt": "Centered Composition"
+        },
+        {
+          "kind": "video",
+          "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/5c633b152c7a36754fdcca970b96d9fa.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/central-framing.webp",
+          "alt": "Central Framing"
+        }
+      ],
+      "sourceText": "Compared with similar shots Rule of Thirds is the coarser default, lines at one-third, faster to set. Centered Composition plants the subject on the axis and ignores the spiral.Leading Lines can trace the same curve if the architecture supplies it, but leading lines do not require phi. If the picture is a bullseye, you wanted Central Framing.Rule of ThirdsDefault dynamic balance. Break it later on purpose.Centered CompositionControl, ritual, comedy, or fate.Central FramingPut them on the crosshairs."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Painterly cinema often organizes near these proportions without announcing them. Barry Lyndon holds figures and furniture in quiet harmonic rooms."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Tree of Life lets landscape, light, and a small body share a coil rather than a grid. Portrait of a Lady on Fire stages faces and firelight as a slow curve of attention."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not overlays to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Painterly cinema often organizes near these proportions without announcing them. Barry Lyndon holds figures and furniture in quiet harmonic rooms.The Tree of Life lets landscape, light, and a small body share a coil rather than a grid. Portrait of a Lady on Fire stages faces and firelight as a slow curve of attention.Grammar, not overlays to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the curve and the destination. Golden-ratio spiral composition around [Subject], the eye traveling a harmonic curve rather than a grid."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say where the coil starts (corner, doorway, shoreline) and where it lands (eyes, hands, a window). Do not write Fibonacci as a sticker."
+        },
+        {
+          "type": "quote",
+          "text": "Golden-ratio spiral composition around [Subject], the eye traveling a harmonic curve rather than a grid."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Golden-ratio+spiral+composition+around+[Subject],+the+eye+traveling+a+harmonic+curve+rather+than+a+grid."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the curve and the destination. Golden-ratio spiral composition around [Subject], the eye traveling a harmonic curve rather than a grid.Say where the coil starts (corner, doorway, shoreline) and where it lands (eyes, hands, a window). Do not write Fibonacci as a sticker.Copy promptUse in Image GeneratorGolden-ratio spiral composition around [Subject], the eye traveling a harmonic curve rather than a grid.Golden-ratio spiral composition around [Subject], the eye traveling a harmonic curve rather than a grid."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is thirds with a spiral graphic imagined on top. The tell is a face on a 33 percent line and a prompt that only says golden."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to move the mass inward toward 62 percent, or to build an actual path of secondary objects the eye can ride."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is thirds with a spiral graphic imagined on top. The tell is a face on a 33 percent line and a prompt that only says golden.The fix is to move the mass inward toward 62 percent, or to build an actual path of secondary objects the eye can ride."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is golden ratio in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is composition that uses proportions near 1.618, as a phi grid or as a spiral path through the masses. The subject is offset, but not as bluntly as on a thirds line. The eye is meant to travel, not to park on a cell."
+        },
+        {
+          "type": "heading",
+          "text": "Golden Ratio vs Rule of Thirds",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Thirds splits the frame at 33 percent. Phi splits nearer 38 and 62 percent. Thirds is a default grid on a monitor. Golden-ratio composition is a tighter proportional claim, sometimes a curve. Both beat accidental centering. Neither is a law."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use golden ratio?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a still or a slow hold has a real path of masses, and you want order that does not look like a student overlay. Skip it for fast geography, jokes, and any shot where the spiral would be a lie."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt golden ratio for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for a spiral or phi placement and name the path. Example: Golden-ratio spiral composition around [Subject], the eye traveling a harmonic curve rather than a grid. State the start of the coil and the landing point. Avoid mystic math talk."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is golden ratio in film?It is composition that uses proportions near 1.618, as a phi grid or as a spiral path through the masses. The subject is offset, but not as bluntly as on a thirds line. The eye is meant to travel, not to park on a cell.Golden Ratio vs Rule of ThirdsThirds splits the frame at 33 percent. Phi splits nearer 38 and 62 percent. Thirds is a default grid on a monitor. Golden-ratio composition is a tighter proportional claim, sometimes a curve. Both beat accidental centering. Neither is a law.When should I use golden ratio?Use it when a still or a slow hold has a real path of masses, and you want order that does not look like a student overlay. Skip it for fast geography, jokes, and any shot where the spiral would be a lie.How do I prompt golden ratio for AI image or video?Ask for a spiral or phi placement and name the path. Example: Golden-ratio spiral composition around [Subject], the eye traveling a harmonic curve rather than a grid. State the start of the coil and the landing point. Avoid mystic math talk."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the curve and the destination. Golden-ratio spiral composition around [Subject], the eye traveling a harmonic curve rather than a grid.",
+      "Say where the coil starts (corner, doorway, shoreline) and where it lands (eyes, hands, a window). Do not write Fibonacci as a sticker."
+    ],
+    "example": "Golden-ratio spiral composition around [Subject], the eye traveling a harmonic curve rather than a grid."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/820f9b78f9bd93714cc8ce3feb2a5f5f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-ratio.webp",
+      "alt": "Golden Ratio example"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+      "alt": "Centered Composition"
+    },
+    {
+      "kind": "video",
+      "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5c633b152c7a36754fdcca970b96d9fa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/central-framing.webp",
+      "alt": "Central Framing"
+    },
+    {
+      "kind": "image",
+      "path": "media/81a3755d6c3134d7e807256dad9075ae.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/golden-ratio/hero.jpg",
+      "alt": "Golden Ratio",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "bb85b6b93604b32d109da4a469e3fb4271953326791e2bd0fbaa8de16d31b65f"
+}

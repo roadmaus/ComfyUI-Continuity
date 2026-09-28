@@ -1,0 +1,474 @@
+{
+  "id": "color/tungsten-balance",
+  "slug": "tungsten-balance",
+  "title": "Tungsten Balance",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/tungsten-balance",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tungsten-balance.webp",
+  "detail": "details/color/tungsten-balance.json",
+  "aliases": [
+    "Warm interior versus cool exterior"
+  ],
+  "description": "Tungsten balance in tungsten color temperature work sets the camera or stock for about 3200K so tungsten practicals render near-neutral or gently warm while daylight and cooler sources go blue. Different source colors remain visibly distinct rather than being normalized to one white.",
+  "thumbnail": "media/32ecde368ef689eb9461a0bbd54dc93e.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The room is warm; the world is not. A hotel corridor, a Christmas party, a snowed-in hotel: 3200K lamps own the interior, and the windows go cold."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mixed sources tell inside versus out without a caption. Safety and exposure can split across a pane of glass."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the whole image should be honey with no cold leftover. That is Warm Amber as a grade.",
+          "links": [
+            {
+              "text": "Warm Amber",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool if you paint opposite halves of a face teal and orange without sources to justify it. Do not treat this as a LUT named mixed lighting; it is a white-balance relationship among real lamps."
+        }
+      ],
+      "links": [
+        {
+          "text": "Warm Amber",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The room is warm; the world is not. A hotel corridor, a Christmas party, a snowed-in hotel: 3200K lamps own the interior, and the windows go cold.Mixed sources tell inside versus out without a caption. Safety and exposure can split across a pane of glass.It is the wrong tool when the whole image should be honey with no cold leftover. That is Warm Amber as a grade.It is the wrong tool if you paint opposite halves of a face teal and orange without sources to justify it. Do not treat this as a LUT named mixed lighting; it is a white-balance relationship among real lamps."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Set white balance near 3200K, or use tungsten stock. Let 5600K windows, moonlight, or cool LEDs go blue."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep 3200K practicals as the interior key (Practical Lighting). Gels exist to convert sources toward or away from that balance.",
+          "links": [
+            {
+              "text": "Practical Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Colored light should hit nearby surfaces consistently. Prompt: Tungsten-balanced interior on [Subject], 3200K warmth, windows going cold blue, mixed sources telling inside versus out."
+        }
+      ],
+      "links": [
+        {
+          "text": "Practical Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Set white balance near 3200K, or use tungsten stock. Let 5600K windows, moonlight, or cool LEDs go blue.Keep 3200K practicals as the interior key (Practical Lighting). Gels exist to convert sources toward or away from that balance.Colored light should hit nearby surfaces consistently. Prompt: Tungsten-balanced interior on [Subject], 3200K warmth, windows going cold blue, mixed sources telling inside versus out."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the room is warm and the world is not: a night interior with cold windows, a party against snow. Do not use it to fake a complementary grade without sources, and do not neutralize every lamp to the same white."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the room is warm and the world is not: a night interior with cold windows, a party against snow. Do not use it to fake a complementary grade without sources, and do not neutralize every lamp to the same white."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Warm Amber is an overall honey grade, not necessarily mixed. Cool Blue chills the whole frame.",
+          "links": [
+            {
+              "text": "Warm Amber",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            },
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Practical Lighting supplies the lamps this balance photographs. Moonlight Gel is a cool key you hang, which will go even colder if the camera is tungsten-balanced.",
+          "links": [
+            {
+              "text": "Practical Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            },
+            {
+              "text": "Moonlight Gel",
+              "url": "https://melies.co/cinematic-techniques/color/moonlight-gel"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Split Toning paints highlights and shadows in grade; this is source color at capture.",
+          "links": [
+            {
+              "text": "Split Toning",
+              "url": "https://melies.co/cinematic-techniques/color/split-tone"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Practical LightingLet the set light the face.",
+          "displayText": "Practical Lighting\nLet the set light the face.",
+          "links": [
+            {
+              "text": "Practical LightingLet the set light the face.",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "displayText": "Bleach Bypass\nWar, crime, or a world without mercy.",
+          "links": [
+            {
+              "text": "Bleach BypassWar, crime, or a world without mercy.",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Warm Amber",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        },
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "Practical Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "Moonlight Gel",
+          "url": "https://melies.co/cinematic-techniques/color/moonlight-gel"
+        },
+        {
+          "text": "Split Toning",
+          "url": "https://melies.co/cinematic-techniques/color/split-tone"
+        },
+        {
+          "text": "Practical LightingLet the set light the face.",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e57ccee4dac77a8b92955074bb2f3c0a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/practical-lighting-065-practical-source-motivation-mini.webp",
+          "alt": "Practical Lighting"
+        },
+        {
+          "kind": "video",
+          "path": "media/1aa504cae7d8c87fc765f9694501981f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/065-practical-source-motivation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        },
+        {
+          "kind": "image",
+          "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+          "alt": "Bleach Bypass"
+        },
+        {
+          "kind": "video",
+          "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Warm Amber is an overall honey grade, not necessarily mixed. Cool Blue chills the whole frame.Practical Lighting supplies the lamps this balance photographs. Moonlight Gel is a cool key you hang, which will go even colder if the camera is tungsten-balanced.Split Toning paints highlights and shadows in grade; this is source color at capture.Practical LightingLet the set light the face.Teal and OrangeYou want contemporary studio punch. Use with taste.Bleach BypassWar, crime, or a world without mercy."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Shining lets warm interior sources contrast with cold blue window light. Eyes Wide Shut keeps warm practicals and cool night illumination in the same rooms."
+        },
+        {
+          "type": "paragraph",
+          "text": "Heat and Her also live in mixed-temperature interiors. Grammar of 3200K versus daylight, not a copied wallpaper."
+        },
+        {
+          "type": "list-item",
+          "text": "The Shining 1980Warm interior sources contrast with cold blue window light.",
+          "displayText": "The Shining 1980\nWarm interior sources contrast with cold blue window light."
+        },
+        {
+          "type": "list-item",
+          "text": "Eyes Wide Shut 1999Warm practicals and cool night illumination coexist.",
+          "displayText": "Eyes Wide Shut 1999\nWarm practicals and cool night illumination coexist."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f6ba8fe5826206bb964516e78306999f.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tungsten-balance/famous/00-the-shining-1980.jpg",
+          "alt": "The Shining 1980"
+        },
+        {
+          "kind": "image",
+          "path": "media/d357f0e2d99943b8759526ff776b1304.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tungsten-balance/famous/01-eyes-wide-shut-1999.jpg",
+          "alt": "Eyes Wide Shut 1999"
+        }
+      ],
+      "sourceText": "In film The Shining lets warm interior sources contrast with cold blue window light. Eyes Wide Shut keeps warm practicals and cool night illumination in the same rooms.Heat and Her also live in mixed-temperature interiors. Grammar of 3200K versus daylight, not a copied wallpaper.The Shining 1980Warm interior sources contrast with cold blue window light.Eyes Wide Shut 1999Warm practicals and cool night illumination coexist."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name 3200K and the cold window. Tungsten-balanced interior on [Subject], 3200K warmth, windows going cold blue, mixed sources telling inside versus out."
+        },
+        {
+          "type": "paragraph",
+          "text": "Put real lamps in the shot. Do not paint a face in two unmotivated halves, and do not neutralize the windows."
+        },
+        {
+          "type": "quote",
+          "text": "A woman sits at a kitchen table lit by a warm tungsten pendant while cold blue predawn light enters from a window behind her. Both colors stay distinct, natural skin transitions, readable shadows. She turns toward the window and moves from warmth into cooler light."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+woman+sits+at+a+kitchen+table+lit+by+a+warm+tungsten+pendant+while+cold+blue+predawn+light+enters+from+a+window+behind+her.+Both+colors+stay+distinct,+natural+skin+transitions,+readable+shadows.+She+turns+toward+the+window+and+moves+from+warmth+into+cooler+light."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name 3200K and the cold window. Tungsten-balanced interior on [Subject], 3200K warmth, windows going cold blue, mixed sources telling inside versus out.Put real lamps in the shot. Do not paint a face in two unmotivated halves, and do not neutralize the windows.Copy promptUse in Video GeneratorA woman sits at a kitchen table lit by a warm tungsten pendant while cold blue predawn light enters from a window behind her. Both colors stay distinct, natural skin transitions, readable shadows. She turns toward the window and moves from warmth into cooler light.A woman sits at a kitchen table lit by a warm tungsten pendant while cold blue predawn light enters from a window behind her. Both colors stay distinct, natural skin transitions, readable shadows. She turns toward the window and moves from warmth into cooler light."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Warm Amber (no cold leftover) or Teal and Orange painted on a face. The tell is a uniformly honey room, or a split face with no window or lamp to cause it.",
+          "links": [
+            {
+              "text": "Warm Amber",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            },
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: 3200K balance, visible warm practicals, daylight or night windows going blue, consistent spill."
+        }
+      ],
+      "links": [
+        {
+          "text": "Warm Amber",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Warm Amber (no cold leftover) or Teal and Orange painted on a face. The tell is a uniformly honey room, or a split face with no window or lamp to cause it.Fix: 3200K balance, visible warm practicals, daylight or night windows going blue, consistent spill."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is tungsten balance in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is white balance (or stock) set for about 3200K. Tungsten lamps look near-white or gently warm, and cooler sources such as daylight windows go blue. Mixed color is kept as information."
+        },
+        {
+          "type": "heading",
+          "text": "Tungsten Balance vs Warm Amber",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Warm amber is a grade that honeys the whole image. Tungsten balance is a capture setting that makes 3200K sources normal and colder sources blue. You can have mixed interiors that are not an overall amber look."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use tungsten balance?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when inside should be warm and outside cold, or when practicals must stay true while windows go blue. Skip it if every source should match one white."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt tungsten balance for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Tungsten-balanced interior on [Subject], 3200K warmth, windows going cold blue, mixed sources telling inside versus out. Demand real lamps. Forbid an unmotivated two-tone face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is tungsten balance in film?It is white balance (or stock) set for about 3200K. Tungsten lamps look near-white or gently warm, and cooler sources such as daylight windows go blue. Mixed color is kept as information.Tungsten Balance vs Warm AmberWarm amber is a grade that honeys the whole image. Tungsten balance is a capture setting that makes 3200K sources normal and colder sources blue. You can have mixed interiors that are not an overall amber look.When should I use tungsten balance?Use it when inside should be warm and outside cold, or when practicals must stay true while windows go blue. Skip it if every source should match one white.How do I prompt tungsten balance for AI image or video?Write: Tungsten-balanced interior on [Subject], 3200K warmth, windows going cold blue, mixed sources telling inside versus out. Demand real lamps. Forbid an unmotivated two-tone face."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name 3200K and the cold window. Tungsten-balanced interior on [Subject], 3200K warmth, windows going cold blue, mixed sources telling inside versus out.",
+      "Put real lamps in the shot. Do not paint a face in two unmotivated halves, and do not neutralize the windows."
+    ],
+    "example": "A woman sits at a kitchen table lit by a warm tungsten pendant while cold blue predawn light enters from a window behind her. Both colors stay distinct, natural skin transitions, readable shadows. She turns toward the window and moves from warmth into cooler light."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/32ecde368ef689eb9461a0bbd54dc93e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tungsten-balance.webp",
+      "alt": "Tungsten Balance example"
+    },
+    {
+      "kind": "image",
+      "path": "media/e57ccee4dac77a8b92955074bb2f3c0a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/practical-lighting-065-practical-source-motivation-mini.webp",
+      "alt": "Practical Lighting"
+    },
+    {
+      "kind": "video",
+      "path": "media/1aa504cae7d8c87fc765f9694501981f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/065-practical-source-motivation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+      "alt": "Bleach Bypass"
+    },
+    {
+      "kind": "video",
+      "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f6ba8fe5826206bb964516e78306999f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tungsten-balance/famous/00-the-shining-1980.jpg",
+      "alt": "The Shining 1980"
+    },
+    {
+      "kind": "image",
+      "path": "media/d357f0e2d99943b8759526ff776b1304.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tungsten-balance/famous/01-eyes-wide-shut-1999.jpg",
+      "alt": "Eyes Wide Shut 1999"
+    },
+    {
+      "kind": "image",
+      "path": "media/21e33fd4d48e36fb5b75810f95af20d1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tungsten-balance/hero.jpg",
+      "alt": "Tungsten Balance",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "c8c165eb0e572e1e094cdf01aca0aaaac34e8d3e2b8c5aba90ee0f79af2dd2ea"
+}

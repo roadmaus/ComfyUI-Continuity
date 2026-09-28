@@ -1,0 +1,408 @@
+{
+  "id": "camera-movement/fpv-drone",
+  "slug": "fpv-drone",
+  "title": "FPV Drone",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+  "detail": "details/camera-movement/fpv-drone.json",
+  "aliases": [],
+  "description": "An FPV drone shot is first-person aerial flying: the camera banks, dives, and threads architecture at high speed. It is proximity and flight, a racing craft with a lens, not a slow crane and not a high establishing hover.",
+  "thumbnail": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+  "video": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Impossible closeness at velocity. Windows, girders, and shoulders are obstacles in a flight path, not composition toys at a distance."
+        },
+        {
+          "type": "paragraph",
+          "text": "The horizon rolls because the craft banks. It is the wrong tool for a chapter-close aerial pullback, and the wrong tool for a dialogue two-shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the drone flies like a tripod, you wanted a different aerial."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Impossible closeness at velocity. Windows, girders, and shoulders are obstacles in a flight path, not composition toys at a distance.The horizon rolls because the craft banks. It is the wrong tool for a chapter-close aerial pullback, and the wrong tool for a dialogue two-shot.If the drone flies like a tripod, you wanted a different aerial."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A small quad flown in first-person view, often with a bound or slightly stabilized camera. Banked turns, fast acceleration, edge motion blur, proximity to surfaces."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the route and the end composition. Prompt FPV drone racing past the subject, first-person flight, banking turns, proximity to architecture, motion blur on edges."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works A small quad flown in first-person view, often with a bound or slightly stabilized camera. Banked turns, fast acceleration, edge motion blur, proximity to surfaces.Name the route and the end composition. Prompt FPV drone racing past the subject, first-person flight, banking turns, proximity to architecture, motion blur on edges."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for impossible proximity and speed. Concrete beat: through a hangar, past a fuselage, out a door, into sky."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not FPV a still interview."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for impossible proximity and speed. Concrete beat: through a hangar, past a fuselage, out a door, into sky.Do not FPV a still interview."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An Aerial Pullback rises and recedes until geography wins, usually from helicopter or high drone with a level horizon. A Crash Zoom In is an optical snap from sticks, not a fly-by.",
+          "links": [
+            {
+              "text": "Aerial Pullback",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            },
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Crane Up is an arm on the ground, tens of feet, not a missile path. FPV is 6DOF flight.",
+          "links": [
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "displayText": "Aerial Pullback\nClose a chapter. Geography wins.",
+          "links": [
+            {
+              "text": "Aerial PullbackClose a chapter. Geography wins.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "displayText": "Crash Zoom In\nPunctuate a hit, a realization, or a comic sting.",
+          "links": [
+            {
+              "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Aerial Pullback",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+          "alt": "Aerial Pullback"
+        },
+        {
+          "kind": "video",
+          "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+          "alt": "Crash Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots An Aerial Pullback rises and recedes until geography wins, usually from helicopter or high drone with a level horizon. A Crash Zoom In is an optical snap from sticks, not a fly-by.A Crane Up is an arm on the ground, tens of feet, not a missile path. FPV is 6DOF flight.Aerial PullbackClose a chapter. Geography wins.Crash Zoom InPunctuate a hit, a realization, or a comic sting.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Top Gun: Maverick second-unit language made high-speed proximity a feature grammar. Music-video FPV popularized threading architecture and bodies at racing speeds."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the banked path and the near-miss, not a particular jet."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Top Gun: Maverick second-unit language made high-speed proximity a feature grammar. Music-video FPV popularized threading architecture and bodies at racing speeds.Use the banked path and the near-miss, not a particular jet."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "FPV drone racing past [Subject], first-person flight, banking turns, proximity to architecture, motion blur on edges, extreme sports camera path. For motion: FPV drone flies past and around [Subject] with banking turns and proximity to structures."
+        },
+        {
+          "type": "quote",
+          "text": "FPV drone flies past and around [Subject] with banking turns and proximity to structures."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=FPV+drone+flies+past+and+around+[Subject]+with+banking+turns+and+proximity+to+structures."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it FPV drone racing past [Subject], first-person flight, banking turns, proximity to architecture, motion blur on edges, extreme sports camera path. For motion: FPV drone flies past and around [Subject] with banking turns and proximity to structures.Copy promptUse in Video GeneratorFPV drone flies past and around [Subject] with banking turns and proximity to structures.FPV drone flies past and around [Subject] with banking turns and proximity to structures."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a slow Aerial Pullback or a Crane Up. The tell is a level, hovering horizon and no bank.",
+          "links": [
+            {
+              "text": "Aerial Pullback",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            },
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: first-person flight, banking, speed, named obstacles, a physical end frame."
+        }
+      ],
+      "links": [
+        {
+          "text": "Aerial Pullback",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a slow Aerial Pullback or a Crane Up. The tell is a level, hovering horizon and no bank.The fix: first-person flight, banking, speed, named obstacles, a physical end frame."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is FPV Drone in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a first-person-view drone path that banks and threads space at speed, with the camera flying as a small aircraft rather than hovering as a crane."
+        },
+        {
+          "type": "heading",
+          "text": "FPV Drone vs Aerial Pullback",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Aerial pullback recedes until a person is a mark on a map, usually level and high. FPV stays close, banks, and treats architecture as a course."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use FPV Drone?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When proximity and speed are the information. Do not use it to gently reveal a landscape."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt FPV Drone for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write FPV drone, first-person flight, banking turns, proximity to structures, edge blur, named route and end composition. Ban a slow level crane."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is FPV Drone in film?It is a first-person-view drone path that banks and threads space at speed, with the camera flying as a small aircraft rather than hovering as a crane.FPV Drone vs Aerial PullbackAerial pullback recedes until a person is a mark on a map, usually level and high. FPV stays close, banks, and treats architecture as a course.When should I use FPV Drone?When proximity and speed are the information. Do not use it to gently reveal a landscape.How do I prompt FPV Drone for AI image or video?Write FPV drone, first-person flight, banking turns, proximity to structures, edge blur, named route and end composition. Ban a slow level crane."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "FPV drone racing past [Subject], first-person flight, banking turns, proximity to architecture, motion blur on edges, extreme sports camera path. For motion: FPV drone flies past and around [Subject] with banking turns and proximity to structures."
+    ],
+    "example": "FPV drone flies past and around [Subject] with banking turns and proximity to structures."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d1f80cca3b74de13558db9947482f893.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/fpv-drone.jpg",
+      "alt": "FPV Drone frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+      "alt": "Aerial Pullback"
+    },
+    {
+      "kind": "video",
+      "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": "Crash Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/477768bc20fcda1987fd1cf7bb4b4d77.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fpv-drone/hero.jpg",
+      "alt": "FPV Drone",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "14419be09646fada225b571e22bcf8c729fc4263bf303c7b9b9b4e47cb8a791e"
+}

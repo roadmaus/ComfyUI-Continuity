@@ -1,0 +1,481 @@
+{
+  "id": "editing/l-cut-visual",
+  "slug": "l-cut-visual",
+  "title": "J-Cut / L-Cut (Visual Setup)",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/l-cut-visual",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/l-cut-visual-152-l-cut-and-dialogue-postlap-mini.webp",
+  "detail": "details/editing/l-cut-visual.json",
+  "aliases": [
+    "Contrapuntal sound",
+    "Ironic music"
+  ],
+  "description": "A J-cut or L-cut visual setup is a picture designed so sound can lead or lag across the splice. One side of the join is a face, a room, or a listener that can hold; the other side is a space already speaking, or still speaking after we have left it.",
+  "thumbnail": "media/f6d76bc24c260e1e374a859c2ff05b85.webp",
+  "video": "media/daba5405fd9b5f11d9a0ff7ebb3351ca.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/152-l-cut-and-dialogue-postlap-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "We hear the next room before we see it (J-cut): the picture stays on the walker, the voice has already arrived. Or we see the listener while the speaker's words continue (L-cut): the face is the bridge."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sound will lead or lag. The face is the bridge."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when picture and track should not cut on the same frame, so thought can cross a doorway. It is the wrong tool when you need both rooms visible at once (Split Screen) or when you only need a mute reaction insert with no overlapping track.",
+          "links": [
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Randomly mismatched music is not automatically meaningful counterpoint. Define what the lag reveals: dread, irony, a voice that will not let the face go."
+        }
+      ],
+      "links": [
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function We hear the next room before we see it (J-cut): the picture stays on the walker, the voice has already arrived. Or we see the listener while the speaker's words continue (L-cut): the face is the bridge.Sound will lead or lag. The face is the bridge.Use it when picture and track should not cut on the same frame, so thought can cross a doorway. It is the wrong tool when you need both rooms visible at once (Split Screen) or when you only need a mute reaction insert with no overlapping track.Randomly mismatched music is not automatically meaningful counterpoint. Define what the lag reveals: dread, irony, a voice that will not let the face go."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "On the timeline, a J-cut lets incoming audio start under the outgoing picture. An L-cut lets outgoing audio continue under the incoming picture."
+        },
+        {
+          "type": "paragraph",
+          "text": "The visual setup is a shot that can bear that overlap: a Reaction Shot, a walk toward a door, an empty office. Keep the sound's source clear enough that the overlap is information, not muddle.",
+          "links": [
+            {
+              "text": "Reaction Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: a frame of [Subject] designed as the picture half of an L-cut or J-cut, reaction holding while another space is already speaking."
+        }
+      ],
+      "links": [
+        {
+          "text": "Reaction Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works On the timeline, a J-cut lets incoming audio start under the outgoing picture. An L-cut lets outgoing audio continue under the incoming picture.The visual setup is a shot that can bear that overlap: a Reaction Shot, a walk toward a door, an empty office. Keep the sound's source clear enough that the overlap is information, not muddle.Prompt: a frame of [Subject] designed as the picture half of an L-cut or J-cut, reaction holding while another space is already speaking."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to enter a conversation before the room, to stay on a listener after a confession, to let a song continue over a packing scene it does not belong to. Do not use it as default dialogue cutting if both faces should share the same on-camera words."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you need meanwhile geography, Cross-Cutting.",
+          "links": [
+            {
+              "text": "Cross-Cutting",
+              "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cross-Cutting",
+          "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it to enter a conversation before the room, to stay on a listener after a confession, to let a song continue over a packing scene it does not belong to. Do not use it as default dialogue cutting if both faces should share the same on-camera words.If you need meanwhile geography, Cross-Cutting."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Reaction Shot is the picture; J-cut and L-cut are how that picture meets sound. Cross-Cutting alternates whole lines.",
+          "links": [
+            {
+              "text": "Reaction Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+            },
+            {
+              "text": "Cross-Cutting",
+              "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A smash in sound on a picture cut is closer to Smash Cut. Counterpoint (cheerful music on a cruel image) can ride an L-cut, but the technique here is the staggered splice, not the playlist.",
+          "links": [
+            {
+              "text": "Smash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Reaction ShotThe important action is watching.",
+          "displayText": "Reaction Shot\nThe important action is watching.",
+          "links": [
+            {
+              "text": "Reaction ShotThe important action is watching.",
+              "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cross-CuttingMeanwhile is the engine.",
+          "displayText": "Cross-Cutting\nMeanwhile is the engine.",
+          "links": [
+            {
+              "text": "Cross-CuttingMeanwhile is the engine.",
+              "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Reaction Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+        },
+        {
+          "text": "Cross-Cutting",
+          "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+        },
+        {
+          "text": "Smash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Reaction ShotThe important action is watching.",
+          "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+        },
+        {
+          "text": "Cross-CuttingMeanwhile is the engine.",
+          "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/248886e506c0ab0f39e5253a8675425b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reaction-shot-093-reaction-shot-mini.webp",
+          "alt": "Reaction Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/e015bba47d3ffb7de60f4bd03af20bcb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/093-reaction-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8f3e9fa837a5cfd76a9d6348a999ed0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-cut-111-cross-cutting-between-converging-actions-mini.webp",
+          "alt": "Cross-Cutting"
+        },
+        {
+          "kind": "video",
+          "path": "media/ffb85c669ad8b5e280269a83f59f771a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/111-cross-cutting-between-converging-actions-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Reaction Shot is the picture; J-cut and L-cut are how that picture meets sound. Cross-Cutting alternates whole lines.A smash in sound on a picture cut is closer to Smash Cut. Counterpoint (cheerful music on a cruel image) can ride an L-cut, but the technique here is the staggered splice, not the playlist.Reaction ShotThe important action is watching.Cross-CuttingMeanwhile is the engine.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Social Network and Heat keep speech living over listeners' faces so thought continues across the join. The Conversation makes incoming sound a threat before the picture explains it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Yi Yi lets piano arrive before its source is located. A Clockwork Orange and Reservoir Dogs place cheerful tracks against behavior the picture will not bless."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the stagger, not the needle-drop."
+        },
+        {
+          "type": "list-item",
+          "text": "A Clockwork Orange 1971Cheerful performance is placed against disturbing behavior.",
+          "displayText": "A Clockwork Orange 1971\nCheerful performance is placed against disturbing behavior."
+        },
+        {
+          "type": "list-item",
+          "text": "Reservoir Dogs 1992The radio song contrasts with the warehouse torture scene.",
+          "displayText": "Reservoir Dogs 1992\nThe radio song contrasts with the warehouse torture scene."
+        },
+        {
+          "type": "list-item",
+          "text": "Yi Yi 2000Piano music is heard before its source is fully located visually.",
+          "displayText": "Yi Yi 2000\nPiano music is heard before its source is fully located visually."
+        },
+        {
+          "type": "list-item",
+          "text": "Heat 1995Use the diner conversation to study speech continuing over a listener’s view; exact overlaps require an edition check.",
+          "displayText": "Heat 1995\nUse the diner conversation to study speech continuing over a listener’s view; exact overlaps require an edition check."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Social Network and Heat keep speech living over listeners' faces so thought continues across the join. The Conversation makes incoming sound a threat before the picture explains it.Yi Yi lets piano arrive before its source is located. A Clockwork Orange and Reservoir Dogs place cheerful tracks against behavior the picture will not bless.Use the stagger, not the needle-drop.A Clockwork Orange 1971Cheerful performance is placed against disturbing behavior.Reservoir Dogs 1992The radio song contrasts with the warehouse torture scene.Yi Yi 2000Piano music is heard before its source is fully located visually.Heat 1995Use the diner conversation to study speech continuing over a listener’s view; exact overlaps require an edition check."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A frame of [Subject] designed as the picture half of an L-cut or J-cut, reaction holding while another space is already speaking. For stills, describe a listening face or a doorway that can hold offscreen voice."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, specify whether audio of B starts under A (J) or audio of A continues under B (L), and name both spaces."
+        },
+        {
+          "type": "quote",
+          "text": "A cheerful original corporate jingle plays over a spotless office being emptied after a sudden closure. Workers quietly pack plants and family photographs while the tune maintains its bright tempo. Generate restrained visual coverage and compose an original cue; do not imitate an existing recording or melody."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+cheerful+original+corporate+jingle+plays+over+a+spotless+office+being+emptied+after+a+sudden+closure.+Workers+quietly+pack+plants+and+family+photographs+while+the+tune+maintains+its+bright+tempo.+Generate+restrained+visual+coverage+and+compose+an+original+cue;+do+not+imitate+an+existing+recording+or+melody."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it A frame of [Subject] designed as the picture half of an L-cut or J-cut, reaction holding while another space is already speaking. For stills, describe a listening face or a doorway that can hold offscreen voice.For video, specify whether audio of B starts under A (J) or audio of A continues under B (L), and name both spaces.Copy promptUse in Video GeneratorA cheerful original corporate jingle plays over a spotless office being emptied after a sudden closure. Workers quietly pack plants and family photographs while the tune maintains its bright tempo. Generate restrained visual coverage and compose an original cue; do not imitate an existing recording or melody.A cheerful original corporate jingle plays over a spotless office being emptied after a sudden closure. Workers quietly pack plants and family photographs while the tune maintains its bright tempo. Generate restrained visual coverage and compose an original cue; do not imitate an existing recording or melody."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a mute Reaction Shot with picture and sound cutting together, or a Cross-Cutting that never overlaps track. The tell: lips in the new room are already talking in sync at the picture cut, with no pre-lap.",
+          "links": [
+            {
+              "text": "Reaction Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+            },
+            {
+              "text": "Cross-Cutting",
+              "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: hold the first picture while the second track starts, or hold the first track after the picture has moved."
+        }
+      ],
+      "links": [
+        {
+          "text": "Reaction Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+        },
+        {
+          "text": "Cross-Cutting",
+          "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a mute Reaction Shot with picture and sound cutting together, or a Cross-Cutting that never overlaps track. The tell: lips in the new room are already talking in sync at the picture cut, with no pre-lap.The fix: hold the first picture while the second track starts, or hold the first track after the picture has moved."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is J-Cut / L-Cut (Visual Setup) in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A J-cut starts the next shot's sound before its picture; an L-cut keeps the last shot's sound after the picture has changed. The visual setup is a frame that can hold while the other space speaks."
+        },
+        {
+          "type": "heading",
+          "text": "J-Cut / L-Cut vs Reaction Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A reaction shot is a picture of listening. J-cut and L-cut are how that picture is joined to another space's sound. You can have a reaction with a straight cut; the J/L is the stagger."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use J-Cut / L-Cut (Visual Setup)?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when sound should lead a scene in, or linger after we have left. Do not use it if picture and track must hit together as a smash."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt J-Cut / L-Cut (Visual Setup) for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Describe a face or room that can hold offscreen voice. Example: A frame of [Subject] as the picture half of an L-cut or J-cut, reaction holding while another space is already speaking. For video, say which track pre-laps."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is J-Cut / L-Cut (Visual Setup) in film?A J-cut starts the next shot's sound before its picture; an L-cut keeps the last shot's sound after the picture has changed. The visual setup is a frame that can hold while the other space speaks.J-Cut / L-Cut vs Reaction ShotA reaction shot is a picture of listening. J-cut and L-cut are how that picture is joined to another space's sound. You can have a reaction with a straight cut; the J/L is the stagger.When should I use J-Cut / L-Cut (Visual Setup)?Use it when sound should lead a scene in, or linger after we have left. Do not use it if picture and track must hit together as a smash.How do I prompt J-Cut / L-Cut (Visual Setup) for AI image or video?Describe a face or room that can hold offscreen voice. Example: A frame of [Subject] as the picture half of an L-cut or J-cut, reaction holding while another space is already speaking. For video, say which track pre-laps."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "A frame of [Subject] designed as the picture half of an L-cut or J-cut, reaction holding while another space is already speaking. For stills, describe a listening face or a doorway that can hold offscreen voice.",
+      "For video, specify whether audio of B starts under A (J) or audio of A continues under B (L), and name both spaces."
+    ],
+    "example": "A cheerful original corporate jingle plays over a spotless office being emptied after a sudden closure. Workers quietly pack plants and family photographs while the tune maintains its bright tempo. Generate restrained visual coverage and compose an original cue; do not imitate an existing recording or melody."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/daba5405fd9b5f11d9a0ff7ebb3351ca.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/152-l-cut-and-dialogue-postlap-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f6d76bc24c260e1e374a859c2ff05b85.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/l-cut-visual-152-l-cut-and-dialogue-postlap-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f19f044937026b2506d844312ec90247.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/l-cut-visual.jpg",
+      "alt": "J-Cut / L-Cut (Visual Setup) frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/248886e506c0ab0f39e5253a8675425b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reaction-shot-093-reaction-shot-mini.webp",
+      "alt": "Reaction Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/e015bba47d3ffb7de60f4bd03af20bcb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/093-reaction-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8f3e9fa837a5cfd76a9d6348a999ed0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-cut-111-cross-cutting-between-converging-actions-mini.webp",
+      "alt": "Cross-Cutting"
+    },
+    {
+      "kind": "video",
+      "path": "media/ffb85c669ad8b5e280269a83f59f771a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/111-cross-cutting-between-converging-actions-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f2c2cb88224ca1049f6041892daf6ea4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/l-cut-visual/hero.jpg",
+      "alt": "J-Cut / L-Cut (Visual Setup)",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "2a75c50717ffbc78176670e4d0c710ad6ffbed0f403cb2e87234d76f6afbc6ff"
+}

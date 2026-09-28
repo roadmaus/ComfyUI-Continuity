@@ -1,0 +1,397 @@
+{
+  "id": "viral-looks/2000s-paparazzi",
+  "slug": "2000s-paparazzi",
+  "title": "2000s Paparazzi",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/2000s-paparazzi-2000s-paparazzi-mini.webp",
+  "detail": "details/viral-looks/2000s-paparazzi.json",
+  "aliases": [],
+  "description": "2000s paparazzi, the 2000s paparazzi look, is on-camera flash from a compact digital: greenish white balance, hard wall-shadow, sidewalk glare, a face not ready. Fame as a strobe: the theft is the lighting.",
+  "thumbnail": "media/06642059ad749895e9403b5a4e19a430.webp",
+  "video": "media/6764560fe3048c902e391df99ef78685.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/2000s-paparazzi-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Scandal, youth, a character hunted by attention: club rope, sidewalk, car door, night. Motion smear is allowed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Beauty light is not. Superstar is the sanctioned cousin."
+        },
+        {
+          "type": "paragraph",
+          "text": "Magazine is the page. This is the accident you keep."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a royal portrait, a beauty cover, or a planned fashion key. If the red-eye and the wall-shadow are gone, you shot glam."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Scandal, youth, a character hunted by attention: club rope, sidewalk, car door, night. Motion smear is allowed.Beauty light is not. Superstar is the sanctioned cousin.Magazine is the page. This is the accident you keep.It is the wrong tool for a royal portrait, a beauty cover, or a planned fashion key. If the red-eye and the wall-shadow are gone, you shot glam."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Chest to eye height, 28mm to 50mm, as if a compact in a crowd. Direct on-camera flash, hard shadow on a wall, compact-camera artifacts, sidewalk or club rope."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not beauty-light the face. No masthead."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: 2000s paparazzi of [Subject], on-camera flash, compact digital, sidewalk fame, a decade of glare."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Chest to eye height, 28mm to 50mm, as if a compact in a crowd. Direct on-camera flash, hard shadow on a wall, compact-camera artifacts, sidewalk or club rope.Do not beauty-light the face. No masthead.Prompt: 2000s paparazzi of [Subject], on-camera flash, compact digital, sidewalk fame, a decade of glare."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A hunted exit, a scandal still, youth under theft-light. Do not use it for a sanctioned cover or a beauty dish."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A hunted exit, a scandal still, youth under theft-light. Do not use it for a sanctioned cover or a beauty dish."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Superstar is consent and cover light. Flash Cut is an edit of white frames.",
+          "links": [
+            {
+              "text": "Superstar",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/superstar"
+            },
+            {
+              "text": "Flash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/flash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "2000s paparazzi is the still of that theft: compact digital, on-camera flash, face not posed. Glam is the opposite discipline.",
+          "links": [
+            {
+              "text": "Glam",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SuperstarThey are already famous in the frame.",
+          "displayText": "Superstar\nThey are already famous in the frame.",
+          "links": [
+            {
+              "text": "SuperstarThey are already famous in the frame.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/superstar"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Flash CutA thought that lasts three frames.",
+          "displayText": "Flash Cut\nA thought that lasts three frames.",
+          "links": [
+            {
+              "text": "Flash CutA thought that lasts three frames.",
+              "url": "https://melies.co/cinematic-techniques/editing/flash-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Superstar",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/superstar"
+        },
+        {
+          "text": "Flash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/flash-cut"
+        },
+        {
+          "text": "Glam",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "SuperstarThey are already famous in the frame.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/superstar"
+        },
+        {
+          "text": "Flash CutA thought that lasts three frames.",
+          "url": "https://melies.co/cinematic-techniques/editing/flash-cut"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/31002824b52ca76758c3e755e8b6f0d6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/superstar-superstar-mini.webp",
+          "alt": "Superstar"
+        },
+        {
+          "kind": "video",
+          "path": "media/776b8f7833f86445f2ce4541b61aee89.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/superstar-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/0466a9cd31ca195d7074a1f111fed0fb.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/flash-cut-03-flash-cut-mini.webp",
+          "alt": "Flash Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/3f8d190b8a2f9ff5c53e4150c8ccaccd.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-flash-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Superstar is consent and cover light. Flash Cut is an edit of white frames.2000s paparazzi is the still of that theft: compact digital, on-camera flash, face not posed. Glam is the opposite discipline.SuperstarThey are already famous in the frame.Flash CutA thought that lasts three frames.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Bling Ring lives in sidewalk fame and ugly flash. Paparazzi (2004) treats the compact strobe as a weapon."
+        },
+        {
+          "type": "paragraph",
+          "text": "A thousand club-exit stills are the grammar. The frame should look accidental."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Bling Ring lives in sidewalk fame and ugly flash. Paparazzi (2004) treats the compact strobe as a weapon.A thousand club-exit stills are the grammar. The frame should look accidental."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Direct flash, not ready, sidewalk. 2000s paparazzi of [Subject], on-camera flash, compact digital, sidewalk fame, a decade of glare."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add hard wall-shadow, greenish compact white balance, motion smear allowed, no beauty key, no masthead type."
+        },
+        {
+          "type": "quote",
+          "text": "2000s paparazzi of [Subject], on-camera flash, compact digital, sidewalk fame, a decade of glare."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=2000s+paparazzi+of+[Subject],+on-camera+flash,+compact+digital,+sidewalk+fame,+a+decade+of+glare."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Direct flash, not ready, sidewalk. 2000s paparazzi of [Subject], on-camera flash, compact digital, sidewalk fame, a decade of glare.Add hard wall-shadow, greenish compact white balance, motion smear allowed, no beauty key, no masthead type.Copy promptUse in Image Generator2000s paparazzi of [Subject], on-camera flash, compact digital, sidewalk fame, a decade of glare.2000s paparazzi of [Subject], on-camera flash, compact digital, sidewalk fame, a decade of glare."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Soft flash that still looks like fashion, or a slide into Superstar. The tell is no wall-shadow and no compact artifact.",
+          "links": [
+            {
+              "text": "Superstar",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/superstar"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: on-camera flash, ugly, accidental, face not ready."
+        }
+      ],
+      "links": [
+        {
+          "text": "Superstar",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/superstar"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong Soft flash that still looks like fashion, or a slide into Superstar. The tell is no wall-shadow and no compact artifact.Fix it: on-camera flash, ugly, accidental, face not ready."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is 2000s Paparazzi in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A theft-light recipe: on-camera flash, compact digital, sidewalk glare, a face not ready. It is a lamp and a sensor, not a camera move."
+        },
+        {
+          "type": "heading",
+          "text": "2000s Paparazzi vs Superstar",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Superstar is sanctioned beauty and a room already looking. 2000s paparazzi is stolen strobe. If the person looks ready and rich in the light, you wanted superstar."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use 2000s Paparazzi?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Scandal, hunted exits, youth under attention. Skip royal portraits and beauty covers."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt 2000s Paparazzi for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Compact flash, sidewalk, then: 2000s paparazzi of [Subject], on-camera flash, compact digital, sidewalk fame, a decade of glare. Keep the wall-shadow. Do not beauty-light."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is 2000s Paparazzi in film?A theft-light recipe: on-camera flash, compact digital, sidewalk glare, a face not ready. It is a lamp and a sensor, not a camera move.2000s Paparazzi vs SuperstarSuperstar is sanctioned beauty and a room already looking. 2000s paparazzi is stolen strobe. If the person looks ready and rich in the light, you wanted superstar.When should I use 2000s Paparazzi?Scandal, hunted exits, youth under attention. Skip royal portraits and beauty covers.How do I prompt 2000s Paparazzi for AI image or video?Compact flash, sidewalk, then: 2000s paparazzi of [Subject], on-camera flash, compact digital, sidewalk fame, a decade of glare. Keep the wall-shadow. Do not beauty-light."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Direct flash, not ready, sidewalk. 2000s paparazzi of [Subject], on-camera flash, compact digital, sidewalk fame, a decade of glare.",
+      "Add hard wall-shadow, greenish compact white balance, motion smear allowed, no beauty key, no masthead type."
+    ],
+    "example": "2000s paparazzi of [Subject], on-camera flash, compact digital, sidewalk fame, a decade of glare."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/6764560fe3048c902e391df99ef78685.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/2000s-paparazzi-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/06642059ad749895e9403b5a4e19a430.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/2000s-paparazzi-2000s-paparazzi-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/54b6d483b97ac557e41e7db6ecbb6f39.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/2000s-paparazzi.jpg",
+      "alt": "2000s Paparazzi frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/31002824b52ca76758c3e755e8b6f0d6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/superstar-superstar-mini.webp",
+      "alt": "Superstar"
+    },
+    {
+      "kind": "video",
+      "path": "media/776b8f7833f86445f2ce4541b61aee89.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/superstar-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0466a9cd31ca195d7074a1f111fed0fb.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/flash-cut-03-flash-cut-mini.webp",
+      "alt": "Flash Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/3f8d190b8a2f9ff5c53e4150c8ccaccd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-flash-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/92555963af7c4546ea0df403992e59ac.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/2000s-paparazzi/hero.jpg",
+      "alt": "2000s Paparazzi",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "52cb4163c6ba4e9b6791ab6e46cd35f5465d30caa19b330feab9bc5a2cd2b5a6"
+}

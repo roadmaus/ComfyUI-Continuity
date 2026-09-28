@@ -1,0 +1,450 @@
+{
+  "id": "composition/one-point-perspective",
+  "slug": "one-point-perspective",
+  "title": "One-Point Perspective",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/one-point-perspective",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-point-perspective-037-symmetry-and-one-point-perspective-mini.webp",
+  "detail": "details/composition/one-point-perspective.json",
+  "aliases": [
+    "Central vanishing point",
+    "Axial composition"
+  ],
+  "description": "One-point perspective in one point perspective cinematography squares the camera to a plane so receding parallels meet at a single vanishing point, often on the central axis. The result is tunnel depth or ceremonial order: a corridor, a nave, a hotel hall aimed at infinity or at a person.",
+  "thumbnail": "media/fd42e6b828b510faf2cf566bcbd2d93b.webp",
+  "video": "media/6a0595c4b52cce7843ef5c4ab8eb4adf.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/037-symmetry-and-one-point-perspective-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Destiny has a vanishing point when the architecture agrees. Walk toward it and the world funnels."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stand in the middle and the world presents. A small step off axis becomes a scandal because the construction was so true."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool in a room with no parallel receding edges, or when the scene should feel found rather than designed. Forcing a tunnel onto a forest is a lie unless the trees were planted as a nave."
+        },
+        {
+          "type": "paragraph",
+          "text": "Centering a face is not enough. If the walls do not recede to one point, you have central framing in a box."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Destiny has a vanishing point when the architecture agrees. Walk toward it and the world funnels.Stand in the middle and the world presents. A small step off axis becomes a scandal because the construction was so true.It is the wrong tool in a room with no parallel receding edges, or when the scene should feel found rather than designed. Forcing a tunnel onto a forest is a lie unless the trees were planted as a nave.Centering a face is not enough. If the walls do not recede to one point, you have central framing in a box."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Align the lens with the centerline of the architecture. Keep verticals vertical (shift, a level, or a longer lens farther back)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Place the vanishing point on a face, on a door, or on empty infinity. A moderate wide (24mm to 35mm) shows the funnel."
+        },
+        {
+          "type": "paragraph",
+          "text": "Too wide bows the walls. Prompt: One-point perspective corridor toward [Subject] or through them, vanishing point on axis, Kubrick infinity."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Align the lens with the centerline of the architecture. Keep verticals vertical (shift, a level, or a longer lens farther back).Place the vanishing point on a face, on a door, or on empty infinity. A moderate wide (24mm to 35mm) shows the funnel.Too wide bows the walls. Prompt: One-point perspective corridor toward [Subject] or through them, vanishing point on axis, Kubrick infinity."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for hotels, spaceships, naves, bunkers, and any fate that should feel designed. Do not square up a messy street and call it one-point because a face is in the middle."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for hotels, spaceships, naves, bunkers, and any fate that should feel designed. Do not square up a messy street and call it one-point because a face is in the middle."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Leading Lines may converge without a full axial construction. Centered Composition plants the subject on the axis but may be a flat altar with no tunnel.",
+          "links": [
+            {
+              "text": "Leading Lines",
+              "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+            },
+            {
+              "text": "Centered Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vanishing Point is the meeting place itself and can sit off-axis in two-point perspective. Symmetry often arrives with one-point, but a tunnel can hide an unmatched object as the break.",
+          "links": [
+            {
+              "text": "Vanishing Point",
+              "url": "https://melies.co/cinematic-techniques/composition/vanishing-point"
+            },
+            {
+              "text": "Symmetry",
+              "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Architexture may flatten facade as texture instead of aiming it.",
+          "links": [
+            {
+              "text": "Architexture",
+              "url": "https://melies.co/cinematic-techniques/composition/architexture"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Leading LinesArchitecture should point.",
+          "displayText": "Leading Lines\nArchitecture should point.",
+          "links": [
+            {
+              "text": "Leading LinesArchitecture should point.",
+              "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "displayText": "Centered Composition\nControl, ritual, comedy, or fate.",
+          "links": [
+            {
+              "text": "Centered CompositionControl, ritual, comedy, or fate.",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Leading Lines",
+          "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+        },
+        {
+          "text": "Centered Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Vanishing Point",
+          "url": "https://melies.co/cinematic-techniques/composition/vanishing-point"
+        },
+        {
+          "text": "Symmetry",
+          "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+        },
+        {
+          "text": "Architexture",
+          "url": "https://melies.co/cinematic-techniques/composition/architexture"
+        },
+        {
+          "text": "Leading LinesArchitecture should point.",
+          "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+        },
+        {
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/13ec67852b1960715c9beedb1ebfdf5b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/leading-lines.webp",
+          "alt": "Leading Lines"
+        },
+        {
+          "kind": "image",
+          "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+          "alt": "Centered Composition"
+        },
+        {
+          "kind": "video",
+          "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Leading Lines may converge without a full axial construction. Centered Composition plants the subject on the axis but may be a flat altar with no tunnel.Vanishing Point is the meeting place itself and can sit off-axis in two-point perspective. Symmetry often arrives with one-point, but a tunnel can hide an unmatched object as the break.Architexture may flatten facade as texture instead of aiming it.Leading LinesArchitecture should point.Centered CompositionControl, ritual, comedy, or fate.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Shining aims Overlook corridors at a point that feels like destiny. 2001: A Space Odyssey uses axial interiors as designed future."
+        },
+        {
+          "type": "paragraph",
+          "text": "Leon and The Grand Budapest Hotel also square halls and lobbies so order is the air you breathe. Grammar of construction, not a carpet to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "The Shining 1980The Overlook’s corridors and architectural interiors.",
+          "displayText": "The Shining 1980\nThe Overlook’s corridors and architectural interiors."
+        },
+        {
+          "type": "list-item",
+          "text": "The Grand Budapest Hotel 2014Frontal hotel interiors and concierge compositions.",
+          "displayText": "The Grand Budapest Hotel 2014\nFrontal hotel interiors and concierge compositions."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/17558fb03e9b391610f4443c91c412e2.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/one-point-perspective/famous/00-the-shining-1980.jpg",
+          "alt": "The Shining 1980"
+        },
+        {
+          "kind": "image",
+          "path": "media/2ce75faf239b470b14b282f5a1a58671.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/one-point-perspective/famous/01-the-grand-budapest-hotel-2014.jpg",
+          "alt": "The Grand Budapest Hotel 2014"
+        }
+      ],
+      "sourceText": "In film The Shining aims Overlook corridors at a point that feels like destiny. 2001: A Space Odyssey uses axial interiors as designed future.Leon and The Grand Budapest Hotel also square halls and lobbies so order is the air you breathe. Grammar of construction, not a carpet to copy.The Shining 1980The Overlook’s corridors and architectural interiors.The Grand Budapest Hotel 2014Frontal hotel interiors and concierge compositions."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand a single vanishing point and a square camera. One-point perspective corridor toward [Subject] or through them, vanishing point on axis, Kubrick infinity."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the receding architecture. Say camera on the centerline, verticals true."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the person is the target, put the point on them. If they are a gate, put the point beyond."
+        },
+        {
+          "type": "quote",
+          "text": "A lone night porter stands centered at the end of a perfectly symmetrical hotel corridor. Locked axial camera, central vanishing point, balanced lamps and doorways. Hold still as one door on the far left opens slightly, breaking the order. No camera move."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+lone+night+porter+stands+centered+at+the+end+of+a+perfectly+symmetrical+hotel+corridor.+Locked+axial+camera,+central+vanishing+point,+balanced+lamps+and+doorways.+Hold+still+as+one+door+on+the+far+left+opens+slightly,+breaking+the+order.+No+camera+move."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Demand a single vanishing point and a square camera. One-point perspective corridor toward [Subject] or through them, vanishing point on axis, Kubrick infinity.Name the receding architecture. Say camera on the centerline, verticals true.If the person is the target, put the point on them. If they are a gate, put the point beyond.Copy promptUse in Video GeneratorA lone night porter stands centered at the end of a perfectly symmetrical hotel corridor. Locked axial camera, central vanishing point, balanced lamps and doorways. Hold still as one door on the far left opens slightly, breaking the order. No camera move.A lone night porter stands centered at the end of a perfectly symmetrical hotel corridor. Locked axial camera, central vanishing point, balanced lamps and doorways. Hold still as one door on the far left opens slightly, breaking the order. No camera move."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a centered portrait in a hall shot from a corner. The tell is two vanishing points, a wall receding on one side only."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to move onto the axis until left and right converge together, or to own Vanishing Point as a two-point street.",
+          "links": [
+            {
+              "text": "Vanishing Point",
+              "url": "https://melies.co/cinematic-techniques/composition/vanishing-point"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Vanishing Point",
+          "url": "https://melies.co/cinematic-techniques/composition/vanishing-point"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a centered portrait in a hall shot from a corner. The tell is two vanishing points, a wall receding on one side only.The fix is to move onto the axis until left and right converge together, or to own Vanishing Point as a two-point street."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is one-point perspective in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera is square to a plane. Parallel receding lines meet at one vanishing point, often on the central axis. Halls, naves, and designed interiors become tunnels or ceremonies."
+        },
+        {
+          "type": "heading",
+          "text": "One-Point Perspective vs Centered Composition",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Centered composition puts the subject on the axis. One-point perspective constructs space toward a single vanishing point. You can center a face against a flat wall with no tunnel. You can also shoot a one-point hall with the actor off to the side as a break."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use one-point perspective?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when architecture can funnel: hotels, ships, churches, bunkers, a fate that feels designed. Do not fake it in irregular space, and do not confuse a centered head with a vanishing construction."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt one-point perspective for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for one vanishing point on axis and a square camera. Example: One-point perspective corridor toward [Subject] or through them, vanishing point on axis, Kubrick infinity. Name the corridor. Add verticals true."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is one-point perspective in film?The camera is square to a plane. Parallel receding lines meet at one vanishing point, often on the central axis. Halls, naves, and designed interiors become tunnels or ceremonies.One-Point Perspective vs Centered CompositionCentered composition puts the subject on the axis. One-point perspective constructs space toward a single vanishing point. You can center a face against a flat wall with no tunnel. You can also shoot a one-point hall with the actor off to the side as a break.When should I use one-point perspective?Use it when architecture can funnel: hotels, ships, churches, bunkers, a fate that feels designed. Do not fake it in irregular space, and do not confuse a centered head with a vanishing construction.How do I prompt one-point perspective for AI image or video?Ask for one vanishing point on axis and a square camera. Example: One-point perspective corridor toward [Subject] or through them, vanishing point on axis, Kubrick infinity. Name the corridor. Add verticals true."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Demand a single vanishing point and a square camera. One-point perspective corridor toward [Subject] or through them, vanishing point on axis, Kubrick infinity.",
+      "Name the receding architecture. Say camera on the centerline, verticals true.",
+      "If the person is the target, put the point on them. If they are a gate, put the point beyond."
+    ],
+    "example": "A lone night porter stands centered at the end of a perfectly symmetrical hotel corridor. Locked axial camera, central vanishing point, balanced lamps and doorways. Hold still as one door on the far left opens slightly, breaking the order. No camera move."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/6a0595c4b52cce7843ef5c4ab8eb4adf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/037-symmetry-and-one-point-perspective-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fd42e6b828b510faf2cf566bcbd2d93b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-point-perspective-037-symmetry-and-one-point-perspective-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cb9368dda0a1dc100857684367ee7a62.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/one-point-perspective.jpg",
+      "alt": "One-Point Perspective frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/13ec67852b1960715c9beedb1ebfdf5b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/leading-lines.webp",
+      "alt": "Leading Lines"
+    },
+    {
+      "kind": "image",
+      "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+      "alt": "Centered Composition"
+    },
+    {
+      "kind": "video",
+      "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/17558fb03e9b391610f4443c91c412e2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/one-point-perspective/famous/00-the-shining-1980.jpg",
+      "alt": "The Shining 1980"
+    },
+    {
+      "kind": "image",
+      "path": "media/2ce75faf239b470b14b282f5a1a58671.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/one-point-perspective/famous/01-the-grand-budapest-hotel-2014.jpg",
+      "alt": "The Grand Budapest Hotel 2014"
+    },
+    {
+      "kind": "image",
+      "path": "media/8b299f31ca1e8cc95fb2213bbed0a9c2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/one-point-perspective/hero.jpg",
+      "alt": "One-Point Perspective",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "0dd2336807851184bdfb504c48de98e2d042d0d62d7e5d70bb5116fa3a0c41c1"
+}

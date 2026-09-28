@@ -1,0 +1,368 @@
+{
+  "id": "lighting/broad-lighting",
+  "slug": "broad-lighting",
+  "title": "Broad Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/broad-lighting",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/broad-lighting.webp",
+  "detail": "details/lighting/broad-lighting.json",
+  "aliases": [],
+  "description": "Broad lighting keys the side of the face turned toward camera, so the near cheek is the bright one and the shadow sits on the far side. The face reads open, public, and less mysterious.",
+  "thumbnail": "media/b0073bddd7022e9ff98efe24b0655d79.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Someone is presenting themselves: a speech, a studio comic, a star who must be fully available to the lens. The camera-facing plane carries the exposure, so pores and expression on that cheek are easy to read."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for menace, secrecy, or a slimming portrait on a wide face. Broad is not high-key; you can still have a dark room."
+        },
+        {
+          "type": "paragraph",
+          "text": "The definition is only which cheek is near and lit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Someone is presenting themselves: a speech, a studio comic, a star who must be fully available to the lens. The camera-facing plane carries the exposure, so pores and expression on that cheek are easy to read.It is the wrong tool for menace, secrecy, or a slimming portrait on a wide face. Broad is not high-key; you can still have a dark room.The definition is only which cheek is near and lit."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Turn the face or swing the key so the camera-facing cheek takes the key, often 30 to 45 degrees off a near-frontal axis. Fill can be generous."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness is often softer than noir short lighting. Color is whatever the public space is: daylight, studio tungsten, a bright practical."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Broad lighting on [Subject], the camera-facing side keyed, open and public, less shadow on the near cheek."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Turn the face or swing the key so the camera-facing cheek takes the key, often 30 to 45 degrees off a near-frontal axis. Fill can be generous.Hardness is often softer than noir short lighting. Color is whatever the public space is: daylight, studio tungsten, a bright practical.Prompt: Broad lighting on [Subject], the camera-facing side keyed, open and public, less shadow on the near cheek."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for an open, readable portrait, a public figure, a comic close-up. Do not use it when the near cheek should be the secret."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for an open, readable portrait, a public figure, a comic close-up. Do not use it when the near cheek should be the secret."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Short lighting is the reverse: far cheek keyed, near cheek dark. High-key lighting is overall contrast, which often pairs with broad but is not the same job.",
+          "links": [
+            {
+              "text": "Short lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/short-lighting"
+            },
+            {
+              "text": "High-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Butterfly lighting is on-axis, so neither cheek is favored. Loop lighting can be executed broad or short depending on head turn.",
+          "links": [
+            {
+              "text": "Butterfly lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            },
+            {
+              "text": "Loop lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Short LightingSculpt a face; add mystery on the camera side.",
+          "displayText": "Short Lighting\nSculpt a face; add mystery on the camera side.",
+          "links": [
+            {
+              "text": "Short LightingSculpt a face; add mystery on the camera side.",
+              "url": "https://melies.co/cinematic-techniques/lighting/short-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+          "displayText": "High-Key Lighting\nComedy, heaven, hospital, or candy.",
+          "links": [
+            {
+              "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Short lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/short-lighting"
+        },
+        {
+          "text": "High-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Butterfly lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        },
+        {
+          "text": "Loop lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+        },
+        {
+          "text": "Short LightingSculpt a face; add mystery on the camera side.",
+          "url": "https://melies.co/cinematic-techniques/lighting/short-lighting"
+        },
+        {
+          "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/5d50bc5c4bba91975b25d4c884864181.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/short-lighting.webp",
+          "alt": "Short Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/633961526d0799af2b516a1929d04ff7.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-key-064-high-key-brightness-mini.webp",
+          "alt": "High-Key Lighting"
+        },
+        {
+          "kind": "video",
+          "path": "media/501404f06979d708f24c98a578ccaf9a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/064-high-key-brightness-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Short lighting is the reverse: far cheek keyed, near cheek dark. High-key lighting is overall contrast, which often pairs with broad but is not the same job.Butterfly lighting is on-axis, so neither cheek is favored. Loop lighting can be executed broad or short depending on head turn.Short LightingSculpt a face; add mystery on the camera side.High-Key LightingComedy, heaven, hospital, or candy.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Classical portraiture and studio comedy close-ups, including open faces in Roman Holiday and Singin' in the Rain, key the near cheek so the public can have the person. The shadow, if any, lives on the far side."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Classical portraiture and studio comedy close-ups, including open faces in Roman Holiday and Singin' in the Rain, key the near cheek so the public can have the person. The shadow, if any, lives on the far side."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Light the near cheek. Use: \"Broad lighting on [Subject], the camera-facing side keyed, open and public, less shadow on the near cheek.\" Say the bright plane is the one occupying most of the frame."
+        },
+        {
+          "type": "quote",
+          "text": "Broad lighting on [Subject], the camera-facing side keyed, open and public, less shadow on the near cheek."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Broad+lighting+on+[Subject],+the+camera-facing+side+keyed,+open+and+public,+less+shadow+on+the+near+cheek."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Light the near cheek. Use: \"Broad lighting on [Subject], the camera-facing side keyed, open and public, less shadow on the near cheek.\" Say the bright plane is the one occupying most of the frame.Copy promptUse in Image GeneratorBroad lighting on [Subject], the camera-facing side keyed, open and public, less shadow on the near cheek.Broad lighting on [Subject], the camera-facing side keyed, open and public, less shadow on the near cheek."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is short lighting. The tell is a dark near cheek and a bright far sliver.",
+          "links": [
+            {
+              "text": "short lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/short-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by turning the key onto the camera-facing side or turning the face toward the key."
+        }
+      ],
+      "links": [
+        {
+          "text": "short lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/short-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is short lighting. The tell is a dark near cheek and a bright far sliver.Fix it by turning the key onto the camera-facing side or turning the face toward the key."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is broad lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Lighting the side of the face turned toward camera. The near cheek is bright; the shadow sits farther away."
+        },
+        {
+          "type": "heading",
+          "text": "Broad lighting vs short lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Broad keys the near cheek and feels open. Short keys the far cheek and puts mystery on the camera side."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use broad lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a face should feel public and easy to read. Skip it when you want sculpture and withheld information."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt broad lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify the camera-facing side keyed, open near cheek, less shadow on the plane closest to camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is broad lighting in film?Lighting the side of the face turned toward camera. The near cheek is bright; the shadow sits farther away.Broad lighting vs short lightingBroad keys the near cheek and feels open. Short keys the far cheek and puts mystery on the camera side.When should I use broad lighting?Use it when a face should feel public and easy to read. Skip it when you want sculpture and withheld information.How do I prompt broad lighting for AI image or video?Specify the camera-facing side keyed, open near cheek, less shadow on the plane closest to camera."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Light the near cheek. Use: \"Broad lighting on [Subject], the camera-facing side keyed, open and public, less shadow on the near cheek.\" Say the bright plane is the one occupying most of the frame."
+    ],
+    "example": "Broad lighting on [Subject], the camera-facing side keyed, open and public, less shadow on the near cheek."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/b0073bddd7022e9ff98efe24b0655d79.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/broad-lighting.webp",
+      "alt": "Broad Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/5d50bc5c4bba91975b25d4c884864181.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/short-lighting.webp",
+      "alt": "Short Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/633961526d0799af2b516a1929d04ff7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-key-064-high-key-brightness-mini.webp",
+      "alt": "High-Key Lighting"
+    },
+    {
+      "kind": "video",
+      "path": "media/501404f06979d708f24c98a578ccaf9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/064-high-key-brightness-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/0ef327a6f5750e60e78e07531736f8ff.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/broad-lighting/hero.jpg",
+      "alt": "Broad Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "f28832b2ae83a385d8184bb6f3d776fc51895da9dbbf9073b919ec67e4f7a5b9"
+}

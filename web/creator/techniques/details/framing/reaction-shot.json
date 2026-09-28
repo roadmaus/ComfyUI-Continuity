@@ -1,0 +1,418 @@
+{
+  "id": "framing/reaction-shot",
+  "slug": "reaction-shot",
+  "title": "Reaction Shot",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/reaction-shot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reaction-shot-093-reaction-shot-mini.webp",
+  "detail": "details/framing/reaction-shot.json",
+  "aliases": [
+    "Kuleshov effect",
+    "Associative reaction construction"
+  ],
+  "description": "A reaction shot shows a character's response to an event, a line, or an unseen stimulus. The important action is watching; the face (or body) is the cut.",
+  "thumbnail": "media/248886e506c0ab0f39e5253a8675425b.webp",
+  "video": "media/e015bba47d3ffb7de60f4bd03af20bcb.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/093-reaction-shot-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A reaction shot is coverage of receiving. The gunshot, the insult, the courtyard window: we often learn what it meant by looking at the person who saw it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Meaning can be constructed between shots. A relatively still face reads differently depending on what came before, which is the Kuleshov lesson, not a demand that you fake a historical clip."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the speaker's line still needs to be seen, or when you over-act the response so the audience is told the emotion. It is a function, not a size: often a close-up, sometimes an MCU, occasionally a full-body flinch."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A reaction shot is coverage of receiving. The gunshot, the insult, the courtyard window: we often learn what it meant by looking at the person who saw it.Meaning can be constructed between shots. A relatively still face reads differently depending on what came before, which is the Kuleshov lesson, not a demand that you fake a historical clip.It is the wrong tool when the speaker's line still needs to be seen, or when you over-act the response so the audience is told the emotion. It is a function, not a size: often a close-up, sometimes an MCU, occasionally a full-body flinch."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Point the eyeline at the stimulus, even if that stimulus is offscreen. Hold."
+        },
+        {
+          "type": "paragraph",
+          "text": "Minimize explanatory mugging if you want the cut to do the work. Match Look Space and eyeline to the previous shot.",
+          "links": [
+            {
+              "text": "Look Space",
+              "url": "https://melies.co/cinematic-techniques/composition/look-space"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Size is usually Close-Up or Medium Close-Up. Prompt: Reaction close-up of [Subject] receiving news they cannot speak yet, the face as the cut.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            },
+            {
+              "text": "Medium Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Look Space",
+          "url": "https://melies.co/cinematic-techniques/composition/look-space"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Medium Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Point the eyeline at the stimulus, even if that stimulus is offscreen. Hold.Minimize explanatory mugging if you want the cut to do the work. Match Look Space and eyeline to the previous shot.Size is usually Close-Up or Medium Close-Up. Prompt: Reaction close-up of [Subject] receiving news they cannot speak yet, the face as the cut."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the important action is watching: the face after an offscreen shot, the listener who cannot speak yet. Do not use it as a blink after every clause, and do not perform the entire emotion so the juxtaposition has nothing to do."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the important action is watching: the face after an offscreen shot, the listener who cannot speak yet. Do not use it as a blink after every clause, and do not perform the entire emotion so the juxtaposition has nothing to do."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Close-Up is a size; a reaction is why that size is here. Over-the-shoulder coverage still includes the partner as a shoulder; a reaction single can drop them.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            },
+            {
+              "text": "Over-the-shoulder coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Cutaway may be a non-human comment; a reaction is a person's response. Keep the face fixed if you want to test Kuleshov; changing the expression changes the experiment.",
+          "links": [
+            {
+              "text": "Cutaway",
+              "url": "https://melies.co/cinematic-techniques/framing/cutaway"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "displayText": "Close-Up\nRead micro-expression. Default for important dialogue.",
+          "links": [
+            {
+              "text": "Close-UpRead micro-expression. Default for important dialogue.",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Choker ShotEmotion with nowhere to hide.",
+          "displayText": "Choker Shot\nEmotion with nowhere to hide.",
+          "links": [
+            {
+              "text": "Choker ShotEmotion with nowhere to hide.",
+              "url": "https://melies.co/cinematic-techniques/framing/choker"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Over-the-shoulder coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Cutaway",
+          "url": "https://melies.co/cinematic-techniques/framing/cutaway"
+        },
+        {
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Choker ShotEmotion with nowhere to hide.",
+          "url": "https://melies.co/cinematic-techniques/framing/choker"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/95136909e657a1816141551e20893339.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+          "alt": "Close-Up"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d5bdd8f53c2bc0f78a3e63efcaac2a30.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choker.webp",
+          "alt": "Choker Shot"
+        }
+      ],
+      "sourceText": "Compared with similar shots A Close-Up is a size; a reaction is why that size is here. Over-the-shoulder coverage still includes the partner as a shoulder; a reaction single can drop them.A Cutaway may be a non-human comment; a reaction is a person's response. Keep the face fixed if you want to test Kuleshov; changing the expression changes the experiment.Close-UpRead micro-expression. Default for important dialogue.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.Choker ShotEmotion with nowhere to hide."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Godfather often lets receiving carry the beat. Whiplash cuts to the face that has to survive the next bar."
+        },
+        {
+          "type": "paragraph",
+          "text": "Rear Window builds Jeff's looks so courtyard views change what the same face means. Grammar: watch the watcher."
+        },
+        {
+          "type": "list-item",
+          "text": "Rear Window 1954Jeff’s looks acquire different meanings through the courtyard views placed beside them.",
+          "displayText": "Rear Window 1954\nJeff’s looks acquire different meanings through the courtyard views placed beside them."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Godfather often lets receiving carry the beat. Whiplash cuts to the face that has to survive the next bar.Rear Window builds Jeff's looks so courtyard views change what the same face means. Grammar: watch the watcher.Rear Window 1954Jeff’s looks acquire different meanings through the courtyard views placed beside them."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name receiving. Example: Reaction close-up of [Subject] receiving news they cannot speak yet, the face as the cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify eyeline offscreen or toward a known object. For video, hold a small physical change (a swallow, a blink) rather than a tour of expressions."
+        },
+        {
+          "type": "quote",
+          "text": "Generate one neutral close-up of a woman looking slightly down and right. Reuse the identical clip in three short edits: after a broken heirloom, after a sleeping puppy and after an unsigned contract. Generate the inserts separately and keep the reaction genuinely unchanged. Compare the meanings created by the juxtaposition."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Generate+one+neutral+close-up+of+a+woman+looking+slightly+down+and+right.+Reuse+the+identical+clip+in+three+short+edits:+after+a+broken+heirloom,+after+a+sleeping+puppy+and+after+an+unsigned+contract.+Generate+the+inserts+separately+and+keep+the+reaction+genuinely+unchanged.+Compare+the+meanings+created+by+the+juxtaposition."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name receiving. Example: Reaction close-up of [Subject] receiving news they cannot speak yet, the face as the cut.Specify eyeline offscreen or toward a known object. For video, hold a small physical change (a swallow, a blink) rather than a tour of expressions.Copy promptUse in Video GeneratorGenerate one neutral close-up of a woman looking slightly down and right. Reuse the identical clip in three short edits: after a broken heirloom, after a sleeping puppy and after an unsigned contract. Generate the inserts separately and keep the reaction genuinely unchanged. Compare the meanings created by the juxtaposition.Generate one neutral close-up of a woman looking slightly down and right. Reuse the identical clip in three short edits: after a broken heirloom, after a sleeping puppy and after an unsigned contract. Generate the inserts separately and keep the reaction genuinely unchanged. Compare the meanings created by the juxtaposition."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a generic Close-Up of the speaker, or an overplayed grimace. The tell is mouth moving through the line, or eyebrows explaining the plot.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: this person is receiving, not delivering. Point the eyes; hold."
+        }
+      ],
+      "links": [
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a generic Close-Up of the speaker, or an overplayed grimace. The tell is mouth moving through the line, or eyebrows explaining the plot.Fix: this person is receiving, not delivering. Point the eyes; hold."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Reaction Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A reaction shot shows a character's response to an event, a line, or an unseen stimulus. It is a coverage function: the important action is watching, and the face or body is what the cut is about."
+        },
+        {
+          "type": "heading",
+          "text": "Reaction Shot vs Close-Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A close-up is a crop: head and upper shoulders. A reaction shot is a job: this image exists because of what was just seen or heard. Reactions are often close-ups, but a close-up of someone speaking is not a reaction."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Reaction Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when watching is the event and the audience should read the receiver. Do not stack one after every sentence, and do not over-act the face if the cut is supposed to supply meaning."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Reaction Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Reaction close-up of [Subject] receiving news they cannot speak yet, the face as the cut. Put the eyeline in the prompt. Keep the expression restrained unless the scene needs a big flinch."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Reaction Shot in film?A reaction shot shows a character's response to an event, a line, or an unseen stimulus. It is a coverage function: the important action is watching, and the face or body is what the cut is about.Reaction Shot vs Close-UpA close-up is a crop: head and upper shoulders. A reaction shot is a job: this image exists because of what was just seen or heard. Reactions are often close-ups, but a close-up of someone speaking is not a reaction.When should I use Reaction Shot?Use it when watching is the event and the audience should read the receiver. Do not stack one after every sentence, and do not over-act the face if the cut is supposed to supply meaning.How do I prompt Reaction Shot for AI image or video?Write Reaction close-up of [Subject] receiving news they cannot speak yet, the face as the cut. Put the eyeline in the prompt. Keep the expression restrained unless the scene needs a big flinch."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name receiving. Example: Reaction close-up of [Subject] receiving news they cannot speak yet, the face as the cut.",
+      "Specify eyeline offscreen or toward a known object. For video, hold a small physical change (a swallow, a blink) rather than a tour of expressions."
+    ],
+    "example": "Generate one neutral close-up of a woman looking slightly down and right. Reuse the identical clip in three short edits: after a broken heirloom, after a sleeping puppy and after an unsigned contract. Generate the inserts separately and keep the reaction genuinely unchanged. Compare the meanings created by the juxtaposition."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/e015bba47d3ffb7de60f4bd03af20bcb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/093-reaction-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/248886e506c0ab0f39e5253a8675425b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reaction-shot-093-reaction-shot-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/68d0b1d50df4e9b0c0878f6264b723e5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/reaction-shot.jpg",
+      "alt": "Reaction Shot frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/95136909e657a1816141551e20893339.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+      "alt": "Close-Up"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d5bdd8f53c2bc0f78a3e63efcaac2a30.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choker.webp",
+      "alt": "Choker Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/5c3817668d062cfa9a7b9977b8bbb2ec.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reaction-shot/hero.jpg",
+      "alt": "Reaction Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "71a1d3809834eea02bf15ec12683c2a000dbb5060140f588ccdd355a82e2f93c"
+}

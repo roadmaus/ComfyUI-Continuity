@@ -1,0 +1,421 @@
+{
+  "id": "time-and-motion/boomerang",
+  "slug": "boomerang",
+  "title": "Boomerang",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/boomerang",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/boomerang-02-boomerang-mini.webp",
+  "detail": "details/time-and-motion/boomerang.json",
+  "aliases": [],
+  "description": "A boomerang video effect plays a short action forward, then snaps it backward along the same samples, often looping. The gesture comes and goes on one path: reversed playback used as a round trip rather than a one-way undo.",
+  "thumbnail": "media/3807ab61c9fb3adc52edf60b250034b9.webp",
+  "video": "media/7c35712d882d0899c197afcf888ffeaa.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-boomerang-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to weaponize a small motion: hair toss, splash, a jump's peak, a door that never finishes closing. Both directions must read."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the forward pass is ugly, the reverse will not save it. Loops work when the end of the reverse meets the start of the forward without a bump."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for grief, inverted physics as story, or a seamless forward-only cycle (a pendulum designed to sew). Reverse motion one way is a spell."
+        },
+        {
+          "type": "paragraph",
+          "text": "An infinite loop may never reverse. Do not boomerang a line of dialogue whose words cannot run backward."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it to weaponize a small motion: hair toss, splash, a jump's peak, a door that never finishes closing. Both directions must read.If the forward pass is ugly, the reverse will not save it. Loops work when the end of the reverse meets the start of the forward without a bump.It is the wrong tool for grief, inverted physics as story, or a seamless forward-only cycle (a pendulum designed to sew). Reverse motion one way is a spell.An infinite loop may never reverse. Do not boomerang a line of dialogue whose words cannot run backward."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Record a short, readable gesture with clean contacts, play it forward, then reverse the same frames. Trim so the join is at a still-ish peak or a matched pose."
+        },
+        {
+          "type": "paragraph",
+          "text": "Camera usually locked. Prompt: Boomerang of [Subject], action running forward then snapping backward on the same path, a loop of coming and going."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Record a short, readable gesture with clean contacts, play it forward, then reverse the same frames. Trim so the join is at a still-ish peak or a matched pose.Camera usually locked. Prompt: Boomerang of [Subject], action running forward then snapping backward on the same path, a loop of coming and going."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to turn a splash, a jump, or a hair toss into a toy loop. Do not use it for a one-way undo of a crash."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to turn a splash, a jump, or a hair toss into a toy loop. Do not use it for a one-way undo of a crash."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A boomerang is not one-way Reverse Motion. It is not an Infinite Loop that sews last frame to first while staying forward.",
+          "links": [
+            {
+              "text": "Reverse Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion"
+            },
+            {
+              "text": "Infinite Loop",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Moonwalk is a body's lie in living time. A Cinemagraph freezes most of a still and loops one element.",
+          "links": [
+            {
+              "text": "Moonwalk",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/moonwalk"
+            },
+            {
+              "text": "Cinemagraph",
+              "url": "https://melies.co/cinematic-techniques/effects/cinemagraph"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Infinite LoopDuration without progress.",
+          "displayText": "Infinite Loop\nDuration without progress.",
+          "links": [
+            {
+              "text": "Infinite LoopDuration without progress.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Reverse MotionMagic, grief, or a world with inverted physics.",
+          "displayText": "Reverse Motion\nMagic, grief, or a world with inverted physics.",
+          "links": [
+            {
+              "text": "Reverse MotionMagic, grief, or a world with inverted physics.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Reverse Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion"
+        },
+        {
+          "text": "Infinite Loop",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+        },
+        {
+          "text": "Moonwalk",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/moonwalk"
+        },
+        {
+          "text": "Cinemagraph",
+          "url": "https://melies.co/cinematic-techniques/effects/cinemagraph"
+        },
+        {
+          "text": "Infinite LoopDuration without progress.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+        },
+        {
+          "text": "Reverse MotionMagic, grief, or a world with inverted physics.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/214e076659063e613c529a0a7ea87725.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infinite-loop-126-time-loop-with-evolving-behavior-mini.webp",
+          "alt": "Infinite Loop"
+        },
+        {
+          "kind": "video",
+          "path": "media/67fd3e9c12a65abbee2ff75f8fb0b181.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/126-time-loop-with-evolving-behavior-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/47fac5326936cfc833f9e558220b5143.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reverse-motion-085-reverse-motion-image-mini.webp",
+          "alt": "Reverse Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/508e95075e797a6a8eb1eebddcb1305d.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/085-reverse-motion-image-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A boomerang is not one-way Reverse Motion. It is not an Infinite Loop that sews last frame to first while staying forward.A Moonwalk is a body's lie in living time. A Cinemagraph freezes most of a still and loops one element.Infinite LoopDuration without progress.Reverse MotionMagic, grief, or a world with inverted physics.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Instagram and Vine made the round-trip native. Music videos use it as a hook on a single gesture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Feature grammar rarely needs it except as a quoted phone-screen or a title-card gag."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Instagram and Vine made the round-trip native. Music videos use it as a hook on a single gesture.Feature grammar rarely needs it except as a quoted phone-screen or a title-card gag."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write the round trip. Still: the mid-gesture peak, because a still cannot boomerang."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: [Subject] plays forward then reverses along the same motion, a seamless boomerang loop. Same path, no new action on the way back, no one-way reverse."
+        },
+        {
+          "type": "quote",
+          "text": "[Subject] plays forward then reverses along the same motion, a seamless boomerang loop."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=[Subject]+plays+forward+then+reverses+along+the+same+motion,+a+seamless+boomerang+loop."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write the round trip. Still: the mid-gesture peak, because a still cannot boomerang.Video: [Subject] plays forward then reverses along the same motion, a seamless boomerang loop. Same path, no new action on the way back, no one-way reverse.Copy promptUse in Video Generator[Subject] plays forward then reverses along the same motion, a seamless boomerang loop.[Subject] plays forward then reverses along the same motion, a seamless boomerang loop."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Reverse Motion or a forward Infinite Loop. The tell is rain that only rises, or a loop that never rewinds.",
+          "links": [
+            {
+              "text": "Reverse Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion"
+            },
+            {
+              "text": "Infinite Loop",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: specify forward then back on the same samples, and a join that matches."
+        }
+      ],
+      "links": [
+        {
+          "text": "Reverse Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion"
+        },
+        {
+          "text": "Infinite Loop",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Reverse Motion or a forward Infinite Loop. The tell is rain that only rises, or a loop that never rewinds.Fix: specify forward then back on the same samples, and a join that matches."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Boomerang in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A boomerang plays a short action forward and then backward on the same path, often as a loop, so the gesture comes and goes."
+        },
+        {
+          "type": "heading",
+          "text": "Boomerang vs Reverse Motion",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Reverse motion rewinds once and stays in that direction. A boomerang is a round trip: forward, then back, usually repeating."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Boomerang?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a small physical gesture should become a toy: splash, jump, toss. Both directions must remain readable."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Boomerang for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write that [Subject] plays forward then reverses along the same motion as a seamless loop. Forbid a one-way reverse and a forward-only sew."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Boomerang in film?A boomerang plays a short action forward and then backward on the same path, often as a loop, so the gesture comes and goes.Boomerang vs Reverse MotionReverse motion rewinds once and stays in that direction. A boomerang is a round trip: forward, then back, usually repeating.When should I use Boomerang?When a small physical gesture should become a toy: splash, jump, toss. Both directions must remain readable.How do I prompt Boomerang for AI image or video?Write that [Subject] plays forward then reverses along the same motion as a seamless loop. Forbid a one-way reverse and a forward-only sew."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write the round trip. Still: the mid-gesture peak, because a still cannot boomerang.",
+      "Video: [Subject] plays forward then reverses along the same motion, a seamless boomerang loop. Same path, no new action on the way back, no one-way reverse."
+    ],
+    "example": "[Subject] plays forward then reverses along the same motion, a seamless boomerang loop."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/7c35712d882d0899c197afcf888ffeaa.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-boomerang-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3807ab61c9fb3adc52edf60b250034b9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/boomerang-02-boomerang-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2624bef812f2e3f6c6d32c7993190538.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/boomerang.jpg",
+      "alt": "Boomerang frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/214e076659063e613c529a0a7ea87725.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infinite-loop-126-time-loop-with-evolving-behavior-mini.webp",
+      "alt": "Infinite Loop"
+    },
+    {
+      "kind": "video",
+      "path": "media/67fd3e9c12a65abbee2ff75f8fb0b181.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/126-time-loop-with-evolving-behavior-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47fac5326936cfc833f9e558220b5143.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reverse-motion-085-reverse-motion-image-mini.webp",
+      "alt": "Reverse Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/508e95075e797a6a8eb1eebddcb1305d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/085-reverse-motion-image-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ed5b5bab425977bbcaa73e26b1f15ca8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/boomerang/hero.jpg",
+      "alt": "Boomerang",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "2fedf5ef6a2ff5ada090a2c0b24d5a3dcfbfbc74df04ae59d9c03276e407794e"
+}

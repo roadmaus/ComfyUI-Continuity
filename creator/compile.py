@@ -3675,7 +3675,10 @@ def _chained_request(data, segment, pool, global_prompt, cast=()):
     #   part-render missed the cache the whole render had just filled.
     # - `card_id` is persistent UI ownership for queued takes, not a model
     #   input. Assigning/recovering an identity must not re-encode a shot.
-    for key in ("seed", "take", "hold", "card_no", "card_id"):
+    # - `techniques` records which literal prompt spans the library owns. The
+    #   prompt already contains those words; changing a chip's provenance or
+    #   stale marker must not change the encoder's cache key.
+    for key in ("seed", "take", "hold", "card_no", "card_id", "techniques"):
         request.pop(key, None)
     request["prompt"] = _join_prompt(global_prompt, segment.get("prompt"))
     # A shot-scoped rewrite gets the same join: it stands in for the

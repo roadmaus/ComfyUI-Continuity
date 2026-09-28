@@ -1,0 +1,416 @@
+{
+  "id": "camera-movement/tilt",
+  "slug": "tilt",
+  "title": "Tilt",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/tilt",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-tilt-mini.webp",
+  "detail": "details/camera-movement/tilt.json",
+  "aliases": [
+    "Tilt shot",
+    "tilt up",
+    "tilt down",
+    "reveal tilt"
+  ],
+  "description": "A tilt shot rotates the camera vertically around a fixed position, pitch on the horizontal axis, tripod planted. Height is revealed or hidden by angle, not by lifting the support.",
+  "thumbnail": "media/04fe267362efc76d95832429f13513d8.webp",
+  "video": "media/54306bb6062aaf0edbf03de2b0176045.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/tilt-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Reveal height without traveling. A body from shoes to face, a building from door to roof, a dinosaur from ankle to skull: the facts are stacked on one vertical."
+        },
+        {
+          "type": "paragraph",
+          "text": "The feet do not move. A crane or a jib is the wrong tool only if you wanted parallax of a rising support."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the foreground must slide as you climb, boom. If you only need to look up, tilt."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Reveal height without traveling. A body from shoes to face, a building from door to roof, a dinosaur from ankle to skull: the facts are stacked on one vertical.The feet do not move. A crane or a jib is the wrong tool only if you wanted parallax of a rising support.If the foreground must slide as you climb, boom. If you only need to look up, tilt."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tripod, fluid head, horizontal axis. Start and end on composed frames; do not overshoot into ceiling unless that is the gag."
+        },
+        {
+          "type": "paragraph",
+          "text": "A wide lens exaggerates vertical stretch; a longer lens keeps the stack calmer. Prompt: Tilt on [Subject], camera rotating on its horizontal axis, climbing or descending the world from a fixed point."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Tripod, fluid head, horizontal axis. Start and end on composed frames; do not overshoot into ceiling unless that is the gag.A wide lens exaggerates vertical stretch; a longer lens keeps the stack calmer. Prompt: Tilt on [Subject], camera rotating on its horizontal axis, climbing or descending the world from a fixed point."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to reveal height from one stance: a statue, a tower, a person from ground to face. Do not tilt as a fake crane-up."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to reveal height from one stance: a statue, a tower, a person from ground to face. Do not tilt as a fake crane-up."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tilt Up and Tilt Down name direction. A Crane Up physically lifts the camera, so rooftops and streets change in parallax.",
+          "links": [
+            {
+              "text": "Tilt Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            },
+            {
+              "text": "Tilt Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+            },
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Pedestal Up raises the support on a column without pitching. A Pan is the horizontal cousin.",
+          "links": [
+            {
+              "text": "Pedestal Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up"
+            },
+            {
+              "text": "Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tilt UpReveal height, awe, or a face last.",
+          "displayText": "Tilt Up\nReveal height, awe, or a face last.",
+          "links": [
+            {
+              "text": "Tilt UpReveal height, awe, or a face last.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tilt DownLand on a person or object after establishing scale above.",
+          "displayText": "Tilt Down\nLand on a person or object after establishing scale above.",
+          "links": [
+            {
+              "text": "Tilt DownLand on a person or object after establishing scale above.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Tilt Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        },
+        {
+          "text": "Tilt Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+        },
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Pedestal Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up"
+        },
+        {
+          "text": "Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan"
+        },
+        {
+          "text": "Tilt UpReveal height, awe, or a face last.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        },
+        {
+          "text": "Tilt DownLand on a person or object after establishing scale above.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ba0d5d532fbf6a3cf122ffc10add8687.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-up-009-tilt-reveal-mini.webp",
+          "alt": "Tilt Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/de2a0060534bd4c5940a383f5d15c5a9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/009-tilt-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4aee5a86e2d08a2ccb263a4424f91a54.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-down-tilt-down-mini.webp",
+          "alt": "Tilt Down"
+        },
+        {
+          "kind": "video",
+          "path": "media/2a05dc613a864383ff7096c6fe1fee8a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/tilt-down-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Tilt Up and Tilt Down name direction. A Crane Up physically lifts the camera, so rooftops and streets change in parallax.A Pedestal Up raises the support on a column without pitching. A Pan is the horizontal cousin.Tilt UpReveal height, awe, or a face last.Tilt DownLand on a person or object after establishing scale above.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Jurassic Park tilts up bodies and gates to stack scale from a planted stance. Citizen Kane uses vertical swings and stacked compositions to turn height into power."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: rotation, not travel."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Jurassic Park tilts up bodies and gates to stack scale from a planted stance. Citizen Kane uses vertical swings and stacked compositions to turn height into power.Grammar: rotation, not travel."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Plant the tripod. Still: Tilt on [Subject], camera rotating on its horizontal axis, climbing or descending the world from a fixed point."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera tilts vertically across [Subject], tripod planted. Name start (shoes, door) and end (face, roof)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a crane."
+        },
+        {
+          "type": "quote",
+          "text": "The camera tilts vertically across [Subject], tripod planted."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+tilts+vertically+across+[Subject],+tripod+planted."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Plant the tripod. Still: Tilt on [Subject], camera rotating on its horizontal axis, climbing or descending the world from a fixed point.Video: The camera tilts vertically across [Subject], tripod planted. Name start (shoes, door) and end (face, roof).Forbid a crane.Copy promptUse in Video GeneratorThe camera tilts vertically across [Subject], tripod planted.The camera tilts vertically across [Subject], tripod planted."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a crane-up. The tell: foreground sliding, the support rising, the person shrinking in a map."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: lock the position, pitch only, and let height arrive as angle."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a crane-up. The tell: foreground sliding, the support rising, the person shrinking in a map.The fix: lock the position, pitch only, and let height arrive as angle."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Tilt in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A tilt rotates the camera vertically from a fixed position. The tripod stays put; the frame climbs or drops to reveal height."
+        },
+        {
+          "type": "heading",
+          "text": "Tilt vs Crane Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A tilt only changes angle. A crane physically moves the camera through space, so parallax appears and the map can change."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Tilt?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to reveal height without traveling. Do not use it when you need the camera to climb and ease back over a city."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Tilt for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a planted tripod and a vertical rotation. Example: Tilt on [Subject], camera rotating on its horizontal axis, climbing or descending the world from a fixed point."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Tilt in film?A tilt rotates the camera vertically from a fixed position. The tripod stays put; the frame climbs or drops to reveal height.Tilt vs Crane UpA tilt only changes angle. A crane physically moves the camera through space, so parallax appears and the map can change.When should I use Tilt?Use it to reveal height without traveling. Do not use it when you need the camera to climb and ease back over a city.How do I prompt Tilt for AI image or video?Write a planted tripod and a vertical rotation. Example: Tilt on [Subject], camera rotating on its horizontal axis, climbing or descending the world from a fixed point."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Plant the tripod. Still: Tilt on [Subject], camera rotating on its horizontal axis, climbing or descending the world from a fixed point.",
+      "Video: The camera tilts vertically across [Subject], tripod planted. Name start (shoes, door) and end (face, roof).",
+      "Forbid a crane."
+    ],
+    "example": "The camera tilts vertically across [Subject], tripod planted."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/54306bb6062aaf0edbf03de2b0176045.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/tilt-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/04fe267362efc76d95832429f13513d8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-tilt-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3118ee1c976c14949925bc94c39cd4fd.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/tilt.jpg",
+      "alt": "Tilt frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/ba0d5d532fbf6a3cf122ffc10add8687.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-up-009-tilt-reveal-mini.webp",
+      "alt": "Tilt Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/de2a0060534bd4c5940a383f5d15c5a9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/009-tilt-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4aee5a86e2d08a2ccb263a4424f91a54.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-down-tilt-down-mini.webp",
+      "alt": "Tilt Down"
+    },
+    {
+      "kind": "video",
+      "path": "media/2a05dc613a864383ff7096c6fe1fee8a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/tilt-down-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c6597c9ed407d8dc00c22aa7df1e6f47.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tilt/hero.jpg",
+      "alt": "Tilt",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "771276b5f1d8832f4b79b5a987c5574b72fa9373c60d8041f98d3fb5b0a42e7f"
+}

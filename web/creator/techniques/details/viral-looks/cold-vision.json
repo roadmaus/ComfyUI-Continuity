@@ -1,0 +1,381 @@
+{
+  "id": "viral-looks/cold-vision",
+  "slug": "cold-vision",
+  "title": "Cold Vision",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/cold-vision",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cold-vision-cold-vision-mini.webp",
+  "detail": "details/viral-looks/cold-vision.json",
+  "aliases": [],
+  "description": "Cold vision, the cold vision look, reads the world as temperature: either an arctic photochemical grade with breath and ice, or a thermal false-color overlay with heat edges. Empathy is not in the palette, so pick one sensor and keep it.",
+  "thumbnail": "media/6a2b7c27ce389e65a0410742b570766a.webp",
+  "video": "media/5f77031e44b13ef59f6e42e85cba4961.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/cold-vision-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hunts, winter war, a stalker POV: faces become warmer than walls if you are in thermal, or paler than snow if you are in climate. The camera can be lock-off, handheld, or a device POV, but the seeing logic cannot change mid-shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "Kindness dies in this grade unless the joke is cruelty. It is the wrong tool for a Christmas romance, a beauty key, or a teal wash that only makes skin pale."
+        },
+        {
+          "type": "paragraph",
+          "text": "If there is no breath, ice, or heat edge, you shot a cool LUT."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Hunts, winter war, a stalker POV: faces become warmer than walls if you are in thermal, or paler than snow if you are in climate. The camera can be lock-off, handheld, or a device POV, but the seeing logic cannot change mid-shot.Kindness dies in this grade unless the joke is cruelty. It is the wrong tool for a Christmas romance, a beauty key, or a teal wash that only makes skin pale.If there is no breath, ice, or heat edge, you shot a cool LUT."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose one: (1) arctic still, 35mm, breath visible, ice in the air, hard winter sun or overcast white, photochemical blues, or (2) thermal/false-color overlay, readable human hotter than the room, device frame optional but no HUD letters. Do not mix Night Vision green unless that is the device.",
+          "links": [
+            {
+              "text": "Night Vision",
+              "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Cold vision of [Subject], arctic grade, thermal edges, a world seen as temperature and threat."
+        }
+      ],
+      "links": [
+        {
+          "text": "Night Vision",
+          "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Choose one: (1) arctic still, 35mm, breath visible, ice in the air, hard winter sun or overcast white, photochemical blues, or (2) thermal/false-color overlay, readable human hotter than the room, device frame optional but no HUD letters. Do not mix Night Vision green unless that is the device.Prompt: Cold vision of [Subject], arctic grade, thermal edges, a world seen as temperature and threat."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A hunt through snow, a stalker watching heat, a winter war still. Do not use it as teal-and-sad on a love scene unless cruelty is the point."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A hunt through snow, a stalker watching heat, a winter war still. Do not use it as teal-and-sad on a love scene unless cruelty is the point."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Thermal is the device overlay as such. Night Vision is green intensification, a different sensor.",
+          "links": [
+            {
+              "text": "Thermal",
+              "url": "https://melies.co/cinematic-techniques/effects/thermal"
+            },
+            {
+              "text": "Night Vision",
+              "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cool Blue is white-balance weather without a seeing-device or ice logic. Cold vision is the named recipe that must pick one of those physics and commit.",
+          "links": [
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "ThermalSee temperature, not light.",
+          "displayText": "Thermal\nSee temperature, not light.",
+          "links": [
+            {
+              "text": "ThermalSee temperature, not light.",
+              "url": "https://melies.co/cinematic-techniques/effects/thermal"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Night VisionSomeone is hunting in the dark.",
+          "displayText": "Night Vision\nSomeone is hunting in the dark.",
+          "links": [
+            {
+              "text": "Night VisionSomeone is hunting in the dark.",
+              "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cool BlueCold institutions, night, or alienation.",
+          "displayText": "Cool Blue\nCold institutions, night, or alienation.",
+          "links": [
+            {
+              "text": "Cool BlueCold institutions, night, or alienation.",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Thermal",
+          "url": "https://melies.co/cinematic-techniques/effects/thermal"
+        },
+        {
+          "text": "Night Vision",
+          "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+        },
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "ThermalSee temperature, not light.",
+          "url": "https://melies.co/cinematic-techniques/effects/thermal"
+        },
+        {
+          "text": "Night VisionSomeone is hunting in the dark.",
+          "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+        },
+        {
+          "text": "Cool BlueCold institutions, night, or alienation.",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/dfe75425132e409b7e17839e57127e62.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/thermal.webp",
+          "alt": "Thermal"
+        },
+        {
+          "kind": "image",
+          "path": "media/57004862851c5391970cbe491d31bfae.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/night-vision.webp",
+          "alt": "Night Vision"
+        },
+        {
+          "kind": "image",
+          "path": "media/9ac5d96fc611ee97ab52dc9132feb3fa.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cool-blue.webp",
+          "alt": "Cool Blue"
+        }
+      ],
+      "sourceText": "Compared with similar shots Thermal is the device overlay as such. Night Vision is green intensification, a different sensor.Cool Blue is white-balance weather without a seeing-device or ice logic. Cold vision is the named recipe that must pick one of those physics and commit.ThermalSee temperature, not light.Night VisionSomeone is hunting in the dark.Cool BlueCold institutions, night, or alienation."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Revenant is winter as climate: breath, ice, unkind daylight. The Thing is isolation in cold rooms and a world read as threat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the device if you want a thermal overlay rather than weather."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Revenant is winter as climate: breath, ice, unkind daylight. The Thing is isolation in cold rooms and a world read as threat.Name the device if you want a thermal overlay rather than weather."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the sensor, then the body. Cold vision of [Subject], arctic grade, thermal edges, a world seen as temperature and threat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add either breath and ice with a winter key, or false-color heat with a readable face. One logic."
+        },
+        {
+          "type": "paragraph",
+          "text": "No night-vision green unless you mean that tube."
+        },
+        {
+          "type": "quote",
+          "text": "Cold vision of [Subject], arctic grade, thermal edges, a world seen as temperature and threat."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Cold+vision+of+[Subject],+arctic+grade,+thermal+edges,+a+world+seen+as+temperature+and+threat."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the sensor, then the body. Cold vision of [Subject], arctic grade, thermal edges, a world seen as temperature and threat.Add either breath and ice with a winter key, or false-color heat with a readable face. One logic.No night-vision green unless you mean that tube.Copy promptUse in Image GeneratorCold vision of [Subject], arctic grade, thermal edges, a world seen as temperature and threat.Cold vision of [Subject], arctic grade, thermal edges, a world seen as temperature and threat."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A teal grade with pale skin, or a mash of thermal plus Night Vision. The tell is no breath, no ice, no heat edge.",
+          "links": [
+            {
+              "text": "Night Vision",
+              "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: pick climate or device, show the physics, hold the face."
+        }
+      ],
+      "links": [
+        {
+          "text": "Night Vision",
+          "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A teal grade with pale skin, or a mash of thermal plus Night Vision. The tell is no breath, no ice, no heat edge.Fix it: pick climate or device, show the physics, hold the face."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Cold Vision in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A seeing recipe: arctic climate with breath and ice, or thermal false-color with heat edges. It treats the world as temperature and threat, not as a sad blue LUT."
+        },
+        {
+          "type": "heading",
+          "text": "Cold Vision vs Thermal",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Thermal is a specific false-color device look. Cold vision may use that overlay, or it may be photochemical winter. If you want the device, say thermal. If you want climate, show breath and ice."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Cold Vision?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Hunts, winter war, stalker POV. Skip Christmas romance and any beauty key that only wants pale skin."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Cold Vision for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Pick one sensor. Then: Cold vision of [Subject], arctic grade, thermal edges, a world seen as temperature and threat. Add breath and ice, or a heat-edge overlay, and a readable human."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Cold Vision in film?A seeing recipe: arctic climate with breath and ice, or thermal false-color with heat edges. It treats the world as temperature and threat, not as a sad blue LUT.Cold Vision vs ThermalThermal is a specific false-color device look. Cold vision may use that overlay, or it may be photochemical winter. If you want the device, say thermal. If you want climate, show breath and ice.When should I use Cold Vision?Hunts, winter war, stalker POV. Skip Christmas romance and any beauty key that only wants pale skin.How do I prompt Cold Vision for AI image or video?Pick one sensor. Then: Cold vision of [Subject], arctic grade, thermal edges, a world seen as temperature and threat. Add breath and ice, or a heat-edge overlay, and a readable human."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the sensor, then the body. Cold vision of [Subject], arctic grade, thermal edges, a world seen as temperature and threat.",
+      "Add either breath and ice with a winter key, or false-color heat with a readable face. One logic.",
+      "No night-vision green unless you mean that tube."
+    ],
+    "example": "Cold vision of [Subject], arctic grade, thermal edges, a world seen as temperature and threat."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/5f77031e44b13ef59f6e42e85cba4961.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/cold-vision-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a2b7c27ce389e65a0410742b570766a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cold-vision-cold-vision-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6fd48c7ec316c14ab56f0955f3cdcf0f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/cold-vision.jpg",
+      "alt": "Cold Vision frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/dfe75425132e409b7e17839e57127e62.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/thermal.webp",
+      "alt": "Thermal"
+    },
+    {
+      "kind": "image",
+      "path": "media/57004862851c5391970cbe491d31bfae.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/night-vision.webp",
+      "alt": "Night Vision"
+    },
+    {
+      "kind": "image",
+      "path": "media/9ac5d96fc611ee97ab52dc9132feb3fa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cool-blue.webp",
+      "alt": "Cool Blue"
+    },
+    {
+      "kind": "image",
+      "path": "media/6fb119b58726296ad2c320dd6dc1405f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cold-vision/hero.jpg",
+      "alt": "Cold Vision",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "6b42f647a132c316e2cc807aa2493b86f06eca85c126213bf5d65546b9e11c8b"
+}

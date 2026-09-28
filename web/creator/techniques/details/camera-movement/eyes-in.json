@@ -1,0 +1,399 @@
+{
+  "id": "camera-movement/eyes-in",
+  "slug": "eyes-in",
+  "title": "Eyes In",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/eyes-in",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eyes-in-eyes-in-mini.webp",
+  "detail": "details/camera-movement/eyes-in.json",
+  "aliases": [],
+  "description": "An eyes in camera push travels into the gaze until the irises own the frame. It does not stop at a close-up; the portrait becomes an interior of sclera, iris, and catchlight.",
+  "thumbnail": "media/3ecbe80d8f428c7648727b3ff26b0283.webp",
+  "video": "media/6d217d643f1e4f618bc524b14cc986bd.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/eyes-in-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The thought is in the eye. Realization, a lie, a memory: you go there by traveling, not by cutting to an ECU."
+        },
+        {
+          "type": "paragraph",
+          "text": "The world around the face falls away until the eye is the room. A beauty close-up that never moves is not this shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the eyes are not the location, stay at MCU. Mouth-in is the appetite cousin; do not mix the destinations."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The thought is in the eye. Realization, a lie, a memory: you go there by traveling, not by cutting to an ECU.The world around the face falls away until the eye is the room. A beauty close-up that never moves is not this shot.If the eyes are not the location, stay at MCU. Mouth-in is the appetite cousin; do not mix the destinations."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Start on a face, end inside the eye. Slow push, no tilt, catchlights held."
+        },
+        {
+          "type": "paragraph",
+          "text": "Macro or a close diopter may finish the last centimeters. Identity must hold or the end face is a cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Eyes-in push on [Subject], the camera traveling into the gaze until the irises own the frame, a portrait that becomes an interior."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Start on a face, end inside the eye. Slow push, no tilt, catchlights held.Macro or a close diopter may finish the last centimeters. Identity must hold or the end face is a cut.Prompt: Eyes-in push on [Subject], the camera traveling into the gaze until the irises own the frame, a portrait that becomes an interior."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the scene turns inward: a decision, a lie, a memory landing in the pupil. Do not use it as a default portrait."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the scene turns inward: a decision, a lie, a memory landing in the pupil. Do not use it as a default portrait."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Push In can stop at a close-up of the whole face. Extreme Close-Up is a frame size, not necessarily a move.",
+          "links": [
+            {
+              "text": "Push In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+            },
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Mouth In travels into lips and teeth. Eyes-in has one destination: the iris as architecture.",
+          "links": [
+            {
+              "text": "Mouth In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/mouth-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Push InA thought lands. Do not rush it.",
+          "displayText": "Push In\nA thought lands. Do not rush it.",
+          "links": [
+            {
+              "text": "Push InA thought lands. Do not rush it.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Mouth InSpeech or hunger is the scene.",
+          "displayText": "Mouth In\nSpeech or hunger is the scene.",
+          "links": [
+            {
+              "text": "Mouth InSpeech or hunger is the scene.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/mouth-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Push In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+        },
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Mouth In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/mouth-in"
+        },
+        {
+          "text": "Push InA thought lands. Do not rush it.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Mouth InSpeech or hunger is the scene.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/mouth-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/47c873ce3b75c118eebcc03f9ebba030.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/push-in-push-in-mini.webp",
+          "alt": "Push In"
+        },
+        {
+          "kind": "video",
+          "path": "media/ff1d0cd1ffd7716264b1bf880a5b857a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/push-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ddd9d09cf91c46eb1e8e38f56f855f47.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mouth-in-mouth-in-mini.webp",
+          "alt": "Mouth In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59234568de5cd8001820c1207faf15b7.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mouth-in-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Push In can stop at a close-up of the whole face. Extreme Close-Up is a frame size, not necessarily a move.Mouth In travels into lips and teeth. Eyes-in has one destination: the iris as architecture.Push InA thought lands. Do not rush it.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.Mouth InSpeech or hunger is the scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Requiem for a Dream punches into pupils until the eye is a location. The Passion of Joan of Arc already lived in the eyes as architecture, often without the travel."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: the gaze as a room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Requiem for a Dream punches into pupils until the eye is a location. The Passion of Joan of Arc already lived in the eyes as architecture, often without the travel.Grammar: the gaze as a room."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the travel and the end state. Still: Eyes-in push on [Subject], the camera traveling into the gaze until the irises own the frame, a portrait that becomes an interior."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera pushes into [Subject]'s eyes until the iris fills the frame. Keep catchlights."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a cut to a new face."
+        },
+        {
+          "type": "quote",
+          "text": "The camera pushes into [Subject]'s eyes until the iris fills the frame."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+pushes+into+[Subject]'s+eyes+until+the+iris+fills+the+frame."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the travel and the end state. Still: Eyes-in push on [Subject], the camera traveling into the gaze until the irises own the frame, a portrait that becomes an interior.Video: The camera pushes into [Subject]'s eyes until the iris fills the frame. Keep catchlights.Forbid a cut to a new face.Copy promptUse in Video GeneratorThe camera pushes into [Subject]'s eyes until the iris fills the frame.The camera pushes into [Subject]'s eyes until the iris fills the frame."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a pretty ECU with large eyes and no travel. The tell: a still portrait, whole face, no arrival inside the iris."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: write the end state as iris fill, slow push, identity held."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a pretty ECU with large eyes and no travel. The tell: a still portrait, whole face, no arrival inside the iris.The fix: write the end state as iris fill, slow push, identity held."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Eyes In in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Eyes in is a push that travels into the gaze until the iris fills the frame. The portrait becomes an interior, not a standard close-up."
+        },
+        {
+          "type": "heading",
+          "text": "Eyes In vs Extreme Close-Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An extreme close-up is a frame size and can be locked. Eyes in is a move whose destination is the iris as a room."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Eyes In?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the thought lives in the eye: realization, lie, memory. Do not use it as a beauty default."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Eyes In for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a push that ends on an iris fill. Example: Eyes-in push on [Subject], the camera traveling into the gaze until the irises own the frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Eyes In in film?Eyes in is a push that travels into the gaze until the iris fills the frame. The portrait becomes an interior, not a standard close-up.Eyes In vs Extreme Close-UpAn extreme close-up is a frame size and can be locked. Eyes in is a move whose destination is the iris as a room.When should I use Eyes In?Use it when the thought lives in the eye: realization, lie, memory. Do not use it as a beauty default.How do I prompt Eyes In for AI image or video?Write a push that ends on an iris fill. Example: Eyes-in push on [Subject], the camera traveling into the gaze until the irises own the frame."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the travel and the end state. Still: Eyes-in push on [Subject], the camera traveling into the gaze until the irises own the frame, a portrait that becomes an interior.",
+      "Video: The camera pushes into [Subject]'s eyes until the iris fills the frame. Keep catchlights.",
+      "Forbid a cut to a new face."
+    ],
+    "example": "The camera pushes into [Subject]'s eyes until the iris fills the frame."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/6d217d643f1e4f618bc524b14cc986bd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/eyes-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3ecbe80d8f428c7648727b3ff26b0283.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eyes-in-eyes-in-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/02cd1ffa6a1b998c8a0408211ffe2f6a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/eyes-in.jpg",
+      "alt": "Eyes In frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/47c873ce3b75c118eebcc03f9ebba030.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/push-in-push-in-mini.webp",
+      "alt": "Push In"
+    },
+    {
+      "kind": "video",
+      "path": "media/ff1d0cd1ffd7716264b1bf880a5b857a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/push-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ddd9d09cf91c46eb1e8e38f56f855f47.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mouth-in-mouth-in-mini.webp",
+      "alt": "Mouth In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59234568de5cd8001820c1207faf15b7.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mouth-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/61ebe017f54df41ce6e38defc7a7dfe9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/eyes-in/hero.jpg",
+      "alt": "Eyes In",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "fa8b1c04a8fec6ee9ecdf36614f0e0f62ddb7aa233a872329764c22507a3b57d"
+}

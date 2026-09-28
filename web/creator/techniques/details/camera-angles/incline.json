@@ -1,0 +1,432 @@
+{
+  "id": "camera-angles/incline",
+  "slug": "incline",
+  "title": "Incline",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/incline",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/incline.webp",
+  "detail": "details/camera-angles/incline.json",
+  "aliases": [],
+  "description": "An incline is a slight camera roll, a gentle cant of the floor rather than a full Dutch angle. The horizon is a few degrees off true, enough to suggest slope or unease without declaring that the world has fallen over.",
+  "thumbnail": "media/f046f6b83b7ca001bfd79b2bbf2a1d04.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A full Dutch Angle at 20 to 30 degrees is a statement: the axis is broken. Incline is the whisper.",
+          "links": [
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hallways that should feel 6 to 12 degrees wrong, a street that might be hill or might be mind, a conversation that is not yet a crisis. If the viewer can measure a lean at a glance, you probably overshot into Dutch."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is still roll, not pitch. A camera looking up a real hill with a level bubble is not an incline; the floor is actually sloped and the frame is true."
+        },
+        {
+          "type": "paragraph",
+          "text": "Incline cheats gravity in the head, not in the set."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A full Dutch Angle at 20 to 30 degrees is a statement: the axis is broken. Incline is the whisper.Hallways that should feel 6 to 12 degrees wrong, a street that might be hill or might be mind, a conversation that is not yet a crisis. If the viewer can measure a lean at a glance, you probably overshot into Dutch.It is still roll, not pitch. A camera looking up a real hill with a level bubble is not an incline; the floor is actually sloped and the frame is true.Incline cheats gravity in the head, not in the set."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Roll the camera a small amount, typically about 5 to 12 degrees, and lock it. Keep architecture readable and bodies upright in the world; only the frame is off."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not combine with a wide fisheye or the small cant disappears into distortion. Contrast with a level reverse if you want the incline to be felt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: inclined camera, a gentle cant, not a full Dutch, the floor suggesting slope or unease."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Roll the camera a small amount, typically about 5 to 12 degrees, and lock it. Keep architecture readable and bodies upright in the world; only the frame is off.Do not combine with a wide fisheye or the small cant disappears into distortion. Contrast with a level reverse if you want the incline to be felt.Prompt: inclined camera, a gentle cant, not a full Dutch, the floor suggesting slope or unease."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a full Dutch is too much and the floor should only suggest slope or unease. Concrete beat: a hotel corridor, 8 degrees of roll, wallpaper still a grid, a person walking toward camera."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it as a substitute for building a real ramp, and do not park at 25 degrees and call it gentle."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a full Dutch is too much and the floor should only suggest slope or unease. Concrete beat: a hotel corridor, 8 degrees of roll, wallpaper still a grid, a person walking toward camera.Do not use it as a substitute for building a real ramp, and do not park at 25 degrees and call it gentle."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dutch Angle is the full cant, often 20 to 30 degrees, moral or mental tilt as a graphic. Dutch Roll and Camera Roll move on this axis over time.",
+          "links": [
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            },
+            {
+              "text": "Dutch Roll",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+            },
+            {
+              "text": "Camera Roll",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/camera-roll"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Eye Level with a level bubble is the control. Low Angle and High Angle are pitch, not roll.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            },
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A real inclined set photographed level is production design, not this technique."
+        },
+        {
+          "type": "list-item",
+          "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+          "displayText": "Dutch Angle\nThe world is off its axis. Do not use as decoration.",
+          "links": [
+            {
+              "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dutch RollUnease that arrives in time, not as a still cant.",
+          "displayText": "Dutch Roll\nUnease that arrives in time, not as a still cant.",
+          "links": [
+            {
+              "text": "Dutch RollUnease that arrives in time, not as a still cant.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "Dutch Roll",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+        },
+        {
+          "text": "Camera Roll",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/camera-roll"
+        },
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "Dutch RollUnease that arrives in time, not as a still cant.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b87a1699cd3cd68781b68c037559849a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-angle-161-dutch-angle-mini.webp",
+          "alt": "Dutch Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/705061adfd657c913629f2fb72bc9a79.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/161-dutch-angle-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bb8189d9c5960a57f1ebb107154d2464.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-roll-dutch-roll-mini.webp",
+          "alt": "Dutch Roll"
+        },
+        {
+          "kind": "video",
+          "path": "media/cd5fb60adefb4ef7a32067187d802aa7.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dutch-roll-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        }
+      ],
+      "sourceText": "Compared with similar shots Dutch Angle is the full cant, often 20 to 30 degrees, moral or mental tilt as a graphic. Dutch Roll and Camera Roll move on this axis over time.Eye Level with a level bubble is the control. Low Angle and High Angle are pitch, not roll.A real inclined set photographed level is production design, not this technique.Dutch AngleThe world is off its axis. Do not use as decoration.Dutch RollUnease that arrives in time, not as a still cant.Eye LevelDefault honesty. Do not look down or up unless you mean it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Third Man contains a range of cants; the shallower ones are closer to incline, the harder leans are Dutch. Do the Right Thing similarly varies the amount of roll on confrontations rather than using one angle for every street."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use degree of roll as a dimmer, not as a single switch."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Third Man contains a range of cants; the shallower ones are closer to incline, the harder leans are Dutch. Do the Right Thing similarly varies the amount of roll on confrontations rather than using one angle for every street.Use degree of roll as a dimmer, not as a single switch."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Give a small number. Quote: Inclined camera on [Subject], a gentle cant, not a full Dutch, the floor suggesting slope or unease."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: rolled about 8 degrees, horizon slightly off, walls not warped, static, not 25 degrees. If the model still produces a comic lean, lower the number and say almost level."
+        },
+        {
+          "type": "quote",
+          "text": "Inclined camera on [Subject], a gentle cant, not a full Dutch, the floor suggesting slope or unease."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Inclined+camera+on+[Subject],+a+gentle+cant,+not+a+full+Dutch,+the+floor+suggesting+slope+or+unease."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Give a small number. Quote: Inclined camera on [Subject], a gentle cant, not a full Dutch, the floor suggesting slope or unease.Add: rolled about 8 degrees, horizon slightly off, walls not warped, static, not 25 degrees. If the model still produces a comic lean, lower the number and say almost level.Copy promptUse in Image GeneratorInclined camera on [Subject], a gentle cant, not a full Dutch, the floor suggesting slope or unease.Inclined camera on [Subject], a gentle cant, not a full Dutch, the floor suggesting slope or unease."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a full Dutch Angle. Tell: diagonal horizon you could hang a picture on, 25-plus degrees, poster unease.",
+          "links": [
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: 5 to 12 degrees, almost level, a hint of slope. The other failure is pitching up or down and calling it incline."
+        },
+        {
+          "type": "paragraph",
+          "text": "Check the roll axis: left-right tilt of the horizon, not looking at the ceiling."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a full Dutch Angle. Tell: diagonal horizon you could hang a picture on, 25-plus degrees, poster unease.Fix: 5 to 12 degrees, almost level, a hint of slope. The other failure is pitching up or down and calling it incline.Check the roll axis: left-right tilt of the horizon, not looking at the ceiling."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is incline in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An incline is a slight Dutch: a small camera roll so the floor and horizon are a few degrees off true. It suggests slope or unease without a full canted frame."
+        },
+        {
+          "type": "heading",
+          "text": "Incline vs Dutch angle",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A Dutch angle is a clear cant, often 20 to 30 degrees. Incline is gentler, about 5 to 12 degrees, the floor slightly wrong rather than the world off its axis."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use incline?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a full Dutch would overstate the beat: a corridor, a talk, a street that should only hint. Do not use it if you need the graphic lean of a true Dutch."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt incline for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Inclined camera on [Subject], gentle cant about 8 degrees, not a full Dutch, horizon slightly off, walls rigid. Lock the roll; do not roll during the shot unless you want a Dutch roll."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is incline in film?An incline is a slight Dutch: a small camera roll so the floor and horizon are a few degrees off true. It suggests slope or unease without a full canted frame.Incline vs Dutch angleA Dutch angle is a clear cant, often 20 to 30 degrees. Incline is gentler, about 5 to 12 degrees, the floor slightly wrong rather than the world off its axis.When should I use incline?Use it when a full Dutch would overstate the beat: a corridor, a talk, a street that should only hint. Do not use it if you need the graphic lean of a true Dutch.How do I prompt incline for AI image or video?Write: Inclined camera on [Subject], gentle cant about 8 degrees, not a full Dutch, horizon slightly off, walls rigid. Lock the roll; do not roll during the shot unless you want a Dutch roll."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Give a small number. Quote: Inclined camera on [Subject], a gentle cant, not a full Dutch, the floor suggesting slope or unease.",
+      "Add: rolled about 8 degrees, horizon slightly off, walls not warped, static, not 25 degrees. If the model still produces a comic lean, lower the number and say almost level."
+    ],
+    "example": "Inclined camera on [Subject], a gentle cant, not a full Dutch, the floor suggesting slope or unease."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/f046f6b83b7ca001bfd79b2bbf2a1d04.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/incline.webp",
+      "alt": "Incline example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b87a1699cd3cd68781b68c037559849a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-angle-161-dutch-angle-mini.webp",
+      "alt": "Dutch Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/705061adfd657c913629f2fb72bc9a79.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/161-dutch-angle-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bb8189d9c5960a57f1ebb107154d2464.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-roll-dutch-roll-mini.webp",
+      "alt": "Dutch Roll"
+    },
+    {
+      "kind": "video",
+      "path": "media/cd5fb60adefb4ef7a32067187d802aa7.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dutch-roll-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/4d6fe18c5034620fe44c2b70801bdf9f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/incline/hero.jpg",
+      "alt": "Incline",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "299d83f2e3809012eec8ec08784c642e214e11a323e65bc90b5542a9f361a42e"
+}

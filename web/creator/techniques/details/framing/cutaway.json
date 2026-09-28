@@ -1,0 +1,421 @@
+{
+  "id": "framing/cutaway",
+  "slug": "cutaway",
+  "title": "Cutaway",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/cutaway",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cutaway-094-cutaway-for-meaning-or-continuity-mini.webp",
+  "detail": "details/framing/cutaway.json",
+  "aliases": [
+    "Plan de coupe"
+  ],
+  "description": "A cutaway shot leaves the primary action for a related detail, observer, or part of the same world. It is used for context, reaction, compression, or continuity repair.",
+  "thumbnail": "media/e60435779dcb1a571dbf136d390be2eb.webp",
+  "video": "media/f0b62f9704045d719f79fa990e3ef9e5.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/094-cutaway-for-meaning-or-continuity-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A cutaway is a brief exit: a clock, a kettle, a street, a person listening in a doorway. Its value is the relation it adds, not merely that it hides a bad join."
+        },
+        {
+          "type": "paragraph",
+          "text": "It can build anticipation, let the room comment, or imply that time has passed. It is the wrong tool when the object is the plot in the actor's hands: that is an insert."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool if the return to the main action restarts a gesture that should have continued. Check temporal logic."
+        },
+        {
+          "type": "paragraph",
+          "text": "A cutaway can be a pressure release; it can also cheat geography if the new view could not exist at that moment."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A cutaway is a brief exit: a clock, a kettle, a street, a person listening in a doorway. Its value is the relation it adds, not merely that it hides a bad join.It can build anticipation, let the room comment, or imply that time has passed. It is the wrong tool when the object is the plot in the actor's hands: that is an insert.It is also the wrong tool if the return to the main action restarts a gesture that should have continued. Check temporal logic.A cutaway can be a pressure release; it can also cheat geography if the new view could not exist at that moment."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose a detail that can plausibly be present now. Match ambient light and, in editorial thinking, room sound."
+        },
+        {
+          "type": "paragraph",
+          "text": "Return to the main action at a later phase of the motion, not at the same frame of a handshake. Prompt: Cutaway from [Subject] to a related detail in the same world, a pressure-release or information beat that is not an insert on the actor."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Choose a detail that can plausibly be present now. Match ambient light and, in editorial thinking, room sound.Return to the main action at a later phase of the motion, not at the same frame of a handshake. Prompt: Cutaway from [Subject] to a related detail in the same world, a pressure-release or information beat that is not an insert on the actor."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to hide a cut, show a clock, or let the room comment: a kettle trembling during an argument, a courtyard while someone looks. Do not cut away to a new geography that implies false time, and do not call an object-in-hand a cutaway."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to hide a cut, show a clock, or let the room comment: a kettle trembling during an argument, a courtyard while someone looks. Do not cut away to a new geography that implies false time, and do not call an object-in-hand a cutaway."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An Insert Shot stays on a plot object inside the action. A Reaction Shot is a person's response, often a face; a cutaway might be that listener, or it might be a non-human detail.",
+          "links": [
+            {
+              "text": "Insert Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            },
+            {
+              "text": "Reaction Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A cut-in goes tighter on something already in the master, same space and often same axis, without leaving the beat. Cutaway means you left.",
+          "links": [
+            {
+              "text": "cut-in",
+              "url": "https://melies.co/cinematic-techniques/framing/cut-ins"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Insert ShotPoint at the thing that will matter later.",
+          "displayText": "Insert Shot\nPoint at the thing that will matter later.",
+          "links": [
+            {
+              "text": "Insert ShotPoint at the thing that will matter later.",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Reaction ShotThe important action is watching.",
+          "displayText": "Reaction Shot\nThe important action is watching.",
+          "links": [
+            {
+              "text": "Reaction ShotThe important action is watching.",
+              "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Insert Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "Reaction Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+        },
+        {
+          "text": "cut-in",
+          "url": "https://melies.co/cinematic-techniques/framing/cut-ins"
+        },
+        {
+          "text": "Insert ShotPoint at the thing that will matter later.",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "Reaction ShotThe important action is watching.",
+          "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b5bb789f90144033b393ce87e620564d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/insert-095-narrative-insert-mini.webp",
+          "alt": "Insert Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/53a13c456f43ab42d2e3d1f277d87138.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/095-narrative-insert-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/248886e506c0ab0f39e5253a8675425b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reaction-shot-093-reaction-shot-mini.webp",
+          "alt": "Reaction Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/e015bba47d3ffb7de60f4bd03af20bcb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/093-reaction-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots An Insert Shot stays on a plot object inside the action. A Reaction Shot is a person's response, often a face; a cutaway might be that listener, or it might be a non-human detail.A cut-in goes tighter on something already in the master, same space and often same axis, without leaving the beat. Cutaway means you left.Insert ShotPoint at the thing that will matter later.Reaction ShotThe important action is watching.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hot Fuzz uses cutaways as both joke and glue. The Conversation lets the world around a listener comment."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dancer in the Dark brackets a car conversation with wider and closer views. Jurassic Park punctuates approaching threat with environmental details and observers."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: leave, add a relation, return honestly."
+        },
+        {
+          "type": "list-item",
+          "text": "Dancer in the Dark 2000Wider and closer views bracket the conversation in Bill’s car.",
+          "displayText": "Dancer in the Dark 2000\nWider and closer views bracket the conversation in Bill’s car."
+        },
+        {
+          "type": "list-item",
+          "text": "Jurassic Park 1993Environmental details and observers punctuate the approaching threat.",
+          "displayText": "Jurassic Park 1993\nEnvironmental details and observers punctuate the approaching threat."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Hot Fuzz uses cutaways as both joke and glue. The Conversation lets the world around a listener comment.Dancer in the Dark brackets a car conversation with wider and closer views. Jurassic Park punctuates approaching threat with environmental details and observers.Grammar: leave, add a relation, return honestly.Dancer in the Dark 2000Wider and closer views bracket the conversation in Bill’s car.Jurassic Park 1993Environmental details and observers punctuate the approaching threat."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the exit. Example: Cutaway from [Subject] to a related detail in the same world (a clock, a kettle, a street, a listener), not an insert on the actor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Match the key. For video, hold the detail, then imply a return; do not keep the original action in frame if you meant to leave it."
+        },
+        {
+          "type": "quote",
+          "text": "A couple argues quietly in a kitchen. Cut away to a kettle beginning to tremble on the stove while their voices continue, then return to the couple after a tense pause. Generate the insert separately with matching light and room sound. No literal symbolism captions."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+couple+argues+quietly+in+a+kitchen.+Cut+away+to+a+kettle+beginning+to+tremble+on+the+stove+while+their+voices+continue,+then+return+to+the+couple+after+a+tense+pause.+Generate+the+insert+separately+with+matching+light+and+room+sound.+No+literal+symbolism+captions."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the exit. Example: Cutaway from [Subject] to a related detail in the same world (a clock, a kettle, a street, a listener), not an insert on the actor.Match the key. For video, hold the detail, then imply a return; do not keep the original action in frame if you meant to leave it.Copy promptUse in Video GeneratorA couple argues quietly in a kitchen. Cut away to a kettle beginning to tremble on the stove while their voices continue, then return to the couple after a tense pause. Generate the insert separately with matching light and room sound. No literal symbolism captions.A couple argues quietly in a kitchen. Cut away to a kettle beginning to tremble on the stove while their voices continue, then return to the couple after a tense pause. Generate the insert separately with matching light and room sound. No literal symbolism captions."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an Insert Shot (object in the action) or a random pretty detail. The tell is a letter in the hero's hands labeled cutaway, or a return that rewinds the action.",
+          "links": [
+            {
+              "text": "Insert Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: leave the primary beat, pick a plausible now, watch time on the way back."
+        }
+      ],
+      "links": [
+        {
+          "text": "Insert Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an Insert Shot (object in the action) or a random pretty detail. The tell is a letter in the hero's hands labeled cutaway, or a return that rewinds the action.Fix: leave the primary beat, pick a plausible now, watch time on the way back."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Cutaway in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A cutaway is a shot away from the primary action, used for context, reaction, compression, or continuity repair. It might be a clock, a street, an observer, or a piece of the room."
+        },
+        {
+          "type": "heading",
+          "text": "Cutaway vs Insert Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An insert is a close view of a story object or hand fact inside the action. A cutaway leaves that action for a related view. Hands on the plot letter are an insert; the kettle on the stove during the fight is a cutaway."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Cutaway?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to add a relation, hide a join, compress time, or let the world comment. Do not use it to show the object in the actor's hands, and do not return in a way that rewinds the action."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Cutaway for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Cutaway from [Subject] to a related detail in the same world, and name that detail. Say it is not an insert on the actor. Match light to the main scene."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Cutaway in film?A cutaway is a shot away from the primary action, used for context, reaction, compression, or continuity repair. It might be a clock, a street, an observer, or a piece of the room.Cutaway vs Insert ShotAn insert is a close view of a story object or hand fact inside the action. A cutaway leaves that action for a related view. Hands on the plot letter are an insert; the kettle on the stove during the fight is a cutaway.When should I use Cutaway?Use it to add a relation, hide a join, compress time, or let the world comment. Do not use it to show the object in the actor's hands, and do not return in a way that rewinds the action.How do I prompt Cutaway for AI image or video?Write Cutaway from [Subject] to a related detail in the same world, and name that detail. Say it is not an insert on the actor. Match light to the main scene."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the exit. Example: Cutaway from [Subject] to a related detail in the same world (a clock, a kettle, a street, a listener), not an insert on the actor.",
+      "Match the key. For video, hold the detail, then imply a return; do not keep the original action in frame if you meant to leave it."
+    ],
+    "example": "A couple argues quietly in a kitchen. Cut away to a kettle beginning to tremble on the stove while their voices continue, then return to the couple after a tense pause. Generate the insert separately with matching light and room sound. No literal symbolism captions."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/f0b62f9704045d719f79fa990e3ef9e5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/094-cutaway-for-meaning-or-continuity-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e60435779dcb1a571dbf136d390be2eb.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cutaway-094-cutaway-for-meaning-or-continuity-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c5f62a4e0ef8a954e8549d865a16232f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/cutaway.jpg",
+      "alt": "Cutaway frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/b5bb789f90144033b393ce87e620564d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/insert-095-narrative-insert-mini.webp",
+      "alt": "Insert Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/53a13c456f43ab42d2e3d1f277d87138.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/095-narrative-insert-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/248886e506c0ab0f39e5253a8675425b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reaction-shot-093-reaction-shot-mini.webp",
+      "alt": "Reaction Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/e015bba47d3ffb7de60f4bd03af20bcb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/093-reaction-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a09959fac00a6c5b24de9ae72b0dc89d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cutaway/hero.jpg",
+      "alt": "Cutaway",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "98bf5b24d4ec71f09b0ce4d22a29687ab06b7560f95f4c100ad7501df5482d1d"
+}

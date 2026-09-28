@@ -1,0 +1,399 @@
+{
+  "id": "lighting/epiphany",
+  "slug": "epiphany",
+  "title": "Epiphany",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/epiphany",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/epiphany-epiphany-mini.webp",
+  "detail": "details/lighting/epiphany.json",
+  "aliases": [],
+  "description": "Epiphany lighting is a change of illumination that makes a face or figure suddenly the brightest readable fact in the room as a realization lands. The light finds the person; it is timed to understanding, not left as a static setup.",
+  "thumbnail": "media/a4bd01a1175d1c32c1f7965c7d1ebd0f.webp",
+  "video": "media/3cffafa37a53defa7c60cafb09cf0c05.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/epiphany-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Thought becomes visible. A dim interior, a forest, a chapel: something shifts (a cloud, a door, a hidden unit, a match) and the face takes the key as if the idea switched a lamp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spiritual and interior films use the change; the audience reads insight as exposure. It is the wrong tool for a whole scene that is merely pretty, or for a jump scare flash."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the pool never changes, you have cameo or a static shaft. If the beam is only atmosphere, you have volumetric light without a thought.",
+          "links": [
+            {
+              "text": "cameo",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            },
+            {
+              "text": "volumetric light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "cameo",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "volumetric light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Thought becomes visible. A dim interior, a forest, a chapel: something shifts (a cloud, a door, a hidden unit, a match) and the face takes the key as if the idea switched a lamp.Spiritual and interior films use the change; the audience reads insight as exposure. It is the wrong tool for a whole scene that is merely pretty, or for a jump scare flash.If the pool never changes, you have cameo or a static shaft. If the beam is only atmosphere, you have volumetric light without a thought."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Start under, then raise a motivated source on the face: sun through cloud, a door opening, a practical turned up, a flagged unit revealed. Direction often comes from above or behind so it can feel given rather than a frontal beauty key."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness can be soft wrap or a sudden shaft; color often goes warmer or clearer than the preceding gloom. In video, the change is the shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Epiphany light on [Subject], a sudden intelligible brightness, as if the thought itself switched a lamp. Motion: Light finds [Subject] as a realization lands, the face becoming the brightest fact in the room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Start under, then raise a motivated source on the face: sun through cloud, a door opening, a practical turned up, a flagged unit revealed. Direction often comes from above or behind so it can feel given rather than a frontal beauty key.Hardness can be soft wrap or a sudden shaft; color often goes warmer or clearer than the preceding gloom. In video, the change is the shot.Prompt: Epiphany light on [Subject], a sudden intelligible brightness, as if the thought itself switched a lamp. Motion: Light finds [Subject] as a realization lands, the face becoming the brightest fact in the room."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when understanding should be visible, a decision, a grace, a confession that lands. Do not use a random brightness bump with no story cause."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when understanding should be visible, a decision, a grace, a confession that lands. Do not use a random brightness bump with no story cause."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cameo lighting isolates a figure in a static pool. Volumetric light shows beams in air; epiphany may use that, but the job is the timed change on a face.",
+          "links": [
+            {
+              "text": "Cameo lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            },
+            {
+              "text": "Volumetric light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Spotlight is a theatrical instrument, not necessarily a thought. High-key is a whole-frame ratio, not a reveal.",
+          "links": [
+            {
+              "text": "Spotlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/spotlight"
+            },
+            {
+              "text": "High-key",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cameo LightingErase the world. Keep the person.",
+          "displayText": "Cameo Lighting\nErase the world. Keep the person.",
+          "links": [
+            {
+              "text": "Cameo LightingErase the world. Keep the person.",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "displayText": "Volumetric Light\nAir has to be photographed, not just the subject.",
+          "links": [
+            {
+              "text": "Volumetric LightAir has to be photographed, not just the subject.",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cameo lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Volumetric light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "Spotlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/spotlight"
+        },
+        {
+          "text": "High-key",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Cameo LightingErase the world. Keep the person.",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/eb2b22619f7f3f03ae5875d0cbf8986f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cameo-lighting.webp",
+          "alt": "Cameo Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+          "alt": "Volumetric Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Cameo lighting isolates a figure in a static pool. Volumetric light shows beams in air; epiphany may use that, but the job is the timed change on a face.Spotlight is a theatrical instrument, not necessarily a thought. High-key is a whole-frame ratio, not a reveal.Cameo LightingErase the world. Keep the person.Volumetric LightAir has to be photographed, not just the subject.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Tree of Life lets sun and interior light arrive as if attention itself brightened. Silence uses sudden or given light on faces at moments of spiritual crisis."
+        },
+        {
+          "type": "paragraph",
+          "text": "The grammar is the change, not a lens flare sticker."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Tree of Life lets sun and interior light arrive as if attention itself brightened. Silence uses sudden or given light on faces at moments of spiritual crisis.The grammar is the change, not a lens flare sticker."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write the before and after. Still: \"Epiphany light on [Subject], a sudden intelligible brightness, as if the thought itself switched a lamp.\" Video: \"Light finds [Subject] as a realization lands, the face becoming the brightest fact in the room.\" Name what caused the change (sun, door, lamp)."
+        },
+        {
+          "type": "quote",
+          "text": "Light finds [Subject] as a realization lands, the face becoming the brightest fact in the room."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Light+finds+[Subject]+as+a+realization+lands,+the+face+becoming+the+brightest+fact+in+the+room."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write the before and after. Still: \"Epiphany light on [Subject], a sudden intelligible brightness, as if the thought itself switched a lamp.\" Video: \"Light finds [Subject] as a realization lands, the face becoming the brightest fact in the room.\" Name what caused the change (sun, door, lamp).Copy promptUse in Video GeneratorLight finds [Subject] as a realization lands, the face becoming the brightest fact in the room.Light finds [Subject] as a realization lands, the face becoming the brightest fact in the room."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a static cameo or a decorative volumetric shaft. The tell is no change, or brightness with no cause.",
+          "links": [
+            {
+              "text": "cameo",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            },
+            {
+              "text": "volumetric",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by starting darker and letting a motivated source find the face at the thought."
+        }
+      ],
+      "links": [
+        {
+          "text": "cameo",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "volumetric",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a static cameo or a decorative volumetric shaft. The tell is no change, or brightness with no cause.Fix it by starting darker and letting a motivated source find the face at the thought."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is epiphany in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A lighting change that makes a person suddenly the brightest readable fact as a realization lands. The light is timed to understanding."
+        },
+        {
+          "type": "heading",
+          "text": "Epiphany vs cameo lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Cameo is a static isolated pool on a dark ground. Epiphany is a change: light finds the face because a thought arrives, often from a motivated source."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use epiphany lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a decision or insight should be visible in exposure. Skip it as decoration on a scene with no inner turn."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt epiphany for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Describe a sudden intelligible brightness on the face as a realization lands. In video, start dimmer and let light find the subject. Name the cause."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is epiphany in film?A lighting change that makes a person suddenly the brightest readable fact as a realization lands. The light is timed to understanding.Epiphany vs cameo lightingCameo is a static isolated pool on a dark ground. Epiphany is a change: light finds the face because a thought arrives, often from a motivated source.When should I use epiphany lighting?Use it when a decision or insight should be visible in exposure. Skip it as decoration on a scene with no inner turn.How do I prompt epiphany for AI image or video?Describe a sudden intelligible brightness on the face as a realization lands. In video, start dimmer and let light find the subject. Name the cause."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write the before and after. Still: \"Epiphany light on [Subject], a sudden intelligible brightness, as if the thought itself switched a lamp.\" Video: \"Light finds [Subject] as a realization lands, the face becoming the brightest fact in the room.\" Name what caused the change (sun, door, lamp)."
+    ],
+    "example": "Light finds [Subject] as a realization lands, the face becoming the brightest fact in the room."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/3cffafa37a53defa7c60cafb09cf0c05.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/epiphany-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a4bd01a1175d1c32c1f7965c7d1ebd0f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/epiphany-epiphany-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/65ddb398c49858bb9a631c13f2ec37f9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/epiphany.jpg",
+      "alt": "Epiphany frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb2b22619f7f3f03ae5875d0cbf8986f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cameo-lighting.webp",
+      "alt": "Cameo Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+      "alt": "Volumetric Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/4ed66f2dcbf58b891994e82945cc00f9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/epiphany/hero.jpg",
+      "alt": "Epiphany",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "c1080d7d7e4cd2d5def5529d8282cbe72bff87c5c45b0fdad338cf1cab02fca1"
+}

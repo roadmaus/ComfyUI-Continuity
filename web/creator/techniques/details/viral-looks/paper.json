@@ -1,0 +1,347 @@
+{
+  "id": "viral-looks/paper",
+  "slug": "paper",
+  "title": "Paper",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/paper",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/paper.webp",
+  "detail": "details/viral-looks/paper.json",
+  "aliases": [],
+  "description": "Paper, in paper look cinematography, is the world as pulp: torn stock, visible fibers, a person as a cut-out on a page. The world is pulp, and creased lawful sculpture is origami, not this.",
+  "thumbnail": "media/a7800a6e5872222a0cb7c3c956175f43.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Titles, stop-motion paper, a figure that has been scissored from stock: hard or window light that shows the edge of the sheet, fibers in the tear. Collage stacks pieces."
+        },
+        {
+          "type": "paragraph",
+          "text": "Paper is the material of the whole world. It is the wrong tool when the paper is neatly folded into facets, and the wrong tool when the person is simply standing in a library."
+        },
+        {
+          "type": "paragraph",
+          "text": "Show the cut and the fiber."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Titles, stop-motion paper, a figure that has been scissored from stock: hard or window light that shows the edge of the sheet, fibers in the tear. Collage stacks pieces.Paper is the material of the whole world. It is the wrong tool when the paper is neatly folded into facets, and the wrong tool when the person is simply standing in a library.Show the cut and the fiber."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height, 35mm to 50mm, lock-off. Light that rakes the tooth of the stock."
+        },
+        {
+          "type": "paragraph",
+          "text": "Torn edges, visible fibers, cut-out person. Prompt: Paper world of [Subject], torn stock, visible fibers, a person as a cut-out on pulp."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Eye height, 35mm to 50mm, lock-off. Light that rakes the tooth of the stock.Torn edges, visible fibers, cut-out person. Prompt: Paper world of [Subject], torn stock, visible fibers, a person as a cut-out on pulp."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A title still, a cut-out figure, a world that is stock. Do not use it as origami, and do not use it as a person holding a sheet as a prop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A title still, a cut-out figure, a world that is stock. Do not use it as origami, and do not use it as a person holding a sheet as a prop."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Origami is lawful creases and planar sculpture. Collage is assembled pieces.",
+          "links": [
+            {
+              "text": "Origami",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/origami"
+            },
+            {
+              "text": "Collage",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Paper is torn pulp as the world, a cut-out on fibers. If the edges are folded, you wanted origami."
+        },
+        {
+          "type": "paragraph",
+          "text": "If they are glued fragments, collage."
+        },
+        {
+          "type": "list-item",
+          "text": "OrigamiThe world folds.",
+          "displayText": "Origami\nThe world folds.",
+          "links": [
+            {
+              "text": "OrigamiThe world folds.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/origami"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CollageOne image is not enough; stack them.",
+          "displayText": "Collage\nOne image is not enough; stack them.",
+          "links": [
+            {
+              "text": "CollageOne image is not enough; stack them.",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Origami",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/origami"
+        },
+        {
+          "text": "Collage",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        },
+        {
+          "text": "OrigamiThe world folds.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/origami"
+        },
+        {
+          "text": "CollageOne image is not enough; stack them.",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/cf45da92595b4d5f62bad9978a168416.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/origami.webp",
+          "alt": "Origami"
+        },
+        {
+          "kind": "image",
+          "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+          "alt": "Collage"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Origami is lawful creases and planar sculpture. Collage is assembled pieces.Paper is torn pulp as the world, a cut-out on fibers. If the edges are folded, you wanted origami.If they are glued fragments, collage.OrigamiThe world folds.CollageOne image is not enough; stack them.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Tale of the Princess Kaguya treats paper and pencil as living stock. Stop-motion paper titles and cut-out shorts are the well-known use."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fiber and tear as grammar, not a title to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Tale of the Princess Kaguya treats paper and pencil as living stock. Stop-motion paper titles and cut-out shorts are the well-known use.Fiber and tear as grammar, not a title to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pulp, tear, cut-out. Paper world of [Subject], torn stock, visible fibers, a person as a cut-out on pulp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add raking light on fibers, torn edges, no lawful origami creases, no readable type."
+        },
+        {
+          "type": "quote",
+          "text": "Paper world of [Subject], torn stock, visible fibers, a person as a cut-out on pulp."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Paper+world+of+[Subject],+torn+stock,+visible+fibers,+a+person+as+a+cut-out+on+pulp."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Pulp, tear, cut-out. Paper world of [Subject], torn stock, visible fibers, a person as a cut-out on pulp.Add raking light on fibers, torn edges, no lawful origami creases, no readable type.Copy promptUse in Image GeneratorPaper world of [Subject], torn stock, visible fibers, a person as a cut-out on pulp.Paper world of [Subject], torn stock, visible fibers, a person as a cut-out on pulp."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A person holding paper as a prop, or a slide into Origami folds. The tell is no tear and no fiber.",
+          "links": [
+            {
+              "text": "Origami",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/origami"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: cut-out, pulp tooth, torn stock as the world."
+        }
+      ],
+      "links": [
+        {
+          "text": "Origami",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/origami"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A person holding paper as a prop, or a slide into Origami folds. The tell is no tear and no fiber.Fix it: cut-out, pulp tooth, torn stock as the world."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Paper in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A pulp-material look: torn stock, visible fibers, a person as a cut-out. The world is the sheet, not a prop in a hand."
+        },
+        {
+          "type": "heading",
+          "text": "Paper vs Origami",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Paper is tear and fiber. Origami is crease and facet. If the world folds on lawful lines, you wanted origami."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Paper?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Titles, cut-out worlds, pulp as set. Skip neat folds and library portraits with a book as a prop."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Paper for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Raking light, then: Paper world of [Subject], torn stock, visible fibers, a person as a cut-out on pulp. Demand fibers and a tear. Forbid origami creases."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Paper in film?A pulp-material look: torn stock, visible fibers, a person as a cut-out. The world is the sheet, not a prop in a hand.Paper vs OrigamiPaper is tear and fiber. Origami is crease and facet. If the world folds on lawful lines, you wanted origami.When should I use Paper?Titles, cut-out worlds, pulp as set. Skip neat folds and library portraits with a book as a prop.How do I prompt Paper for AI image or video?Raking light, then: Paper world of [Subject], torn stock, visible fibers, a person as a cut-out on pulp. Demand fibers and a tear. Forbid origami creases."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Pulp, tear, cut-out. Paper world of [Subject], torn stock, visible fibers, a person as a cut-out on pulp.",
+      "Add raking light on fibers, torn edges, no lawful origami creases, no readable type."
+    ],
+    "example": "Paper world of [Subject], torn stock, visible fibers, a person as a cut-out on pulp."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/a7800a6e5872222a0cb7c3c956175f43.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/paper.webp",
+      "alt": "Paper example"
+    },
+    {
+      "kind": "image",
+      "path": "media/cf45da92595b4d5f62bad9978a168416.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/origami.webp",
+      "alt": "Origami"
+    },
+    {
+      "kind": "image",
+      "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+      "alt": "Collage"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/5fd5dec431ebf2a05684c023fa10c235.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/paper/hero.jpg",
+      "alt": "Paper",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "ae43088631090f14fd7a5f34cec2fdea5935fd79f2833d298d9e50be4b666e76"
+}

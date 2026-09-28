@@ -1,0 +1,471 @@
+{
+  "id": "editing/wipe",
+  "slug": "wipe",
+  "title": "Wipe",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/wipe",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wipe-105-wipe-transition-mini.webp",
+  "detail": "details/editing/wipe.json",
+  "aliases": [
+    "horizontal wipe",
+    "vertical wipe",
+    "diagonal wipe",
+    "clock wipe",
+    "radial wipe",
+    "barn-door wipe",
+    "shape wipe",
+    "Directional replacement"
+  ],
+  "description": "A wipe replaces one image with another through a moving boundary that travels across the frame. One side of the join is still A; the other side is already B; the edge between them is the edit, and it is meant to be seen.",
+  "thumbnail": "media/54fcdd902f1f2659782cf95fef84cb74.webp",
+  "video": "media/13551e2b4f47b0627fcbd4e1954eacfc.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/105-wipe-transition-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A vertical line walks left to right and a village becomes a mountain pass. Geography has changed as a page turn, not as an invisible cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "Adventure, serials, and playful maps like that honesty. Use it when the change of scene should feel brisk, storybook, or openly constructed."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you need the audience not to feel an edit: that is Invisible Cut or Match on Action. A wipe is not a person walking in front of the lens (occlusion).",
+          "links": [
+            {
+              "text": "Invisible Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+            },
+            {
+              "text": "Match on Action",
+              "url": "https://melies.co/cinematic-techniques/editing/match-action"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Occlusion can hide a cut; a wipe displays one. Direction and speed should agree with the next action."
+        },
+        {
+          "type": "paragraph",
+          "text": "A wipe against the traveler's walk fights the grammar."
+        }
+      ],
+      "links": [
+        {
+          "text": "Invisible Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+        },
+        {
+          "text": "Match on Action",
+          "url": "https://melies.co/cinematic-techniques/editing/match-action"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A vertical line walks left to right and a village becomes a mountain pass. Geography has changed as a page turn, not as an invisible cut.Adventure, serials, and playful maps like that honesty. Use it when the change of scene should feel brisk, storybook, or openly constructed.It is the wrong tool when you need the audience not to feel an edit: that is Invisible Cut or Match on Action. A wipe is not a person walking in front of the lens (occlusion).Occlusion can hide a cut; a wipe displays one. Direction and speed should agree with the next action.A wipe against the traveler's walk fights the grammar."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose a boundary: vertical, horizontal, diagonal, clock hand, barn-door, shape. Animate it across a clean pair of shots."
+        },
+        {
+          "type": "paragraph",
+          "text": "Soft-edged or hard-edged is a taste choice; the edge must remain a graphic, not a morph of the scenery. A motivated object edge (a passing wall, a cloak) can justify a wipe, but then you are close to an invisible occlusion cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: wipe replacing [Subject] with the next image, a line traveling across the frame, a clock hand or a hard vertical."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Choose a boundary: vertical, horizontal, diagonal, clock hand, barn-door, shape. Animate it across a clean pair of shots.Soft-edged or hard-edged is a taste choice; the edge must remain a graphic, not a morph of the scenery. A motivated object edge (a passing wall, a cloak) can justify a wipe, but then you are close to an invisible occlusion cut.Prompt: wipe replacing [Subject] with the next image, a line traveling across the frame, a clock hand or a hard vertical."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to leap from planet to planet, village to road, chapter to chapter in a serial cadence. Do not use it to hide a continuity error."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the join should vanish, do not wipe."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to leap from planet to planet, village to road, chapter to chapter in a serial cadence. Do not use it to hide a continuity error.If the join should vanish, do not wipe."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An Iris is a radial mask from a center, not a traveling edge. A Match Cut rhymes two full frames with a hard cut and no boundary.",
+          "links": [
+            {
+              "text": "Iris",
+              "url": "https://melies.co/cinematic-techniques/editing/iris"
+            },
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Dissolve mixes opacities. An Invisible Cut uses a real object or blur to conceal the splice; the wipe's graphic boundary is intentional and visible.",
+          "links": [
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            },
+            {
+              "text": "Invisible Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "IrisPoint with the mask itself.",
+          "displayText": "Iris\nPoint with the mask itself.",
+          "links": [
+            {
+              "text": "IrisPoint with the mask itself.",
+              "url": "https://melies.co/cinematic-techniques/editing/iris"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Graphic MatchForm carries you across time.",
+          "displayText": "Graphic Match\nForm carries you across time.",
+          "links": [
+            {
+              "text": "Graphic MatchForm carries you across time.",
+              "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Iris",
+          "url": "https://melies.co/cinematic-techniques/editing/iris"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        },
+        {
+          "text": "Invisible Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+        },
+        {
+          "text": "IrisPoint with the mask itself.",
+          "url": "https://melies.co/cinematic-techniques/editing/iris"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Graphic MatchForm carries you across time.",
+          "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ac66d050cb3a40e5efe5550f1b3c9242.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/iris-104-iris-opening-or-closing-mini.webp",
+          "alt": "Iris"
+        },
+        {
+          "kind": "video",
+          "path": "media/df975cf4d452b48274b222e578129ce2.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/104-iris-opening-or-closing-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/87ceda0519aff5db427c7cd37728798e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/graphic-match-099-graphic-match-cut-mini.webp",
+          "alt": "Graphic Match"
+        },
+        {
+          "kind": "video",
+          "path": "media/ffba929ec8dc585d8a9c73346ee4cd87.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/099-graphic-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots An Iris is a radial mask from a center, not a traveling edge. A Match Cut rhymes two full frames with a hard cut and no boundary.A Dissolve mixes opacities. An Invisible Cut uses a real object or blur to conceal the splice; the wipe's graphic boundary is intentional and visible.IrisPoint with the mask itself.Match CutTwo images are the same idea.Graphic MatchForm carries you across time."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Star Wars uses directional wipes as adventure punctuation between locations. Seven Samurai uses wipes to mark narrative progression with a visible page-turn."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those are grammar samples for an honest scene change, not compositions to clone."
+        },
+        {
+          "type": "list-item",
+          "text": "Star Wars 1977Directional wipes connect adventure scenes and locations.",
+          "displayText": "Star Wars 1977\nDirectional wipes connect adventure scenes and locations."
+        },
+        {
+          "type": "list-item",
+          "text": "Seven Samurai 1954Wipes punctuate narrative progression.",
+          "displayText": "Seven Samurai 1954\nWipes punctuate narrative progression."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Star Wars uses directional wipes as adventure punctuation between locations. Seven Samurai uses wipes to mark narrative progression with a visible page-turn.Those are grammar samples for an honest scene change, not compositions to clone.Star Wars 1977Directional wipes connect adventure scenes and locations.Seven Samurai 1954Wipes punctuate narrative progression."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wipe replacing [Subject] with the next image, a line traveling across the frame, Star Wars grammar or a clock hand. Name direction, edge hardness, and both scenes."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, generate A and B as full frames, then composite a moving mask. No blending scenery, no morph."
+        },
+        {
+          "type": "quote",
+          "text": "Generate A: a traveler leaves a dusty village at dawn. Generate B: the traveler approaches a distant mountain pass later that day. Replace A with B using a clean left-to-right vertical wipe. Consistent travel direction, no blending or morphing scenery."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Generate+A:+a+traveler+leaves+a+dusty+village+at+dawn.+Generate+B:+the+traveler+approaches+a+distant+mountain+pass+later+that+day.+Replace+A+with+B+using+a+clean+left-to-right+vertical+wipe.+Consistent+travel+direction,+no+blending+or+morphing+scenery."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Wipe replacing [Subject] with the next image, a line traveling across the frame, Star Wars grammar or a clock hand. Name direction, edge hardness, and both scenes.For video, generate A and B as full frames, then composite a moving mask. No blending scenery, no morph.Copy promptUse in Video GeneratorGenerate A: a traveler leaves a dusty village at dawn. Generate B: the traveler approaches a distant mountain pass later that day. Replace A with B using a clean left-to-right vertical wipe. Consistent travel direction, no blending or morphing scenery.Generate A: a traveler leaves a dusty village at dawn. Generate B: the traveler approaches a distant mountain pass later that day. Replace A with B using a clean left-to-right vertical wipe. Consistent travel direction, no blending or morphing scenery."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an Invisible Cut (hidden occlusion) or a Dissolve. The tell: the edge is gooey, or a passing extra is doing the work while you call it a wipe.",
+          "links": [
+            {
+              "text": "Invisible Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+            },
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: a clean traveling mask, two intact pictures, direction matched to the story's travel."
+        }
+      ],
+      "links": [
+        {
+          "text": "Invisible Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+        },
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an Invisible Cut (hidden occlusion) or a Dissolve. The tell: the edge is gooey, or a passing extra is doing the work while you call it a wipe.The fix: a clean traveling mask, two intact pictures, direction matched to the story's travel."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Wipe in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A wipe replaces one shot with another through a moving boundary across the screen. Both sides of the join are full pictures; the traveling edge is the edit, and it is meant to be seen."
+        },
+        {
+          "type": "heading",
+          "text": "Wipe vs Iris",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A wipe's edge travels (left to right, clock, barn-door). An iris is a circular or shaped mask that opens or closes around a center. One is a page turn; the other is a pointing hole."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Wipe?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for adventure, serial geography, or a playful scene change that should not pretend to be invisible. Do not use it to hide a splice the audience must not feel."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Wipe for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name both images and the traveling edge. Example: Wipe replacing [Subject] with the next image, a line traveling across the frame. Specify direction and a clean mask, not a morph."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Wipe in film?A wipe replaces one shot with another through a moving boundary across the screen. Both sides of the join are full pictures; the traveling edge is the edit, and it is meant to be seen.Wipe vs IrisA wipe's edge travels (left to right, clock, barn-door). An iris is a circular or shaped mask that opens or closes around a center. One is a page turn; the other is a pointing hole.When should I use Wipe?Use it for adventure, serial geography, or a playful scene change that should not pretend to be invisible. Do not use it to hide a splice the audience must not feel.How do I prompt Wipe for AI image or video?Name both images and the traveling edge. Example: Wipe replacing [Subject] with the next image, a line traveling across the frame. Specify direction and a clean mask, not a morph."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Wipe replacing [Subject] with the next image, a line traveling across the frame, Star Wars grammar or a clock hand. Name direction, edge hardness, and both scenes.",
+      "For video, generate A and B as full frames, then composite a moving mask. No blending scenery, no morph."
+    ],
+    "example": "Generate A: a traveler leaves a dusty village at dawn. Generate B: the traveler approaches a distant mountain pass later that day. Replace A with B using a clean left-to-right vertical wipe. Consistent travel direction, no blending or morphing scenery."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/13551e2b4f47b0627fcbd4e1954eacfc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/105-wipe-transition-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/54fcdd902f1f2659782cf95fef84cb74.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wipe-105-wipe-transition-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f9a65d1c65c340c744c8f58538f83cbf.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/wipe.jpg",
+      "alt": "Wipe frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/ac66d050cb3a40e5efe5550f1b3c9242.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/iris-104-iris-opening-or-closing-mini.webp",
+      "alt": "Iris"
+    },
+    {
+      "kind": "video",
+      "path": "media/df975cf4d452b48274b222e578129ce2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/104-iris-opening-or-closing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/87ceda0519aff5db427c7cd37728798e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/graphic-match-099-graphic-match-cut-mini.webp",
+      "alt": "Graphic Match"
+    },
+    {
+      "kind": "video",
+      "path": "media/ffba929ec8dc585d8a9c73346ee4cd87.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/099-graphic-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cfe3148cdb849258d0f85544d10336e0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/wipe/hero.jpg",
+      "alt": "Wipe",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "12a4758e5f3bbd8aa1c0e54b7d7dd6bec41c2e39cda04ea1ce3a04bb11afef85"
+}

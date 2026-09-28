@@ -1,0 +1,467 @@
+{
+  "id": "lenses/split-diopter",
+  "slug": "split-diopter",
+  "title": "Split Diopter",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/split-diopter",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-diopter-054-split-diopter-focus-mini.webp",
+  "detail": "details/lenses/split-diopter.json",
+  "aliases": [
+    "Split-field diopter",
+    "Double plan de netteté"
+  ],
+  "description": "A split diopter is a partial close-focus element that keeps different distance zones sharp in one frame. One region focuses very near while another remains focused farther away; it is not two focal lengths, and it is not ordinary deep focus.",
+  "thumbnail": "media/9ca16cd086644cbf4c2f2dd79c809a72.webp",
+  "video": "media/6918a9b50ffd37951a502deb6b96e1b3.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/054-split-diopter-focus-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A telephone in the foreground and a doorway across the room can both be tack-sharp, with a narrow blur band where the half-lens ends. The construction is often hidden on a door edge, a lamp, or a dark seam."
+        },
+        {
+          "type": "paragraph",
+          "text": "The coexistence is the sentence: a face and a distant threat are equally true at once. It is the wrong tool when a small aperture and careful staging would hold both planes without a seam."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is Deep Focus. It is also the wrong tool if you meant to throw attention from one plane to the other over time: that is Rack Focus.",
+          "links": [
+            {
+              "text": "Deep Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+            },
+            {
+              "text": "Rack Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not describe this as a split-screen or a ghost overlay."
+        }
+      ],
+      "links": [
+        {
+          "text": "Deep Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+        },
+        {
+          "text": "Rack Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A telephone in the foreground and a doorway across the room can both be tack-sharp, with a narrow blur band where the half-lens ends. The construction is often hidden on a door edge, a lamp, or a dark seam.The coexistence is the sentence: a face and a distant threat are equally true at once. It is the wrong tool when a small aperture and careful staging would hold both planes without a seam.That is Deep Focus. It is also the wrong tool if you meant to throw attention from one plane to the other over time: that is Rack Focus.Do not describe this as a split-screen or a ghost overlay."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mount a split-field diopter in front of the taking lens so half the field is a close-up filter. Focus the naked side on the far subject; the diopter side will bring a near object into focus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hide the boundary against a vertical edge or a soft region. A two-focus composite can recreate the look with more control."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: One continuous room: a near object on the left tack-sharp and [Subject] far on the right also tack-sharp, a narrow blur band between them. Not a split-screen, not a ghost overlay."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Mount a split-field diopter in front of the taking lens so half the field is a close-up filter. Focus the naked side on the far subject; the diopter side will bring a near object into focus.Hide the boundary against a vertical edge or a soft region. A two-focus composite can recreate the look with more control.Prompt: One continuous room: a near object on the left tack-sharp and [Subject] far on the right also tack-sharp, a narrow blur band between them. Not a split-screen, not a ghost overlay."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when two distances must both be true at once: a listener and a far figure, a glass and a door. Do not use it as a substitute for deep focus, and do not split the frame into two movies."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when two distances must both be true at once: a listener and a far figure, a glass and a door. Do not use it as a substitute for deep focus, and do not split the frame into two movies."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Deep Focus holds near and far by stopping down and staging, with no diopter seam. Rack Focus changes which plane is sharp over time.",
+          "links": [
+            {
+              "text": "Deep Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+            },
+            {
+              "text": "Rack Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Split Screen cuts the frame into separate images. A split diopter is one take, two focus regions, a possible tell at the join.",
+          "links": [
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Deep FocusLet the audience find the story in the whole room.",
+          "displayText": "Deep Focus\nLet the audience find the story in the whole room.",
+          "links": [
+            {
+              "text": "Deep FocusLet the audience find the story in the whole room.",
+              "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rack FocusChange who owns the shot without cutting.",
+          "displayText": "Rack Focus\nChange who owns the shot without cutting.",
+          "links": [
+            {
+              "text": "Rack FocusChange who owns the shot without cutting.",
+              "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Deep Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+        },
+        {
+          "text": "Rack Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+        },
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "Deep FocusLet the audience find the story in the whole room.",
+          "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+        },
+        {
+          "text": "Rack FocusChange who owns the shot without cutting.",
+          "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/2085760298012aaa946dc04506a877fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/deep-focus-051-deep-focus-mini.webp",
+          "alt": "Deep Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/3b7ec49068c390bdc3af6487abab0eaf.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/051-deep-focus-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d8621e52db925c8d69c6da997747f829.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rack-focus-053-rack-focus-mini.webp",
+          "alt": "Rack Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/396e12ac75a8a03a4ec4597dc1dbcafd.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/053-rack-focus-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots Deep Focus holds near and far by stopping down and staging, with no diopter seam. Rack Focus changes which plane is sharp over time.Split Screen cuts the frame into separate images. A split diopter is one take, two focus regions, a possible tell at the join.Deep FocusLet the audience find the story in the whole room.Rack FocusChange who owns the shot without cutting.14mm Ultra-WidePut the audience inside a space that is too big or too close."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blow Out holds near listening equipment or faces with distant action in the same composition. Jaws keeps near and far figures simultaneously sharp in selected setups."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Conversation and Mission: Impossible have used the same charged coexistence. Grammar of two distances at once, not a copied still."
+        },
+        {
+          "type": "list-item",
+          "text": "Blow Out 1981Near listening equipment or faces share the frame with distant action.",
+          "displayText": "Blow Out 1981\nNear listening equipment or faces share the frame with distant action."
+        },
+        {
+          "type": "list-item",
+          "text": "Jaws 1975Near and far figures are held simultaneously in focus in selected compositions.",
+          "displayText": "Jaws 1975\nNear and far figures are held simultaneously in focus in selected compositions."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f0cd7880b907a0634be8fdd71edfdf98.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/split-diopter/famous/00-blow-out-1981.jpg",
+          "alt": "Blow Out 1981"
+        },
+        {
+          "kind": "image",
+          "path": "media/768cc83fb72614f1ada8abae8409a933.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/split-diopter/famous/01-jaws-1975.jpg",
+          "alt": "Jaws 1975"
+        }
+      ],
+      "sourceText": "In film Blow Out holds near listening equipment or faces with distant action in the same composition. Jaws keeps near and far figures simultaneously sharp in selected setups.The Conversation and Mission: Impossible have used the same charged coexistence. Grammar of two distances at once, not a copied still.Blow Out 1981Near listening equipment or faces share the frame with distant action.Jaws 1975Near and far figures are held simultaneously in focus in selected compositions."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name one room and two sharp zones. One continuous room: a near object on the left tack-sharp and [Subject] far on the right also tack-sharp, a narrow blur band between them."
+        },
+        {
+          "type": "paragraph",
+          "text": "Not a split-screen, not a ghost overlay. Hide the join on a door or pole."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not write deep focus or two shots side by side."
+        },
+        {
+          "type": "quote",
+          "text": "A listening device fills the near-left foreground; a suspicious figure stands far back on the right. Both are tack sharp, with a narrow soft transition aligned to a dark door jamb between them. Locked camera, deliberate split-diopter look, not uniformly sharp depth throughout the room."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+listening+device+fills+the+near-left+foreground;+a+suspicious+figure+stands+far+back+on+the+right.+Both+are+tack+sharp,+with+a+narrow+soft+transition+aligned+to+a+dark+door+jamb+between+them.+Locked+camera,+deliberate+split-diopter+look,+not+uniformly+sharp+depth+throughout+the+room."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name one room and two sharp zones. One continuous room: a near object on the left tack-sharp and [Subject] far on the right also tack-sharp, a narrow blur band between them.Not a split-screen, not a ghost overlay. Hide the join on a door or pole.Do not write deep focus or two shots side by side.Copy promptUse in Video GeneratorA listening device fills the near-left foreground; a suspicious figure stands far back on the right. Both are tack sharp, with a narrow soft transition aligned to a dark door jamb between them. Locked camera, deliberate split-diopter look, not uniformly sharp depth throughout the room.A listening device fills the near-left foreground; a suspicious figure stands far back on the right. Both are tack sharp, with a narrow soft transition aligned to a dark door jamb between them. Locked camera, deliberate split-diopter look, not uniformly sharp depth throughout the room."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Deep Focus (no seam, everything held by aperture) or Split Screen (two images). The tell is a hard vertical cut, a double-exposed ghost, or uniform focus with no join.",
+          "links": [
+            {
+              "text": "Deep Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+            },
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: two distance zones, both sharp, a narrow optical blur band, one continuous space."
+        }
+      ],
+      "links": [
+        {
+          "text": "Deep Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+        },
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Deep Focus (no seam, everything held by aperture) or Split Screen (two images). The tell is a hard vertical cut, a double-exposed ghost, or uniform focus with no join.Fix: two distance zones, both sharp, a narrow optical blur band, one continuous space."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a split diopter in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a partial close-up lens that lets one part of the frame focus very near while another part stays focused far away. The join often shows as a thin blur band."
+        },
+        {
+          "type": "heading",
+          "text": "Split Diopter vs Deep Focus",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Deep focus uses a small aperture and staging so a single focus field covers near and far. A split diopter creates two different focus regions with an optical join. It is not two focal lengths and not a split-screen."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a split diopter?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a near object and a far figure must both be sharp at once and ordinary depth of field cannot hold them. Skip it if deep focus or a rack would tell the truth better."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a split diopter for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write one continuous room with a near object and a far subject both tack-sharp and a narrow blur band between them. Forbid split-screen, ghost overlay, and ordinary deep focus."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a split diopter in film?It is a partial close-up lens that lets one part of the frame focus very near while another part stays focused far away. The join often shows as a thin blur band.Split Diopter vs Deep FocusDeep focus uses a small aperture and staging so a single focus field covers near and far. A split diopter creates two different focus regions with an optical join. It is not two focal lengths and not a split-screen.When should I use a split diopter?Use it when a near object and a far figure must both be sharp at once and ordinary depth of field cannot hold them. Skip it if deep focus or a rack would tell the truth better.How do I prompt a split diopter for AI image or video?Write one continuous room with a near object and a far subject both tack-sharp and a narrow blur band between them. Forbid split-screen, ghost overlay, and ordinary deep focus."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name one room and two sharp zones. One continuous room: a near object on the left tack-sharp and [Subject] far on the right also tack-sharp, a narrow blur band between them.",
+      "Not a split-screen, not a ghost overlay. Hide the join on a door or pole.",
+      "Do not write deep focus or two shots side by side."
+    ],
+    "example": "A listening device fills the near-left foreground; a suspicious figure stands far back on the right. Both are tack sharp, with a narrow soft transition aligned to a dark door jamb between them. Locked camera, deliberate split-diopter look, not uniformly sharp depth throughout the room."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/6918a9b50ffd37951a502deb6b96e1b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/054-split-diopter-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9ca16cd086644cbf4c2f2dd79c809a72.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-diopter-054-split-diopter-focus-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e444c6eefcb40adfcc1efc8ee96c4ff3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/split-diopter.jpg",
+      "alt": "Split Diopter frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/2085760298012aaa946dc04506a877fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/deep-focus-051-deep-focus-mini.webp",
+      "alt": "Deep Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/3b7ec49068c390bdc3af6487abab0eaf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/051-deep-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d8621e52db925c8d69c6da997747f829.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rack-focus-053-rack-focus-mini.webp",
+      "alt": "Rack Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/396e12ac75a8a03a4ec4597dc1dbcafd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/053-rack-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/f0cd7880b907a0634be8fdd71edfdf98.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/split-diopter/famous/00-blow-out-1981.jpg",
+      "alt": "Blow Out 1981"
+    },
+    {
+      "kind": "image",
+      "path": "media/768cc83fb72614f1ada8abae8409a933.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/split-diopter/famous/01-jaws-1975.jpg",
+      "alt": "Jaws 1975"
+    },
+    {
+      "kind": "image",
+      "path": "media/f539861689b094aadecf81cc0d8a3621.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/split-diopter/hero.jpg",
+      "alt": "Split Diopter",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "f4dba75644c59202353c9767f18cf53c7a2bf9219deb126a93b61bba6ca518c9"
+}

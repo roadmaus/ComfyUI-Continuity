@@ -8,6 +8,7 @@ import { resolve as resolveVariations } from "./variations.js";
 import { DEFAULT_STILL_ARCH, DEFAULT_VIDEO_FAMILY, STILL_ARCHES,
          UPSCALERS, VIDEO_FAMILIES, family as anyFamily, stillFamily, upscaler, videoFamily } from "./manifest.js";
 import { t } from "./i18n.js";
+import { serializeTechniques } from "./technique-state.js";
 // Where files land is not in the blob any more — it is a preference of this
 // machine, in `settings.js`, so a shared workflow does not carry one person's
 // folder names onto another person's disk.
@@ -1997,6 +1998,9 @@ function serializeAssets(assets) {
 function serializeCommon(state, family = DEFAULT_VIDEO_FAMILY) {
   return {
     prompt: state.prompt ?? "",
+    // UI ownership only: keep removable technique blocks across workflow
+    // reloads without introducing markup into the model's prompt.
+    ...serializeTechniques(state),
     ...serializeRefined(state.refined),
     // An empty field is emitted as nothing, which is not the same as "N/A" —
     // see contextir.compose. A segment leaving them blank inherits the
@@ -3536,6 +3540,7 @@ export function serializeTimeline(timeline) {
     ...(pieceFamily(timeline) !== DEFAULT_VIDEO_FAMILY ? { family: timeline.family } : {}),
     render: timeline.render === "single" ? "single" : "chained",
     prompt: timeline.prompt ?? "",
+    ...serializeTechniques(timeline),
     // Absent means the field is not emitted at all, which is not the same as
     // "N/A" — see contextir.compose — so an empty box writes nothing.
     ...(timeline.soundscape?.trim() ? { soundscape: timeline.soundscape } : {}),

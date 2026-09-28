@@ -1,0 +1,389 @@
+{
+  "id": "viral-looks/action-figure",
+  "slug": "action-figure",
+  "title": "Action Figure",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/action-figure",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/action-figure.webp",
+  "detail": "details/viral-looks/action-figure.json",
+  "aliases": [],
+  "description": "Action figure, the action figure look, turns a person into merchandise: plastic joints, painted-on costume, blister-card studio lighting, a toy of a hero. Scale and material are the look, and a real actor in a costume is not enough.",
+  "thumbnail": "media/efa643ba0f5c274305422d171b69ae57.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Satire, kid myth, a hero reduced to product: one figure, diorama base, rivets, polymer skin. Mighty fighter is a living sprite."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the box. A sincere war story should not become a doll unless that is the point."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you still see pores and cloth weave as fabric. You need plastic."
+        },
+        {
+          "type": "paragraph",
+          "text": "Joints. Toy scale in the light."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not render readable packaging type."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Satire, kid myth, a hero reduced to product: one figure, diorama base, rivets, polymer skin. Mighty fighter is a living sprite.This is the box. A sincere war story should not become a doll unless that is the point.It is the wrong tool when you still see pores and cloth weave as fabric. You need plastic.Joints. Toy scale in the light.Do not render readable packaging type."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Slightly high studio camera, 50mm, lock-off, as if the toy is on a card. Hard product keys, blister shine, visible joints, painted costume."
+        },
+        {
+          "type": "paragraph",
+          "text": "Diorama base allowed. No letters."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Action-figure of [Subject], plastic joints, blister-card lighting, a toy of a person."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Slightly high studio camera, 50mm, lock-off, as if the toy is on a card. Hard product keys, blister shine, visible joints, painted costume.Diorama base allowed. No letters.Prompt: Action-figure of [Subject], plastic joints, blister-card lighting, a toy of a person."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Satire, kid myth, a hero as SKU. Do not use it on a sincere war story unless the reduction is the sentence."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Satire, kid myth, a hero as SKU. Do not use it on a sincere war story unless the reduction is the sentence."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mighty Fighter is a living win pose. Diorama is the miniature world under them.",
+          "links": [
+            {
+              "text": "Mighty Fighter",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+            },
+            {
+              "text": "Diorama",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Action figure is polymer body and blister-card light. 3D Render is shader flesh, not toy plastic.",
+          "links": [
+            {
+              "text": "3D Render",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/3d-render"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Mighty FighterThey should look like a sprite that won.",
+          "displayText": "Mighty Fighter\nThey should look like a sprite that won.",
+          "links": [
+            {
+              "text": "Mighty FighterThey should look like a sprite that won.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DioramaShrink the epic until it fits a shelf.",
+          "displayText": "Diorama\nShrink the epic until it fits a shelf.",
+          "links": [
+            {
+              "text": "DioramaShrink the epic until it fits a shelf.",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Mighty Fighter",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+        },
+        {
+          "text": "Diorama",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        },
+        {
+          "text": "3D Render",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/3d-render"
+        },
+        {
+          "text": "Mighty FighterThey should look like a sprite that won.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+        },
+        {
+          "text": "DioramaShrink the epic until it fits a shelf.",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/046b608906416624c9d8433b3b4e890d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mighty-fighter-mighty-fighter-mini.webp",
+          "alt": "Mighty Fighter"
+        },
+        {
+          "kind": "video",
+          "path": "media/0d7921ffd701093cbc0e915976e8824f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mighty-fighter-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/181d3dd7ea713bbb349f3475266cdf7f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diorama-diorama-mini.webp",
+          "alt": "Diorama"
+        },
+        {
+          "kind": "video",
+          "path": "media/4a23017cfb59808a2d3cee76a9fc5a28.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/diorama-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Mighty Fighter is a living win pose. Diorama is the miniature world under them.Action figure is polymer body and blister-card light. 3D Render is shader flesh, not toy plastic.Mighty FighterThey should look like a sprite that won.DioramaShrink the epic until it fits a shelf.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Toy Story stills treat plastic as matter with product light. The Lego Movie does the same with brick joints."
+        },
+        {
+          "type": "paragraph",
+          "text": "Matter is polymer. Not a package to copy, and no readable logos."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Toy Story stills treat plastic as matter with product light. The Lego Movie does the same with brick joints.Matter is polymer. Not a package to copy, and no readable logos."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Plastic, joints, toy light. Action-figure of [Subject], plastic joints, blister-card lighting, a toy of a person."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add studio keys, visible rivets, diorama base, no packaging type, polymer skin. Not a costumed actor."
+        },
+        {
+          "type": "quote",
+          "text": "Action-figure of [Subject], plastic joints, blister-card lighting, a toy of a person."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Action-figure+of+[Subject],+plastic+joints,+blister-card+lighting,+a+toy+of+a+person."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Plastic, joints, toy light. Action-figure of [Subject], plastic joints, blister-card lighting, a toy of a person.Add studio keys, visible rivets, diorama base, no packaging type, polymer skin. Not a costumed actor.Copy promptUse in Image GeneratorAction-figure of [Subject], plastic joints, blister-card lighting, a toy of a person.Action-figure of [Subject], plastic joints, blister-card lighting, a toy of a person."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A real actor in a costume, or a slide into Mighty Fighter. The tell is cloth weave and no joints.",
+          "links": [
+            {
+              "text": "Mighty Fighter",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: plastic, rivets, blister shine, toy scale."
+        }
+      ],
+      "links": [
+        {
+          "text": "Mighty Fighter",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A real actor in a costume, or a slide into Mighty Fighter. The tell is cloth weave and no joints.Fix it: plastic, rivets, blister shine, toy scale."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Action Figure in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A merchandise recipe: plastic joints, blister-card lighting, a toy of a person. Material and scale, not a costume photograph."
+        },
+        {
+          "type": "heading",
+          "text": "Action Figure vs Mighty Fighter",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Mighty fighter is a living champion pose. Action figure is the doll of that champion. If the skin is flesh, you wanted mighty fighter. If you see joints, you are here."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Action Figure?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Satire, kid myth, hero as product. Skip sincere war coverage unless the doll is the point."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Action Figure for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Studio toy light, then: Action-figure of [Subject], plastic joints, blister-card lighting, a toy of a person. Demand polymer and joints. Forbid readable packaging type."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Action Figure in film?A merchandise recipe: plastic joints, blister-card lighting, a toy of a person. Material and scale, not a costume photograph.Action Figure vs Mighty FighterMighty fighter is a living champion pose. Action figure is the doll of that champion. If the skin is flesh, you wanted mighty fighter. If you see joints, you are here.When should I use Action Figure?Satire, kid myth, hero as product. Skip sincere war coverage unless the doll is the point.How do I prompt Action Figure for AI image or video?Studio toy light, then: Action-figure of [Subject], plastic joints, blister-card lighting, a toy of a person. Demand polymer and joints. Forbid readable packaging type."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Plastic, joints, toy light. Action-figure of [Subject], plastic joints, blister-card lighting, a toy of a person.",
+      "Add studio keys, visible rivets, diorama base, no packaging type, polymer skin. Not a costumed actor."
+    ],
+    "example": "Action-figure of [Subject], plastic joints, blister-card lighting, a toy of a person."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/efa643ba0f5c274305422d171b69ae57.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/action-figure.webp",
+      "alt": "Action Figure example"
+    },
+    {
+      "kind": "image",
+      "path": "media/046b608906416624c9d8433b3b4e890d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mighty-fighter-mighty-fighter-mini.webp",
+      "alt": "Mighty Fighter"
+    },
+    {
+      "kind": "video",
+      "path": "media/0d7921ffd701093cbc0e915976e8824f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mighty-fighter-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/181d3dd7ea713bbb349f3475266cdf7f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diorama-diorama-mini.webp",
+      "alt": "Diorama"
+    },
+    {
+      "kind": "video",
+      "path": "media/4a23017cfb59808a2d3cee76a9fc5a28.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/diorama-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/1e7e629cf5f836e0a42d360e81f11c80.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/action-figure/hero.jpg",
+      "alt": "Action Figure",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "a537e5aaf83ac9876477e515553aaace4427f69946a22a497d7c9e48bdb1a145"
+}

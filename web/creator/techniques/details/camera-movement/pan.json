@@ -1,0 +1,497 @@
+{
+  "id": "camera-movement/pan",
+  "slug": "pan",
+  "title": "Pan",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/pan",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-pan-mini.webp",
+  "detail": "details/camera-movement/pan.json",
+  "aliases": [
+    "Pan shot",
+    "slow pan",
+    "reveal pan",
+    "anticipatory pan",
+    "reactive pan",
+    "delayed pan",
+    "Follow-and-settle",
+    "Internal reframing"
+  ],
+  "description": "A pan shot rotates the camera horizontally around a fixed position, yaw on the vertical axis, feet planted. The support does not travel; the horizon should stay level as the frame sweeps the world.",
+  "thumbnail": "media/ea77f9807ab3d7ddd08cc566c6206207.webp",
+  "video": "media/6883f250452bdbd22a13508add6c6673.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pan-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Connect two facts without moving the feet. A look, a landscape, a second person: the pan can reveal, follow, anticipate, or delay."
+        },
+        {
+          "type": "paragraph",
+          "text": "Small pans also reframe blocking so the camera stays almost invisible while power changes inside the frame. Unmotivated constant drifting weakens that change."
+        },
+        {
+          "type": "paragraph",
+          "text": "If nothing new is being connected, the pan is fidget. A truck or a dolly is the tool when you need parallax, not a swing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Connect two facts without moving the feet. A look, a landscape, a second person: the pan can reveal, follow, anticipate, or delay.Small pans also reframe blocking so the camera stays almost invisible while power changes inside the frame. Unmotivated constant drifting weakens that change.If nothing new is being connected, the pan is fidget. A truck or a dolly is the tool when you need parallax, not a swing."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tripod or a locked remote head. Rotate on the vertical axis; keep the bubble level unless you mean a Dutch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Speed is a choice: crawl, follow, or whip. Near objects smear at the edges on a fast pan; they do not shear as they would on a dolly."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Pan across [Subject], camera rotating on its vertical axis from a fixed point, a horizontal sweep of the world."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Tripod or a locked remote head. Rotate on the vertical axis; keep the bubble level unless you mean a Dutch.Speed is a choice: crawl, follow, or whip. Near objects smear at the edges on a fast pan; they do not shear as they would on a dolly.Prompt: Pan across [Subject], camera rotating on its vertical axis from a fixed point, a horizontal sweep of the world."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to join two facts from one stance: a gun and a face, a window and a street, a speaker and a listener. Do not pan as a substitute for laying track."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to join two facts from one stance: a gun and a face, a window and a street, a speaker and a listener. Do not pan as a substitute for laying track."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pan Left and Pan Right name direction. A Whip Pan is the same axis at a speed that blurs the join.",
+          "links": [
+            {
+              "text": "Pan Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-left"
+            },
+            {
+              "text": "Pan Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+            },
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Tilt pitches on the other axis. A Dolly moves the body, so parallax appears.",
+          "links": [
+            {
+              "text": "Tilt",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt"
+            },
+            {
+              "text": "Dolly",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pan LeftConnect two things in one geography without moving the support.",
+          "displayText": "Pan Left\nConnect two things in one geography without moving the support.",
+          "links": [
+            {
+              "text": "Pan LeftConnect two things in one geography without moving the support.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-left"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pan RightSame as pan left, other direction. End on the story beat.",
+          "displayText": "Pan Right\nSame as pan left, other direction. End on the story beat.",
+          "links": [
+            {
+              "text": "Pan RightSame as pan left, other direction. End on the story beat.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "displayText": "Whip Pan\nTransition, punchline, or sudden attention shift.",
+          "links": [
+            {
+              "text": "Whip PanTransition, punchline, or sudden attention shift.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Pan Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-left"
+        },
+        {
+          "text": "Pan Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Tilt",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt"
+        },
+        {
+          "text": "Dolly",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly"
+        },
+        {
+          "text": "Pan LeftConnect two things in one geography without moving the support.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-left"
+        },
+        {
+          "text": "Pan RightSame as pan left, other direction. End on the story beat.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+        },
+        {
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e29cddf050f61f946c3cb766cfe71638.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-left-pan-left-mini.webp",
+          "alt": "Pan Left"
+        },
+        {
+          "kind": "video",
+          "path": "media/0cdf798de2f0032a1e8662a6e008a690.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pan-left-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/333aea1b396b4f8bb512847a5d486835.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-right-008-pan-and-discovery-mini.webp",
+          "alt": "Pan Right"
+        },
+        {
+          "kind": "video",
+          "path": "media/4939347f523db67283fabf104312adf7.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/008-pan-and-discovery-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+          "alt": "Whip Pan"
+        },
+        {
+          "kind": "video",
+          "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Pan Left and Pan Right name direction. A Whip Pan is the same axis at a speed that blurs the join.A Tilt pitches on the other axis. A Dolly moves the body, so parallax appears.Pan LeftConnect two things in one geography without moving the support.Pan RightSame as pan left, other direction. End on the story beat.Whip PanTransition, punchline, or sudden attention shift."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Searchers and There Will Be Blood sweep land from a planted stance. Eyes Wide Shut adjusts framing as dance partners move."
+        },
+        {
+          "type": "paragraph",
+          "text": "12 Angry Men reframes as the jury's alliances shift. Rear Window surveys a courtyard."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Stendhal Syndrome uses a museum pan as a survey."
+        },
+        {
+          "type": "list-item",
+          "text": "Eyes Wide Shut 1999The ballroom dance adjusts framing as the partners move.",
+          "displayText": "Eyes Wide Shut 1999\nThe ballroom dance adjusts framing as the partners move."
+        },
+        {
+          "type": "list-item",
+          "text": "12 Angry Men 1957Group positions change as the jury’s alliances shift.",
+          "displayText": "12 Angry Men 1957\nGroup positions change as the jury’s alliances shift."
+        },
+        {
+          "type": "list-item",
+          "text": "Rear Window 1954The opening exploration of the courtyard and apartment.",
+          "displayText": "Rear Window 1954\nThe opening exploration of the courtyard and apartment."
+        },
+        {
+          "type": "list-item",
+          "text": "The Stendhal Syndrome 1996A panoramic museum survey.",
+          "displayText": "The Stendhal Syndrome 1996\nA panoramic museum survey."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/cef2ceb2d950d74caf85249dc0125ea7.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pan/famous/00-eyes-wide-shut-1999.jpg",
+          "alt": "Eyes Wide Shut 1999"
+        },
+        {
+          "kind": "image",
+          "path": "media/65d4c394af9f4a039663969f50420814.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pan/famous/01-12-angry-men-1957.jpg",
+          "alt": "12 Angry Men 1957"
+        },
+        {
+          "kind": "image",
+          "path": "media/b35dab19ea0b4b24768a483801b08b5e.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pan/famous/00-rear-window-1954.jpg",
+          "alt": "Rear Window 1954"
+        },
+        {
+          "kind": "image",
+          "path": "media/2a3fd013449e3caa8e2664eff638ff24.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pan/famous/01-the-stendhal-syndrome-1996.jpg",
+          "alt": "The Stendhal Syndrome 1996"
+        }
+      ],
+      "sourceText": "In film The Searchers and There Will Be Blood sweep land from a planted stance. Eyes Wide Shut adjusts framing as dance partners move.12 Angry Men reframes as the jury's alliances shift. Rear Window surveys a courtyard.The Stendhal Syndrome uses a museum pan as a survey.Eyes Wide Shut 1999The ballroom dance adjusts framing as the partners move.12 Angry Men 1957Group positions change as the jury’s alliances shift.Rear Window 1954The opening exploration of the courtyard and apartment.The Stendhal Syndrome 1996A panoramic museum survey."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Plant the feet. Still: Pan across [Subject], camera rotating on its vertical axis from a fixed point, a horizontal sweep of the world."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera pans across [Subject] from a tripod, horizon level, no body travel. Name start and end facts."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a dolly."
+        },
+        {
+          "type": "quote",
+          "text": "Two siblings argue quietly at a kitchen table. Hold a two-shot; when one stands, gently tilt and pan to include her without cutting. As she leans back toward the seated brother, settle into a tighter shared composition. No arbitrary camera movement."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Two+siblings+argue+quietly+at+a+kitchen+table.+Hold+a+two-shot;+when+one+stands,+gently+tilt+and+pan+to+include+her+without+cutting.+As+she+leans+back+toward+the+seated+brother,+settle+into+a+tighter+shared+composition.+No+arbitrary+camera+movement."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Plant the feet. Still: Pan across [Subject], camera rotating on its vertical axis from a fixed point, a horizontal sweep of the world.Video: The camera pans across [Subject] from a tripod, horizon level, no body travel. Name start and end facts.Forbid a dolly.Copy promptUse in Video GeneratorTwo siblings argue quietly at a kitchen table. Hold a two-shot; when one stands, gently tilt and pan to include her without cutting. As she leans back toward the seated brother, settle into a tighter shared composition. No arbitrary camera movement.Two siblings argue quietly at a kitchen table. Hold a two-shot; when one stands, gently tilt and pan to include her without cutting. As she leans back toward the seated brother, settle into a tighter shared composition. No arbitrary camera movement."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a trucking shot. The tell: foreground shearing as if the camera walked."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: lock the position, yaw only, keep the horizon level, and let the join be angular, not spatial."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a trucking shot. The tell: foreground shearing as if the camera walked.The fix: lock the position, yaw only, keep the horizon level, and let the join be angular, not spatial."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Pan in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A pan rotates the camera horizontally from a fixed position. The feet stay put; the frame sweeps left or right to connect two facts."
+        },
+        {
+          "type": "heading",
+          "text": "Pan vs Dolly",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A pan yaws on sticks, so distances do not change by travel. A dolly moves the camera through space and produces parallax."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Pan?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to connect two facts without walking, or to reframe blocking. Do not use it as fake geography."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Pan for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a tripod, a level horizon, and no body travel. Example: Pan across [Subject], camera rotating on its vertical axis from a fixed point, a horizontal sweep of the world."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Pan in film?A pan rotates the camera horizontally from a fixed position. The feet stay put; the frame sweeps left or right to connect two facts.Pan vs DollyA pan yaws on sticks, so distances do not change by travel. A dolly moves the camera through space and produces parallax.When should I use Pan?Use it to connect two facts without walking, or to reframe blocking. Do not use it as fake geography.How do I prompt Pan for AI image or video?Write a tripod, a level horizon, and no body travel. Example: Pan across [Subject], camera rotating on its vertical axis from a fixed point, a horizontal sweep of the world."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Plant the feet. Still: Pan across [Subject], camera rotating on its vertical axis from a fixed point, a horizontal sweep of the world.",
+      "Video: The camera pans across [Subject] from a tripod, horizon level, no body travel. Name start and end facts.",
+      "Forbid a dolly."
+    ],
+    "example": "Two siblings argue quietly at a kitchen table. Hold a two-shot; when one stands, gently tilt and pan to include her without cutting. As she leans back toward the seated brother, settle into a tighter shared composition. No arbitrary camera movement."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/6883f250452bdbd22a13508add6c6673.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ea77f9807ab3d7ddd08cc566c6206207.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-pan-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1932ad83d33c55871f9975bb06864851.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/pan.jpg",
+      "alt": "Pan frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/e29cddf050f61f946c3cb766cfe71638.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-left-pan-left-mini.webp",
+      "alt": "Pan Left"
+    },
+    {
+      "kind": "video",
+      "path": "media/0cdf798de2f0032a1e8662a6e008a690.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pan-left-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/333aea1b396b4f8bb512847a5d486835.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-right-008-pan-and-discovery-mini.webp",
+      "alt": "Pan Right"
+    },
+    {
+      "kind": "video",
+      "path": "media/4939347f523db67283fabf104312adf7.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/008-pan-and-discovery-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+      "alt": "Whip Pan"
+    },
+    {
+      "kind": "video",
+      "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cef2ceb2d950d74caf85249dc0125ea7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pan/famous/00-eyes-wide-shut-1999.jpg",
+      "alt": "Eyes Wide Shut 1999"
+    },
+    {
+      "kind": "image",
+      "path": "media/65d4c394af9f4a039663969f50420814.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pan/famous/01-12-angry-men-1957.jpg",
+      "alt": "12 Angry Men 1957"
+    },
+    {
+      "kind": "image",
+      "path": "media/b35dab19ea0b4b24768a483801b08b5e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pan/famous/00-rear-window-1954.jpg",
+      "alt": "Rear Window 1954"
+    },
+    {
+      "kind": "image",
+      "path": "media/2a3fd013449e3caa8e2664eff638ff24.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pan/famous/01-the-stendhal-syndrome-1996.jpg",
+      "alt": "The Stendhal Syndrome 1996"
+    },
+    {
+      "kind": "image",
+      "path": "media/912fd09c394b0928b2cd0696fefeeef8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pan/hero.jpg",
+      "alt": "Pan",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "476b527be839a21f6aeed9c30d02305e78cd56d7ca5ed934d3cab4b6d51c48b2"
+}

@@ -1,0 +1,414 @@
+{
+  "id": "lighting/golden-hour",
+  "slug": "golden-hour",
+  "title": "Golden Hour",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/golden-hour",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-hour.webp",
+  "detail": "details/lighting/golden-hour.json",
+  "aliases": [
+    "Twilight photography",
+    "Golden-hour window"
+  ],
+  "description": "Golden hour in golden hour cinematography is low-angle warm sunlight shortly after sunrise or before sunset, when the sun is near the horizon. Shadows go long; the light is directional, warm, and brief.",
+  "thumbnail": "media/ed33713845cad9f645afdfb4eadcf62d.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You have a short window in which ordinary action looks transient because the sun is leaving or arriving. Faces rake, dust shows, and the sky still has brightness."
+        },
+        {
+          "type": "paragraph",
+          "text": "Farms, roads, and childhood exteriors wait on this hour because it will not hold. It is the wrong tool if you need three hours of matching coverage, or if you mean the cool time after the sun is down."
+        },
+        {
+          "type": "paragraph",
+          "text": "An orange grade on midday sun is not golden hour. Direct late sun is still a hard-ish source; post-sunset wrap is blue hour or dusk ambient.",
+          "links": [
+            {
+              "text": "blue hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "blue hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function You have a short window in which ordinary action looks transient because the sun is leaving or arriving. Faces rake, dust shows, and the sky still has brightness.Farms, roads, and childhood exteriors wait on this hour because it will not hold. It is the wrong tool if you need three hours of matching coverage, or if you mean the cool time after the sun is down.An orange grade on midday sun is not golden hour. Direct late sun is still a hard-ish source; post-sunset wrap is blue hour or dusk ambient."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Point the scene at the low sun. Backlight is common (warm rim, long ground shadows toward camera); front or side rake also works."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness is softer than noon because of atmosphere, but shadows remain defined. Color is warm amber, well below midday 5600K."
+        },
+        {
+          "type": "paragraph",
+          "text": "Rehearse before the window. Prompt: Golden hour backlight on [Subject], warm amber raking sun, long shadows, horizontal flare."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Point the scene at the low sun. Backlight is common (warm rim, long ground shadows toward camera); front or side rake also works.Hardness is softer than noon because of atmosphere, but shadows remain defined. Color is warm amber, well below midday 5600K.Rehearse before the window. Prompt: Golden hour backlight on [Subject], warm amber raking sun, long shadows, horizontal flare."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the day is ending or beginning and the sun is still up, a last walk, a field, a ridge. Do not use an orange LUT on noon and call it this hour."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the day is ending or beginning and the sun is still up, a last walk, a field, a ridge. Do not use an orange LUT on noon and call it this hour."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blue hour is after sunset or before sunrise, cool ambient, no hard sun disk lighting the subject. Available light is the method; golden hour is a specific available condition.",
+          "links": [
+            {
+              "text": "Blue hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            },
+            {
+              "text": "Available light",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Backlight is a common placement of this sun. Warm amber is a grade that can fake the hue without the long shadows.",
+          "links": [
+            {
+              "text": "Backlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            },
+            {
+              "text": "Warm amber",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Blue HourDay is gone but the sky still works.",
+          "displayText": "Blue Hour\nDay is gone but the sky still works.",
+          "links": [
+            {
+              "text": "Blue HourDay is gone but the sky still works.",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Available LightCommit to the hour you have.",
+          "displayText": "Available Light\nCommit to the hour you have.",
+          "links": [
+            {
+              "text": "Available LightCommit to the hour you have.",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Blue hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        },
+        {
+          "text": "Available light",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Backlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "Warm amber",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        },
+        {
+          "text": "Blue HourDay is gone but the sky still works.",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        },
+        {
+          "text": "Available LightCommit to the hour you have.",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/afeaf073c169bf136864eccfa0d68e92.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blue-hour.webp",
+          "alt": "Blue Hour"
+        },
+        {
+          "kind": "image",
+          "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+          "alt": "Available Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Blue hour is after sunset or before sunrise, cool ambient, no hard sun disk lighting the subject. Available light is the method; golden hour is a specific available condition.Backlight is a common placement of this sun. Warm amber is a grade that can fake the hue without the long shadows.Blue HourDay is gone but the sky still works.Available LightCommit to the hour you have.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Days of Heaven waited on farm and prairie edges of the day. The Tree of Life uses low-sun childhood passages."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Revenant and Call Me by Your Name both treat late or early sun as a scheduled source, not a preset."
+        },
+        {
+          "type": "list-item",
+          "text": "Days of Heaven 1978Farm and prairie scenes in the low-light edges of the day.",
+          "displayText": "Days of Heaven 1978\nFarm and prairie scenes in the low-light edges of the day."
+        },
+        {
+          "type": "list-item",
+          "text": "The Tree of Life 2011Natural-light childhood passages, including low-sun imagery.",
+          "displayText": "The Tree of Life 2011\nNatural-light childhood passages, including low-sun imagery."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8e122fb4cadc4a0cc3c83049f84beace.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/golden-hour/famous/00-days-of-heaven-1978.jpg",
+          "alt": "Days of Heaven 1978"
+        },
+        {
+          "kind": "image",
+          "path": "media/3c72c8d4c2f9e7d6844187ce7acaad06.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/golden-hour/famous/01-the-tree-of-life-2011.jpg",
+          "alt": "The Tree of Life 2011"
+        }
+      ],
+      "sourceText": "In film Days of Heaven waited on farm and prairie edges of the day. The Tree of Life uses low-sun childhood passages.The Revenant and Call Me by Your Name both treat late or early sun as a scheduled source, not a preset.Days of Heaven 1978Farm and prairie scenes in the low-light edges of the day.The Tree of Life 2011Natural-light childhood passages, including low-sun imagery."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the sun low and real. \" Say the sun is just above the horizon."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid midday height and a full blue sky with no rake."
+        },
+        {
+          "type": "quote",
+          "text": "Two farm workers walk beside a wheat field just after sunset. Soft luminous sky, low contrast on their faces, warm remnants on the horizon, no direct overhead sun. Gentle wind and patient lateral movement, natural exposure, no exaggerated orange filter."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Two+farm+workers+walk+beside+a+wheat+field+just+after+sunset.+Soft+luminous+sky,+low+contrast+on+their+faces,+warm+remnants+on+the+horizon,+no+direct+overhead+sun.+Gentle+wind+and+patient+lateral+movement,+natural+exposure,+no+exaggerated+orange+filter."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Keep the sun low and real. \" Say the sun is just above the horizon.Forbid midday height and a full blue sky with no rake.Copy promptUse in Video GeneratorTwo farm workers walk beside a wheat field just after sunset. Soft luminous sky, low contrast on their faces, warm remnants on the horizon, no direct overhead sun. Gentle wind and patient lateral movement, natural exposure, no exaggerated orange filter.Two farm workers walk beside a wheat field just after sunset. Soft luminous sky, low contrast on their faces, warm remnants on the horizon, no direct overhead sun. Gentle wind and patient lateral movement, natural exposure, no exaggerated orange filter."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is blue hour or an orange midday grade. The tell is a high sun, or a cool sky with no long shadows.",
+          "links": [
+            {
+              "text": "blue hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by lowering the sun, warming the key, and throwing long shadows."
+        }
+      ],
+      "links": [
+        {
+          "text": "blue hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is blue hour or an orange midday grade. The tell is a high sun, or a cool sky with no long shadows.Fix it by lowering the sun, warming the key, and throwing long shadows."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is golden hour in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Low-angle warm sunlight shortly after sunrise or before sunset. Shadows are long, color is warm, and the window is short."
+        },
+        {
+          "type": "heading",
+          "text": "Golden hour vs blue hour",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Golden hour still has the sun above the horizon as a warm directional key. Blue hour is twilight with the sun down, a cool sky, and no hard sunlight."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use golden hour?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for a brief late or early exterior that can accept long shadows and changing light. Skip it if you cannot schedule the window."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt golden hour for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify warm amber raking sun just above the horizon, long shadows, often as backlight. Not an orange grade on a high sun."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is golden hour in film?Low-angle warm sunlight shortly after sunrise or before sunset. Shadows are long, color is warm, and the window is short.Golden hour vs blue hourGolden hour still has the sun above the horizon as a warm directional key. Blue hour is twilight with the sun down, a cool sky, and no hard sunlight.When should I use golden hour?Use it for a brief late or early exterior that can accept long shadows and changing light. Skip it if you cannot schedule the window.How do I prompt golden hour for AI image or video?Specify warm amber raking sun just above the horizon, long shadows, often as backlight. Not an orange grade on a high sun."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Keep the sun low and real. \" Say the sun is just above the horizon.",
+      "Forbid midday height and a full blue sky with no rake."
+    ],
+    "example": "Two farm workers walk beside a wheat field just after sunset. Soft luminous sky, low contrast on their faces, warm remnants on the horizon, no direct overhead sun. Gentle wind and patient lateral movement, natural exposure, no exaggerated orange filter."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/ed33713845cad9f645afdfb4eadcf62d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-hour.webp",
+      "alt": "Golden Hour example"
+    },
+    {
+      "kind": "image",
+      "path": "media/afeaf073c169bf136864eccfa0d68e92.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blue-hour.webp",
+      "alt": "Blue Hour"
+    },
+    {
+      "kind": "image",
+      "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+      "alt": "Available Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/8e122fb4cadc4a0cc3c83049f84beace.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/golden-hour/famous/00-days-of-heaven-1978.jpg",
+      "alt": "Days of Heaven 1978"
+    },
+    {
+      "kind": "image",
+      "path": "media/3c72c8d4c2f9e7d6844187ce7acaad06.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/golden-hour/famous/01-the-tree-of-life-2011.jpg",
+      "alt": "The Tree of Life 2011"
+    },
+    {
+      "kind": "image",
+      "path": "media/3a31e73cf1478a8051b35f9ff48da094.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/golden-hour/hero.jpg",
+      "alt": "Golden Hour",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "c0c86693bc1ad1cd826b71e00689d382a04f1355bafe816b1bce261a28d8a73d"
+}

@@ -1,0 +1,381 @@
+{
+  "id": "lenses/35mm-moderate",
+  "slug": "35mm-moderate",
+  "title": "35mm Moderate Wide",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/35mm-moderate",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/35mm-moderate.webp",
+  "detail": "details/lenses/35mm-moderate.json",
+  "aliases": [],
+  "description": "A 35mm moderate wide in 35mm cinematography is the common narrative wide-normal: natural perspective with a little more world than a 50mm. It is default coverage for scenes that need both face and room.",
+  "thumbnail": "media/192baaa553dac5fb337404d41c596029.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Most talking scenes want this field. You see the listener's shoulder, a lamp, a slice of wall, and a face that does not balloon."
+        },
+        {
+          "type": "paragraph",
+          "text": "The glass does a little editorial work (more place than a 50) without turning the room into a character the way 24mm and 14mm do. It is the wrong tool when the location must dominate, or when the person must become the only landscape."
+        },
+        {
+          "type": "paragraph",
+          "text": "Street masters and kitchen two-shots often belong at 24mm. Isolation close-ups belong at 85mm."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you shoot every size on 35mm, the coverage matches, but you never change how space feels."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Most talking scenes want this field. You see the listener's shoulder, a lamp, a slice of wall, and a face that does not balloon.The glass does a little editorial work (more place than a 50) without turning the room into a character the way 24mm and 14mm do. It is the wrong tool when the location must dominate, or when the person must become the only landscape.Street masters and kitchen two-shots often belong at 24mm. Isolation close-ups belong at 85mm.If you shoot every size on 35mm, the coverage matches, but you never change how space feels."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stand at a conversational distance, roughly the same as a person talking across a table or a small room. On Super 35, 35mm sits near format-normal; on full frame it is a mild wide."
+        },
+        {
+          "type": "paragraph",
+          "text": "Either way the perspective is gentle if you do not crowd the nose. Keep verticals honest unless a tilt is the sentence."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: 35mm on [Subject], storyteller focal length, natural perspective with a little more world than 50."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Stand at a conversational distance, roughly the same as a person talking across a table or a small room. On Super 35, 35mm sits near format-normal; on full frame it is a mild wide.Either way the perspective is gentle if you do not crowd the nose. Keep verticals honest unless a tilt is the sentence.Prompt: 35mm on [Subject], storyteller focal length, natural perspective with a little more world than 50."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for most narrative coverage that should feel human but not telephoto: a two-shot at a table, a walk through a doorway. Do not use it as the only length in a film that needs space to change meaning."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for most narrative coverage that should feel human but not telephoto: a two-shot at a table, a walk through a doorway. Do not use it as the only length in a film that needs space to change meaning."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "24mm Wide shows more architecture and more stretch. 50mm Normal crops toward the conversation and editorialize less.",
+          "links": [
+            {
+              "text": "24mm Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            },
+            {
+              "text": "50mm Normal",
+              "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "85mm Portrait from farther back isolates the face and stacks the background. 35mm is the middle storyteller, not a look.",
+          "links": [
+            {
+              "text": "85mm Portrait",
+              "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "50mm NormalYou do not want the glass to editorialize.",
+          "displayText": "50mm Normal\nYou do not want the glass to editorialize.",
+          "links": [
+            {
+              "text": "50mm NormalYou do not want the glass to editorialize.",
+              "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "24mm WidePerson plus place, neither winning.",
+          "displayText": "24mm Wide\nPerson plus place, neither winning.",
+          "links": [
+            {
+              "text": "24mm WidePerson plus place, neither winning.",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "24mm Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        },
+        {
+          "text": "50mm Normal",
+          "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+        },
+        {
+          "text": "85mm Portrait",
+          "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+        },
+        {
+          "text": "50mm NormalYou do not want the glass to editorialize.",
+          "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+        },
+        {
+          "text": "24mm WidePerson plus place, neither winning.",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e9bae839781c16a528f25d7fa4dbf0bc.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/50mm-normal.webp",
+          "alt": "50mm Normal"
+        },
+        {
+          "kind": "image",
+          "path": "media/628b32ea127fbd2eb64660fbc452f455.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/24mm-wide-055-close-wide-angle-distortion-mini.webp",
+          "alt": "24mm Wide"
+        },
+        {
+          "kind": "video",
+          "path": "media/7426a29d0521c2e8cebe331ee900e38c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/055-close-wide-angle-distortion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots 24mm Wide shows more architecture and more stretch. 50mm Normal crops toward the conversation and editorialize less.85mm Portrait from farther back isolates the face and stacks the background. 35mm is the middle storyteller, not a look.50mm NormalYou do not want the glass to editorialize.24mm WidePerson plus place, neither winning.14mm Ultra-WidePut the audience inside a space that is too big or too close."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Moonlight often covers faces in rooms at a moderate wide-normal so Miami stays present without becoming a postcard. Manchester by the Sea does the same with New England interiors: people in places, neither squeezed nor stretched."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar for default coverage, not a frame to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Moonlight often covers faces in rooms at a moderate wide-normal so Miami stays present without becoming a postcard. Manchester by the Sea does the same with New England interiors: people in places, neither squeezed nor stretched.Grammar for default coverage, not a frame to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the storyteller length and the extra world. 35mm on [Subject], storyteller focal length, natural perspective with a little more world than 50."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add the room slice (kitchen, porch, car interior). Do not write bokeh wash or ultra-wide stretch."
+        },
+        {
+          "type": "quote",
+          "text": "35mm on [Subject], the classic storyteller focal length, natural perspective with a little more world than 50."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=35mm+on+[Subject],+the+classic+storyteller+focal+length,+natural+perspective+with+a+little+more+world+than+50."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the storyteller length and the extra world. 35mm on [Subject], storyteller focal length, natural perspective with a little more world than 50.Add the room slice (kitchen, porch, car interior). Do not write bokeh wash or ultra-wide stretch.Copy promptUse in Image Generator35mm on [Subject], the classic storyteller focal length, natural perspective with a little more world than 50.35mm on [Subject], the classic storyteller focal length, natural perspective with a little more world than 50."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is 50mm Normal (too little room) or 24mm Wide (too much stretch). The tell is either a tight conversational crop with a melted wall, or a reportage wide with looming furniture.",
+          "links": [
+            {
+              "text": "50mm Normal",
+              "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+            },
+            {
+              "text": "24mm Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: conversational stand, face plus a true slice of place, mild perspective."
+        }
+      ],
+      "links": [
+        {
+          "text": "50mm Normal",
+          "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+        },
+        {
+          "text": "24mm Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is 50mm Normal (too little room) or 24mm Wide (too much stretch). The tell is either a tight conversational crop with a melted wall, or a reportage wide with looming furniture.Fix: conversational stand, face plus a true slice of place, mild perspective."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is 35mm moderate wide in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the common narrative wide-normal: a little more world than a 50mm, without the stretch of a 24mm. Faces stay human and rooms stay readable."
+        },
+        {
+          "type": "heading",
+          "text": "35mm Moderate Wide vs 50mm Normal",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "35mm includes more of the room from the same stand. 50mm is tighter and less willing to show place. 35mm is default story coverage. 50mm is the glass that refuses to editorialize."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use 35mm moderate wide?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for most talk and coverage that needs face and room together. Skip it when the location should dominate or when the face should be the whole country."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt 35mm moderate wide for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: 35mm on [Subject], storyteller focal length, natural perspective with a little more world than 50. Name a slice of the room. Forbid 14mm distortion and 85mm isolation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is 35mm moderate wide in film?It is the common narrative wide-normal: a little more world than a 50mm, without the stretch of a 24mm. Faces stay human and rooms stay readable.35mm Moderate Wide vs 50mm Normal35mm includes more of the room from the same stand. 50mm is tighter and less willing to show place. 35mm is default story coverage. 50mm is the glass that refuses to editorialize.When should I use 35mm moderate wide?Use it for most talk and coverage that needs face and room together. Skip it when the location should dominate or when the face should be the whole country.How do I prompt 35mm moderate wide for AI image or video?Write: 35mm on [Subject], storyteller focal length, natural perspective with a little more world than 50. Name a slice of the room. Forbid 14mm distortion and 85mm isolation."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the storyteller length and the extra world. 35mm on [Subject], storyteller focal length, natural perspective with a little more world than 50.",
+      "Add the room slice (kitchen, porch, car interior). Do not write bokeh wash or ultra-wide stretch."
+    ],
+    "example": "35mm on [Subject], the classic storyteller focal length, natural perspective with a little more world than 50."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/192baaa553dac5fb337404d41c596029.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/35mm-moderate.webp",
+      "alt": "35mm Moderate Wide example"
+    },
+    {
+      "kind": "image",
+      "path": "media/e9bae839781c16a528f25d7fa4dbf0bc.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/50mm-normal.webp",
+      "alt": "50mm Normal"
+    },
+    {
+      "kind": "image",
+      "path": "media/628b32ea127fbd2eb64660fbc452f455.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/24mm-wide-055-close-wide-angle-distortion-mini.webp",
+      "alt": "24mm Wide"
+    },
+    {
+      "kind": "video",
+      "path": "media/7426a29d0521c2e8cebe331ee900e38c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/055-close-wide-angle-distortion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/03d3cd69dfe463c2559a36d28b73c182.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/35mm-moderate/hero.jpg",
+      "alt": "35mm Moderate Wide",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "5c5985f99586a45643cb7b0381e75fbd70b5274c2277330ec64bf7b638d80f51"
+}

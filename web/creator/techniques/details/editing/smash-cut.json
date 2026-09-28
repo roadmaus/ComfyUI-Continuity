@@ -1,0 +1,495 @@
+{
+  "id": "editing/smash-cut",
+  "slug": "smash-cut",
+  "title": "Smash Cut",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/smash-cut",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smash-cut-165-smash-cut-mini.webp",
+  "detail": "details/editing/smash-cut.json",
+  "aliases": [
+    "Apparent closure",
+    "Last-beat reversal"
+  ],
+  "description": "A smash cut makes an abrupt, high-contrast transition in image, sound, tone, scale, or time. The outgoing side has earned a state (quiet, prayer, resolution); the incoming side contradicts it without a polite blend.",
+  "thumbnail": "media/bd7d68009bacf7d9970db0873ae94f1c.webp",
+  "video": "media/bb74b65d11d6f62c19ec9876a5b85953.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/165-smash-cut-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A night walk tightens. A bus door hisses into the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "The scare was a vehicle, not a monster, and the cut is the joke and the slap at once. Or: a grave visit settles, then a hand breaks the earth."
+        },
+        {
+          "type": "paragraph",
+          "text": "The next image should hurt. Use it when contrast is the meaning."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the two sides are similar, or when you still need the audience inside one continuous action. Similar frames with missing time are a Jump Cut.",
+          "links": [
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A few stolen frames of another image are a Flash Cut. Earn the first state.",
+          "links": [
+            {
+              "text": "Flash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/flash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A smash from nowhere, with no quiet or no prayer, is only loud."
+        }
+      ],
+      "links": [
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Flash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/flash-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A night walk tightens. A bus door hisses into the frame.The scare was a vehicle, not a monster, and the cut is the joke and the slap at once. Or: a grave visit settles, then a hand breaks the earth.The next image should hurt. Use it when contrast is the meaning.It is the wrong tool when the two sides are similar, or when you still need the audience inside one continuous action. Similar frames with missing time are a Jump Cut.A few stolen frames of another image are a Flash Cut. Earn the first state.A smash from nowhere, with no quiet or no prayer, is only loud."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hold A long enough to establish tone, scale, or apparent closure. Cut to B with a large change in brightness, loudness, shot size, or subject class: silence to noise, interior to blast, hymn to murder."
+        },
+        {
+          "type": "paragraph",
+          "text": "No dissolve, no fade, no matched contour unless the match is itself the insult. Coordinate picture and sound so they smash together, or delay the sound for a second smash (the blast seen, then heard)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: from [Subject] to a violently different image, no polite dissolve."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Hold A long enough to establish tone, scale, or apparent closure. Cut to B with a large change in brightness, loudness, shot size, or subject class: silence to noise, interior to blast, hymn to murder.No dissolve, no fade, no matched contour unless the match is itself the insult. Coordinate picture and sound so they smash together, or delay the sound for a second smash (the blast seen, then heard).Prompt: from [Subject] to a violently different image, no polite dissolve."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it at the false ending, the bus in the dark, the cut from a kiss to a siren. Do not use it on every scene change."
+        },
+        {
+          "type": "paragraph",
+          "text": "If nothing in A was quiet, sacred, or resolved, B has nothing to smash."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it at the false ending, the bus in the dark, the cut from a kiss to a siren. Do not use it on every scene change.If nothing in A was quiet, sacred, or resolved, B has nothing to smash."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Jump Cut stays in a similar frame and skips time. A Crash Cut is a hard collision used as percussion or as a start inside an event; smash cut is contrast after a state has been earned.",
+          "links": [
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            },
+            {
+              "text": "Crash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Match Cut rhymes; smash cut usually refuses the rhyme. Cross-Cutting alternates lines over time; smash is one brutal join.",
+          "links": [
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            },
+            {
+              "text": "Cross-Cutting",
+              "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Jump CutDo not soothe. Show the skip.",
+          "displayText": "Jump Cut\nDo not soothe. Show the skip.",
+          "links": [
+            {
+              "text": "Jump CutDo not soothe. Show the skip.",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Graphic MatchForm carries you across time.",
+          "displayText": "Graphic Match\nForm carries you across time.",
+          "links": [
+            {
+              "text": "Graphic MatchForm carries you across time.",
+              "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Crash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Cross-Cutting",
+          "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+        },
+        {
+          "text": "Jump CutDo not soothe. Show the skip.",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Graphic MatchForm carries you across time.",
+          "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/30e16a300df23158df8edae534b8363d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+          "alt": "Jump Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/87ceda0519aff5db427c7cd37728798e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/graphic-match-099-graphic-match-cut-mini.webp",
+          "alt": "Graphic Match"
+        },
+        {
+          "kind": "video",
+          "path": "media/ffba929ec8dc585d8a9c73346ee4cd87.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/099-graphic-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Jump Cut stays in a similar frame and skips time. A Crash Cut is a hard collision used as percussion or as a start inside an event; smash cut is contrast after a state has been earned.A Match Cut rhymes; smash cut usually refuses the rhyme. Cross-Cutting alternates lines over time; smash is one brutal join.Jump CutDo not soothe. Show the skip.Match CutTwo images are the same idea.Graphic MatchForm carries you across time."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cat People uses the bus to interrupt a tense walk: the cut is the scare and its release. Carrie lets the aftermath settle, then destabilizes the coda."
+        },
+        {
+          "type": "paragraph",
+          "text": "Whiplash smashes quiet into the kit. Oppenheimer lets the Trinity flash arrive before the blast sound."
+        },
+        {
+          "type": "paragraph",
+          "text": "Contrast as grammar, not a shot to duplicate."
+        },
+        {
+          "type": "list-item",
+          "text": "Carrie 1976The apparent aftermath and grave visit lead to a final destabilizing event.",
+          "displayText": "Carrie 1976\nThe apparent aftermath and grave visit lead to a final destabilizing event."
+        },
+        {
+          "type": "list-item",
+          "text": "Oppenheimer 2023The Trinity explosion is experienced visually before the full blast sound arrives.",
+          "displayText": "Oppenheimer 2023\nThe Trinity explosion is experienced visually before the full blast sound arrives."
+        },
+        {
+          "type": "list-item",
+          "text": "Cat People 1942The bus interrupts the tense nighttime walk.",
+          "displayText": "Cat People 1942\nThe bus interrupts the tense nighttime walk."
+        },
+        {
+          "type": "list-item",
+          "text": "The Exorcist III 1990The hospital corridor sequence uses prolonged observation before a sudden attack.",
+          "displayText": "The Exorcist III 1990\nThe hospital corridor sequence uses prolonged observation before a sudden attack."
+        },
+        {
+          "type": "list-item",
+          "text": "Alien 1979Jones the cat provides an apparently threatening sound or movement with an innocent explanation.",
+          "displayText": "Alien 1979\nJones the cat provides an apparently threatening sound or movement with an innocent explanation."
+        },
+        {
+          "type": "list-item",
+          "text": "Cat People 1942The approaching bus resolves one immediate expectation of attack.",
+          "displayText": "Cat People 1942\nThe approaching bus resolves one immediate expectation of attack."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Cat People uses the bus to interrupt a tense walk: the cut is the scare and its release. Carrie lets the aftermath settle, then destabilizes the coda.Whiplash smashes quiet into the kit. Oppenheimer lets the Trinity flash arrive before the blast sound.Contrast as grammar, not a shot to duplicate.Carrie 1976The apparent aftermath and grave visit lead to a final destabilizing event.Oppenheimer 2023The Trinity explosion is experienced visually before the full blast sound arrives.Cat People 1942The bus interrupts the tense nighttime walk.The Exorcist III 1990The hospital corridor sequence uses prolonged observation before a sudden attack.Alien 1979Jones the cat provides an apparently threatening sound or movement with an innocent explanation.Cat People 1942The approaching bus resolves one immediate expectation of attack."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Smash cut from [Subject] to a violently different image, silence to noise, prayer to explosion, no polite dissolve. Name the outgoing state (quiet, dark, small, resolved) and the incoming opposite (loud, bright, huge, ruptured)."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, hold A, then hard-cut to B; specify the sound smash or the delayed boom."
+        },
+        {
+          "type": "quote",
+          "text": "After a conservator returns a stolen painting, show a calm closing sequence: gallery reopened, lights dimmed, doors locked. In one final locked shot, reveal a tiny fresh brushstroke appearing on the otherwise restored canvas. Keep the event subtle and consistent with earlier clues, not an unrelated shock."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=After+a+conservator+returns+a+stolen+painting,+show+a+calm+closing+sequence:+gallery+reopened,+lights+dimmed,+doors+locked.+In+one+final+locked+shot,+reveal+a+tiny+fresh+brushstroke+appearing+on+the+otherwise+restored+canvas.+Keep+the+event+subtle+and+consistent+with+earlier+clues,+not+an+unrelated+shock."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Smash cut from [Subject] to a violently different image, silence to noise, prayer to explosion, no polite dissolve. Name the outgoing state (quiet, dark, small, resolved) and the incoming opposite (loud, bright, huge, ruptured).For video, hold A, then hard-cut to B; specify the sound smash or the delayed boom.Copy promptUse in Video GeneratorAfter a conservator returns a stolen painting, show a calm closing sequence: gallery reopened, lights dimmed, doors locked. In one final locked shot, reveal a tiny fresh brushstroke appearing on the otherwise restored canvas. Keep the event subtle and consistent with earlier clues, not an unrelated shock.After a conservator returns a stolen painting, show a calm closing sequence: gallery reopened, lights dimmed, doors locked. In one final locked shot, reveal a tiny fresh brushstroke appearing on the otherwise restored canvas. Keep the event subtle and consistent with earlier clues, not an unrelated shock."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Dissolve (polite) or a Jump Cut (same setup). The tell: A and B have similar brightness, scale, and tone, so nothing smashes.",
+          "links": [
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            },
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: earn a state on A, change at least two axes (sound and scale, or tone and time) on B, cut hard."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        },
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Dissolve (polite) or a Jump Cut (same setup). The tell: A and B have similar brightness, scale, and tone, so nothing smashes.The fix: earn a state on A, change at least two axes (sound and scale, or tone and time) on B, cut hard."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Smash Cut in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A smash cut is an abrupt, high-contrast join in image, sound, tone, scale, or time. One side of the splice has a state; the other side breaks it without a blend."
+        },
+        {
+          "type": "heading",
+          "text": "Smash Cut vs Jump Cut",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A jump cut skips time inside a similar framing. A smash cut leaves that world for a violently different one. Similarity is the jump cut's tell; contrast is the smash cut's tell."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Smash Cut?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the next image should hurt after quiet, prayer, or false closure. Do not use it as a default scene change."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Smash Cut for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the earned state and the contradicting image. Example: Smash cut from [Subject] to a violently different image, silence to noise, no dissolve. Hold A, then hard-cut to B."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Smash Cut in film?A smash cut is an abrupt, high-contrast join in image, sound, tone, scale, or time. One side of the splice has a state; the other side breaks it without a blend.Smash Cut vs Jump CutA jump cut skips time inside a similar framing. A smash cut leaves that world for a violently different one. Similarity is the jump cut's tell; contrast is the smash cut's tell.When should I use Smash Cut?Use it when the next image should hurt after quiet, prayer, or false closure. Do not use it as a default scene change.How do I prompt Smash Cut for AI image or video?Name the earned state and the contradicting image. Example: Smash cut from [Subject] to a violently different image, silence to noise, no dissolve. Hold A, then hard-cut to B."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Smash cut from [Subject] to a violently different image, silence to noise, prayer to explosion, no polite dissolve. Name the outgoing state (quiet, dark, small, resolved) and the incoming opposite (loud, bright, huge, ruptured).",
+      "For video, hold A, then hard-cut to B; specify the sound smash or the delayed boom."
+    ],
+    "example": "After a conservator returns a stolen painting, show a calm closing sequence: gallery reopened, lights dimmed, doors locked. In one final locked shot, reveal a tiny fresh brushstroke appearing on the otherwise restored canvas. Keep the event subtle and consistent with earlier clues, not an unrelated shock."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/bb74b65d11d6f62c19ec9876a5b85953.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/165-smash-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bd7d68009bacf7d9970db0873ae94f1c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smash-cut-165-smash-cut-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/534ab7941e5c974fd98e9480d53943db.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/smash-cut.jpg",
+      "alt": "Smash Cut frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/30e16a300df23158df8edae534b8363d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+      "alt": "Jump Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/87ceda0519aff5db427c7cd37728798e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/graphic-match-099-graphic-match-cut-mini.webp",
+      "alt": "Graphic Match"
+    },
+    {
+      "kind": "video",
+      "path": "media/ffba929ec8dc585d8a9c73346ee4cd87.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/099-graphic-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f0ce232dc9b981809ac09e77dc4558c5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/smash-cut/hero.jpg",
+      "alt": "Smash Cut",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "96b5c767449703a7f37ef5fe613112cae7f61827a979697a1d8311170e09c0eb"
+}

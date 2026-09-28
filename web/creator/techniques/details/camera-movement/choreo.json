@@ -1,0 +1,384 @@
+{
+  "id": "camera-movement/choreo",
+  "slug": "choreo",
+  "title": "Choreo",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/choreo",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choreo-choreo-mini.webp",
+  "detail": "details/camera-movement/choreo.json",
+  "aliases": [],
+  "description": "A choreographed camera times bodies and lens as one phrase of movement. The blocking is scored: steps, turns, and the support share a count, then the phrase ends.",
+  "thumbnail": "media/908bec79f605b4d3770c376216a6e657.webp",
+  "video": "media/0cf1f5b089d162dcb9ec8acf33cf323b.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/choreo-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The blocking is the music. Dance floors, musicals, and some fight halls need the camera to partner, not to report."
+        },
+        {
+          "type": "paragraph",
+          "text": "One phrase: a lift, a turn, a stop. Extra flourishes after the count read as a different shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for coverage. If you need an over-the-shoulder for a line, shoot the line."
+        },
+        {
+          "type": "paragraph",
+          "text": "Choreo that wanders off the dancers is a tour, not a duet."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The blocking is the music. Dance floors, musicals, and some fight halls need the camera to partner, not to report.One phrase: a lift, a turn, a stop. Extra flourishes after the count read as a different shot.It is the wrong tool for coverage. If you need an over-the-shoulder for a line, shoot the line.Choreo that wanders off the dancers is a tour, not a duet."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rehearse actors and camera as one system: steadicam, dolly, or jib, marks on the floor, a shared tempo. Height usually stays human."
+        },
+        {
+          "type": "paragraph",
+          "text": "Parallax of partners and set pieces should land on the beat. Prompt: Choreographed camera with [Subject], bodies and lens timed together, one phrase of movement, dance-floor blocking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Rehearse actors and camera as one system: steadicam, dolly, or jib, marks on the floor, a shared tempo. Height usually stays human.Parallax of partners and set pieces should land on the beat. Prompt: Choreographed camera with [Subject], bodies and lens timed together, one phrase of movement, dance-floor blocking."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a dance, a fight, or a walk is written as a single musical sentence. Do not use it to pretty-up a scene with no shared rhythm."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a dance, a fight, or a walk is written as a single musical sentence. Do not use it to pretty-up a scene with no shared rhythm."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Steadicam is the vest that can carry the phrase; it is a platform, not the idea. A Oner is about duration, a long take that may or may not be danced.",
+          "links": [
+            {
+              "text": "Steadicam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            },
+            {
+              "text": "Oner",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Choreo can be short if the count is short."
+        },
+        {
+          "type": "list-item",
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "displayText": "Steadicam\nLong connecting moves through architecture. Neither handheld nor dolly.",
+          "links": [
+            {
+              "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "OnerThe scene is a ride.",
+          "displayText": "Oner\nThe scene is a ride.",
+          "links": [
+            {
+              "text": "OnerThe scene is a ride.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Steadicam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Oner",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+        },
+        {
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "OnerThe scene is a ride.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+          "alt": "Steadicam"
+        },
+        {
+          "kind": "video",
+          "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/5a298b3eb3b678926135a630f52fe6da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-er-026-social-access-tracking-oner-mini.webp",
+          "alt": "Oner"
+        },
+        {
+          "kind": "video",
+          "path": "media/60e5248f694fc74656ed80d4e908fe31.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/026-social-access-tracking-oner-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Steadicam is the vest that can carry the phrase; it is a platform, not the idea. A Oner is about duration, a long take that may or may not be danced.Choreo can be short if the count is short.SteadicamLong connecting moves through architecture. Neither handheld nor dolly.OnerThe scene is a ride.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "La La Land stages camera and dancers on one count. The Umbrellas of Cherbourg treats color, step, and lens as a shared phrase."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use them as grammar for timed blocking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film La La Land stages camera and dancers on one count. The Umbrellas of Cherbourg treats color, step, and lens as a shared phrase.Use them as grammar for timed blocking."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the shared phrase and stop there. Still: Choreographed camera with [Subject], bodies and lens timed together, one phrase of movement, dance-floor blocking."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Camera and [Subject] move as one choreography, a single phrase, no extra flourishes. Forbid a second unmotivated orbit after the stop."
+        },
+        {
+          "type": "quote",
+          "text": "Camera and [Subject] move as one choreography, a single phrase, no extra flourishes."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Camera+and+[Subject]+move+as+one+choreography,+a+single+phrase,+no+extra+flourishes."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the shared phrase and stop there. Still: Choreographed camera with [Subject], bodies and lens timed together, one phrase of movement, dance-floor blocking.Video: Camera and [Subject] move as one choreography, a single phrase, no extra flourishes. Forbid a second unmotivated orbit after the stop.Copy promptUse in Video GeneratorCamera and [Subject] move as one choreography, a single phrase, no extra flourishes.Camera and [Subject] move as one choreography, a single phrase, no extra flourishes."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a wandering steadicam. The tell: the camera keeps going after the bodies have finished the phrase."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: one count, a shared stop, no extra travel."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a wandering steadicam. The tell: the camera keeps going after the bodies have finished the phrase.The fix: one count, a shared stop, no extra travel."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Choreo in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Choreo is a camera that shares a count with the bodies: one phrase of movement, then a stop, as if the lens were a dance partner."
+        },
+        {
+          "type": "heading",
+          "text": "Choreo vs Steadicam",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Steadicam is a stabilizer. Choreo is the idea that blocking and lens are timed together; it can ride a vest, a dolly, or a jib."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Choreo?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for a dance, a fight, or a walk written as one musical sentence. Do not use it as default coverage."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Choreo for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write bodies and lens on one phrase, then stop. Example: Choreographed camera with [Subject], bodies and lens timed together, one phrase of movement, dance-floor blocking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Choreo in film?Choreo is a camera that shares a count with the bodies: one phrase of movement, then a stop, as if the lens were a dance partner.Choreo vs SteadicamSteadicam is a stabilizer. Choreo is the idea that blocking and lens are timed together; it can ride a vest, a dolly, or a jib.When should I use Choreo?Use it for a dance, a fight, or a walk written as one musical sentence. Do not use it as default coverage.How do I prompt Choreo for AI image or video?Write bodies and lens on one phrase, then stop. Example: Choreographed camera with [Subject], bodies and lens timed together, one phrase of movement, dance-floor blocking."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the shared phrase and stop there. Still: Choreographed camera with [Subject], bodies and lens timed together, one phrase of movement, dance-floor blocking.",
+      "Video: Camera and [Subject] move as one choreography, a single phrase, no extra flourishes. Forbid a second unmotivated orbit after the stop."
+    ],
+    "example": "Camera and [Subject] move as one choreography, a single phrase, no extra flourishes."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/0cf1f5b089d162dcb9ec8acf33cf323b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/choreo-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/908bec79f605b4d3770c376216a6e657.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choreo-choreo-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/db308b440ef7becdceee15cf241d4fd8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/choreo.jpg",
+      "alt": "Choreo frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+      "alt": "Steadicam"
+    },
+    {
+      "kind": "video",
+      "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5a298b3eb3b678926135a630f52fe6da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-er-026-social-access-tracking-oner-mini.webp",
+      "alt": "Oner"
+    },
+    {
+      "kind": "video",
+      "path": "media/60e5248f694fc74656ed80d4e908fe31.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/026-social-access-tracking-oner-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5fe63c5216d26ad407f09a4e7614b968.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/choreo/hero.jpg",
+      "alt": "Choreo",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "902d766d2ada8032ddd694de643576627adebf8adc6325d8c2892b68c15a4be8"
+}

@@ -1,0 +1,474 @@
+{
+  "id": "editing/graphic-match",
+  "slug": "graphic-match",
+  "title": "Graphic Match",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/graphic-match",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/graphic-match-099-graphic-match-cut-mini.webp",
+  "detail": "details/editing/graphic-match.json",
+  "aliases": [
+    "Shape match",
+    "Raccord graphique"
+  ],
+  "description": "A graphic match cut joins two images that share a dominant shape, line, color, placement, or motion pattern, even when location and time change. The outgoing contour and the incoming contour occupy the same part of the screen, so form carries you across the splice.",
+  "thumbnail": "media/87ceda0519aff5db427c7cd37728798e.webp",
+  "video": "media/ffba929ec8dc585d8a9c73346ee4cd87.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/099-graphic-match-cut-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You leave a drain, circular, centered. You arrive on an eye, circular, centered."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nothing has been explained, but the cut has already made a bridge. The viewer feels the leap before anyone names it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when form should carry you across time or place. It is the wrong tool when the two frames do not share a contour you can point at."
+        },
+        {
+          "type": "paragraph",
+          "text": "Matching wardrobe or actor identity is not a graphic match. A graphic match is not a morph."
+        },
+        {
+          "type": "paragraph",
+          "text": "Similarity across a hard cut is enough. If the image melts, you have left editing and entered morph.",
+          "links": [
+            {
+              "text": "morph",
+              "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "morph",
+          "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function You leave a drain, circular, centered. You arrive on an eye, circular, centered.Nothing has been explained, but the cut has already made a bridge. The viewer feels the leap before anyone names it.Use it when form should carry you across time or place. It is the wrong tool when the two frames do not share a contour you can point at.Matching wardrobe or actor identity is not a graphic match. A graphic match is not a morph.Similarity across a hard cut is enough. If the image melts, you have left editing and entered morph."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Design the outgoing and incoming frames together. Match the important contour and screen position rather than every part of the image: circle size, horizon height, the diagonal of a body."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use a hard cut when the instant connection is the point. A short Dissolve can soften the rhyme, but it also hides how precise the match was.",
+          "links": [
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt the silhouette or the echoed shape on both sides, same placement, no morph."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Design the outgoing and incoming frames together. Match the important contour and screen position rather than every part of the image: circle size, horizon height, the diagonal of a body.Use a hard cut when the instant connection is the point. A short Dissolve can soften the rhyme, but it also hides how precise the match was.Prompt the silhouette or the echoed shape on both sides, same placement, no morph."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a silhouette, a circle, or a line should survive a jump in time: a watch face to a dome, a scream-mouth to a tunnel. Do not use it as wallpaper between unrelated wides."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the contour does not match, the cut is just a cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a silhouette, a circle, or a line should survive a jump in time: a watch face to a dome, a scream-mouth to a tunnel. Do not use it as wallpaper between unrelated wides.If the contour does not match, the cut is just a cut."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Match Cut may include a graphic rhyme, but it also claims an idea. Graphic match can be purely formal.",
+          "links": [
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Match on Action continues one gesture in one scene. Dissolve overlaps two images in time instead of snapping form to form.",
+          "links": [
+            {
+              "text": "Match on Action",
+              "url": "https://melies.co/cinematic-techniques/editing/match-action"
+            },
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Morph interpolates; graphic match does not.",
+          "links": [
+            {
+              "text": "Morph",
+              "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match on ActionHide the cut in a movement.",
+          "displayText": "Match on Action\nHide the cut in a movement.",
+          "links": [
+            {
+              "text": "Match on ActionHide the cut in a movement.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-action"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Jump CutDo not soothe. Show the skip.",
+          "displayText": "Jump Cut\nDo not soothe. Show the skip.",
+          "links": [
+            {
+              "text": "Jump CutDo not soothe. Show the skip.",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Match on Action",
+          "url": "https://melies.co/cinematic-techniques/editing/match-action"
+        },
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        },
+        {
+          "text": "Morph",
+          "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Match on ActionHide the cut in a movement.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-action"
+        },
+        {
+          "text": "Jump CutDo not soothe. Show the skip.",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/36fe4cdad4d3560862f74e16bb138e37.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-action-091-match-on-action-mini.webp",
+          "alt": "Match on Action"
+        },
+        {
+          "kind": "video",
+          "path": "media/4cf4135997162440b197de8fe749fe08.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/091-match-on-action-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/30e16a300df23158df8edae534b8363d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+          "alt": "Jump Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Match Cut may include a graphic rhyme, but it also claims an idea. Graphic match can be purely formal.Match on Action continues one gesture in one scene. Dissolve overlaps two images in time instead of snapping form to form.Morph interpolates; graphic match does not.Match CutTwo images are the same idea.Match on ActionHide the cut in a movement.Jump CutDo not soothe. Show the skip."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "2001: A Space Odyssey throws a bone and finds a craft of similar attitude and screen path. Psycho leaves the shower drain and arrives on Marion's eye, two circles in one place."
+        },
+        {
+          "type": "paragraph",
+          "text": "Women on the Verge of a Nervous Breakdown uses compositional rhymes to connect successive images. Borrow the geometry, not the posters."
+        },
+        {
+          "type": "list-item",
+          "text": "2001: A Space Odyssey 1968The thrown bone is followed by an orbiting spacecraft.",
+          "displayText": "2001: A Space Odyssey 1968\nThe thrown bone is followed by an orbiting spacecraft."
+        },
+        {
+          "type": "list-item",
+          "text": "Women on the Verge of a Nervous Breakdown 1988Compositional similarities connect successive images.",
+          "displayText": "Women on the Verge of a Nervous Breakdown 1988\nCompositional similarities connect successive images."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film 2001: A Space Odyssey throws a bone and finds a craft of similar attitude and screen path. Psycho leaves the shower drain and arrives on Marion's eye, two circles in one place.Women on the Verge of a Nervous Breakdown uses compositional rhymes to connect successive images. Borrow the geometry, not the posters.2001: A Space Odyssey 1968The thrown bone is followed by an orbiting spacecraft.Women on the Verge of a Nervous Breakdown 1988Compositional similarities connect successive images."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Graphic match on the silhouette of [Subject], shape echoing shape, circle to circle, a visual rhyme. Specify the shared contour, its screen position, and that the objects stay distinct."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video: generate A and B with the same dominant shape size and placement, then hard-cut. No morph, no dissolve unless you explicitly want a soft rhyme."
+        },
+        {
+          "type": "quote",
+          "text": "Generate A: close-up of a circular watch face centered in frame. Generate B: a circular observatory dome seen from above at exactly the same size and position. Hard-cut on the shared circle, with no morph or dissolve. Keep the two objects distinct and the visual connection immediate."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Generate+A:+close-up+of+a+circular+watch+face+centered+in+frame.+Generate+B:+a+circular+observatory+dome+seen+from+above+at+exactly+the+same+size+and+position.+Hard-cut+on+the+shared+circle,+with+no+morph+or+dissolve.+Keep+the+two+objects+distinct+and+the+visual+connection+immediate."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Graphic match on the silhouette of [Subject], shape echoing shape, circle to circle, a visual rhyme. Specify the shared contour, its screen position, and that the objects stay distinct.For video: generate A and B with the same dominant shape size and placement, then hard-cut. No morph, no dissolve unless you explicitly want a soft rhyme.Copy promptUse in Video GeneratorGenerate A: close-up of a circular watch face centered in frame. Generate B: a circular observatory dome seen from above at exactly the same size and position. Hard-cut on the shared circle, with no morph or dissolve. Keep the two objects distinct and the visual connection immediate.Generate A: close-up of a circular watch face centered in frame. Generate B: a circular observatory dome seen from above at exactly the same size and position. Hard-cut on the shared circle, with no morph or dissolve. Keep the two objects distinct and the visual connection immediate."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is morph or a lazy Match Cut that only repeats the actor. The tell: the model blends A into B, or the second frame does not occupy the same contour.",
+          "links": [
+            {
+              "text": "morph",
+              "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+            },
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: lock one shape and one placement, keep two different objects, cut hard."
+        }
+      ],
+      "links": [
+        {
+          "text": "morph",
+          "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is morph or a lazy Match Cut that only repeats the actor. The tell: the model blends A into B, or the second frame does not occupy the same contour.The fix: lock one shape and one placement, keep two different objects, cut hard."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Graphic Match in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A graphic match is a cut that connects images with similar shape, line, color, placement, or movement pattern. The two sides of the join can be different places and times; the shared form is the bridge."
+        },
+        {
+          "type": "heading",
+          "text": "Graphic Match vs Match Cut",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Graphic match is a form rhyme. Match cut is a correspondence that can include form but also idea, space, or sound. Many famous joins are both; the graphic match name is about the contour, not the thesis."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Graphic Match?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when form should carry the viewer across a leap in time or place. Do not use it when the two frames share no readable contour."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Graphic Match for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the silhouette or shape on both sides and put it in the same screen place. Example: Graphic match on the silhouette of [Subject], circle to circle. Demand a hard cut and two distinct objects."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Graphic Match in film?A graphic match is a cut that connects images with similar shape, line, color, placement, or movement pattern. The two sides of the join can be different places and times; the shared form is the bridge.Graphic Match vs Match CutGraphic match is a form rhyme. Match cut is a correspondence that can include form but also idea, space, or sound. Many famous joins are both; the graphic match name is about the contour, not the thesis.When should I use Graphic Match?Use it when form should carry the viewer across a leap in time or place. Do not use it when the two frames share no readable contour.How do I prompt Graphic Match for AI image or video?Name the silhouette or shape on both sides and put it in the same screen place. Example: Graphic match on the silhouette of [Subject], circle to circle. Demand a hard cut and two distinct objects."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Graphic match on the silhouette of [Subject], shape echoing shape, circle to circle, a visual rhyme. Specify the shared contour, its screen position, and that the objects stay distinct.",
+      "For video: generate A and B with the same dominant shape size and placement, then hard-cut. No morph, no dissolve unless you explicitly want a soft rhyme."
+    ],
+    "example": "Generate A: close-up of a circular watch face centered in frame. Generate B: a circular observatory dome seen from above at exactly the same size and position. Hard-cut on the shared circle, with no morph or dissolve. Keep the two objects distinct and the visual connection immediate."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/ffba929ec8dc585d8a9c73346ee4cd87.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/099-graphic-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/87ceda0519aff5db427c7cd37728798e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/graphic-match-099-graphic-match-cut-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/84f2efb2c98db89d844f92bdcf5f4c46.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/graphic-match.jpg",
+      "alt": "Graphic Match frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/36fe4cdad4d3560862f74e16bb138e37.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-action-091-match-on-action-mini.webp",
+      "alt": "Match on Action"
+    },
+    {
+      "kind": "video",
+      "path": "media/4cf4135997162440b197de8fe749fe08.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/091-match-on-action-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/30e16a300df23158df8edae534b8363d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+      "alt": "Jump Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1dc73f9e722f13ec33aa74be094bc430.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/graphic-match/hero.jpg",
+      "alt": "Graphic Match",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "32c66df9c30ca0b217512234e0f2322dbcf2a535ff7c50f5655ddbba35a66a93"
+}

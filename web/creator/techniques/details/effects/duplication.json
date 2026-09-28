@@ -1,0 +1,391 @@
+{
+  "id": "effects/duplication",
+  "slug": "duplication",
+  "title": "Duplication",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/duplication",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/duplication-duplication-mini.webp",
+  "detail": "details/effects/duplication.json",
+  "aliases": [],
+  "description": "A duplicate subject effect puts the same performer in a frame more than once as solid bodies: twins, a self across a table, copies in one room. It is usually a split matte, motion control, or a locked-camera composite, not a translucent double exposure.",
+  "thumbnail": "media/b07a80e569770eac04d41040ec5db8d1.webp",
+  "video": "media/23be8e3bb3bf4166b8e3ed97053c9439.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/duplication-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "One person is not a single self. Two performances share a kitchen."
+        },
+        {
+          "type": "paragraph",
+          "text": "They argue, pass a look, fail to occupy the same chair. Contact shadows, eyelines, and any exchanged object are the hard problems."
+        },
+        {
+          "type": "paragraph",
+          "text": "Two similar-looking people are not automatically this effect. Use it when identity splits in space: twins, a writer and his brother, a man meeting himself."
+        },
+        {
+          "type": "paragraph",
+          "text": "The encounter should feel physically ordinary. It is the wrong tool when the second self is a ghost (double exposure), when the frame is simply divided (split-screen as the visible device), or when one body melts into another (morph)."
+        },
+        {
+          "type": "paragraph",
+          "text": "If they cannot sit in depth and occlude, you have the wrong cousin."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function One person is not a single self. Two performances share a kitchen.They argue, pass a look, fail to occupy the same chair. Contact shadows, eyelines, and any exchanged object are the hard problems.Two similar-looking people are not automatically this effect. Use it when identity splits in space: twins, a writer and his brother, a man meeting himself.The encounter should feel physically ordinary. It is the wrong tool when the second self is a ghost (double exposure), when the frame is simply divided (split-screen as the visible device), or when one body melts into another (morph).If they cannot sit in depth and occlude, you have the wrong cousin."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock the camera or repeat the move with motion control. Record a clean plate."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shoot each performance with matched light. Use a split matte where bodies stay apart, or tracked masks where they overlap."
+        },
+        {
+          "type": "paragraph",
+          "text": "Plan contact and handed objects as separate shots or as later help. Prompt: the same figure twice in one frame, solid bodies, matched lighting, not a ghost overlay, not a visible split line unless you want split-screen."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock the camera or repeat the move with motion control. Record a clean plate.Shoot each performance with matched light. Use a split matte where bodies stay apart, or tracked masks where they overlap.Plan contact and handed objects as separate shots or as later help. Prompt: the same figure twice in one frame, solid bodies, matched lighting, not a ghost overlay, not a visible split line unless you want split-screen."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Two versions of one woman across a kitchen table, distinct posture and clothing, shared shadows, locked camera. Do not stack them as translucent densities, and do not leave a vertical join down the table."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Two versions of one woman across a kitchen table, distinct posture and clothing, shared shadows, locked camera. Do not stack them as translucent densities, and do not leave a vertical join down the table."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Double Exposure is additive overlay. Ghosts, not two sitters.",
+          "links": [
+            {
+              "text": "Double Exposure",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Split Screen shows two pictures with a designed border, which can be how duplication is done if the join is visible. Seamless duplication hides the join.",
+          "links": [
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Morph turns one form into another over time. Duplication keeps both.",
+          "links": [
+            {
+              "text": "Morph",
+              "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Double ExposureTwo times or two selves occupy one frame.",
+          "displayText": "Double Exposure\nTwo times or two selves occupy one frame.",
+          "links": [
+            {
+              "text": "Double ExposureTwo times or two selves occupy one frame.",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Split ScreenTwo rooms, one moment.",
+          "displayText": "Split Screen\nTwo rooms, one moment.",
+          "links": [
+            {
+              "text": "Split ScreenTwo rooms, one moment.",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Double Exposure",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        },
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "Morph",
+          "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+        },
+        {
+          "text": "Double ExposureTwo times or two selves occupy one frame.",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        },
+        {
+          "text": "Split ScreenTwo rooms, one moment.",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+          "alt": "Double Exposure"
+        },
+        {
+          "kind": "image",
+          "path": "media/aa1f55893c6980380f31912c5c293abe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-screen-120-simultaneous-split-screen-mini.webp",
+          "alt": "Split Screen"
+        },
+        {
+          "kind": "video",
+          "path": "media/6b8983f75155ce580e4009fe6c11abb4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/120-simultaneous-split-screen-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Double Exposure is additive overlay. Ghosts, not two sitters.Split Screen shows two pictures with a designed border, which can be how duplication is done if the join is visible. Seamless duplication hides the join.Morph turns one form into another over time. Duplication keeps both.Double ExposureTwo times or two selves occupy one frame.Split ScreenTwo rooms, one moment.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Parent Trap seats one performer as both twins in shared compositions. Adaptation puts Charlie and Donald in the same scenes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Enemy multiplies a man as encounter. The Social Network uses similar motion-control doubling for the Winklevoss pair."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Parent Trap seats one performer as both twins in shared compositions. Adaptation puts Charlie and Donald in the same scenes.Enemy multiplies a man as encounter. The Social Network uses similar motion-control doubling for the Winklevoss pair."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Two solid performances, one space. Example: Duplication of [Subject], the same figure twice in one frame, twins of identity, solid bodies with matched light and contact shadows, not a double-exposure ghost, not a visible split-screen line."
+        },
+        {
+          "type": "quote",
+          "text": "Duplication of [Subject], the same figure twice or more in one frame, twins of time or identity."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Duplication+of+[Subject],+the+same+figure+twice+or+more+in+one+frame,+twins+of+time+or+identity."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Two solid performances, one space. Example: Duplication of [Subject], the same figure twice in one frame, twins of identity, solid bodies with matched light and contact shadows, not a double-exposure ghost, not a visible split-screen line.Copy promptUse in Image GeneratorDuplication of [Subject], the same figure twice or more in one frame, twins of time or identity.Duplication of [Subject], the same figure twice or more in one frame, twins of time or identity."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: double exposure, split-screen with a hard line, or two lookalikes who are not the same face. Tell: translucent stack, a seam down the set, mismatched grain or key, hovering hands."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: locked or motion-controlled plates, identical identity, shared shadows, planned occlusion."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: double exposure, split-screen with a hard line, or two lookalikes who are not the same face. Tell: translucent stack, a seam down the set, mismatched grain or key, hovering hands.Fix: locked or motion-controlled plates, identical identity, shared shadows, planned occlusion."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is duplication in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "The same performer appearing more than once in a shot as solid bodies, usually via split mattes or motion control. It is a spatial double, not a ghost overlay."
+        },
+        {
+          "type": "heading",
+          "text": "Duplication vs double exposure",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Double exposure stacks densities so both images show through. Duplication composites two performances so each body can occlude, sit, and cast shadow."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use duplication?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When one person must meet themselves as a physical other. Do not use it for a memory ghost or for a morph from one face into another."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt duplication for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for the same face twice, distinct poses, matched lighting, contact shadows, locked camera. Forbid translucent overlay and a visible split line unless split-screen is the point."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is duplication in film?The same performer appearing more than once in a shot as solid bodies, usually via split mattes or motion control. It is a spatial double, not a ghost overlay.Duplication vs double exposureDouble exposure stacks densities so both images show through. Duplication composites two performances so each body can occlude, sit, and cast shadow.When should I use duplication?When one person must meet themselves as a physical other. Do not use it for a memory ghost or for a morph from one face into another.How do I prompt duplication for AI image or video?Ask for the same face twice, distinct poses, matched lighting, contact shadows, locked camera. Forbid translucent overlay and a visible split line unless split-screen is the point."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Two solid performances, one space. Example: Duplication of [Subject], the same figure twice in one frame, twins of identity, solid bodies with matched light and contact shadows, not a double-exposure ghost, not a visible split-screen line."
+    ],
+    "example": "Duplication of [Subject], the same figure twice or more in one frame, twins of time or identity."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/23be8e3bb3bf4166b8e3ed97053c9439.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/duplication-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b07a80e569770eac04d41040ec5db8d1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/duplication-duplication-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aee716b8e42ad4e267a6d6fd6fe16510.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/duplication.jpg",
+      "alt": "Duplication frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+      "alt": "Double Exposure"
+    },
+    {
+      "kind": "image",
+      "path": "media/aa1f55893c6980380f31912c5c293abe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-screen-120-simultaneous-split-screen-mini.webp",
+      "alt": "Split Screen"
+    },
+    {
+      "kind": "video",
+      "path": "media/6b8983f75155ce580e4009fe6c11abb4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/120-simultaneous-split-screen-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47dde72cd9eb34960ea68d4a45738b5a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/duplication/hero.jpg",
+      "alt": "Duplication",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "af981927227f97171c2ac542d39c5f8198c93a6c8ed6f13f310e5768f0d306ff"
+}

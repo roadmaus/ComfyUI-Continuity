@@ -1,0 +1,360 @@
+{
+  "id": "viral-looks/toxic",
+  "slug": "toxic",
+  "title": "Toxic",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/toxic",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/toxic-toxic-mini.webp",
+  "detail": "details/viral-looks/toxic.json",
+  "aliases": [],
+  "description": "Toxic, in toxic look cinematography, is air as contamination: sick greens, yellow haze, fumes you can backlight. The air is a hazard, and a teal grade with no particles is not poison.",
+  "thumbnail": "media/9160cbcf3491011602e1b24c5ce6826f.webp",
+  "video": "media/427bdd74ae9d301e47a46062466de35b.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/toxic-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hell, industry, a joke about a city: wet industrial ground, drums optional as objects not as icons, a figure in it. Atmosphere as contamination."
+        },
+        {
+          "type": "paragraph",
+          "text": "A pastoral picnic dies here. It is the wrong tool when you only tint the frame green."
+        },
+        {
+          "type": "paragraph",
+          "text": "Show the air as matter. No biohazard letters."
+        },
+        {
+          "type": "paragraph",
+          "text": "Models ruin type."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Hell, industry, a joke about a city: wet industrial ground, drums optional as objects not as icons, a figure in it. Atmosphere as contamination.A pastoral picnic dies here. It is the wrong tool when you only tint the frame green.Show the air as matter. No biohazard letters.Models ruin type."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height or slightly low, 35mm, lock-off. Backlight the fumes so the poison is visible."
+        },
+        {
+          "type": "paragraph",
+          "text": "Acid greens and urine yellows, wet ground, a figure. Prompt: Toxic air around [Subject], sick greens, yellow haze, poison you can see."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Eye height or slightly low, 35mm, lock-off. Backlight the fumes so the poison is visible.Acid greens and urine yellows, wet ground, a figure. Prompt: Toxic air around [Subject], sick greens, yellow haze, poison you can see."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Industrial hell, a city as a joke about poison, a hazard beat. Do not use it on a pastoral picnic, and do not fake it with a green LUT."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Industrial hell, a city as a joke about poison, a hazard beat. Do not use it on a pastoral picnic, and do not fake it with a green LUT."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fog is water in air, usually white or grey. Particles is bits without a chemical law.",
+          "links": [
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            },
+            {
+              "text": "Particles",
+              "url": "https://melies.co/cinematic-techniques/effects/particles"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Toxic is fumes with a sick palette, backlight so the air is matter. If you cannot see the poison, you have a grade, not this look."
+        },
+        {
+          "type": "list-item",
+          "text": "FogHide geography. Delay the reveal.",
+          "displayText": "Fog\nHide geography. Delay the reveal.",
+          "links": [
+            {
+              "text": "FogHide geography. Delay the reveal.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "ParticlesThe air should be countable.",
+          "displayText": "Particles\nThe air should be countable.",
+          "links": [
+            {
+              "text": "ParticlesThe air should be countable.",
+              "url": "https://melies.co/cinematic-techniques/effects/particles"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Particles",
+          "url": "https://melies.co/cinematic-techniques/effects/particles"
+        },
+        {
+          "text": "FogHide geography. Delay the reveal.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "ParticlesThe air should be countable.",
+          "url": "https://melies.co/cinematic-techniques/effects/particles"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a8973955095d2a7214fd549c40d15a8a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fog.webp",
+          "alt": "Fog"
+        },
+        {
+          "kind": "image",
+          "path": "media/d3e34f0291639924a4c5ff1898e55451.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/particles-particles-mini.webp",
+          "alt": "Particles"
+        },
+        {
+          "kind": "video",
+          "path": "media/ddfc39957e978e9062f724fbb3c58908.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/particles-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Fog is water in air, usually white or grey. Particles is bits without a chemical law.Toxic is fumes with a sick palette, backlight so the air is matter. If you cannot see the poison, you have a grade, not this look.FogHide geography. Delay the reveal.ParticlesThe air should be countable.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Chernobyl treats air as a hazard you can almost see. Comic-book ooze is the well-known graphic cousin: weather that can kill you."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of contamination, not a logo."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Chernobyl treats air as a hazard you can almost see. Comic-book ooze is the well-known graphic cousin: weather that can kill you.Grammar of contamination, not a logo."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Backlight the fumes. Toxic air around [Subject], sick greens, yellow haze, poison you can see."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add wet industrial ground, a figure, particles in air, no biohazard type. Not a teal wash."
+        },
+        {
+          "type": "quote",
+          "text": "Toxic air around [Subject], sick greens, yellow haze, poison you can see."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Toxic+air+around+[Subject],+sick+greens,+yellow+haze,+poison+you+can+see."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Backlight the fumes. Toxic air around [Subject], sick greens, yellow haze, poison you can see.Add wet industrial ground, a figure, particles in air, no biohazard type. Not a teal wash.Copy promptUse in Image GeneratorToxic air around [Subject], sick greens, yellow haze, poison you can see.Toxic air around [Subject], sick greens, yellow haze, poison you can see."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A teal or green grade with no fumes, or hazard icons. The tell is clean air."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: visible poison, backlight, sick green and yellow, a body in it."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong A teal or green grade with no fumes, or hazard icons. The tell is clean air.Fix it: visible poison, backlight, sick green and yellow, a body in it."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Toxic in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Chemical weather: sick greens, yellow haze, fumes you can see. The air is the hazard. A green LUT is not enough."
+        },
+        {
+          "type": "heading",
+          "text": "Toxic vs Fog",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fog is water droplets, usually neutral. Toxic is contamination with a sick palette and visible fumes. If the air is white and harmless, you wanted fog."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Toxic?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Industry, hell, a poisoned city. Skip picnics and clean-air grades."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Toxic for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Backlight fumes, then: Toxic air around [Subject], sick greens, yellow haze, poison you can see. Forbid biohazard letters. Keep a readable figure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Toxic in film?Chemical weather: sick greens, yellow haze, fumes you can see. The air is the hazard. A green LUT is not enough.Toxic vs FogFog is water droplets, usually neutral. Toxic is contamination with a sick palette and visible fumes. If the air is white and harmless, you wanted fog.When should I use Toxic?Industry, hell, a poisoned city. Skip picnics and clean-air grades.How do I prompt Toxic for AI image or video?Backlight fumes, then: Toxic air around [Subject], sick greens, yellow haze, poison you can see. Forbid biohazard letters. Keep a readable figure."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Backlight the fumes. Toxic air around [Subject], sick greens, yellow haze, poison you can see.",
+      "Add wet industrial ground, a figure, particles in air, no biohazard type. Not a teal wash."
+    ],
+    "example": "Toxic air around [Subject], sick greens, yellow haze, poison you can see."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/427bdd74ae9d301e47a46062466de35b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/toxic-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9160cbcf3491011602e1b24c5ce6826f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/toxic-toxic-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9f9d47b721a6e50ef6e3b37ce7294616.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/toxic.jpg",
+      "alt": "Toxic frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/a8973955095d2a7214fd549c40d15a8a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fog.webp",
+      "alt": "Fog"
+    },
+    {
+      "kind": "image",
+      "path": "media/d3e34f0291639924a4c5ff1898e55451.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/particles-particles-mini.webp",
+      "alt": "Particles"
+    },
+    {
+      "kind": "video",
+      "path": "media/ddfc39957e978e9062f724fbb3c58908.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/particles-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/731a4a4e388f2a7be738f80ca082d164.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/toxic/hero.jpg",
+      "alt": "Toxic",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "7439207347ccd40345c82d500218df491089a7d0a31183bd53a3f31891dd2e0b"
+}

@@ -1,0 +1,365 @@
+{
+  "id": "effects/infrared",
+  "slug": "infrared",
+  "title": "Infrared",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/infrared",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infrared.webp",
+  "detail": "details/effects/infrared.json",
+  "aliases": [],
+  "description": "Infrared cinematography photographs near-infrared reflectance (roughly 700 to 900 nm), not heat, so foliage often goes pale, skies go dark, and skin can look waxy. It is a different slice of reflected light, still a photograph of the location.",
+  "thumbnail": "media/84366f6fb8fef72adc7fdae948e3cccd.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The woods are white. The sky is near black."
+        },
+        {
+          "type": "paragraph",
+          "text": "Faces are wrong in a quiet way: veins, powder, fabric dyes all rewrite. The place is still Earth."
+        },
+        {
+          "type": "paragraph",
+          "text": "The spectrum is not the one the eye owns. Use it when a landscape should feel like another planet without leaving the location: a forbidden forest, a concert IR look, a surveillance still that is not green-tube night vision."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for hunting in total dark (that is image intensification) or for seeing body heat (that is thermal). If the image is green and noisy with blooming lamps, you have night vision."
+        },
+        {
+          "type": "paragraph",
+          "text": "If faces are ironbow masks, you have thermal."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The woods are white. The sky is near black.Faces are wrong in a quiet way: veins, powder, fabric dyes all rewrite. The place is still Earth.The spectrum is not the one the eye owns. Use it when a landscape should feel like another planet without leaving the location: a forbidden forest, a concert IR look, a surveillance still that is not green-tube night vision.It is the wrong tool for hunting in total dark (that is image intensification) or for seeing body heat (that is thermal). If the image is green and noisy with blooming lamps, you have night vision.If faces are ironbow masks, you have thermal."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use an IR-pass filter and a sensor or stock sensitive to near-IR, or remove a camera's IR-cut filter. Light is still reflected sunlight or IR-rich tungsten, not emitted heat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Expose for the Wood effect on leaves. Prompt: pale foliage, dark sky, waxy skin, near-infrared photograph, not green phosphor, not a thermal palette."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Use an IR-pass filter and a sensor or stock sensitive to near-IR, or remove a camera's IR-cut filter. Light is still reflected sunlight or IR-rich tungsten, not emitted heat.Expose for the Wood effect on leaves. Prompt: pale foliage, dark sky, waxy skin, near-infrared photograph, not green phosphor, not a thermal palette."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A rider on a ridge, trees gone chalky, sky black, skin slightly unearthly, still clearly a daylight landscape. Do not render it as predator heat colors or as a green goggle feed."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A rider on a ridge, trees gone chalky, sky black, skin slightly unearthly, still clearly a daylight landscape. Do not render it as predator heat colors or as a green goggle feed."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Night Vision intensifies residual photons onto a phosphor, usually green and grainy, as a hunting or surveillance eye. Thermal maps emitted long-wave radiation to a false-color palette.",
+          "links": [
+            {
+              "text": "Night Vision",
+              "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+            },
+            {
+              "text": "Thermal",
+              "url": "https://melies.co/cinematic-techniques/effects/thermal"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Monochrome is visible-light black and white. Infrared can be printed mono, but its tonalities (white leaves, black sky) come from IR reflectance.",
+          "links": [
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Night VisionSomeone is hunting in the dark.",
+          "displayText": "Night Vision\nSomeone is hunting in the dark.",
+          "links": [
+            {
+              "text": "Night VisionSomeone is hunting in the dark.",
+              "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MonochromeStrip to drawing.",
+          "displayText": "Monochrome\nStrip to drawing.",
+          "links": [
+            {
+              "text": "MonochromeStrip to drawing.",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Night Vision",
+          "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+        },
+        {
+          "text": "Thermal",
+          "url": "https://melies.co/cinematic-techniques/effects/thermal"
+        },
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Night VisionSomeone is hunting in the dark.",
+          "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+        },
+        {
+          "text": "MonochromeStrip to drawing.",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/57004862851c5391970cbe491d31bfae.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/night-vision.webp",
+          "alt": "Night Vision"
+        },
+        {
+          "kind": "image",
+          "path": "media/cdf5189c733a215f8f6312b537573dbd.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monochrome-073-selective-color-in-monochrome-mini.webp",
+          "alt": "Monochrome"
+        },
+        {
+          "kind": "video",
+          "path": "media/7a3685f47ea79cd2485426ecee14655b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/073-selective-color-in-monochrome-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Night Vision intensifies residual photons onto a phosphor, usually green and grainy, as a hunting or surveillance eye. Thermal maps emitted long-wave radiation to a false-color palette.Monochrome is visible-light black and white. Infrared can be printed mono, but its tonalities (white leaves, black sky) come from IR reflectance.Night VisionSomeone is hunting in the dark.MonochromeStrip to drawing.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Village used infrared film in the woods so the forest would read as another world while remaining a photographed place. Concert IR photography is the live-music cousin: pale skin, dark clothing dyes, no green tube."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Village used infrared film in the woods so the forest would read as another world while remaining a photographed place. Concert IR photography is the live-music cousin: pale skin, dark clothing dyes, no green tube."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Specify near-IR reflectance, not heat. Example: Infrared look on [Subject], foliage going pale, skies black, skin waxy, near-infrared photograph, not night-vision green, not a thermal palette."
+        },
+        {
+          "type": "quote",
+          "text": "Infrared look on [Subject], foliage going pale, skies black, skin otherworldly, a spectrum humans do not own."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Infrared+look+on+[Subject],+foliage+going+pale,+skies+black,+skin+otherworldly,+a+spectrum+humans+do+not+own."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Specify near-IR reflectance, not heat. Example: Infrared look on [Subject], foliage going pale, skies black, skin waxy, near-infrared photograph, not night-vision green, not a thermal palette.Copy promptUse in Image GeneratorInfrared look on [Subject], foliage going pale, skies black, skin otherworldly, a spectrum humans do not own.Infrared look on [Subject], foliage going pale, skies black, skin otherworldly, a spectrum humans do not own."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: night vision or thermal. Tell: green phosphor grain, or ironbow heat masks, or ordinary black and white with normal dark trees."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: invert the foliage and sky relationship, keep it a reflected-light still, no goggle HUD."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: night vision or thermal. Tell: green phosphor grain, or ironbow heat masks, or ordinary black and white with normal dark trees.Fix: invert the foliage and sky relationship, keep it a reflected-light still, no goggle HUD."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is infrared in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Photography with near-infrared light. Leaves often go pale, skies darken, skin and dyes shift. It is reflectance, not a heat camera."
+        },
+        {
+          "type": "heading",
+          "text": "Infrared vs night vision",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Infrared film or IR photography is a spectral still of the world. Night vision is an image intensifier: residual light amplified onto a phosphor, typically green and grainy."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use infrared?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a real landscape should look spectrally alien: pale woods, black sky. Do not use it for goggle POV or heat detection."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt infrared for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for pale foliage, dark skies, waxy skin, near-infrared still. Explicitly forbid green phosphor and thermal color palettes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is infrared in film?Photography with near-infrared light. Leaves often go pale, skies darken, skin and dyes shift. It is reflectance, not a heat camera.Infrared vs night visionInfrared film or IR photography is a spectral still of the world. Night vision is an image intensifier: residual light amplified onto a phosphor, typically green and grainy.When should I use infrared?When a real landscape should look spectrally alien: pale woods, black sky. Do not use it for goggle POV or heat detection.How do I prompt infrared for AI image or video?Ask for pale foliage, dark skies, waxy skin, near-infrared still. Explicitly forbid green phosphor and thermal color palettes."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Specify near-IR reflectance, not heat. Example: Infrared look on [Subject], foliage going pale, skies black, skin waxy, near-infrared photograph, not night-vision green, not a thermal palette."
+    ],
+    "example": "Infrared look on [Subject], foliage going pale, skies black, skin otherworldly, a spectrum humans do not own."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/84366f6fb8fef72adc7fdae948e3cccd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infrared.webp",
+      "alt": "Infrared example"
+    },
+    {
+      "kind": "image",
+      "path": "media/57004862851c5391970cbe491d31bfae.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/night-vision.webp",
+      "alt": "Night Vision"
+    },
+    {
+      "kind": "image",
+      "path": "media/cdf5189c733a215f8f6312b537573dbd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monochrome-073-selective-color-in-monochrome-mini.webp",
+      "alt": "Monochrome"
+    },
+    {
+      "kind": "video",
+      "path": "media/7a3685f47ea79cd2485426ecee14655b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/073-selective-color-in-monochrome-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/efa91e2e38623b62c534d3753e53fbce.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/infrared/hero.jpg",
+      "alt": "Infrared",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "f6063d132f6521df8c3fe927538f5e719c3518552dc9599bcfecdfd1c282d4bb"
+}

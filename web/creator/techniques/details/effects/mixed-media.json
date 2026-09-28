@@ -1,0 +1,389 @@
+{
+  "id": "effects/mixed-media",
+  "slug": "mixed-media",
+  "title": "Mixed Media",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/mixed-media",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mixed-media-mixed-media-mini.webp",
+  "detail": "details/effects/mixed-media.json",
+  "aliases": [],
+  "description": "Mixed media film combines live action with type, illustration, and stock in one plane so no single capture method owns the truth of the frame. Media collide rather than dissolve into one photograph.",
+  "thumbnail": "media/83d2cb5611a01b24c14f80d7066eb566.webp",
+  "video": "media/d444dde0403cf42d4c72951f133ce07c.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mixed-media-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face is a photograph. The wall is a drawing."
+        },
+        {
+          "type": "paragraph",
+          "text": "A headline sits on the glass. Use it when the story is already a pile of documents, broadcasts, and drawings, and the cut would lie by smoothing them."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a single elegant composite that should feel like one camera. If every layer is the same still torn into pieces, you are closer to collage."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the only extra layer is words as objects, you are closer to typography."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A face is a photograph. The wall is a drawing.A headline sits on the glass. Use it when the story is already a pile of documents, broadcasts, and drawings, and the cut would lie by smoothing them.It is the wrong tool for a single elegant composite that should feel like one camera. If every layer is the same still torn into pieces, you are closer to collage.If the only extra layer is words as objects, you are closer to typography."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shoot or generate a live-action plate with a real key. Add illustration, type, and stock as separate layers with visible edges: torn, keyed, or butted."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lighting does not have to match across media. The mismatch is evidence of different sources."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep one subject readable so the collision has a center. Prompt mixed media around the subject: live action, type, illustration, and stock colliding in one plane."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Shoot or generate a live-action plate with a real key. Add illustration, type, and stock as separate layers with visible edges: torn, keyed, or butted.Lighting does not have to match across media. The mismatch is evidence of different sources.Keep one subject readable so the collision has a center. Prompt mixed media around the subject: live action, type, illustration, and stock colliding in one plane."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when news, memory, and the body cannot agree on one medium. Do not use it as a sticker pack on a scene that still wants photochemical unity."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when news, memory, and the body cannot agree on one medium. Do not use it as a sticker pack on a scene that still wants photochemical unity."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Collage layers stills and textures into one picture. Mixed media insists on different capture modes in the same plane.",
+          "links": [
+            {
+              "text": "Collage",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Typography puts words in the world as objects. Mixed media can include type, but type is only one of the colliding sources.",
+          "links": [
+            {
+              "text": "Typography",
+              "url": "https://melies.co/cinematic-techniques/effects/typography"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CollageOne image is not enough; stack them.",
+          "displayText": "Collage\nOne image is not enough; stack them.",
+          "links": [
+            {
+              "text": "CollageOne image is not enough; stack them.",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "TypographyThe sentence is in the shot.",
+          "displayText": "Typography\nThe sentence is in the shot.",
+          "links": [
+            {
+              "text": "TypographyThe sentence is in the shot.",
+              "url": "https://melies.co/cinematic-techniques/effects/typography"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Collage",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        },
+        {
+          "text": "Typography",
+          "url": "https://melies.co/cinematic-techniques/effects/typography"
+        },
+        {
+          "text": "CollageOne image is not enough; stack them.",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        },
+        {
+          "text": "TypographyThe sentence is in the shot.",
+          "url": "https://melies.co/cinematic-techniques/effects/typography"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+          "alt": "Collage"
+        },
+        {
+          "kind": "image",
+          "path": "media/81b1f876fe5e16bb270d26421a1dbb15.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/typography-typography-mini.webp",
+          "alt": "Typography"
+        },
+        {
+          "kind": "video",
+          "path": "media/8103d2a433b486f00ca65f195f8bae83.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/typography-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Collage layers stills and textures into one picture. Mixed media insists on different capture modes in the same plane.Typography puts words in the world as objects. Mixed media can include type, but type is only one of the colliding sources.CollageOne image is not enough; stack them.TypographyThe sentence is in the shot.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Natural Born Killers collides broadcast, film, and graphic interruption. Everything Everywhere All at Once lets illustration, stock, and live action share a plane when the universe will not stay one medium."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Natural Born Killers collides broadcast, film, and graphic interruption. Everything Everywhere All at Once lets illustration, stock, and live action share a plane when the universe will not stay one medium.Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mixed media around [Subject], live action, type, illustration, and stock colliding in one plane. Name each medium."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep edges visible. Ban a single seamless grade that hides the collision."
+        },
+        {
+          "type": "quote",
+          "text": "Mixed media around [Subject], live action, type, illustration, and stock colliding in one plane."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Mixed+media+around+[Subject],+live+action,+type,+illustration,+and+stock+colliding+in+one+plane."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Mixed media around [Subject], live action, type, illustration, and stock colliding in one plane. Name each medium.Keep edges visible. Ban a single seamless grade that hides the collision.Copy promptUse in Image GeneratorMixed media around [Subject], live action, type, illustration, and stock colliding in one plane.Mixed media around [Subject], live action, type, illustration, and stock colliding in one plane."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a graded live-action still with a font on top, or a pure Collage of one photo. The tell is one texture, one grain, one key.",
+          "links": [
+            {
+              "text": "Collage",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is at least two capture modes, edges showing, one readable subject."
+        }
+      ],
+      "links": [
+        {
+          "text": "Collage",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a graded live-action still with a font on top, or a pure Collage of one photo. The tell is one texture, one grain, one key.The fix is at least two capture modes, edges showing, one readable subject."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is mixed media in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Mixed media combines live action with type, illustration, and stock in one plane. No single medium owns the truth of the frame."
+        },
+        {
+          "type": "heading",
+          "text": "Mixed media vs collage",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Collage is layers of stills and textures. Mixed media is different capture methods colliding: a photograph next to a drawing next to type. One is torn paper. The other is torn ontology."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use mixed media?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when documents, broadcasts, and bodies cannot be one photograph. Skip it when the scene still wants a single camera's truth."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt mixed media for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Mixed media around [Subject], live action, type, illustration, and stock colliding in one plane. Name the media and keep their edges. Do not melt them into one grade."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is mixed media in film?Mixed media combines live action with type, illustration, and stock in one plane. No single medium owns the truth of the frame.Mixed media vs collageCollage is layers of stills and textures. Mixed media is different capture methods colliding: a photograph next to a drawing next to type. One is torn paper. The other is torn ontology.When should I use mixed media?Use it when documents, broadcasts, and bodies cannot be one photograph. Skip it when the scene still wants a single camera's truth.How do I prompt mixed media for AI image or video?Write Mixed media around [Subject], live action, type, illustration, and stock colliding in one plane. Name the media and keep their edges. Do not melt them into one grade."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Mixed media around [Subject], live action, type, illustration, and stock colliding in one plane. Name each medium.",
+      "Keep edges visible. Ban a single seamless grade that hides the collision."
+    ],
+    "example": "Mixed media around [Subject], live action, type, illustration, and stock colliding in one plane."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/d444dde0403cf42d4c72951f133ce07c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mixed-media-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/83d2cb5611a01b24c14f80d7066eb566.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mixed-media-mixed-media-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dcb60efae6143ab914daef4ce579e9e7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/mixed-media.jpg",
+      "alt": "Mixed Media frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+      "alt": "Collage"
+    },
+    {
+      "kind": "image",
+      "path": "media/81b1f876fe5e16bb270d26421a1dbb15.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/typography-typography-mini.webp",
+      "alt": "Typography"
+    },
+    {
+      "kind": "video",
+      "path": "media/8103d2a433b486f00ca65f195f8bae83.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/typography-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/491f9c7a92e511e849d23bbda2610ef6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/mixed-media/hero.jpg",
+      "alt": "Mixed Media",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "927b819a2dc54ab297abca065e0998568d124e87bb4d9067681dec9e399f7fe2"
+}

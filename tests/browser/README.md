@@ -23,6 +23,7 @@ node (Join-Path $env:PLAYWRIGHT_MODULE 'cli.js') install chromium
 node tests/browser/test-style-scroll.cjs
 node tests/browser/test-reference-preview.cjs
 node tests/browser/test-timeline-sections-seams.cjs
+node tests/browser/test-technique-library.cjs
 ```
 
 On other operating systems, the same scripts work with the equivalent environment
@@ -55,6 +56,17 @@ scripts do not launch ComfyUI, touch a user browser profile, or modify project d
   popover cleanup, seam option/capability matrices and localized layout. Backend
   capability/state providers, picker responses and unrelated renderers are
   fixtures, not a running ComfyUI application.
+
+- **Technique library:** production UI, catalogue and article fixtures, plus real
+  bundled examples; categories/favorites/search, live prompt targets, English
+  insertion modes, internal history, comparison layout, 1.2x playback/cleanup,
+  narrow layouts, clipboard/storage failure and target-specific draft recovery.
+  Local video playback is not proof of generation-model adherence.
+
+Full non-English explanation coverage is a separate data gate. Run
+`python tests/test_technique_localizations.py` to see missing coverage; it is
+intentionally not passing while only five of 424 articles per non-English locale
+have explanation overlays. Browser checks do not establish full translation.
 
 These are isolated browser regression tests, **not end-to-end ComfyUI tests or
 GPU/rendering validation**. Source extraction is intentionally explicit: if a

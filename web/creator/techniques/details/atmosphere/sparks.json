@@ -1,0 +1,432 @@
+{
+  "id": "atmosphere/sparks",
+  "slug": "sparks",
+  "title": "Sparks and Embers",
+  "categoryId": "atmosphere",
+  "categoryTitle": "Atmosphere and Weather",
+  "sourceUrl": "https://melies.co/cinematic-techniques/atmosphere/sparks",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/sparks.webp",
+  "detail": "details/atmosphere/sparks.json",
+  "aliases": [],
+  "description": "Sparks and embers are incandescent particles thrown by welding, fire, grinding, or a cigarette: orange weather with short trajectories. They are burning matter; backlight is optional because they are their own small keys.",
+  "thumbnail": "media/03d4dfe2baaeaf6eacd98261eec5fbf6.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A welder writes a fountain. A collapsing floor throws embers that hang, then die."
+        },
+        {
+          "type": "paragraph",
+          "text": "Industry or apocalypse in the air. Unlike dust, these specks have temperature and a brief life."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the air should be dangerous or industrial: a foundry, a burning street, a cigarette in a dark booth (embers, not a fountain). It is the wrong tool when the specks are cold (Dust Motes, Snow).",
+          "links": [
+            {
+              "text": "Dust Motes",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+            },
+            {
+              "text": "Snow",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/snow"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the glow is only a warm key on a face with no particles: that is Candlelight or firelight without weather. If the particles are large, slow, and white, you probably asked for snow.",
+          "links": [
+            {
+              "text": "Candlelight",
+              "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If they never fall, you asked for hanging dust."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dust Motes",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+        },
+        {
+          "text": "Snow",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/snow"
+        },
+        {
+          "text": "Candlelight",
+          "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A welder writes a fountain. A collapsing floor throws embers that hang, then die.Industry or apocalypse in the air. Unlike dust, these specks have temperature and a brief life.Use it when the air should be dangerous or industrial: a foundry, a burning street, a cigarette in a dark booth (embers, not a fountain). It is the wrong tool when the specks are cold (Dust Motes, Snow).It is the wrong tool when the glow is only a warm key on a face with no particles: that is Candlelight or firelight without weather. If the particles are large, slow, and white, you probably asked for snow.If they never fall, you asked for hanging dust."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Give them a source (welder, angle grinder, timber, cigarette). Let gravity and heat dictate: sparks drop and bounce; embers can loft and drift."
+        },
+        {
+          "type": "paragraph",
+          "text": "Expose for the particle without losing the face entirely, or accept silhouettes. A dark surround makes them read."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: sparks or embers around [Subject], welding, fire, cigarettes, orange particles as weather."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Give them a source (welder, angle grinder, timber, cigarette). Let gravity and heat dictate: sparks drop and bounce; embers can loft and drift.Expose for the particle without losing the face entirely, or accept silhouettes. A dark surround makes them read.Prompt: sparks or embers around [Subject], welding, fire, cigarettes, orange particles as weather."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a night burn, a factory, a ruined city, a match. Do not sprinkle orange specks on a pastoral wide with no fire."
+        },
+        {
+          "type": "paragraph",
+          "text": "Particles need a reason."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a night burn, a factory, a ruined city, a match. Do not sprinkle orange specks on a pastoral wide with no fire.Particles need a reason."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Candlelight is a warm, flickering key. Sparks are the particles.",
+          "links": [
+            {
+              "text": "Candlelight",
+              "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Volumetric Light is a shaft; sparks can cross it but are not the shaft. Dust Motes are cold and slow in a beam.",
+          "links": [
+            {
+              "text": "Volumetric Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            },
+            {
+              "text": "Dust Motes",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Snow is cold and accumulates. Sparks die in the air.",
+          "links": [
+            {
+              "text": "Snow",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/snow"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CandlelightPeriod night or ritual.",
+          "displayText": "Candlelight\nPeriod night or ritual.",
+          "links": [
+            {
+              "text": "CandlelightPeriod night or ritual.",
+              "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "displayText": "Volumetric Light\nAir has to be photographed, not just the subject.",
+          "links": [
+            {
+              "text": "Volumetric LightAir has to be photographed, not just the subject.",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "RainMake the air visible and the ground reflective.",
+          "displayText": "Rain\nMake the air visible and the ground reflective.",
+          "links": [
+            {
+              "text": "RainMake the air visible and the ground reflective.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Candlelight",
+          "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+        },
+        {
+          "text": "Volumetric Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "Dust Motes",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+        },
+        {
+          "text": "Snow",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/snow"
+        },
+        {
+          "text": "CandlelightPeriod night or ritual.",
+          "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+        },
+        {
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "RainMake the air visible and the ground reflective.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/63d3a366e4a80f088428e87b46d5c969.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/candlelight-066-candlelit-naturalism-mini.webp",
+          "alt": "Candlelight"
+        },
+        {
+          "kind": "video",
+          "path": "media/ca4aadaa8863da5b4b9ea93abb6843f2.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/066-candlelit-naturalism-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+          "alt": "Volumetric Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+          "alt": "Rain"
+        }
+      ],
+      "sourceText": "Compared with similar shots Candlelight is a warm, flickering key. Sparks are the particles.Volumetric Light is a shaft; sparks can cross it but are not the shaft. Dust Motes are cold and slow in a beam.Snow is cold and accumulates. Sparks die in the air.CandlelightPeriod night or ritual.Volumetric LightAir has to be photographed, not just the subject.RainMake the air visible and the ground reflective."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blade Runner 2049 throws orange particles as industrial weather. The Dark Knight Rises uses fire and debris as airborne specks in night action."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use source plus trajectory, not a spark overlay on a clean street."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Blade Runner 2049 throws orange particles as industrial weather. The Dark Knight Rises uses fire and debris as airborne specks in night action.Use source plus trajectory, not a spark overlay on a clean street."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sparks or embers around [Subject], welding, fire, cigarettes, orange particles as weather. Name the source, color (white-orange to dull red), trajectory (fountain versus lofted drift), and a dark surround."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, short-lived particles with gravity; no snow, no cigarette smoke unless you also want smoke."
+        },
+        {
+          "type": "quote",
+          "text": "Sparks or embers around [Subject], welding, fire, cigarettes, orange particles as weather."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Sparks+or+embers+around+[Subject],+welding,+fire,+cigarettes,+orange+particles+as+weather."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Sparks or embers around [Subject], welding, fire, cigarettes, orange particles as weather. Name the source, color (white-orange to dull red), trajectory (fountain versus lofted drift), and a dark surround.For video, short-lived particles with gravity; no snow, no cigarette smoke unless you also want smoke.Copy promptUse in Image GeneratorSparks or embers around [Subject], welding, fire, cigarettes, orange particles as weather.Sparks or embers around [Subject], welding, fire, cigarettes, orange particles as weather."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Dust Motes tinted orange, or Snow. The tell: specks hang forever, accumulate on the ground as white, or have no welder or fire.",
+          "links": [
+            {
+              "text": "Dust Motes",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+            },
+            {
+              "text": "Snow",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/snow"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: a hot source, brief trajectories, self-luminous particles, dark air."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dust Motes",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+        },
+        {
+          "text": "Snow",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/snow"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Dust Motes tinted orange, or Snow. The tell: specks hang forever, accumulate on the ground as white, or have no welder or fire.The fix: a hot source, brief trajectories, self-luminous particles, dark air."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Sparks and Embers in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Sparks and embers are burning particles in the air, thrown by welding, fire, or a cigarette. They light themselves, follow short trajectories, and die."
+        },
+        {
+          "type": "heading",
+          "text": "Sparks and Embers vs Dust Motes",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dust motes are cold specks in a shaft of light. Sparks are incandescent and come from a hot source. One is time in a closed room; the other is industry or fire."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Sparks and Embers?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use them when the air should carry heat: welding, collapse, a cigarette coal. Do not sprinkle orange dots on a scene with no fire."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Sparks and Embers for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the hot source and the trajectories. Example: sparks or embers around [Subject], welding, fire, cigarettes, orange particles as weather. Dark surround, gravity, no snow."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Sparks and Embers in film?Sparks and embers are burning particles in the air, thrown by welding, fire, or a cigarette. They light themselves, follow short trajectories, and die.Sparks and Embers vs Dust MotesDust motes are cold specks in a shaft of light. Sparks are incandescent and come from a hot source. One is time in a closed room; the other is industry or fire.When should I use Sparks and Embers?Use them when the air should carry heat: welding, collapse, a cigarette coal. Do not sprinkle orange dots on a scene with no fire.How do I prompt Sparks and Embers for AI image or video?Name the hot source and the trajectories. Example: sparks or embers around [Subject], welding, fire, cigarettes, orange particles as weather. Dark surround, gravity, no snow."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Sparks or embers around [Subject], welding, fire, cigarettes, orange particles as weather. Name the source, color (white-orange to dull red), trajectory (fountain versus lofted drift), and a dark surround.",
+      "For video, short-lived particles with gravity; no snow, no cigarette smoke unless you also want smoke."
+    ],
+    "example": "Sparks or embers around [Subject], welding, fire, cigarettes, orange particles as weather."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/03d4dfe2baaeaf6eacd98261eec5fbf6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/sparks.webp",
+      "alt": "Sparks and Embers example"
+    },
+    {
+      "kind": "image",
+      "path": "media/63d3a366e4a80f088428e87b46d5c969.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/candlelight-066-candlelit-naturalism-mini.webp",
+      "alt": "Candlelight"
+    },
+    {
+      "kind": "video",
+      "path": "media/ca4aadaa8863da5b4b9ea93abb6843f2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/066-candlelit-naturalism-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+      "alt": "Volumetric Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+      "alt": "Rain"
+    },
+    {
+      "kind": "image",
+      "path": "media/923c0aaf44e71ae94bb3ded9fc70dd1a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/sparks/hero.jpg",
+      "alt": "Sparks and Embers",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "e1fb3c9353f748e76048aed591c3d04c25783980f792e03f90efce4822b100df"
+}

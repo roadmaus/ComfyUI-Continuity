@@ -1,0 +1,450 @@
+{
+  "id": "editing/axial-cut",
+  "slug": "axial-cut",
+  "title": "Axial Cut",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/axial-cut",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/axial-cut-177-axial-cut-and-punch-in-cut-mini.webp",
+  "detail": "details/editing/axial-cut.json",
+  "aliases": [
+    "Jump along the camera axis",
+    "Cut-in emphasis"
+  ],
+  "description": "An axial cut jumps closer or farther along approximately the same camera axis, changing shot size without changing angle. The outgoing frame and the incoming frame share a viewpoint; only distance snaps.",
+  "thumbnail": "media/8e36f1dab06b9b4dadc032bc5bf1a00e.webp",
+  "video": "media/9bcd543d80e94c3b9d9c68405e7a75d4.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/177-axial-cut-and-punch-in-cut-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A farmhouse kitchen, then the same kitchen larger, then an eye socket you were not ready to occupy. Recognition arrives as a series of shocks, not as a walk."
+        },
+        {
+          "type": "paragraph",
+          "text": "Change shot size without changing angle. Use it for stepwise emphasis: a date in a book, a wound, a face that must suddenly fill the world."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you want a continuous approach. A Crash Zoom In is an optical move in time.",
+          "links": [
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A dolly-in is a walk. An axial cut is an edit."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the angle changes more than a few degrees, you have ordinary coverage, not an axial cut. If time is what you skipped inside one size, you have a Jump Cut.",
+          "links": [
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A farmhouse kitchen, then the same kitchen larger, then an eye socket you were not ready to occupy. Recognition arrives as a series of shocks, not as a walk.Change shot size without changing angle. Use it for stepwise emphasis: a date in a book, a wound, a face that must suddenly fill the world.It is the wrong tool when you want a continuous approach. A Crash Zoom In is an optical move in time.A dolly-in is a walk. An axial cut is an edit.If the angle changes more than a few degrees, you have ordinary coverage, not an axial cut. If time is what you skipped inside one size, you have a Jump Cut."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Capture or generate matched wide, medium, and close compositions on the same axis. Preserve pose, eyeline, and background alignment enough that the jump is only scale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Choose deliberate steps (for example 50mm at 3 meters, then 50mm at 1 meter, or a punch-in crop that matches a true closer camera). Do not animate a zoom between the frames if the point is the snap."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: axial cut jumping toward or away from [Subject] along the lens axis, punch-in without a zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Capture or generate matched wide, medium, and close compositions on the same axis. Preserve pose, eyeline, and background alignment enough that the jump is only scale.Choose deliberate steps (for example 50mm at 3 meters, then 50mm at 1 meter, or a punch-in crop that matches a true closer camera). Do not animate a zoom between the frames if the point is the snap.Prompt: axial cut jumping toward or away from [Subject] along the lens axis, punch-in without a zoom."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a detail must land as a blow: the date stamp, the empty eye, the gun on the table. Do not use it as a substitute for a motivated push-in during a long take."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera should walk, walk."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a detail must land as a blow: the date stamp, the empty eye, the gun on the table. Do not use it as a substitute for a motivated push-in during a long take.If the camera should walk, walk."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Crash Zoom In is a continuous, fast focal-length change. An axial cut is a splice.",
+          "links": [
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Jump Cut skips time in a similar size; axial cut skips distance on one axis. Match on Action needs a bridging gesture; axial cut can hit a still figure.",
+          "links": [
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            },
+            {
+              "text": "Match on Action",
+              "url": "https://melies.co/cinematic-techniques/editing/match-action"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A push-in has parallax; a punch-in crop of one take has none, and is a cheaper cousin of a true closer camera on the same axis."
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "displayText": "Crash Zoom In\nPunctuate a hit, a realization, or a comic sting.",
+          "links": [
+            {
+              "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Jump CutDo not soothe. Show the skip.",
+          "displayText": "Jump Cut\nDo not soothe. Show the skip.",
+          "links": [
+            {
+              "text": "Jump CutDo not soothe. Show the skip.",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Match on Action",
+          "url": "https://melies.co/cinematic-techniques/editing/match-action"
+        },
+        {
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Jump CutDo not soothe. Show the skip.",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+          "alt": "Crash Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/30e16a300df23158df8edae534b8363d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+          "alt": "Jump Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Crash Zoom In is a continuous, fast focal-length change. An axial cut is a splice.A Jump Cut skips time in a similar size; axial cut skips distance on one axis. Match on Action needs a bridging gesture; axial cut can hit a still figure.A push-in has parallax; a punch-in crop of one take has none, and is a cheaper cousin of a true closer camera on the same axis.Crash Zoom InPunctuate a hit, a realization, or a comic sting.Jump CutDo not soothe. Show the skip.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Birds sends Lydia through successive closer views of the dead farmer, the axis held, the scale jumping. The Shining uses hard axial emphasis on rooms and faces so space feels like a trap."
+        },
+        {
+          "type": "paragraph",
+          "text": "Goodfellas punches in for recognition rather than a polite zoom. Use the snap, not a copied kitchen."
+        },
+        {
+          "type": "list-item",
+          "text": "The Birds 1963Lydia’s discovery of the dead farmer is emphasized through successive closer views.",
+          "displayText": "The Birds 1963\nLydia’s discovery of the dead farmer is emphasized through successive closer views."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Birds sends Lydia through successive closer views of the dead farmer, the axis held, the scale jumping. The Shining uses hard axial emphasis on rooms and faces so space feels like a trap.Goodfellas punches in for recognition rather than a polite zoom. Use the snap, not a copied kitchen.The Birds 1963Lydia’s discovery of the dead farmer is emphasized through successive closer views."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Axial cut jumping toward or away from [Subject] along the lens axis, punch-in without a zoom, a snap of scale. Name two or three matched framings, same angle, same pose, hard cuts."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, do not ask the model to zoom; ask for a cut between a wide and a close on the same axis."
+        },
+        {
+          "type": "quote",
+          "text": "A librarian notices an impossible new date stamped inside an old book. Make three hard cuts on the same axis: desk-wide, book close-up, extreme close-up of the date. Keep the page and hands fixed, with no zoom animation, morph or lateral angle change. Add exact date text in compositing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+librarian+notices+an+impossible+new+date+stamped+inside+an+old+book.+Make+three+hard+cuts+on+the+same+axis:+desk-wide,+book+close-up,+extreme+close-up+of+the+date.+Keep+the+page+and+hands+fixed,+with+no+zoom+animation,+morph+or+lateral+angle+change.+Add+exact+date+text+in+compositing."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Axial cut jumping toward or away from [Subject] along the lens axis, punch-in without a zoom, a snap of scale. Name two or three matched framings, same angle, same pose, hard cuts.For video, do not ask the model to zoom; ask for a cut between a wide and a close on the same axis.Copy promptUse in Video GeneratorA librarian notices an impossible new date stamped inside an old book. Make three hard cuts on the same axis: desk-wide, book close-up, extreme close-up of the date. Keep the page and hands fixed, with no zoom animation, morph or lateral angle change. Add exact date text in compositing.A librarian notices an impossible new date stamped inside an old book. Make three hard cuts on the same axis: desk-wide, book close-up, extreme close-up of the date. Keep the page and hands fixed, with no zoom animation, morph or lateral angle change. Add exact date text in compositing."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Crash Zoom In or a digital crop sold as a camera move. The tell: the lens breathes, or the angle walks off axis, or the subject morphs larger.",
+          "links": [
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: two (or three) still-matched compositions, same axis, hard cuts, pose locked."
+        }
+      ],
+      "links": [
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Crash Zoom In or a digital crop sold as a camera move. The tell: the lens breathes, or the angle walks off axis, or the subject morphs larger.The fix: two (or three) still-matched compositions, same axis, hard cuts, pose locked."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Axial Cut in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An axial cut jumps closer or farther along the same camera axis. Both sides of the join share an angle; only shot size changes, as a snap rather than a move."
+        },
+        {
+          "type": "heading",
+          "text": "Axial Cut vs Crash Zoom In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A crash zoom is a continuous optical move. An axial cut is an edit between matched distances on one axis. One is a whoosh; the other is a punch."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Axial Cut?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to change shot size without changing angle, when recognition should shock. Do not use it when you want the camera to walk or the lens to zoom in time."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Axial Cut for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for matched wide and close frames on the same axis, then a hard cut. Example: Axial cut jumping toward [Subject] along the lens axis, punch-in without a zoom. No zoom animation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Axial Cut in film?An axial cut jumps closer or farther along the same camera axis. Both sides of the join share an angle; only shot size changes, as a snap rather than a move.Axial Cut vs Crash Zoom InA crash zoom is a continuous optical move. An axial cut is an edit between matched distances on one axis. One is a whoosh; the other is a punch.When should I use Axial Cut?Use it to change shot size without changing angle, when recognition should shock. Do not use it when you want the camera to walk or the lens to zoom in time.How do I prompt Axial Cut for AI image or video?Ask for matched wide and close frames on the same axis, then a hard cut. Example: Axial cut jumping toward [Subject] along the lens axis, punch-in without a zoom. No zoom animation."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Axial cut jumping toward or away from [Subject] along the lens axis, punch-in without a zoom, a snap of scale. Name two or three matched framings, same angle, same pose, hard cuts.",
+      "For video, do not ask the model to zoom; ask for a cut between a wide and a close on the same axis."
+    ],
+    "example": "A librarian notices an impossible new date stamped inside an old book. Make three hard cuts on the same axis: desk-wide, book close-up, extreme close-up of the date. Keep the page and hands fixed, with no zoom animation, morph or lateral angle change. Add exact date text in compositing."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/9bcd543d80e94c3b9d9c68405e7a75d4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/177-axial-cut-and-punch-in-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8e36f1dab06b9b4dadc032bc5bf1a00e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/axial-cut-177-axial-cut-and-punch-in-cut-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/033b910b2f68a6f6a9c625a023f65776.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/axial-cut.jpg",
+      "alt": "Axial Cut frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": "Crash Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/30e16a300df23158df8edae534b8363d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+      "alt": "Jump Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c262e05880a61022f29fcf860b72e406.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/axial-cut/hero.jpg",
+      "alt": "Axial Cut",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "c497f3395142ebe453cc5e1497ee3a15b8f487e32637d1fae5fdefb9347309d3"
+}

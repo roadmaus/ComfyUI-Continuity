@@ -1,0 +1,386 @@
+{
+  "id": "viral-looks/penguin-ride",
+  "slug": "penguin-ride",
+  "title": "Penguin Ride",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/penguin-ride",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/penguin-ride-penguin-ride-mini.webp",
+  "detail": "details/viral-looks/penguin-ride.json",
+  "aliases": [],
+  "description": "Penguin ride, as a penguin ride preset, is an absurd mount played straight: a person on a penguin through ice, slush, or the wrong city. The vehicle is the joke, and a penguin standing next to a person is not the sentence.",
+  "thumbnail": "media/63b1162883c67f3a759b3e3cae07df69.webp",
+  "video": "media/a87a2591dbdbd3e5746b5a9aa99d52f8.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/penguin-ride-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Gags and dream logistics: documentary camera, horizon honest, face committed. Ice in the air or city slush."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolphin ride is bright water. Skatedog is pavement sport."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is a flightless bird as engine, which is already funny if you do not wink. It is the wrong tool for a nature film that respects penguins, and the wrong tool if the animal is only a companion in frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mounted. Moving."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Gags and dream logistics: documentary camera, horizon honest, face committed. Ice in the air or city slush.Dolphin ride is bright water. Skatedog is pavement sport.This is a flightless bird as engine, which is already funny if you do not wink. It is the wrong tool for a nature film that respects penguins, and the wrong tool if the animal is only a companion in frame.Mounted. Moving."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wide, rider height or slightly low, 24mm to 35mm. Ice, snow, or an inappropriate street."
+        },
+        {
+          "type": "paragraph",
+          "text": "Overcast white or hard polar sun. Animal fully readable, person mounted, slush or ice crystals in air."
+        },
+        {
+          "type": "paragraph",
+          "text": "Still: Penguin-ride of [Subject], an absurd mount, ice gag, tourism of the wrong animal. Video: [Subject] rides a penguin through ice or city, a straight-faced gag."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Wide, rider height or slightly low, 24mm to 35mm. Ice, snow, or an inappropriate street.Overcast white or hard polar sun. Animal fully readable, person mounted, slush or ice crystals in air.Still: Penguin-ride of [Subject], an absurd mount, ice gag, tourism of the wrong animal. Video: [Subject] rides a penguin through ice or city, a straight-faced gag."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A gag commute, a dream of ice tourism, a postcard that cannot be true. Do not use it in wildlife coverage, and do not park the penguin beside the person."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A gag commute, a dream of ice tourism, a postcard that cannot be true. Do not use it in wildlife coverage, and do not park the penguin beside the person."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dolphin Ride is sea and splash. Skatedog is low pavement sport.",
+          "links": [
+            {
+              "text": "Dolphin Ride",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/dolphin-ride"
+            },
+            {
+              "text": "Skatedog",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/skatedog"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Puffin Ride is cliffs and a flying seabird. Penguin ride is ice or wrong city, flightless mount, same postcard law.",
+          "links": [
+            {
+              "text": "Puffin Ride",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/puffin-ride"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dolphin RideThe gag is the vehicle.",
+          "displayText": "Dolphin Ride\nThe gag is the vehicle.",
+          "links": [
+            {
+              "text": "Dolphin RideThe gag is the vehicle.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/dolphin-ride"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SkatedogKeep it stupid and low.",
+          "displayText": "Skatedog\nKeep it stupid and low.",
+          "links": [
+            {
+              "text": "SkatedogKeep it stupid and low.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/skatedog"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolphin Ride",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/dolphin-ride"
+        },
+        {
+          "text": "Skatedog",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/skatedog"
+        },
+        {
+          "text": "Puffin Ride",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/puffin-ride"
+        },
+        {
+          "text": "Dolphin RideThe gag is the vehicle.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/dolphin-ride"
+        },
+        {
+          "text": "SkatedogKeep it stupid and low.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/skatedog"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/712cfdcdd4c1727734dcb641639f6b95.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolphin-ride-dolphin-ride-mini.webp",
+          "alt": "Dolphin Ride"
+        },
+        {
+          "kind": "video",
+          "path": "media/af8e388232811dc06457f90921274fb2.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolphin-ride-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7c5498f21901b1a4ef31e584def40a09.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/skatedog-skatedog-mini.webp",
+          "alt": "Skatedog"
+        },
+        {
+          "kind": "video",
+          "path": "media/b4cdcfecc62dc06c6d1e03cfd69171ad.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/skatedog-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Dolphin Ride is sea and splash. Skatedog is low pavement sport.Puffin Ride is cliffs and a flying seabird. Penguin ride is ice or wrong city, flightless mount, same postcard law.Dolphin RideThe gag is the vehicle.SkatedogKeep it stupid and low.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "There is no canonical penguin-ride feature. Borrow ice-and-body grammar from polar coverage and play the mount as viral impossible tourism."
+        },
+        {
+          "type": "paragraph",
+          "text": "Postcard law: it looks like it happened."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film There is no canonical penguin-ride feature. Borrow ice-and-body grammar from polar coverage and play the mount as viral impossible tourism.Postcard law: it looks like it happened."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mounted, ice, no wink. Penguin-ride of [Subject], an absurd mount, ice gag, tourism of the wrong animal."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add wide lens, readable penguin, slush in air, face committed. Video: [Subject] rides a penguin through ice or city, a straight-faced gag."
+        },
+        {
+          "type": "quote",
+          "text": "[Subject] rides a penguin through ice or city, a straight-faced gag."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=[Subject]+rides+a+penguin+through+ice+or+city,+a+straight-faced+gag."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Mounted, ice, no wink. Penguin-ride of [Subject], an absurd mount, ice gag, tourism of the wrong animal.Add wide lens, readable penguin, slush in air, face committed. Video: [Subject] rides a penguin through ice or city, a straight-faced gag.Copy promptUse in Video Generator[Subject] rides a penguin through ice or city, a straight-faced gag.[Subject] rides a penguin through ice or city, a straight-faced gag."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A penguin standing next to a person, or a wink. The tell is no mount."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: they are on the bird, it is moving, ice or slush in the air, documentary camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong A penguin standing next to a person, or a wink. The tell is no mount.Fix it: they are on the bird, it is moving, ice or slush in the air, documentary camera."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Penguin Ride in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A straight-faced mount gag on a penguin, usually through ice or a wrong city. The animal is the engine. Standing beside it does not count."
+        },
+        {
+          "type": "heading",
+          "text": "Penguin Ride vs Dolphin Ride",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolphin ride is bright water and a cetacean. Penguin ride is ice, slush, a flightless mount. Same documentary postcard, different physics."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Penguin Ride?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Gags and dream logistics. Skip respectful nature films."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Penguin Ride for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Wide ice or city, mounted [Subject], then: Penguin-ride of [Subject], an absurd mount, ice gag, tourism of the wrong animal. Video: [Subject] rides a penguin through ice or city. Face committed."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Penguin Ride in film?A straight-faced mount gag on a penguin, usually through ice or a wrong city. The animal is the engine. Standing beside it does not count.Penguin Ride vs Dolphin RideDolphin ride is bright water and a cetacean. Penguin ride is ice, slush, a flightless mount. Same documentary postcard, different physics.When should I use Penguin Ride?Gags and dream logistics. Skip respectful nature films.How do I prompt Penguin Ride for AI image or video?Wide ice or city, mounted [Subject], then: Penguin-ride of [Subject], an absurd mount, ice gag, tourism of the wrong animal. Video: [Subject] rides a penguin through ice or city. Face committed."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Mounted, ice, no wink. Penguin-ride of [Subject], an absurd mount, ice gag, tourism of the wrong animal.",
+      "Add wide lens, readable penguin, slush in air, face committed. Video: [Subject] rides a penguin through ice or city, a straight-faced gag."
+    ],
+    "example": "[Subject] rides a penguin through ice or city, a straight-faced gag."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/a87a2591dbdbd3e5746b5a9aa99d52f8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/penguin-ride-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/63b1162883c67f3a759b3e3cae07df69.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/penguin-ride-penguin-ride-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c240342d6273de805cbce86faa49fcad.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/penguin-ride.jpg",
+      "alt": "Penguin Ride frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/712cfdcdd4c1727734dcb641639f6b95.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolphin-ride-dolphin-ride-mini.webp",
+      "alt": "Dolphin Ride"
+    },
+    {
+      "kind": "video",
+      "path": "media/af8e388232811dc06457f90921274fb2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolphin-ride-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7c5498f21901b1a4ef31e584def40a09.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/skatedog-skatedog-mini.webp",
+      "alt": "Skatedog"
+    },
+    {
+      "kind": "video",
+      "path": "media/b4cdcfecc62dc06c6d1e03cfd69171ad.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/skatedog-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/52caa3d328e5c05642566dfdb529ec40.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/penguin-ride/hero.jpg",
+      "alt": "Penguin Ride",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "ddcaf829c9b7e18cb545badd2b4771df0b670b163d3fa2f4e2909eaeca9435a8"
+}

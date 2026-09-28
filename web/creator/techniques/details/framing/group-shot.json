@@ -1,0 +1,373 @@
+{
+  "id": "framing/group-shot",
+  "slug": "group-shot",
+  "title": "Group Shot",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/group-shot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/group-shot.webp",
+  "detail": "details/framing/group-shot.json",
+  "aliases": [],
+  "description": "A group shot frames a small ensemble as a relational unit, such as a family, a crew, or a jury. Position, height, and light say who belongs and who dominates.",
+  "thumbnail": "media/8856451ac171821d93803a9aab56af80.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A group shot is not a crowd still. It is a unit: people who share a table, a job, a crime, a bloodline."
+        },
+        {
+          "type": "paragraph",
+          "text": "The audience should be able to rank them at a glance: who sits, who stands, who is brightest, who is at the edge. It is the wrong tool when the politics are only two or three principals, or when you needed a master of action rather than a portrait of the unit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lighting everyone the same makes a yearbook. Let one face own the key, or let depth split generations."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A group shot is not a crowd still. It is a unit: people who share a table, a job, a crime, a bloodline.The audience should be able to rank them at a glance: who sits, who stands, who is brightest, who is at the edge. It is the wrong tool when the politics are only two or three principals, or when you needed a master of action rather than a portrait of the unit.Lighting everyone the same makes a yearbook. Let one face own the key, or let depth split generations."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stage in layers: seated foreground, standing mid, a doorway back. Who is highest, central, nearest, brightest."
+        },
+        {
+          "type": "paragraph",
+          "text": "A slightly wider lens (35mm to 50mm) holds the unit without turning them into ants; go longer if you want compression to stack them. Prompt: Group shot containing [Subject] among several figures, ensemble blocking, who owns the frame by position and light."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Stage in layers: seated foreground, standing mid, a doorway back. Who is highest, central, nearest, brightest.A slightly wider lens (35mm to 50mm) holds the unit without turning them into ants; go longer if you want compression to stack them. Prompt: Group shot containing [Subject] among several figures, ensemble blocking, who owns the frame by position and light."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a family, a crew, a jury: the unit as the subject. Do not light every face equally if someone owns the room, and do not use a group shot when the beat has become a two-person fight."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a family, a crew, a jury: the unit as the subject. Do not light every face equally if someone owns the room, and do not use a group shot when the beat has become a two-person fight."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Three-Shot is specifically three principals. A Master Shot covers the complete action; a group shot may be that master, or it may be a posed unit inside a larger scene.",
+          "links": [
+            {
+              "text": "Three-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+            },
+            {
+              "text": "Master Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Two-Shot is a pair. Group means the ensemble is the relation, usually more than three, still small enough to read as people rather than a mob.",
+          "links": [
+            {
+              "text": "Two-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-ShotA trio has politics.",
+          "displayText": "Three-Shot\nA trio has politics.",
+          "links": [
+            {
+              "text": "Three-ShotA trio has politics.",
+              "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Master ShotProtect the scene. You can always go tighter.",
+          "displayText": "Master Shot\nProtect the scene. You can always go tighter.",
+          "links": [
+            {
+              "text": "Master ShotProtect the scene. You can always go tighter.",
+              "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Three-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+        },
+        {
+          "text": "Master Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+        },
+        {
+          "text": "Two-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        },
+        {
+          "text": "Three-ShotA trio has politics.",
+          "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+        },
+        {
+          "text": "Master ShotProtect the scene. You can always go tighter.",
+          "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/993aa813c3ad1027061cf473597be748.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-shot.webp",
+          "alt": "Three-Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/b25d5a381b507fb58a45e000e1880381.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/master-shot.webp",
+          "alt": "Master Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Three-Shot is specifically three principals. A Master Shot covers the complete action; a group shot may be that master, or it may be a posed unit inside a larger scene.A Two-Shot is a pair. Group means the ensemble is the relation, usually more than three, still small enough to read as people rather than a mob.Three-ShotA trio has politics.Master ShotProtect the scene. You can always go tighter.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Godfather stages families and crews so rank is seating, light, and who gets the center. Parasite uses household groupings the same way: who serves, who sits, who stands in a doorway."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: the unit, ranked."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Godfather stages families and crews so rank is seating, light, and who gets the center. Parasite uses household groupings the same way: who serves, who sits, who stands in a doorway.Grammar: the unit, ranked."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the unit and the owner. Example: Group shot containing [Subject] among several figures, ensemble blocking, who owns the frame by position and light."
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify count (five at a table, a crew of six) and who is brightest or highest. For video, a small shift in who stands can re-rank the group without a cut."
+        },
+        {
+          "type": "quote",
+          "text": "Group shot containing [Subject] among several figures, ensemble blocking, who owns the frame by position and light."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Group+shot+containing+[Subject]+among+several+figures,+ensemble+blocking,+who+owns+the+frame+by+position+and+light."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the unit and the owner. Example: Group shot containing [Subject] among several figures, ensemble blocking, who owns the frame by position and light.Specify count (five at a table, a crew of six) and who is brightest or highest. For video, a small shift in who stands can re-rank the group without a cut.Copy promptUse in Image GeneratorGroup shot containing [Subject] among several figures, ensemble blocking, who owns the frame by position and light.Group shot containing [Subject] among several figures, ensemble blocking, who owns the frame by position and light."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Three-Shot labeled group, or a Master Shot so wide the faces die. The tell is three people, or a mob with no rank.",
+          "links": [
+            {
+              "text": "Three-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+            },
+            {
+              "text": "Master Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: a small ensemble, readable faces, one person owning position or key."
+        }
+      ],
+      "links": [
+        {
+          "text": "Three-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+        },
+        {
+          "text": "Master Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Three-Shot labeled group, or a Master Shot so wide the faces die. The tell is three people, or a mob with no rank.Fix: a small ensemble, readable faces, one person owning position or key."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Group Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A group shot frames a small ensemble as one relational unit so belonging and dominance read through blocking and light. It is more than a trio, still small enough that people remain individuals."
+        },
+        {
+          "type": "heading",
+          "text": "Group Shot vs Three-Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A three-shot is three principals and their triangle. A group shot is a larger unit: family, crew, jury. If you only have three named people, write three-shot. If the unit is the household or the crew, write group."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Group Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the ensemble is the subject and rank should be visible. Do not use it for a pair or a trio, and do not flatten everyone with equal light."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Group Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Group shot containing [Subject] among several figures, ensemble blocking, who owns the frame by position and light. Give a head count and name the dominant body."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Group Shot in film?A group shot frames a small ensemble as one relational unit so belonging and dominance read through blocking and light. It is more than a trio, still small enough that people remain individuals.Group Shot vs Three-ShotA three-shot is three principals and their triangle. A group shot is a larger unit: family, crew, jury. If you only have three named people, write three-shot. If the unit is the household or the crew, write group.When should I use Group Shot?Use it when the ensemble is the subject and rank should be visible. Do not use it for a pair or a trio, and do not flatten everyone with equal light.How do I prompt Group Shot for AI image or video?Write Group shot containing [Subject] among several figures, ensemble blocking, who owns the frame by position and light. Give a head count and name the dominant body."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the unit and the owner. Example: Group shot containing [Subject] among several figures, ensemble blocking, who owns the frame by position and light.",
+      "Specify count (five at a table, a crew of six) and who is brightest or highest. For video, a small shift in who stands can re-rank the group without a cut."
+    ],
+    "example": "Group shot containing [Subject] among several figures, ensemble blocking, who owns the frame by position and light."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/8856451ac171821d93803a9aab56af80.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/group-shot.webp",
+      "alt": "Group Shot example"
+    },
+    {
+      "kind": "image",
+      "path": "media/993aa813c3ad1027061cf473597be748.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-shot.webp",
+      "alt": "Three-Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/b25d5a381b507fb58a45e000e1880381.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/master-shot.webp",
+      "alt": "Master Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/135e61d74739f4570038c60b8734a54d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/group-shot/hero.jpg",
+      "alt": "Group Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "3491178b9ae26d499b92a709a029a06fef66301bc0f28e9d581886f7090ee320"
+}

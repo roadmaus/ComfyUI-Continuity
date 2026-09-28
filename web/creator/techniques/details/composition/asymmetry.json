@@ -1,0 +1,387 @@
+{
+  "id": "composition/asymmetry",
+  "slug": "asymmetry",
+  "title": "Asymmetry",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/asymmetry",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/asymmetry.webp",
+  "detail": "details/composition/asymmetry.json",
+  "aliases": [],
+  "description": "Asymmetry, or asymmetrical composition, offsets the dominant mass and answers it with a different kind of weight: color, light, a small face, a dark void, or a distant doorway. The frame does not mirror, so leftover space is a counterweight rather than a matching wing.",
+  "thumbnail": "media/4aa8809e69b8801f562128547133cdcd.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Who owns space is unsettled. A woman in a corridor may occupy a sliver while red wallpaper and a lamp own the rest."
+        },
+        {
+          "type": "paragraph",
+          "text": "A driver may sit in a third of night while neon and road own the surplus. The counterweight is the point, not the empty accident of a bad mark."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the scene is a ceremony of order. If both sides should salute, shoot the mirror."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the character should be presented as an altar, do not hide them in a wing. Asymmetry is not automatically thirds."
+        },
+        {
+          "type": "paragraph",
+          "text": "Thirds is one recipe for offset. You can hang a figure in a far corner and balance them with a bright speck, which is visual weight, not a student grid."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Who owns space is unsettled. A woman in a corridor may occupy a sliver while red wallpaper and a lamp own the rest.A driver may sit in a third of night while neon and road own the surplus. The counterweight is the point, not the empty accident of a bad mark.It is the wrong tool when the scene is a ceremony of order. If both sides should salute, shoot the mirror.If the character should be presented as an altar, do not hide them in a wing. Asymmetry is not automatically thirds.Thirds is one recipe for offset. You can hang a figure in a far corner and balance them with a bright speck, which is visual weight, not a student grid."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place the main body off the centerline. Find a counterweight: a practical, a second figure, a block of color, a window."
+        },
+        {
+          "type": "paragraph",
+          "text": "Check the frame on a monitor without overlay first. If it tips over, add weight or crop."
+        },
+        {
+          "type": "paragraph",
+          "text": "A slightly wide lens (32mm to 40mm) lets the unused field stay a real place. Prompt: Asymmetrical balance with [Subject] offset, counterweights of color or mass, tension instead of mirror."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place the main body off the centerline. Find a counterweight: a practical, a second figure, a block of color, a window.Check the frame on a monitor without overlay first. If it tips over, add weight or crop.A slightly wide lens (32mm to 40mm) lets the unused field stay a real place. Prompt: Asymmetrical balance with [Subject] offset, counterweights of color or mass, tension instead of mirror."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for desire, class, loneliness, and any conversation where the room is not fair. Do not use it as a default mess: unmotivated clutter is not balance."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for desire, class, loneliness, and any conversation where the room is not fair. Do not use it as a default mess: unmotivated clutter is not balance."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rule of Thirds is a specific offset grid. Asymmetry is the larger family.",
+          "links": [
+            {
+              "text": "Rule of Thirds",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Visual Weight is the currency that makes an unequal picture hold. Symmetry is the opposite claim.",
+          "links": [
+            {
+              "text": "Visual Weight",
+              "url": "https://melies.co/cinematic-techniques/composition/visual-weight"
+            },
+            {
+              "text": "Symmetry",
+              "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Short Siding is a harsh asymmetric trap that denies look-space rather than composing a counterweight. Negative Space lets emptiness itself be the other mass.",
+          "links": [
+            {
+              "text": "Short Siding",
+              "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+            },
+            {
+              "text": "Negative Space",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Visual WeightThe eye should land where the story is.",
+          "displayText": "Visual Weight\nThe eye should land where the story is.",
+          "links": [
+            {
+              "text": "Visual WeightThe eye should land where the story is.",
+              "url": "https://melies.co/cinematic-techniques/composition/visual-weight"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Golden RatioA more secret order than thirds.",
+          "displayText": "Golden Ratio\nA more secret order than thirds.",
+          "links": [
+            {
+              "text": "Golden RatioA more secret order than thirds.",
+              "url": "https://melies.co/cinematic-techniques/composition/golden-ratio"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Rule of Thirds",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        },
+        {
+          "text": "Visual Weight",
+          "url": "https://melies.co/cinematic-techniques/composition/visual-weight"
+        },
+        {
+          "text": "Symmetry",
+          "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+        },
+        {
+          "text": "Short Siding",
+          "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+        },
+        {
+          "text": "Negative Space",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        },
+        {
+          "text": "Visual WeightThe eye should land where the story is.",
+          "url": "https://melies.co/cinematic-techniques/composition/visual-weight"
+        },
+        {
+          "text": "Golden RatioA more secret order than thirds.",
+          "url": "https://melies.co/cinematic-techniques/composition/golden-ratio"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        },
+        {
+          "kind": "image",
+          "path": "media/b912105d62d1a5737291d24c7df04440.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/visual-weight.webp",
+          "alt": "Visual Weight"
+        },
+        {
+          "kind": "image",
+          "path": "media/820f9b78f9bd93714cc8ce3feb2a5f5f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-ratio.webp",
+          "alt": "Golden Ratio"
+        }
+      ],
+      "sourceText": "Compared with similar shots Rule of Thirds is a specific offset grid. Asymmetry is the larger family.Visual Weight is the currency that makes an unequal picture hold. Symmetry is the opposite claim.Short Siding is a harsh asymmetric trap that denies look-space rather than composing a counterweight. Negative Space lets emptiness itself be the other mass.Rule of ThirdsDefault dynamic balance. Break it later on purpose.Visual WeightThe eye should land where the story is.Golden RatioA more secret order than thirds."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In the Mood for Love parks bodies in corridors and door gaps so wallpaper, lamps, and rain own as much as faces. Drive lets night, steel, and neon outweigh a still driver."
+        },
+        {
+          "type": "paragraph",
+          "text": "The pictures hold because something answers the offset. Grammar, not mood boards."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film In the Mood for Love parks bodies in corridors and door gaps so wallpaper, lamps, and rain own as much as faces. Drive lets night, steel, and neon outweigh a still driver.The pictures hold because something answers the offset. Grammar, not mood boards."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the offset and the answer. Asymmetrical balance with [Subject] offset, counterweights of color or mass, tension instead of mirror."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say which side holds the body and what holds the other side (lamp, doorway, red wall, dark road). Do not write unbalanced as a mood."
+        },
+        {
+          "type": "quote",
+          "text": "Asymmetrical balance with [Subject] offset, counterweights of color or mass, tension instead of mirror."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Asymmetrical+balance+with+[Subject]+offset,+counterweights+of+color+or+mass,+tension+instead+of+mirror."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the offset and the answer. Asymmetrical balance with [Subject] offset, counterweights of color or mass, tension instead of mirror.Say which side holds the body and what holds the other side (lamp, doorway, red wall, dark road). Do not write unbalanced as a mood.Copy promptUse in Image GeneratorAsymmetrical balance with [Subject] offset, counterweights of color or mass, tension instead of mirror.Asymmetrical balance with [Subject] offset, counterweights of color or mass, tension instead of mirror."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a failed centered shot. The tell is a person who missed their mark and nothing answering them."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to add a real counterweight, move them to a thirds intersection, or recenter and own Symmetry.",
+          "links": [
+            {
+              "text": "Symmetry",
+              "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Symmetry",
+          "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a failed centered shot. The tell is a person who missed their mark and nothing answering them.The fix is to add a real counterweight, move them to a thirds intersection, or recenter and own Symmetry."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is asymmetry in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a composition that does not mirror. The main mass sits off-axis and is answered by a different mass: light, color, a small figure, empty weather. The frame holds by tension, not by reflection."
+        },
+        {
+          "type": "heading",
+          "text": "Asymmetry vs Rule of Thirds",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Thirds is one offset recipe: lines at one-third. Asymmetry includes thirds and also stranger diagrams, a body in a corner balanced by a bright speck or a void. If you only know thirds, every offset will look like homework."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use asymmetry?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the room is not fair: desire, class, isolation, a look that cannot have a mirror. Do not use it as leftover clutter. If nothing answers the offset, the picture just tips."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt asymmetry for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "State the offset and the counterweight. Example: Asymmetrical balance with [Subject] offset, counterweights of color or mass, tension instead of mirror. Name the side and the answering object. Avoid the word messy unless mess is the counterweight."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is asymmetry in film?It is a composition that does not mirror. The main mass sits off-axis and is answered by a different mass: light, color, a small figure, empty weather. The frame holds by tension, not by reflection.Asymmetry vs Rule of ThirdsThirds is one offset recipe: lines at one-third. Asymmetry includes thirds and also stranger diagrams, a body in a corner balanced by a bright speck or a void. If you only know thirds, every offset will look like homework.When should I use asymmetry?Use it when the room is not fair: desire, class, isolation, a look that cannot have a mirror. Do not use it as leftover clutter. If nothing answers the offset, the picture just tips.How do I prompt asymmetry for AI image or video?State the offset and the counterweight. Example: Asymmetrical balance with [Subject] offset, counterweights of color or mass, tension instead of mirror. Name the side and the answering object. Avoid the word messy unless mess is the counterweight."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the offset and the answer. Asymmetrical balance with [Subject] offset, counterweights of color or mass, tension instead of mirror.",
+      "Say which side holds the body and what holds the other side (lamp, doorway, red wall, dark road). Do not write unbalanced as a mood."
+    ],
+    "example": "Asymmetrical balance with [Subject] offset, counterweights of color or mass, tension instead of mirror."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/4aa8809e69b8801f562128547133cdcd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/asymmetry.webp",
+      "alt": "Asymmetry example"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/b912105d62d1a5737291d24c7df04440.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/visual-weight.webp",
+      "alt": "Visual Weight"
+    },
+    {
+      "kind": "image",
+      "path": "media/820f9b78f9bd93714cc8ce3feb2a5f5f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-ratio.webp",
+      "alt": "Golden Ratio"
+    },
+    {
+      "kind": "image",
+      "path": "media/43601bd32163c346bbd6d7e3f80cec23.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/asymmetry/hero.jpg",
+      "alt": "Asymmetry",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "b5c21caf1bd22b4c84b187afeabffec94e705bcefb8d8ba8d5fa4cc80ea42e09"
+}

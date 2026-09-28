@@ -1,0 +1,430 @@
+{
+  "id": "camera-movement/camera-roll",
+  "slug": "camera-roll",
+  "title": "Camera Roll",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/camera-roll",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/camera-roll-016-camera-roll-mini.webp",
+  "detail": "details/camera-movement/camera-roll.json",
+  "aliases": [
+    "Roll set",
+    "Revolving room"
+  ],
+  "description": "A camera roll rotates the frame around the lens axis as if the world has lost its up, either by rolling the camera or by rotating a room around a weighted body. Gravity becomes optional, which is stronger than a small Dutch cant.",
+  "thumbnail": "media/d2d53ff1041eb987820d34d5c024fc89.webp",
+  "video": "media/91f52bd41b8df84cbe73edca6ab15991.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/016-camera-roll-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A familiar corridor can become an unstable physical system. The effect is strongest when bodies retain weight and surfaces remain solid: people walk on walls because the set or the camera has rewritten up."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a 15-degree unease, and the wrong tool if you only tilted the image in post with no sense of mass. A tilted still is not a room physically rotating."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A familiar corridor can become an unstable physical system. The effect is strongest when bodies retain weight and surfaces remain solid: people walk on walls because the set or the camera has rewritten up.It is the wrong tool for a 15-degree unease, and the wrong tool if you only tilted the image in post with no sense of mass. A tilted still is not a room physically rotating."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Either roll the camera continuously around the optical axis, or build a rotating set and keep the camera's relationship designed. Practical work needs engineered sets, restrained objects, and stunt coordination."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a full camera roll, the frame rotating as if the world has lost its up, or a rotating corridor with weighted bodies."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Either roll the camera continuously around the optical axis, or build a rotating set and keep the camera's relationship designed. Practical work needs engineered sets, restrained objects, and stunt coordination.Prompt a full camera roll, the frame rotating as if the world has lost its up, or a rotating corridor with weighted bodies."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when gravity is optional. Concrete beat: a fight in a hotel corridor whose floor becomes a wall."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not roll a quiet dialogue that only needed a Dutch."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when gravity is optional. Concrete beat: a fight in a hotel corridor whose floor becomes a wall.Do not roll a quiet dialogue that only needed a Dutch."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Dutch Roll is a slow transition into a cant. A Dutch Angle is frozen.",
+          "links": [
+            {
+              "text": "Dutch Roll",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+            },
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An 360-Degree Orbit circles a subject in yaw, changing azimuth, not rolling the horizon around the lens. Camera roll is about up and down swapping, not about walking around someone.",
+          "links": [
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dutch RollUnease that arrives in time, not as a still cant.",
+          "displayText": "Dutch Roll\nUnease that arrives in time, not as a still cant.",
+          "links": [
+            {
+              "text": "Dutch RollUnease that arrives in time, not as a still cant.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "displayText": "360-Degree Orbit\nTime collapses around one person: kiss, threat, or product hero.",
+          "links": [
+            {
+              "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dutch Roll",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+        },
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Dutch RollUnease that arrives in time, not as a still cant.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+        },
+        {
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/bb8189d9c5960a57f1ebb107154d2464.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-roll-dutch-roll-mini.webp",
+          "alt": "Dutch Roll"
+        },
+        {
+          "kind": "video",
+          "path": "media/cd5fb60adefb4ef7a32067187d802aa7.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dutch-roll-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+          "alt": "360-Degree Orbit"
+        },
+        {
+          "kind": "video",
+          "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Dutch Roll is a slow transition into a cant. A Dutch Angle is frozen.An 360-Degree Orbit circles a subject in yaw, changing azimuth, not rolling the horizon around the lens. Camera roll is about up and down swapping, not about walking around someone.Dutch RollUnease that arrives in time, not as a still cant.360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Inception's hotel corridor fight is a rotating set with weighted bodies. 2001: A Space Odyssey moves through circular spacecraft interiors so walking in a ring redefines down."
+        },
+        {
+          "type": "paragraph",
+          "text": "Distinguish the rotating room from a simple tilted grade."
+        },
+        {
+          "type": "list-item",
+          "text": "Inception 2010Arthur fights in the rotating hotel corridor.",
+          "displayText": "Inception 2010\nArthur fights in the rotating hotel corridor."
+        },
+        {
+          "type": "list-item",
+          "text": "2001: A Space Odyssey 1968Movement through the spacecraft’s circular interior.",
+          "displayText": "2001: A Space Odyssey 1968\nMovement through the spacecraft’s circular interior."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/77aa147a5ab0ca92af49444ecd80e7e6.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/camera-roll/famous/00-inception-2010.jpg",
+          "alt": "Inception 2010"
+        }
+      ],
+      "sourceText": "In film Inception's hotel corridor fight is a rotating set with weighted bodies. 2001: A Space Odyssey moves through circular spacecraft interiors so walking in a ring redefines down.Distinguish the rotating room from a simple tilted grade.Inception 2010Arthur fights in the rotating hotel corridor.2001: A Space Odyssey 1968Movement through the spacecraft’s circular interior."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Full camera roll around [Subject], the frame rotating as if the world has lost its up, disorientation or dance-floor physics. For motion: the camera rolls continuously around its lens axis with [Subject] in frame."
+        },
+        {
+          "type": "quote",
+          "text": "A rigid hotel corridor slowly rolls ninety degrees while a courier braces against a wall that becomes the floor. Maintain coherent gravity, body weight, cloth motion and contact. Previsualize the room rotation in 3D, then generate short connected beats from fixed endpoints. No bending walls or effortless floating."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+rigid+hotel+corridor+slowly+rolls+ninety+degrees+while+a+courier+braces+against+a+wall+that+becomes+the+floor.+Maintain+coherent+gravity,+body+weight,+cloth+motion+and+contact.+Previsualize+the+room+rotation+in+3D,+then+generate+short+connected+beats+from+fixed+endpoints.+No+bending+walls+or+effortless+floating."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Full camera roll around [Subject], the frame rotating as if the world has lost its up, disorientation or dance-floor physics. For motion: the camera rolls continuously around its lens axis with [Subject] in frame.Copy promptUse in Video GeneratorA rigid hotel corridor slowly rolls ninety degrees while a courier braces against a wall that becomes the floor. Maintain coherent gravity, body weight, cloth motion and contact. Previsualize the room rotation in 3D, then generate short connected beats from fixed endpoints. No bending walls or effortless floating.A rigid hotel corridor slowly rolls ninety degrees while a courier braces against a wall that becomes the floor. Maintain coherent gravity, body weight, cloth motion and contact. Previsualize the room rotation in 3D, then generate short connected beats from fixed endpoints. No bending walls or effortless floating."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Dutch Angle or an 360-Degree Orbit. The tell is a still cant, or a camera circling while the horizon stays mostly level.",
+          "links": [
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            },
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: roll around the lens axis, or rotate the room, until up is no longer the top of the frame."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Dutch Angle or an 360-Degree Orbit. The tell is a still cant, or a camera circling while the horizon stays mostly level.The fix: roll around the lens axis, or rotate the room, until up is no longer the top of the frame."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Camera Roll in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is rotation around the lens axis (or a rotating set) so the horizon turns and up is no longer stable."
+        },
+        {
+          "type": "heading",
+          "text": "Camera Roll vs Dutch Roll",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dutch roll eases a level frame into a cant. Camera roll continues the idea until gravity is in question, sometimes with a revolving room rather than a small tilt."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Camera Roll?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the story has unhooked gravity: spacecraft, dream architecture, a dance floor that forgets the floor. Do not use it as a default unease."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Camera Roll for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write camera rolls continuously around its lens axis, or a rotating room with weighted bodies. Name whether the set turns or only the camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Camera Roll in film?It is rotation around the lens axis (or a rotating set) so the horizon turns and up is no longer stable.Camera Roll vs Dutch RollDutch roll eases a level frame into a cant. Camera roll continues the idea until gravity is in question, sometimes with a revolving room rather than a small tilt.When should I use Camera Roll?When the story has unhooked gravity: spacecraft, dream architecture, a dance floor that forgets the floor. Do not use it as a default unease.How do I prompt Camera Roll for AI image or video?Write camera rolls continuously around its lens axis, or a rotating room with weighted bodies. Name whether the set turns or only the camera."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Full camera roll around [Subject], the frame rotating as if the world has lost its up, disorientation or dance-floor physics. For motion: the camera rolls continuously around its lens axis with [Subject] in frame."
+    ],
+    "example": "A rigid hotel corridor slowly rolls ninety degrees while a courier braces against a wall that becomes the floor. Maintain coherent gravity, body weight, cloth motion and contact. Previsualize the room rotation in 3D, then generate short connected beats from fixed endpoints. No bending walls or effortless floating."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/91f52bd41b8df84cbe73edca6ab15991.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/016-camera-roll-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d2d53ff1041eb987820d34d5c024fc89.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/camera-roll-016-camera-roll-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a40e7fb6c066346d1daee9f62c5826c0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/camera-roll.jpg",
+      "alt": "Camera Roll frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/bb8189d9c5960a57f1ebb107154d2464.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-roll-dutch-roll-mini.webp",
+      "alt": "Dutch Roll"
+    },
+    {
+      "kind": "video",
+      "path": "media/cd5fb60adefb4ef7a32067187d802aa7.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dutch-roll-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+      "alt": "360-Degree Orbit"
+    },
+    {
+      "kind": "video",
+      "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/77aa147a5ab0ca92af49444ecd80e7e6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/camera-roll/famous/00-inception-2010.jpg",
+      "alt": "Inception 2010"
+    },
+    {
+      "kind": "image",
+      "path": "media/3d8c1772d1ce0b9a2b11460f99a3234e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/camera-roll/hero.jpg",
+      "alt": "Camera Roll",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "bfa04f39476da9c56b4e87f474be903fef308c748b372b9771e3c487c1a5729f"
+}

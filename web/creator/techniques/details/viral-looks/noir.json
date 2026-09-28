@@ -1,0 +1,355 @@
+{
+  "id": "viral-looks/noir",
+  "slug": "noir",
+  "title": "Noir",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/noir",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/noir.webp",
+  "detail": "details/viral-looks/noir.json",
+  "aliases": [],
+  "description": "Noir, the noir preset look, is wet streets, venetian gobos, and a crime already in the lighting: a motivated hard key, black pools, a face half-deleted. Night is moral, and a dark photo with teal is not this.",
+  "thumbnail": "media/a577410cd7d89cfe54786382c987cef5.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crime, conscience, a city that judges: one practical in the deep, smoke optional, contrast as law. The viral-named version of film-noir grammar."
+        },
+        {
+          "type": "paragraph",
+          "text": "It can stay silver, or go wet neon if you say so. A sitcom kitchen does not want venetian blinds unless the joke is noir."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the key is soft and the blacks are mush. That is moody, not noir."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you wanted color-era melancholy, say neo-noir."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Crime, conscience, a city that judges: one practical in the deep, smoke optional, contrast as law. The viral-named version of film-noir grammar.It can stay silver, or go wet neon if you say so. A sitcom kitchen does not want venetian blinds unless the joke is noir.It is the wrong tool when the key is soft and the blacks are mush. That is moody, not noir.If you wanted color-era melancholy, say neo-noir."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height or slightly low, 35mm, lock-off. Motivated hard key, Gobo Lighting slashes, Wet-Down asphalt, face half in black.",
+          "links": [
+            {
+              "text": "Gobo Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+            },
+            {
+              "text": "Wet-Down",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/wet-down"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "One practical in the deep. Prompt: Noir look on [Subject], wet streets, venetian gobos, a crime already in the lighting."
+        }
+      ],
+      "links": [
+        {
+          "text": "Gobo Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+        },
+        {
+          "text": "Wet-Down",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/wet-down"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Eye height or slightly low, 35mm, lock-off. Motivated hard key, Gobo Lighting slashes, Wet-Down asphalt, face half in black.One practical in the deep. Prompt: Noir look on [Subject], wet streets, venetian gobos, a crime already in the lighting."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A crime beat, a conscience still, a city that judges. Do not use it as a soft dark grade, and do not use it in a sitcom kitchen unless the joke is the blinds."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A crime beat, a conscience still, a city that judges. Do not use it as a soft dark grade, and do not use it in a sitcom kitchen unless the joke is the blinds."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Film Noir is the 1940s crime language this preset compresses. Neo-Noir adds color-era neon and later tech.",
+          "links": [
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            },
+            {
+              "text": "Neo-Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Noir as a named recipe is the wet street, the gobo, the hard key. If the blacks are mush, you shot moody, not this."
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Neo-NoirNoir after color was invented.",
+          "displayText": "Neo-Noir\nNoir after color was invented.",
+          "links": [
+            {
+              "text": "Neo-NoirNoir after color was invented.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Neo-Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Neo-NoirNoir after color was invented.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        },
+        {
+          "kind": "image",
+          "path": "media/ea5ae8a2e30baa75c39a22cd02fb3d7b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neo-noir.webp",
+          "alt": "Neo-Noir"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Film Noir is the 1940s crime language this preset compresses. Neo-Noir adds color-era neon and later tech.Noir as a named recipe is the wet street, the gobo, the hard key. If the blacks are mush, you shot moody, not this.Film NoirCrime, guilt, and streetlamps.Neo-NoirNoir after color was invented.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Third Man is hard night, wet stone, moral shadow. Drive is the color-era cousin you may borrow if you specify neon."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shadow is the sentence. Not a still to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Third Man is hard night, wet stone, moral shadow. Drive is the color-era cousin you may borrow if you specify neon.Shadow is the sentence. Not a still to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hard key, gobo, wet ground. Noir look on [Subject], wet streets, venetian gobos, a crime already in the lighting."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add 35mm lock-off, motivated hard key, slashes, face half-deleted, one deep practical. No teal mush."
+        },
+        {
+          "type": "quote",
+          "text": "Noir look on [Subject], wet streets, venetian gobos, a crime already in the lighting."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Noir+look+on+[Subject],+wet+streets,+venetian+gobos,+a+crime+already+in+the+lighting."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Hard key, gobo, wet ground. Noir look on [Subject], wet streets, venetian gobos, a crime already in the lighting.Add 35mm lock-off, motivated hard key, slashes, face half-deleted, one deep practical. No teal mush.Copy promptUse in Image GeneratorNoir look on [Subject], wet streets, venetian gobos, a crime already in the lighting.Noir look on [Subject], wet streets, venetian gobos, a crime already in the lighting."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A dark teal photo, or a soft key. The tell is mushy blacks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: hard motivated key, gobo slashes, wet street, a face half gone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong A dark teal photo, or a soft key. The tell is mushy blacks.Fix it: hard motivated key, gobo slashes, wet street, a face half gone."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Noir in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A named night recipe: wet streets, venetian gobos, hard motivated key, crime already in the lighting. It is contrast law, not a dark LUT."
+        },
+        {
+          "type": "heading",
+          "text": "Noir vs Neo-Noir",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Film noir and this preset can stay silver. Neo-noir retools the same guilt in color and later tech. If you want neon melancholy, say neo-noir. If you want gobos and wet black, this is the recipe."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Noir?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Crime, conscience, a judging city. Skip sitcom kitchens and soft dark grades."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Noir for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard key, wet street, then: Noir look on [Subject], wet streets, venetian gobos, a crime already in the lighting. Keep contrast as law. Do not add teal mush."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Noir in film?A named night recipe: wet streets, venetian gobos, hard motivated key, crime already in the lighting. It is contrast law, not a dark LUT.Noir vs Neo-NoirFilm noir and this preset can stay silver. Neo-noir retools the same guilt in color and later tech. If you want neon melancholy, say neo-noir. If you want gobos and wet black, this is the recipe.When should I use Noir?Crime, conscience, a judging city. Skip sitcom kitchens and soft dark grades.How do I prompt Noir for AI image or video?Hard key, wet street, then: Noir look on [Subject], wet streets, venetian gobos, a crime already in the lighting. Keep contrast as law. Do not add teal mush."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Hard key, gobo, wet ground. Noir look on [Subject], wet streets, venetian gobos, a crime already in the lighting.",
+      "Add 35mm lock-off, motivated hard key, slashes, face half-deleted, one deep practical. No teal mush."
+    ],
+    "example": "Noir look on [Subject], wet streets, venetian gobos, a crime already in the lighting."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/a577410cd7d89cfe54786382c987cef5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/noir.webp",
+      "alt": "Noir example"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/ea5ae8a2e30baa75c39a22cd02fb3d7b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neo-noir.webp",
+      "alt": "Neo-Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/dd1165eace09a10d1b35a422db26c360.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/noir/hero.jpg",
+      "alt": "Noir",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "a071e544562f5b15e93294419191308310710d5bd9e37db4a9542bc7460204eb"
+}

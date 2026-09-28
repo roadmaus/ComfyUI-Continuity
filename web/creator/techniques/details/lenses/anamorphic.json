@@ -1,0 +1,432 @@
+{
+  "id": "lenses/anamorphic",
+  "slug": "anamorphic",
+  "title": "Anamorphic",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/anamorphic",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-057-anamorphic-optical-character-mini.webp",
+  "detail": "details/lenses/anamorphic.json",
+  "aliases": [
+    "Oval bokeh",
+    "Anamorphic lens signature"
+  ],
+  "description": "Anamorphic cinematography squeezes one image dimension during capture, usually horizontally by 2x, then expands it for presentation. Depending on the lens, that cylindrical squeeze can produce oval bokeh, directional flares, and distinctive edge behavior; a wide aspect ratio alone is not anamorphic photography.",
+  "thumbnail": "media/b11a08fb15e0ac7dcd89ec2184cb65da.webp",
+  "video": "media/df5fddd2498117a9636a23f7270ff4b4.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/057-anamorphic-optical-character-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The frame can hold a face and a landscape in the same breath because the desqueezed field is wide while the taking lens may still be a moderate focal length. Highlights streak sideways."
+        },
+        {
+          "type": "paragraph",
+          "text": "Out-of-focus lamps become ovals. The optic announces a movie without needing black bars glued onto a spherical image."
+        },
+        {
+          "type": "paragraph",
+          "text": "39:1. Cropping a Spherical 50mm and adding letterbox is an aspect ratio, not this glass.",
+          "links": [
+            {
+              "text": "Spherical",
+              "url": "https://melies.co/cinematic-techniques/lenses/spherical"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool if you need clinical edges and round bokeh. Not every anamorphic lens flares the same way; do not treat Anamorphic Flare as automatic.",
+          "links": [
+            {
+              "text": "Anamorphic Flare",
+              "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Spherical",
+          "url": "https://melies.co/cinematic-techniques/lenses/spherical"
+        },
+        {
+          "text": "Anamorphic Flare",
+          "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The frame can hold a face and a landscape in the same breath because the desqueezed field is wide while the taking lens may still be a moderate focal length. Highlights streak sideways.Out-of-focus lamps become ovals. The optic announces a movie without needing black bars glued onto a spherical image.39:1. Cropping a Spherical 50mm and adding letterbox is an aspect ratio, not this glass.It is also the wrong tool if you need clinical edges and round bokeh. Not every anamorphic lens flares the same way; do not treat Anamorphic Flare as automatic."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "8x) or recreate specific optical traits with restraint. Keep desqueezed geometry correct: circles in the world must not stay squeezed in the final image."
+        },
+        {
+          "type": "paragraph",
+          "text": "Focus breathing and a thinner vertical taking field are common. Oval bokeh comes from the cylindrical elements, not from a filter sticker."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Anamorphic 2x on [Subject], oval bokeh, horizontal flares, widescreen squeeze character."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works 8x) or recreate specific optical traits with restraint. Keep desqueezed geometry correct: circles in the world must not stay squeezed in the final image.Focus breathing and a thinner vertical taking field are common. Oval bokeh comes from the cylindrical elements, not from a filter sticker.Prompt: Anamorphic 2x on [Subject], oval bokeh, horizontal flares, widescreen squeeze character."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the frame should announce itself as widescreen glass: a night interior with oval lamps, a face in a wide city. Do not use it as a synonym for letterbox, and do not sprinkle blue streaks on every spherical shot."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the frame should announce itself as widescreen glass: a night interior with oval lamps, a face in a wide city. Do not use it as a synonym for letterbox, and do not sprinkle blue streaks on every spherical shot."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Spherical has round bokeh and rectilinear edges with no squeeze. Anamorphic Flare is one artifact some anamorphic lenses produce, not the whole system.",
+          "links": [
+            {
+              "text": "Spherical",
+              "url": "https://melies.co/cinematic-techniques/lenses/spherical"
+            },
+            {
+              "text": "Anamorphic Flare",
+              "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vintage Cine Glass can be spherical or anamorphic; vintage is coatings and contrast, not the squeeze. Black bars on a 16:9 file are not this technique.",
+          "links": [
+            {
+              "text": "Vintage Cine Glass",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "displayText": "Anamorphic Flare\nNight lights and headlights should write on the lens.",
+          "links": [
+            {
+              "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+              "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SphericalControl and sharpness over romance.",
+          "displayText": "Spherical\nControl and sharpness over romance.",
+          "links": [
+            {
+              "text": "SphericalControl and sharpness over romance.",
+              "url": "https://melies.co/cinematic-techniques/lenses/spherical"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Spherical",
+          "url": "https://melies.co/cinematic-techniques/lenses/spherical"
+        },
+        {
+          "text": "Anamorphic Flare",
+          "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+        },
+        {
+          "text": "Vintage Cine Glass",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+        },
+        {
+          "text": "SphericalControl and sharpness over romance.",
+          "url": "https://melies.co/cinematic-techniques/lenses/spherical"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/dd60ac3e349447877925814c6440f811.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+          "alt": "Anamorphic Flare"
+        },
+        {
+          "kind": "image",
+          "path": "media/3e37246c8f59339c5508ddce1d433bf1.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/spherical.webp",
+          "alt": "Spherical"
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots Spherical has round bokeh and rectilinear edges with no squeeze. Anamorphic Flare is one artifact some anamorphic lenses produce, not the whole system.Vintage Cine Glass can be spherical or anamorphic; vintage is coatings and contrast, not the squeeze. Black bars on a 16:9 file are not this technique.Anamorphic FlareNight lights and headlights should write on the lens.SphericalControl and sharpness over romance.14mm Ultra-WidePut the audience inside a space that is too big or too close."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blade Runner uses anamorphic night interiors and city imagery as a widescreen optical fact. Inception's live-action photography is largely anamorphic widescreen."
+        },
+        {
+          "type": "paragraph",
+          "text": "La La Land and The Batman lean on oval highlights and directional flares as part of that glass. Borrow the squeeze behavior, not a copyrighted still."
+        },
+        {
+          "type": "list-item",
+          "text": "Blade Runner 1982Widescreen night interiors and city imagery.",
+          "displayText": "Blade Runner 1982\nWidescreen night interiors and city imagery."
+        },
+        {
+          "type": "list-item",
+          "text": "Inception 2010Much of the live-action photography uses an anamorphic widescreen approach.",
+          "displayText": "Inception 2010\nMuch of the live-action photography uses an anamorphic widescreen approach."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e4cd96bcce0c9965bcdafb1b14bf6ba0.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/anamorphic/famous/00-blade-runner-1982.jpg",
+          "alt": "Blade Runner 1982"
+        },
+        {
+          "kind": "image",
+          "path": "media/b844d3b296e02eb19370384e2fbc5a10.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/anamorphic/famous/01-inception-2010.jpg",
+          "alt": "Inception 2010"
+        }
+      ],
+      "sourceText": "In film Blade Runner uses anamorphic night interiors and city imagery as a widescreen optical fact. Inception's live-action photography is largely anamorphic widescreen.La La Land and The Batman lean on oval highlights and directional flares as part of that glass. Borrow the squeeze behavior, not a copyrighted still.Blade Runner 1982Widescreen night interiors and city imagery.Inception 2010Much of the live-action photography uses an anamorphic widescreen approach."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the squeeze and the artifacts you actually want. Anamorphic 2x on [Subject], oval bokeh, horizontal flares, widescreen squeeze character."
+        },
+        {
+          "type": "paragraph",
+          "text": "39:1 if the delivery is widescreen. Do not write letterbox on a spherical lens, and do not add random blue streaks without oval bokeh and correct geometry."
+        },
+        {
+          "type": "quote",
+          "text": "Night exterior of a woman beneath station lights, widescreen anamorphic-style optics, subtle oval defocused highlights and restrained horizontal flare from one practical light. Natural face width, coherent architecture, no excessive streaks and no letterbox bars baked into the image."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Night+exterior+of+a+woman+beneath+station+lights,+widescreen+anamorphic-style+optics,+subtle+oval+defocused+highlights+and+restrained+horizontal+flare+from+one+practical+light.+Natural+face+width,+coherent+architecture,+no+excessive+streaks+and+no+letterbox+bars+baked+into+the+image."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the squeeze and the artifacts you actually want. Anamorphic 2x on [Subject], oval bokeh, horizontal flares, widescreen squeeze character.39:1 if the delivery is widescreen. Do not write letterbox on a spherical lens, and do not add random blue streaks without oval bokeh and correct geometry.Copy promptUse in Video GeneratorNight exterior of a woman beneath station lights, widescreen anamorphic-style optics, subtle oval defocused highlights and restrained horizontal flare from one practical light. Natural face width, coherent architecture, no excessive streaks and no letterbox bars baked into the image.Night exterior of a woman beneath station lights, widescreen anamorphic-style optics, subtle oval defocused highlights and restrained horizontal flare from one practical light. Natural face width, coherent architecture, no excessive streaks and no letterbox bars baked into the image."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Spherical footage with black bars, or a flare overlay without oval highlights. The tell is round lamps, no squeeze character, and a 16:9 image with mats.",
+          "links": [
+            {
+              "text": "Spherical",
+              "url": "https://melies.co/cinematic-techniques/lenses/spherical"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: oval bokeh, horizontal highlight streaks, desqueezed widescreen geometry. A wide aspect ratio alone is not anamorphic."
+        }
+      ],
+      "links": [
+        {
+          "text": "Spherical",
+          "url": "https://melies.co/cinematic-techniques/lenses/spherical"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Spherical footage with black bars, or a flare overlay without oval highlights. The tell is round lamps, no squeeze character, and a 16:9 image with mats.Fix: oval bokeh, horizontal highlight streaks, desqueezed widescreen geometry. A wide aspect ratio alone is not anamorphic."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is anamorphic in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a lens system that squeezes one dimension at capture and expands it for viewing. Many such lenses add oval bokeh and directional flares. Widescreen shape by itself is not anamorphic."
+        },
+        {
+          "type": "heading",
+          "text": "Anamorphic vs Spherical",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Spherical lenses do not squeeze; bokeh is typically round and edges stay rectilinear. Anamorphic lenses squeeze, then desqueeze, and often ovalize highlights. Letterboxing a spherical image does not convert it."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use anamorphic?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when you want the specific optical behavior of squeeze glass: oval lamps, horizontal flares, a wide field from a moderate taking length. Skip it if you only wanted black bars."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt anamorphic for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Anamorphic 2x on [Subject], oval bokeh, horizontal flares, widescreen squeeze character. Demand desqueezed geometry. Forbid round bokeh and simple letterbox."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is anamorphic in film?It is a lens system that squeezes one dimension at capture and expands it for viewing. Many such lenses add oval bokeh and directional flares. Widescreen shape by itself is not anamorphic.Anamorphic vs SphericalSpherical lenses do not squeeze; bokeh is typically round and edges stay rectilinear. Anamorphic lenses squeeze, then desqueeze, and often ovalize highlights. Letterboxing a spherical image does not convert it.When should I use anamorphic?Use it when you want the specific optical behavior of squeeze glass: oval lamps, horizontal flares, a wide field from a moderate taking length. Skip it if you only wanted black bars.How do I prompt anamorphic for AI image or video?Write: Anamorphic 2x on [Subject], oval bokeh, horizontal flares, widescreen squeeze character. Demand desqueezed geometry. Forbid round bokeh and simple letterbox."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the squeeze and the artifacts you actually want. Anamorphic 2x on [Subject], oval bokeh, horizontal flares, widescreen squeeze character.",
+      "39:1 if the delivery is widescreen. Do not write letterbox on a spherical lens, and do not add random blue streaks without oval bokeh and correct geometry."
+    ],
+    "example": "Night exterior of a woman beneath station lights, widescreen anamorphic-style optics, subtle oval defocused highlights and restrained horizontal flare from one practical light. Natural face width, coherent architecture, no excessive streaks and no letterbox bars baked into the image."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/df5fddd2498117a9636a23f7270ff4b4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/057-anamorphic-optical-character-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b11a08fb15e0ac7dcd89ec2184cb65da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-057-anamorphic-optical-character-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/184f7d7bdea60222c396e9329fd23371.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/anamorphic.jpg",
+      "alt": "Anamorphic frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/dd60ac3e349447877925814c6440f811.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+      "alt": "Anamorphic Flare"
+    },
+    {
+      "kind": "image",
+      "path": "media/3e37246c8f59339c5508ddce1d433bf1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/spherical.webp",
+      "alt": "Spherical"
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/e4cd96bcce0c9965bcdafb1b14bf6ba0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/anamorphic/famous/00-blade-runner-1982.jpg",
+      "alt": "Blade Runner 1982"
+    },
+    {
+      "kind": "image",
+      "path": "media/b844d3b296e02eb19370384e2fbc5a10.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/anamorphic/famous/01-inception-2010.jpg",
+      "alt": "Inception 2010"
+    },
+    {
+      "kind": "image",
+      "path": "media/fa5ec34b0dae8518eecfdb88f4335d95.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/anamorphic/hero.jpg",
+      "alt": "Anamorphic",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "59c61907617f34eea3fc8539db31567e9da2349488ab8fcf30f6266eda1720a2"
+}

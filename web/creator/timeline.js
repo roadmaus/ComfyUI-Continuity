@@ -15,7 +15,8 @@ import { castFamilies, keepAsMod } from "./refmod.js";
 import { clearButton } from "./clear.js";
 import { el, icon, mountOverlay, swappable, closeOwnedPopovers } from "./dom.js";
 import { createDisclosure } from "./disclosure.js";
-import { CreatorEditor, pickTakes, takesHelp } from "./editor.js";
+import { techniqueTargetsForPiece, techniqueButton, renderTechniqueBar, openTechniqueLibrary } from "./technique-controls.js";
+import { CreatorEditor, syncTechniqueReferences, pickTakes, takesHelp } from "./editor.js";
 import { t } from "./i18n.js";
 import { openLoras, loraBlock, loraBase, settlePins } from "./loras.js";
 import { openPicker } from "./picker.js";
@@ -353,8 +354,9 @@ async function compiledFor(timeline, card, seed) {
 }
 
 class Timeline {
-  constructor({ timeline, onCommit, edit = null, io = null }, resolve) {
+  constructor({ timeline, onCommit, edit = null, io = null, isCurrent = null }, resolve) {
     this.timeline = timeline;
+    this.isCurrent = isCurrent;
     this.onCommit = onCommit;
     this.resolve = resolve;
     // The node's sampler widgets, so a card's preset can carry the row it was
@@ -474,6 +476,7 @@ class Timeline {
       onInput: (text) => {
         this.timeline.prompt = text;
         this.onCommit?.();
+        this.renderTechniques();
         this.renderBar();
         // A citation typed here flips a pool chip from idle to "everywhere" as
         // it is written. The shelf holds no caret, so rebuilding it here loses
@@ -550,7 +553,10 @@ class Timeline {
       // Display label only. The serialized key remains `prompt`.
       title: "global_prompt", content: this.promptBox.frame,
       onBeforeCollapse: () => this.promptBox.closeMenu(),
+      inlineActions: [techniqueButton(() => this.openTechniques(), { small: true })],
     });
+    this.techniqueHost = el("div", { class: "mmc-technique-bar", hidden: true });
+    this.promptSection.body.append(this.techniqueHost);
     this.promptBox.root.setAttribute("aria-labelledby", this.promptSection.titleId);
 
     // The two audio fields H3's own prompt format has, kept side by side and
@@ -632,6 +638,7 @@ class Timeline {
   }
 
   close() {
+    this.closed = true;
     this.unmount();
     this.resolve();
   }
@@ -648,6 +655,7 @@ class Timeline {
     this.promptBox.root.setAttribute("data-placeholder", S.isSingle(this.timeline)
       ? t("The whole piece: setting, look, who is in it. Opens Shot 1's description, so write it as the start of one.")
       : t("The whole piece: setting, look, who is in it. Added in front of every segment's own prompt."));
+    this.renderTechniques();
     this.renderPool();
     this.renderCast();
     this.renderBar();
@@ -658,6 +666,37 @@ class Timeline {
     // not something every family a later version adds will have.
     this.sound.host.hidden = !S.familyOf(this.timeline).capabilities?.audio?.supplied;
     if (!this.sound.host.hidden) this.sound.render();
+  }
+
+  techniqueTargets() {
+    const piece = this.timeline;
+    return techniqueTargetsForPiece({ piece,
+      isCurrent: () => !this.closed && this.timeline === piece && (this.isCurrent?.() ?? true),
+      onChange: ({ before, after, owner, kind }) => {
+        const warnings = kind === "segment" ? syncTechniqueReferences({ owner, piece, before, after }) : [];
+        if (owner === piece) {
+          this.techniqueHost.dataset.techniqueEdited = "true";
+          this.promptBox.setValue(piece.prompt ?? "");
+          this.promptSection.setOpen(true);
+        }
+        this.commit();
+        return warnings;
+      },
+    });
+  }
+
+  techniqueTarget() {
+    return this.techniqueTargets().find(target => target.owner === this.timeline);
+  }
+
+  openTechniques(initialTechnique = null) {
+    const targets = this.techniqueTargets();
+    openTechniqueLibrary({ target: targets[0], targets, getTargets: () => this.techniqueTargets(), initialTechnique });
+  }
+
+  renderTechniques() {
+    if (!this.techniqueHost) return;
+    renderTechniqueBar(this.techniqueHost, this.techniqueTarget(), { open: id => this.openTechniques(id) });
   }
 
   /**
@@ -3303,7 +3342,8 @@ class Timeline {
 
   /** The segment editor: the node's own body, over the strip. */
   edit(index) {
-    const segment = this.timeline.segments[index];
+    const piece = this.timeline;
+    const segment = piece.segments[index];
     const editor = new CreatorEditor({
       state: segment,
       // Which piece this card belongs to — the same answer the lone shot's
@@ -3315,6 +3355,7 @@ class Timeline {
       // references the compiler would then refuse. The strip underneath had all
       // of it right, because it asks `this.timeline`.
       piece: this.timeline,
+      techniqueContextCurrent: () => !this.closed && this.timeline === piece && (this.isCurrent?.() ?? true),
       // The shelf as well as the strip: writing `@ref-1` in this card is what
       // makes the pool chip say "in segment 3", and the shelf is the only place
       // that fact is ever shown. Redrawn on the card's own commits rather than
@@ -3325,6 +3366,9 @@ class Timeline {
       // nothing. See `renderPool` and `S.poolCitations`.
       onCommit: () => {
         this.onCommit?.(); this.renderStrip(); this.renderPool(); this.renderCast();
+        // A technique opened inside a segment can explicitly target the piece.
+        // Refresh its global field/chips too, not just the segment strip.
+        this.promptBox.refresh(); this.renderTechniques();
       },
       // A member typed into this card's prose is cast into the *piece* — where
       // the cast lives — and their files land in the piece's pool. The card is
@@ -3408,7 +3452,7 @@ class Timeline {
       title: t(shared ? "Shot {n}" : "Segment {n}", { n: index + 1 }),
       subtitle: t("of {count}", { count: this.timeline.segments.length }),
       content: [editor.root],
-      onClose: () => this.render(),
+      onClose: () => { editor.destroy(); this.render(); },
     });
   }
 }
@@ -3701,7 +3745,8 @@ export class TimelineBody {
    * than re-rendering itself.
    */
   faceBody() {
-    const segment = this.timeline.segments[0];
+    const piece = this.timeline;
+    const segment = piece.segments[0];
     if (this.faceEditor?.state === segment) return this.faceEditor;
     this.dropFaceEditor();
     this.faceEditor = new CreatorEditor({
@@ -3711,6 +3756,7 @@ export class TimelineBody {
       // about where they live — which is what makes growing a second one a
       // matter of adding a card and not of moving any settings.
       piece: this.timeline,
+      techniqueContextCurrent: () => !this.destroyed && this.timeline === piece,
       // The face's rail is the family's stack — it is where a pin is made.
       pinFamily: () => S.pieceFamily(this.timeline),
       // The face is wearing the piece's only card, and the piece is what a cast
@@ -3865,13 +3911,32 @@ export class TimelineBody {
    *  face does on the way from one shot to two, so the new card is where the
    *  writing already is. */
   open({ edit = null } = {}) {
+    const piece = this.timeline;
     openTimeline({
-      timeline: this.timeline,
+      timeline: piece,
+      isCurrent: () => !this.destroyed && this.timeline === piece,
       onCommit: () => this.commit(),
       edit,
       // Lent so a card's preset can carry the sampler row — see `Timeline.io`.
       io: () => this.widgetIO(),
     });
+  }
+
+  techniqueTargets() {
+    const piece = this.timeline;
+    return techniqueTargetsForPiece({ piece,
+      isCurrent: () => !this.destroyed && this.timeline === piece,
+      onChange: ({ before, after, owner, kind }) => {
+        const warnings = kind === "segment" ? syncTechniqueReferences({ owner, piece, before, after }) : [];
+        this.commit();
+        return warnings;
+      },
+    });
+  }
+
+  openTechniques(initialTechnique = null) {
+    const targets = this.techniqueTargets();
+    openTechniqueLibrary({ target: targets[0], targets, getTargets: () => this.techniqueTargets(), initialTechnique });
   }
 
   value(name, fallback) {
@@ -4016,6 +4081,7 @@ export class TimelineBody {
         tool("Presets", "star",
              t("Save this setup so you can put it back, or apply one you saved before"),
              () => openPresetLibrary({ target: this.presetTarget() }).then(() => this.render())),
+        techniqueButton(() => this.openTechniques()),
         tool("Gallery", "gallery",
              t("Browse, organize and attach finished renders and pre-stage stills"),
              () => openPicker({

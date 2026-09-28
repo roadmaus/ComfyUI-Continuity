@@ -1,0 +1,392 @@
+{
+  "id": "lighting/gobo-lighting",
+  "slug": "gobo-lighting",
+  "title": "Gobo Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/gobo-lighting",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gobo-lighting.webp",
+  "detail": "details/lighting/gobo-lighting.json",
+  "aliases": [
+    "cucoloris"
+  ],
+  "description": "Gobo lighting places a pattern or object in a light beam (a gobo or cucoloris) so the source throws graphic shadows across face, body, and wall. The room writes on the person.",
+  "thumbnail": "media/9d2fae3d817782fff1bed611023e5a33.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Venetian blinds, bars, branches cut as a design, a fan, a grille: the character wears the architecture. Noir and political interiors use it so a man is already in a cage before anyone speaks."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for invisible naturalism, or for random leaf scatter you do not want to look designed. If the pattern is irregular canopy, prefer dappled light.",
+          "links": [
+            {
+              "text": "dappled light",
+              "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Gobos need a hard enough source to stay readable."
+        }
+      ],
+      "links": [
+        {
+          "text": "dappled light",
+          "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Venetian blinds, bars, branches cut as a design, a fan, a grille: the character wears the architecture. Noir and political interiors use it so a man is already in a cage before anyone speaks.It is the wrong tool for invisible naturalism, or for random leaf scatter you do not want to look designed. If the pattern is irregular canopy, prefer dappled light.Gobos need a hard enough source to stay readable."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put a hard, small source through slats, a cut cucoloris, or a metal gobo in a fixture. Distance from pattern to subject sets how sharp the shadows are."
+        },
+        {
+          "type": "paragraph",
+          "text": "Key side is wherever that lamp sits, often high and off axis. Color is often white moonlight gel or hard tungsten."
+        },
+        {
+          "type": "paragraph",
+          "text": "Flag spill so the pattern is not washed out. Prompt: Gobo-patterned light on [Subject], venetian blinds, bars, or branches throwing graphic shadows across face and wall."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put a hard, small source through slats, a cut cucoloris, or a metal gobo in a fixture. Distance from pattern to subject sets how sharp the shadows are.Key side is wherever that lamp sits, often high and off axis. Color is often white moonlight gel or hard tungsten.Flag spill so the pattern is not washed out. Prompt: Gobo-patterned light on [Subject], venetian blinds, bars, or branches throwing graphic shadows across face and wall."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the room should write on the person, blinds on a liar, bars on a prisoner. Do not use it as default texture on every close-up."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the room should write on the person, blinds on a liar, bars on a prisoner. Do not use it as default texture on every close-up."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dappled light is irregular and natural. Hard light is the quality a gobo needs.",
+          "links": [
+            {
+              "text": "Dappled light",
+              "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+            },
+            {
+              "text": "Hard light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Window light through blinds is a motivated gobo. Split lighting is a half-face cut without a pattern.",
+          "links": [
+            {
+              "text": "Window light",
+              "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+            },
+            {
+              "text": "Split lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Film noir is a genre look that often employs this tool.",
+          "links": [
+            {
+              "text": "Film noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "displayText": "Hard Light\nGrit, noon sun, or interrogation.",
+          "links": [
+            {
+              "text": "Hard LightGrit, noon sun, or interrogation.",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dappled LightNature or blinds as gobo.",
+          "displayText": "Dappled Light\nNature or blinds as gobo.",
+          "links": [
+            {
+              "text": "Dappled LightNature or blinds as gobo.",
+              "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dappled light",
+          "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+        },
+        {
+          "text": "Hard light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Window light",
+          "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+        },
+        {
+          "text": "Split lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+        },
+        {
+          "text": "Film noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Dappled LightNature or blinds as gobo.",
+          "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+          "alt": "Hard Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/c527ca397332e8503e2b3e124659a749.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dappled-light.webp",
+          "alt": "Dappled Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Dappled light is irregular and natural. Hard light is the quality a gobo needs.Window light through blinds is a motivated gobo. Split lighting is a half-face cut without a pattern.Film noir is a genre look that often employs this tool.Hard LightGrit, noon sun, or interrogation.Dappled LightNature or blinds as gobo.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Conformist (Storaro) throws architectural slats and graphic shadows across faces and walls. Classic film noir uses blinds and bars as cages."
+        },
+        {
+          "type": "paragraph",
+          "text": "The pattern is placed, not accidental leaf scatter."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Conformist (Storaro) throws architectural slats and graphic shadows across faces and walls. Classic film noir uses blinds and bars as cages.The pattern is placed, not accidental leaf scatter."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the object in the beam. \" Specify a hard source."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the pattern sharp enough to read."
+        },
+        {
+          "type": "quote",
+          "text": "Gobo-patterned light on [Subject], venetian blinds, bars, or branches throwing graphic shadows across face and wall."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Gobo-patterned+light+on+[Subject],+venetian+blinds,+bars,+or+branches+throwing+graphic+shadows+across+face+and+wall."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the object in the beam. \" Specify a hard source.Keep the pattern sharp enough to read.Copy promptUse in Image GeneratorGobo-patterned light on [Subject], venetian blinds, bars, or branches throwing graphic shadows across face and wall.Gobo-patterned light on [Subject], venetian blinds, bars, or branches throwing graphic shadows across face and wall."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is dappled leaf scatter or soft wrap that eats the slats. The tell is fuzzy blobs, or no pattern at all.",
+          "links": [
+            {
+              "text": "dappled",
+              "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by hardening the source and putting a real slat or cucoloris in the beam."
+        }
+      ],
+      "links": [
+        {
+          "text": "dappled",
+          "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is dappled leaf scatter or soft wrap that eats the slats. The tell is fuzzy blobs, or no pattern at all.Fix it by hardening the source and putting a real slat or cucoloris in the beam."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is gobo lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A pattern or object placed in a light beam so graphic shadows fall on the subject and the set. Venetian blinds and bars are common."
+        },
+        {
+          "type": "heading",
+          "text": "Gobo lighting vs dappled light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A gobo is a designed obstruction (cucoloris, blinds, bars). Dappled light is irregular, usually from foliage or water."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use gobo lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when architecture should brand the face: blinds, bars, grilles. Skip it for unstyled naturalism."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt gobo lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name blinds, bars, or a cucoloris in a hard beam, graphic shadows on face and wall. Keep the source hard enough for a sharp pattern."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is gobo lighting in film?A pattern or object placed in a light beam so graphic shadows fall on the subject and the set. Venetian blinds and bars are common.Gobo lighting vs dappled lightA gobo is a designed obstruction (cucoloris, blinds, bars). Dappled light is irregular, usually from foliage or water.When should I use gobo lighting?Use it when architecture should brand the face: blinds, bars, grilles. Skip it for unstyled naturalism.How do I prompt gobo lighting for AI image or video?Name blinds, bars, or a cucoloris in a hard beam, graphic shadows on face and wall. Keep the source hard enough for a sharp pattern."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the object in the beam. \" Specify a hard source.",
+      "Keep the pattern sharp enough to read."
+    ],
+    "example": "Gobo-patterned light on [Subject], venetian blinds, bars, or branches throwing graphic shadows across face and wall."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/9d2fae3d817782fff1bed611023e5a33.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gobo-lighting.webp",
+      "alt": "Gobo Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+      "alt": "Hard Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/c527ca397332e8503e2b3e124659a749.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dappled-light.webp",
+      "alt": "Dappled Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/29c92ca916860a8c3a8a6ca5425b4071.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/gobo-lighting/hero.jpg",
+      "alt": "Gobo Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "62bb7ccc2bbeb4f05951854297c51bad716568a3bf8814b353072da3431c5aec"
+}

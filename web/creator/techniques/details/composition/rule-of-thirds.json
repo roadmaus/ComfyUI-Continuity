@@ -1,0 +1,373 @@
+{
+  "id": "composition/rule-of-thirds",
+  "slug": "rule-of-thirds",
+  "title": "Rule of Thirds",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/rule-of-thirds",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+  "detail": "details/composition/rule-of-thirds.json",
+  "aliases": [],
+  "description": "The rule of thirds in rule of thirds cinematography divides the frame into nine equal cells and parks important masses on those lines or at their four intersections. The horizon usually sits on an upper or lower third so land and sky are not equal partners, and the subject usually sits off-center with look-space in the larger remaining field.",
+  "thumbnail": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Treat the frame as a diagram of who owns space. Thirds is a default, not a law."
+        },
+        {
+          "type": "paragraph",
+          "text": "A face on a power intersection hands the bigger rectangle to the look, the weather, or the threat. The strip behind the head is leftover, not decoration."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the beat needs a formal altar, a trap, or a joke about order. Dead-center ritual, short-sided panic, and poster symmetry all break the grid on purpose."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you apply thirds to every close-up, the diagram stops meaning anything. A model that hears only balanced composition will center the face and split the sky in half."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name which intersection holds the eyes and which third holds the horizon."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Treat the frame as a diagram of who owns space. Thirds is a default, not a law.A face on a power intersection hands the bigger rectangle to the look, the weather, or the threat. The strip behind the head is leftover, not decoration.It is the wrong tool when the beat needs a formal altar, a trap, or a joke about order. Dead-center ritual, short-sided panic, and poster symmetry all break the grid on purpose.If you apply thirds to every close-up, the diagram stops meaning anything. A model that hears only balanced composition will center the face and split the sky in half.Name which intersection holds the eyes and which third holds the horizon."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Turn on the 3x3 overlay on the monitor. Place eyes, a head, or a landmark on an intersection, not in the dead middle of a cell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the camera level unless a roll is the point. A 35mm to 50mm keeps the grid honest."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ultra-wide glass stretches the outer thirds into cartoon corners. Telephoto compresses them into stacked bands."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Rule-of-thirds placement of [Subject] on a power intersection, horizon on a third, breathing room in the look direction."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Turn on the 3x3 overlay on the monitor. Place eyes, a head, or a landmark on an intersection, not in the dead middle of a cell.Keep the camera level unless a roll is the point. A 35mm to 50mm keeps the grid honest.Ultra-wide glass stretches the outer thirds into cartoon corners. Telephoto compresses them into stacked bands.Prompt: Rule-of-thirds placement of [Subject] on a power intersection, horizon on a third, breathing room in the look direction."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it on a landscape walk, a single looking off, or an establishing wide that must feel occupied without becoming an altar. Do not treat it as a religion on every close-up, title card, or ritual tableau."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it on a landscape walk, a single looking off, or an establishing wide that must feel occupied without becoming an altar. Do not treat it as a religion on every close-up, title card, or ritual tableau."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "618 instead of one-third. Lead Room is the horizontal air that thirds usually create for a look or a walk.",
+          "links": [
+            {
+              "text": "Lead Room",
+              "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Centered Composition refuses the offset and puts the subject on the axis. Short Siding is the opposite diagram: the look is crushed against the edge it faces.",
+          "links": [
+            {
+              "text": "Centered Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            },
+            {
+              "text": "Short Siding",
+              "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Golden RatioA more secret order than thirds.",
+          "displayText": "Golden Ratio\nA more secret order than thirds.",
+          "links": [
+            {
+              "text": "Golden RatioA more secret order than thirds.",
+              "url": "https://melies.co/cinematic-techniques/composition/golden-ratio"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lead RoomThey are going somewhere, even if standing.",
+          "displayText": "Lead Room\nThey are going somewhere, even if standing.",
+          "links": [
+            {
+              "text": "Lead RoomThey are going somewhere, even if standing.",
+              "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Central FramingPut them on the crosshairs.",
+          "displayText": "Central Framing\nPut them on the crosshairs.",
+          "links": [
+            {
+              "text": "Central FramingPut them on the crosshairs.",
+              "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Lead Room",
+          "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+        },
+        {
+          "text": "Centered Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Short Siding",
+          "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+        },
+        {
+          "text": "Golden RatioA more secret order than thirds.",
+          "url": "https://melies.co/cinematic-techniques/composition/golden-ratio"
+        },
+        {
+          "text": "Lead RoomThey are going somewhere, even if standing.",
+          "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+        },
+        {
+          "text": "Central FramingPut them on the crosshairs.",
+          "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/820f9b78f9bd93714cc8ce3feb2a5f5f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-ratio.webp",
+          "alt": "Golden Ratio"
+        },
+        {
+          "kind": "image",
+          "path": "media/00082839284cdeb7bf57bb7a3a31a168.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lead-room.webp",
+          "alt": "Lead Room"
+        },
+        {
+          "kind": "image",
+          "path": "media/5c633b152c7a36754fdcca970b96d9fa.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/central-framing.webp",
+          "alt": "Central Framing"
+        }
+      ],
+      "sourceText": "Compared with similar shots 618 instead of one-third. Lead Room is the horizontal air that thirds usually create for a look or a walk.Centered Composition refuses the offset and puts the subject on the axis. Short Siding is the opposite diagram: the look is crushed against the edge it faces.Golden RatioA more secret order than thirds.Lead RoomThey are going somewhere, even if standing.Central FramingPut them on the crosshairs."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Classical coverage treats thirds as the default diagram for singles and landscapes. Lawrence of Arabia parks horizons on a third so desert owns the rest of the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Days of Heaven does the same with prairie and sky. There Will Be Blood often offsets a figure so land outweighs the person."
+        },
+        {
+          "type": "paragraph",
+          "text": "These are grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Classical coverage treats thirds as the default diagram for singles and landscapes. Lawrence of Arabia parks horizons on a third so desert owns the rest of the frame.Days of Heaven does the same with prairie and sky. There Will Be Blood often offsets a figure so land outweighs the person.These are grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write the grid, not a mood. Rule-of-thirds placement of [Subject] on a power intersection, horizon on a third, breathing room in the look direction."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name which third holds the horizon and whether the figure sits left or right. Do not write balanced or well composed."
+        },
+        {
+          "type": "quote",
+          "text": "Rule-of-thirds placement of [Subject] on a power intersection, horizon on a third, breathing room in the look direction."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Rule-of-thirds+placement+of+[Subject]+on+a+power+intersection,+horizon+on+a+third,+breathing+room+in+the+look+direction."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write the grid, not a mood. Rule-of-thirds placement of [Subject] on a power intersection, horizon on a third, breathing room in the look direction.Name which third holds the horizon and whether the figure sits left or right. Do not write balanced or well composed.Copy promptUse in Image GeneratorRule-of-thirds placement of [Subject] on a power intersection, horizon on a third, breathing room in the look direction.Rule-of-thirds placement of [Subject] on a power intersection, horizon on a third, breathing room in the look direction."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is dead-center portrait posing as thirds. The tell is a face on the optical axis with equal sky and equal leftover on both ears."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to slide the eyes to an intersection and give the look the larger field, or admit you wanted Central Framing and shoot that instead.",
+          "links": [
+            {
+              "text": "Central Framing",
+              "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Central Framing",
+          "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is dead-center portrait posing as thirds. The tell is a face on the optical axis with equal sky and equal leftover on both ears.The fix is to slide the eyes to an intersection and give the look the larger field, or admit you wanted Central Framing and shoot that instead."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is rule of thirds in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a 3x3 grid overlaid on the frame. Important masses sit on the lines or at the four intersections so the picture is offset by default. The larger remaining field usually belongs to the look, the land, or the threat."
+        },
+        {
+          "type": "heading",
+          "text": "Rule of Thirds vs Golden Ratio",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Thirds splits at 33 percent. A golden-ratio or phi grid splits nearer 38 and 62 percent, a slightly tighter offset, sometimes described as a spiral. Both refuse dead center. Thirds is the faster default on a set. Phi is a quieter proportional claim."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use rule of thirds?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a figure or horizon should share the frame with a larger field they do not occupy. A walk, a look off, a landscape single. Skip it when the scene is a ritual, a trap, or a poster that needs the axis."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt rule of thirds for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the intersection and the horizon line. Example: Rule-of-thirds placement of [Subject] on a power intersection, horizon on a third, breathing room in the look direction. Say left or right. If you only write balanced, the model will center the face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is rule of thirds in film?It is a 3x3 grid overlaid on the frame. Important masses sit on the lines or at the four intersections so the picture is offset by default. The larger remaining field usually belongs to the look, the land, or the threat.Rule of Thirds vs Golden RatioThirds splits at 33 percent. A golden-ratio or phi grid splits nearer 38 and 62 percent, a slightly tighter offset, sometimes described as a spiral. Both refuse dead center. Thirds is the faster default on a set. Phi is a quieter proportional claim.When should I use rule of thirds?Use it when a figure or horizon should share the frame with a larger field they do not occupy. A walk, a look off, a landscape single. Skip it when the scene is a ritual, a trap, or a poster that needs the axis.How do I prompt rule of thirds for AI image or video?Name the intersection and the horizon line. Example: Rule-of-thirds placement of [Subject] on a power intersection, horizon on a third, breathing room in the look direction. Say left or right. If you only write balanced, the model will center the face."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write the grid, not a mood. Rule-of-thirds placement of [Subject] on a power intersection, horizon on a third, breathing room in the look direction.",
+      "Name which third holds the horizon and whether the figure sits left or right. Do not write balanced or well composed."
+    ],
+    "example": "Rule-of-thirds placement of [Subject] on a power intersection, horizon on a third, breathing room in the look direction."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds example"
+    },
+    {
+      "kind": "image",
+      "path": "media/820f9b78f9bd93714cc8ce3feb2a5f5f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-ratio.webp",
+      "alt": "Golden Ratio"
+    },
+    {
+      "kind": "image",
+      "path": "media/00082839284cdeb7bf57bb7a3a31a168.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lead-room.webp",
+      "alt": "Lead Room"
+    },
+    {
+      "kind": "image",
+      "path": "media/5c633b152c7a36754fdcca970b96d9fa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/central-framing.webp",
+      "alt": "Central Framing"
+    },
+    {
+      "kind": "image",
+      "path": "media/5525c90aa67b2dcc97a5660b1b8351f6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/rule-of-thirds/hero.jpg",
+      "alt": "Rule of Thirds",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "f8bc5166e8ee6cd7c295e1946ca637cc905d505d17a76e1cf146c86225998982"
+}

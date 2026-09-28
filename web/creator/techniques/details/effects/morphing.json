@@ -1,0 +1,408 @@
+{
+  "id": "effects/morphing",
+  "slug": "morphing",
+  "title": "Morphing",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/morphing",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/morphing-morphing-mini.webp",
+  "detail": "details/effects/morphing.json",
+  "aliases": [
+    "Geometric image transformation"
+  ],
+  "description": "Morphing cinematography transforms one shape or image continuously into another by interpolating geometry, rather than merely fading between pictures. Identity is a dissolve you can watch as contour.",
+  "thumbnail": "media/3e0961caa225ee0edff07ce811460ef7.webp",
+  "video": "media/0f4148849d67d9c9aa6bfff44212963f.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/morphing-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face becomes another face while the eyes stay aligned. A body interpolates toward a new contour."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when becoming should be visible as a correspondence of landmarks, not as a cut or a fade. It is the wrong tool when the person stays the same and the room should change, or when makeup and performance can do the work in stages."
+        },
+        {
+          "type": "paragraph",
+          "text": "If only opacity changes, you shot a dissolve."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A face becomes another face while the eyes stay aligned. A body interpolates toward a new contour.Use it when becoming should be visible as a correspondence of landmarks, not as a cut or a fade. It is the wrong tool when the person stays the same and the room should change, or when makeup and performance can do the work in stages.If only opacity changes, you shot a dissolve."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock pose, eyeline, and key on two endpoints. Set landmark matches (eyes to eyes, mouth to mouth, silhouette to silhouette)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Separate foreground from background so the warp does not drag the room. Control which features change first."
+        },
+        {
+          "type": "paragraph",
+          "text": "The midpoint should be an intentional in-between, not a melt. Prompt a morph of the subject into another state: continuous transformation, identity as a dissolve you can watch."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, morph into another form over the shot."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock pose, eyeline, and key on two endpoints. Set landmark matches (eyes to eyes, mouth to mouth, silhouette to silhouette).Separate foreground from background so the warp does not drag the room. Control which features change first.The midpoint should be an intentional in-between, not a melt. Prompt a morph of the subject into another state: continuous transformation, identity as a dissolve you can watch.For video, morph into another form over the shot."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when one form must become another in a few seconds of continuous view. Do not use it as a fancy cut between two unrelated shots with no shared landmarks."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when one form must become another in a few seconds of continuous view. Do not use it as a fancy cut between two unrelated shots with no shared landmarks."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Morph as an edit uses the warp as the join between two shots. Morphing here is the geometric interpolation itself.",
+          "links": [
+            {
+              "text": "Morph",
+              "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Transformation can be practical makeup, a set change, or a world swap around a stable body. Morphing is landmark geometry, not a new room.",
+          "links": [
+            {
+              "text": "Transformation",
+              "url": "https://melies.co/cinematic-techniques/effects/transformation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MorphIdentity is unstable.",
+          "displayText": "Morph\nIdentity is unstable.",
+          "links": [
+            {
+              "text": "MorphIdentity is unstable.",
+              "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "TransformationThe change is the scene.",
+          "displayText": "Transformation\nThe change is the scene.",
+          "links": [
+            {
+              "text": "TransformationThe change is the scene.",
+              "url": "https://melies.co/cinematic-techniques/effects/transformation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Morph",
+          "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+        },
+        {
+          "text": "Transformation",
+          "url": "https://melies.co/cinematic-techniques/effects/transformation"
+        },
+        {
+          "text": "MorphIdentity is unstable.",
+          "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+        },
+        {
+          "text": "TransformationThe change is the scene.",
+          "url": "https://melies.co/cinematic-techniques/effects/transformation"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/dcb8cfd262c43c8b46735742cf21e23c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-morph-108-morph-transition-mini.webp",
+          "alt": "Morph"
+        },
+        {
+          "kind": "video",
+          "path": "media/7a188a730ee1b83e803a81c50de9fe76.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/108-morph-transition-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/2b2f4bf7ab8e9ab09f2e0fc9e723cf5d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/transformation-147-continuous-material-transformation-mini.webp",
+          "alt": "Transformation"
+        },
+        {
+          "kind": "video",
+          "path": "media/411facd0b31da9993f6629ce59666775.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/147-continuous-material-transformation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Morph as an edit uses the warp as the join between two shots. Morphing here is the geometric interpolation itself.Transformation can be practical makeup, a set change, or a world swap around a stable body. Morphing is landmark geometry, not a new room.MorphIdentity is unstable.TransformationThe change is the scene.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Terminator 2 interpolates chrome and flesh as correspondence. Michael Jackson's Black or White walks faces through aligned landmarks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Willow interpolates between creature forms. Grammar, not frames to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "Willow 1988Transformation passages visibly interpolate between forms.",
+          "displayText": "Willow 1988\nTransformation passages visibly interpolate between forms."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Terminator 2 interpolates chrome and flesh as correspondence. Michael Jackson's Black or White walks faces through aligned landmarks.Willow interpolates between creature forms. Grammar, not frames to copy.Willow 1988Transformation passages visibly interpolate between forms."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Morph of [Subject] into another state, continuous transformation, identity as a dissolve you can watch. Video: [Subject] morphs into another form over the shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name both endpoints, keep eyes aligned, and forbid a cross-dissolve of unmatched poses."
+        },
+        {
+          "type": "quote",
+          "text": "Transform a close-up of a young fictional woman’s face into her older self over four seconds. Keep eyes aligned, head pose, expression and light direction fixed. Age changes occur gradually and coherently. Use matched endpoint portraits and controlled landmark-based compositing, no identity swap or liquefying face."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Transform+a+close-up+of+a+young+fictional+woman%E2%80%99s+face+into+her+older+self+over+four+seconds.+Keep+eyes+aligned,+head+pose,+expression+and+light+direction+fixed.+Age+changes+occur+gradually+and+coherently.+Use+matched+endpoint+portraits+and+controlled+landmark-based+compositing,+no+identity+swap+or+liquefying+face."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Morph of [Subject] into another state, continuous transformation, identity as a dissolve you can watch. Video: [Subject] morphs into another form over the shot.Name both endpoints, keep eyes aligned, and forbid a cross-dissolve of unmatched poses.Copy promptUse in Video GeneratorTransform a close-up of a young fictional woman’s face into her older self over four seconds. Keep eyes aligned, head pose, expression and light direction fixed. Age changes occur gradually and coherently. Use matched endpoint portraits and controlled landmark-based compositing, no identity swap or liquefying face.Transform a close-up of a young fictional woman’s face into her older self over four seconds. Keep eyes aligned, head pose, expression and light direction fixed. Age changes occur gradually and coherently. Use matched endpoint portraits and controlled landmark-based compositing, no identity swap or liquefying face."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Dissolve. The tell is two images fading with no shared contour, or a liquefying face with no midpoint design.",
+          "links": [
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is matched pose, matched light, and landmarks that travel."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Dissolve. The tell is two images fading with no shared contour, or a liquefying face with no midpoint design.The fix is matched pose, matched light, and landmarks that travel."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is morphing in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Morphing transforms one shape or image continuously into another by interpolating geometry. It is not a fade. Contours travel from one form to the next."
+        },
+        {
+          "type": "heading",
+          "text": "Morphing vs dissolve",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dissolve changes opacity. Morphing changes shape. A cross-dissolve can resemble a morph for a few frames, but it does not continuously transform geometry."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use morphing?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when identity or form must become another form in continuous view, with matched landmarks. Skip it when the room should change around a stable person, or when a simple fade is enough."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt morphing for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Morph of [Subject] into another state, continuous transformation. Specify both endpoints, aligned eyes, and which features change first. For video, morph over the shot, not a cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is morphing in film?Morphing transforms one shape or image continuously into another by interpolating geometry. It is not a fade. Contours travel from one form to the next.Morphing vs dissolveA dissolve changes opacity. Morphing changes shape. A cross-dissolve can resemble a morph for a few frames, but it does not continuously transform geometry.When should I use morphing?Use it when identity or form must become another form in continuous view, with matched landmarks. Skip it when the room should change around a stable person, or when a simple fade is enough.How do I prompt morphing for AI image or video?Write Morph of [Subject] into another state, continuous transformation. Specify both endpoints, aligned eyes, and which features change first. For video, morph over the shot, not a cut."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Morph of [Subject] into another state, continuous transformation, identity as a dissolve you can watch. Video: [Subject] morphs into another form over the shot.",
+      "Name both endpoints, keep eyes aligned, and forbid a cross-dissolve of unmatched poses."
+    ],
+    "example": "Transform a close-up of a young fictional woman’s face into her older self over four seconds. Keep eyes aligned, head pose, expression and light direction fixed. Age changes occur gradually and coherently. Use matched endpoint portraits and controlled landmark-based compositing, no identity swap or liquefying face."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/0f4148849d67d9c9aa6bfff44212963f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/morphing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3e0961caa225ee0edff07ce811460ef7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/morphing-morphing-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/67b563c3c5ce7d44c0b06c4e3ed8c92c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/morphing.jpg",
+      "alt": "Morphing frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/dcb8cfd262c43c8b46735742cf21e23c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-morph-108-morph-transition-mini.webp",
+      "alt": "Morph"
+    },
+    {
+      "kind": "video",
+      "path": "media/7a188a730ee1b83e803a81c50de9fe76.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/108-morph-transition-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2b2f4bf7ab8e9ab09f2e0fc9e723cf5d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/transformation-147-continuous-material-transformation-mini.webp",
+      "alt": "Transformation"
+    },
+    {
+      "kind": "video",
+      "path": "media/411facd0b31da9993f6629ce59666775.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/147-continuous-material-transformation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fe1b56e23b58b382ab56f1993f3ffcfd.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/morphing/hero.jpg",
+      "alt": "Morphing",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "e60ffb0607974c3bb3f6b9dfa6704d16f1bf838d42dd02a6adb2df1e288060ed"
+}

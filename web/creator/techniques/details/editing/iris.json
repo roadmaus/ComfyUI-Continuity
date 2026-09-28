@@ -1,0 +1,465 @@
+{
+  "id": "editing/iris",
+  "slug": "iris",
+  "title": "Iris",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/iris",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/iris-104-iris-opening-or-closing-mini.webp",
+  "detail": "details/editing/iris.json",
+  "aliases": [
+    "Iris-in",
+    "Iris-out"
+  ],
+  "description": "An iris transition reveals or conceals the picture with a moving circular or shaped mask. The mask's center is a pointer: one side of the join is the full world, the other is a hole closing on a face, a detail, or black.",
+  "thumbnail": "media/ac66d050cb3a40e5efe5550f1b3c9242.webp",
+  "video": "media/df975cf4d452b48274b222e578129ce2.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/104-iris-opening-or-closing-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The hall is there. The circle tightens on a satisfied face, then opens a little to include the yawning cat on the piano, then shuts."
+        },
+        {
+          "type": "paragraph",
+          "text": "Silent comedy pointed with the mask itself. The iris is a wink and a chapter ending at once."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to isolate a comic detail, imitate a viewing device, or close in an openly theatrical way. It is the wrong tool if you only want the image to die evenly: that is a Fade In / Fade Out.",
+          "links": [
+            {
+              "text": "Fade In / Fade Out",
+              "url": "https://melies.co/cinematic-techniques/editing/fade"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also not a zoom into a dark tunnel. The camera can sit still while the mask moves."
+        },
+        {
+          "type": "paragraph",
+          "text": "An iris is a mask over the image, not a Vignette. Vignette is optical falloff on a living frame.",
+          "links": [
+            {
+              "text": "Vignette",
+              "url": "https://melies.co/cinematic-techniques/effects/vignette"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Iris is a boundary that travels until the picture is gone or born."
+        }
+      ],
+      "links": [
+        {
+          "text": "Fade In / Fade Out",
+          "url": "https://melies.co/cinematic-techniques/editing/fade"
+        },
+        {
+          "text": "Vignette",
+          "url": "https://melies.co/cinematic-techniques/effects/vignette"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The hall is there. The circle tightens on a satisfied face, then opens a little to include the yawning cat on the piano, then shuts.Silent comedy pointed with the mask itself. The iris is a wink and a chapter ending at once.Use it to isolate a comic detail, imitate a viewing device, or close in an openly theatrical way. It is the wrong tool if you only want the image to die evenly: that is a Fade In / Fade Out.It is also not a zoom into a dark tunnel. The camera can sit still while the mask moves.An iris is a mask over the image, not a Vignette. Vignette is optical falloff on a living frame.Iris is a boundary that travels until the picture is gone or born."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Build the mask in post (or in-camera with an iris gimmick). Control center, shape, and timing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Decide whether the circle follows a subject or stays fixed while action continues underneath. Iris-in opens from black; iris-out closes to black (or to a tiny remaining image)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: iris in or out on [Subject], a circular mask closing on a face or detail, silent-era pointing, or a wink."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Build the mask in post (or in-camera with an iris gimmick). Control center, shape, and timing.Decide whether the circle follows a subject or stays fixed while action continues underneath. Iris-in opens from black; iris-out closes to black (or to a tiny remaining image).Prompt: iris in or out on [Subject], a circular mask closing on a face or detail, silent-era pointing, or a wink."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to point at a ring, a glance, a gag, or to end a scene as theatre. Do not use it as a substitute for a push-in."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera must physically approach, move the camera. If the world should fade as a whole, fade."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to point at a ring, a glance, a gag, or to end a scene as theatre. Do not use it as a substitute for a push-in.If the camera must physically approach, move the camera. If the world should fade as a whole, fade."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Fade In / Fade Out empties the whole field evenly. A Wipe uses a traveling straight or clock edge, not a hole from a center.",
+          "links": [
+            {
+              "text": "Fade In / Fade Out",
+              "url": "https://melies.co/cinematic-techniques/editing/fade"
+            },
+            {
+              "text": "Wipe",
+              "url": "https://melies.co/cinematic-techniques/editing/wipe"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vignette darkens corners without being a transition. A zoom changes focal length; the iris does not.",
+          "links": [
+            {
+              "text": "Vignette",
+              "url": "https://melies.co/cinematic-techniques/effects/vignette"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Match Cut joins two full frames; iris withholds the frame on purpose.",
+          "links": [
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "VignetteHold the eye in. Do not crush the sides as a filter.",
+          "displayText": "Vignette\nHold the eye in. Do not crush the sides as a filter.",
+          "links": [
+            {
+              "text": "VignetteHold the eye in. Do not crush the sides as a filter.",
+              "url": "https://melies.co/cinematic-techniques/effects/vignette"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Fade In / Fade OutA scene is a book chapter.",
+          "displayText": "Fade In / Fade Out\nA scene is a book chapter.",
+          "links": [
+            {
+              "text": "Fade In / Fade OutA scene is a book chapter.",
+              "url": "https://melies.co/cinematic-techniques/editing/fade"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Fade In / Fade Out",
+          "url": "https://melies.co/cinematic-techniques/editing/fade"
+        },
+        {
+          "text": "Wipe",
+          "url": "https://melies.co/cinematic-techniques/editing/wipe"
+        },
+        {
+          "text": "Vignette",
+          "url": "https://melies.co/cinematic-techniques/effects/vignette"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "VignetteHold the eye in. Do not crush the sides as a filter.",
+          "url": "https://melies.co/cinematic-techniques/effects/vignette"
+        },
+        {
+          "text": "Fade In / Fade OutA scene is a book chapter.",
+          "url": "https://melies.co/cinematic-techniques/editing/fade"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ce7df81aaefa9edb85f0198d8c4f923a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vignette.webp",
+          "alt": "Vignette"
+        },
+        {
+          "kind": "image",
+          "path": "media/eb3012a31c74b1950233bd05e60d3644.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fade-103-fade-to-a-field-of-black-or-color-mini.webp",
+          "alt": "Fade In / Fade Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/8012073caede219e3dd4f356b367853d.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/103-fade-to-a-field-of-black-or-color-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Fade In / Fade Out empties the whole field evenly. A Wipe uses a traveling straight or clock edge, not a hole from a center.Vignette darkens corners without being a transition. A zoom changes focal length; the iris does not.Match Cut joins two full frames; iris withholds the frame on purpose.VignetteHold the eye in. Do not crush the sides as a filter.Fade In / Fade OutA scene is a book chapter.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Neighbors uses a circular reveal to change the apparent scale and circumstances of a wedding. The Artist borrows silent-era punctuation, including iris-like framing, as a period grammar."
+        },
+        {
+          "type": "paragraph",
+          "text": "Silent comedy at large treated the iris as a pointing finger. Use the mask logic, not a pastiche overlay on every close-up."
+        },
+        {
+          "type": "list-item",
+          "text": "Neighbors 1920A circular reveal changes the apparent scale and circumstances of the wedding.",
+          "displayText": "Neighbors 1920\nA circular reveal changes the apparent scale and circumstances of the wedding."
+        },
+        {
+          "type": "list-item",
+          "text": "The Artist 2011Silent-film-derived visual punctuation includes iris-like framing.",
+          "displayText": "The Artist 2011\nSilent-film-derived visual punctuation includes iris-like framing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Neighbors uses a circular reveal to change the apparent scale and circumstances of a wedding. The Artist borrows silent-era punctuation, including iris-like framing, as a period grammar.Silent comedy at large treated the iris as a pointing finger. Use the mask logic, not a pastiche overlay on every close-up.Neighbors 1920A circular reveal changes the apparent scale and circumstances of the wedding.The Artist 2011Silent-film-derived visual punctuation includes iris-like framing."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Iris in or out on [Subject], a circular mask closing on a face or detail, silent-era pointing, or a wink. Name the center (an eye, a ring, a cat), whether the mask follows, and whether it opens or closes."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, generate the clean scene, then animate a circular mask in post. Do not zoom into darkness and call it an iris."
+        },
+        {
+          "type": "quote",
+          "text": "A violinist finishes a performance in an otherwise empty hall. Close a circular iris around her satisfied face, then let the circle reveal a tiny yawning cat on the piano before closing to black. Generate the clean scene and animate the mask separately."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+violinist+finishes+a+performance+in+an+otherwise+empty+hall.+Close+a+circular+iris+around+her+satisfied+face,+then+let+the+circle+reveal+a+tiny+yawning+cat+on+the+piano+before+closing+to+black.+Generate+the+clean+scene+and+animate+the+mask+separately."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Iris in or out on [Subject], a circular mask closing on a face or detail, silent-era pointing, or a wink. Name the center (an eye, a ring, a cat), whether the mask follows, and whether it opens or closes.For video, generate the clean scene, then animate a circular mask in post. Do not zoom into darkness and call it an iris.Copy promptUse in Video GeneratorA violinist finishes a performance in an otherwise empty hall. Close a circular iris around her satisfied face, then let the circle reveal a tiny yawning cat on the piano before closing to black. Generate the clean scene and animate the mask separately.A violinist finishes a performance in an otherwise empty hall. Close a circular iris around her satisfied face, then let the circle reveal a tiny yawning cat on the piano before closing to black. Generate the clean scene and animate the mask separately."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a zoom, a Fade In / Fade Out, or a heavy Vignette. The tell: the camera pushes in, or the whole frame dims evenly, or corners are just dark.",
+          "links": [
+            {
+              "text": "Fade In / Fade Out",
+              "url": "https://melies.co/cinematic-techniques/editing/fade"
+            },
+            {
+              "text": "Vignette",
+              "url": "https://melies.co/cinematic-techniques/effects/vignette"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: keep the camera still, animate a circular mask with a chosen center, let the unmasked picture stay at full exposure."
+        }
+      ],
+      "links": [
+        {
+          "text": "Fade In / Fade Out",
+          "url": "https://melies.co/cinematic-techniques/editing/fade"
+        },
+        {
+          "text": "Vignette",
+          "url": "https://melies.co/cinematic-techniques/effects/vignette"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a zoom, a Fade In / Fade Out, or a heavy Vignette. The tell: the camera pushes in, or the whole frame dims evenly, or corners are just dark.The fix: keep the camera still, animate a circular mask with a chosen center, let the unmasked picture stay at full exposure."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Iris in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An iris is a moving circular or shaped mask that reveals or conceals part of the image. One side of the join is the open picture; the other is a pointing hole, often closing to black."
+        },
+        {
+          "type": "heading",
+          "text": "Iris vs Fade In / Fade Out",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A fade takes the entire image to a uniform field. An iris keeps a chosen center visible while the mask closes or opens. Fade is a chapter; iris is a finger."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Iris?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to point at a detail, end a gag, or quote silent-era punctuation. Do not use it when you mean a zoom or an even fade to black."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Iris for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the subject and the mask. Example: Iris in or out on [Subject], a circular mask closing on a face or detail. Specify center and direction (in or out), and say it is a mask, not a zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Iris in film?An iris is a moving circular or shaped mask that reveals or conceals part of the image. One side of the join is the open picture; the other is a pointing hole, often closing to black.Iris vs Fade In / Fade OutA fade takes the entire image to a uniform field. An iris keeps a chosen center visible while the mask closes or opens. Fade is a chapter; iris is a finger.When should I use Iris?Use it to point at a detail, end a gag, or quote silent-era punctuation. Do not use it when you mean a zoom or an even fade to black.How do I prompt Iris for AI image or video?Name the subject and the mask. Example: Iris in or out on [Subject], a circular mask closing on a face or detail. Specify center and direction (in or out), and say it is a mask, not a zoom."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Iris in or out on [Subject], a circular mask closing on a face or detail, silent-era pointing, or a wink. Name the center (an eye, a ring, a cat), whether the mask follows, and whether it opens or closes.",
+      "For video, generate the clean scene, then animate a circular mask in post. Do not zoom into darkness and call it an iris."
+    ],
+    "example": "A violinist finishes a performance in an otherwise empty hall. Close a circular iris around her satisfied face, then let the circle reveal a tiny yawning cat on the piano before closing to black. Generate the clean scene and animate the mask separately."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/df975cf4d452b48274b222e578129ce2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/104-iris-opening-or-closing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ac66d050cb3a40e5efe5550f1b3c9242.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/iris-104-iris-opening-or-closing-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/16e9a2bc3672f1e843c6c24a221c311a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/iris.jpg",
+      "alt": "Iris frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/ce7df81aaefa9edb85f0198d8c4f923a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vignette.webp",
+      "alt": "Vignette"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb3012a31c74b1950233bd05e60d3644.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fade-103-fade-to-a-field-of-black-or-color-mini.webp",
+      "alt": "Fade In / Fade Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/8012073caede219e3dd4f356b367853d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/103-fade-to-a-field-of-black-or-color-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/94cf89672a72da3d9c3773b2fa4e24a3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/iris/hero.jpg",
+      "alt": "Iris",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "ab1b8a73512f4f205edb62b19184c67fd524ad1213b0d953017071dfc88527bc"
+}

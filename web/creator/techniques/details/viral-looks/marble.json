@@ -1,0 +1,361 @@
+{
+  "id": "viral-looks/marble",
+  "slug": "marble",
+  "title": "Marble",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/marble",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/marble.webp",
+  "detail": "details/viral-looks/marble.json",
+  "aliases": [],
+  "description": "Marble, in marble look cinematography, is stone as flesh: veined whites, cold polish, a statue that still breathes. They should look quarried: pale beauty skin without veins is not mineral.",
+  "thumbnail": "media/c21057aa7238a95dba62ca75c3b5e533.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Myths, fashion, a character already monumentalized: museum cold, a body that could be sculpture, architecture sharing the same mineral. 3D render is plastic-computer."
+        },
+        {
+          "type": "paragraph",
+          "text": "Marble is geology. It is the wrong tool as a desaturated beauty still, and the wrong tool if the surface is shader-perfect without veins."
+        },
+        {
+          "type": "paragraph",
+          "text": "You need veins, polish, and cold."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Myths, fashion, a character already monumentalized: museum cold, a body that could be sculpture, architecture sharing the same mineral. 3D render is plastic-computer.Marble is geology. It is the wrong tool as a desaturated beauty still, and the wrong tool if the surface is shader-perfect without veins.You need veins, polish, and cold."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height, 50mm to 85mm, lock-off. Soft north light or a gallery skylight."
+        },
+        {
+          "type": "paragraph",
+          "text": "Veined stone, polish, cold. Prompt: Marble look on [Subject], veined stone as flesh, cold polish, a statue that still breathes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Eye height, 50mm to 85mm, lock-off. Soft north light or a gallery skylight.Veined stone, polish, cold. Prompt: Marble look on [Subject], veined stone as flesh, cold polish, a statue that still breathes."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Myth, fashion, a person already turned into a monument. Do not use it as pale beauty without veins."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Myth, fashion, a person already turned into a monument. Do not use it as pale beauty without veins."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "3D Render is shader GI and a cyc. Marble is mineral: veins, polish, gallery cold.",
+          "links": [
+            {
+              "text": "3D Render",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/3d-render"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Diorama is toy scale. If the skin is computed plastic, you wanted 3D render.",
+          "links": [
+            {
+              "text": "Diorama",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If it is quarried, you are here."
+        },
+        {
+          "type": "list-item",
+          "text": "3D RenderThey should look computed.",
+          "displayText": "3D Render\nThey should look computed.",
+          "links": [
+            {
+              "text": "3D RenderThey should look computed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/3d-render"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Ink RiotThe image should spill.",
+          "displayText": "Ink Riot\nThe image should spill.",
+          "links": [
+            {
+              "text": "Ink RiotThe image should spill.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/ink-riot"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "3D Render",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/3d-render"
+        },
+        {
+          "text": "Diorama",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        },
+        {
+          "text": "3D RenderThey should look computed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/3d-render"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        },
+        {
+          "text": "Ink RiotThe image should spill.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/ink-riot"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f0b5523be34f9676e72ab7564462ffaa.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/3d-render.webp",
+          "alt": "3D Render"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        },
+        {
+          "kind": "image",
+          "path": "media/4f2e0687488ed5fe069887e8841b9eaa.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ink-riot-ink-riot-mini.webp",
+          "alt": "Ink Riot"
+        },
+        {
+          "kind": "video",
+          "path": "media/710fb78f97a115252986da945497849b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ink-riot-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots 3D Render is shader GI and a cyc. Marble is mineral: veins, polish, gallery cold.Diorama is toy scale. If the skin is computed plastic, you wanted 3D render.If it is quarried, you are here.3D RenderThey should look computed.AgamemnonMake them ancient and doomed.Ink RiotThe image should spill."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Great Beauty uses Roman stone as moral weather around bodies. The Belly of an Architect treats marble as both building and obsession."
+        },
+        {
+          "type": "paragraph",
+          "text": "Gallery sculpture is the well-known still grammar. Mineral as makeup, not a statue to clone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Great Beauty uses Roman stone as moral weather around bodies. The Belly of an Architect treats marble as both building and obsession.Gallery sculpture is the well-known still grammar. Mineral as makeup, not a statue to clone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Veins, polish, cold skylight. Marble look on [Subject], veined stone as flesh, cold polish, a statue that still breathes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add gallery north light, mineral flesh, no shader cyc, no graffiti type."
+        },
+        {
+          "type": "quote",
+          "text": "Marble look on [Subject], veined stone as flesh, cold polish, a statue that still breathes."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Marble+look+on+[Subject],+veined+stone+as+flesh,+cold+polish,+a+statue+that+still+breathes."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Veins, polish, cold skylight. Marble look on [Subject], veined stone as flesh, cold polish, a statue that still breathes.Add gallery north light, mineral flesh, no shader cyc, no graffiti type.Copy promptUse in Image GeneratorMarble look on [Subject], veined stone as flesh, cold polish, a statue that still breathes.Marble look on [Subject], veined stone as flesh, cold polish, a statue that still breathes."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A pale beauty still, or a slide into 3D Render plastic. The tell is no veins and no cold.",
+          "links": [
+            {
+              "text": "3D Render",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/3d-render"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: veined stone, polish, museum light, a body that could be sculpture."
+        }
+      ],
+      "links": [
+        {
+          "text": "3D Render",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/3d-render"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A pale beauty still, or a slide into 3D Render plastic. The tell is no veins and no cold.Fix it: veined stone, polish, museum light, a body that could be sculpture."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Marble in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A mineral-flesh look: veined stone, cold polish, a statue that still breathes. Geology as skin, not a pale LUT."
+        },
+        {
+          "type": "heading",
+          "text": "Marble vs 3D Render",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "3D render is computed GI and too-perfect shader skin. Marble is quarried: veins, polish, museum cold. Plastic versus stone."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Marble?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Myths, fashion, monumental characters. Skip pale beauty with no veins."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Marble for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Gallery skylight, then: Marble look on [Subject], veined stone as flesh, cold polish, a statue that still breathes. Demand veins. Keep a breath of life in the face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Marble in film?A mineral-flesh look: veined stone, cold polish, a statue that still breathes. Geology as skin, not a pale LUT.Marble vs 3D Render3D render is computed GI and too-perfect shader skin. Marble is quarried: veins, polish, museum cold. Plastic versus stone.When should I use Marble?Myths, fashion, monumental characters. Skip pale beauty with no veins.How do I prompt Marble for AI image or video?Gallery skylight, then: Marble look on [Subject], veined stone as flesh, cold polish, a statue that still breathes. Demand veins. Keep a breath of life in the face."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Veins, polish, cold skylight. Marble look on [Subject], veined stone as flesh, cold polish, a statue that still breathes.",
+      "Add gallery north light, mineral flesh, no shader cyc, no graffiti type."
+    ],
+    "example": "Marble look on [Subject], veined stone as flesh, cold polish, a statue that still breathes."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/c21057aa7238a95dba62ca75c3b5e533.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/marble.webp",
+      "alt": "Marble example"
+    },
+    {
+      "kind": "image",
+      "path": "media/f0b5523be34f9676e72ab7564462ffaa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/3d-render.webp",
+      "alt": "3D Render"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/4f2e0687488ed5fe069887e8841b9eaa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ink-riot-ink-riot-mini.webp",
+      "alt": "Ink Riot"
+    },
+    {
+      "kind": "video",
+      "path": "media/710fb78f97a115252986da945497849b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ink-riot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/331fb6a0684ae8088d82a193be2e43b5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/marble/hero.jpg",
+      "alt": "Marble",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "fe69b1a5efddeaa3e74574d37acc7e2cef9a8adc0dd63651b9d920bdde58f5d0"
+}

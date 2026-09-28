@@ -1,0 +1,362 @@
+{
+  "id": "viral-looks/lost-in-a-book",
+  "slug": "lost-in-a-book",
+  "title": "Lost in a Book",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/lost-in-a-book",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lost-in-a-book-lost-in-a-book-mini.webp",
+  "detail": "details/viral-looks/lost-in-a-book.json",
+  "aliases": [],
+  "description": "Lost in a book, the lost in a book effect, uses an open volume as a door: near-plane paper, a gutter as threshold, illustration or weather coming out of the page, a reader looking in or falling in. A person reading on a couch is not the recipe.",
+  "thumbnail": "media/ebcdf27c9e6717943379001c72faa89b.webp",
+  "video": "media/b1b713d3171da3285e60033e84ae4e93.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lost-in-a-book-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Childhood, grief, a story that eats the teller: hands and paper close to lens, a world on the other side of the binding. Type should be unreadable texture so letters do not garble."
+        },
+        {
+          "type": "paragraph",
+          "text": "One world spills. A library wide with no portal is just a library."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when nothing leaves the page, and the wrong tool if you wanted a castle without a book. Fairytale castle is the destination."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the hinge."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Childhood, grief, a story that eats the teller: hands and paper close to lens, a world on the other side of the binding. Type should be unreadable texture so letters do not garble.One world spills. A library wide with no portal is just a library.It is the wrong tool when nothing leaves the page, and the wrong tool if you wanted a castle without a book. Fairytale castle is the destination.This is the hinge."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Close enough that the book occupies the near third, 24mm to 50mm, lock-off or a tiny push into the gutter. Key from the page (light or weather leaving the paper) plus a dim room lamp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep type as texture. Prompt: Lost-in-a-book of [Subject], a reader falling into illustration, pages becoming rooms."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Close enough that the book occupies the near third, 24mm to 50mm, lock-off or a tiny push into the gutter. Key from the page (light or weather leaving the paper) plus a dim room lamp.Keep type as texture. Prompt: Lost-in-a-book of [Subject], a reader falling into illustration, pages becoming rooms."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A child or adult at the threshold of a story, grief that opens a page, a tale that eats the teller. Do not use it as a couch-reading still with a closed book."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A child or adult at the threshold of a story, grief that opens a page, a tale that eats the teller. Do not use it as a couch-reading still with a closed book."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Object Portal is the generic device through any object. Lost in a book names the volume as the door.",
+          "links": [
+            {
+              "text": "Object Portal",
+              "url": "https://melies.co/cinematic-techniques/effects/object-portal"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fairytale Castle is the world on the other side. Show the hinge in the binding or you only had a library.",
+          "links": [
+            {
+              "text": "Fairytale Castle",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/fairytale-castle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Object PortalA prop is a wormhole.",
+          "displayText": "Object Portal\nA prop is a wormhole.",
+          "links": [
+            {
+              "text": "Object PortalA prop is a wormhole.",
+              "url": "https://melies.co/cinematic-techniques/effects/object-portal"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Fairytale CastleThe location is a tale.",
+          "displayText": "Fairytale Castle\nThe location is a tale.",
+          "links": [
+            {
+              "text": "Fairytale CastleThe location is a tale.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/fairytale-castle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Object Portal",
+          "url": "https://melies.co/cinematic-techniques/effects/object-portal"
+        },
+        {
+          "text": "Fairytale Castle",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/fairytale-castle"
+        },
+        {
+          "text": "Object PortalA prop is a wormhole.",
+          "url": "https://melies.co/cinematic-techniques/effects/object-portal"
+        },
+        {
+          "text": "Fairytale CastleThe location is a tale.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/fairytale-castle"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/eb0b73ad7e6099db4d24e843e9ce6226.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/object-portal-object-portal-mini.webp",
+          "alt": "Object Portal"
+        },
+        {
+          "kind": "video",
+          "path": "media/0a077e954932ba77489876d3a6d39e77.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/object-portal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4da9253acc2f6b7d4072dde1a14afff5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fairytale-castle.webp",
+          "alt": "Fairytale Castle"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Object Portal is the generic device through any object. Lost in a book names the volume as the door.Fairytale Castle is the world on the other side. Show the hinge in the binding or you only had a library.Object PortalA prop is a wormhole.Fairytale CastleThe location is a tale.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The NeverEnding Story makes the book a threshold you can fall through. Inkheart treats reading as a door with consequences."
+        },
+        {
+          "type": "paragraph",
+          "text": "The still should have paper in the near plane and a world leaving the gutter."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The NeverEnding Story makes the book a threshold you can fall through. Inkheart treats reading as a door with consequences.The still should have paper in the near plane and a world leaving the gutter."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Book near, world leaving the gutter. Lost-in-a-book of [Subject], a reader falling into illustration, pages becoming rooms."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add open book in foreground, unreadable type as texture, light or weather from the page, one world on the other side. Not a couch with a closed book."
+        },
+        {
+          "type": "quote",
+          "text": "Lost-in-a-book of [Subject], a reader falling into illustration, pages becoming rooms."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Lost-in-a-book+of+[Subject],+a+reader+falling+into+illustration,+pages+becoming+rooms."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Book near, world leaving the gutter. Lost-in-a-book of [Subject], a reader falling into illustration, pages becoming rooms.Add open book in foreground, unreadable type as texture, light or weather from the page, one world on the other side. Not a couch with a closed book.Copy promptUse in Image GeneratorLost-in-a-book of [Subject], a reader falling into illustration, pages becoming rooms.Lost-in-a-book of [Subject], a reader falling into illustration, pages becoming rooms."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A person reading on a couch, or a castle with no page. The tell is no threshold."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: open book in the near plane, something leaving the gutter, reader looking in or falling in."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong A person reading on a couch, or a castle with no page. The tell is no threshold.Fix it: open book in the near plane, something leaving the gutter, reader looking in or falling in."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Lost in a Book in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A portal recipe: an open book in the near plane, pages becoming rooms, a reader at the hinge. The book is a door, not a prop."
+        },
+        {
+          "type": "heading",
+          "text": "Lost in a Book vs Object Portal",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Object portal is any object as a door. Lost in a book specifies paper, gutter, illustration spilling. If the door is a wardrobe or a screen, you wanted the generic cousin."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Lost in a Book?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Childhood, grief, a story that eats the teller. Skip library wides with no portal."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Lost in a Book for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Open book in foreground, then: Lost-in-a-book of [Subject], a reader falling into illustration, pages becoming rooms. Keep type unreadable. Show the hinge."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Lost in a Book in film?A portal recipe: an open book in the near plane, pages becoming rooms, a reader at the hinge. The book is a door, not a prop.Lost in a Book vs Object PortalObject portal is any object as a door. Lost in a book specifies paper, gutter, illustration spilling. If the door is a wardrobe or a screen, you wanted the generic cousin.When should I use Lost in a Book?Childhood, grief, a story that eats the teller. Skip library wides with no portal.How do I prompt Lost in a Book for AI image or video?Open book in foreground, then: Lost-in-a-book of [Subject], a reader falling into illustration, pages becoming rooms. Keep type unreadable. Show the hinge."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Book near, world leaving the gutter. Lost-in-a-book of [Subject], a reader falling into illustration, pages becoming rooms.",
+      "Add open book in foreground, unreadable type as texture, light or weather from the page, one world on the other side. Not a couch with a closed book."
+    ],
+    "example": "Lost-in-a-book of [Subject], a reader falling into illustration, pages becoming rooms."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/b1b713d3171da3285e60033e84ae4e93.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lost-in-a-book-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ebcdf27c9e6717943379001c72faa89b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lost-in-a-book-lost-in-a-book-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a9093c9d1db7b573218875a71b323b5f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/lost-in-a-book.jpg",
+      "alt": "Lost in a Book frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb0b73ad7e6099db4d24e843e9ce6226.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/object-portal-object-portal-mini.webp",
+      "alt": "Object Portal"
+    },
+    {
+      "kind": "video",
+      "path": "media/0a077e954932ba77489876d3a6d39e77.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/object-portal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4da9253acc2f6b7d4072dde1a14afff5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fairytale-castle.webp",
+      "alt": "Fairytale Castle"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/130f55758468009ee80baa30e305ee9b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/lost-in-a-book/hero.jpg",
+      "alt": "Lost in a Book",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "35a7c16c948ba8285af1aa58a1debd22ceba1f77010ea997223bd913f0f73d4a"
+}

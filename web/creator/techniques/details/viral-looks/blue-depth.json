@@ -1,0 +1,377 @@
+{
+  "id": "viral-looks/blue-depth",
+  "slug": "blue-depth",
+  "title": "Blue Depth",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/blue-depth",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blue-depth-blue-depth-mini.webp",
+  "detail": "details/viral-looks/blue-depth.json",
+  "aliases": [],
+  "description": "Blue depth, the blue depth look, stacks cyan planes so distance is a blue gradient: underwater, night glass, or air thick enough that the far plane goes deeper than the near. Depth is a color, not a cool white-balance wash.",
+  "thumbnail": "media/6a93513d58e6399bd60a156e5eddb65c.webp",
+  "video": "media/d0b18dddd9f734cfc81fc97146fa51ae.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/blue-depth-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Isolation, awe, a swim, a skyline: a body, a pier, a tower that proves scale. Foreground can be warmer or paler."
+        },
+        {
+          "type": "paragraph",
+          "text": "Receding planes go deeper cyan. Comedy usually dies in this water."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when near and far are the same teal. That is a wash, or a Teal and Orange blockbuster grade.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the z-axis is not a hue change, you missed the recipe."
+        }
+      ],
+      "links": [
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Isolation, awe, a swim, a skyline: a body, a pier, a tower that proves scale. Foreground can be warmer or paler.Receding planes go deeper cyan. Comedy usually dies in this water.It is the wrong tool when near and far are the same teal. That is a wash, or a Teal and Orange blockbuster grade.If the z-axis is not a hue change, you missed the recipe."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Telephoto helps the planes (85mm to 135mm), or a wide underwater with haze. Lock off."
+        },
+        {
+          "type": "paragraph",
+          "text": "Describe stacked haze, glass, or water. Keep a subject that proves scale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Blue-depth world of [Subject], stacked cyan planes, underwater or night glass, distance as a blue gradient."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Telephoto helps the planes (85mm to 135mm), or a wide underwater with haze. Lock off.Describe stacked haze, glass, or water. Keep a subject that proves scale.Prompt: Blue-depth world of [Subject], stacked cyan planes, underwater or night glass, distance as a blue gradient."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A swim into dark water, a night city receding, a figure isolated in thick air. Do not use it as teal-and-orange on a daylight street."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A swim into dark water, a night city receding, a figure isolated in thick air. Do not use it as teal-and-orange on a daylight street."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cool Blue is overall color temperature. Blue depth is a gradient along z.",
+          "links": [
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Underwater is the medium that often produces this, not the only legal set. If the near plane is as blue as the far, you have a wash.",
+          "links": [
+            {
+              "text": "Underwater",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cool BlueCold institutions, night, or alienation.",
+          "displayText": "Cool Blue\nCold institutions, night, or alienation.",
+          "links": [
+            {
+              "text": "Cool BlueCold institutions, night, or alienation.",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "UnderwaterLeave air.",
+          "displayText": "Underwater\nLeave air.",
+          "links": [
+            {
+              "text": "UnderwaterLeave air.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "Underwater",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+        },
+        {
+          "text": "Cool BlueCold institutions, night, or alienation.",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "UnderwaterLeave air.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9ac5d96fc611ee97ab52dc9132feb3fa.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cool-blue.webp",
+          "alt": "Cool Blue"
+        },
+        {
+          "kind": "image",
+          "path": "media/fd420b0e034c5e2ab01183f84983fe9c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/underwater-underwater-mini.webp",
+          "alt": "Underwater"
+        },
+        {
+          "kind": "video",
+          "path": "media/64ef0f8f2668206cb2692f2d00919c1e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/underwater-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Cool Blue is overall color temperature. Blue depth is a gradient along z.Underwater is the medium that often produces this, not the only legal set. If the near plane is as blue as the far, you have a wash.Cool BlueCold institutions, night, or alienation.UnderwaterLeave air.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Abyss uses water as stacked blue distance. Blade Runner 2049 uses cyan receding planes against warmer near objects."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is the z-axis. Grammar, not a still to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Abyss uses water as stacked blue distance. Blade Runner 2049 uses cyan receding planes against warmer near objects.Color is the z-axis. Grammar, not a still to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name near and far as different blues. Blue-depth world of [Subject], stacked cyan planes, underwater or night glass, distance as a blue gradient."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add a scale subject, haze, telephoto or underwater wide, near plane paler or warmer than the far."
+        },
+        {
+          "type": "quote",
+          "text": "Blue-depth world of [Subject], stacked cyan planes, underwater or night glass, distance as a blue gradient."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Blue-depth+world+of+[Subject],+stacked+cyan+planes,+underwater+or+night+glass,+distance+as+a+blue+gradient."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name near and far as different blues. Blue-depth world of [Subject], stacked cyan planes, underwater or night glass, distance as a blue gradient.Add a scale subject, haze, telephoto or underwater wide, near plane paler or warmer than the far.Copy promptUse in Image GeneratorBlue-depth world of [Subject], stacked cyan planes, underwater or night glass, distance as a blue gradient.Blue-depth world of [Subject], stacked cyan planes, underwater or night glass, distance as a blue gradient."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A teal-orange grade, or a flat blue wash. The tell is the same hue on face and horizon."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: stacked planes, deeper cyan in the distance, a body or tower to prove scale."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong A teal-orange grade, or a flat blue wash. The tell is the same hue on face and horizon.Fix it: stacked planes, deeper cyan in the distance, a body or tower to prove scale."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Blue Depth in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A spatial grade: receding planes go deeper cyan, so distance is a blue gradient. Underwater, night glass, or thick air. Not a cool LUT."
+        },
+        {
+          "type": "heading",
+          "text": "Blue Depth vs Cool Blue",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Cool blue tints the whole frame. Blue depth changes with distance. If the foreground is as blue as the background, you wanted the cousin, or you failed this look."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Blue Depth?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Isolation, awe, swims, skylines. Skip comedy and any teal-orange street grade."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Blue Depth for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name a scale subject and stacked haze, then: Blue-depth world of [Subject], stacked cyan planes, underwater or night glass, distance as a blue gradient. Keep the near plane less blue than the far."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Blue Depth in film?A spatial grade: receding planes go deeper cyan, so distance is a blue gradient. Underwater, night glass, or thick air. Not a cool LUT.Blue Depth vs Cool BlueCool blue tints the whole frame. Blue depth changes with distance. If the foreground is as blue as the background, you wanted the cousin, or you failed this look.When should I use Blue Depth?Isolation, awe, swims, skylines. Skip comedy and any teal-orange street grade.How do I prompt Blue Depth for AI image or video?Name a scale subject and stacked haze, then: Blue-depth world of [Subject], stacked cyan planes, underwater or night glass, distance as a blue gradient. Keep the near plane less blue than the far."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name near and far as different blues. Blue-depth world of [Subject], stacked cyan planes, underwater or night glass, distance as a blue gradient.",
+      "Add a scale subject, haze, telephoto or underwater wide, near plane paler or warmer than the far."
+    ],
+    "example": "Blue-depth world of [Subject], stacked cyan planes, underwater or night glass, distance as a blue gradient."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/d0b18dddd9f734cfc81fc97146fa51ae.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/blue-depth-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a93513d58e6399bd60a156e5eddb65c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blue-depth-blue-depth-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/15c3b237e9bb2acd5181f589db8fb37d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/blue-depth.jpg",
+      "alt": "Blue Depth frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/9ac5d96fc611ee97ab52dc9132feb3fa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cool-blue.webp",
+      "alt": "Cool Blue"
+    },
+    {
+      "kind": "image",
+      "path": "media/fd420b0e034c5e2ab01183f84983fe9c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/underwater-underwater-mini.webp",
+      "alt": "Underwater"
+    },
+    {
+      "kind": "video",
+      "path": "media/64ef0f8f2668206cb2692f2d00919c1e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/underwater-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/9910919c2d66251f7cb8b0fa83fec22b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/blue-depth/hero.jpg",
+      "alt": "Blue Depth",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "ecdd79bfa65398e22015215b6f851db86c3292a3cc183884ffe9e5d0700867fe"
+}

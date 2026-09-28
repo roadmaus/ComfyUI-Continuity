@@ -1,0 +1,451 @@
+{
+  "id": "time-and-motion/speed-ramp",
+  "slug": "speed-ramp",
+  "title": "Speed Ramp",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/speed-ramp",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/speed-ramp-079-speed-ramp-mini.webp",
+  "detail": "details/time-and-motion/speed-ramp.json",
+  "aliases": [
+    "Variable-speed action",
+    "Ralenti accéléré"
+  ],
+  "description": "Speed ramping changes playback or capture speed inside a single shot rather than holding one retiming ratio. Approach and recovery stay energetic while one motivated instant (impact, glance, turn) stretches, then the clock returns.",
+  "thumbnail": "media/5830a4bde5d41dd3d555f54f4119dd65.webp",
+  "video": "media/1055170f1851ae017a5ed0883f8c29d2.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/079-speed-ramp-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Treat it as temporal close-up. The shot walks up in real time, lands on the fact that matters, and releases."
+        },
+        {
+          "type": "paragraph",
+          "text": "A fight, a catch, a look across a room can all take the ramp if the event is readable. The audience should feel one continuous action, not a new clip glued on."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the whole beat should stay slow, or when you only need a smash of magnification. If rate never returns, you shot slow motion and called it a ramp."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the picture punches in by focal length, you wanted a crash zoom. Do not ramp to hide unreadable choreography."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Treat it as temporal close-up. The shot walks up in real time, lands on the fact that matters, and releases.A fight, a catch, a look across a room can all take the ramp if the event is readable. The audience should feel one continuous action, not a new clip glued on.It is the wrong tool when the whole beat should stay slow, or when you only need a smash of magnification. If rate never returns, you shot slow motion and called it a ramp.If the picture punches in by focal length, you wanted a crash zoom. Do not ramp to hide unreadable choreography."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Capture enough temporal detail (high frame rate) that both the fast and slow portions have samples. Identify the motivated event, then shape the acceleration curve and matching motion blur."
+        },
+        {
+          "type": "paragraph",
+          "text": "The body must stay mechanically continuous through the change. Prompt: Speed ramp on [Subject], real time slamming into slow motion at the impact or glance, then releasing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Capture enough temporal detail (high frame rate) that both the fast and slow portions have samples. Identify the motivated event, then shape the acceleration curve and matching motion blur.The body must stay mechanically continuous through the change. Prompt: Speed ramp on [Subject], real time slamming into slow motion at the impact or glance, then releasing."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to mark one instant inside a fight or a look, such as a board leaving the ramp at the peak of a jump. Do not use it on every cut or the emphasis dies."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to mark one instant inside a fight or a look, such as a board leaving the ramp at the peak of a jump. Do not use it on every cut or the emphasis dies."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A ramp is not constant Slow Motion, which never returns to real time. It is not a Crash Zoom In, which changes focal length rather than the clock.",
+          "links": [
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            },
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Freeze Frame holds one image. Bullet Time lets the camera orbit a nearly stopped instant instead of stretching and releasing the same viewpoint's action.",
+          "links": [
+            {
+              "text": "Freeze Frame",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+            },
+            {
+              "text": "Bullet Time",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "displayText": "Crash Zoom In\nPunctuate a hit, a realization, or a comic sting.",
+          "links": [
+            {
+              "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Fast MotionToo much life for real time.",
+          "displayText": "Fast Motion\nToo much life for real time.",
+          "links": [
+            {
+              "text": "Fast MotionToo much life for real time.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Freeze Frame",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+        },
+        {
+          "text": "Bullet Time",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Fast MotionToo much life for real time.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+          "alt": "Crash Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+          "alt": "Fast Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A ramp is not constant Slow Motion, which never returns to real time. It is not a Crash Zoom In, which changes focal length rather than the clock.Freeze Frame holds one image. Bullet Time lets the camera orbit a nearly stopped instant instead of stretching and releasing the same viewpoint's action.Slow MotionA second contains a scene.Crash Zoom InPunctuate a hit, a realization, or a comic sting.Fast MotionToo much life for real time."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "300 moves combat between fast and extended slow-motion beats so selected blows become readable. Sherlock Holmes (2009) isolates anticipated fight details, then snaps back to the hit as performed."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Matrix mixes rates around chosen impacts, though its array orbits are a different machine."
+        },
+        {
+          "type": "list-item",
+          "text": "300 2006Combat moves between fast and extended slow-motion beats.",
+          "displayText": "300 2006\nCombat moves between fast and extended slow-motion beats."
+        },
+        {
+          "type": "list-item",
+          "text": "Sherlock Holmes 2009Anticipated combat details are isolated before action resumes.",
+          "displayText": "Sherlock Holmes 2009\nAnticipated combat details are isolated before action resumes."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/4d2da7650ed08306c1451fe5493ac066.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/speed-ramp/famous/00-300-2006.jpg",
+          "alt": "300 2006"
+        },
+        {
+          "kind": "image",
+          "path": "media/f74baaac72a2ed5ab81e57ef3fd9da87.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/speed-ramp/famous/01-sherlock-holmes-2009.jpg",
+          "alt": "Sherlock Holmes 2009"
+        }
+      ],
+      "sourceText": "In film 300 moves combat between fast and extended slow-motion beats so selected blows become readable. Sherlock Holmes (2009) isolates anticipated fight details, then snaps back to the hit as performed.The Matrix mixes rates around chosen impacts, though its array orbits are a different machine.300 2006Combat moves between fast and extended slow-motion beats.Sherlock Holmes 2009Anticipated combat details are isolated before action resumes."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the real-time approach, the stretched beat, and the recovery. Still: three readable phases implied in one pose is weaker than a video ramp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Speed ramp: real-time movement of [Subject] suddenly stretches into slow motion at the key beat, then recovers. One coherent action, readable contacts, natural gravity."
+        },
+        {
+          "type": "quote",
+          "text": "A skateboarder approaches a small ramp at normal speed, slows smoothly to reveal the board rotating beneath their feet, then returns to normal speed on landing. One coherent action, readable foot placement, natural gravity, no impossible extra spin. Specify and refine the ramp in editing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+skateboarder+approaches+a+small+ramp+at+normal+speed,+slows+smoothly+to+reveal+the+board+rotating+beneath+their+feet,+then+returns+to+normal+speed+on+landing.+One+coherent+action,+readable+foot+placement,+natural+gravity,+no+impossible+extra+spin.+Specify+and+refine+the+ramp+in+editing."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the real-time approach, the stretched beat, and the recovery. Still: three readable phases implied in one pose is weaker than a video ramp.Video: Speed ramp: real-time movement of [Subject] suddenly stretches into slow motion at the key beat, then recovers. One coherent action, readable contacts, natural gravity.Copy promptUse in Video GeneratorA skateboarder approaches a small ramp at normal speed, slows smoothly to reveal the board rotating beneath their feet, then returns to normal speed on landing. One coherent action, readable foot placement, natural gravity, no impossible extra spin. Specify and refine the ramp in editing.A skateboarder approaches a small ramp at normal speed, slows smoothly to reveal the board rotating beneath their feet, then returns to normal speed on landing. One coherent action, readable foot placement, natural gravity, no impossible extra spin. Specify and refine the ramp in editing."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is wall-to-wall Slow Motion. The tell is a shot that never returns to real time, or a jump in pose at the speed change.",
+          "links": [
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: write approach, hold, and release, and keep the body continuous through the curve."
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is wall-to-wall Slow Motion. The tell is a shot that never returns to real time, or a jump in pose at the speed change.Fix: write approach, hold, and release, and keep the body continuous through the curve."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Speed Ramp in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A speed ramp is a change of playback or capture speed inside one shot, used to emphasize a single instant and then return."
+        },
+        {
+          "type": "heading",
+          "text": "Speed Ramp vs Slow Motion",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Slow motion holds one stretched rate. A speed ramp enters that rate at a motivated event and leaves it, so approach and recovery stay fast."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Speed Ramp?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When one contact, recognition, or turn must be inspected without draining the energy of the surrounding action."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Speed Ramp for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write real time into slow motion at a named beat, then recovery. Demand one continuous action and matching motion blur, not a cut to a different clip."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Speed Ramp in film?A speed ramp is a change of playback or capture speed inside one shot, used to emphasize a single instant and then return.Speed Ramp vs Slow MotionSlow motion holds one stretched rate. A speed ramp enters that rate at a motivated event and leaves it, so approach and recovery stay fast.When should I use Speed Ramp?When one contact, recognition, or turn must be inspected without draining the energy of the surrounding action.How do I prompt Speed Ramp for AI image or video?Write real time into slow motion at a named beat, then recovery. Demand one continuous action and matching motion blur, not a cut to a different clip."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the real-time approach, the stretched beat, and the recovery. Still: three readable phases implied in one pose is weaker than a video ramp.",
+      "Video: Speed ramp: real-time movement of [Subject] suddenly stretches into slow motion at the key beat, then recovers. One coherent action, readable contacts, natural gravity."
+    ],
+    "example": "A skateboarder approaches a small ramp at normal speed, slows smoothly to reveal the board rotating beneath their feet, then returns to normal speed on landing. One coherent action, readable foot placement, natural gravity, no impossible extra spin. Specify and refine the ramp in editing."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/1055170f1851ae017a5ed0883f8c29d2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/079-speed-ramp-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5830a4bde5d41dd3d555f54f4119dd65.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/speed-ramp-079-speed-ramp-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cc661b5dff34c04c98853a4f62cd60f0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/speed-ramp.jpg",
+      "alt": "Speed Ramp frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": "Crash Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+      "alt": "Fast Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4d2da7650ed08306c1451fe5493ac066.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/speed-ramp/famous/00-300-2006.jpg",
+      "alt": "300 2006"
+    },
+    {
+      "kind": "image",
+      "path": "media/f74baaac72a2ed5ab81e57ef3fd9da87.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/speed-ramp/famous/01-sherlock-holmes-2009.jpg",
+      "alt": "Sherlock Holmes 2009"
+    },
+    {
+      "kind": "image",
+      "path": "media/306abadd6f912369028c1419a367b864.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/speed-ramp/hero.jpg",
+      "alt": "Speed Ramp",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "6b8875dae387c24a24e0cfc6675827c2b53941269ae5eca8fc4c0c0b77cd8acb"
+}

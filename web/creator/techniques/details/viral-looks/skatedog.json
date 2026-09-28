@@ -1,0 +1,392 @@
+{
+  "id": "viral-looks/skatedog",
+  "slug": "skatedog",
+  "title": "Skatedog",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/skatedog",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/skatedog-skatedog-mini.webp",
+  "detail": "details/viral-looks/skatedog.json",
+  "aliases": [],
+  "description": "Skatedog, as a skatedog preset, is pavement grammar: camera near the deck or the paws, wide lens, asphalt in the foreground, a creature or rider in street sport as a joke. Keep it stupid and low, because standing height is the failure.",
+  "thumbnail": "media/7c5498f21901b1a4ef31e584def40a09.webp",
+  "video": "media/b4cdcfecc62dc06c6d1e03cfd69171ad.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/skatedog-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Street comedy, animals in human sports, youth: hard sun or sodium night, motion implied, dirty wheels or dirty paws. The gag is the rider who should not be that good at this."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hero rim turns it into mighty fighter and kills the joke. It is the wrong tool in a court drama, a beauty still, or any shot from adult standing height."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you cannot smell the pavement, you are too high."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Street comedy, animals in human sports, youth: hard sun or sodium night, motion implied, dirty wheels or dirty paws. The gag is the rider who should not be that good at this.Hero rim turns it into mighty fighter and kills the joke. It is the wrong tool in a court drama, a beauty still, or any shot from adult standing height.If you cannot smell the pavement, you are too high."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Camera 15 to 40 cm off the ground, 14mm to 24mm, looking along the asphalt. Ground Level axis, lock-off or a short chase that stays low.",
+          "links": [
+            {
+              "text": "Ground Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard noon or street sodium. Subject is rider or animal with the board or the run in frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Skatedog energy around [Subject], low wide, pavement, a creature or rider in street grammar, joke as sport."
+        }
+      ],
+      "links": [
+        {
+          "text": "Ground Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Camera 15 to 40 cm off the ground, 14mm to 24mm, looking along the asphalt. Ground Level axis, lock-off or a short chase that stays low.Hard noon or street sodium. Subject is rider or animal with the board or the run in frame.Prompt: Skatedog energy around [Subject], low wide, pavement, a creature or rider in street grammar, joke as sport."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A street gag, an animal in human sport, youth on dirty ground. Do not use it from standing height, and do not heroic-rim it."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A street gag, an animal in human sport, youth on dirty ground. Do not use it from standing height, and do not heroic-rim it."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ground Level is the height. FPV Drone is the rushing axis.",
+          "links": [
+            {
+              "text": "Ground Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            },
+            {
+              "text": "FPV Drone",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Skatedog is those optics plus the joke of the rider. Mighty Fighter is the opposite stance: low but monumental.",
+          "links": [
+            {
+              "text": "Mighty Fighter",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Stay on the pavement."
+        },
+        {
+          "type": "list-item",
+          "text": "Ground LevelStart from the dirt.",
+          "displayText": "Ground Level\nStart from the dirt.",
+          "links": [
+            {
+              "text": "Ground LevelStart from the dirt.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "displayText": "FPV Drone\nImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "links": [
+            {
+              "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Ground Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        },
+        {
+          "text": "FPV Drone",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "Mighty Fighter",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+        },
+        {
+          "text": "Ground LevelStart from the dirt.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        },
+        {
+          "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/90e4116fa502af93f97dc97b380107b3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ground-level.webp",
+          "alt": "Ground Level"
+        },
+        {
+          "kind": "image",
+          "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+          "alt": "FPV Drone"
+        },
+        {
+          "kind": "video",
+          "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Ground Level is the height. FPV Drone is the rushing axis.Skatedog is those optics plus the joke of the rider. Mighty Fighter is the opposite stance: low but monumental.Stay on the pavement.Ground LevelStart from the dirt.FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Kids (1995) and skate videos put the lens on dirty ground with bodies that do not look directed. Borrow the low wide and the asphalt, not a copied trick."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Kids (1995) and skate videos put the lens on dirty ground with bodies that do not look directed. Borrow the low wide and the asphalt, not a copied trick."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Get on the ground. Skatedog energy around [Subject], low wide, pavement, a creature or rider in street grammar, joke as sport."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add 14-24mm, camera near deck or paws, hard sun or sodium, dirty wheels or paws, no hero rim."
+        },
+        {
+          "type": "quote",
+          "text": "Skatedog energy around [Subject], low wide, pavement, a creature or rider in street grammar, joke as sport."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Skatedog+energy+around+[Subject],+low+wide,+pavement,+a+creature+or+rider+in+street+grammar,+joke+as+sport."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Get on the ground. Skatedog energy around [Subject], low wide, pavement, a creature or rider in street grammar, joke as sport.Add 14-24mm, camera near deck or paws, hard sun or sodium, dirty wheels or paws, no hero rim.Copy promptUse in Image GeneratorSkatedog energy around [Subject], low wide, pavement, a creature or rider in street grammar, joke as sport.Skatedog energy around [Subject], low wide, pavement, a creature or rider in street grammar, joke as sport."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A cute animal on a board from standing height, or a slide into Mighty Fighter. The tell is sky and no asphalt grain.",
+          "links": [
+            {
+              "text": "Mighty Fighter",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: camera on the ground, wide, pavement, joke as sport."
+        }
+      ],
+      "links": [
+        {
+          "text": "Mighty Fighter",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A cute animal on a board from standing height, or a slide into Mighty Fighter. The tell is sky and no asphalt grain.Fix it: camera on the ground, wide, pavement, joke as sport."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Skatedog in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A low-wide street recipe: camera near pavement, a rider or creature in sport grammar, joke played straight. Height is the look."
+        },
+        {
+          "type": "heading",
+          "text": "Skatedog vs Ground Level",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ground level is the axis. Skatedog is that axis plus street sport as a gag, often an animal or a stupid-low rider. If there is no pavement joke, you only had the height."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Skatedog?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Street comedy, youth, animals in human sports. Skip courtrooms and hero rims."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Skatedog for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name camera height in centimeters off asphalt, wide lens, then: Skatedog energy around [Subject], low wide, pavement, a creature or rider in street grammar, joke as sport. Show wheels or paws."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Skatedog in film?A low-wide street recipe: camera near pavement, a rider or creature in sport grammar, joke played straight. Height is the look.Skatedog vs Ground LevelGround level is the axis. Skatedog is that axis plus street sport as a gag, often an animal or a stupid-low rider. If there is no pavement joke, you only had the height.When should I use Skatedog?Street comedy, youth, animals in human sports. Skip courtrooms and hero rims.How do I prompt Skatedog for AI image or video?Name camera height in centimeters off asphalt, wide lens, then: Skatedog energy around [Subject], low wide, pavement, a creature or rider in street grammar, joke as sport. Show wheels or paws."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Get on the ground. Skatedog energy around [Subject], low wide, pavement, a creature or rider in street grammar, joke as sport.",
+      "Add 14-24mm, camera near deck or paws, hard sun or sodium, dirty wheels or paws, no hero rim."
+    ],
+    "example": "Skatedog energy around [Subject], low wide, pavement, a creature or rider in street grammar, joke as sport."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/b4cdcfecc62dc06c6d1e03cfd69171ad.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/skatedog-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7c5498f21901b1a4ef31e584def40a09.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/skatedog-skatedog-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/66560b33acc8a74eacc376ceb1d1241a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/skatedog.jpg",
+      "alt": "Skatedog frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/90e4116fa502af93f97dc97b380107b3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ground-level.webp",
+      "alt": "Ground Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+      "alt": "FPV Drone"
+    },
+    {
+      "kind": "video",
+      "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/00865550487763435f753c437c37c53f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/skatedog/hero.jpg",
+      "alt": "Skatedog",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "f3dc45f7437bba5ea5eb09884bfdc2108d953c27761ac2bfeda06f9b3af5cd99"
+}

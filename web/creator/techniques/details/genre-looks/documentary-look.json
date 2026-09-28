@@ -1,0 +1,451 @@
+{
+  "id": "genre-looks/documentary-look",
+  "slug": "documentary-look",
+  "title": "Documentary",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/documentary-look",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/documentary-look-168-mockumentary-construction-mini.webp",
+  "detail": "details/genre-looks/documentary-look.json",
+  "aliases": [
+    "Fictional documentary",
+    "Documentary parody"
+  ],
+  "description": "Documentary cinematography mixes observational coverage with interview and archive rhetoric: unstyled wardrobe light, mixed color temperatures, a zoom finding focus, and respect without a glamour rim. Fictional films may borrow the same grammar as mockumentary. That is still documentary rhetoric, not a recovered camcorder tape.",
+  "thumbnail": "media/d63ced17eda08ce86e56b92f897c02c5.webp",
+  "video": "media/2fbcda5322a7416af028e2dc3f541ce0.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/168-mockumentary-construction-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The camera claims evidence. A sit-down by a window."
+        },
+        {
+          "type": "paragraph",
+          "text": "A wide of work being done. A cutaway that pretends to prove the sentence."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comedy and unease both live in the gap between what people say and what the camera appears to witness. It is broader than Cinéma Vérité.",
+          "links": [
+            {
+              "text": "Cinéma Vérité",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vérité hunts with a zoom and admits the filmmaker as catalyst. Documentary may also plant a stable interview, use archive, or build a fictional crew (Interview style, observational B-roll).",
+          "links": [
+            {
+              "text": "Interview",
+              "url": "https://melies.co/cinematic-techniques/framing/interview"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Found Footage: there is usually an implied production, not a lost tape.",
+          "links": [
+            {
+              "text": "Found Footage",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cinéma Vérité",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "Interview",
+          "url": "https://melies.co/cinematic-techniques/framing/interview"
+        },
+        {
+          "text": "Found Footage",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The camera claims evidence. A sit-down by a window.A wide of work being done. A cutaway that pretends to prove the sentence.Comedy and unease both live in the gap between what people say and what the camera appears to witness. It is broader than Cinéma Vérité.Vérité hunts with a zoom and admits the filmmaker as catalyst. Documentary may also plant a stable interview, use archive, or build a fictional crew (Interview style, observational B-roll).It is not Found Footage: there is usually an implied production, not a lost tape."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Leave mixed color. Window key for interviews, 35mm to 50mm, eye level, interviewer often offscreen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Observational wides on a zoom, focus hunting is allowed if the implied crew would hunt. No hair light unless the real room has one."
+        },
+        {
+          "type": "paragraph",
+          "text": "Imperfect coverage only when it fits that production. Prompt mixed color, unstyled wardrobe light, zoom finding focus, respect without glamour."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Leave mixed color. Window key for interviews, 35mm to 50mm, eye level, interviewer often offscreen.Observational wides on a zoom, focus hunting is allowed if the implied crew would hunt. No hair light unless the real room has one.Imperfect coverage only when it fits that production. Prompt mixed color, unstyled wardrobe light, zoom finding focus, respect without glamour."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when pretty would be a lie, or when a fiction wants interview-versus-observation irony. Do not use it as random shake, and do not swap it for a recovered-camera story."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when pretty would be a lie, or when a fiction wants interview-versus-observation irony. Do not use it as random shake, and do not swap it for a recovered-camera story."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Documentary is a rhetoric (interview, observation, archive). Cinéma Vérité is a method (available light, presence, zoom-to-find).",
+          "links": [
+            {
+              "text": "Documentary",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+            },
+            {
+              "text": "Cinéma Vérité",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Found Footage is a diegetic recorder. Available Light is the source only.",
+          "links": [
+            {
+              "text": "Found Footage",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            },
+            {
+              "text": "Available Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "BTS shows a film set's crew. Mockumentary uses documentary rhetoric on invented people.",
+          "links": [
+            {
+              "text": "BTS",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/bts"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Quality check: those are not interchangeable."
+        },
+        {
+          "type": "list-item",
+          "text": "Cinéma VéritéStyle would be propaganda.",
+          "displayText": "Cinéma Vérité\nStyle would be propaganda.",
+          "links": [
+            {
+              "text": "Cinéma VéritéStyle would be propaganda.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Available LightCommit to the hour you have.",
+          "displayText": "Available Light\nCommit to the hour you have.",
+          "links": [
+            {
+              "text": "Available LightCommit to the hour you have.",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Documentary",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+        },
+        {
+          "text": "Cinéma Vérité",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "Found Footage",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        },
+        {
+          "text": "Available Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "BTS",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/bts"
+        },
+        {
+          "text": "Cinéma VéritéStyle would be propaganda.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "Available LightCommit to the hour you have.",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/698c2a04908f5536012f8e28784057e5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinema-verite.webp",
+          "alt": "Cinéma Vérité"
+        },
+        {
+          "kind": "image",
+          "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+          "alt": "Available Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Documentary is a rhetoric (interview, observation, archive). Cinéma Vérité is a method (available light, presence, zoom-to-find).Found Footage is a diegetic recorder. Available Light is the source only.BTS shows a film set's crew. Mockumentary uses documentary rhetoric on invented people.Quality check: those are not interchangeable.Cinéma VéritéStyle would be propaganda.Available LightCommit to the hour you have.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Act of Killing (reenactment and interview as evidence). Honeyland (observational patience, mixed natural light)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Won't You Be My Neighbor? (archive plus sit-down)."
+        },
+        {
+          "type": "paragraph",
+          "text": "This Is Spinal Tap and Best in Show (fictional crews using interview and observation). Grammar, not frames to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "This Is Spinal Tap 1984Interviews, backstage observation and performance footage construct the fictional band’s story.",
+          "displayText": "This Is Spinal Tap 1984\nInterviews, backstage observation and performance footage construct the fictional band’s story."
+        },
+        {
+          "type": "list-item",
+          "text": "Best in Show 2000Interviews and observational scenes build the dog-show ensemble.",
+          "displayText": "Best in Show 2000\nInterviews and observational scenes build the dog-show ensemble."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Act of Killing (reenactment and interview as evidence). Honeyland (observational patience, mixed natural light).Won't You Be My Neighbor? (archive plus sit-down).This Is Spinal Tap and Best in Show (fictional crews using interview and observation). Grammar, not frames to copy.This Is Spinal Tap 1984Interviews, backstage observation and performance footage construct the fictional band’s story.Best in Show 2000Interviews and observational scenes build the dog-show ensemble."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Documentary look on [Subject], mixed color, unstyled wardrobe light, zoom finding focus, interview or observational coverage, respect without glamour. Name whether this is a sit-down or a follow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a timestamp or a rim."
+        },
+        {
+          "type": "quote",
+          "text": "Create a short mockumentary about a municipal committee preparing the world’s smallest parade. Intercut confident seated interviews with observational footage of tiny practical setbacks. Keep interview framing consistent, interviewer mostly offscreen and comedy grounded in sincere behavior rather than broad reaction faces."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Create+a+short+mockumentary+about+a+municipal+committee+preparing+the+world%E2%80%99s+smallest+parade.+Intercut+confident+seated+interviews+with+observational+footage+of+tiny+practical+setbacks.+Keep+interview+framing+consistent,+interviewer+mostly+offscreen+and+comedy+grounded+in+sincere+behavior+rather+than+broad+reaction+faces."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Documentary look on [Subject], mixed color, unstyled wardrobe light, zoom finding focus, interview or observational coverage, respect without glamour. Name whether this is a sit-down or a follow.Do not add a timestamp or a rim.Copy promptUse in Video GeneratorCreate a short mockumentary about a municipal committee preparing the world’s smallest parade. Intercut confident seated interviews with observational footage of tiny practical setbacks. Keep interview framing consistent, interviewer mostly offscreen and comedy grounded in sincere behavior rather than broad reaction faces.Create a short mockumentary about a municipal committee preparing the world’s smallest parade. Intercut confident seated interviews with observational footage of tiny practical setbacks. Keep interview framing consistent, interviewer mostly offscreen and comedy grounded in sincere behavior rather than broad reaction faces."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Found Footage or glossy interview: a horror camcorder, or a keyed talk show. The tell is a timestamp, or a Hollywood hair light on a 'documentary' subject.",
+          "links": [
+            {
+              "text": "Found Footage",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: pick a crew style, mix the color, and let the zoom or the window be the only flattery."
+        }
+      ],
+      "links": [
+        {
+          "text": "Found Footage",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Found Footage or glossy interview: a horror camcorder, or a keyed talk show. The tell is a timestamp, or a Hollywood hair light on a 'documentary' subject.Fix: pick a crew style, mix the color, and let the zoom or the window be the only flattery."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Documentary in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A look and a rhetoric: observational wides, sit-down interviews, archive, mixed color, and unstyled light. Fiction can wear the same clothes (mockumentary) without becoming found footage."
+        },
+        {
+          "type": "heading",
+          "text": "Documentary vs Cinéma Vérité",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Vérité is one documentary method: presence, available light, zoom-to-find. Documentary as a look also includes stable interviews and archive. A window-keyed sit-down can be documentary and still not be vérité."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Documentary?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the image must look like evidence, or when a fiction needs the gap between testimony and observation. Skip it for recovered-tape horror, for vérité-only catalysis, or for glamour rims."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Documentary for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Documentary look on [Subject], mixed color, unstyled wardrobe light, zoom finding focus, interview or observational coverage. Name the crew position. Do not add a camcorder timestamp or a hair light."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Documentary in film?A look and a rhetoric: observational wides, sit-down interviews, archive, mixed color, and unstyled light. Fiction can wear the same clothes (mockumentary) without becoming found footage.Documentary vs Cinéma VéritéVérité is one documentary method: presence, available light, zoom-to-find. Documentary as a look also includes stable interviews and archive. A window-keyed sit-down can be documentary and still not be vérité.When should I use Documentary?When the image must look like evidence, or when a fiction needs the gap between testimony and observation. Skip it for recovered-tape horror, for vérité-only catalysis, or for glamour rims.How do I prompt Documentary for AI image or video?Write: Documentary look on [Subject], mixed color, unstyled wardrobe light, zoom finding focus, interview or observational coverage. Name the crew position. Do not add a camcorder timestamp or a hair light."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Documentary look on [Subject], mixed color, unstyled wardrobe light, zoom finding focus, interview or observational coverage, respect without glamour. Name whether this is a sit-down or a follow.",
+      "Do not add a timestamp or a rim."
+    ],
+    "example": "Create a short mockumentary about a municipal committee preparing the world’s smallest parade. Intercut confident seated interviews with observational footage of tiny practical setbacks. Keep interview framing consistent, interviewer mostly offscreen and comedy grounded in sincere behavior rather than broad reaction faces."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/2fbcda5322a7416af028e2dc3f541ce0.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/168-mockumentary-construction-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d63ced17eda08ce86e56b92f897c02c5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/documentary-look-168-mockumentary-construction-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/460784e3ca6c0eec62e8a9819058f077.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/documentary-look.jpg",
+      "alt": "Documentary frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/698c2a04908f5536012f8e28784057e5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinema-verite.webp",
+      "alt": "Cinéma Vérité"
+    },
+    {
+      "kind": "image",
+      "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+      "alt": "Available Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/3ff43313677a9558cdabe705b4b138e4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/documentary-look/hero.jpg",
+      "alt": "Documentary",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "7c5093577478ca70d087ea85d71c4a92550febdac97a700ccec505cbae0afe58"
+}

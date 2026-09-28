@@ -1,0 +1,409 @@
+{
+  "id": "lighting/volumetric-light",
+  "slug": "volumetric-light",
+  "title": "Volumetric Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/volumetric-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+  "detail": "details/lighting/volumetric-light.json",
+  "aliases": [
+    "god rays",
+    "crepuscular rays"
+  ],
+  "description": "Volumetric lighting makes beams visible through haze, fog, dust, smoke, or other particles, so the air photographs as well as the subject. Also called god rays or crepuscular rays when the shafts are distinct.",
+  "thumbnail": "media/b6a67c031e730613387133e7c955d6c9.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Air has to be photographed. A cathedral, a forest, a smoky archive: the beam is architecture."
+        },
+        {
+          "type": "paragraph",
+          "text": "The source implies a world outside the frame. Without particles you only see where the light lands, not the path it took."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool in clean air if you still want shafts, or when haze is so thick that every depth plane flattens. Disconnected glowing stripes with no lamp are not volumetric light."
+        },
+        {
+          "type": "paragraph",
+          "text": "They are stickers."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Air has to be photographed. A cathedral, a forest, a smoky archive: the beam is architecture.The source implies a world outside the frame. Without particles you only see where the light lands, not the path it took.It is the wrong tool in clean air if you still want shafts, or when haze is so thick that every depth plane flattens. Disconnected glowing stripes with no lamp are not volumetric light.They are stickers."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You need a directional source (often hard, slightly back or high) and a scattering medium: haze, dust, rain, smoke. The camera usually sees some of the beam angle, which is why backlight helps.",
+          "links": [
+            {
+              "text": "backlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Color follows the source: warm sun, cool window, searchlight white. Limit haze so foreground and background still separate."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Volumetric rays through haze around [Subject], visible beams, dust in the shaft, cathedral or forest light as architecture."
+        }
+      ],
+      "links": [
+        {
+          "text": "backlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works You need a directional source (often hard, slightly back or high) and a scattering medium: haze, dust, rain, smoke. The camera usually sees some of the beam angle, which is why backlight helps.Color follows the source: warm sun, cool window, searchlight white. Limit haze so foreground and background still separate.Prompt: Volumetric rays through haze around [Subject], visible beams, dust in the shaft, cathedral or forest light as architecture."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the air is part of the picture, a smoky interior, a forest morning, a searchlight. Do not add floating stripes with no source and no medium."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the air is part of the picture, a smoky interior, a forest morning, a searchlight. Do not add floating stripes with no source and no medium."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Backlight is the direction that often reveals volume. Atmospheric haze is the medium.",
+          "links": [
+            {
+              "text": "Backlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            },
+            {
+              "text": "Atmospheric haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dappled light patterns surfaces; volume patterns the air. Epiphany may use a sudden shaft, but epiphany is a change timed to understanding.",
+          "links": [
+            {
+              "text": "Dappled light",
+              "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+            },
+            {
+              "text": "Epiphany",
+              "url": "https://melies.co/cinematic-techniques/lighting/epiphany"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Silhouette can sit inside a bright shaft if the figure stays dark.",
+          "links": [
+            {
+              "text": "Silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "displayText": "Atmospheric Haze\nShow kilometers, not just meters.",
+          "links": [
+            {
+              "text": "Atmospheric HazeShow kilometers, not just meters.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "BacklightSeparate a dark figure from a dark world.",
+          "displayText": "Backlight\nSeparate a dark figure from a dark world.",
+          "links": [
+            {
+              "text": "BacklightSeparate a dark figure from a dark world.",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Backlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "Atmospheric haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Dappled light",
+          "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+        },
+        {
+          "text": "Epiphany",
+          "url": "https://melies.co/cinematic-techniques/lighting/epiphany"
+        },
+        {
+          "text": "Silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "BacklightSeparate a dark figure from a dark world.",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+          "alt": "Atmospheric Haze"
+        },
+        {
+          "kind": "image",
+          "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+          "alt": "Backlight"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Backlight is the direction that often reveals volume. Atmospheric haze is the medium.Dappled light patterns surfaces; volume patterns the air. Epiphany may use a sudden shaft, but epiphany is a change timed to understanding.Silhouette can sit inside a bright shaft if the figure stays dark.Atmospheric HazeShow kilometers, not just meters.BacklightSeparate a dark figure from a dark world.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blade Runner 2049 builds interiors where dust and haze make shafts physical. The Tree of Life lets forest and interior sun become visible architecture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Blade Runner (1982) searchlights through smoke are the same physics."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Blade Runner 2049 builds interiors where dust and haze make shafts physical. The Tree of Life lets forest and interior sun become visible architecture.Blade Runner (1982) searchlights through smoke are the same physics."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name source plus medium. \" Attach every beam to a window, sun, or searchlight."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid disconnected glowing stripes."
+        },
+        {
+          "type": "quote",
+          "text": "Volumetric god rays through haze around [Subject], visible beams, dust in the shaft, cathedral or forest light as architecture."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Volumetric+god+rays+through+haze+around+[Subject],+visible+beams,+dust+in+the+shaft,+cathedral+or+forest+light+as+architecture."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name source plus medium. \" Attach every beam to a window, sun, or searchlight.Forbid disconnected glowing stripes.Copy promptUse in Image GeneratorVolumetric god rays through haze around [Subject], visible beams, dust in the shaft, cathedral or forest light as architecture.Volumetric god rays through haze around [Subject], visible beams, dust in the shaft, cathedral or forest light as architecture."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a backlight rim with no air, or painted god-ray stickers. The tell is stripes that ignore the lamp and the body.",
+          "links": [
+            {
+              "text": "backlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by adding a scattering medium and a real rear or high source, then letting the body interrupt the beam."
+        }
+      ],
+      "links": [
+        {
+          "text": "backlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a backlight rim with no air, or painted god-ray stickers. The tell is stripes that ignore the lamp and the body.Fix it by adding a scattering medium and a real rear or high source, then letting the body interrupt the beam."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is volumetric light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Beams made visible by haze, fog, dust, smoke, or particles. You photograph the path of the light, not only where it lands."
+        },
+        {
+          "type": "heading",
+          "text": "Volumetric light vs backlight",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Backlight is the direction from behind. Volumetric light is the beam made visible in a medium. Backlight often helps you see that beam."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use volumetric light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when air, dust, or smoke should be visible architecture. Skip it in clean air, or when haze would flatten every plane."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt volumetric light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify a real source and a scattering medium, visible beams, dust in the shaft. The body can interrupt the beam. No orphan glowing stripes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is volumetric light in film?Beams made visible by haze, fog, dust, smoke, or particles. You photograph the path of the light, not only where it lands.Volumetric light vs backlightBacklight is the direction from behind. Volumetric light is the beam made visible in a medium. Backlight often helps you see that beam.When should I use volumetric light?Use it when air, dust, or smoke should be visible architecture. Skip it in clean air, or when haze would flatten every plane.How do I prompt volumetric light for AI image or video?Specify a real source and a scattering medium, visible beams, dust in the shaft. The body can interrupt the beam. No orphan glowing stripes."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name source plus medium. \" Attach every beam to a window, sun, or searchlight.",
+      "Forbid disconnected glowing stripes."
+    ],
+    "example": "Volumetric god rays through haze around [Subject], visible beams, dust in the shaft, cathedral or forest light as architecture."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+      "alt": "Volumetric Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+      "alt": "Atmospheric Haze"
+    },
+    {
+      "kind": "image",
+      "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+      "alt": "Backlight"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/ffa4a1cf5fdf1b4e875a3f986e88f65e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/volumetric-light/hero.jpg",
+      "alt": "Volumetric Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "3dc33ebed4de5b5803ab69dde38e1c1b20e8b4702c3130704c85f78e291c90f9"
+}

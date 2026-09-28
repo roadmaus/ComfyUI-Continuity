@@ -1,0 +1,456 @@
+{
+  "id": "composition/tableau",
+  "slug": "tableau",
+  "title": "Tableau",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/tableau",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tableau.webp",
+  "detail": "details/composition/tableau.json",
+  "aliases": [
+    "tableau vivant",
+    "Frontal ensemble",
+    "Cinematic frieze"
+  ],
+  "description": "A tableau (tableau vivant, frontal ensemble, or frieze) is a staged composition whose meaning develops inside a relatively fixed frame. Arranged bodies and objects form a living picture, so duration replaces coverage while the camera stays locked or nearly locked.",
+  "thumbnail": "media/a93c30aeb2ed5bcd737dc27a09898a53.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hold the arrangement and the audience reads at their own speed: who stands where, who fails to move, who sneaks a gesture. Stillness makes a tiny action loud."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comedy, ceremony, and dread all use that delay. It is the wrong tool when the scene needs chase geography or a close-up of a lie."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you cut the tableau to pieces immediately, you shot a master and threw it away. If the arrangement has no readable relationships, you shot decoration."
+        },
+        {
+          "type": "paragraph",
+          "text": "Tableau is not automatically centered, but it likes a designed field. Dirty edges can still apply if the living picture is glimpsed from a door."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Hold the arrangement and the audience reads at their own speed: who stands where, who fails to move, who sneaks a gesture. Stillness makes a tiny action loud.Comedy, ceremony, and dread all use that delay. It is the wrong tool when the scene needs chase geography or a close-up of a lie.If you cut the tableau to pieces immediately, you shot a master and threw it away. If the arrangement has no readable relationships, you shot decoration.Tableau is not automatically centered, but it likes a designed field. Dirty edges can still apply if the living picture is glimpsed from a door."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Block silhouettes, spacing, and sightlines before adding motion. Rehearse separate timings inside the shared frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use enough depth of field that the intended points stay readable. A locked tripod is the default."
+        },
+        {
+          "type": "paragraph",
+          "text": "A slow creep is a different sentence. Prompt: Tableau of [Subject], arranged bodies, a living painting, duration instead of coverage."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Block silhouettes, spacing, and sightlines before adding motion. Rehearse separate timings inside the shared frame.Use enough depth of field that the intended points stay readable. A locked tripod is the default.A slow creep is a different sentence. Prompt: Tableau of [Subject], arranged bodies, a living painting, duration instead of coverage."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for ritual, comic ensembles, processions, and any beat that should be discovered rather than prescribed by cutting. Do not hold a well-dressed but empty arrangement."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for ritual, comic ensembles, processions, and any beat that should be discovered rather than prescribed by cutting. Do not hold a well-dressed but empty arrangement."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Static Locked-Off is the camera lock. Tableau is the staged picture that uses that lock.",
+          "links": [
+            {
+              "text": "Static Locked-Off",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Centered Composition is a common altar for it, not a requirement. Group Shot is a size.",
+          "links": [
+            {
+              "text": "Centered Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            },
+            {
+              "text": "Group Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/group-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tableau is duration plus arrangement. Triangular Composition may be the geometry inside the hold.",
+          "links": [
+            {
+              "text": "Triangular Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/triangular-composition"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Long Take may travel. A tableau usually stays and lets time do the move.",
+          "links": [
+            {
+              "text": "Long Take",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/long-take"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "displayText": "Centered Composition\nControl, ritual, comedy, or fate.",
+          "links": [
+            {
+              "text": "Centered CompositionControl, ritual, comedy, or fate.",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Static Locked-OffTrust blocking and duration. Movement would be noise.",
+          "displayText": "Static Locked-Off\nTrust blocking and duration. Movement would be noise.",
+          "links": [
+            {
+              "text": "Static Locked-OffTrust blocking and duration. Movement would be noise.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Static Locked-Off",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+        },
+        {
+          "text": "Centered Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Group Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/group-shot"
+        },
+        {
+          "text": "Triangular Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/triangular-composition"
+        },
+        {
+          "text": "Long Take",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/long-take"
+        },
+        {
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Static Locked-OffTrust blocking and duration. Movement would be noise.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+          "alt": "Centered Composition"
+        },
+        {
+          "kind": "video",
+          "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ef92f0234960c354d232051aa99779ce.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/static-022-locked-off-duration-mini.webp",
+          "alt": "Static Locked-Off"
+        },
+        {
+          "kind": "video",
+          "path": "media/761eb0bcc8b403eab53e427ad9a96b85.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/022-locked-off-duration-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Static Locked-Off is the camera lock. Tableau is the staged picture that uses that lock.Centered Composition is a common altar for it, not a requirement. Group Shot is a size.Tableau is duration plus arrangement. Triangular Composition may be the geometry inside the hold.Long Take may travel. A tableau usually stays and lets time do the move.Centered CompositionControl, ritual, comedy, or fate.Static Locked-OffTrust blocking and duration. Movement would be noise.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Barry Lyndon holds painterly courts until a glance is an event. Roy Andersson's films park ensembles in still rooms so a small failure is comic and awful."
+        },
+        {
+          "type": "paragraph",
+          "text": "PlayTime distributes gags across broad, held compositions. The Color of Pomegranates arranges people and objects as ritual friezes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of duration, not a freeze."
+        },
+        {
+          "type": "list-item",
+          "text": "PlayTime 1967Office and restaurant scenes distribute comedy across broad compositions.",
+          "displayText": "PlayTime 1967\nOffice and restaurant scenes distribute comedy across broad compositions."
+        },
+        {
+          "type": "list-item",
+          "text": "The Color of Pomegranates 1969Frontal, ritualized arrangements of people and objects.",
+          "displayText": "The Color of Pomegranates 1969\nFrontal, ritualized arrangements of people and objects."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f289a04420bcd0e0f3ec93a2448934c2.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tableau/famous/00-playtime-1967.jpg",
+          "alt": "PlayTime 1967"
+        },
+        {
+          "kind": "image",
+          "path": "media/50763816df2c1387c6e82a1396114638.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tableau/famous/01-the-color-of-pomegranates-1969.jpg",
+          "alt": "The Color of Pomegranates 1969"
+        }
+      ],
+      "sourceText": "In film Barry Lyndon holds painterly courts until a glance is an event. Roy Andersson's films park ensembles in still rooms so a small failure is comic and awful.PlayTime distributes gags across broad, held compositions. The Color of Pomegranates arranges people and objects as ritual friezes.Grammar of duration, not a freeze.PlayTime 1967Office and restaurant scenes distribute comedy across broad compositions.The Color of Pomegranates 1969Frontal, ritualized arrangements of people and objects."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ask for arrangement and a hold. Tableau of [Subject], arranged bodies, a living painting, duration instead of coverage."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name positions (left standing, center seated, right in a doorway) and say camera locked off. For video, add little motion except a planned gesture, no coverage cuts."
+        },
+        {
+          "type": "quote",
+          "text": "Locked wide frontal shot of five museum attendants preparing a display. Each performs a different small task; one repeatedly moves an object that another immediately returns. Clear spacing, readable full-body gestures, dry visual humor, no close-ups or camera motion."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Locked+wide+frontal+shot+of+five+museum+attendants+preparing+a+display.+Each+performs+a+different+small+task;+one+repeatedly+moves+an+object+that+another+immediately+returns.+Clear+spacing,+readable+full-body+gestures,+dry+visual+humor,+no+close-ups+or+camera+motion."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Ask for arrangement and a hold. Tableau of [Subject], arranged bodies, a living painting, duration instead of coverage.Name positions (left standing, center seated, right in a doorway) and say camera locked off. For video, add little motion except a planned gesture, no coverage cuts.Copy promptUse in Video GeneratorLocked wide frontal shot of five museum attendants preparing a display. Each performs a different small task; one repeatedly moves an object that another immediately returns. Clear spacing, readable full-body gestures, dry visual humor, no close-ups or camera motion.Locked wide frontal shot of five museum attendants preparing a display. Each performs a different small task; one repeatedly moves an object that another immediately returns. Clear spacing, readable full-body gestures, dry visual humor, no close-ups or camera motion."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Master Shot you plan to chop, or a pretty still with no relationships. The tell is a posed group that exists to be pretty, then a cut to close-ups that do all the work.",
+          "links": [
+            {
+              "text": "Master Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to give each body a job and to let the hold be the coverage."
+        }
+      ],
+      "links": [
+        {
+          "text": "Master Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Master Shot you plan to chop, or a pretty still with no relationships. The tell is a posed group that exists to be pretty, then a cut to close-ups that do all the work.The fix is to give each body a job and to let the hold be the coverage."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is tableau in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a staged picture whose meaning develops inside a relatively fixed frame. Bodies and objects are arranged. Duration does the work that cutting would otherwise do. A living painting, not a freeze frame."
+        },
+        {
+          "type": "heading",
+          "text": "Tableau vs Static Locked-Off",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Static is a camera that does not move. Tableau is an arranged field that uses stillness, usually with a locked camera. You can lock off a messy documentary corner and have static without tableau. You can, rarely, drift across a tableau, but the default is a hold."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use tableau?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for ritual, ensemble comedy, processions, and any scene the audience should read as a whole. Do not use it as a pretty pause in a chase, and do not cut it to bits immediately."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt tableau for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Describe the arrangement and the hold. Example: Tableau of [Subject], arranged bodies, a living painting, duration instead of coverage. List positions. For video, specify a locked camera and a long hold with one planned gesture."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is tableau in film?It is a staged picture whose meaning develops inside a relatively fixed frame. Bodies and objects are arranged. Duration does the work that cutting would otherwise do. A living painting, not a freeze frame.Tableau vs Static Locked-OffStatic is a camera that does not move. Tableau is an arranged field that uses stillness, usually with a locked camera. You can lock off a messy documentary corner and have static without tableau. You can, rarely, drift across a tableau, but the default is a hold.When should I use tableau?Use it for ritual, ensemble comedy, processions, and any scene the audience should read as a whole. Do not use it as a pretty pause in a chase, and do not cut it to bits immediately.How do I prompt tableau for AI image or video?Describe the arrangement and the hold. Example: Tableau of [Subject], arranged bodies, a living painting, duration instead of coverage. List positions. For video, specify a locked camera and a long hold with one planned gesture."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Ask for arrangement and a hold. Tableau of [Subject], arranged bodies, a living painting, duration instead of coverage.",
+      "Name positions (left standing, center seated, right in a doorway) and say camera locked off. For video, add little motion except a planned gesture, no coverage cuts."
+    ],
+    "example": "Locked wide frontal shot of five museum attendants preparing a display. Each performs a different small task; one repeatedly moves an object that another immediately returns. Clear spacing, readable full-body gestures, dry visual humor, no close-ups or camera motion."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/a93c30aeb2ed5bcd737dc27a09898a53.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tableau.webp",
+      "alt": "Tableau example"
+    },
+    {
+      "kind": "image",
+      "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+      "alt": "Centered Composition"
+    },
+    {
+      "kind": "video",
+      "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ef92f0234960c354d232051aa99779ce.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/static-022-locked-off-duration-mini.webp",
+      "alt": "Static Locked-Off"
+    },
+    {
+      "kind": "video",
+      "path": "media/761eb0bcc8b403eab53e427ad9a96b85.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/022-locked-off-duration-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/f289a04420bcd0e0f3ec93a2448934c2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tableau/famous/00-playtime-1967.jpg",
+      "alt": "PlayTime 1967"
+    },
+    {
+      "kind": "image",
+      "path": "media/50763816df2c1387c6e82a1396114638.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tableau/famous/01-the-color-of-pomegranates-1969.jpg",
+      "alt": "The Color of Pomegranates 1969"
+    },
+    {
+      "kind": "image",
+      "path": "media/0add4e6ef3d646f10f8a3b2959fae8df.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tableau/hero.jpg",
+      "alt": "Tableau",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "f81b88900ca4a37cb90c840ef4cca0bb96508966a87301ddad51d9d93cdeb34c"
+}

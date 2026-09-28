@@ -1,0 +1,403 @@
+{
+  "id": "viral-looks/two-color",
+  "slug": "two-color",
+  "title": "Two Color",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/two-color",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/two-color.webp",
+  "detail": "details/viral-looks/two-color.json",
+  "aliases": [
+    "Color isolation",
+    "Spot color"
+  ],
+  "description": "Two color, in two color cinematography, is a duotone law: a pair of hues doing all the drawing, print as cinematography. Two inks, no extras: teal-and-orange with a thousand leftovers is not this.",
+  "thumbnail": "media/fd1892ad39131260807fde3935c7c4c4.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Posters, fables, a political still: assign the two hues to shadow and light, or to figure and ground, then kill everything else. Spot color can attach to a coat, a person, or a changing state of the world."
+        },
+        {
+          "type": "paragraph",
+          "text": "Naturalistic skin may break the law unless one hue is the skin. It is the wrong tool as a mild grade, and the wrong tool if random colors leak through motion."
+        },
+        {
+          "type": "paragraph",
+          "text": "The selection must stay stable. Complexity of extra inks is a leak, not richness."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Posters, fables, a political still: assign the two hues to shadow and light, or to figure and ground, then kill everything else. Spot color can attach to a coat, a person, or a changing state of the world.Naturalistic skin may break the law unless one hue is the skin. It is the wrong tool as a mild grade, and the wrong tool if random colors leak through motion.The selection must stay stable. Complexity of extra inks is a leak, not richness."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock off, 35mm to 50mm. Plan wardrobe and walls so only two hues survive, then mask or grade the rest to the pair or to monochrome plus one."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Two-color law on [Subject], a pair of hues doing all the drawing, print as cinematography. Name the two hues."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock off, 35mm to 50mm. Plan wardrobe and walls so only two hues survive, then mask or grade the rest to the pair or to monochrome plus one.Prompt: Two-color law on [Subject], a pair of hues doing all the drawing, print as cinematography. Name the two hues."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A poster, a fable, a political still, a coat that must be the only color. Do not use it as teal-orange blockbuster, and do not let extra hues leak."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A poster, a fable, a political still, a coat that must be the only color. Do not use it as teal-orange blockbuster, and do not let extra hues leak."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Palette is a restricted set that may still hold more than two. Monochrome is one ink.",
+          "links": [
+            {
+              "text": "Palette",
+              "url": "https://melies.co/cinematic-techniques/color/palette"
+            },
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Two color is a pair, or monochrome plus a spot. If leftovers survive, you wanted palette, or you failed the law."
+        },
+        {
+          "type": "list-item",
+          "text": "PaletteToo many colors would be noise.",
+          "displayText": "Palette\nToo many colors would be noise.",
+          "links": [
+            {
+              "text": "PaletteToo many colors would be noise.",
+              "url": "https://melies.co/cinematic-techniques/color/palette"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MonochromeStrip to drawing.",
+          "displayText": "Monochrome\nStrip to drawing.",
+          "links": [
+            {
+              "text": "MonochromeStrip to drawing.",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Palette",
+          "url": "https://melies.co/cinematic-techniques/color/palette"
+        },
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "PaletteToo many colors would be noise.",
+          "url": "https://melies.co/cinematic-techniques/color/palette"
+        },
+        {
+          "text": "MonochromeStrip to drawing.",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a4ad6f9b3acabbfb5604abf31d449032.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/palette.webp",
+          "alt": "Palette"
+        },
+        {
+          "kind": "image",
+          "path": "media/cdf5189c733a215f8f6312b537573dbd.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monochrome-073-selective-color-in-monochrome-mini.webp",
+          "alt": "Monochrome"
+        },
+        {
+          "kind": "video",
+          "path": "media/7a3685f47ea79cd2485426ecee14655b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/073-selective-color-in-monochrome-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Palette is a restricted set that may still hold more than two. Monochrome is one ink.Two color is a pair, or monochrome plus a spot. If leftovers survive, you wanted palette, or you failed the law.PaletteToo many colors would be noise.MonochromeStrip to drawing.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Schindler's List keeps the red coat as a signal inside monochrome. Pleasantville lets color arrive as a change of state."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sin City punctuates high-contrast monochrome with selected inks. Law, not a LUT."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the selection stable."
+        },
+        {
+          "type": "list-item",
+          "text": "Schindler’s List 1993The girl’s red coat stands out within the monochrome imagery.",
+          "displayText": "Schindler’s List 1993\nThe girl’s red coat stands out within the monochrome imagery."
+        },
+        {
+          "type": "list-item",
+          "text": "Pleasantville 1998Color appears selectively as the town and its inhabitants change.",
+          "displayText": "Pleasantville 1998\nColor appears selectively as the town and its inhabitants change."
+        },
+        {
+          "type": "list-item",
+          "text": "Sin City 2005Selected colors punctuate high-contrast monochrome imagery.",
+          "displayText": "Sin City 2005\nSelected colors punctuate high-contrast monochrome imagery."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/90abf1e22e89b9e6cc4f5bf9e42585ca.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/two-color/famous/00-schindler-s-list-1993.jpg",
+          "alt": "Schindler’s List 1993"
+        },
+        {
+          "kind": "image",
+          "path": "media/60985d6aab56b6e5df23d536a1c4fc19.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/two-color/famous/01-pleasantville-1998.jpg",
+          "alt": "Pleasantville 1998"
+        },
+        {
+          "kind": "image",
+          "path": "media/b1b0ded02e9a463d7016d2ec8aee1f3b.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/two-color/famous/02-sin-city-2005.jpg",
+          "alt": "Sin City 2005"
+        }
+      ],
+      "sourceText": "In film Schindler's List keeps the red coat as a signal inside monochrome. Pleasantville lets color arrive as a change of state.Sin City punctuates high-contrast monochrome with selected inks. Law, not a LUT.Keep the selection stable.Schindler’s List 1993The girl’s red coat stands out within the monochrome imagery.Pleasantville 1998Color appears selectively as the town and its inhabitants change.Sin City 2005Selected colors punctuate high-contrast monochrome imagery."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the two hues and assign them. Two-color law on [Subject], a pair of hues doing all the drawing, print as cinematography."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add wardrobe planned for the split, lock-off, no leftover inks, stable through motion. Not teal-orange."
+        },
+        {
+          "type": "quote",
+          "text": "A crowded monochrome railway platform, with only one small yellow suitcase retaining its natural color. Track the suitcase as it changes hands; all other objects stay black and white. Stable object identity, clean edge tracking, no random patches of color."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+crowded+monochrome+railway+platform,+with+only+one+small+yellow+suitcase+retaining+its+natural+color.+Track+the+suitcase+as+it+changes+hands;+all+other+objects+stay+black+and+white.+Stable+object+identity,+clean+edge+tracking,+no+random+patches+of+color."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the two hues and assign them. Two-color law on [Subject], a pair of hues doing all the drawing, print as cinematography.Add wardrobe planned for the split, lock-off, no leftover inks, stable through motion. Not teal-orange.Copy promptUse in Video GeneratorA crowded monochrome railway platform, with only one small yellow suitcase retaining its natural color. Track the suitcase as it changes hands; all other objects stay black and white. Stable object identity, clean edge tracking, no random patches of color.A crowded monochrome railway platform, with only one small yellow suitcase retaining its natural color. Track the suitcase as it changes hands; all other objects stay black and white. Stable object identity, clean edge tracking, no random patches of color."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A teal-orange blockbuster, or random leaks. The tell is a thousand leftovers."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: two hues only, assigned, stable through occlusion."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong A teal-orange blockbuster, or random leaks. The tell is a thousand leftovers.Fix it: two hues only, assigned, stable through occlusion."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Two Color in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A duotone or spot-color law: two hues do all the drawing, or one object keeps color in a monochrome world. Print as cinematography, not a mild grade."
+        },
+        {
+          "type": "heading",
+          "text": "Two Color vs Monochrome",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Monochrome is one ink. Two color is a pair, or monochrome plus a chosen signal. If everything is grey, you wanted monochrome. If a coat stays red, you are in this family."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Two Color?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Posters, fables, political stills, a recurring color signal. Skip teal-orange leftovers and leaky masks."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Two Color for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the two hues, plan wardrobe, then: Two-color law on [Subject], a pair of hues doing all the drawing, print as cinematography. Kill every other ink. Keep the rule stable in motion."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Two Color in film?A duotone or spot-color law: two hues do all the drawing, or one object keeps color in a monochrome world. Print as cinematography, not a mild grade.Two Color vs MonochromeMonochrome is one ink. Two color is a pair, or monochrome plus a chosen signal. If everything is grey, you wanted monochrome. If a coat stays red, you are in this family.When should I use Two Color?Posters, fables, political stills, a recurring color signal. Skip teal-orange leftovers and leaky masks.How do I prompt Two Color for AI image or video?Name the two hues, plan wardrobe, then: Two-color law on [Subject], a pair of hues doing all the drawing, print as cinematography. Kill every other ink. Keep the rule stable in motion."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the two hues and assign them. Two-color law on [Subject], a pair of hues doing all the drawing, print as cinematography.",
+      "Add wardrobe planned for the split, lock-off, no leftover inks, stable through motion. Not teal-orange."
+    ],
+    "example": "A crowded monochrome railway platform, with only one small yellow suitcase retaining its natural color. Track the suitcase as it changes hands; all other objects stay black and white. Stable object identity, clean edge tracking, no random patches of color."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/fd1892ad39131260807fde3935c7c4c4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/two-color.webp",
+      "alt": "Two Color example"
+    },
+    {
+      "kind": "image",
+      "path": "media/a4ad6f9b3acabbfb5604abf31d449032.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/palette.webp",
+      "alt": "Palette"
+    },
+    {
+      "kind": "image",
+      "path": "media/cdf5189c733a215f8f6312b537573dbd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monochrome-073-selective-color-in-monochrome-mini.webp",
+      "alt": "Monochrome"
+    },
+    {
+      "kind": "video",
+      "path": "media/7a3685f47ea79cd2485426ecee14655b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/073-selective-color-in-monochrome-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/90abf1e22e89b9e6cc4f5bf9e42585ca.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/two-color/famous/00-schindler-s-list-1993.jpg",
+      "alt": "Schindler’s List 1993"
+    },
+    {
+      "kind": "image",
+      "path": "media/60985d6aab56b6e5df23d536a1c4fc19.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/two-color/famous/01-pleasantville-1998.jpg",
+      "alt": "Pleasantville 1998"
+    },
+    {
+      "kind": "image",
+      "path": "media/b1b0ded02e9a463d7016d2ec8aee1f3b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/two-color/famous/02-sin-city-2005.jpg",
+      "alt": "Sin City 2005"
+    },
+    {
+      "kind": "image",
+      "path": "media/b2bd96d00c3a993bd63bd7c0532f3006.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/two-color/hero.jpg",
+      "alt": "Two Color",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "dffe299bb98375915965e7eb9f64ec969ca4ea3b12e84bc712854b62098fd13d"
+}

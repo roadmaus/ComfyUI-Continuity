@@ -1,0 +1,411 @@
+{
+  "id": "atmosphere/snow",
+  "slug": "snow",
+  "title": "Snow",
+  "categoryId": "atmosphere",
+  "categoryTitle": "Atmosphere and Weather",
+  "sourceUrl": "https://melies.co/cinematic-techniques/atmosphere/snow",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snow.webp",
+  "detail": "details/atmosphere/snow.json",
+  "aliases": [
+    "haze",
+    "fog",
+    "smoke",
+    "dust",
+    "rain",
+    "steam"
+  ],
+  "description": "Snow is ice falling and settling: large flakes in backlight, a muffled world, tracks that record who passed. The air holds crystals you can size; the ground accumulates; contrast goes soft because the world has been covered.",
+  "thumbnail": "media/e9c95087c8682bd295c9e6a02ba98e70.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Flakes cross a sodium lamp like slow sparks that do not burn. Shoulders collect white."
+        },
+        {
+          "type": "paragraph",
+          "text": "Footsteps write the path. Hush the world."
+        },
+        {
+          "type": "paragraph",
+          "text": "Silence becomes visible as reduced contrast and falling matter. Use it when winter must occupy both air and ground."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you only need pale air without accumulation (Mist). It is the wrong tool when the falling matter is liquid (Rain).",
+          "links": [
+            {
+              "text": "Mist",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+            },
+            {
+              "text": "Rain",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Rain wets and mirrors; snow blankets and records tracks. Tiny fast specks against a day sky read as video noise."
+        },
+        {
+          "type": "paragraph",
+          "text": "Size the flakes and backlight them."
+        }
+      ],
+      "links": [
+        {
+          "text": "Mist",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+        },
+        {
+          "text": "Rain",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Flakes cross a sodium lamp like slow sparks that do not burn. Shoulders collect white.Footsteps write the path. Hush the world.Silence becomes visible as reduced contrast and falling matter. Use it when winter must occupy both air and ground.It is the wrong tool when you only need pale air without accumulation (Mist). It is the wrong tool when the falling matter is liquid (Rain).Rain wets and mirrors; snow blankets and records tracks. Tiny fast specks against a day sky read as video noise.Size the flakes and backlight them."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put flakes in the air (practical or digital) large enough to read, and light them from behind or the side. Let accumulation sit on wool, hair, rails, and ground."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep a dark background for flakes to separate, or accept a white-on-white hush. Wind decides drift versus fall."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: falling snow around [Subject], large flakes in backlight, muffled world, tracks, winter silence you can see."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put flakes in the air (practical or digital) large enough to read, and light them from behind or the side. Let accumulation sit on wool, hair, rails, and ground.Keep a dark background for flakes to separate, or accept a white-on-white hush. Wind decides drift versus fall.Prompt: falling snow around [Subject], large flakes in backlight, muffled world, tracks, winter silence you can see."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a platform wait, a hunt, a small-town crime, a night street that should go quiet. Do not use it as white rain that never settles."
+        },
+        {
+          "type": "paragraph",
+          "text": "If shoulders stay dry and the pavement is only wet, you shot rain."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a platform wait, a hunt, a small-town crime, a night street that should go quiet. Do not use it as white rain that never settles.If shoulders stay dry and the pavement is only wet, you shot rain."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rain streaks and mirrors. Mist hangs and does not accumulate as a blanket.",
+          "links": [
+            {
+              "text": "Rain",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            },
+            {
+              "text": "Mist",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Blue Hour is a sky condition that often pairs with snow but is not weather. Dust Motes are indoor specks in a shaft.",
+          "links": [
+            {
+              "text": "Blue Hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            },
+            {
+              "text": "Dust Motes",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Snow falls, lands, and stays."
+        },
+        {
+          "type": "list-item",
+          "text": "MistSofter mystery than fog. Lyric, not monster.",
+          "displayText": "Mist\nSofter mystery than fog. Lyric, not monster.",
+          "links": [
+            {
+              "text": "MistSofter mystery than fog. Lyric, not monster.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Blue HourDay is gone but the sky still works.",
+          "displayText": "Blue Hour\nDay is gone but the sky still works.",
+          "links": [
+            {
+              "text": "Blue HourDay is gone but the sky still works.",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "RainMake the air visible and the ground reflective.",
+          "displayText": "Rain\nMake the air visible and the ground reflective.",
+          "links": [
+            {
+              "text": "RainMake the air visible and the ground reflective.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Rain",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        },
+        {
+          "text": "Mist",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+        },
+        {
+          "text": "Blue Hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        },
+        {
+          "text": "Dust Motes",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+        },
+        {
+          "text": "MistSofter mystery than fog. Lyric, not monster.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+        },
+        {
+          "text": "Blue HourDay is gone but the sky still works.",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        },
+        {
+          "text": "RainMake the air visible and the ground reflective.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/011706e10e626fcdf7bc8085edc5d79c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mist.webp",
+          "alt": "Mist"
+        },
+        {
+          "kind": "image",
+          "path": "media/afeaf073c169bf136864eccfa0d68e92.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blue-hour.webp",
+          "alt": "Blue Hour"
+        },
+        {
+          "kind": "image",
+          "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+          "alt": "Rain"
+        }
+      ],
+      "sourceText": "Compared with similar shots Rain streaks and mirrors. Mist hangs and does not accumulate as a blanket.Blue Hour is a sky condition that often pairs with snow but is not weather. Dust Motes are indoor specks in a shaft.Snow falls, lands, and stays.MistSofter mystery than fog. Lyric, not monster.Blue HourDay is gone but the sky still works.RainMake the air visible and the ground reflective."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fargo lets snow be ground, air, and isolation. Let the Right One In uses falling flakes and muffled suburbs."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Revenant puts bodies into falling and settled winter. Use accumulation and backlight, not a noise overlay."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Fargo lets snow be ground, air, and isolation. Let the Right One In uses falling flakes and muffled suburbs.The Revenant puts bodies into falling and settled winter. Use accumulation and backlight, not a noise overlay."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Falling snow around [Subject], large flakes in backlight, muffled world, tracks, winter silence you can see. Name flake size, a lamp or sun behind them, accumulation on shoulders and ground, and tracks if anyone has walked."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, fall plus settle; no dry coats, no rain streaks."
+        },
+        {
+          "type": "quote",
+          "text": "Falling snow around [Subject], large flakes in backlight, muffled world, tracks, winter silence you can see."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Falling+snow+around+[Subject],+large+flakes+in+backlight,+muffled+world,+tracks,+winter+silence+you+can+see."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Falling snow around [Subject], large flakes in backlight, muffled world, tracks, winter silence you can see. Name flake size, a lamp or sun behind them, accumulation on shoulders and ground, and tracks if anyone has walked.For video, fall plus settle; no dry coats, no rain streaks.Copy promptUse in Image GeneratorFalling snow around [Subject], large flakes in backlight, muffled world, tracks, winter silence you can see.Falling snow around [Subject], large flakes in backlight, muffled world, tracks, winter silence you can see."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Rain tinted white, or grain called snow. The tell: wet mirrors, no accumulation, specks too small to size.",
+          "links": [
+            {
+              "text": "Rain",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: large backlit flakes, settled white on surfaces, tracks, a hush in contrast."
+        }
+      ],
+      "links": [
+        {
+          "text": "Rain",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Rain tinted white, or grain called snow. The tell: wet mirrors, no accumulation, specks too small to size.The fix: large backlit flakes, settled white on surfaces, tracks, a hush in contrast."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Snow in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Snow is ice in the air and on the ground: backlit flakes, accumulation, tracks, a quieter contrast. It occupies volume and records passage."
+        },
+        {
+          "type": "heading",
+          "text": "Snow vs Rain",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Rain is liquid: streaks, splashes, mirrors. Snow is crystal: drift, settle, blanket. If the street specularizes and coats stay dark, you are still in rain."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Snow?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when winter should hush the world and leave tracks. Do not use it as white rain, and do not omit accumulation."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Snow for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify large backlit flakes and settled white. Example: falling snow around [Subject], large flakes in backlight, muffled world, tracks. Demand accumulation on wool and ground."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Snow in film?Snow is ice in the air and on the ground: backlit flakes, accumulation, tracks, a quieter contrast. It occupies volume and records passage.Snow vs RainRain is liquid: streaks, splashes, mirrors. Snow is crystal: drift, settle, blanket. If the street specularizes and coats stay dark, you are still in rain.When should I use Snow?Use it when winter should hush the world and leave tracks. Do not use it as white rain, and do not omit accumulation.How do I prompt Snow for AI image or video?Specify large backlit flakes and settled white. Example: falling snow around [Subject], large flakes in backlight, muffled world, tracks. Demand accumulation on wool and ground."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Falling snow around [Subject], large flakes in backlight, muffled world, tracks, winter silence you can see. Name flake size, a lamp or sun behind them, accumulation on shoulders and ground, and tracks if anyone has walked.",
+      "For video, fall plus settle; no dry coats, no rain streaks."
+    ],
+    "example": "Falling snow around [Subject], large flakes in backlight, muffled world, tracks, winter silence you can see."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/e9c95087c8682bd295c9e6a02ba98e70.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snow.webp",
+      "alt": "Snow example"
+    },
+    {
+      "kind": "image",
+      "path": "media/011706e10e626fcdf7bc8085edc5d79c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mist.webp",
+      "alt": "Mist"
+    },
+    {
+      "kind": "image",
+      "path": "media/afeaf073c169bf136864eccfa0d68e92.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blue-hour.webp",
+      "alt": "Blue Hour"
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+      "alt": "Rain"
+    },
+    {
+      "kind": "image",
+      "path": "media/f5aa1e6b824ed2316bdba0712477e683.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/snow/hero.jpg",
+      "alt": "Snow",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "7814e60c7fd795eefbe8ea3ac32faa25aea684b4f61259349026d4d119d6d0d1"
+}

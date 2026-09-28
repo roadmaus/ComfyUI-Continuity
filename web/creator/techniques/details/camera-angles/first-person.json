@@ -1,0 +1,491 @@
+{
+  "id": "camera-angles/first-person",
+  "slug": "first-person",
+  "title": "First-Person",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/first-person",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/first-person-first-person-mini.webp",
+  "detail": "details/camera-angles/first-person.json",
+  "aliases": [
+    "FPV character",
+    "subjective camera"
+  ],
+  "description": "A first-person camera makes the lens function as a character's bodily viewpoint, with a body that owns it: hands entering the frame, breath, tools, locomotion. It is subjective seeing as continuous embodiment, not a single optical insert.",
+  "thumbnail": "media/01790c06b52c445f162adaebc0032d9c.webp",
+  "video": "media/fa9972874be9b02e031873b419f520ab.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/first-person-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The audience is the character for a stretch of time. Lady in the Lake tries to tell a detective story this way."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardcore Henry runs it as an action body. Enter the Void keeps the camera inside a consciousness that still has a path through rooms."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hands, a steering wheel, a gun, a door handled at the edge: those are the tells that a person, not an invisible observer, is looking. A Point of View shot can be one cut of what they see, clean of the owner.",
+          "links": [
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "First-person keeps the owner as a felt body. Object POV parents the camera to a prop instead.",
+          "links": [
+            {
+              "text": "Object POV",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "SnorriCam looks at their face from their chest, which is the opposite ownership.",
+          "links": [
+            {
+              "text": "SnorriCam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Object POV",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+        },
+        {
+          "text": "SnorriCam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The audience is the character for a stretch of time. Lady in the Lake tries to tell a detective story this way.Hardcore Henry runs it as an action body. Enter the Void keeps the camera inside a consciousness that still has a path through rooms.Hands, a steering wheel, a gun, a door handled at the edge: those are the tells that a person, not an invisible observer, is looking. A Point of View shot can be one cut of what they see, clean of the owner.First-person keeps the owner as a felt body. Object POV parents the camera to a prop instead.SnorriCam looks at their face from their chest, which is the opposite ownership."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Parent the camera to the character's head or upper chest with a human field of view (roughly 24mm to 35mm spherical, not a tiny action-cam unless that is diegetic). Allow hands, shoulders at the extreme edge, or a tool to enter."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add breath and footfall as camera motion only as much as a body would. Do not show the owner's face except in glass."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: first-person camera as [Subject] would see, hands entering frame, breath, a body that owns the lens."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Parent the camera to the character's head or upper chest with a human field of view (roughly 24mm to 35mm spherical, not a tiny action-cam unless that is diegetic). Allow hands, shoulders at the extreme edge, or a tool to enter.Add breath and footfall as camera motion only as much as a body would. Do not show the owner's face except in glass.Prompt: first-person camera as [Subject] would see, hands entering frame, breath, a body that owns the lens."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the audience must be the character, not merely glance as them. Concrete beat: running a wet overpass, gloved hands hitting the rail, breath in the cold, no face of the runner."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it for a two-shot argument; you will lose the listener."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the audience must be the character, not merely glance as them. Concrete beat: running a wet overpass, gloved hands hitting the rail, breath in the cold, no face of the runner.Do not use it for a two-shot argument; you will lose the listener."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Point of View is the optical slice of the seen world, often an insert after a look, owner body forbidden. Object POV is a ball, a bullet, a phone, a vehicle.",
+          "links": [
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            },
+            {
+              "text": "Object POV",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Over-the-Shoulder Coverage keeps us behind someone we can still see. Fourth Wall has them look at us.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            },
+            {
+              "text": "Fourth Wall",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "SnorriCam bolts the camera to the torso and stares at their face while the world slides.",
+          "links": [
+            {
+              "text": "SnorriCam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Point of ViewForce identification. The audience is the character.",
+          "displayText": "Point of View\nForce identification. The audience is the character.",
+          "links": [
+            {
+              "text": "Point of ViewForce identification. The audience is the character.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SnorriCamTrap the audience in a body that cannot get out.",
+          "displayText": "SnorriCam\nTrap the audience in a body that cannot get out.",
+          "links": [
+            {
+              "text": "SnorriCamTrap the audience in a body that cannot get out.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Object POVThe prop has eyes.",
+          "displayText": "Object POV\nThe prop has eyes.",
+          "links": [
+            {
+              "text": "Object POVThe prop has eyes.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Object POV",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+        },
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Fourth Wall",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall"
+        },
+        {
+          "text": "SnorriCam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        },
+        {
+          "text": "Point of ViewForce identification. The audience is the character.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "SnorriCamTrap the audience in a body that cannot get out.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        },
+        {
+          "text": "Object POVThe prop has eyes.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/33e364cb93ac77f7bba981d6a44b2dad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pov-090-subjective-optical-pov-mini.webp",
+          "alt": "Point of View"
+        },
+        {
+          "kind": "video",
+          "path": "media/ad782c8d50b2a756b366df24f8816406.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/090-subjective-optical-pov-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/a377ca603c759f0f3e573588303d2336.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snorricam-018-body-mounted-face-camera-mini.webp",
+          "alt": "SnorriCam"
+        },
+        {
+          "kind": "video",
+          "path": "media/03868d02fedb015bdcc173c26c4c7b3e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/018-body-mounted-face-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fc8020d5f352c3a5a84ef886097c0803.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/object-pov-object-pov-mini.webp",
+          "alt": "Object POV"
+        },
+        {
+          "kind": "video",
+          "path": "media/4a0ca317a754e223f9e0c594ed4c9b2d.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/object-pov-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Point of View is the optical slice of the seen world, often an insert after a look, owner body forbidden. Object POV is a ball, a bullet, a phone, a vehicle.Over-the-Shoulder Coverage keeps us behind someone we can still see. Fourth Wall has them look at us.SnorriCam bolts the camera to the torso and stares at their face while the world slides.Point of ViewForce identification. The audience is the character.SnorriCamTrap the audience in a body that cannot get out.Object POVThe prop has eyes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hardcore Henry keeps the body in the lens: hands, weapons, impacts. Enter the Void rides a consciousness through space after the body is gone, still as a moving first-person path."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lady in the Lake (1947) attempts extended first-person detective storytelling, other characters addressing the lens as Marlowe. Use those as embodiment grammar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Hardcore Henry keeps the body in the lens: hands, weapons, impacts. Enter the Void rides a consciousness through space after the body is gone, still as a moving first-person path.Lady in the Lake (1947) attempts extended first-person detective storytelling, other characters addressing the lens as Marlowe. Use those as embodiment grammar."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Require a body at the edges. Quote: First-person camera as [Subject] would see, hands entering frame, breath, a body that owns the lens."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: First-person view moving as [Subject] moves, hands or tools entering the edges. Add: no owner's face except a reflection, eye height of that person, not a drone, not an OTS shoulder."
+        },
+        {
+          "type": "quote",
+          "text": "First-person view moving as [Subject] moves, hands or tools entering the edges."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=First-person+view+moving+as+[Subject]+moves,+hands+or+tools+entering+the+edges."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Require a body at the edges. Quote: First-person camera as [Subject] would see, hands entering frame, breath, a body that owns the lens.Video: First-person view moving as [Subject] moves, hands or tools entering the edges. Add: no owner's face except a reflection, eye height of that person, not a drone, not an OTS shoulder.Copy promptUse in Video GeneratorFirst-person view moving as [Subject] moves, hands or tools entering the edges.First-person view moving as [Subject] moves, hands or tools entering the edges."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a clean Point of View plate (no hands) or a Follow Shot behind the actor. Tell: a back of a head, or a perfectly disembodied lock-off of a room.",
+          "links": [
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            },
+            {
+              "text": "Follow Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: hands or a tool in frame, motion as a walk or a turn of the head, owner invisible as a face. If the camera is bolted to a car hood with chrome in frame, you wanted Object POV.",
+          "links": [
+            {
+              "text": "Object POV",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Follow Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+        },
+        {
+          "text": "Object POV",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a clean Point of View plate (no hands) or a Follow Shot behind the actor. Tell: a back of a head, or a perfectly disembodied lock-off of a room.Fix: hands or a tool in frame, motion as a walk or a turn of the head, owner invisible as a face. If the camera is bolted to a car hood with chrome in frame, you wanted Object POV."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is first-person camera in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "First-person makes the camera a character's body: we see as they see, with hands, breath, or tools entering the frame. It is continuous embodiment, not only a glance."
+        },
+        {
+          "type": "heading",
+          "text": "First-person vs POV",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A POV shot is what they see, often a single insert with no owner body. First-person keeps a body owning the lens over time: hands, locomotion, breath."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use first-person?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the audience should inhabit a body for a passage of action or perception. Do not use it for ordinary reverse-shot dialogue."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt first-person for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: First-person camera as [Subject] would see, hands entering frame, breath, a body that owns the lens. For video, move as they move, tools at the edges, no owner's face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is first-person camera in film?First-person makes the camera a character's body: we see as they see, with hands, breath, or tools entering the frame. It is continuous embodiment, not only a glance.First-person vs POVA POV shot is what they see, often a single insert with no owner body. First-person keeps a body owning the lens over time: hands, locomotion, breath.When should I use first-person?Use it when the audience should inhabit a body for a passage of action or perception. Do not use it for ordinary reverse-shot dialogue.How do I prompt first-person for AI image or video?Write: First-person camera as [Subject] would see, hands entering frame, breath, a body that owns the lens. For video, move as they move, tools at the edges, no owner's face."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Require a body at the edges. Quote: First-person camera as [Subject] would see, hands entering frame, breath, a body that owns the lens.",
+      "Video: First-person view moving as [Subject] moves, hands or tools entering the edges. Add: no owner's face except a reflection, eye height of that person, not a drone, not an OTS shoulder."
+    ],
+    "example": "First-person view moving as [Subject] moves, hands or tools entering the edges."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/fa9972874be9b02e031873b419f520ab.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/first-person-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/01790c06b52c445f162adaebc0032d9c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/first-person-first-person-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/033d98a81d8105da648db316467dbf9f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/first-person.jpg",
+      "alt": "First-Person frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/33e364cb93ac77f7bba981d6a44b2dad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pov-090-subjective-optical-pov-mini.webp",
+      "alt": "Point of View"
+    },
+    {
+      "kind": "video",
+      "path": "media/ad782c8d50b2a756b366df24f8816406.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/090-subjective-optical-pov-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a377ca603c759f0f3e573588303d2336.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snorricam-018-body-mounted-face-camera-mini.webp",
+      "alt": "SnorriCam"
+    },
+    {
+      "kind": "video",
+      "path": "media/03868d02fedb015bdcc173c26c4c7b3e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/018-body-mounted-face-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fc8020d5f352c3a5a84ef886097c0803.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/object-pov-object-pov-mini.webp",
+      "alt": "Object POV"
+    },
+    {
+      "kind": "video",
+      "path": "media/4a0ca317a754e223f9e0c594ed4c9b2d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/object-pov-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/94ad3b323c5365c2bfeaa12e815645f8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/first-person/hero.jpg",
+      "alt": "First-Person",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "82ce8b989873e782d2e184331d4d8affef6569f21ab69d038b912250644025e4"
+}

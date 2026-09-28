@@ -1,0 +1,459 @@
+{
+  "id": "editing/jump-cut",
+  "slug": "jump-cut",
+  "title": "Jump Cut",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/jump-cut",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+  "detail": "details/editing/jump-cut.json",
+  "aliases": [
+    "Visible temporal discontinuity",
+    "Faux raccord temporel"
+  ],
+  "description": "A jump cut removes time or slightly shifts framing inside a similar setup, so the discontinuity is conspicuous. The outgoing frame and the incoming frame are close enough that the missing interval reads as a skip, not as a new shot.",
+  "thumbnail": "media/30e16a300df23158df8edae534b8363d.webp",
+  "video": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The car is the same. The road is the same."
+        },
+        {
+          "type": "paragraph",
+          "text": "The speaker has jumped three sentences and a mile. You are not soothed."
+        },
+        {
+          "type": "paragraph",
+          "text": "The film has shown the skip. Use it for impatience, instability, comic abbreviation, or an openly constructed voice."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you want invisible continuity. If the two frames are very different in size or angle, the skip hides and you have ordinary coverage, not a jump cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "A jump cut is not simply any fast cut. The visible break within a similar setup is the whole point."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The car is the same. The road is the same.The speaker has jumped three sentences and a mile. You are not soothed.The film has shown the skip. Use it for impatience, instability, comic abbreviation, or an openly constructed voice.It is the wrong tool when you want invisible continuity. If the two frames are very different in size or angle, the skip hides and you have ordinary coverage, not a jump cut.A jump cut is not simply any fast cut. The visible break within a similar setup is the whole point."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Remove intervals from one setup, or join closely related views of the same subject. Keep enough of the composition (lens, angle, body size) that the jump is obvious."
+        },
+        {
+          "type": "paragraph",
+          "text": "Decide whether sound smooths the skip (a continuous line) or emphasizes it (hard in and out). Prompt: time skipped inside a similar framing, same seat, missing frames, no morph."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Remove intervals from one setup, or join closely related views of the same subject. Keep enough of the composition (lens, angle, body size) that the jump is obvious.Decide whether sound smooths the skip (a continuous line) or emphasizes it (hard in and out). Prompt: time skipped inside a similar framing, same seat, missing frames, no morph."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it in a wait, a rambling talk, a comedown, a drive that should feel too long and too short at once. Do not use it as a substitute for coverage you did not shoot."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the audience should not notice the edit, use Match on Action or an Invisible Cut.",
+          "links": [
+            {
+              "text": "Match on Action",
+              "url": "https://melies.co/cinematic-techniques/editing/match-action"
+            },
+            {
+              "text": "Invisible Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Match on Action",
+          "url": "https://melies.co/cinematic-techniques/editing/match-action"
+        },
+        {
+          "text": "Invisible Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it in a wait, a rambling talk, a comedown, a drive that should feel too long and too short at once. Do not use it as a substitute for coverage you did not shoot.If the audience should not notice the edit, use Match on Action or an Invisible Cut."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Smash Cut slams into a violently different image. A jump cut stays inside a similar frame and skips time.",
+          "links": [
+            {
+              "text": "Smash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Montage juxtaposes many shots to compress or argue; jump cut is usually one setup with holes. An Axial Cut jumps distance on the same axis as emphasis, not as missing time.",
+          "links": [
+            {
+              "text": "Montage",
+              "url": "https://melies.co/cinematic-techniques/editing/montage"
+            },
+            {
+              "text": "Axial Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Quick Cuts are short shots from changing setups, a rhythm, not a skip inside one frame.",
+          "links": [
+            {
+              "text": "Quick Cuts",
+              "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Smash CutThe next image should hurt.",
+          "displayText": "Smash Cut\nThe next image should hurt.",
+          "links": [
+            {
+              "text": "Smash CutThe next image should hurt.",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MontageYou need months in a minute.",
+          "displayText": "Montage\nYou need months in a minute.",
+          "links": [
+            {
+              "text": "MontageYou need months in a minute.",
+              "url": "https://melies.co/cinematic-techniques/editing/montage"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Smash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Montage",
+          "url": "https://melies.co/cinematic-techniques/editing/montage"
+        },
+        {
+          "text": "Axial Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+        },
+        {
+          "text": "Quick Cuts",
+          "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+        },
+        {
+          "text": "Smash CutThe next image should hurt.",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "MontageYou need months in a minute.",
+          "url": "https://melies.co/cinematic-techniques/editing/montage"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/bd7d68009bacf7d9970db0873ae94f1c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smash-cut-165-smash-cut-mini.webp",
+          "alt": "Smash Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/bb74b65d11d6f62c19ec9876a5b85953.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/165-smash-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/27a33ae58cc5df616d945877bb4d3771.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/montage-114-elliptical-montage-mini.webp",
+          "alt": "Montage"
+        },
+        {
+          "kind": "video",
+          "path": "media/3ada756f953b73b014f2cf75085ab5b0.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/114-elliptical-montage-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Smash Cut slams into a violently different image. A jump cut stays inside a similar frame and skips time.Montage juxtaposes many shots to compress or argue; jump cut is usually one setup with holes. An Axial Cut jumps distance on the same axis as emphasis, not as missing time.Quick Cuts are short shots from changing setups, a rhythm, not a skip inside one frame.Smash CutThe next image should hurt.MontageYou need months in a minute.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Breathless lets car rides and talks skip forward inside similar framings, which is the modern template. Dancer in the Dark uses discontinuous cutting to disrupt smooth observation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Requiem for a Dream turns repeated rituals into jumps that feel like appetite. Grammar, not a look to clone."
+        },
+        {
+          "type": "list-item",
+          "text": "Breathless 1960Car rides and conversations skip forward within similar framings.",
+          "displayText": "Breathless 1960\nCar rides and conversations skip forward within similar framings."
+        },
+        {
+          "type": "list-item",
+          "text": "Dancer in the Dark 2000Discontinuous cutting disrupts smooth observation.",
+          "displayText": "Dancer in the Dark 2000\nDiscontinuous cutting disrupts smooth observation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Breathless lets car rides and talks skip forward inside similar framings, which is the modern template. Dancer in the Dark uses discontinuous cutting to disrupt smooth observation.Requiem for a Dream turns repeated rituals into jumps that feel like appetite. Grammar, not a look to clone.Breathless 1960Car rides and conversations skip forward within similar framings.Dancer in the Dark 2000Discontinuous cutting disrupts smooth observation."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Jump cut on [Subject], time skipped inside a similar framing, interruption, anxiety or comedy of missing frames. Specify a locked or near-locked setup, what changes (posture, clock, crowd), and that the camera does not morph."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, one bench or seat, several jumps, elapsed waiting, no repositioning disguised as a jump."
+        },
+        {
+          "type": "quote",
+          "text": "Locked medium shot of a woman waiting at a station bench. Make six jump cuts in the same framing as she changes posture, checks the clock and shifts her bag. Other passengers change between cuts. Clear elapsed waiting time, no morphing transitions or camera repositioning."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Locked+medium+shot+of+a+woman+waiting+at+a+station+bench.+Make+six+jump+cuts+in+the+same+framing+as+she+changes+posture,+checks+the+clock+and+shifts+her+bag.+Other+passengers+change+between+cuts.+Clear+elapsed+waiting+time,+no+morphing+transitions+or+camera+repositioning."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Jump cut on [Subject], time skipped inside a similar framing, interruption, anxiety or comedy of missing frames. Specify a locked or near-locked setup, what changes (posture, clock, crowd), and that the camera does not morph.For video, one bench or seat, several jumps, elapsed waiting, no repositioning disguised as a jump.Copy promptUse in Video GeneratorLocked medium shot of a woman waiting at a station bench. Make six jump cuts in the same framing as she changes posture, checks the clock and shifts her bag. Other passengers change between cuts. Clear elapsed waiting time, no morphing transitions or camera repositioning.Locked medium shot of a woman waiting at a station bench. Make six jump cuts in the same framing as she changes posture, checks the clock and shifts her bag. Other passengers change between cuts. Clear elapsed waiting time, no morphing transitions or camera repositioning."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Quick Cuts or random coverage labeled as a jump. The tell: every shot is a new angle, so nothing jumps.",
+          "links": [
+            {
+              "text": "Quick Cuts",
+              "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Or the model morphs the sitter from pose to pose. The fix: keep the framing nearly constant, remove time, let the discontinuity show."
+        }
+      ],
+      "links": [
+        {
+          "text": "Quick Cuts",
+          "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Quick Cuts or random coverage labeled as a jump. The tell: every shot is a new angle, so nothing jumps.Or the model morphs the sitter from pose to pose. The fix: keep the framing nearly constant, remove time, let the discontinuity show."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Jump Cut in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A jump cut removes time while leaving enough similarity of framing or subject that the break is obvious. Both sides of the join look like the same shot with a hole in it."
+        },
+        {
+          "type": "heading",
+          "text": "Jump Cut vs Smash Cut",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A jump cut skips time inside a similar setup. A smash cut leaves that setup for a violently different image, sound, or scale. One shows a hole; the other shows a collision."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Jump Cut?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the skip itself is the meaning: wait, nerves, comic speed, a narrator who will not pretend the cut is invisible. Do not use it to hide missing coverage."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Jump Cut for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep one framing and skip time inside it. Example: Jump cut on [Subject], time skipped inside a similar framing. Name what changes between jumps and forbid morphing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Jump Cut in film?A jump cut removes time while leaving enough similarity of framing or subject that the break is obvious. Both sides of the join look like the same shot with a hole in it.Jump Cut vs Smash CutA jump cut skips time inside a similar setup. A smash cut leaves that setup for a violently different image, sound, or scale. One shows a hole; the other shows a collision.When should I use Jump Cut?Use it when the skip itself is the meaning: wait, nerves, comic speed, a narrator who will not pretend the cut is invisible. Do not use it to hide missing coverage.How do I prompt Jump Cut for AI image or video?Keep one framing and skip time inside it. Example: Jump cut on [Subject], time skipped inside a similar framing. Name what changes between jumps and forbid morphing."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Jump cut on [Subject], time skipped inside a similar framing, interruption, anxiety or comedy of missing frames. Specify a locked or near-locked setup, what changes (posture, clock, crowd), and that the camera does not morph.",
+      "For video, one bench or seat, several jumps, elapsed waiting, no repositioning disguised as a jump."
+    ],
+    "example": "Locked medium shot of a woman waiting at a station bench. Make six jump cuts in the same framing as she changes posture, checks the clock and shifts her bag. Other passengers change between cuts. Clear elapsed waiting time, no morphing transitions or camera repositioning."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/30e16a300df23158df8edae534b8363d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7c5a9242c257b1048995dcc82ac45e1a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/jump-cut.jpg",
+      "alt": "Jump Cut frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/bd7d68009bacf7d9970db0873ae94f1c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smash-cut-165-smash-cut-mini.webp",
+      "alt": "Smash Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/bb74b65d11d6f62c19ec9876a5b85953.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/165-smash-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/27a33ae58cc5df616d945877bb4d3771.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/montage-114-elliptical-montage-mini.webp",
+      "alt": "Montage"
+    },
+    {
+      "kind": "video",
+      "path": "media/3ada756f953b73b014f2cf75085ab5b0.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/114-elliptical-montage-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5b10551315f9e310de70461d4c17b7e0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/jump-cut/hero.jpg",
+      "alt": "Jump Cut",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "14ef43d03b20a387a7eaacd553f7a305fe5caec829d3e872d3480b502f740830"
+}

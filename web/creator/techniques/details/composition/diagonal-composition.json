@@ -1,0 +1,389 @@
+{
+  "id": "composition/diagonal-composition",
+  "slug": "diagonal-composition",
+  "title": "Diagonal Composition",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/diagonal-composition",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diagonal-composition.webp",
+  "detail": "details/composition/diagonal-composition.json",
+  "aliases": [
+    "Diagonal lines"
+  ],
+  "description": "Diagonal composition uses diagonal lines and masses (stairs, rifles, rain, a body on the bias, a street receding on a corner) to raise energy, instability, or depth. The camera can stay level, because the set supplies the tilt of the diagram.",
+  "thumbnail": "media/79170a49a7948c39bc2091f8e6f051c5.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stillness would be a lie if the scene is a riot, a chase down stairs, or a city that will not sit square. Diagonals shove the eye and refuse a calm horizon of furniture."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a formal treaty, a joke about order, or a face that needs to be an altar. If you roll the camera to fake a diagonal that the set does not have, you have made a dutch angle, which is a different sentence."
+        },
+        {
+          "type": "paragraph",
+          "text": "A single strong bias line can be enough: a banister, a shadow, a gun. Filling the frame with accidental slants is not composition."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a crooked set."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Stillness would be a lie if the scene is a riot, a chase down stairs, or a city that will not sit square. Diagonals shove the eye and refuse a calm horizon of furniture.It is the wrong tool for a formal treaty, a joke about order, or a face that needs to be an altar. If you roll the camera to fake a diagonal that the set does not have, you have made a dutch angle, which is a different sentence.A single strong bias line can be enough: a banister, a shadow, a gun. Filling the frame with accidental slants is not composition.It is a crooked set."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the head level unless you truly want a dutch. Find a bias vector in blocking or architecture and place the subject on it or against it."
+        },
+        {
+          "type": "paragraph",
+          "text": "A wider lens increases the thrust of a receding diagonal. Hard light can throw a diagonal shadow as a second line."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Diagonal composition through [Subject], energy on the bias, unstable, rain or stairs as the line."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Keep the head level unless you truly want a dutch. Find a bias vector in blocking or architecture and place the subject on it or against it.A wider lens increases the thrust of a receding diagonal. Hard light can throw a diagonal shadow as a second line.Prompt: Diagonal composition through [Subject], energy on the bias, unstable, rain or stairs as the line."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for stairs, street corners, rain, battles, and any beat where a level diagram would calm the scene down. Do not roll the camera to counterfeit a line the location does not offer."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for stairs, street corners, rain, battles, and any beat where a level diagram would calm the scene down. Do not roll the camera to counterfeit a line the location does not offer."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dutch Angle rolls the camera so the horizon itself tilts. Diagonal composition can keep a true horizon while stairs and bodies cut across.",
+          "links": [
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Leading Lines may be diagonal, but they can also be straight corridors on axis. One-Point Perspective is usually a square, ceremonial tunnel.",
+          "links": [
+            {
+              "text": "Leading Lines",
+              "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+            },
+            {
+              "text": "One-Point Perspective",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Asymmetry offsets mass without requiring a bias line.",
+          "links": [
+            {
+              "text": "Asymmetry",
+              "url": "https://melies.co/cinematic-techniques/composition/asymmetry"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+          "displayText": "Dutch Angle\nThe world is off its axis. Do not use as decoration.",
+          "links": [
+            {
+              "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Leading LinesArchitecture should point.",
+          "displayText": "Leading Lines\nArchitecture should point.",
+          "links": [
+            {
+              "text": "Leading LinesArchitecture should point.",
+              "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "Leading Lines",
+          "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+        },
+        {
+          "text": "One-Point Perspective",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Asymmetry",
+          "url": "https://melies.co/cinematic-techniques/composition/asymmetry"
+        },
+        {
+          "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "Leading LinesArchitecture should point.",
+          "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b87a1699cd3cd68781b68c037559849a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-angle-161-dutch-angle-mini.webp",
+          "alt": "Dutch Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/705061adfd657c913629f2fb72bc9a79.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/161-dutch-angle-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/13ec67852b1960715c9beedb1ebfdf5b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/leading-lines.webp",
+          "alt": "Leading Lines"
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Dutch Angle rolls the camera so the horizon itself tilts. Diagonal composition can keep a true horizon while stairs and bodies cut across.Leading Lines may be diagonal, but they can also be straight corridors on axis. One-Point Perspective is usually a square, ceremonial tunnel.Asymmetry offsets mass without requiring a bias line.Dutch AngleThe world is off its axis. Do not use as decoration.Leading LinesArchitecture should point.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Battleship Potemkin drives rifles, stairs, and crowds on the bias so the massacre cannot sit still. The Third Man turns Vienna's streets, stairs, and wet shadows into diagonal traps while the camera is often simply in the right place."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of instability, not a tilt preset."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Battleship Potemkin drives rifles, stairs, and crowds on the bias so the massacre cannot sit still. The Third Man turns Vienna's streets, stairs, and wet shadows into diagonal traps while the camera is often simply in the right place.Grammar of instability, not a tilt preset."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the bias line and keep the horizon honest unless you also want a dutch. Diagonal composition through [Subject], energy on the bias, unstable, rain or stairs as the line."
+        },
+        {
+          "type": "paragraph",
+          "text": "Replace rain or stairs with the actual vector. Add horizon level if the camera must not roll."
+        },
+        {
+          "type": "quote",
+          "text": "Diagonal composition through [Subject], energy on the bias, unstable, dynamic, rain or stairs as the line."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Diagonal+composition+through+[Subject],+energy+on+the+bias,+unstable,+dynamic,+rain+or+stairs+as+the+line."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the bias line and keep the horizon honest unless you also want a dutch. Diagonal composition through [Subject], energy on the bias, unstable, rain or stairs as the line.Replace rain or stairs with the actual vector. Add horizon level if the camera must not roll.Copy promptUse in Image GeneratorDiagonal composition through [Subject], energy on the bias, unstable, dynamic, rain or stairs as the line.Diagonal composition through [Subject], energy on the bias, unstable, dynamic, rain or stairs as the line."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Dutch Angle. The tell is a tilted horizon and no architectural diagonal.",
+          "links": [
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to level the camera and find stairs, a corner, or a gesture that actually cuts the frame."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Dutch Angle. The tell is a tilted horizon and no architectural diagonal.The fix is to level the camera and find stairs, a corner, or a gesture that actually cuts the frame."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is diagonal composition in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a picture organized on the bias: stairs, streets, rain, bodies, shadows as diagonal vectors. Energy and instability come from those lines. The camera may remain level. The set does the tilting."
+        },
+        {
+          "type": "heading",
+          "text": "Diagonal Composition vs Dutch Angle",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dutch angle rolls the camera so the whole world lists. Diagonal composition uses lines already in the scene. You can have both, but a rolled horizon is not automatically a diagonal composition, and stairs on a level camera are not a dutch."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use diagonal composition?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a square, restful diagram would lie: pursuit, stairs, street violence, weather that cuts. Do not use it as a default slant on a calm interior."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt diagonal composition for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the bias and whether the camera is level. Example: Diagonal composition through [Subject], energy on the bias, unstable, rain or stairs as the line. Specify the line. Add horizon level to block an unwanted dutch."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is diagonal composition in film?It is a picture organized on the bias: stairs, streets, rain, bodies, shadows as diagonal vectors. Energy and instability come from those lines. The camera may remain level. The set does the tilting.Diagonal Composition vs Dutch AngleA dutch angle rolls the camera so the whole world lists. Diagonal composition uses lines already in the scene. You can have both, but a rolled horizon is not automatically a diagonal composition, and stairs on a level camera are not a dutch.When should I use diagonal composition?Use it when a square, restful diagram would lie: pursuit, stairs, street violence, weather that cuts. Do not use it as a default slant on a calm interior.How do I prompt diagonal composition for AI image or video?Name the bias and whether the camera is level. Example: Diagonal composition through [Subject], energy on the bias, unstable, rain or stairs as the line. Specify the line. Add horizon level to block an unwanted dutch."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the bias line and keep the horizon honest unless you also want a dutch. Diagonal composition through [Subject], energy on the bias, unstable, rain or stairs as the line.",
+      "Replace rain or stairs with the actual vector. Add horizon level if the camera must not roll."
+    ],
+    "example": "Diagonal composition through [Subject], energy on the bias, unstable, dynamic, rain or stairs as the line."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/79170a49a7948c39bc2091f8e6f051c5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diagonal-composition.webp",
+      "alt": "Diagonal Composition example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b87a1699cd3cd68781b68c037559849a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-angle-161-dutch-angle-mini.webp",
+      "alt": "Dutch Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/705061adfd657c913629f2fb72bc9a79.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/161-dutch-angle-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/13ec67852b1960715c9beedb1ebfdf5b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/leading-lines.webp",
+      "alt": "Leading Lines"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/35cf22a28012cfeb4e1084d288af746e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/diagonal-composition/hero.jpg",
+      "alt": "Diagonal Composition",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "d213648fd4893dbcba3a29e843593021b03b9626c288219d788a8b085f7d1933"
+}

@@ -1,0 +1,472 @@
+{
+  "id": "color/color-shift",
+  "slug": "color-shift",
+  "title": "Color Shift",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/color-shift",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/color-shift-075-monochrome-to-color-revelation-mini.webp",
+  "detail": "details/color/color-shift.json",
+  "aliases": [
+    "Color threshold",
+    "B&W/color transition"
+  ],
+  "description": "A color shift effect is a change of color state that the audience is meant to notice: monochrome to hue, one world to another, or a slide of temperature during the shot. Color is the event, not a hidden LUT.",
+  "thumbnail": "media/c1119b0bb78c6019a158ece5f04ca1a3.webp",
+  "video": "media/53c4936722d73fe80e13125c1316da31.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/075-monochrome-to-color-revelation-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dorothy opens a door and the world gains hue. A zone, a lie, a memory: the threshold can be a cut, a doorway, or a grade that travels inside the take."
+        },
+        {
+          "type": "paragraph",
+          "text": "The audience crosses with the character. A global saturation ramp is different from a color world revealed through a door."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the film simply has more than one static Palette across chapters. Palettes can sit still; a shift is a change you watch.",
+          "links": [
+            {
+              "text": "Palette",
+              "url": "https://melies.co/cinematic-techniques/color/palette"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool for Cross Process or Split Toning that never move. If the beat is one loud world from the first frame, you wanted Hyper-Saturation or a locked palette, not a shift.",
+          "links": [
+            {
+              "text": "Cross Process",
+              "url": "https://melies.co/cinematic-techniques/color/cross-process"
+            },
+            {
+              "text": "Split Toning",
+              "url": "https://melies.co/cinematic-techniques/color/split-tone"
+            },
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Palette",
+          "url": "https://melies.co/cinematic-techniques/color/palette"
+        },
+        {
+          "text": "Cross Process",
+          "url": "https://melies.co/cinematic-techniques/color/cross-process"
+        },
+        {
+          "text": "Split Toning",
+          "url": "https://melies.co/cinematic-techniques/color/split-tone"
+        },
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Dorothy opens a door and the world gains hue. A zone, a lie, a memory: the threshold can be a cut, a doorway, or a grade that travels inside the take.The audience crosses with the character. A global saturation ramp is different from a color world revealed through a door.It is the wrong tool when the film simply has more than one static Palette across chapters. Palettes can sit still; a shift is a change you watch.It is also the wrong tool for Cross Process or Split Toning that never move. If the beat is one loud world from the first frame, you wanted Hyper-Saturation or a locked palette, not a shift."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose whether the change occurs across a cut, through an opening, or gradually inside the image. Match production design and exposure so the arrival of color (or of a new temperature) feels intended."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you go from grey to hue, expose the grey chapter so the later color has somewhere to live. Prompt: Color shift across [Subject], hues sliding mid-shot or mid-grade, a world that changes temperature in front of us."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video: The grade around [Subject] shifts hue during the shot, warmth turning cold or the reverse."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Choose whether the change occurs across a cut, through an opening, or gradually inside the image. Match production design and exposure so the arrival of color (or of a new temperature) feels intended.If you go from grey to hue, expose the grey chapter so the later color has somewhere to live. Prompt: Color shift across [Subject], hues sliding mid-shot or mid-grade, a world that changes temperature in front of us.For video: The grade around [Subject] shifts hue during the shot, warmth turning cold or the reverse."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when color is the event: a door onto a new world, a lie that changes temperature, a zone. Do not use it as a random hue drift, and do not call two static chapter palettes a shift unless we watch the change."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when color is the event: a door onto a new world, a lie that changes temperature, a zone. Do not use it as a random hue drift, and do not call two static chapter palettes a shift unless we watch the change."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Palette assigns stable hue systems to strands or places. Split Toning is a static two-hue curve.",
+          "links": [
+            {
+              "text": "Palette",
+              "url": "https://melies.co/cinematic-techniques/color/palette"
+            },
+            {
+              "text": "Split Toning",
+              "url": "https://melies.co/cinematic-techniques/color/split-tone"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cross Process is a skewed primary look. Monochrome is a state you might leave.",
+          "links": [
+            {
+              "text": "Cross Process",
+              "url": "https://melies.co/cinematic-techniques/color/cross-process"
+            },
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Color-shift is the transition."
+        },
+        {
+          "type": "list-item",
+          "text": "Split ToningShadows and lights belong to different gods.",
+          "displayText": "Split Toning\nShadows and lights belong to different gods.",
+          "links": [
+            {
+              "text": "Split ToningShadows and lights belong to different gods.",
+              "url": "https://melies.co/cinematic-techniques/color/split-tone"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cross ProcessWrong chemistry on purpose.",
+          "displayText": "Cross Process\nWrong chemistry on purpose.",
+          "links": [
+            {
+              "text": "Cross ProcessWrong chemistry on purpose.",
+              "url": "https://melies.co/cinematic-techniques/color/cross-process"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Palette",
+          "url": "https://melies.co/cinematic-techniques/color/palette"
+        },
+        {
+          "text": "Split Toning",
+          "url": "https://melies.co/cinematic-techniques/color/split-tone"
+        },
+        {
+          "text": "Cross Process",
+          "url": "https://melies.co/cinematic-techniques/color/cross-process"
+        },
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Split ToningShadows and lights belong to different gods.",
+          "url": "https://melies.co/cinematic-techniques/color/split-tone"
+        },
+        {
+          "text": "Cross ProcessWrong chemistry on purpose.",
+          "url": "https://melies.co/cinematic-techniques/color/cross-process"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/31d92d2537ca6e93344aeb4ab840d233.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-tone.webp",
+          "alt": "Split Toning"
+        },
+        {
+          "kind": "image",
+          "path": "media/1327295c65e87c53f955855b54fa99fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-process.webp",
+          "alt": "Cross Process"
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Palette assigns stable hue systems to strands or places. Split Toning is a static two-hue curve.Cross Process is a skewed primary look. Monochrome is a state you might leave.Color-shift is the transition.Split ToningShadows and lights belong to different gods.Cross ProcessWrong chemistry on purpose.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Wizard of Oz makes the farmhouse door a threshold into hue. Stalker changes visual treatment between the outside world and the Zone."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hero retells events in different dominant colors; some transitions are chapter cuts, which is palette as much as shift. Suspiria (2018) lets color states mutate with the story."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of a threshold, not a still of a ruby shoe."
+        },
+        {
+          "type": "list-item",
+          "text": "The Wizard of Oz 1939Dorothy opens the farmhouse door onto the colorful world of Oz.",
+          "displayText": "The Wizard of Oz 1939\nDorothy opens the farmhouse door onto the colorful world of Oz."
+        },
+        {
+          "type": "list-item",
+          "text": "Stalker 1979The visual treatment changes between the outside world and the Zone.",
+          "displayText": "Stalker 1979\nThe visual treatment changes between the outside world and the Zone."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1542ae7ff32bdeedb66ac6fa92b43d47.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/color-shift/famous/00-the-wizard-of-oz-1939.jpg",
+          "alt": "The Wizard of Oz 1939"
+        },
+        {
+          "kind": "image",
+          "path": "media/08e2a09a7dd07c413a3ae381282d45df.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/color-shift/famous/01-stalker-1979.jpg",
+          "alt": "Stalker 1979"
+        }
+      ],
+      "sourceText": "In film The Wizard of Oz makes the farmhouse door a threshold into hue. Stalker changes visual treatment between the outside world and the Zone.Hero retells events in different dominant colors; some transitions are chapter cuts, which is palette as much as shift. Suspiria (2018) lets color states mutate with the story.Grammar of a threshold, not a still of a ruby shoe.The Wizard of Oz 1939Dorothy opens the farmhouse door onto the colorful world of Oz.Stalker 1979The visual treatment changes between the outside world and the Zone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the before and after. Color shift across [Subject], hues sliding mid-shot or mid-grade, a world that changes temperature in front of us."
+        },
+        {
+          "type": "paragraph",
+          "text": "For motion, say when it happens (through a door, during the take). Do not write a static LUT, and do not confuse it with split-tone."
+        },
+        {
+          "type": "quote",
+          "text": "Inside a muted sepia workshop, a child opens a large door onto a richly colored greenhouse. Keep the interior sepia while the exterior already exists in color beyond the threshold. As the camera crosses the doorway, enter the full-color world. No dissolve or global color wash."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Inside+a+muted+sepia+workshop,+a+child+opens+a+large+door+onto+a+richly+colored+greenhouse.+Keep+the+interior+sepia+while+the+exterior+already+exists+in+color+beyond+the+threshold.+As+the+camera+crosses+the+doorway,+enter+the+full-color+world.+No+dissolve+or+global+color+wash."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the before and after. Color shift across [Subject], hues sliding mid-shot or mid-grade, a world that changes temperature in front of us.For motion, say when it happens (through a door, during the take). Do not write a static LUT, and do not confuse it with split-tone.Copy promptUse in Video GeneratorInside a muted sepia workshop, a child opens a large door onto a richly colored greenhouse. Keep the interior sepia while the exterior already exists in color beyond the threshold. As the camera crosses the doorway, enter the full-color world. No dissolve or global color wash.Inside a muted sepia workshop, a child opens a large door onto a richly colored greenhouse. Keep the interior sepia while the exterior already exists in color beyond the threshold. As the camera crosses the doorway, enter the full-color world. No dissolve or global color wash."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a static Palette or a Split Toning that never moves. The tell is two looks in two scenes with no threshold, or a random hue drift.",
+          "links": [
+            {
+              "text": "Palette",
+              "url": "https://melies.co/cinematic-techniques/color/palette"
+            },
+            {
+              "text": "Split Toning",
+              "url": "https://melies.co/cinematic-techniques/color/split-tone"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: a defined before-state, a defined after-state, and a visible crossing (door, cut, or traveling grade)."
+        }
+      ],
+      "links": [
+        {
+          "text": "Palette",
+          "url": "https://melies.co/cinematic-techniques/color/palette"
+        },
+        {
+          "text": "Split Toning",
+          "url": "https://melies.co/cinematic-techniques/color/split-tone"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a static Palette or a Split Toning that never moves. The tell is two looks in two scenes with no threshold, or a random hue drift.Fix: a defined before-state, a defined after-state, and a visible crossing (door, cut, or traveling grade)."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a color shift in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a noticeable change of color state: grey to hue, warm to cold, or one world-color to another. The change is the event, whether across a door, a cut, or a traveling grade."
+        },
+        {
+          "type": "heading",
+          "text": "Color Shift vs Split Toning",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Split toning is a stable pair of highlight and shadow hues. A color shift is a transition the audience watches. If the pair never moves, it is not a shift."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a color shift?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when crossing a world, a lie, or a memory should be visible as color. Skip it when each chapter simply has its own still palette."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a color shift for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the before and after and the threshold. For video: the grade around [Subject] shifts hue during the shot, warmth turning cold or the reverse. For a still, show the crossing (a door, a wipe of hue). Forbid a static LUT."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a color shift in film?It is a noticeable change of color state: grey to hue, warm to cold, or one world-color to another. The change is the event, whether across a door, a cut, or a traveling grade.Color Shift vs Split ToningSplit toning is a stable pair of highlight and shadow hues. A color shift is a transition the audience watches. If the pair never moves, it is not a shift.When should I use a color shift?Use it when crossing a world, a lie, or a memory should be visible as color. Skip it when each chapter simply has its own still palette.How do I prompt a color shift for AI image or video?Name the before and after and the threshold. For video: the grade around [Subject] shifts hue during the shot, warmth turning cold or the reverse. For a still, show the crossing (a door, a wipe of hue). Forbid a static LUT."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the before and after. Color shift across [Subject], hues sliding mid-shot or mid-grade, a world that changes temperature in front of us.",
+      "For motion, say when it happens (through a door, during the take). Do not write a static LUT, and do not confuse it with split-tone."
+    ],
+    "example": "Inside a muted sepia workshop, a child opens a large door onto a richly colored greenhouse. Keep the interior sepia while the exterior already exists in color beyond the threshold. As the camera crosses the doorway, enter the full-color world. No dissolve or global color wash."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/53c4936722d73fe80e13125c1316da31.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/075-monochrome-to-color-revelation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c1119b0bb78c6019a158ece5f04ca1a3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/color-shift-075-monochrome-to-color-revelation-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a52fa2ac9f998dce66e52d62465f906a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/color-shift.jpg",
+      "alt": "Color Shift frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/31d92d2537ca6e93344aeb4ab840d233.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-tone.webp",
+      "alt": "Split Toning"
+    },
+    {
+      "kind": "image",
+      "path": "media/1327295c65e87c53f955855b54fa99fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-process.webp",
+      "alt": "Cross Process"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/1542ae7ff32bdeedb66ac6fa92b43d47.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/color-shift/famous/00-the-wizard-of-oz-1939.jpg",
+      "alt": "The Wizard of Oz 1939"
+    },
+    {
+      "kind": "image",
+      "path": "media/08e2a09a7dd07c413a3ae381282d45df.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/color-shift/famous/01-stalker-1979.jpg",
+      "alt": "Stalker 1979"
+    },
+    {
+      "kind": "image",
+      "path": "media/e9004397b9011e47bedaa909049503e2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/color-shift/hero.jpg",
+      "alt": "Color Shift",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "2854c3bc1de79bf2ca9035a105ea8bd04338b20cb38707398a79820db8c4f035"
+}

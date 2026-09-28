@@ -1,0 +1,412 @@
+{
+  "id": "effects/cinemagraph",
+  "slug": "cinemagraph",
+  "title": "Cinemagraph",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/cinemagraph",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinemagraph-cinemagraph-mini.webp",
+  "detail": "details/effects/cinemagraph.json",
+  "aliases": [],
+  "description": "A cinemagraph is a still photograph in which one isolated element continues to move on a loop (steam, rain on glass, hair, a blink) while the rest of the frame is frozen. It is not a freeze-frame of a whole shot, and it is not a full clip that happens to loop.",
+  "thumbnail": "media/5e31f6b855e7fe96ca6f97144033b3bd.webp",
+  "video": "media/ab617a228494596144b6b44f078fcd61.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/cinemagraph-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The picture looks dead, then a kettle breathes. A coat is still."
+        },
+        {
+          "type": "paragraph",
+          "text": "Only the rain tracks the window. Time is allowed in one masked region."
+        },
+        {
+          "type": "paragraph",
+          "text": "The rest is a still. Use it when a photograph should refuse to fully stop: fashion, a poster that lives, a memory with one leak of motion."
+        },
+        {
+          "type": "paragraph",
+          "text": "The moving part must be plausible as a cycle. It is the wrong tool when the whole scene moves, or when all motion stops (freeze-frame)."
+        },
+        {
+          "type": "paragraph",
+          "text": "If every element loops, that is an infinite loop of a shot, not a cinemagraph. If the loop is a boomerang of the entire take, that is a different toy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The picture looks dead, then a kettle breathes. A coat is still.Only the rain tracks the window. Time is allowed in one masked region.The rest is a still. Use it when a photograph should refuse to fully stop: fashion, a poster that lives, a memory with one leak of motion.The moving part must be plausible as a cycle. It is the wrong tool when the whole scene moves, or when all motion stops (freeze-frame).If every element loops, that is an infinite loop of a shot, not a cinemagraph. If the loop is a boomerang of the entire take, that is a different toy."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shoot a locked camera. Choose one motion that can cycle (steam, rain, flicker)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mask that region in post, freeze the rest from a single frame, loop the live patch so the join is invisible. Prompt: almost a still, only one named element loops, locked camera, no other motion."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Shoot a locked camera. Choose one motion that can cycle (steam, rain, flicker).Mask that region in post, freeze the rest from a single frame, loop the live patch so the join is invisible. Prompt: almost a still, only one named element loops, locked camera, no other motion."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A woman at a rain window, body frozen, only the rain and a thread of steam looping. Do not let her blink, the curtains blow, and the neon flicker all at once."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A woman at a rain window, body frozen, only the rain and a thread of steam looping. Do not let her blink, the curtains blow, and the neon flicker all at once."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Freeze Frame stops everything. Infinite Loop repeats the entire shot.",
+          "links": [
+            {
+              "text": "Freeze Frame",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+            },
+            {
+              "text": "Infinite Loop",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Boomerang plays a whole action forward and back. A cinemagraph freezes the majority and loops a patch.",
+          "links": [
+            {
+              "text": "Boomerang",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Time-Lapse advances the whole world in steps.",
+          "links": [
+            {
+              "text": "Time-Lapse",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Infinite LoopDuration without progress.",
+          "displayText": "Infinite Loop\nDuration without progress.",
+          "links": [
+            {
+              "text": "Infinite LoopDuration without progress.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Freeze FrameEnd, joke, or evidence.",
+          "displayText": "Freeze Frame\nEnd, joke, or evidence.",
+          "links": [
+            {
+              "text": "Freeze FrameEnd, joke, or evidence.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Freeze Frame",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+        },
+        {
+          "text": "Infinite Loop",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+        },
+        {
+          "text": "Boomerang",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+        },
+        {
+          "text": "Time-Lapse",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "Infinite LoopDuration without progress.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+        },
+        {
+          "text": "Freeze FrameEnd, joke, or evidence.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/214e076659063e613c529a0a7ea87725.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infinite-loop-126-time-loop-with-evolving-behavior-mini.webp",
+          "alt": "Infinite Loop"
+        },
+        {
+          "kind": "video",
+          "path": "media/67fd3e9c12a65abbee2ff75f8fb0b181.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/126-time-loop-with-evolving-behavior-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1ad70976642309f23fa26ea36279f9f2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/freeze-frame-082-freeze-frame-mini.webp",
+          "alt": "Freeze Frame"
+        },
+        {
+          "kind": "video",
+          "path": "media/37917860b99448ecd248b6e9e204384a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/082-freeze-frame-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Freeze Frame stops everything. Infinite Loop repeats the entire shot.Boomerang plays a whole action forward and back. A cinemagraph freezes the majority and loops a patch.Time-Lapse advances the whole world in steps.Infinite LoopDuration without progress.Freeze FrameEnd, joke, or evidence.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The form comes from fashion stills (Jamie Beck and Kevin Burg) and advertising, not from a single feature grammar. Fashion films and window displays are the well-known uses: one living detail in a still."
+        },
+        {
+          "type": "paragraph",
+          "text": "La Jetee is a cousin of stills and motion, not a cinemagraph loop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The form comes from fashion stills (Jamie Beck and Kevin Burg) and advertising, not from a single feature grammar. Fashion films and window displays are the well-known uses: one living detail in a still.La Jetee is a cousin of stills and motion, not a cinemagraph loop."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Freeze the frame, license one cycle. Still: Cinemagraph of [Subject], almost a still, one isolated motion looping: steam, hair, a blink, rain in a window."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Almost still on [Subject], only one named element loops, locked camera, seamless cycle."
+        },
+        {
+          "type": "quote",
+          "text": "Almost still on [Subject], only one element loops: steam, rain, or a subtle gesture."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Almost+still+on+[Subject],+only+one+element+loops:+steam,+rain,+or+a+subtle+gesture."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Freeze the frame, license one cycle. Still: Cinemagraph of [Subject], almost a still, one isolated motion looping: steam, hair, a blink, rain in a window.Video: Almost still on [Subject], only one named element loops, locked camera, seamless cycle.Copy promptUse in Video GeneratorAlmost still on [Subject], only one element loops: steam, rain, or a subtle gesture.Almost still on [Subject], only one element loops: steam, rain, or a subtle gesture."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: freeze-frame, full-shot loop, or a normal live take. Tell: several motions alive, a visible loop bump, or a frozen frame with no live patch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: one masked element, invisible join, everything else from a single still."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: freeze-frame, full-shot loop, or a normal live take. Tell: several motions alive, a visible loop bump, or a frozen frame with no live patch.Fix: one masked element, invisible join, everything else from a single still."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a cinemagraph in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A still image with one isolated looping motion. The rest is frozen. It sits between a photograph and a clip."
+        },
+        {
+          "type": "heading",
+          "text": "Cinemagraph vs freeze-frame",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A freeze-frame stops all motion. A cinemagraph stops almost all motion and keeps one element alive on a loop."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a cinemagraph?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a still should have one living detail: steam, rain, a flicker. Do not use it if the whole scene needs to play, or if nothing should move."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a cinemagraph for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Say almost still, locked camera, and name the single looping element. Forbid additional motion and a visible loop cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a cinemagraph in film?A still image with one isolated looping motion. The rest is frozen. It sits between a photograph and a clip.Cinemagraph vs freeze-frameA freeze-frame stops all motion. A cinemagraph stops almost all motion and keeps one element alive on a loop.When should I use a cinemagraph?When a still should have one living detail: steam, rain, a flicker. Do not use it if the whole scene needs to play, or if nothing should move.How do I prompt a cinemagraph for AI image or video?Say almost still, locked camera, and name the single looping element. Forbid additional motion and a visible loop cut."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Freeze the frame, license one cycle. Still: Cinemagraph of [Subject], almost a still, one isolated motion looping: steam, hair, a blink, rain in a window.",
+      "Video: Almost still on [Subject], only one named element loops, locked camera, seamless cycle."
+    ],
+    "example": "Almost still on [Subject], only one element loops: steam, rain, or a subtle gesture."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/ab617a228494596144b6b44f078fcd61.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/cinemagraph-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5e31f6b855e7fe96ca6f97144033b3bd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinemagraph-cinemagraph-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/518af040516e824060e839763f78c92e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/cinemagraph.jpg",
+      "alt": "Cinemagraph frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/214e076659063e613c529a0a7ea87725.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infinite-loop-126-time-loop-with-evolving-behavior-mini.webp",
+      "alt": "Infinite Loop"
+    },
+    {
+      "kind": "video",
+      "path": "media/67fd3e9c12a65abbee2ff75f8fb0b181.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/126-time-loop-with-evolving-behavior-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1ad70976642309f23fa26ea36279f9f2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/freeze-frame-082-freeze-frame-mini.webp",
+      "alt": "Freeze Frame"
+    },
+    {
+      "kind": "video",
+      "path": "media/37917860b99448ecd248b6e9e204384a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/082-freeze-frame-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e975188f909b882d70ee4c125efa6ec6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cinemagraph/hero.jpg",
+      "alt": "Cinemagraph",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "7669a4596667db39471b3595fcf136f446ca8f08debefe8f1f82bc3a8f5c560f"
+}

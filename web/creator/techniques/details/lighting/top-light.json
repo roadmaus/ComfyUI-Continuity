@@ -1,0 +1,393 @@
+{
+  "id": "lighting/top-light",
+  "slug": "top-light",
+  "title": "Top Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/top-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/top-light.webp",
+  "detail": "details/lighting/top-light.json",
+  "aliases": [],
+  "description": "Top lighting is illumination from directly above the subject, falling on forehead, nose bridge, and shoulders while the eye sockets and the underside of the chin go into shadow. The source is a ceiling, a rig, or a high practical, not a frontal beauty key.",
+  "thumbnail": "media/e702e3ff8e7ea2df6c3899c49c686bc6.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Power sitting in a chair, or guilt: the head is a skull with a lid of light. Crime bosses, interrogations, and some night exteriors use overhead so the eyes recede."
+        },
+        {
+          "type": "paragraph",
+          "text": "The person is still human; the pupils must not emit. It is the wrong tool for glamour."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you bring the source forward of the head you get butterfly. If you need a catchlight, add a tiny eye light rather than lowering the overhead until it becomes a frontal key.",
+          "links": [
+            {
+              "text": "butterfly",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            },
+            {
+              "text": "eye light",
+              "url": "https://melies.co/cinematic-techniques/lighting/eye-light"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "butterfly",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        },
+        {
+          "text": "eye light",
+          "url": "https://melies.co/cinematic-techniques/lighting/eye-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Power sitting in a chair, or guilt: the head is a skull with a lid of light. Crime bosses, interrogations, and some night exteriors use overhead so the eyes recede.The person is still human; the pupils must not emit. It is the wrong tool for glamour.If you bring the source forward of the head you get butterfly. If you need a catchlight, add a tiny eye light rather than lowering the overhead until it becomes a frontal key."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hang a lamp or use a ceiling practical directly above, flagged so it does not rake the nose as a frontal. Hardness can be hard (bare bulb) for a skull, or a bit softer (shaded pendant) for a diner."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is often tungsten, sometimes cool industrial. Keep exposure on the forehead, not in the sockets, unless you add a separate eye glint."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: A lamp directly above [Subject], light falling on forehead and shoulders, eye sockets in shadow, human eyes, no light emitting from the pupils."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Hang a lamp or use a ceiling practical directly above, flagged so it does not rake the nose as a frontal. Hardness can be hard (bare bulb) for a skull, or a bit softer (shaded pendant) for a diner.Color is often tungsten, sometimes cool industrial. Keep exposure on the forehead, not in the sockets, unless you add a separate eye glint.Prompt: A lamp directly above [Subject], light falling on forehead and shoulders, eye sockets in shadow, human eyes, no light emitting from the pupils."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a figure of power in a chair, a diner pendant, a guilty face under a garage bulb. Do not use it as beauty lighting."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a figure of power in a chair, a diner pendant, a guilty face under a garage bulb. Do not use it as beauty lighting."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Underlighting is the opposite direction, from below. Butterfly lighting is high but still in front of the face.",
+          "links": [
+            {
+              "text": "Underlighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+            },
+            {
+              "text": "Butterfly lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Low-key lighting is the ratio that often houses top light. Hair light is behind and above, not a downward key on the forehead.",
+          "links": [
+            {
+              "text": "Low-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            },
+            {
+              "text": "Hair light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hair-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cameo may use a top pool but is about isolating the figure in void.",
+          "links": [
+            {
+              "text": "Cameo",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "displayText": "Low-Key Lighting\nMystery, crime, or moral night.",
+          "links": [
+            {
+              "text": "Low-Key LightingMystery, crime, or moral night.",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "UnderlightingThe source is fire, a screen on the floor, or a monster.",
+          "displayText": "Underlighting\nThe source is fire, a screen on the floor, or a monster.",
+          "links": [
+            {
+              "text": "UnderlightingThe source is fire, a screen on the floor, or a monster.",
+              "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Underlighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+        },
+        {
+          "text": "Butterfly lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        },
+        {
+          "text": "Low-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Hair light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hair-light"
+        },
+        {
+          "text": "Cameo",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "UnderlightingThe source is fire, a screen on the floor, or a monster.",
+          "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+          "alt": "Low-Key Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/37fd93cf4962f10e77869ecfc8008a95.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/under-light.webp",
+          "alt": "Underlighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Underlighting is the opposite direction, from below. Butterfly lighting is high but still in front of the face.Low-key lighting is the ratio that often houses top light. Hair light is behind and above, not a downward key on the forehead.Cameo may use a top pool but is about isolating the figure in void.Low-Key LightingMystery, crime, or moral night.UnderlightingThe source is fire, a screen on the floor, or a monster.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Godfather is the famous overhead office: forehead and hands, eyes in wells. The Batman (2022) uses overhead rain and practicals so faces sit under lids of light."
+        },
+        {
+          "type": "paragraph",
+          "text": "The sockets stay dark on purpose."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Godfather is the famous overhead office: forehead and hands, eyes in wells. The Batman (2022) uses overhead rain and practicals so faces sit under lids of light.The sockets stay dark on purpose."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the lamp on the ceiling axis. Use: \"A lamp directly above [Subject], light falling on forehead and shoulders, eye sockets in shadow, human eyes, no light emitting from the pupils.\" Forbid frontal beauty fill."
+        },
+        {
+          "type": "quote",
+          "text": "A lamp directly above [Subject], light falling on forehead and shoulders, eye sockets in shadow, human eyes, no light emitting from the pupils."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=A+lamp+directly+above+[Subject],+light+falling+on+forehead+and+shoulders,+eye+sockets+in+shadow,+human+eyes,+no+light+emitting+from+the+pupils."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Put the lamp on the ceiling axis. Use: \"A lamp directly above [Subject], light falling on forehead and shoulders, eye sockets in shadow, human eyes, no light emitting from the pupils.\" Forbid frontal beauty fill.Copy promptUse in Image GeneratorA lamp directly above [Subject], light falling on forehead and shoulders, eye sockets in shadow, human eyes, no light emitting from the pupils.A lamp directly above [Subject], light falling on forehead and shoulders, eye sockets in shadow, human eyes, no light emitting from the pupils."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is butterfly or glowing eyes. The tell is an under-nose butterfly with open sockets, or pupils that shine like LEDs.",
+          "links": [
+            {
+              "text": "butterfly",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by moving the source truly overhead and keeping eyes as dark human surfaces with at most a tiny catch."
+        }
+      ],
+      "links": [
+        {
+          "text": "butterfly",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is butterfly or glowing eyes. The tell is an under-nose butterfly with open sockets, or pupils that shine like LEDs.Fix it by moving the source truly overhead and keeping eyes as dark human surfaces with at most a tiny catch."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is top light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Light from directly above that hits forehead and shoulders and drops the eye sockets into shadow. It is a downward key, not a hair rim."
+        },
+        {
+          "type": "heading",
+          "text": "Top light vs butterfly lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Butterfly is high and in front, opening both eyes with a small nose shadow. Top light is overhead enough that the sockets hollow."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use top light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for power, guilt, a pendant over a table, a boss in a chair. Skip it for glamour."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt top light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Place a lamp directly above. Light on forehead and shoulders, eye sockets in shadow, human eyes, no light from the pupils."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is top light in film?Light from directly above that hits forehead and shoulders and drops the eye sockets into shadow. It is a downward key, not a hair rim.Top light vs butterfly lightingButterfly is high and in front, opening both eyes with a small nose shadow. Top light is overhead enough that the sockets hollow.When should I use top light?Use it for power, guilt, a pendant over a table, a boss in a chair. Skip it for glamour.How do I prompt top light for AI image or video?Place a lamp directly above. Light on forehead and shoulders, eye sockets in shadow, human eyes, no light from the pupils."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Put the lamp on the ceiling axis. Use: \"A lamp directly above [Subject], light falling on forehead and shoulders, eye sockets in shadow, human eyes, no light emitting from the pupils.\" Forbid frontal beauty fill."
+    ],
+    "example": "A lamp directly above [Subject], light falling on forehead and shoulders, eye sockets in shadow, human eyes, no light emitting from the pupils."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/e702e3ff8e7ea2df6c3899c49c686bc6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/top-light.webp",
+      "alt": "Top Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+      "alt": "Low-Key Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/37fd93cf4962f10e77869ecfc8008a95.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/under-light.webp",
+      "alt": "Underlighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/fc0043fca7219ef16a4f141e1f961152.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/top-light/hero.jpg",
+      "alt": "Top Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "b7a609990e371e6b75253c3b8bb4381d024c1b4f061cb052106ddb057e60f8e0"
+}

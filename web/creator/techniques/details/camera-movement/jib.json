@@ -1,0 +1,408 @@
+{
+  "id": "camera-movement/jib",
+  "slug": "jib",
+  "title": "Jib Shot",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/jib",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jib-crane-up-mini.webp",
+  "detail": "details/camera-movement/jib.json",
+  "aliases": [],
+  "description": "A jib shot uses a short pivoting arm to raise, lower, or sweep the camera a few feet. It is a compact crane: small height change, often over a table, a walk, or a two-shot.",
+  "thumbnail": "media/ca477f6ac62a6d3c3137c88ed6536f03.webp",
+  "video": "media/2c6eb20d48f8d0508ffec7893e2debf8.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/crane-up-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A few feet is enough. Music-video and dialogue coverage live here because the accent is intimate: over a drum kit, up from a plate, a gentle lift off a two-shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "You are not turning a person into a city. It is the wrong tool for a skyline chapter-close, and the wrong tool if you needed a straight column with no arc."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the arm is tens of feet, you are in Technocrane country."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A few feet is enough. Music-video and dialogue coverage live here because the accent is intimate: over a drum kit, up from a plate, a gentle lift off a two-shot.You are not turning a person into a city. It is the wrong tool for a skyline chapter-close, and the wrong tool if you needed a straight column with no arc.If the arm is tens of feet, you are in Technocrane country."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pivot a short arm from a base, remote or fluid head compensating so the subject stays composed. Typical travel is human-scale: table to standing, seated to slightly above."
+        },
+        {
+          "type": "paragraph",
+          "text": "Parallax is real but modest. Prompt a short jib move, compact crane arm lifting or sweeping a few feet, more intimate than a full Technocrane."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Pivot a short arm from a base, remote or fluid head compensating so the subject stays composed. Typical travel is human-scale: table to standing, seated to slightly above.Parallax is real but modest. Prompt a short jib move, compact crane arm lifting or sweeping a few feet, more intimate than a full Technocrane."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a small height change is enough, especially music-video and dialogue coverage. Concrete beat: lift off a two-shot at a restaurant table so the room returns."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not jib if the story needed a city."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a small height change is enough, especially music-video and dialogue coverage. Concrete beat: lift off a two-shot at a restaurant table so the room returns.Do not jib if the story needed a city."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Crane Up is the large version that can make geography the subject. A Pedestal Up rises on a column with no arc.",
+          "links": [
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            },
+            {
+              "text": "Pedestal Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A jib always draws a small radius. If you only nod, you wanted a Tilt Up.",
+          "links": [
+            {
+              "text": "Tilt Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+          "displayText": "Crane Up\nEnd a scene, reveal a city, or turn a person into landscape.",
+          "links": [
+            {
+              "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pedestal UpChange height without the drama of a crane arc.",
+          "displayText": "Pedestal Up\nChange height without the drama of a crane arc.",
+          "links": [
+            {
+              "text": "Pedestal UpChange height without the drama of a crane arc.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Pedestal Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up"
+        },
+        {
+          "text": "Tilt Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        },
+        {
+          "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Pedestal UpChange height without the drama of a crane arc.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+          "alt": "Crane Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8f771121a4ce93d9b0389d0b4a59b0a9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pedestal-up-06-pedestal-up-v2-mini.webp",
+          "alt": "Pedestal Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/f516047901ee827b5665fc1c6658f64a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/06-pedestal-up-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Crane Up is the large version that can make geography the subject. A Pedestal Up rises on a column with no arc.A jib always draws a small radius. If you only nod, you wanted a Tilt Up.Crane UpEnd a scene, reveal a city, or turn a person into landscape.Pedestal UpChange height without the drama of a crane arc.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "La La Land uses small lifts as well as larger cranes; keep the jib examples at human height, over docks and rooms. Whiplash works close to the kit, where a short arm is an accent around sweat and sticks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar for a few feet of pivot."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film La La Land uses small lifts as well as larger cranes; keep the jib examples at human height, over docks and rooms. Whiplash works close to the kit, where a short arm is an accent around sweat and sticks.Grammar for a few feet of pivot."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Short jib move on [Subject], a compact crane arm lifting or sweeping a few feet, more intimate than a full Technocrane, elegant vertical accent. For motion: a compact jib arm lifts a few feet above [Subject] with a gentle sweep."
+        },
+        {
+          "type": "quote",
+          "text": "A compact jib arm lifts a few feet above [Subject] with a gentle sweep."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+compact+jib+arm+lifts+a+few+feet+above+[Subject]+with+a+gentle+sweep."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Short jib move on [Subject], a compact crane arm lifting or sweeping a few feet, more intimate than a full Technocrane, elegant vertical accent. For motion: a compact jib arm lifts a few feet above [Subject] with a gentle sweep.Copy promptUse in Video GeneratorA compact jib arm lifts a few feet above [Subject] with a gentle sweep.A compact jib arm lifts a few feet above [Subject] with a gentle sweep."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a full Crane Up or a Pedestal Up. The tell is a skyline, or a perfectly vertical column with no arc.",
+          "links": [
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            },
+            {
+              "text": "Pedestal Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: name a short arm, a few feet of travel, and an intimate end frame."
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Pedestal Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a full Crane Up or a Pedestal Up. The tell is a skyline, or a perfectly vertical column with no arc.The fix: name a short arm, a few feet of travel, and an intimate end frame."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Jib Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a camera move on a short pivoting arm that raises, lowers, or sweeps a few feet, a compact member of the crane family."
+        },
+        {
+          "type": "heading",
+          "text": "Jib Shot vs Crane Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Crane up can run tens of feet and turn a person into landscape. A jib is the small radius: table, kit, two-shot, a short lift."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Jib Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a small height or sweep accent is enough. Do not use it to close a film on a city."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Jib Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write compact jib arm, a few feet of lift or sweep, intimate scale, no Technocrane skyline. Name start and end height."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Jib Shot in film?It is a camera move on a short pivoting arm that raises, lowers, or sweeps a few feet, a compact member of the crane family.Jib Shot vs Crane UpCrane up can run tens of feet and turn a person into landscape. A jib is the small radius: table, kit, two-shot, a short lift.When should I use Jib Shot?When a small height or sweep accent is enough. Do not use it to close a film on a city.How do I prompt Jib Shot for AI image or video?Write compact jib arm, a few feet of lift or sweep, intimate scale, no Technocrane skyline. Name start and end height."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Short jib move on [Subject], a compact crane arm lifting or sweeping a few feet, more intimate than a full Technocrane, elegant vertical accent. For motion: a compact jib arm lifts a few feet above [Subject] with a gentle sweep."
+    ],
+    "example": "A compact jib arm lifts a few feet above [Subject] with a gentle sweep."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/2c6eb20d48f8d0508ffec7893e2debf8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/crane-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ca477f6ac62a6d3c3137c88ed6536f03.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jib-crane-up-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/44bec7e10852cf439105dfdcdbc1753a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/jib.jpg",
+      "alt": "Jib Shot frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+      "alt": "Crane Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8f771121a4ce93d9b0389d0b4a59b0a9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pedestal-up-06-pedestal-up-v2-mini.webp",
+      "alt": "Pedestal Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/f516047901ee827b5665fc1c6658f64a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/06-pedestal-up-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/714e859bcf1ea5ae84f6f5c4695557d8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/jib/hero.jpg",
+      "alt": "Jib Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "cc77e8a3ca9d000473c461832c976b72e30d6d1c0fdce9164ba8655bfb31c9cd"
+}

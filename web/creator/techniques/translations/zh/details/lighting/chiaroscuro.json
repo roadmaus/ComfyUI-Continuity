@@ -1,0 +1,220 @@
+{
+  "version": 1,
+  "locale": "zh",
+  "id": "lighting/chiaroscuro",
+  "sourceHtmlSha256": "b34880cbe359678baf83457f2f31d31e7a00dca7dafd23a090b2ffb1b2d1de65",
+  "description": "Chiaroscuro 照明通过强烈的明暗对比塑造立体感，营造道德、心理或戏剧性的张力。黑暗隐藏信息，受光面则展示场景愿意向观众揭示的部分。",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "叙事作用",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "单一暖光源、转向光线的面孔，以及消失在黑暗中的房间其余部分，让观众通过仍然可见的内容解读人物。Tenebrism将这种方式推向极端，使手臂可及范围之外的一切都陷入黑暗。"
+        },
+        {
+          "index": 1,
+          "text": "犯罪题材、年代题材的夜景以及宗教疑虑的场面，都可以运用同样的光学原理。如果广角全景必须交代建筑结构，或喜剧需要让阴影中的另一张脸也清楚可见，就不适合这种照明。"
+        },
+        {
+          "index": 2,
+          "text": "把均匀照亮的房间拍成欠曝，并不等于Chiaroscuro。必须设置主光，并利用光线衰减来划分明暗区域。"
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "how",
+      "title": "工作原理",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "设置一个在场景中有来源依据的主光（如窗户、灯具或蜡烛），减少补光，并用遮光旗挡住杂散光。主光通常偏暖、位置略高，光源较小，使照度在空间中迅速衰减。"
+        },
+        {
+          "index": 1,
+          "text": "可以使用偏硬的光，让脸部不同平面之间的明暗迅速转换。在受光区域中，要保留足够的层次，使眼睛和手部仍然清楚可辨。"
+        },
+        {
+          "index": 2,
+          "text": "提示：[Subject] 上的明暗对比灯光，卡拉瓦乔色调，单一温暖的光源，手臂触及不到的一切都陷入黑色。"
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "when",
+      "title": "适用场景",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "当光线带有道德意味，而黑暗负责隐藏或审视时使用，例如隔着台灯进行的坦白。不要把它当作覆盖整条日间街道的统一调色。"
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "vs",
+      "title": "与相近技法比较",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "Low-key lighting 是范围更广的明暗对比策略；Chiaroscuro强调通过明暗塑造立体感，而不仅仅是让画面变暗。Rembrandt lighting 是在阴影侧脸颊形成三角形亮区的具体布光模式，经常出现在Chiaroscuro之中。"
+        },
+        {
+          "index": 1,
+          "text": "Cameo lighting 在空无的暗背景中孤立主体，可能使空间像舞台平面布景一样。硬光有助于划分边界，但如果光线衰减足够陡峭，就并非必需。"
+        },
+        {
+          "index": 2,
+          "text": "Low-Key Lighting\n神秘之夜、犯罪之夜或道德之夜。"
+        },
+        {
+          "index": 3,
+          "text": "Rembrandt Lighting\n经典的戏剧肖像。"
+        },
+        {
+          "index": 4,
+          "text": "Three-Point Lighting\n可教的肖像。从这里开始，然后打破它。"
+        }
+      ],
+      "media": [
+        {
+          "index": 0,
+          "alt": "Low-Key Lighting"
+        },
+        {
+          "index": 1,
+          "alt": "Rembrandt Lighting"
+        },
+        {
+          "index": 2,
+          "alt": "Three-Point Lighting"
+        }
+      ]
+    },
+    {
+      "id": "examples-film",
+      "title": "电影中的应用案例",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "The Godfather 中昏暗办公室与室外婚礼的对照，是借黑暗保留信息的典型。The Third Man 利用维也纳的夜景，让人物在精心设计的黑暗中出现和消失。"
+        },
+        {
+          "index": 1,
+          "text": "Barry Lyndon 和The Night of the Hunter 都以单一光源塑造面部立体感，同时让房间其余部分隐入黑暗。"
+        },
+        {
+          "index": 2,
+          "text": "The Godfather 1972\n唐的黑暗办公室与外面的婚礼形成鲜明对比。"
+        },
+        {
+          "index": 3,
+          "text": "The Third Man 1949\n维也纳的夜晚街道和隐藏的人物。"
+        }
+      ],
+      "media": [
+        {
+          "index": 0,
+          "alt": "The Godfather 1972"
+        },
+        {
+          "index": 1,
+          "alt": "The Third Man 1949"
+        }
+      ]
+    },
+    {
+      "id": "prompt",
+      "title": "英文提示词",
+      "blocks": [],
+      "media": []
+    },
+    {
+      "id": "mistakes",
+      "title": "常见问题与解决方法",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "常见错误是把画面单纯处理成浑浊的欠曝效果。判断标志是看不出主光方向，暗部也没有细节。"
+        },
+        {
+          "index": 1,
+          "text": "设置一个暖色光源，用遮光旗挡住反射光，并根据受光面确定曝光。"
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "faq",
+      "title": "常见问题",
+      "blocks": [
+        {
+          "index": 0,
+          "text": "电影中的明暗对比是什么？"
+        },
+        {
+          "index": 1,
+          "text": "利用强烈明暗对比塑造立体感并制造张力。只照亮选定区域，画面中相当大的部分则有意保持黑暗。"
+        },
+        {
+          "index": 2,
+          "text": "明暗对比 Rembrandt lighting"
+        },
+        {
+          "index": 3,
+          "text": "Chiaroscuro 是整体的明暗对比语言；Rembrandt lighting 则是一种具体的人像布光模式，在阴影侧脸颊形成三角形亮区。"
+        },
+        {
+          "index": 4,
+          "text": "我什么时候应该使用明暗对比？"
+        },
+        {
+          "index": 5,
+          "text": "当隐藏的内容与展示的内容同样重要时使用，例如坦白、犯罪和夜间交易。如果需要清楚交代整个房间，就不要使用。"
+        },
+        {
+          "index": 6,
+          "text": "如何为AI图像或视频提示明暗对比？"
+        },
+        {
+          "index": 7,
+          "text": "指定单一暖光源、通过明暗塑造的面部，以及手臂可及范围之外全部陷入黑暗。不添加额外补光，也不要让全室具有均匀亮度。"
+        }
+      ],
+      "media": []
+    }
+  ],
+  "media": [
+    {
+      "index": 2,
+      "alt": "随着时间的推移明暗对比帧"
+    },
+    {
+      "index": 3,
+      "alt": "Low-Key Lighting"
+    },
+    {
+      "index": 4,
+      "alt": "Rembrandt Lighting"
+    },
+    {
+      "index": 5,
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "index": 6,
+      "alt": "The Godfather 1972"
+    },
+    {
+      "index": 7,
+      "alt": "The Third Man 1949"
+    },
+    {
+      "index": 8,
+      "alt": "明暗对比"
+    }
+  ]
+}

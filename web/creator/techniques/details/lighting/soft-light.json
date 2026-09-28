@@ -1,0 +1,375 @@
+{
+  "id": "lighting/soft-light",
+  "slug": "soft-light",
+  "title": "Soft Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/soft-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+  "detail": "details/lighting/soft-light.json",
+  "aliases": [],
+  "description": "Soft light in soft light cinematography comes from a large apparent source and produces gradual shadow transitions and wrap around the face or body. Speculars get larger and dimmer; texture is reduced.",
+  "thumbnail": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Kindness, memory, overcast, a north window: the key still has a side, but the nose shadow is a gradient. Skin holds, rooms feel breathable."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can still have contrast if the fill is low; softness is not high-key. It is the wrong tool for a gobo of blinds, a noon duel, or a split that needs a knife edge."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the source becomes so large it surrounds the subject, direction dies and you have ambient soup."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Kindness, memory, overcast, a north window: the key still has a side, but the nose shadow is a gradient. Skin holds, rooms feel breathable.You can still have contrast if the fill is low; softness is not high-key. It is the wrong tool for a gobo of blinds, a noon duel, or a split that needs a knife edge.If the source becomes so large it surrounds the subject, direction dies and you have ambient soup."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Make the last surface before the subject large: silk, book light, overcast sky, big window, bounce wall. Closer and larger is softer."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is often daylight 5600K through diffusion, or tungsten through a large shade. Keep a key side."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Soft wrapping light on [Subject] from a large source, gentle shadow transitions, luminous skin, north-window daylight."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Make the last surface before the subject large: silk, book light, overcast sky, big window, bounce wall. Closer and larger is softer.Color is often daylight 5600K through diffusion, or tungsten through a large shade. Keep a key side.Prompt: Soft wrapping light on [Subject] from a large source, gentle shadow transitions, luminous skin, north-window daylight."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for beauty, memory, or kindness, a daylight interior, a close-up that should not cut pores into craters. Do not use it when you need projected pattern or interrogation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for beauty, memory, or kindness, a daylight interior, a close-up that should not cut pores into craters. Do not use it when you need projected pattern or interrogation."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hard light is the opposite quality. Bounce light is a method of getting soft.",
+          "links": [
+            {
+              "text": "Hard light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            },
+            {
+              "text": "Bounce light",
+              "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Window light is often large and soft by architecture. Glam uses soft keys plus diffusion and catchlights.",
+          "links": [
+            {
+              "text": "Window light",
+              "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+            },
+            {
+              "text": "Glam",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "High-key lighting uses soft sources and a lot of fill; you can have soft low-key if the wrap is large but isolated.",
+          "links": [
+            {
+              "text": "High-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bounce LightSoften without losing direction.",
+          "displayText": "Bounce Light\nSoften without losing direction.",
+          "links": [
+            {
+              "text": "Bounce LightSoften without losing direction.",
+              "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Window LightDay interiors without looking lit.",
+          "displayText": "Window Light\nDay interiors without looking lit.",
+          "links": [
+            {
+              "text": "Window LightDay interiors without looking lit.",
+              "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Hard light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Bounce light",
+          "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+        },
+        {
+          "text": "Window light",
+          "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+        },
+        {
+          "text": "Glam",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "High-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Bounce LightSoften without losing direction.",
+          "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+        },
+        {
+          "text": "Window LightDay interiors without looking lit.",
+          "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/15d2ee62653c333bb3a8b0381e7d6d7a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bounce-light.webp",
+          "alt": "Bounce Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/b40f77c3fa856d3a1ad6b3c98e9753de.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/window-light.webp",
+          "alt": "Window Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Hard light is the opposite quality. Bounce light is a method of getting soft.Window light is often large and soft by architecture. Glam uses soft keys plus diffusion and catchlights.High-key lighting uses soft sources and a lot of fill; you can have soft low-key if the wrap is large but isolated.Bounce LightSoften without losing direction.Window LightDay interiors without looking lit.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Tree of Life and Call Me by Your Name let large daylight sources wrap skin and rooms. The softness is the size of sky and window, not a beauty filter named glow."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Tree of Life and Call Me by Your Name let large daylight sources wrap skin and rooms. The softness is the size of sky and window, not a beauty filter named glow."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name a large source and gentle edges. \" Keep a key side."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid razor nose shadows."
+        },
+        {
+          "type": "quote",
+          "text": "Soft wrapping light on [Subject] from a large source, gentle shadow transitions, luminous skin, Vermeer daylight."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Soft+wrapping+light+on+[Subject]+from+a+large+source,+gentle+shadow+transitions,+luminous+skin,+Vermeer+daylight."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name a large source and gentle edges. \" Keep a key side.Forbid razor nose shadows.Copy promptUse in Image GeneratorSoft wrapping light on [Subject] from a large source, gentle shadow transitions, luminous skin, Vermeer daylight.Soft wrapping light on [Subject] from a large source, gentle shadow transitions, luminous skin, Vermeer daylight."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is hard light or directionless ambient. The tell is razor edges, or no key side at all.",
+          "links": [
+            {
+              "text": "hard light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by enlarging the source and keeping it on one side of the face."
+        }
+      ],
+      "links": [
+        {
+          "text": "hard light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is hard light or directionless ambient. The tell is razor edges, or no key side at all.Fix it by enlarging the source and keeping it on one side of the face."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is soft light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Light from a large apparent source that wraps the subject and makes shadow edges gradual. Texture is reduced; direction can still exist."
+        },
+        {
+          "type": "heading",
+          "text": "Soft light vs bounce light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Soft describes the quality. Bounce is one way to create it, by reflecting off a large surface. A silk in line with the lamp is another way."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use soft light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for kindness, memory, and most daylight interiors. Skip it when you need graphic shadow or a sharp gobo."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt soft light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify a large source, wrapping light, gentle shadow transitions. Name a window or silk on one side so direction remains."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is soft light in film?Light from a large apparent source that wraps the subject and makes shadow edges gradual. Texture is reduced; direction can still exist.Soft light vs bounce lightSoft describes the quality. Bounce is one way to create it, by reflecting off a large surface. A silk in line with the lamp is another way.When should I use soft light?Use it for kindness, memory, and most daylight interiors. Skip it when you need graphic shadow or a sharp gobo.How do I prompt soft light for AI image or video?Specify a large source, wrapping light, gentle shadow transitions. Name a window or silk on one side so direction remains."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name a large source and gentle edges. \" Keep a key side.",
+      "Forbid razor nose shadows."
+    ],
+    "example": "Soft wrapping light on [Subject] from a large source, gentle shadow transitions, luminous skin, Vermeer daylight."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+      "alt": "Soft Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/15d2ee62653c333bb3a8b0381e7d6d7a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bounce-light.webp",
+      "alt": "Bounce Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/b40f77c3fa856d3a1ad6b3c98e9753de.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/window-light.webp",
+      "alt": "Window Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/62a31a9fa6639ccf19fa44a9f1e8d399.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/soft-light/hero.jpg",
+      "alt": "Soft Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "1d98340ec2529ea517c21f65a1846d394d849f9945527a9654b65df1b95cc8a8"
+}

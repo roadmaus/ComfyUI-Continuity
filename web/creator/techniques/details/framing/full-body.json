@@ -1,0 +1,411 @@
+{
+  "id": "framing/full-body",
+  "slug": "full-body",
+  "title": "Full Body (WS)",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/full-body",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/full-body.webp",
+  "detail": "details/framing/full-body.json",
+  "aliases": [
+    "long shot",
+    "wide on person",
+    "WS",
+    "LS"
+  ],
+  "description": "A full body shot holds a person head to toe, with the figure complete and a readable strip of environment around the silhouette. The person is still the subject; the world is a border, not the owner of the frame.",
+  "thumbnail": "media/a56beb8abd7529d00c6b851ad11dd2cc.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Full body is for costume, blocking, and gait. You need the shoes, the hem, the way weight sits on a hip, the path to the door."
+        },
+        {
+          "type": "paragraph",
+          "text": "The figure occupies most of the frame height, so this is a portrait of a body in space, not a map of a valley. It is the wrong tool when land must dwarf the person, or when the beat is a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Calling every complete figure a long shot or a wide shot erases this size. If the human is still large in the rectangle and the feet are in, you are here."
+        },
+        {
+          "type": "paragraph",
+          "text": "If they have become a small mark in weather, you have gone longer."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Full body is for costume, blocking, and gait. You need the shoes, the hem, the way weight sits on a hip, the path to the door.The figure occupies most of the frame height, so this is a portrait of a body in space, not a map of a valley. It is the wrong tool when land must dwarf the person, or when the beat is a face.Calling every complete figure a long shot or a wide shot erases this size. If the human is still large in the rectangle and the feet are in, you are here.If they have become a small mark in weather, you have gone longer."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep head and feet both in, with a little floor and a little air. The figure should own most of the vertical."
+        },
+        {
+          "type": "paragraph",
+          "text": "A 35mm to 50mm from enough distance avoids stretching the legs; a 24mm too close will cartoon the feet. Do not confuse this with a 24mm Wide room map.",
+          "links": [
+            {
+              "text": "24mm Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Full-body shot of [Subject], head to toe, figure complete in frame, environment readable around the silhouette."
+        }
+      ],
+      "links": [
+        {
+          "text": "24mm Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Keep head and feet both in, with a little floor and a little air. The figure should own most of the vertical.A 35mm to 50mm from enough distance avoids stretching the legs; a 24mm too close will cartoon the feet. Do not confuse this with a 24mm Wide room map.Prompt: Full-body shot of [Subject], head to toe, figure complete in frame, environment readable around the silhouette."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when costume, blocking, and gait matter: a walk in a new coat, a stand in a doorway, a body that has to be seen whole. Do not use it when the land must win, or when you only needed mid-thigh for the hands."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when costume, blocking, and gait matter: a walk in a new coat, a stand in a doorway, a body that has to be seen whole. Do not use it when the land must win, or when you only needed mid-thigh for the hands."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Cowboy Shot stops at mid-thigh; feet are out. A Long Shot shows a full figure plus so much geography that the person is small in the world.",
+          "links": [
+            {
+              "text": "Cowboy Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            },
+            {
+              "text": "Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Wide Shot lets place speak; bodies may be smaller still. Full body is the complete figure as subject, not cowboy, not long, not wide.",
+          "links": [
+            {
+              "text": "Wide Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Extreme Long Shot makes them a speck.",
+          "links": [
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cowboy ShotShow hands, weapons, or stance without going full body.",
+          "displayText": "Cowboy Shot\nShow hands, weapons, or stance without going full body.",
+          "links": [
+            {
+              "text": "Cowboy ShotShow hands, weapons, or stance without going full body.",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Long ShotScale is the emotion.",
+          "displayText": "Extreme Long Shot\nScale is the emotion.",
+          "links": [
+            {
+              "text": "Extreme Long ShotScale is the emotion.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cowboy Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        },
+        {
+          "text": "Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+        },
+        {
+          "text": "Wide Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+        },
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Cowboy ShotShow hands, weapons, or stance without going full body.",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        },
+        {
+          "text": "Extreme Long ShotScale is the emotion.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/c60ed76a9d57c2a52bc1d3433036ec10.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cowboy-shot.webp",
+          "alt": "Cowboy Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+          "alt": "Extreme Long Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Cowboy Shot stops at mid-thigh; feet are out. A Long Shot shows a full figure plus so much geography that the person is small in the world.A Wide Shot lets place speak; bodies may be smaller still. Full body is the complete figure as subject, not cowboy, not long, not wide.An Extreme Long Shot makes them a speck.Cowboy ShotShow hands, weapons, or stance without going full body.Extreme Long ShotScale is the emotion.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Searchers uses complete figures in doorways and desert edges so costume and stance read before the land fully claims them. Drive holds night walks head to toe so gait and scorpion jacket are the sentence."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: person complete, place as margin."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Searchers uses complete figures in doorways and desert edges so costume and stance read before the land fully claims them. Drive holds night walks head to toe so gait and scorpion jacket are the sentence.Grammar: person complete, place as margin."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say head to toe. Example: Full-body shot of [Subject], head to toe, figure complete in frame, environment readable around the silhouette."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not write long shot, wide, or mid-thigh. For video, if the figure shrinks into architecture you have drifted into a long shot."
+        },
+        {
+          "type": "quote",
+          "text": "Full-body shot of [Subject], head to toe, figure complete in frame, environment readable around the silhouette."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Full-body+shot+of+[Subject],+head+to+toe,+figure+complete+in+frame,+environment+readable+around+the+silhouette."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say head to toe. Example: Full-body shot of [Subject], head to toe, figure complete in frame, environment readable around the silhouette.Do not write long shot, wide, or mid-thigh. For video, if the figure shrinks into architecture you have drifted into a long shot.Copy promptUse in Image GeneratorFull-body shot of [Subject], head to toe, figure complete in frame, environment readable around the silhouette.Full-body shot of [Subject], head to toe, figure complete in frame, environment readable around the silhouette."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Long Shot (person small in land) or a Cowboy Shot (no feet). The tell is a tiny figure in weather, or a crop at the knee.",
+          "links": [
+            {
+              "text": "Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+            },
+            {
+              "text": "Cowboy Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: feet in, head in, person still large in the frame. Do not label it WS or LS just because the body is complete."
+        }
+      ],
+      "links": [
+        {
+          "text": "Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+        },
+        {
+          "text": "Cowboy Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/cowboy-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Long Shot (person small in land) or a Cowboy Shot (no feet). The tell is a tiny figure in weather, or a crop at the knee.Fix: feet in, head in, person still large in the frame. Do not label it WS or LS just because the body is complete."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Full Body in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A full body shot shows a person head to toe, with the figure complete and some environment around the silhouette. The human remains the subject. It is not the same as a long shot or a wide shot, even if those names get used loosely."
+        },
+        {
+          "type": "heading",
+          "text": "Full Body vs Long Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "In a full body shot the person fills most of the height; place is a readable border. In a long shot the full figure sits in substantial geography and could be ignored by the world. If the human is small in the rectangle, you have left full body."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Full Body?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for costume, blocking, and gait. Do not use it when scale or landscape should dominate, and do not use it when hands-at-holster would have been enough."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Full Body for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Full-body shot of [Subject], head to toe, figure complete in frame, environment readable around the silhouette. Forbid a speck-in-landscape result. Keep feet visible."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Full Body in film?A full body shot shows a person head to toe, with the figure complete and some environment around the silhouette. The human remains the subject. It is not the same as a long shot or a wide shot, even if those names get used loosely.Full Body vs Long ShotIn a full body shot the person fills most of the height; place is a readable border. In a long shot the full figure sits in substantial geography and could be ignored by the world. If the human is small in the rectangle, you have left full body.When should I use Full Body?Use it for costume, blocking, and gait. Do not use it when scale or landscape should dominate, and do not use it when hands-at-holster would have been enough.How do I prompt Full Body for AI image or video?Write Full-body shot of [Subject], head to toe, figure complete in frame, environment readable around the silhouette. Forbid a speck-in-landscape result. Keep feet visible."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say head to toe. Example: Full-body shot of [Subject], head to toe, figure complete in frame, environment readable around the silhouette.",
+      "Do not write long shot, wide, or mid-thigh. For video, if the figure shrinks into architecture you have drifted into a long shot."
+    ],
+    "example": "Full-body shot of [Subject], head to toe, figure complete in frame, environment readable around the silhouette."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/a56beb8abd7529d00c6b851ad11dd2cc.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/full-body.webp",
+      "alt": "Full Body example"
+    },
+    {
+      "kind": "image",
+      "path": "media/c60ed76a9d57c2a52bc1d3433036ec10.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cowboy-shot.webp",
+      "alt": "Cowboy Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+      "alt": "Extreme Long Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/600bba6b77b47ccc2e43513ded74dce7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/full-body/hero.jpg",
+      "alt": "Full Body (WS)",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "c7bdcc7ff2c06bf1ff274aa7d90abce3683e8c833ffc2d8f8f4bb74528d9b0cb"
+}

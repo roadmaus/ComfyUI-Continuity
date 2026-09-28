@@ -1,0 +1,385 @@
+{
+  "id": "effects/film-grain",
+  "slug": "film-grain",
+  "title": "Film Grain",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/film-grain",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-grain-076-archival-or-damaged-medium-texture-mini.webp",
+  "detail": "details/effects/film-grain.json",
+  "aliases": [],
+  "description": "Film grain in film grain cinematography is the random texture of silver halide crystals or color dye clouds in the emulsion, or a digital simulation of that structure. It is a developed surface, not a PNG overlay sitting on top of a clean render.",
+  "thumbnail": "media/5fca5d01511d1b273f967622f709e9a3.webp",
+  "video": "media/1d7683ea283deb5b71800203fb729749.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/076-archival-or-damaged-medium-texture-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The image is made of particles that change every frame. Shadows crawl."
+        },
+        {
+          "type": "paragraph",
+          "text": "Midtones have a living grain. Highlights are not a separate smooth plate."
+        },
+        {
+          "type": "paragraph",
+          "text": "Format and stock speed set the size: 16mm reads coarser in the frame than 35mm or 65mm. Use it when the picture should feel exposed and processed, not drawn."
+        },
+        {
+          "type": "paragraph",
+          "text": "A rooftop at blue hour, a winter platform, a handheld interior. Grain should scale with density, not stamp the same speckle on sky and coat alike."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool as a default film look on a sharp digital plate. If the grain is identical on every frame, or floats above motion blur, it is a layer, not an emulsion."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The image is made of particles that change every frame. Shadows crawl.Midtones have a living grain. Highlights are not a separate smooth plate.Format and stock speed set the size: 16mm reads coarser in the frame than 35mm or 65mm. Use it when the picture should feel exposed and processed, not drawn.A rooftop at blue hour, a winter platform, a handheld interior. Grain should scale with density, not stamp the same speckle on sky and coat alike.It is the wrong tool as a default film look on a sharp digital plate. If the grain is identical on every frame, or floats above motion blur, it is a layer, not an emulsion."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "On film, choose stock and format: faster stocks and smaller negatives show more grain. Push processing increases it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Digitally, generate monochromatic grain that is denser in midtones and shadows, temporally unstable, and finer on larger implied formats. Do not sharpen after."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt 16mm or 35mm texture, living grain, no overlay."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works On film, choose stock and format: faster stocks and smaller negatives show more grain. Push processing increases it.Digitally, generate monochromatic grain that is denser in midtones and shadows, temporally unstable, and finer on larger implied formats. Do not sharpen after.Prompt 16mm or 35mm texture, living grain, no overlay."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A charcoal coat on wet slate at blue hour, 35mm grain in the dusk, chimney smoke breaking into particles. Do not paste coarse grain on an already sharp product still and call it developed."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A charcoal coat on wet slate at blue hour, 35mm grain in the dusk, chimney smoke breaking into particles. Do not paste coarse grain on an already sharp product still and call it developed."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Halation is highlight bloom in the layers, not the particle field. Filmic Faded is a contrast and color decision (lifted blacks, reduced saturation), which can sit with grain but is not grain.",
+          "links": [
+            {
+              "text": "Halation",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            },
+            {
+              "text": "Filmic Faded",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Light Leak fogs from the edge with unfiltered light. Grain is the stock's texture everywhere the image has density.",
+          "links": [
+            {
+              "text": "Light Leak",
+              "url": "https://melies.co/cinematic-techniques/effects/light-leak"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "displayText": "Halation\nHighlights should bleed like film, not clip like video.",
+          "links": [
+            {
+              "text": "HalationHighlights should bleed like film, not clip like video.",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Filmic FadedNot HDR. A print.",
+          "displayText": "Filmic Faded\nNot HDR. A print.",
+          "links": [
+            {
+              "text": "Filmic FadedNot HDR. A print.",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Halation",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "Filmic Faded",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Light Leak",
+          "url": "https://melies.co/cinematic-techniques/effects/light-leak"
+        },
+        {
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "Filmic FadedNot HDR. A print.",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+          "alt": "Halation"
+        },
+        {
+          "kind": "video",
+          "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6c5de4fbb1a2ea3e097921b0637da37f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/filmic-faded.webp",
+          "alt": "Filmic Faded"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Halation is highlight bloom in the layers, not the particle field. Filmic Faded is a contrast and color decision (lifted blacks, reduced saturation), which can sit with grain but is not grain.Light Leak fogs from the edge with unfiltered light. Grain is the stock's texture everywhere the image has density.HalationHighlights should bleed like film, not clip like video.Filmic FadedNot HDR. A print.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Revenant lets natural-light textures read as a developed image rather than a clean sensor. Roma is large-format stillness with a photochemical finish, not a grain storm."
+        },
+        {
+          "type": "paragraph",
+          "text": "Saving Private Ryan uses a harsher, tighter grain as combat stock language."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Revenant lets natural-light textures read as a developed image rather than a clean sensor. Roma is large-format stillness with a photochemical finish, not a grain storm.Saving Private Ryan uses a harsher, tighter grain as combat stock language."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Specify format and that the grain is in the image, not on it. Example: Visible film grain over [Subject], 35mm or 16mm dye-cloud texture, temporally unstable, denser in shadows, not a cheap overlay."
+        },
+        {
+          "type": "quote",
+          "text": "Visible film grain over [Subject], 35mm or 16mm texture, living silver, not a cheap overlay."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Visible+film+grain+over+[Subject],+35mm+or+16mm+texture,+living+silver,+not+a+cheap+overlay."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Specify format and that the grain is in the image, not on it. Example: Visible film grain over [Subject], 35mm or 16mm dye-cloud texture, temporally unstable, denser in shadows, not a cheap overlay.Copy promptUse in Image GeneratorVisible film grain over [Subject], 35mm or 16mm texture, living silver, not a cheap overlay.Visible film grain over [Subject], 35mm or 16mm texture, living silver, not a cheap overlay."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: a repeating overlay, digital noise, or halation bloom. Tell: identical grain on every frame, speckle in clipped whites, or a wallpaper that ignores motion."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: per-frame grain, format-sized particles, density-weighted, no overlay."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: a repeating overlay, digital noise, or halation bloom. Tell: identical grain on every frame, speckle in clipped whites, or a wallpaper that ignores motion.Fix: per-frame grain, format-sized particles, density-weighted, no overlay."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is film grain in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Random texture from silver crystals or dye clouds in the emulsion. Size follows stock speed and negative area. It changes every frame."
+        },
+        {
+          "type": "heading",
+          "text": "Film grain vs halation",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Grain is the particle structure of the image. Halation is a warm glow around bright highlights from light bouncing in the film layers."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use film grain?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the image should feel developed rather than rendered. Match grain size to format. Do not stamp one overlay on every shot."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt film grain for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name 16mm or 35mm, ask for living per-frame texture in shadows and midtones, and forbid a repeating overlay."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is film grain in film?Random texture from silver crystals or dye clouds in the emulsion. Size follows stock speed and negative area. It changes every frame.Film grain vs halationGrain is the particle structure of the image. Halation is a warm glow around bright highlights from light bouncing in the film layers.When should I use film grain?When the image should feel developed rather than rendered. Match grain size to format. Do not stamp one overlay on every shot.How do I prompt film grain for AI image or video?Name 16mm or 35mm, ask for living per-frame texture in shadows and midtones, and forbid a repeating overlay."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Specify format and that the grain is in the image, not on it. Example: Visible film grain over [Subject], 35mm or 16mm dye-cloud texture, temporally unstable, denser in shadows, not a cheap overlay."
+    ],
+    "example": "Visible film grain over [Subject], 35mm or 16mm texture, living silver, not a cheap overlay."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/1d7683ea283deb5b71800203fb729749.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/076-archival-or-damaged-medium-texture-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5fca5d01511d1b273f967622f709e9a3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-grain-076-archival-or-damaged-medium-texture-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5f118dcb3586e5f20bcaab931a75e5f5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/film-grain.jpg",
+      "alt": "Film Grain frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+      "alt": "Halation"
+    },
+    {
+      "kind": "video",
+      "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6c5de4fbb1a2ea3e097921b0637da37f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/filmic-faded.webp",
+      "alt": "Filmic Faded"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5b1d915167e6e6d83dcd50ecb4215a82.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/film-grain/hero.jpg",
+      "alt": "Film Grain",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "03ec3946c1d2398ef98271acb0da99f5a3725ffaa264c36214cc7001cdec8db5"
+}

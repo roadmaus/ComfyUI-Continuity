@@ -1,0 +1,581 @@
+{
+  "id": "editing/invisible-cut",
+  "slug": "invisible-cut",
+  "title": "Invisible Cut",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/invisible-cut",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/invisible-cut-107-occlusion-hidden-cut-mini.webp",
+  "detail": "details/editing/invisible-cut.json",
+  "aliases": [
+    "Substitution splice",
+    "Stop trick"
+  ],
+  "description": "An invisible cut hides an edit through motion, darkness, occlusion, blur, matching geometry, or digital stitching. One side of the join and the other are meant to feel like a single take; the splice is a seam the audience should not find.",
+  "thumbnail": "media/5cf0b45fed829ca85d5d6db372384a43.webp",
+  "video": "media/9d35cea3666631fb40cfa31fcfcfc220.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/107-occlusion-hidden-cut-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A coat fills the lens. When it leaves, the room is later, or the body is gone, or the street has changed."
+        },
+        {
+          "type": "paragraph",
+          "text": "You needed a cut the audience must not feel. Stop-trick cinema did this with a locked camera and a substitution."
+        },
+        {
+          "type": "paragraph",
+          "text": "Contemporary oners do it with whips, walls, and stitches. Use it to simulate a long take, to vanish a person, or to change time inside an apparently continuous walk."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the cut should be a sentence: a Match Cut, a Smash Cut, a Wipe. If you want the join seen, do not hide it.",
+          "links": [
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            },
+            {
+              "text": "Smash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            },
+            {
+              "text": "Wipe",
+              "url": "https://melies.co/cinematic-techniques/editing/wipe"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The trick depends on spatial continuity around the substitution. A wandering unmatched camera exposes an unintended jump."
+        }
+      ],
+      "links": [
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Smash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Wipe",
+          "url": "https://melies.co/cinematic-techniques/editing/wipe"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A coat fills the lens. When it leaves, the room is later, or the body is gone, or the street has changed.You needed a cut the audience must not feel. Stop-trick cinema did this with a locked camera and a substitution.Contemporary oners do it with whips, walls, and stitches. Use it to simulate a long take, to vanish a person, or to change time inside an apparently continuous walk.It is the wrong tool when the cut should be a sentence: a Match Cut, a Smash Cut, a Wipe. If you want the join seen, do not hide it.The trick depends on spatial continuity around the substitution. A wandering unmatched camera exposes an unintended jump."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Plan a hiding place: a passing body, a dark wall, a whip-pan blur, a matched doorway, a digital stitch on a texture. Lock exposure and lighting across plates if you are substituting."
+        },
+        {
+          "type": "paragraph",
+          "text": "For a stop trick, lock the camera, hold actors, change the object, splice on the occlusion. For an oner illusion, match motion blur and grain at the whip."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: invisible cut hidden in [Subject]'s whip, a dark wall, or a passing body, the oner illusion."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Plan a hiding place: a passing body, a dark wall, a whip-pan blur, a matched doorway, a digital stitch on a texture. Lock exposure and lighting across plates if you are substituting.For a stop trick, lock the camera, hold actors, change the object, splice on the occlusion. For an oner illusion, match motion blur and grain at the whip.Prompt: invisible cut hidden in [Subject]'s whip, a dark wall, or a passing body, the oner illusion."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to extend a take through a theatre, a trench, a street, or to make a woman vanish from a chair. Do not use it to avoid writing a scene change."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the geography actually transforms as you watch, that may be a Set Transition instead of a hidden splice.",
+          "links": [
+            {
+              "text": "Set Transition",
+              "url": "https://melies.co/cinematic-techniques/editing/set-transition"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Set Transition",
+          "url": "https://melies.co/cinematic-techniques/editing/set-transition"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it to extend a take through a theatre, a trench, a street, or to make a woman vanish from a chair. Do not use it to avoid writing a scene change.If the geography actually transforms as you watch, that may be a Set Transition instead of a hidden splice."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Oner is the long take you are faking or actually shooting. A Whip Pan can be the bandage over the splice.",
+          "links": [
+            {
+              "text": "Oner",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+            },
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Match on Action hides a cut in a readable gesture but still changes the view on purpose. Set Transition lets the location rewrite itself.",
+          "links": [
+            {
+              "text": "Match on Action",
+              "url": "https://melies.co/cinematic-techniques/editing/match-action"
+            },
+            {
+              "text": "Set Transition",
+              "url": "https://melies.co/cinematic-techniques/editing/set-transition"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Morph is a visible interpolation, the opposite of invisible.",
+          "links": [
+            {
+              "text": "Morph",
+              "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "OnerThe scene is a ride.",
+          "displayText": "Oner\nThe scene is a ride.",
+          "links": [
+            {
+              "text": "OnerThe scene is a ride.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "displayText": "Whip Pan\nTransition, punchline, or sudden attention shift.",
+          "links": [
+            {
+              "text": "Whip PanTransition, punchline, or sudden attention shift.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Oner",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Match on Action",
+          "url": "https://melies.co/cinematic-techniques/editing/match-action"
+        },
+        {
+          "text": "Set Transition",
+          "url": "https://melies.co/cinematic-techniques/editing/set-transition"
+        },
+        {
+          "text": "Morph",
+          "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+        },
+        {
+          "text": "OnerThe scene is a ride.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+        },
+        {
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/5a298b3eb3b678926135a630f52fe6da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-er-026-social-access-tracking-oner-mini.webp",
+          "alt": "Oner"
+        },
+        {
+          "kind": "video",
+          "path": "media/60e5248f694fc74656ed80d4e908fe31.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/026-social-access-tracking-oner-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+          "alt": "Whip Pan"
+        },
+        {
+          "kind": "video",
+          "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Oner is the long take you are faking or actually shooting. A Whip Pan can be the bandage over the splice.Match on Action hides a cut in a readable gesture but still changes the view on purpose. Set Transition lets the location rewrite itself.Morph is a visible interpolation, the opposite of invisible.OnerThe scene is a ride.Whip PanTransition, punchline, or sudden attention shift.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Vanishing Lady substitutes a seated woman between frames. A Trip to the Moon pops Selenites out of existence."
+        },
+        {
+          "type": "paragraph",
+          "text": "Rope hides joins in dark foregrounds. 1917 and Birdman stitch walks so trenches and theatres feel continuous."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spectre's opening presents multiple spaces as one shot. Grammar of concealment, not a take to clone."
+        },
+        {
+          "type": "list-item",
+          "text": "The Vanishing Lady 1896A seated woman apparently disappears and is replaced.",
+          "displayText": "The Vanishing Lady 1896\nA seated woman apparently disappears and is replaced."
+        },
+        {
+          "type": "list-item",
+          "text": "A Trip to the Moon 1902Selenites disappear in bursts when struck.",
+          "displayText": "A Trip to the Moon 1902\nSelenites disappear in bursts when struck."
+        },
+        {
+          "type": "list-item",
+          "text": "1917 2019Long continuous-looking stretches through trenches, ruins and open ground.",
+          "displayText": "1917 2019\nLong continuous-looking stretches through trenches, ruins and open ground."
+        },
+        {
+          "type": "list-item",
+          "text": "Birdman 2014The theatre and city passages appear to flow continuously despite time shifts.",
+          "displayText": "Birdman 2014\nThe theatre and city passages appear to flow continuously despite time shifts."
+        },
+        {
+          "type": "list-item",
+          "text": "Rope 1948Dark foreground surfaces conceal some joins between long takes.",
+          "displayText": "Rope 1948\nDark foreground surfaces conceal some joins between long takes."
+        },
+        {
+          "type": "list-item",
+          "text": "Spectre 2015The opening Day of the Dead passage presents multiple spaces as an apparently continuous shot.",
+          "displayText": "Spectre 2015\nThe opening Day of the Dead passage presents multiple spaces as an apparently continuous shot."
+        },
+        {
+          "type": "list-item",
+          "text": "Rope 1948Dark foreground bodies help conceal selected joins.",
+          "displayText": "Rope 1948\nDark foreground bodies help conceal selected joins."
+        },
+        {
+          "type": "list-item",
+          "text": "1917 2019Objects, darkness and motion help maintain continuous-looking travel.",
+          "displayText": "1917 2019\nObjects, darkness and motion help maintain continuous-looking travel."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f15ddcca6e6369bf848a0e322a87480b.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/invisible-cut/famous/00-1917-2019.jpg",
+          "alt": "1917 2019"
+        },
+        {
+          "kind": "image",
+          "path": "media/88fe9e31e68a7b20bdce747437f924f5.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/invisible-cut/famous/01-birdman-2014.jpg",
+          "alt": "Birdman 2014"
+        },
+        {
+          "kind": "image",
+          "path": "media/44af5034ea35991c8bb6a67c5dcd3bf3.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/invisible-cut/famous/02-rope-1948.jpg",
+          "alt": "Rope 1948"
+        },
+        {
+          "kind": "image",
+          "path": "media/c1b16b2823e7ab5653ca5e12da6a6d88.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/invisible-cut/famous/03-spectre-2015.jpg",
+          "alt": "Spectre 2015"
+        }
+      ],
+      "sourceText": "In film The Vanishing Lady substitutes a seated woman between frames. A Trip to the Moon pops Selenites out of existence.Rope hides joins in dark foregrounds. 1917 and Birdman stitch walks so trenches and theatres feel continuous.Spectre's opening presents multiple spaces as one shot. Grammar of concealment, not a take to clone.The Vanishing Lady 1896A seated woman apparently disappears and is replaced.A Trip to the Moon 1902Selenites disappear in bursts when struck.1917 2019Long continuous-looking stretches through trenches, ruins and open ground.Birdman 2014The theatre and city passages appear to flow continuously despite time shifts.Rope 1948Dark foreground surfaces conceal some joins between long takes.Spectre 2015The opening Day of the Dead passage presents multiple spaces as an apparently continuous shot.Rope 1948Dark foreground bodies help conceal selected joins.1917 2019Objects, darkness and motion help maintain continuous-looking travel."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Invisible cut hidden in [Subject]'s whip, a dark wall, or a passing body, the oner illusion. Name the hiding action, the before plate, the after plate, and that the camera path should appear continuous."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, two plates joined at occlusion or blur; locked lighting; no liquid morph."
+        },
+        {
+          "type": "quote",
+          "text": "A stage magician drops a cloth over an empty chair. At the instant the cloth fills the chair silhouette, cut to an identically framed plate with a bouquet beneath it. The magician lifts the cloth. Locked camera, matching hands and shadows, no liquid morph or camera move. Generate two plates and join them at the occlusion."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+stage+magician+drops+a+cloth+over+an+empty+chair.+At+the+instant+the+cloth+fills+the+chair+silhouette,+cut+to+an+identically+framed+plate+with+a+bouquet+beneath+it.+The+magician+lifts+the+cloth.+Locked+camera,+matching+hands+and+shadows,+no+liquid+morph+or+camera+move.+Generate+two+plates+and+join+them+at+the+occlusion."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Invisible cut hidden in [Subject]'s whip, a dark wall, or a passing body, the oner illusion. Name the hiding action, the before plate, the after plate, and that the camera path should appear continuous.For video, two plates joined at occlusion or blur; locked lighting; no liquid morph.Copy promptUse in Video GeneratorA stage magician drops a cloth over an empty chair. At the instant the cloth fills the chair silhouette, cut to an identically framed plate with a bouquet beneath it. The magician lifts the cloth. Locked camera, matching hands and shadows, no liquid morph or camera move. Generate two plates and join them at the occlusion.A stage magician drops a cloth over an empty chair. At the instant the cloth fills the chair silhouette, cut to an identically framed plate with a bouquet beneath it. The magician lifts the cloth. Locked camera, matching hands and shadows, no liquid morph or camera move. Generate two plates and join them at the occlusion."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a visible Whip Pan that never hides a join, or a morph. The tell: a pop in grain, a jump in crowd, a morphing wall.",
+          "links": [
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            },
+            {
+              "text": "morph",
+              "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: a true occluder or blur that fills the frame, matched lighting, a hard splice inside that fill, continuous motion on both sides."
+        }
+      ],
+      "links": [
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "morph",
+          "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a visible Whip Pan that never hides a join, or a morph. The tell: a pop in grain, a jump in crowd, a morphing wall.The fix: a true occluder or blur that fills the frame, matched lighting, a hard splice inside that fill, continuous motion on both sides."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Invisible Cut in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An invisible cut hides the edit in motion, darkness, occlusion, blur, matching geometry, or stitching. Both sides of the join are meant to play as one continuous shot."
+        },
+        {
+          "type": "heading",
+          "text": "Invisible Cut vs Oner",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A oner is a long take. An invisible cut is how you fake or extend one: the splice sits inside a whip, a wall, or a passing body. One is the apparent shot; the other is the seam."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Invisible Cut?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the audience must not feel the edit: a vanishing act, a stitched walk, a time jump inside a continuous-looking path. Do not use it when the join should speak."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Invisible Cut for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the hiding place and both plates. Example: Invisible cut hidden in [Subject]'s whip, a dark wall, or a passing body. Demand matched lighting and no morph."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Invisible Cut in film?An invisible cut hides the edit in motion, darkness, occlusion, blur, matching geometry, or stitching. Both sides of the join are meant to play as one continuous shot.Invisible Cut vs OnerA oner is a long take. An invisible cut is how you fake or extend one: the splice sits inside a whip, a wall, or a passing body. One is the apparent shot; the other is the seam.When should I use Invisible Cut?Use it when the audience must not feel the edit: a vanishing act, a stitched walk, a time jump inside a continuous-looking path. Do not use it when the join should speak.How do I prompt Invisible Cut for AI image or video?Name the hiding place and both plates. Example: Invisible cut hidden in [Subject]'s whip, a dark wall, or a passing body. Demand matched lighting and no morph."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Invisible cut hidden in [Subject]'s whip, a dark wall, or a passing body, the oner illusion. Name the hiding action, the before plate, the after plate, and that the camera path should appear continuous.",
+      "For video, two plates joined at occlusion or blur; locked lighting; no liquid morph."
+    ],
+    "example": "A stage magician drops a cloth over an empty chair. At the instant the cloth fills the chair silhouette, cut to an identically framed plate with a bouquet beneath it. The magician lifts the cloth. Locked camera, matching hands and shadows, no liquid morph or camera move. Generate two plates and join them at the occlusion."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/9d35cea3666631fb40cfa31fcfcfc220.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/107-occlusion-hidden-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5cf0b45fed829ca85d5d6db372384a43.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/invisible-cut-107-occlusion-hidden-cut-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/77955f045432b3d217a369735c0e3175.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/invisible-cut.jpg",
+      "alt": "Invisible Cut frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/5a298b3eb3b678926135a630f52fe6da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-er-026-social-access-tracking-oner-mini.webp",
+      "alt": "Oner"
+    },
+    {
+      "kind": "video",
+      "path": "media/60e5248f694fc74656ed80d4e908fe31.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/026-social-access-tracking-oner-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+      "alt": "Whip Pan"
+    },
+    {
+      "kind": "video",
+      "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f15ddcca6e6369bf848a0e322a87480b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/invisible-cut/famous/00-1917-2019.jpg",
+      "alt": "1917 2019"
+    },
+    {
+      "kind": "image",
+      "path": "media/88fe9e31e68a7b20bdce747437f924f5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/invisible-cut/famous/01-birdman-2014.jpg",
+      "alt": "Birdman 2014"
+    },
+    {
+      "kind": "image",
+      "path": "media/44af5034ea35991c8bb6a67c5dcd3bf3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/invisible-cut/famous/02-rope-1948.jpg",
+      "alt": "Rope 1948"
+    },
+    {
+      "kind": "image",
+      "path": "media/c1b16b2823e7ab5653ca5e12da6a6d88.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/invisible-cut/famous/03-spectre-2015.jpg",
+      "alt": "Spectre 2015"
+    },
+    {
+      "kind": "image",
+      "path": "media/659b9bb7736c283cb1d3e2bbf1838c1e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/invisible-cut/hero.jpg",
+      "alt": "Invisible Cut",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "4977edd0911baa902f0757a83130c7fb741d332d842d5d28182943506404184f"
+}

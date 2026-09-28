@@ -1,0 +1,444 @@
+{
+  "id": "camera-movement/dolly-out",
+  "slug": "dolly-out",
+  "title": "Dolly Out",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/dolly-out",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-out-04-dolly-out-v2-mini.webp",
+  "detail": "details/camera-movement/dolly-out.json",
+  "aliases": [
+    "truck out",
+    "pull back",
+    "Dolly shot",
+    "dolly in",
+    "lateral dolly",
+    "diagonal dolly",
+    "Pull-back reveal",
+    "Travelling arrière"
+  ],
+  "description": "A dolly out shot withdraws the entire camera through space on a wheeled or tracked support. The world widens with true parallax, and the subject shrinks inside architecture because the station point has actually retreated.",
+  "thumbnail": "media/250b08be437f19b68ce05ee85ac60c70.webp",
+  "video": "media/92e21cccbf00e7cb0422d0c370c86118.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/04-dolly-out-v2-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "We understand an expression first, then discover the social situation or danger that gives it meaning. Leaving someone behind is a spatial fact: the camera walks away, so the person is abandoned in a real room."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you only need a detached, flat widening, or when the famous pull-back you remember was actually a zoom. Check perspective before you name the rig."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function We understand an expression first, then discover the social situation or danger that gives it meaning. Leaving someone behind is a spatial fact: the camera walks away, so the person is abandoned in a real room.It is the wrong tool when you only need a detached, flat widening, or when the famous pull-back you remember was actually a zoom. Check perspective before you name the rig."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Compose the tight and wide endpoints first. Reveal surrounding elements in a deliberate order as the dolly retreats."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep focal length fixed so size change comes from distance. Foreground will enter from the edges."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a physical dolly out on track, true parallax, subject shrinking inside architecture, no zoom-out."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Compose the tight and wide endpoints first. Reveal surrounding elements in a deliberate order as the dolly retreats.Keep focal length fixed so size change comes from distance. Foreground will enter from the edges.Prompt a physical dolly out on track, true parallax, subject shrinking inside architecture, no zoom-out."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to leave someone behind, or to show how small they are in the system. Concrete beat: a confession in close coverage, then the camera retreats until the office owns them."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not call every famous pull-back a dolly."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to leave someone behind, or to show how small they are in the system. Concrete beat: a confession in close coverage, then the camera retreats until the office owns them.Do not call every famous pull-back a dolly."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Pull Out is the generic retreat job and may be virtual, Steadicam, or crane-backed; dolly out specifies wheeled translation at human height. A Slow Zoom Out widens without walking.",
+          "links": [
+            {
+              "text": "Pull Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+            },
+            {
+              "text": "Slow Zoom Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Aerial Pullback leaves the ground and hands the scene to geography from above.",
+          "links": [
+            {
+              "text": "Aerial Pullback",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pull OutShow the container around a feeling.",
+          "displayText": "Pull Out\nShow the container around a feeling.",
+          "links": [
+            {
+              "text": "Pull OutShow the container around a feeling.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "displayText": "Aerial Pullback\nClose a chapter. Geography wins.",
+          "links": [
+            {
+              "text": "Aerial PullbackClose a chapter. Geography wins.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Pull Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+        },
+        {
+          "text": "Slow Zoom Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out"
+        },
+        {
+          "text": "Aerial Pullback",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Pull OutShow the container around a feeling.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+        },
+        {
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/37b5595bae8858283390769367c4f5d6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pull-out-pull-out-mini.webp",
+          "alt": "Pull Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/4c02c1f19b8cf15347f8a51749112685.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pull-out-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+          "alt": "Aerial Pullback"
+        },
+        {
+          "kind": "video",
+          "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Pull Out is the generic retreat job and may be virtual, Steadicam, or crane-backed; dolly out specifies wheeled translation at human height. A Slow Zoom Out widens without walking.An Aerial Pullback leaves the ground and hands the scene to geography from above.Pull OutShow the container around a feeling.Aerial PullbackClose a chapter. Geography wins.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Clockwork Orange withdraws from Alex to reveal the Korova Milk Bar. The Godfather opens by withdrawing from Bonasera until the office encounter is the room."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Truman Show uses retreat to disclose the container around a life. Confirm each shot's parallax before treating it as track."
+        },
+        {
+          "type": "list-item",
+          "text": "A Clockwork Orange 1971Opening withdrawal from Alex to reveal the Korova Milk Bar.",
+          "displayText": "A Clockwork Orange 1971\nOpening withdrawal from Alex to reveal the Korova Milk Bar."
+        },
+        {
+          "type": "list-item",
+          "text": "The Godfather 1972Opening withdrawal from Bonasera reveals the office encounter.",
+          "displayText": "The Godfather 1972\nOpening withdrawal from Bonasera reveals the office encounter."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/48d77484100a5f56f8d3673096235add.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-out/famous/00-a-clockwork-orange-1971.jpg",
+          "alt": "A Clockwork Orange 1971"
+        },
+        {
+          "kind": "image",
+          "path": "media/4c37dee45defac57bdbe96b065575394.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-out/famous/01-the-godfather-1972.jpg",
+          "alt": "The Godfather 1972"
+        }
+      ],
+      "sourceText": "In film A Clockwork Orange withdraws from Alex to reveal the Korova Milk Bar. The Godfather opens by withdrawing from Bonasera until the office encounter is the room.The Truman Show uses retreat to disclose the container around a life. Confirm each shot's parallax before treating it as track.A Clockwork Orange 1971Opening withdrawal from Alex to reveal the Korova Milk Bar.The Godfather 1972Opening withdrawal from Bonasera reveals the office encounter."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Physical dolly out from [Subject], camera retreating on track, the world widening with true parallax, subject shrinking inside architecture. For motion: the camera physically dollies backward away from [Subject], revealing more environment with parallax."
+        },
+        {
+          "type": "quote",
+          "text": "Start tightly on a calm pianist’s face. Pull the camera backward in one uninterrupted shot, fixed focal length, gradually revealing that the grand piano stands alone in a flooded ballroom. Keep the face natural and delay the water reveal until the middle of the shot."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Start+tightly+on+a+calm+pianist%E2%80%99s+face.+Pull+the+camera+backward+in+one+uninterrupted+shot,+fixed+focal+length,+gradually+revealing+that+the+grand+piano+stands+alone+in+a+flooded+ballroom.+Keep+the+face+natural+and+delay+the+water+reveal+until+the+middle+of+the+shot."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Physical dolly out from [Subject], camera retreating on track, the world widening with true parallax, subject shrinking inside architecture. For motion: the camera physically dollies backward away from [Subject], revealing more environment with parallax.Copy promptUse in Video GeneratorStart tightly on a calm pianist’s face. Pull the camera backward in one uninterrupted shot, fixed focal length, gradually revealing that the grand piano stands alone in a flooded ballroom. Keep the face natural and delay the water reveal until the middle of the shot.Start tightly on a calm pianist’s face. Pull the camera backward in one uninterrupted shot, fixed focal length, gradually revealing that the grand piano stands alone in a flooded ballroom. Keep the face natural and delay the water reveal until the middle of the shot."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Slow Zoom Out. The tell is a flat grow of the frame with no new overlap of furniture.",
+          "links": [
+            {
+              "text": "Slow Zoom Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: translate backward, keep the lens fixed, and let foreground objects arrive at the edges in order."
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Zoom Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Slow Zoom Out. The tell is a flat grow of the frame with no new overlap of furniture.The fix: translate backward, keep the lens fixed, and let foreground objects arrive at the edges in order."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dolly Out in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a physical retreat of the camera on wheels or track, opening space around a subject with changing perspective and parallax."
+        },
+        {
+          "type": "heading",
+          "text": "Dolly Out vs Slow Zoom Out",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Slow zoom out stays put and only widens the lens. Dolly out moves the camera backward, so the room's layers slide and the person is left in real space."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dolly Out?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When isolation, abandonment, or a revealed system must be walked, not merely disclosed by the lens. Do not use it for a sting widen."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dolly Out for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write physical dolly backward on track, fixed focal length, parallax, subject shrinking in architecture. Ban optical zoom out."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dolly Out in film?It is a physical retreat of the camera on wheels or track, opening space around a subject with changing perspective and parallax.Dolly Out vs Slow Zoom OutSlow zoom out stays put and only widens the lens. Dolly out moves the camera backward, so the room's layers slide and the person is left in real space.When should I use Dolly Out?When isolation, abandonment, or a revealed system must be walked, not merely disclosed by the lens. Do not use it for a sting widen.How do I prompt Dolly Out for AI image or video?Write physical dolly backward on track, fixed focal length, parallax, subject shrinking in architecture. Ban optical zoom out."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Physical dolly out from [Subject], camera retreating on track, the world widening with true parallax, subject shrinking inside architecture. For motion: the camera physically dollies backward away from [Subject], revealing more environment with parallax."
+    ],
+    "example": "Start tightly on a calm pianist’s face. Pull the camera backward in one uninterrupted shot, fixed focal length, gradually revealing that the grand piano stands alone in a flooded ballroom. Keep the face natural and delay the water reveal until the middle of the shot."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/92e21cccbf00e7cb0422d0c370c86118.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/04-dolly-out-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/250b08be437f19b68ce05ee85ac60c70.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-out-04-dolly-out-v2-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d76fdb15f77844a6b0061fa3dab79f06.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/dolly-out-04-dolly-out-v2.jpg",
+      "alt": "Dolly Out frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/37b5595bae8858283390769367c4f5d6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pull-out-pull-out-mini.webp",
+      "alt": "Pull Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/4c02c1f19b8cf15347f8a51749112685.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pull-out-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+      "alt": "Aerial Pullback"
+    },
+    {
+      "kind": "video",
+      "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/48d77484100a5f56f8d3673096235add.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-out/famous/00-a-clockwork-orange-1971.jpg",
+      "alt": "A Clockwork Orange 1971"
+    },
+    {
+      "kind": "image",
+      "path": "media/4c37dee45defac57bdbe96b065575394.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-out/famous/01-the-godfather-1972.jpg",
+      "alt": "The Godfather 1972"
+    },
+    {
+      "kind": "image",
+      "path": "media/6eeff7e55b2a712e3488d052574d184b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-out/hero.jpg",
+      "alt": "Dolly Out",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "758eb0f870e1833c7959de54698ccf505fe084f22464bb58082b82f68c2bbffe"
+}

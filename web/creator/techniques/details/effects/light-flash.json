@@ -1,0 +1,404 @@
+{
+  "id": "effects/light-flash",
+  "slug": "light-flash",
+  "title": "Light Flash",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/light-flash",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/light-flash-light-flash-mini.webp",
+  "detail": "details/effects/light-flash.json",
+  "aliases": [],
+  "description": "A light flash transition is a brief blowout of the frame to white or near-white, then a return, as if a bulb, explosion, or memory dump hit the emulsion. It is a temporal event, often a cut hidden in the peak, not a standing lens flare.",
+  "thumbnail": "media/4e6870e12c661aa6c0dbde12bf048a17.webp",
+  "video": "media/9b644dfc7d7f6c439b9a9252f52a613f.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/light-flash-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The picture goes. For a few frames there is only density failure: a bulb, a muzzle, a Polaroid, a trauma."
+        },
+        {
+          "type": "paragraph",
+          "text": "Then the next image, or the same room, settles back. The flash is both a wound and a splice."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the cut should hurt: memory stings, explosions, still cameras in a crowd, a mind skipping. The white is the edit."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a sun ghost that stays in shot, or for a smash cut that is only a hard join of two dark images. If the flare hangs and tracks a lamp, that is flare."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you simply jump scenes with no blowout, that is a smash cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The picture goes. For a few frames there is only density failure: a bulb, a muzzle, a Polaroid, a trauma.Then the next image, or the same room, settles back. The flash is both a wound and a splice.Use it when the cut should hurt: memory stings, explosions, still cameras in a crowd, a mind skipping. The white is the edit.It is the wrong tool for a sun ghost that stays in shot, or for a smash cut that is only a hard join of two dark images. If the flare hangs and tracks a lamp, that is flare.If you simply jump scenes with no blowout, that is a smash cut."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Overexpose a practical, a strobe, or a muzzle until clipping, or animate a white frame at the cut. Recovery can carry a lingering veil."
+        },
+        {
+          "type": "paragraph",
+          "text": "In camera, a still photographer's flash or a door onto daylight can do it live. Prompt: frame going to white then returning, bulb or explosion or memory sting, not a persistent source-linked flare."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Overexpose a practical, a strobe, or a muzzle until clipping, or animate a white frame at the cut. Recovery can carry a lingering veil.In camera, a still photographer's flash or a door onto daylight can do it live. Prompt: frame going to white then returning, bulb or explosion or memory sting, not a persistent source-linked flare."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A hard flash blows out a face, then settles into the next memory, as in a sting cut. Do not leave a decorative streak parked on the lens after the white is gone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A hard flash blows out a face, then settles into the next memory, as in a sting cut. Do not leave a decorative streak parked on the lens after the white is gone."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Smash Cut is an abrupt edit without a required white-out. A light flash is the white that can carry that cut.",
+          "links": [
+            {
+              "text": "Smash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Lens Flare is scatter that remains while a source is in the optic. Fade In / Fade Out goes slowly to black or white as a chapter mark.",
+          "links": [
+            {
+              "text": "Lens Flare",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            },
+            {
+              "text": "Fade In / Fade Out",
+              "url": "https://melies.co/cinematic-techniques/editing/fade"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A flash is fast. Iris closes a circle.",
+          "links": [
+            {
+              "text": "Iris",
+              "url": "https://melies.co/cinematic-techniques/editing/iris"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It does not blow the whole field."
+        },
+        {
+          "type": "list-item",
+          "text": "Smash CutThe next image should hurt.",
+          "displayText": "Smash Cut\nThe next image should hurt.",
+          "links": [
+            {
+              "text": "Smash CutThe next image should hurt.",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "displayText": "Anamorphic Flare\nNight lights and headlights should write on the lens.",
+          "links": [
+            {
+              "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+              "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Smash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Lens Flare",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "Fade In / Fade Out",
+          "url": "https://melies.co/cinematic-techniques/editing/fade"
+        },
+        {
+          "text": "Iris",
+          "url": "https://melies.co/cinematic-techniques/editing/iris"
+        },
+        {
+          "text": "Smash CutThe next image should hurt.",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/bd7d68009bacf7d9970db0873ae94f1c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smash-cut-165-smash-cut-mini.webp",
+          "alt": "Smash Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/bb74b65d11d6f62c19ec9876a5b85953.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/165-smash-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/dd60ac3e349447877925814c6440f811.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+          "alt": "Anamorphic Flare"
+        }
+      ],
+      "sourceText": "Compared with similar shots Smash Cut is an abrupt edit without a required white-out. A light flash is the white that can carry that cut.Lens Flare is scatter that remains while a source is in the optic. Fade In / Fade Out goes slowly to black or white as a chapter mark.A flash is fast. Iris closes a circle.It does not blow the whole field.Smash CutThe next image should hurt.Lens FlareLight is too strong to be polite.Anamorphic FlareNight lights and headlights should write on the lens."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Memento uses white flashes as memory dumps between Polaroids and the present. Saving Private Ryan lets muzzle flashes and overload wipe the frame as combat sting."
+        },
+        {
+          "type": "paragraph",
+          "text": "Raging Bull's camera flashes in the ring are the still-photographer version of the same blowout."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Memento uses white flashes as memory dumps between Polaroids and the present. Saving Private Ryan lets muzzle flashes and overload wipe the frame as combat sting.Raging Bull's camera flashes in the ring are the still-photographer version of the same blowout."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Make it an event with a recovery. Still: Blinding light flash over [Subject], a bulb, explosion, or memory cut, the frame going to white then returning."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: A hard light flash blows out [Subject] then settles back, as a memory or explosion sting."
+        },
+        {
+          "type": "quote",
+          "text": "A hard light flash blows out [Subject] then settles back, as a memory or explosion sting."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+hard+light+flash+blows+out+[Subject]+then+settles+back,+as+a+memory+or+explosion+sting."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Make it an event with a recovery. Still: Blinding light flash over [Subject], a bulb, explosion, or memory cut, the frame going to white then returning.Video: A hard light flash blows out [Subject] then settles back, as a memory or explosion sting.Copy promptUse in Video GeneratorA hard light flash blows out [Subject] then settles back, as a memory or explosion sting.A hard light flash blows out [Subject] then settles back, as a memory or explosion sting."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: persistent lens flare or a smash cut with no exposure event. Tell: a rainbow streak that never whites the frame, or a hard cut in full detail."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: clip to white (or near-white) for frames, then recover. Hide the splice in the peak if it is a transition."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: persistent lens flare or a smash cut with no exposure event. Tell: a rainbow streak that never whites the frame, or a hard cut in full detail.Fix: clip to white (or near-white) for frames, then recover. Hide the splice in the peak if it is a transition."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a light flash in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A brief blowout of the image to white, then a return, used as a sting or as a cut. It is overexposure as an event, not a standing artifact."
+        },
+        {
+          "type": "heading",
+          "text": "Light flash vs lens flare",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Flare is stray light in the optic that can last as long as the source is in play. A light flash is a temporal wipe of the frame, often covering an edit."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a light flash?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a cut or a shock should be a wound of light: memory, explosion, still-camera flash. Do not use it as decoration on a quiet master."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a light flash for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, describe a blowout to white and a settle-back, and name the cause (bulb, muzzle, memory). For stills, show the peak or the recovery, not a parked streak."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a light flash in film?A brief blowout of the image to white, then a return, used as a sting or as a cut. It is overexposure as an event, not a standing artifact.Light flash vs lens flareFlare is stray light in the optic that can last as long as the source is in play. A light flash is a temporal wipe of the frame, often covering an edit.When should I use a light flash?When a cut or a shock should be a wound of light: memory, explosion, still-camera flash. Do not use it as decoration on a quiet master.How do I prompt a light flash for AI image or video?For video, describe a blowout to white and a settle-back, and name the cause (bulb, muzzle, memory). For stills, show the peak or the recovery, not a parked streak."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Make it an event with a recovery. Still: Blinding light flash over [Subject], a bulb, explosion, or memory cut, the frame going to white then returning.",
+      "Video: A hard light flash blows out [Subject] then settles back, as a memory or explosion sting."
+    ],
+    "example": "A hard light flash blows out [Subject] then settles back, as a memory or explosion sting."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/9b644dfc7d7f6c439b9a9252f52a613f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/light-flash-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4e6870e12c661aa6c0dbde12bf048a17.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/light-flash-light-flash-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a265a7fa47a9f95d159d88ec14c872de.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/light-flash.jpg",
+      "alt": "Light Flash frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/bd7d68009bacf7d9970db0873ae94f1c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smash-cut-165-smash-cut-mini.webp",
+      "alt": "Smash Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/bb74b65d11d6f62c19ec9876a5b85953.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/165-smash-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dd60ac3e349447877925814c6440f811.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+      "alt": "Anamorphic Flare"
+    },
+    {
+      "kind": "image",
+      "path": "media/ad6f36c114516747a73e6aec1633ff85.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/light-flash/hero.jpg",
+      "alt": "Light Flash",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "49bc8909527191672fb3657a9d45f17344367c07740b79c631fec3c1eb3941de"
+}

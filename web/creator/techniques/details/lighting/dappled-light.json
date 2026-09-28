@@ -1,0 +1,388 @@
+{
+  "id": "lighting/dappled-light",
+  "slug": "dappled-light",
+  "title": "Dappled Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/dappled-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dappled-light.webp",
+  "detail": "details/lighting/dappled-light.json",
+  "aliases": [],
+  "description": "Dappled light is broken patches of brightness and shadow caused by foliage, water, blinds, or another irregular obstruction in a hard beam. The pattern is organic and often moving.",
+  "thumbnail": "media/c527ca397332e8503e2b3e124659a749.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A tree writes on a coat. Jungle, orchard, and bedroom blinds turn a person into a field of spots."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nature or architecture becomes the gobo without looking designed as a logo. It is the wrong tool for a clean beauty close-up or a graphic prison-bar statement."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the pattern is a crisp logo or perfectly parallel slats, you have shifted toward gobo lighting. Dappled wants irregular leaf-shaped or caustic patches.",
+          "links": [
+            {
+              "text": "gobo lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "gobo lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A tree writes on a coat. Jungle, orchard, and bedroom blinds turn a person into a field of spots.Nature or architecture becomes the gobo without looking designed as a logo. It is the wrong tool for a clean beauty close-up or a graphic prison-bar statement.If the pattern is a crisp logo or perfectly parallel slats, you have shifted toward gobo lighting. Dappled wants irregular leaf-shaped or caustic patches."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You need a relatively hard sun or lamp, plus an obstructing layer (leaves, a tree, water surface, dirty glass) between source and subject. Distance from gobo to subject controls softness of the patches.",
+          "links": [
+            {
+              "text": "hard",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is usually daylight. Wind or water makes the patches crawl."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Sun through leaves on [Subject], irregular patches of brightness and leaf-shaped shadows on coat and horse, a real tree overhead."
+        }
+      ],
+      "links": [
+        {
+          "text": "hard",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works You need a relatively hard sun or lamp, plus an obstructing layer (leaves, a tree, water surface, dirty glass) between source and subject. Distance from gobo to subject controls softness of the patches.Color is usually daylight. Wind or water makes the patches crawl.Prompt: Sun through leaves on [Subject], irregular patches of brightness and leaf-shaped shadows on coat and horse, a real tree overhead."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when nature or blinds should break the key, a forest walk, a siesta under a tree. Do not use a clean unobstructed key and then paint spots in post as stickers."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when nature or blinds should break the key, a forest walk, a siesta under a tree. Do not use a clean unobstructed key and then paint spots in post as stickers."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Gobo lighting is the designed version: a cucoloris, bars, or blinds placed to write a graphic. Dappled is irregular and usually natural.",
+          "links": [
+            {
+              "text": "Gobo lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard light is required for sharp patches. Window light through trees outside can be dappled.",
+          "links": [
+            {
+              "text": "Hard light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            },
+            {
+              "text": "Window light",
+              "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Volumetric light shows beams in air; dappled shows patches on surfaces.",
+          "links": [
+            {
+              "text": "Volumetric light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Gobo LightingThe room writes on the person.",
+          "displayText": "Gobo Lighting\nThe room writes on the person.",
+          "links": [
+            {
+              "text": "Gobo LightingThe room writes on the person.",
+              "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "displayText": "Hard Light\nGrit, noon sun, or interrogation.",
+          "links": [
+            {
+              "text": "Hard LightGrit, noon sun, or interrogation.",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Gobo lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+        },
+        {
+          "text": "Hard light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Window light",
+          "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+        },
+        {
+          "text": "Volumetric light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "Gobo LightingThe room writes on the person.",
+          "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+        },
+        {
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9d2fae3d817782fff1bed611023e5a33.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gobo-lighting.webp",
+          "alt": "Gobo Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+          "alt": "Hard Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Gobo lighting is the designed version: a cucoloris, bars, or blinds placed to write a graphic. Dappled is irregular and usually natural.Hard light is required for sharp patches. Window light through trees outside can be dappled.Volumetric light shows beams in air; dappled shows patches on surfaces.Gobo LightingThe room writes on the person.Hard LightGrit, noon sun, or interrogation.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Thin Red Line lets jungle canopy break sun on soldiers. Moonlight uses broken daylight and night sources so bodies carry irregular patches."
+        },
+        {
+          "type": "paragraph",
+          "text": "The obstruction is real, not a texture overlay."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Thin Red Line lets jungle canopy break sun on soldiers. Moonlight uses broken daylight and night sources so bodies carry irregular patches.The obstruction is real, not a texture overlay."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the obstruction. Use: \"Sun through leaves on [Subject], irregular patches of brightness and leaf-shaped shadows on coat and horse, a real tree overhead.\" Forbid a clean unpatterned key and a venetian-bar prison graphic unless blinds are the story."
+        },
+        {
+          "type": "quote",
+          "text": "Sun through leaves on [Subject], irregular patches of brightness and leaf-shaped shadows on coat and horse, a real tree overhead."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Sun+through+leaves+on+[Subject],+irregular+patches+of+brightness+and+leaf-shaped+shadows+on+coat+and+horse,+a+real+tree+overhead."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the obstruction. Use: \"Sun through leaves on [Subject], irregular patches of brightness and leaf-shaped shadows on coat and horse, a real tree overhead.\" Forbid a clean unpatterned key and a venetian-bar prison graphic unless blinds are the story.Copy promptUse in Image GeneratorSun through leaves on [Subject], irregular patches of brightness and leaf-shaped shadows on coat and horse, a real tree overhead.Sun through leaves on [Subject], irregular patches of brightness and leaf-shaped shadows on coat and horse, a real tree overhead."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a clean key or a designed gobo of bars. The tell is even skin, or perfectly parallel slats.",
+          "links": [
+            {
+              "text": "gobo",
+              "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by putting a real tree, water, or irregular foliage in a hard beam."
+        }
+      ],
+      "links": [
+        {
+          "text": "gobo",
+          "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a clean key or a designed gobo of bars. The tell is even skin, or perfectly parallel slats.Fix it by putting a real tree, water, or irregular foliage in a hard beam."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is dappled light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Broken patches of light and shadow from foliage, water, or similar irregular obstruction in a hard beam. The pattern is organic."
+        },
+        {
+          "type": "heading",
+          "text": "Dappled light vs gobo lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dappled is irregular, usually from nature. Gobo lighting places a designed pattern (cucoloris, blinds, bars) in the beam to throw a graphic."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use dappled light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it under trees, by water, or through messy glass when the world should break the key. Skip it for clean glamour or a prison-bar statement."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt dappled light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Put a real tree or irregular obstruction in hard sun. Ask for leaf-shaped or caustic patches on cloth and skin, not a clean key and not parallel bars."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is dappled light in film?Broken patches of light and shadow from foliage, water, or similar irregular obstruction in a hard beam. The pattern is organic.Dappled light vs gobo lightingDappled is irregular, usually from nature. Gobo lighting places a designed pattern (cucoloris, blinds, bars) in the beam to throw a graphic.When should I use dappled light?Use it under trees, by water, or through messy glass when the world should break the key. Skip it for clean glamour or a prison-bar statement.How do I prompt dappled light for AI image or video?Put a real tree or irregular obstruction in hard sun. Ask for leaf-shaped or caustic patches on cloth and skin, not a clean key and not parallel bars."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the obstruction. Use: \"Sun through leaves on [Subject], irregular patches of brightness and leaf-shaped shadows on coat and horse, a real tree overhead.\" Forbid a clean unpatterned key and a venetian-bar prison graphic unless blinds are the story."
+    ],
+    "example": "Sun through leaves on [Subject], irregular patches of brightness and leaf-shaped shadows on coat and horse, a real tree overhead."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/c527ca397332e8503e2b3e124659a749.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dappled-light.webp",
+      "alt": "Dappled Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/9d2fae3d817782fff1bed611023e5a33.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gobo-lighting.webp",
+      "alt": "Gobo Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+      "alt": "Hard Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/2c4fc928d08437a34dedc57f79625171.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dappled-light/hero.jpg",
+      "alt": "Dappled Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "4cde8e5f2d4de71bfd57d68f3dbe5fce1c092ca7341aa15d15d3c5f0f81b685d"
+}

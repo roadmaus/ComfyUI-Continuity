@@ -1,0 +1,392 @@
+{
+  "id": "lighting/available-light",
+  "slug": "available-light",
+  "title": "Available Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/available-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+  "detail": "details/lighting/available-light.json",
+  "aliases": [],
+  "description": "Available light in available light cinematography is the illumination already at the location before the crew adds or changes units: sun, sky, or existing interior fixtures. You commit to the hour and the existing contrast.",
+  "thumbnail": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The day is the gaffer. , a kitchen with one overhead, a station with sodium: you expose for what is there and block actors into it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Documentary and certain features treat that limitation as the look. It is the wrong tool when you need night-for-night control, a cheek triangle that the sun will not hold, or matching a scene across three hours."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you add a bounce board you have already left pure available and entered a small bounce or naturalistic cheat.",
+          "links": [
+            {
+              "text": "bounce",
+              "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+            },
+            {
+              "text": "naturalistic",
+              "url": "https://melies.co/cinematic-techniques/lighting/naturalistic-ambient"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "bounce",
+          "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+        },
+        {
+          "text": "naturalistic",
+          "url": "https://melies.co/cinematic-techniques/lighting/naturalistic-ambient"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The day is the gaffer. , a kitchen with one overhead, a station with sodium: you expose for what is there and block actors into it.Documentary and certain features treat that limitation as the look. It is the wrong tool when you need night-for-night control, a cheek triangle that the sun will not hold, or matching a scene across three hours.If you add a bounce board you have already left pure available and entered a small bounce or naturalistic cheat."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Do not add lights. Choose sun angle, weather, and existing fixtures."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness is the sun's (hard when clear, soft when overcast). Color is the real Kelvin of that hour: high sun near 5600K, late sun warmer, interiors whatever the building installed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Expose for faces or for sky, not both if the ratio is huge. Prompt: Available light only on [Subject], sun, sky, or existing interior fixtures, documentary humility, no added units."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Do not add lights. Choose sun angle, weather, and existing fixtures.Hardness is the sun's (hard when clear, soft when overcast). Color is the real Kelvin of that hour: high sun near 5600K, late sun warmer, interiors whatever the building installed.Expose for faces or for sky, not both if the ratio is huge. Prompt: Available light only on [Subject], sun, sky, or existing interior fixtures, documentary humility, no added units."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when you will commit to the hour you have, a ridge, a real kitchen, a street at the time the story needs. Do not use it if you plan to sneak in an HMI and still call it available."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when you will commit to the hour you have, a ridge, a real kitchen, a street at the time the story needs. Do not use it if you plan to sneak in an HMI and still call it available."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Motivated lighting adds hidden units that imitate the world. Naturalistic ambient is crafted to look unstyled and may include lights.",
+          "links": [
+            {
+              "text": "Motivated lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            },
+            {
+              "text": "Naturalistic ambient",
+              "url": "https://melies.co/cinematic-techniques/lighting/naturalistic-ambient"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Golden hour and blue hour are specific available conditions. Practical lighting can be available if the fixtures already exist and you do not enhance them.",
+          "links": [
+            {
+              "text": "Golden hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+            },
+            {
+              "text": "blue hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            },
+            {
+              "text": "Practical lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Naturalistic AmbientInvisible craft.",
+          "displayText": "Naturalistic Ambient\nInvisible craft.",
+          "links": [
+            {
+              "text": "Naturalistic AmbientInvisible craft.",
+              "url": "https://melies.co/cinematic-techniques/lighting/naturalistic-ambient"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Motivated LightingRealism with control. Light like a world, not a studio.",
+          "displayText": "Motivated Lighting\nRealism with control. Light like a world, not a studio.",
+          "links": [
+            {
+              "text": "Motivated LightingRealism with control. Light like a world, not a studio.",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Motivated lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Naturalistic ambient",
+          "url": "https://melies.co/cinematic-techniques/lighting/naturalistic-ambient"
+        },
+        {
+          "text": "Golden hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+        },
+        {
+          "text": "blue hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        },
+        {
+          "text": "Practical lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "Naturalistic AmbientInvisible craft.",
+          "url": "https://melies.co/cinematic-techniques/lighting/naturalistic-ambient"
+        },
+        {
+          "text": "Motivated LightingRealism with control. Light like a world, not a studio.",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f43d62e57e8d4334ed56d9f94b8be9ec.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/naturalistic-ambient.webp",
+          "alt": "Naturalistic Ambient"
+        },
+        {
+          "kind": "image",
+          "path": "media/72b4a8abf049e156a7fe62f44ecbdf57.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motivated-lighting.webp",
+          "alt": "Motivated Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Motivated lighting adds hidden units that imitate the world. Naturalistic ambient is crafted to look unstyled and may include lights.Golden hour and blue hour are specific available conditions. Practical lighting can be available if the fixtures already exist and you do not enhance them.Naturalistic AmbientInvisible craft.Motivated LightingRealism with control. Light like a world, not a studio.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Days of Heaven waited on natural edges of the day. The Revenant committed to location sun, overcast, and fire already in the space."
+        },
+        {
+          "type": "paragraph",
+          "text": "The grammar is patience and geography, not a gel called natural."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Days of Heaven waited on natural edges of the day. The Revenant committed to location sun, overcast, and fire already in the space.The grammar is patience and geography, not a gel called natural."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Forbid added units. \" Name the hour and the existing source."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not list movie lamps."
+        },
+        {
+          "type": "quote",
+          "text": "Available light only on [Subject], sun, sky, or existing interior fixtures, documentary humility, no added units."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Available+light+only+on+[Subject],+sun,+sky,+or+existing+interior+fixtures,+documentary+humility,+no+added+units."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Forbid added units. \" Name the hour and the existing source.Do not list movie lamps.Copy promptUse in Image GeneratorAvailable light only on [Subject], sun, sky, or existing interior fixtures, documentary humility, no added units.Available light only on [Subject], sun, sky, or existing interior fixtures, documentary humility, no added units."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is motivated lighting sold as available. The tell is a perfect fill on the shadow cheek at noon in open sun.",
+          "links": [
+            {
+              "text": "motivated",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by removing extra units, or by renaming the setup motivated."
+        }
+      ],
+      "links": [
+        {
+          "text": "motivated",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is motivated lighting sold as available. The tell is a perfect fill on the shadow cheek at noon in open sun.Fix it by removing extra units, or by renaming the setup motivated."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is available light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Existing illumination at a location before the crew adds or changes anything: sun, sky, or fixtures already there."
+        },
+        {
+          "type": "heading",
+          "text": "Available light vs naturalistic ambient",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Available light means no added units. Naturalistic ambient is a crafted wrap that looks like room or sky, and it may use hidden lights."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use available light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the real hour and place are the point, and you can schedule for them. Skip it when continuity or a specific portrait pattern must be locked."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt available light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "State sun, sky, or existing fixtures only, no added units. Name the time of day and the real source direction."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is available light in film?Existing illumination at a location before the crew adds or changes anything: sun, sky, or fixtures already there.Available light vs naturalistic ambientAvailable light means no added units. Naturalistic ambient is a crafted wrap that looks like room or sky, and it may use hidden lights.When should I use available light?Use it when the real hour and place are the point, and you can schedule for them. Skip it when continuity or a specific portrait pattern must be locked.How do I prompt available light for AI image or video?State sun, sky, or existing fixtures only, no added units. Name the time of day and the real source direction."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Forbid added units. \" Name the hour and the existing source.",
+      "Do not list movie lamps."
+    ],
+    "example": "Available light only on [Subject], sun, sky, or existing interior fixtures, documentary humility, no added units."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+      "alt": "Available Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/f43d62e57e8d4334ed56d9f94b8be9ec.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/naturalistic-ambient.webp",
+      "alt": "Naturalistic Ambient"
+    },
+    {
+      "kind": "image",
+      "path": "media/72b4a8abf049e156a7fe62f44ecbdf57.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motivated-lighting.webp",
+      "alt": "Motivated Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/0b2fc4fa64745a1566f6a9a9a51316e1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/available-light/hero.jpg",
+      "alt": "Available Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "2f4ada557e1ca1e5fc1ad01f428beb46717f7f8e59f19c401939ea8129b357df"
+}

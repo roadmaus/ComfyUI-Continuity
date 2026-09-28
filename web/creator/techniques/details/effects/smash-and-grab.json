@@ -1,0 +1,410 @@
+{
+  "id": "effects/smash-and-grab",
+  "slug": "smash-and-grab",
+  "title": "Smash and Grab",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/smash-and-grab",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smash-and-grab-smash-and-grab-mini.webp",
+  "detail": "details/effects/smash-and-grab.json",
+  "aliases": [],
+  "description": "Smash-and-grab video is impact as coverage: glass, snatch, handheld chaos, a theft of a moment. The camera is inside the crime, too close and too late.",
+  "thumbnail": "media/05764b7cdc6a430cda33464f68d267b0.webp",
+  "video": "media/f9818865133f1a1efa611b7f290c9475.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/smash-and-grab-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A pane goes. A hand already leaves."
+        },
+        {
+          "type": "paragraph",
+          "text": "Flash or streetlight strobes the shards. Use it when the scene is a robbery of time: heist, paparazzi, panic, joining at the worst second."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a planned fight with clear axes, and for documentary breathing on a still interview. If the smash is only in the edit, you want a crash cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the operator is simply present in a quiet room, you want handheld."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A pane goes. A hand already leaves.Flash or streetlight strobes the shards. Use it when the scene is a robbery of time: heist, paparazzi, panic, joining at the worst second.It is the wrong tool for a planned fight with clear axes, and for documentary breathing on a still interview. If the smash is only in the edit, you want a crash cut.If the operator is simply present in a quiet room, you want handheld."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the camera in the way: handheld, short lens, glass as foreground flying toward the taking glass. One impact, then escape."
+        },
+        {
+          "type": "paragraph",
+          "text": "Motion smear is allowed. Pretty centering is not."
+        },
+        {
+          "type": "paragraph",
+          "text": "A hard flash or a practical strobe can freeze a shard. Keep the snatched object or the broken pane in frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt smash-and-grab energy: glass, impact, snatch, handheld chaos. For video, violent handheld smash, impact, grab, escape."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put the camera in the way: handheld, short lens, glass as foreground flying toward the taking glass. One impact, then escape.Motion smear is allowed. Pretty centering is not.A hard flash or a practical strobe can freeze a shard. Keep the snatched object or the broken pane in frame.Prompt smash-and-grab energy: glass, impact, snatch, handheld chaos. For video, violent handheld smash, impact, grab, escape."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the story is already running and we join at the theft. Do not use it for a martial-arts exchange that needs readable geography."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the story is already running and we join at the theft. Do not use it for a martial-arts exchange that needs readable geography."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Handheld is the operator's body in the nerves of a scene that can still be quiet. Smash-and-grab is the robbery: impact, shards, exit.",
+          "links": [
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Crash Cut smashes in the edit. This look smashes in the taking.",
+          "links": [
+            {
+              "text": "Crash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "displayText": "Handheld\nUrgency, documentary truth, or a mind that cannot sit still.",
+          "links": [
+            {
+              "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash CutThe next image must hurt.",
+          "displayText": "Crash Cut\nThe next image must hurt.",
+          "links": [
+            {
+              "text": "Crash CutThe next image must hurt.",
+              "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Crash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+        },
+        {
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Crash CutThe next image must hurt.",
+          "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+          "alt": "Handheld"
+        },
+        {
+          "kind": "video",
+          "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/48db69b77d2fa3ebe58e56551a9e40ee.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-cut-02-crash-cut-mini.webp",
+          "alt": "Crash Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/3c68828a0b24b8eb8e6cd3614839346b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-crash-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Handheld is the operator's body in the nerves of a scene that can still be quiet. Smash-and-grab is the robbery: impact, shards, exit.Crash Cut smashes in the edit. This look smashes in the taking.HandheldUrgency, documentary truth, or a mind that cannot sit still.Crash CutThe next image must hurt.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Uncut Gems lives in this nervous system: too close, too late, glare. The Town stages actual smash-and-grab coverage, glass and snatch as the beat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of theft, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Uncut Gems lives in this nervous system: too close, too late, glare. The Town stages actual smash-and-grab coverage, glass and snatch as the beat.Grammar of theft, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Smash-and-grab energy on [Subject], glass, impact, snatch, handheld chaos, a theft of a moment. Video: Violent handheld smash around [Subject], impact, grab, escape."
+        },
+        {
+          "type": "paragraph",
+          "text": "Force shards toward the lens. Name the object taken."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban a posed hero in front of a tidy broken window."
+        },
+        {
+          "type": "quote",
+          "text": "Violent handheld smash around [Subject], impact, grab, escape."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Violent+handheld+smash+around+[Subject],+impact,+grab,+escape."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Smash-and-grab energy on [Subject], glass, impact, snatch, handheld chaos, a theft of a moment. Video: Violent handheld smash around [Subject], impact, grab, escape.Force shards toward the lens. Name the object taken.Ban a posed hero in front of a tidy broken window.Copy promptUse in Video GeneratorViolent handheld smash around [Subject], impact, grab, escape.Violent handheld smash around [Subject], impact, grab, escape."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a posed action still or polite Handheld. The tell is a wide shop, a centered fighter, no glass toward camera.",
+          "links": [
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is dirty edges, shards at the lens, a hand already leaving."
+        }
+      ],
+      "links": [
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a posed action still or polite Handheld. The tell is a wide shop, a centered fighter, no glass toward camera.The fix is dirty edges, shards at the lens, a hand already leaving."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is smash and grab in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Smash and grab is coverage as a robbery: glass, impact, snatch, handheld chaos. The camera is inside the crime, a theft of a moment."
+        },
+        {
+          "type": "heading",
+          "text": "Smash and grab vs handheld",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Handheld can be a breathing hold on a still scene. Smash and grab is impact: shards, a snatch, an escape. One is presence. The other is a theft."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use smash and grab?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when we join at the worst second: heist, panic, paparazzi. Skip it for a clean fight or a quiet interview."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt smash and grab for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Smash-and-grab energy on [Subject], glass, impact, snatch, handheld chaos. For video, violent handheld smash, grab, escape. Put shards toward the lens and name what is taken."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is smash and grab in film?Smash and grab is coverage as a robbery: glass, impact, snatch, handheld chaos. The camera is inside the crime, a theft of a moment.Smash and grab vs handheldHandheld can be a breathing hold on a still scene. Smash and grab is impact: shards, a snatch, an escape. One is presence. The other is a theft.When should I use smash and grab?Use it when we join at the worst second: heist, panic, paparazzi. Skip it for a clean fight or a quiet interview.How do I prompt smash and grab for AI image or video?Write Smash-and-grab energy on [Subject], glass, impact, snatch, handheld chaos. For video, violent handheld smash, grab, escape. Put shards toward the lens and name what is taken."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Smash-and-grab energy on [Subject], glass, impact, snatch, handheld chaos, a theft of a moment. Video: Violent handheld smash around [Subject], impact, grab, escape.",
+      "Force shards toward the lens. Name the object taken.",
+      "Ban a posed hero in front of a tidy broken window."
+    ],
+    "example": "Violent handheld smash around [Subject], impact, grab, escape."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/f9818865133f1a1efa611b7f290c9475.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/smash-and-grab-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/05764b7cdc6a430cda33464f68d267b0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smash-and-grab-smash-and-grab-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/852a943f063157da627ef7f4022173a7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/smash-and-grab.jpg",
+      "alt": "Smash and Grab frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+      "alt": "Handheld"
+    },
+    {
+      "kind": "video",
+      "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/48db69b77d2fa3ebe58e56551a9e40ee.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-cut-02-crash-cut-mini.webp",
+      "alt": "Crash Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/3c68828a0b24b8eb8e6cd3614839346b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-crash-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c3d27e4146b267dafd343869ee8a2696.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/smash-and-grab/hero.jpg",
+      "alt": "Smash and Grab",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "b09f723f6a853a62f50961b4ce1ae70865ddbd5ce84853c2bd6d666612a3d24c"
+}

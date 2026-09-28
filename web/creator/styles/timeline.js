@@ -72,6 +72,27 @@ export const css = `
 .mmc-tl-section-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; flex: 0 1 auto; min-width: 0; }
 .mmc-tl-section-actions:empty { display: none; }
 .mmc-tl-section-actions button { white-space: normal; }
+.mmc-tl-section-inline-actions { display: flex; flex: 0 1 auto; align-items: center; gap: 6px; min-width: 0; max-width: 100%; }
+.mmc-tl-section-inline-actions:empty { display: none; }
+/* Only the global prompt opts in: the pill sits beside its short title button,
+   while unoccupied header space still toggles the disclosure. Other shelves
+   retain their wide native toggle and separate right-hand actions. */
+.mmc-tl-section-head-inline {
+  align-items: center; padding-right: 8px; border: 1px solid var(--mmc-line);
+  border-radius: 7px; background: var(--mmc-surface); cursor: pointer;
+}
+.mmc-tl-section-head-inline > .mmc-tl-section-toggle {
+  flex: 0 1 auto; max-width: 100%; border: 0; padding-right: 2px; background: transparent;
+}
+.mmc-tl-section-head-inline > .mmc-tl-section-toggle:hover { background: var(--mmc-surface-2); }
+.mmc-tl-section-head-inline > .mmc-tl-section-actions { margin-left: auto; }
+.mmc-tl-section-inline-actions > button { flex: 0 1 auto; max-width: 100%; white-space: normal; }
+/* The global Technique pill sits inside a bordered disclosure row. Keep its
+   type/icon size, but inset the pill itself instead of touching that border. */
+.mmc-tl-section-head-inline > .mmc-tl-section-inline-actions > .mmc-pill {
+  height: calc(30px * var(--mmc-type)); min-height: 28px; margin: 3px 0;
+  padding: 0 11px; border-radius: 999px; white-space: nowrap;
+}
 .mmc-tl-section-body { min-width: 0; }
 .mmc-tl-section-body[hidden], .mmc-tl-pool[hidden] { display: none; }
 .mmc-tl-section-warning .mmc-tl-section-hint { color: var(--mmc-warn); }

@@ -1,0 +1,401 @@
+{
+  "id": "effects/generative",
+  "slug": "generative",
+  "title": "Generative",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/generative",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/generative-generative-mini.webp",
+  "detail": "details/effects/generative.json",
+  "aliases": [],
+  "description": "Generative visuals show process: forms grown by rule, particles, and iteration, so cinema is made by a system rather than only by a finished photograph. Making is visible.",
+  "thumbnail": "media/6b48e362798736699fdb40f691433621.webp",
+  "video": "media/3c34258304da7e32e94745a16d642cbc.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/generative-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A body, a city, or a cloud is not posed. It is grown."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cells, grains, or agents iterate until a figure appears. Use it when the point is how the image becomes, not only what it depicts."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a codec wound or a person turning into a beast. If the look is smashed motion vectors, you want datamosh."
+        },
+        {
+          "type": "paragraph",
+          "text": "If a body becomes another body in continuous view, you want a transformation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A body, a city, or a cloud is not posed. It is grown.Cells, grains, or agents iterate until a figure appears. Use it when the point is how the image becomes, not only what it depicts.It is the wrong tool for a codec wound or a person turning into a beast. If the look is smashed motion vectors, you want datamosh.If a body becomes another body in continuous view, you want a transformation."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Treat the forming matter as something you can light. Name the rule (particles, iteration, grown geometry), the scale of the bits, and a hard or soft source that rakes them."
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera can be locked so the growth is the move. Keep a readable subject so the system has an object."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a generative image of the subject: forms grown by rule, particles, and iteration, cinema made by a system."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Treat the forming matter as something you can light. Name the rule (particles, iteration, grown geometry), the scale of the bits, and a hard or soft source that rakes them.The camera can be locked so the growth is the move. Keep a readable subject so the system has an object.Prompt a generative image of the subject: forms grown by rule, particles, and iteration, cinema made by a system."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when a world or a face is still assembling. Do not use it as a style wash on a finished portrait that never needed a rule."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when a world or a face is still assembling. Do not use it as a style wash on a finished portrait that never needed a rule."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Datamosh is deliberate compression failure: I-frames gone, motion vectors smeared. Generative growth is a rule, not a wound in the file.",
+          "links": [
+            {
+              "text": "Datamosh",
+              "url": "https://melies.co/cinematic-techniques/effects/datamosh"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Transformation changes a body or room in continuous view. Generative imagery shows the system that builds the picture.",
+          "links": [
+            {
+              "text": "Transformation",
+              "url": "https://melies.co/cinematic-techniques/effects/transformation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DatamoshBreak the file on purpose.",
+          "displayText": "Datamosh\nBreak the file on purpose.",
+          "links": [
+            {
+              "text": "DatamoshBreak the file on purpose.",
+              "url": "https://melies.co/cinematic-techniques/effects/datamosh"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "TransformationThe change is the scene.",
+          "displayText": "Transformation\nThe change is the scene.",
+          "links": [
+            {
+              "text": "TransformationThe change is the scene.",
+              "url": "https://melies.co/cinematic-techniques/effects/transformation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Datamosh",
+          "url": "https://melies.co/cinematic-techniques/effects/datamosh"
+        },
+        {
+          "text": "Transformation",
+          "url": "https://melies.co/cinematic-techniques/effects/transformation"
+        },
+        {
+          "text": "DatamoshBreak the file on purpose.",
+          "url": "https://melies.co/cinematic-techniques/effects/datamosh"
+        },
+        {
+          "text": "TransformationThe change is the scene.",
+          "url": "https://melies.co/cinematic-techniques/effects/transformation"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/99367fe56b9910063f44dfb7e302be10.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/datamosh-datamosh-mini.webp",
+          "alt": "Datamosh"
+        },
+        {
+          "kind": "video",
+          "path": "media/ca4b11c1af5cb6d2477aac8673509b82.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/datamosh-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/2b2f4bf7ab8e9ab09f2e0fc9e723cf5d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/transformation-147-continuous-material-transformation-mini.webp",
+          "alt": "Transformation"
+        },
+        {
+          "kind": "video",
+          "path": "media/411facd0b31da9993f6629ce59666775.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/147-continuous-material-transformation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Datamosh is deliberate compression failure: I-frames gone, motion vectors smeared. Generative growth is a rule, not a wound in the file.Transformation changes a body or room in continuous view. Generative imagery shows the system that builds the picture.DatamoshBreak the file on purpose.TransformationThe change is the scene.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Koyaanisqatsi-adjacent process films let systems and time grow the image. Music-video generative sequences make iteration the event on screen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar for process, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Koyaanisqatsi-adjacent process films let systems and time grow the image. Music-video generative sequences make iteration the event on screen.Grammar for process, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Generative image of [Subject], forms grown by rule, particles, and iteration, cinema made by a system. Name the rule and the light on the bits."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the subject recognizable at the end of the growth."
+        },
+        {
+          "type": "quote",
+          "text": "Generative image of [Subject], forms grown by rule, particles, and iteration, cinema made by a system."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Generative+image+of+[Subject],+forms+grown+by+rule,+particles,+and+iteration,+cinema+made+by+a+system."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Generative image of [Subject], forms grown by rule, particles, and iteration, cinema made by a system. Name the rule and the light on the bits.Keep the subject recognizable at the end of the growth.Copy promptUse in Image GeneratorGenerative image of [Subject], forms grown by rule, particles, and iteration, cinema made by a system.Generative image of [Subject], forms grown by rule, particles, and iteration, cinema made by a system."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousins are Datamosh and a generic melt. The tell is blocky codec smear, or a face liquefying with no rule.",
+          "links": [
+            {
+              "text": "Datamosh",
+              "url": "https://melies.co/cinematic-techniques/effects/datamosh"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is named iteration, countable bits, and a subject the system is growing toward."
+        }
+      ],
+      "links": [
+        {
+          "text": "Datamosh",
+          "url": "https://melies.co/cinematic-techniques/effects/datamosh"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousins are Datamosh and a generic melt. The tell is blocky codec smear, or a face liquefying with no rule.The fix is named iteration, countable bits, and a subject the system is growing toward."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is generative in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Generative visuals show process rather than only a finished result. Forms are grown by rule, particles, and iteration, so the system that makes the picture is visible."
+        },
+        {
+          "type": "heading",
+          "text": "Generative vs datamosh",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Datamosh breaks the file on purpose. Generative work builds an image by iteration. One is a codec artifact. The other is a rule you can light."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use generative?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when becoming-by-rule is the scene: a city assembling, a body grown from particles. Skip it as a filter on a still that is already complete."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt generative for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Generative image of [Subject], forms grown by rule, particles, and iteration. Name the rule, the scale of the bits, and the light. Keep a readable end state."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is generative in film?Generative visuals show process rather than only a finished result. Forms are grown by rule, particles, and iteration, so the system that makes the picture is visible.Generative vs datamoshDatamosh breaks the file on purpose. Generative work builds an image by iteration. One is a codec artifact. The other is a rule you can light.When should I use generative?Use it when becoming-by-rule is the scene: a city assembling, a body grown from particles. Skip it as a filter on a still that is already complete.How do I prompt generative for AI image or video?Write Generative image of [Subject], forms grown by rule, particles, and iteration. Name the rule, the scale of the bits, and the light. Keep a readable end state."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Generative image of [Subject], forms grown by rule, particles, and iteration, cinema made by a system. Name the rule and the light on the bits.",
+      "Keep the subject recognizable at the end of the growth."
+    ],
+    "example": "Generative image of [Subject], forms grown by rule, particles, and iteration, cinema made by a system."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/3c34258304da7e32e94745a16d642cbc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/generative-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6b48e362798736699fdb40f691433621.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/generative-generative-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c13dcf15821e021126abb1f9e980bcf2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/generative.jpg",
+      "alt": "Generative frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/99367fe56b9910063f44dfb7e302be10.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/datamosh-datamosh-mini.webp",
+      "alt": "Datamosh"
+    },
+    {
+      "kind": "video",
+      "path": "media/ca4b11c1af5cb6d2477aac8673509b82.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/datamosh-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2b2f4bf7ab8e9ab09f2e0fc9e723cf5d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/transformation-147-continuous-material-transformation-mini.webp",
+      "alt": "Transformation"
+    },
+    {
+      "kind": "video",
+      "path": "media/411facd0b31da9993f6629ce59666775.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/147-continuous-material-transformation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/14368228677ab80cffce41be8227d3ec.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/generative/hero.jpg",
+      "alt": "Generative",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "5410c298b6b2c44edaa217ccc0f90485ca83bd51a16547f03ebeb69c7af68c32"
+}

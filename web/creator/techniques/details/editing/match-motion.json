@@ -1,0 +1,492 @@
+{
+  "id": "editing/match-motion",
+  "slug": "match-motion",
+  "title": "Match Motion",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/match-motion",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-motion-04-match-motion-mini.webp",
+  "detail": "details/editing/match-motion.json",
+  "aliases": [
+    "Motion bridge",
+    "Seamless spatial jump"
+  ],
+  "description": "A match-motion cut continues direction and speed across the splice so the cut rides a vector even when location, time, or reality changes. One side of the join starts a movement; the other side keeps that movement, and the world around the body may be new.",
+  "thumbnail": "media/31cb308166a54d59eea9a39ad4b19b8d.webp",
+  "video": "media/a94dba8bac68d71086b307b9b90f8af8.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/04-match-motion-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A fall toward a mattress becomes a fall toward grass. A dive into a pool completes as a lunge onto a bed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hide the cut inside a vector. The body is the continuity; the room is allowed to lie."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to carry someone through an impossible transition: dream to street, train to meadow, one chase into another. It is the wrong tool when you are still in the same room and only changing cameras on one gesture: that is Match on Action.",
+          "links": [
+            {
+              "text": "Match on Action",
+              "url": "https://melies.co/cinematic-techniques/editing/match-action"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Matching only the actor's face, with no shared phase of motion, will not hide the leap. A whip can supply the blur that sells the vector (Whip Pan), but the match is the body's direction and speed, not the smear alone.",
+          "links": [
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Match on Action",
+          "url": "https://melies.co/cinematic-techniques/editing/match-action"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A fall toward a mattress becomes a fall toward grass. A dive into a pool completes as a lunge onto a bed.Hide the cut inside a vector. The body is the continuity; the room is allowed to lie.Use it to carry someone through an impossible transition: dream to street, train to meadow, one chase into another. It is the wrong tool when you are still in the same room and only changing cameras on one gesture: that is Match on Action.Matching only the actor's face, with no shared phase of motion, will not hide the leap. A whip can supply the blur that sells the vector (Whip Pan), but the match is the body's direction and speed, not the smear alone."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Match pose, screen position, camera angle, motion direction, and speed at the cut. Plan the two shots as a pair (or a shared rig)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cut at a readable phase: mid-fall, mid-turn, mid-stride. The outgoing world and the incoming world can disagree; the vector must not."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: match-motion cut on [Subject], direction and speed continuing across the join so the cut rides the movement."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Match pose, screen position, camera angle, motion direction, and speed at the cut. Plan the two shots as a pair (or a shared rig).Cut at a readable phase: mid-fall, mid-turn, mid-stride. The outgoing world and the incoming world can disagree; the vector must not.Prompt: match-motion cut on [Subject], direction and speed continuing across the join so the cut rides the movement."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to leave a dream, to stitch a chase across towns, to let a dance continue in another decade. Do not use it as ordinary coverage inside one hallway."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the action is the same event, match on action. If only the contour matches and the body is still, use a Graphic Match or Match Cut.",
+          "links": [
+            {
+              "text": "Graphic Match",
+              "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+            },
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Graphic Match",
+          "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it to leave a dream, to stitch a chase across towns, to let a dance continue in another decade. Do not use it as ordinary coverage inside one hallway.If the action is the same event, match on action. If only the contour matches and the body is still, use a Graphic Match or Match Cut."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Match on Action is one continuous event, two views, same world. Match-motion can change the world if the vector holds.",
+          "links": [
+            {
+              "text": "Match on Action",
+              "url": "https://melies.co/cinematic-techniques/editing/match-action"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Whip Pan hides a cut in camera blur; match-motion hides it in subject motion (they can combine). A Match Cut may be still.",
+          "links": [
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            },
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Invisible Cut conceals a splice in occlusion; the motion match is a visible, readable continuation.",
+          "links": [
+            {
+              "text": "Invisible Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match on ActionHide the cut in a movement.",
+          "displayText": "Match on Action\nHide the cut in a movement.",
+          "links": [
+            {
+              "text": "Match on ActionHide the cut in a movement.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-action"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "displayText": "Whip Pan\nTransition, punchline, or sudden attention shift.",
+          "links": [
+            {
+              "text": "Whip PanTransition, punchline, or sudden attention shift.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Match on Action",
+          "url": "https://melies.co/cinematic-techniques/editing/match-action"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Invisible Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+        },
+        {
+          "text": "Match on ActionHide the cut in a movement.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-action"
+        },
+        {
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/36fe4cdad4d3560862f74e16bb138e37.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-action-091-match-on-action-mini.webp",
+          "alt": "Match on Action"
+        },
+        {
+          "kind": "video",
+          "path": "media/4cf4135997162440b197de8fe749fe08.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/091-match-on-action-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+          "alt": "Whip Pan"
+        },
+        {
+          "kind": "video",
+          "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Match on Action is one continuous event, two views, same world. Match-motion can change the world if the vector holds.A Whip Pan hides a cut in camera blur; match-motion hides it in subject motion (they can combine). A Match Cut may be still.Invisible Cut conceals a splice in occlusion; the motion match is a visible, readable continuation.Match on ActionHide the cut in a movement.Whip PanTransition, punchline, or sudden attention shift.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Graduate connects pool and bedroom through Benjamin's movement so the body finishes what the water started. Paprika carries gestures between incompatible dream spaces."
+        },
+        {
+          "type": "paragraph",
+          "text": "Baby Driver rides motion from music and cars across joins. Lawrence of Arabia's match-to-sun is more a still match cut; use it only if you are matching a rising gesture, not just a circle."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the vector, not the wardrobe."
+        },
+        {
+          "type": "list-item",
+          "text": "The Graduate 1967Benjamin’s movement connects the swimming pool and bedroom imagery.",
+          "displayText": "The Graduate 1967\nBenjamin’s movement connects the swimming pool and bedroom imagery."
+        },
+        {
+          "type": "list-item",
+          "text": "Paprika 2006Dream transitions carry gestures and movement between incompatible spaces.",
+          "displayText": "Paprika 2006\nDream transitions carry gestures and movement between incompatible spaces."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Graduate connects pool and bedroom through Benjamin's movement so the body finishes what the water started. Paprika carries gestures between incompatible dream spaces.Baby Driver rides motion from music and cars across joins. Lawrence of Arabia's match-to-sun is more a still match cut; use it only if you are matching a rising gesture, not just a circle.Borrow the vector, not the wardrobe.The Graduate 1967Benjamin’s movement connects the swimming pool and bedroom imagery.Paprika 2006Dream transitions carry gestures and movement between incompatible spaces."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Match-motion cut on [Subject], direction and speed continuing across the join so the cut rides the movement. Name the outgoing path, the incoming path, matched pose and velocity, and what world changes."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, two shots with aligned motion phase, hard cut, no dissolving body."
+        },
+        {
+          "type": "quote",
+          "text": "Generate A: a woman falls backward onto a train berth. Generate B: the same woman completes the identical backward movement onto grass in a sunlit field. Match body pose, clothing, framing and velocity at the cut. Hard transition between worlds, no dissolving mattress or body morph."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Generate+A:+a+woman+falls+backward+onto+a+train+berth.+Generate+B:+the+same+woman+completes+the+identical+backward+movement+onto+grass+in+a+sunlit+field.+Match+body+pose,+clothing,+framing+and+velocity+at+the+cut.+Hard+transition+between+worlds,+no+dissolving+mattress+or+body+morph."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Match-motion cut on [Subject], direction and speed continuing across the join so the cut rides the movement. Name the outgoing path, the incoming path, matched pose and velocity, and what world changes.For video, two shots with aligned motion phase, hard cut, no dissolving body.Copy promptUse in Video GeneratorGenerate A: a woman falls backward onto a train berth. Generate B: the same woman completes the identical backward movement onto grass in a sunlit field. Match body pose, clothing, framing and velocity at the cut. Hard transition between worlds, no dissolving mattress or body morph.Generate A: a woman falls backward onto a train berth. Generate B: the same woman completes the identical backward movement onto grass in a sunlit field. Match body pose, clothing, framing and velocity at the cut. Hard transition between worlds, no dissolving mattress or body morph."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Match on Action (same room) or a Match Cut of two stills. The tell: the walk resets, speed changes, or the subject is static on both sides.",
+          "links": [
+            {
+              "text": "Match on Action",
+              "url": "https://melies.co/cinematic-techniques/editing/match-action"
+            },
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: match phase, direction, and speed; let geography jump; cut during the move."
+        }
+      ],
+      "links": [
+        {
+          "text": "Match on Action",
+          "url": "https://melies.co/cinematic-techniques/editing/match-action"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Match on Action (same room) or a Match Cut of two stills. The tell: the walk resets, speed changes, or the subject is static on both sides.The fix: match phase, direction, and speed; let geography jump; cut during the move."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Match Motion in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A match-motion cut continues direction and speed across the edit so the splice rides a vector. One side starts the movement; the other keeps it, even if place or reality changes."
+        },
+        {
+          "type": "heading",
+          "text": "Match Motion vs Match on Action",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Match on action hides a camera change inside one continuous event in one world. Match motion can carry that event's vector into another location, time, or dream."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Match Motion?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a body should tow the viewer through an impossible change of world. Do not use it for ordinary coverage of one gesture in one room."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Match Motion for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Describe the same direction and speed on both sides, and name the world change. Example: Match-motion cut on [Subject], direction and speed continuing across the join. Hard cut, matched pose, no morph."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Match Motion in film?A match-motion cut continues direction and speed across the edit so the splice rides a vector. One side starts the movement; the other keeps it, even if place or reality changes.Match Motion vs Match on ActionMatch on action hides a camera change inside one continuous event in one world. Match motion can carry that event's vector into another location, time, or dream.When should I use Match Motion?Use it when a body should tow the viewer through an impossible change of world. Do not use it for ordinary coverage of one gesture in one room.How do I prompt Match Motion for AI image or video?Describe the same direction and speed on both sides, and name the world change. Example: Match-motion cut on [Subject], direction and speed continuing across the join. Hard cut, matched pose, no morph."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Match-motion cut on [Subject], direction and speed continuing across the join so the cut rides the movement. Name the outgoing path, the incoming path, matched pose and velocity, and what world changes.",
+      "For video, two shots with aligned motion phase, hard cut, no dissolving body."
+    ],
+    "example": "Generate A: a woman falls backward onto a train berth. Generate B: the same woman completes the identical backward movement onto grass in a sunlit field. Match body pose, clothing, framing and velocity at the cut. Hard transition between worlds, no dissolving mattress or body morph."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/a94dba8bac68d71086b307b9b90f8af8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/04-match-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/31cb308166a54d59eea9a39ad4b19b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-motion-04-match-motion-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47a8ce7311ec302667d3eff3331c0c97.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/match-motion.jpg",
+      "alt": "Match Motion frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/36fe4cdad4d3560862f74e16bb138e37.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-action-091-match-on-action-mini.webp",
+      "alt": "Match on Action"
+    },
+    {
+      "kind": "video",
+      "path": "media/4cf4135997162440b197de8fe749fe08.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/091-match-on-action-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+      "alt": "Whip Pan"
+    },
+    {
+      "kind": "video",
+      "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/662777e528c586b0df088f8f893620cc.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/match-motion/hero.jpg",
+      "alt": "Match Motion",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "85c5212276abbce88fd195d85510bcb1af02b277d70f180295747e4fd630d983"
+}

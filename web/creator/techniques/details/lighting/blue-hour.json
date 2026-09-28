@@ -1,0 +1,389 @@
+{
+  "id": "lighting/blue-hour",
+  "slug": "blue-hour",
+  "title": "Blue Hour",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/blue-hour",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blue-hour.webp",
+  "detail": "details/lighting/blue-hour.json",
+  "aliases": [],
+  "description": "Blue hour in blue hour cinematography is cool ambient twilight before sunrise or after sunset, when the sun is below the horizon but the sky still glows. There is no hard sunlight; the sky is a large cool source, and warm practicals often kick in.",
+  "thumbnail": "media/afeaf073c169bf136864eccfa0d68e92.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Day is gone but the sky still works as a wrap. Cities mix cobalt air with sodium, tungsten, and neon."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crime and melancholy exteriors use this mix because faces can be cool while windows go warm. It is the wrong tool if you still want a sun disk raking the ground."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is golden hour or late sun. A blue grade on night black is not blue hour.",
+          "links": [
+            {
+              "text": "golden hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "You need residual sky luminance."
+        }
+      ],
+      "links": [
+        {
+          "text": "golden hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Day is gone but the sky still works as a wrap. Cities mix cobalt air with sodium, tungsten, and neon.Crime and melancholy exteriors use this mix because faces can be cool while windows go warm. It is the wrong tool if you still want a sun disk raking the ground.That is golden hour or late sun. A blue grade on night black is not blue hour.You need residual sky luminance."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Expose for the glowing sky as a large, soft, overhead-to-side source, Kelvin high and cool. Add warm practicals (streetlights, windows, signs) as small hard or semi-hard accents."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness of the wrap is soft; hardness of the lamps is whatever they are. Color contrast is the point: cool ambient versus warm fixtures."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Blue hour wrap on [Subject], deep cobalt sky still glowing, warm practicals kicking in."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Expose for the glowing sky as a large, soft, overhead-to-side source, Kelvin high and cool. Add warm practicals (streetlights, windows, signs) as small hard or semi-hard accents.Hardness of the wrap is soft; hardness of the lamps is whatever they are. Color contrast is the point: cool ambient versus warm fixtures.Prompt: Blue hour wrap on [Subject], deep cobalt sky still glowing, warm practicals kicking in."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the sun is down but the sky still holds, a city street, a platform, a rooftop. Do not use it for a hard sunset backlight."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the sun is down but the sky still holds, a city street, a platform, a rooftop. Do not use it for a hard sunset backlight."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Golden hour still has directional warm sun. Neon practicals often appear inside blue hour as the warm or magenta notes.",
+          "links": [
+            {
+              "text": "Golden hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+            },
+            {
+              "text": "Neon practicals",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Available light at this time is exactly this mix if you add nothing. Cool blue is a grade; blue hour is a real sky condition.",
+          "links": [
+            {
+              "text": "Available light",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            },
+            {
+              "text": "Cool blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Motivated lighting can fake it with large cool overheads plus warm lamps.",
+          "links": [
+            {
+              "text": "Motivated lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Golden HourYou have twenty minutes of truth.",
+          "displayText": "Golden Hour\nYou have twenty minutes of truth.",
+          "links": [
+            {
+              "text": "Golden HourYou have twenty minutes of truth.",
+              "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "displayText": "Neon Practicals\nThe city is the lighting department.",
+          "links": [
+            {
+              "text": "Neon PracticalsThe city is the lighting department.",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Golden hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+        },
+        {
+          "text": "Neon practicals",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "Available light",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Cool blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "Motivated lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Golden HourYou have twenty minutes of truth.",
+          "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+        },
+        {
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ed33713845cad9f645afdfb4eadcf62d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-hour.webp",
+          "alt": "Golden Hour"
+        },
+        {
+          "kind": "image",
+          "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+          "alt": "Neon Practicals"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Golden hour still has directional warm sun. Neon practicals often appear inside blue hour as the warm or magenta notes.Available light at this time is exactly this mix if you add nothing. Cool blue is a grade; blue hour is a real sky condition.Motivated lighting can fake it with large cool overheads plus warm lamps.Golden HourYou have twenty minutes of truth.Neon PracticalsThe city is the lighting department.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Heat and Collateral are built on Los Angeles twilight, digital-friendly cobalt air with sodium and tungsten. Drive uses the same urban mix of residual sky and signs."
+        },
+        {
+          "type": "paragraph",
+          "text": "The sky has to still be there."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Heat and Collateral are built on Los Angeles twilight, digital-friendly cobalt air with sodium and tungsten. Drive uses the same urban mix of residual sky and signs.The sky has to still be there."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the sky luminous and cool. Use: \"Blue hour wrap on [Subject], deep cobalt sky still glowing, warm practicals kicking in.\" Forbid a visible sun disk and a black night sky with no residual light."
+        },
+        {
+          "type": "quote",
+          "text": "Blue hour wrap on [Subject], deep cobalt sky still glowing, warm practicals kicking in, Mann twilight melancholy."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Blue+hour+wrap+on+[Subject],+deep+cobalt+sky+still+glowing,+warm+practicals+kicking+in,+Mann+twilight+melancholy."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Keep the sky luminous and cool. Use: \"Blue hour wrap on [Subject], deep cobalt sky still glowing, warm practicals kicking in.\" Forbid a visible sun disk and a black night sky with no residual light.Copy promptUse in Image GeneratorBlue hour wrap on [Subject], deep cobalt sky still glowing, warm practicals kicking in, Mann twilight melancholy.Blue hour wrap on [Subject], deep cobalt sky still glowing, warm practicals kicking in, Mann twilight melancholy."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is golden hour or night-for-night black. The tell is long warm sun shadows, or a sky with no glow.",
+          "links": [
+            {
+              "text": "golden hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by killing the sun, cooling the wrap, and turning practicals on against a still-bright sky."
+        }
+      ],
+      "links": [
+        {
+          "text": "golden hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is golden hour or night-for-night black. The tell is long warm sun shadows, or a sky with no glow.Fix it by killing the sun, cooling the wrap, and turning practicals on against a still-bright sky."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is blue hour in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Cool twilight before sunrise or after sunset, with the sun down and the sky still glowing. Warm practicals often contrast with that cool wrap."
+        },
+        {
+          "type": "heading",
+          "text": "Blue hour vs golden hour",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Blue hour has no hard sun and a cool sky. Golden hour has the sun just above the horizon as a warm directional source with long shadows."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use blue hour?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for urban or exterior twilight when the sky still works and lamps are coming on. Skip it if you need raking sun."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt blue hour for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify a deep cobalt sky still glowing, no sun disk, warm practicals kicking in. Soft cool wrap plus small warm fixtures."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is blue hour in film?Cool twilight before sunrise or after sunset, with the sun down and the sky still glowing. Warm practicals often contrast with that cool wrap.Blue hour vs golden hourBlue hour has no hard sun and a cool sky. Golden hour has the sun just above the horizon as a warm directional source with long shadows.When should I use blue hour?Use it for urban or exterior twilight when the sky still works and lamps are coming on. Skip it if you need raking sun.How do I prompt blue hour for AI image or video?Specify a deep cobalt sky still glowing, no sun disk, warm practicals kicking in. Soft cool wrap plus small warm fixtures."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Keep the sky luminous and cool. Use: \"Blue hour wrap on [Subject], deep cobalt sky still glowing, warm practicals kicking in.\" Forbid a visible sun disk and a black night sky with no residual light."
+    ],
+    "example": "Blue hour wrap on [Subject], deep cobalt sky still glowing, warm practicals kicking in, Mann twilight melancholy."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/afeaf073c169bf136864eccfa0d68e92.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blue-hour.webp",
+      "alt": "Blue Hour example"
+    },
+    {
+      "kind": "image",
+      "path": "media/ed33713845cad9f645afdfb4eadcf62d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-hour.webp",
+      "alt": "Golden Hour"
+    },
+    {
+      "kind": "image",
+      "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+      "alt": "Neon Practicals"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/0b6575e91185c7870bc679efc3d222a2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/blue-hour/hero.jpg",
+      "alt": "Blue Hour",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "3c16d2e6f8581a3fff62964fe479b56c08d537f5ecb1dc4f8b17c344618def60"
+}

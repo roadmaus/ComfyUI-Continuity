@@ -1,0 +1,428 @@
+{
+  "id": "time-and-motion/moonwalk",
+  "slug": "moonwalk",
+  "title": "Moonwalk",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/moonwalk",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/moonwalk-07-moonwalk-mini.webp",
+  "detail": "details/time-and-motion/moonwalk.json",
+  "aliases": [],
+  "description": "A moonwalk effect is a backward glide that reads as a forward myth: the torso stays upright, one foot slides, the other pushes, and the heel does not lift like a walk. It is a locomotion lie in living time, not reversed footage.",
+  "thumbnail": "media/a330126fc017d5dcc38c3f1091166266.webp",
+  "video": "media/2b8c165a5067936fa53568abf1cc677d.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/07-moonwalk-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when gait itself is the spectacle: dance, a villain who does not obey floors, a sidewalk that should feel like ice. Wet asphalt or a stage helps the read."
+        },
+        {
+          "type": "paragraph",
+          "text": "Coat tails should trail the slide, not bounce like steps. It is the wrong tool for a chase on gravel, a grief undo, or a toy loop."
+        },
+        {
+          "type": "paragraph",
+          "text": "Reverse motion would rewind the whole world. A boomerang would come and go."
+        },
+        {
+          "type": "paragraph",
+          "text": "A double dolly puts subject and camera on one platform so the world slides while the walk may be ordinary. Moonwalk is the body's lie."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not also spin or levitate."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when gait itself is the spectacle: dance, a villain who does not obey floors, a sidewalk that should feel like ice. Wet asphalt or a stage helps the read.Coat tails should trail the slide, not bounce like steps. It is the wrong tool for a chase on gravel, a grief undo, or a toy loop.Reverse motion would rewind the whole world. A boomerang would come and go.A double dolly puts subject and camera on one platform so the world slides while the walk may be ordinary. Moonwalk is the body's lie.Do not also spin or levitate."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write a backward slide, upright torso, one foot gliding, the other pushing. Camera can lock or track laterally."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep contact with the floor. Prompt: Moonwalk of [Subject], backward glide that reads as forward myth, slide as dance grammar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Write a backward slide, upright torso, one foot gliding, the other pushing. Camera can lock or track laterally.Keep contact with the floor. Prompt: Moonwalk of [Subject], backward glide that reads as forward myth, slide as dance grammar."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the walk is the trick, such as a backward glide on wet night asphalt. Do not use it as reversed footage of an ordinary walk."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the walk is the trick, such as a backward glide on wet night asphalt. Do not use it as reversed footage of an ordinary walk."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A moonwalk is not Reverse Motion of a forward walk (that inverts the whole street). It is not a Boomerang loop.",
+          "links": [
+            {
+              "text": "Reverse Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion"
+            },
+            {
+              "text": "Boomerang",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Double Dolly can fake a similar float by moving person and camera together, world sliding, feet possibly still walking. Moonwalk deletes the heel-lift.",
+          "links": [
+            {
+              "text": "Double Dolly",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/double-dolly"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Infinite Loop may sew a glide but is a join, not a gait.",
+          "links": [
+            {
+              "text": "Infinite Loop",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Double DollyInterior state made external: the person is carried by an idea.",
+          "displayText": "Double Dolly\nInterior state made external: the person is carried by an idea.",
+          "links": [
+            {
+              "text": "Double DollyInterior state made external: the person is carried by an idea.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/double-dolly"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "BoomerangTurn a gesture into a toy.",
+          "displayText": "Boomerang\nTurn a gesture into a toy.",
+          "links": [
+            {
+              "text": "BoomerangTurn a gesture into a toy.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Reverse Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion"
+        },
+        {
+          "text": "Boomerang",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+        },
+        {
+          "text": "Double Dolly",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/double-dolly"
+        },
+        {
+          "text": "Infinite Loop",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+        },
+        {
+          "text": "Double DollyInterior state made external: the person is carried by an idea.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/double-dolly"
+        },
+        {
+          "text": "BoomerangTurn a gesture into a toy.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ce24f94c30c52af03eb506f2b74fd5f1.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-dolly-019-double-dolly-floating-shot-mini.webp",
+          "alt": "Double Dolly"
+        },
+        {
+          "kind": "video",
+          "path": "media/1032b136cbdc1b953c8b60b66a3524fb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/019-double-dolly-floating-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/3807ab61c9fb3adc52edf60b250034b9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/boomerang-02-boomerang-mini.webp",
+          "alt": "Boomerang"
+        },
+        {
+          "kind": "video",
+          "path": "media/7c35712d882d0899c197afcf888ffeaa.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-boomerang-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A moonwalk is not Reverse Motion of a forward walk (that inverts the whole street). It is not a Boomerang loop.A Double Dolly can fake a similar float by moving person and camera together, world sliding, feet possibly still walking. Moonwalk deletes the heel-lift.Infinite Loop may sew a glide but is a join, not a gait.Double DollyInterior state made external: the person is carried by an idea.BoomerangTurn a gesture into a toy.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Moonwalker and Jackson's music videos are the grammar: the still is the middle of the glide, not a pose at rest. Later videos quote the slide."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spike Lee's double-dolly is the camera-platform cousin, a different physical cause for a similar dream of locomotion."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Moonwalker and Jackson's music videos are the grammar: the still is the middle of the glide, not a pose at rest. Later videos quote the slide.Spike Lee's double-dolly is the camera-platform cousin, a different physical cause for a similar dream of locomotion."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write the slide, not a reverse clip. Still: mid-glide, one foot flat, torso upright, coat trailing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: [Subject] glides backward as if the floor were ice, a moonwalk path. Heel does not lift like a walk."
+        },
+        {
+          "type": "paragraph",
+          "text": "No spin, no float off the ground, no world rewind."
+        },
+        {
+          "type": "quote",
+          "text": "[Subject] glides backward as if the floor were ice, a moonwalk path."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=[Subject]+glides+backward+as+if+the+floor+were+ice,+a+moonwalk+path."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write the slide, not a reverse clip. Still: mid-glide, one foot flat, torso upright, coat trailing.Video: [Subject] glides backward as if the floor were ice, a moonwalk path. Heel does not lift like a walk.No spin, no float off the ground, no world rewind.Copy promptUse in Video Generator[Subject] glides backward as if the floor were ice, a moonwalk path.[Subject] glides backward as if the floor were ice, a moonwalk path."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is walking backward normally, or Reverse Motion. The tell is a heel lift, swinging arms of a walk, or rain rising.",
+          "links": [
+            {
+              "text": "Reverse Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: flat glide, upright torso, floor contact, world still running forward."
+        }
+      ],
+      "links": [
+        {
+          "text": "Reverse Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is walking backward normally, or Reverse Motion. The tell is a heel lift, swinging arms of a walk, or rain rising.Fix: flat glide, upright torso, floor contact, world still running forward."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Moonwalk in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A moonwalk is a backward slide performed as dance grammar: the body glides, the heel does not walk, the world keeps its forward clock."
+        },
+        {
+          "type": "heading",
+          "text": "Moonwalk vs Double Dolly",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Double dolly moves performer and camera together so the world slides. Moonwalk is the feet lying: a glide that can be shot with a locked or laterally tracking camera."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Moonwalk?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When gait is the spectacle and the floor should feel like ice. Skip it on terrain that cannot sell a slide."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Moonwalk for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a backward glide, upright torso, one foot sliding, heel not lifting. Keep the world running forward. Ban reverse footage and levitation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Moonwalk in film?A moonwalk is a backward slide performed as dance grammar: the body glides, the heel does not walk, the world keeps its forward clock.Moonwalk vs Double DollyDouble dolly moves performer and camera together so the world slides. Moonwalk is the feet lying: a glide that can be shot with a locked or laterally tracking camera.When should I use Moonwalk?When gait is the spectacle and the floor should feel like ice. Skip it on terrain that cannot sell a slide.How do I prompt Moonwalk for AI image or video?Write a backward glide, upright torso, one foot sliding, heel not lifting. Keep the world running forward. Ban reverse footage and levitation."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write the slide, not a reverse clip. Still: mid-glide, one foot flat, torso upright, coat trailing.",
+      "Video: [Subject] glides backward as if the floor were ice, a moonwalk path. Heel does not lift like a walk.",
+      "No spin, no float off the ground, no world rewind."
+    ],
+    "example": "[Subject] glides backward as if the floor were ice, a moonwalk path."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/2b8c165a5067936fa53568abf1cc677d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/07-moonwalk-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a330126fc017d5dcc38c3f1091166266.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/moonwalk-07-moonwalk-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/eb78760685444854d06e08d1bd81cd68.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/moonwalk.jpg",
+      "alt": "Moonwalk frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/ce24f94c30c52af03eb506f2b74fd5f1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-dolly-019-double-dolly-floating-shot-mini.webp",
+      "alt": "Double Dolly"
+    },
+    {
+      "kind": "video",
+      "path": "media/1032b136cbdc1b953c8b60b66a3524fb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/019-double-dolly-floating-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3807ab61c9fb3adc52edf60b250034b9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/boomerang-02-boomerang-mini.webp",
+      "alt": "Boomerang"
+    },
+    {
+      "kind": "video",
+      "path": "media/7c35712d882d0899c197afcf888ffeaa.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-boomerang-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/899426ea598d5a78f31c1fb408708343.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/moonwalk/hero.jpg",
+      "alt": "Moonwalk",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "0e7e6c8edbcf7cc91a1ba573046a8582b065a348d8b07c17ef60abdaf50714b1"
+}

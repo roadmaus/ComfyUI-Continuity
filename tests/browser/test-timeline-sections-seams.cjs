@@ -8,6 +8,9 @@ const root = path.resolve(__dirname, '../../web/creator');
 const read = p => fs.readFileSync(path.join(root, p), 'utf8');
 const source = read('timeline.js');
 const castSource = read('cast.js');
+// Timeline's disclosure header also hosts the Technique entry point now.
+// Extract its real button factory; library behavior has its own suite.
+const techniqueButton = read('technique-controls.js').match(/export function techniqueButton\([^]*?^\}/m)[0].replace(/^export /, '');
 const method = (name, code = source) => {
   const found = code.match(new RegExp(`^  (?:async )?${name}\\([^]*?^  \\}`, 'm'));
   assert.ok(found, name); return found[0];
@@ -19,13 +22,14 @@ const popovers = [
   domSource.match(/const popoverOwners[^]*?(?=\/\*\* Close-on-outside-click)/)[0],
   ...['floatAbove','dismissable','placeNear'].map(name => domSource.match(new RegExp(`export function ${name}\\([^]*?^\\}`, 'm'))[0].replace(/^export /,'')),
 ].join('\n').replace(/^export /gm,'');
-const css = ['base', 'timeline'].map(name => read(`styles/${name}.js`).match(/export const css = `([^]*)`;\s*$/)[1]).join('\n');
+const css = ['base', 'editor', 'timeline'].map(name => read(`styles/${name}.js`).match(/export const css = `([^]*)`;\s*$/)[1]).join('\n');
 const code = `
 ${dom}
 ${popovers}
 ${helper}
 const t = (text, vars = {}) => text.replace(/\\{([^}]+)\\}/g, (_, key) => vars[key] ?? key);
 const icon = () => el('span', { text: '·' });
+${techniqueButton}
 const seamGroup = children => children.length ? el('div', {class:'mmc-tl-seam-group'}, children) : null;
 const blendSeconds = (frames, rules) => (frames / rules.fps).toFixed(1);
 const blendSetsTail = (segment, piece) => S.continuesAudio(segment) && S.feather(segment, piece) > 1;
@@ -63,6 +67,7 @@ class Subject {
  render() { this.renderPool(); }
  renderCast() {}
  renderBar() {}
+ openTechniques() { window.techniqueOpens++; }
  commit() { this.commits++; this.renderPool(); }
  poolChip(asset) { return el('button',{text:asset.handle}); }
  poolPlate() { return null; }
@@ -76,6 +81,7 @@ class Subject {
  mergeAt() { window.lastPick={kind:'merge'}; }
 }
 window.menuClosed=0;
+window.techniqueOpens=0;
 window.subject=Object.assign(new Subject(),{timeline:{prompt:'Standing scene',soundscape:'Room tone',music:'N/A',assets:[],subjects:[],segments:[{},{}]},commits:0});
 window.createDisclosure=createDisclosure;
 window.setPickerAnswer = value => { pickerAnswer=value; };
@@ -202,7 +208,9 @@ async function check(name, fn) { await fn(); results.push({name,passed:true}); }
       // Ownership must survive ordinary chip refresh detaching the anchor.
       anchor.remove();
     });
-    await page.waitForTimeout(20);
+    // Wait on the page's timer queue, after dismissable's deferred listeners,
+    // instead of racing a host-side 20ms delay on a busy/browser-throttled run.
+    await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,0)));
     assert.equal(await page.evaluate(() => {
       childPop.node.firstChild.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}));
       return parentPop.node.isConnected&&childPop.node.isConnected;
@@ -221,7 +229,7 @@ async function check(name, fn) { await fn(); results.push({name,passed:true}); }
   });
   await check('Default outside pointer dismissal still disposes once after deferred registration', async () => {
     await page.evaluate(()=>{window.regularPop=makePopover(subject.musicBox,'regular');});
-    await page.waitForTimeout(20);
+    await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,0)));
     await page.evaluate(()=>document.body.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true})));
     assert.equal(await page.evaluate(()=>!regularPop.node.isConnected&&popoverClosed.filter(x=>x==='regular').length===1),true);
   });
@@ -265,6 +273,87 @@ async function check(name, fn) { await fn(); results.push({name,passed:true}); }
       }return results;
     });assert.ok(rows.every(r=>!r.overlap&&!r.overflow),JSON.stringify(rows));
   });
+  await check('Global Technique pill sits immediately beside the title with independent native hit area', async () => {
+    assert.equal(await page.evaluate(() => {
+      const section=subject.promptSection,head=section.head;
+      const pill=head.querySelector('.mmc-tl-section-inline-actions button');
+      const title=head.querySelector('.mmc-tl-section-title').getBoundingClientRect();
+      const p=pill.getBoundingClientRect(),h=head.getBoundingClientRect();
+      return !head.querySelector('button button')&&pill.parentElement.parentElement===head&&
+        p.left>=title.right&&p.left-title.right<=24&&Math.abs(p.top-title.top)<20&&
+        p.width<h.width/2&&document.elementFromPoint(p.right+12,p.top+p.height/2)===head&&
+        subject.poolSection.head.children.length===2&&!subject.poolSection.head.classList.contains('mmc-tl-section-head-inline');
+    }),true);
+  });
+  await check('Global Technique pill is inset without shrinking text or unrelated pills', async () => {
+    const result=await page.evaluate(()=>{
+      const pill=subject.promptSection.head.querySelector('.mmc-tl-section-inline-actions button');
+      const head=subject.promptSection.head;
+      const normal=document.createElement('button');normal.className='mmc-pill';normal.textContent=pill.textContent;
+      head.parentElement.append(normal);
+      const p=pill.getBoundingClientRect(),h=head.getBoundingClientRect(),n=normal.getBoundingClientRect();
+      const good=p.top-h.top>=3&&h.bottom-p.bottom>=3&&p.height<n.height&&
+        getComputedStyle(pill).fontSize===getComputedStyle(normal).fontSize;
+      normal.remove();return good;
+    });assert.equal(result,true);
+  });
+  await check('Only visible pill click opens techniques; blank header and inter-control gap fold once', async () => {
+    await page.evaluate(()=>{subject.promptSection.setOpen(true);techniqueOpens=0;});
+    const pill=page.locator('.mmc-tl-section-inline-actions button').first();
+    await pill.click();
+    assert.deepEqual(await page.evaluate(()=>[techniqueOpens,subject.promptSection.isOpen()]),[1,true]);
+    const rect=await pill.boundingBox();
+    await page.mouse.click(rect.x+rect.width+14,rect.y+rect.height/2);
+    assert.deepEqual(await page.evaluate(()=>[techniqueOpens,subject.promptSection.isOpen(),document.activeElement===subject.promptSection.toggle]),[1,false,true]);
+    const title=await page.locator('.mmc-tl-section-toggle').first().boundingBox();
+    await page.mouse.click((title.x+title.width+rect.x)/2,rect.y+rect.height/2);
+    assert.deepEqual(await page.evaluate(()=>[techniqueOpens,subject.promptSection.isOpen()]),[1,true]);
+    await pill.locator('span').last().click();
+    assert.deepEqual(await page.evaluate(()=>[techniqueOpens,subject.promptSection.isOpen()]),[2,true]);
+  });
+  await check('Tab, Enter and Space keep title folding separate from Technique activation', async () => {
+    await page.evaluate(()=>{subject.promptSection.setOpen(true);techniqueOpens=0;subject.promptSection.toggle.focus();});
+    await page.keyboard.press('Tab');
+    assert.equal(await page.evaluate(()=>document.activeElement===subject.promptSection.head.querySelector('.mmc-tl-section-inline-actions button')),true);
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Space');
+    assert.deepEqual(await page.evaluate(()=>[techniqueOpens,subject.promptSection.isOpen()]),[2,true]);
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Space');
+    assert.deepEqual(await page.evaluate(()=>[techniqueOpens,subject.promptSection.isOpen()]),[2,false]);
+    await page.keyboard.press('Enter');
+    assert.deepEqual(await page.evaluate(()=>[techniqueOpens,subject.promptSection.isOpen()]),[2,true]);
+  });
+  await check('Inline and trailing actions stay independent, including disabled and prevented clicks', async () => {
+    assert.equal(await page.evaluate(() => {
+      let calls=0;
+      const inline=document.createElement('button');inline.textContent='Techniques';inline.onclick=()=>calls++;
+      const trailing=document.createElement('button');trailing.textContent='Add';trailing.onclick=()=>calls++;
+      const d=createDisclosure({title:'Fixture',inlineActions:[inline],actions:[trailing]});document.body.append(d.root);
+      inline.click();trailing.click();const activated=calls===2&&d.isOpen();
+      trailing.disabled=true;trailing.click();const disabled=calls===2&&d.isOpen();
+      d.head.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));const blank=!d.isOpen();
+      const prevented=new MouseEvent('click',{bubbles:true,cancelable:true});prevented.preventDefault();d.head.dispatchEvent(prevented);
+      const good=activated&&disabled&&blank&&!d.isOpen();d.root.remove();return good;
+    }),true);
+  });
+  await check('Localized inline pills remain inside narrow headers at enlarged text sizes', async () => {
+    const rows=await page.evaluate(() => {
+      const results=[];
+      for(const label of ['기법','テクニック','技巧','Techniques']) {
+        const pill=document.createElement('button');pill.className='mmc-pill';pill.textContent=label;
+        const d=createDisclosure({title:'global_prompt',inlineActions:[pill]});
+        d.root.style.width='245px';d.root.style.setProperty('--mmc-type','1.6');document.body.append(d.root);
+        const p=pill.getBoundingClientRect(),b=d.toggle.getBoundingClientRect(),r=d.root.getBoundingClientRect();
+        results.push({overlap:p.left<b.right&&p.right>b.left&&p.top<b.bottom&&p.bottom>b.top,
+          overflow:d.root.scrollWidth>r.width+1||p.right>r.right+1,visible:p.width>0&&p.height>0});d.root.remove();
+      }return results;
+    });assert.ok(rows.every(r=>!r.overlap&&!r.overflow&&r.visible),JSON.stringify(rows));
+  });
+  if (process.env.TIMELINE_SCREENSHOT) {
+    await page.setViewportSize({width:1200,height:800});
+    await page.locator('.mmc-tl-section-head-inline').first().screenshot({path:process.env.TIMELINE_SCREENSHOT});
+  }
   assert.equal(requests,0);
   console.log(JSON.stringify({passed:results.length,requests,results},null,2));
 })().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{await browser?.close();});

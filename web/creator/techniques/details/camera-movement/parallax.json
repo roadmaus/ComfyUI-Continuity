@@ -1,0 +1,398 @@
+{
+  "id": "camera-movement/parallax",
+  "slug": "parallax",
+  "title": "Parallax",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/parallax",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/parallax-parallax-mini.webp",
+  "detail": "details/camera-movement/parallax.json",
+  "aliases": [],
+  "description": "Parallax cinematography is the relative apparent motion between near and far objects as the camera translates. Near things race, far things crawl; that speed difference is how the image proves the world has layers.",
+  "thumbnail": "media/3a1d3091de6e3fca4df2e2e0c4eda88e.webp",
+  "video": "media/2784a85fa36f42e8edd95c3211f83dd3.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/parallax-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Prove the world has layers. A foreground railing, a mid-ground person, a far ridge: once the camera moves, their relative speeds cannot be faked by a zoom."
+        },
+        {
+          "type": "paragraph",
+          "text": "The shot is less a named rig than a test you apply to any travel. A zoom that claims depth will fail this test."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you need a graphic flatten, zoom on purpose. If you need air and furniture, translate."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Prove the world has layers. A foreground railing, a mid-ground person, a far ridge: once the camera moves, their relative speeds cannot be faked by a zoom.The shot is less a named rig than a test you apply to any travel. A zoom that claims depth will fail this test.If you need a graphic flatten, zoom on purpose. If you need air and furniture, translate."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Any real translation works: dolly, tracking, arc, handheld, aerial. Place a near object in frame (post, glass, leaves)."
+        },
+        {
+          "type": "paragraph",
+          "text": "The near plane should slide faster than the subject, the subject faster than the horizon. Prompt: Parallax around [Subject], near things racing, far things crawling, depth proven by relative speed."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Any real translation works: dolly, tracking, arc, handheld, aerial. Place a near object in frame (post, glass, leaves).The near plane should slide faster than the subject, the subject faster than the horizon. Prompt: Parallax around [Subject], near things racing, far things crawling, depth proven by relative speed."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the room or land must feel thick: a walk past columns, a car past trees. Do not add fake 2.5D wobble to a still and call it a dolly."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the room or land must feel thick: a walk past columns, a car past trees. Do not add fake 2.5D wobble to a still and call it a dolly."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Dolly is a wheeled translation that produces parallax. Tracking Shot produces it along a path.",
+          "links": [
+            {
+              "text": "Dolly",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly"
+            },
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Zoom changes size without relative speed between planes. A Wiggle is a tiny stereo rock, parallax as a fidget, not a path.",
+          "links": [
+            {
+              "text": "Zoom",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/zoom"
+            },
+            {
+              "text": "Wiggle",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/wiggle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DollyWalk the camera. Change geography.",
+          "displayText": "Dolly\nWalk the camera. Change geography.",
+          "links": [
+            {
+              "text": "DollyWalk the camera. Change geography.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "displayText": "Tracking Shot\nAccompany a walker. The shot is a journey, not a picture.",
+          "links": [
+            {
+              "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly"
+        },
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Zoom",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/zoom"
+        },
+        {
+          "text": "Wiggle",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/wiggle"
+        },
+        {
+          "text": "DollyWalk the camera. Change geography.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly"
+        },
+        {
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7c27ab424cba754ccc78025231412b17.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-dolly-mini.webp",
+          "alt": "Dolly"
+        },
+        {
+          "kind": "video",
+          "path": "media/b6d096232c8badc07554a2cc4ea3a76c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolly-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+          "alt": "Tracking Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Dolly is a wheeled translation that produces parallax. Tracking Shot produces it along a path.A Zoom changes size without relative speed between planes. A Wiggle is a tiny stereo rock, parallax as a fidget, not a path.DollyWalk the camera. Change geography.Tracking ShotAccompany a walker. The shot is a journey, not a picture.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Tree of Life uses moving viewpoints so near nature shears against far sky. Gravity lets debris and faces disagree in speed as the camera translates."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: relative motion as proof of depth."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Tree of Life uses moving viewpoints so near nature shears against far sky. Gravity lets debris and faces disagree in speed as the camera translates.Grammar: relative motion as proof of depth."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name near, mid, and far, and make them disagree in speed. Still: Parallax around [Subject], near things racing, far things crawling, depth proven by relative speed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Camera moves so foreground around [Subject] slides faster than the background. Forbid a zoom."
+        },
+        {
+          "type": "quote",
+          "text": "Camera moves so foreground around [Subject] slides faster than the background."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Camera+moves+so+foreground+around+[Subject]+slides+faster+than+the+background."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name near, mid, and far, and make them disagree in speed. Still: Parallax around [Subject], near things racing, far things crawling, depth proven by relative speed.Video: Camera moves so foreground around [Subject] slides faster than the background. Forbid a zoom.Copy promptUse in Video GeneratorCamera moves so foreground around [Subject] slides faster than the background.Camera moves so foreground around [Subject] slides faster than the background."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a zoom. The tell: the whole picture enlarges as one card."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: translate the camera and keep a near object in frame so it outruns the horizon."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a zoom. The tell: the whole picture enlarges as one card.The fix: translate the camera and keep a near object in frame so it outruns the horizon."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Parallax in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Parallax is the relative apparent motion of near and far objects when the camera translates. Near planes slide faster; that difference proves depth."
+        },
+        {
+          "type": "heading",
+          "text": "Parallax vs Zoom",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A zoom scales the image from a locked body, so planes do not shear. Parallax needs the camera to move through space."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Parallax?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it whenever travel should prove a thick world: columns, glass, trees. Do not fake it with a zoom."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Parallax for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a translating camera and a near object that slides faster than the far plane. Example: Parallax around [Subject], near things racing, far things crawling, depth proven by relative speed."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Parallax in film?Parallax is the relative apparent motion of near and far objects when the camera translates. Near planes slide faster; that difference proves depth.Parallax vs ZoomA zoom scales the image from a locked body, so planes do not shear. Parallax needs the camera to move through space.When should I use Parallax?Use it whenever travel should prove a thick world: columns, glass, trees. Do not fake it with a zoom.How do I prompt Parallax for AI image or video?Write a translating camera and a near object that slides faster than the far plane. Example: Parallax around [Subject], near things racing, far things crawling, depth proven by relative speed."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name near, mid, and far, and make them disagree in speed. Still: Parallax around [Subject], near things racing, far things crawling, depth proven by relative speed.",
+      "Video: Camera moves so foreground around [Subject] slides faster than the background. Forbid a zoom."
+    ],
+    "example": "Camera moves so foreground around [Subject] slides faster than the background."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/2784a85fa36f42e8edd95c3211f83dd3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/parallax-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3a1d3091de6e3fca4df2e2e0c4eda88e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/parallax-parallax-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e629bc0af3ac11cb0cb8d355a8aea27d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/parallax.jpg",
+      "alt": "Parallax frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/7c27ab424cba754ccc78025231412b17.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-dolly-mini.webp",
+      "alt": "Dolly"
+    },
+    {
+      "kind": "video",
+      "path": "media/b6d096232c8badc07554a2cc4ea3a76c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolly-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+      "alt": "Tracking Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/40a81207d4113bb30399ece84a9aba6f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/parallax/hero.jpg",
+      "alt": "Parallax",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "83245aedb3f4db50fdbbecd8d44faee2561c8c3d47d0ba107278b5a85a0b37d8"
+}

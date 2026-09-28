@@ -1,0 +1,418 @@
+{
+  "id": "genre-looks/southern-gothic",
+  "slug": "southern-gothic",
+  "title": "Southern Gothic",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/southern-gothic",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/southern-gothic.webp",
+  "detail": "details/genre-looks/southern-gothic.json",
+  "aliases": [
+    "Southern Gothic cinema"
+  ],
+  "description": "Southern gothic cinematography uses the American South as a humid optical problem: late-afternoon gold gone sickly, Spanish-moss Dappled Light, porch tungsten, and Atmospheric Haze that keeps heat in the air. Decay is on the walls. The threat is family, history, and something under the porch, not a city streetlamp.",
+  "thumbnail": "media/a2710c6c1c132af8ff8bce770f977eb2.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Beauty is rotting. A house peels."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sweat holds on skin. Sun through moss becomes a moving gobo."
+        },
+        {
+          "type": "paragraph",
+          "text": "The palette is gold-green and tobacco, not cyan neon. Blocking is slow: a porch, a church, a river, a dinner table that will not end."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for urban night crime or for cosmic scale. Film Noir is a wet city.",
+          "links": [
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cosmic horror makes the human irrelevant against illegal geometry. Southern gothic keeps the human too close: kin, pulpit, swamp.",
+          "links": [
+            {
+              "text": "Cosmic horror",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cosmic-horror-look"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Cosmic horror",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cosmic-horror-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Beauty is rotting. A house peels.Sweat holds on skin. Sun through moss becomes a moving gobo.The palette is gold-green and tobacco, not cyan neon. Blocking is slow: a porch, a church, a river, a dinner table that will not end.It is the wrong tool for urban night crime or for cosmic scale. Film Noir is a wet city.Cosmic horror makes the human irrelevant against illegal geometry. Southern gothic keeps the human too close: kin, pulpit, swamp."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Late sun as key, often raking, through trees or moss so the pattern crawls. Add atmospheric haze or real humidity so blacks go milky."
+        },
+        {
+          "type": "paragraph",
+          "text": "Porch bulbs and interior practicals go warm and a little dirty. 35mm or 50mm spherical, sometimes 24mm for a house against sky."
+        },
+        {
+          "type": "paragraph",
+          "text": "Avoid clean rims. Let paint peel in the highlight."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt humid decay, moss, late-afternoon gold gone sickly, beauty rotting as production design, not as a slogan."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Late sun as key, often raking, through trees or moss so the pattern crawls. Add atmospheric haze or real humidity so blacks go milky.Porch bulbs and interior practicals go warm and a little dirty. 35mm or 50mm spherical, sometimes 24mm for a house against sky.Avoid clean rims. Let paint peel in the highlight.Prompt humid decay, moss, late-afternoon gold gone sickly, beauty rotting as production design, not as a slogan."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when heat, family, and decay have to be visible in the air. Do not use it as generic gothic fog on a Victorian stone castle, or as noir in a Southern town with the humidity removed."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when heat, family, and decay have to be visible in the air. Do not use it as generic gothic fog on a Victorian stone castle, or as noir in a Southern town with the humidity removed."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Southern Gothic is humid gold-green decay. Dappled Light is the moss gobo only.",
+          "links": [
+            {
+              "text": "Southern Gothic",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/southern-gothic"
+            },
+            {
+              "text": "Dappled Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Atmospheric Haze is the air only. Cosmic Horror is scale and illegal geometry.",
+          "links": [
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            },
+            {
+              "text": "Cosmic Horror",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cosmic-horror-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Film Noir is urban night silver. A British gothic look is stone, grey, and cold.",
+          "links": [
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the heat."
+        },
+        {
+          "type": "list-item",
+          "text": "Dappled LightNature or blinds as gobo.",
+          "displayText": "Dappled Light\nNature or blinds as gobo.",
+          "links": [
+            {
+              "text": "Dappled LightNature or blinds as gobo.",
+              "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "displayText": "Atmospheric Haze\nShow kilometers, not just meters.",
+          "links": [
+            {
+              "text": "Atmospheric HazeShow kilometers, not just meters.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Southern Gothic",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/southern-gothic"
+        },
+        {
+          "text": "Dappled Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+        },
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Cosmic Horror",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cosmic-horror-look"
+        },
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Dappled LightNature or blinds as gobo.",
+          "url": "https://melies.co/cinematic-techniques/lighting/dappled-light"
+        },
+        {
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/c527ca397332e8503e2b3e124659a749.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dappled-light.webp",
+          "alt": "Dappled Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+          "alt": "Atmospheric Haze"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Southern Gothic is humid gold-green decay. Dappled Light is the moss gobo only.Atmospheric Haze is the air only. Cosmic Horror is scale and illegal geometry.Film Noir is urban night silver. A British gothic look is stone, grey, and cold.Keep the heat.Dappled LightNature or blinds as gobo.Atmospheric HazeShow kilometers, not just meters.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Night of the Hunter (river, moonlight, and a Southern fable's hard shadows). Beasts of the Southern Wild (humid daylight, water, a community at the edge of weather)."
+        },
+        {
+          "type": "paragraph",
+          "text": "True Detective S1 (sickly gold, industrial coast, family rot). Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Night of the Hunter (river, moonlight, and a Southern fable's hard shadows). Beasts of the Southern Wild (humid daylight, water, a community at the edge of weather).True Detective S1 (sickly gold, industrial coast, family rot). Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Southern gothic air around [Subject], humid decay, Spanish moss dappled sun, late-afternoon gold gone sickly, porch tungsten, peeling paint. Name the heat and the house."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not prompt a dry noir alley or a cosmic void."
+        },
+        {
+          "type": "quote",
+          "text": "Southern gothic air around [Subject], humid decay, moss, late-afternoon gold gone sickly, beauty rotting."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Southern+gothic+air+around+[Subject],+humid+decay,+moss,+late-afternoon+gold+gone+sickly,+beauty+rotting."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Southern gothic air around [Subject], humid decay, Spanish moss dappled sun, late-afternoon gold gone sickly, porch tungsten, peeling paint. Name the heat and the house.Do not prompt a dry noir alley or a cosmic void.Copy promptUse in Image GeneratorSouthern gothic air around [Subject], humid decay, moss, late-afternoon gold gone sickly, beauty rotting.Southern gothic air around [Subject], humid decay, moss, late-afternoon gold gone sickly, beauty rotting."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Film Noir or generic gothic fog: wet city silver, or a cold castle. The tell is no humidity, no moss pattern, and a teal night grade.",
+          "links": [
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: add late sickly sun, haze, peeling surfaces, and slow porch blocking."
+        }
+      ],
+      "links": [
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Film Noir or generic gothic fog: wet city silver, or a cold castle. The tell is no humidity, no moss pattern, and a teal night grade.Fix: add late sickly sun, haze, peeling surfaces, and slow porch blocking."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Southern Gothic in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A look that makes the American South's heat, decay, and haunted social history optical: sickly gold, moss dapples, humidity, porch practicals, and slow blocking around family and land."
+        },
+        {
+          "type": "heading",
+          "text": "Southern Gothic vs Cosmic Horror",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Southern gothic keeps human kin too close: a porch, a pulpit, a swamp. Cosmic horror shrinks the human against wrong scale and geometry. One is family rot. The other is the universe refusing you."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Southern Gothic?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When heat, family, and something under the porch must be visible. Skip it for urban noir, for future rain, or for a cold stone gothic with no humidity."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Southern Gothic for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Southern gothic air around [Subject], humid decay, moss, late-afternoon gold gone sickly, porch tungsten, peeling paint. Name the house and the heat. Do not ask for a wet city or a cosmic void."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Southern Gothic in film?A look that makes the American South's heat, decay, and haunted social history optical: sickly gold, moss dapples, humidity, porch practicals, and slow blocking around family and land.Southern Gothic vs Cosmic HorrorSouthern gothic keeps human kin too close: a porch, a pulpit, a swamp. Cosmic horror shrinks the human against wrong scale and geometry. One is family rot. The other is the universe refusing you.When should I use Southern Gothic?When heat, family, and something under the porch must be visible. Skip it for urban noir, for future rain, or for a cold stone gothic with no humidity.How do I prompt Southern Gothic for AI image or video?Write: Southern gothic air around [Subject], humid decay, moss, late-afternoon gold gone sickly, porch tungsten, peeling paint. Name the house and the heat. Do not ask for a wet city or a cosmic void."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Southern gothic air around [Subject], humid decay, Spanish moss dappled sun, late-afternoon gold gone sickly, porch tungsten, peeling paint. Name the heat and the house.",
+      "Do not prompt a dry noir alley or a cosmic void."
+    ],
+    "example": "Southern gothic air around [Subject], humid decay, moss, late-afternoon gold gone sickly, beauty rotting."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/a2710c6c1c132af8ff8bce770f977eb2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/southern-gothic.webp",
+      "alt": "Southern Gothic example"
+    },
+    {
+      "kind": "image",
+      "path": "media/c527ca397332e8503e2b3e124659a749.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dappled-light.webp",
+      "alt": "Dappled Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+      "alt": "Atmospheric Haze"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/b8187119a177419e0c284c30ef305723.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/southern-gothic/hero.jpg",
+      "alt": "Southern Gothic",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "9712e8a867a6068eb0a39ec40da3482b0d9cc00f295689b61ada23967947bae7"
+}

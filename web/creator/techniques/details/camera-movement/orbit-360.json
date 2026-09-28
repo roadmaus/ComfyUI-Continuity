@@ -1,0 +1,440 @@
+{
+  "id": "camera-movement/orbit-360",
+  "slug": "orbit-360",
+  "title": "360-Degree Orbit",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/orbit-360",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+  "detail": "details/camera-movement/orbit-360.json",
+  "aliases": [
+    "circular tracking",
+    "orbit shot",
+    "Orbit 360",
+    "360-degree shot",
+    "partial orbit",
+    "Arc shot"
+  ],
+  "description": "A 360-degree orbit shot circles the subject through a full turn, usually at a constant radius, always facing them. The background becomes a continuous ribbon while the person stays the center of interest.",
+  "thumbnail": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+  "video": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Time can feel as if it collapsed around one kiss, one threat, or one product. Unlike a pan, the camera reveals different sides of the subject and changes their relation to every wall."
+        },
+        {
+          "type": "paragraph",
+          "text": "A full orbit calls attention to space itself; a partial arc can be quieter. It is the wrong tool when you only needed a quarter-turn to change a conversation axis, and the wrong tool if the subject is spinning on a turntable while the camera sits still."
+        },
+        {
+          "type": "paragraph",
+          "text": "Separate live-speed orbiting from bullet time, which also manipulates time."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Time can feel as if it collapsed around one kiss, one threat, or one product. Unlike a pan, the camera reveals different sides of the subject and changes their relation to every wall.A full orbit calls attention to space itself; a partial arc can be quieter. It is the wrong tool when you only needed a quarter-turn to change a conversation axis, and the wrong tool if the subject is spinning on a turntable while the camera sits still.Separate live-speed orbiting from bullet time, which also manipulates time."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lay a circular path, pick a center, coordinate focus as distance breathes. Keep height even unless you also boom."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not zoom during the orbit unless you want a different technique. Prompt a full 360-degree orbit, constant radius, always facing the subject, background wrapping as a ribbon of light."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lay a circular path, pick a center, coordinate focus as distance breathes. Keep height even unless you also boom.Do not zoom during the orbit unless you want a different technique. Prompt a full 360-degree orbit, constant radius, always facing the subject, background wrapping as a ribbon of light."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a moment should close around one person: kiss, threat, or product hero. Concrete beat: a couple kisses while the room becomes a ribbon."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not also zoom, and do not let the subject rotate instead of the camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a moment should close around one person: kiss, threat, or product hero. Concrete beat: a couple kisses while the room becomes a ribbon.Do not also zoom, and do not let the subject rotate instead of the camera."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Arc Left and Arc Right are partial orbits, often about 90 degrees, for axis change rather than spectacle. A Lazy Susan turns the object while the camera may stay put.",
+          "links": [
+            {
+              "text": "Arc Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc-left"
+            },
+            {
+              "text": "Arc Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc-right"
+            },
+            {
+              "text": "Lazy Susan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A pan never relocates the support. Orbit 360 is a full inspection on an azimuth circle."
+        },
+        {
+          "type": "list-item",
+          "text": "Arc LeftChange the axis of a conversation or reveal the other half of a room.",
+          "displayText": "Arc Left\nChange the axis of a conversation or reveal the other half of a room.",
+          "links": [
+            {
+              "text": "Arc LeftChange the axis of a conversation or reveal the other half of a room.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc-left"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Arc RightSame as arc left, other side.",
+          "displayText": "Arc Right\nSame as arc left, other side.",
+          "links": [
+            {
+              "text": "Arc RightSame as arc left, other side.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc-right"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lazy SusanShow an object or costume from every side.",
+          "displayText": "Lazy Susan\nShow an object or costume from every side.",
+          "links": [
+            {
+              "text": "Lazy SusanShow an object or costume from every side.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Arc Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc-left"
+        },
+        {
+          "text": "Arc Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc-right"
+        },
+        {
+          "text": "Lazy Susan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+        },
+        {
+          "text": "Arc LeftChange the axis of a conversation or reveal the other half of a room.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc-left"
+        },
+        {
+          "text": "Arc RightSame as arc left, other side.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc-right"
+        },
+        {
+          "text": "Lazy SusanShow an object or costume from every side.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d272f82a8824765861ad77fb975af55e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-left-arc-left-mini.webp",
+          "alt": "Arc Left"
+        },
+        {
+          "kind": "video",
+          "path": "media/9f0cfe2921cd4a52ee9f3bb03b669001.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-left-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/627c7500d384beb2260120a87573cbff.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-right-arc-right-mini.webp",
+          "alt": "Arc Right"
+        },
+        {
+          "kind": "video",
+          "path": "media/9498695f34b770931d6614351a9561a9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-right-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/e08a5e61f13e45920f57f62e20326731.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lazy-susan-lazy-susan-mini.webp",
+          "alt": "Lazy Susan"
+        },
+        {
+          "kind": "video",
+          "path": "media/de412fdb77aeb52f922e9ab38017a869.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lazy-susan-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Arc Left and Arc Right are partial orbits, often about 90 degrees, for axis change rather than spectacle. A Lazy Susan turns the object while the camera may stay put.A pan never relocates the support. Orbit 360 is a full inspection on an azimuth circle.Arc LeftChange the axis of a conversation or reveal the other half of a room.Arc RightSame as arc left, other side.Lazy SusanShow an object or costume from every side."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Matrix circles suspended action in the rooftop bullet-time sequence: orbit plus time manipulation, so keep the distinction. Vertigo circles Scottie and Judy as the remembered setting appears."
+        },
+        {
+          "type": "paragraph",
+          "text": "Carlito's Way and American Beauty use live-speed orbits as trap or rapture. Grammar of the circle, not a costume to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "The Matrix 1999The camera circles suspended action in the rooftop bullet-time sequence.",
+          "displayText": "The Matrix 1999\nThe camera circles suspended action in the rooftop bullet-time sequence."
+        },
+        {
+          "type": "list-item",
+          "text": "Vertigo 1958Scottie and Judy kiss as the camera circles and the remembered setting appears.",
+          "displayText": "Vertigo 1958\nScottie and Judy kiss as the camera circles and the remembered setting appears."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ae39ef60b27348f7b7ad63d220b6cf3d.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/orbit-360/famous/00-the-matrix-1999.jpg",
+          "alt": "The Matrix 1999"
+        },
+        {
+          "kind": "image",
+          "path": "media/348098447e5de64ad43f579caec91df8.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/orbit-360/famous/01-vertigo-1958.jpg",
+          "alt": "Vertigo 1958"
+        }
+      ],
+      "sourceText": "In film The Matrix circles suspended action in the rooftop bullet-time sequence: orbit plus time manipulation, so keep the distinction. Vertigo circles Scottie and Judy as the remembered setting appears.Carlito's Way and American Beauty use live-speed orbits as trap or rapture. Grammar of the circle, not a costume to copy.The Matrix 1999The camera circles suspended action in the rooftop bullet-time sequence.Vertigo 1958Scottie and Judy kiss as the camera circles and the remembered setting appears."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Full 360-degree orbit around [Subject], camera circling at constant radius, background becoming a continuous ribbon of light, centripetal romantic or predatory energy. For motion: the camera orbits 360 degrees around [Subject], always facing them, background wrapping as a ribbon of light."
+        },
+        {
+          "type": "quote",
+          "text": "Orbit clockwise 120 degrees around a violinist standing still in an empty circular hall. Keep her eyes near the same point in frame, natural live-speed motion, constant camera distance, no zoom. Columns reveal genuine changing perspective. One uninterrupted eight-second take."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Orbit+clockwise+120+degrees+around+a+violinist+standing+still+in+an+empty+circular+hall.+Keep+her+eyes+near+the+same+point+in+frame,+natural+live-speed+motion,+constant+camera+distance,+no+zoom.+Columns+reveal+genuine+changing+perspective.+One+uninterrupted+eight-second+take."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Full 360-degree orbit around [Subject], camera circling at constant radius, background becoming a continuous ribbon of light, centripetal romantic or predatory energy. For motion: the camera orbits 360 degrees around [Subject], always facing them, background wrapping as a ribbon of light.Copy promptUse in Video GeneratorOrbit clockwise 120 degrees around a violinist standing still in an empty circular hall. Keep her eyes near the same point in frame, natural live-speed motion, constant camera distance, no zoom. Columns reveal genuine changing perspective. One uninterrupted eight-second take.Orbit clockwise 120 degrees around a violinist standing still in an empty circular hall. Keep her eyes near the same point in frame, natural live-speed motion, constant camera distance, no zoom. Columns reveal genuine changing perspective. One uninterrupted eight-second take."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a subject rotating on the spot, or a Pan Left from sticks. The tell is a fixed background with a spinning body, or no parallax.",
+          "links": [
+            {
+              "text": "Pan Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-left"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: camera travels a circle, subject mostly still, background wrapping, constant radius."
+        }
+      ],
+      "links": [
+        {
+          "text": "Pan Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-left"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a subject rotating on the spot, or a Pan Left from sticks. The tell is a fixed background with a spinning body, or no parallax.The fix: camera travels a circle, subject mostly still, background wrapping, constant radius."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is 360-Degree Orbit in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a camera path that circles a subject all the way around, usually facing them at a steady distance, so every side and every background wall appears."
+        },
+        {
+          "type": "heading",
+          "text": "360-Degree Orbit vs Arc Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An arc is a partial curve, often a quarter-turn to change axis. A 360 orbit completes the circle and makes space itself the event."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use 360-Degree Orbit?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a kiss, a threat, or a hero object should own time. Do not use a full spin if a 90-degree arc would do."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt 360-Degree Orbit for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write camera orbits 360 degrees around [Subject], constant radius, always facing them, background wrapping. Ban a turntable subject and ban extra zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is 360-Degree Orbit in film?It is a camera path that circles a subject all the way around, usually facing them at a steady distance, so every side and every background wall appears.360-Degree Orbit vs Arc ShotAn arc is a partial curve, often a quarter-turn to change axis. A 360 orbit completes the circle and makes space itself the event.When should I use 360-Degree Orbit?When a kiss, a threat, or a hero object should own time. Do not use a full spin if a 90-degree arc would do.How do I prompt 360-Degree Orbit for AI image or video?Write camera orbits 360 degrees around [Subject], constant radius, always facing them, background wrapping. Ban a turntable subject and ban extra zoom."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Full 360-degree orbit around [Subject], camera circling at constant radius, background becoming a continuous ribbon of light, centripetal romantic or predatory energy. For motion: the camera orbits 360 degrees around [Subject], always facing them, background wrapping as a ribbon of light."
+    ],
+    "example": "Orbit clockwise 120 degrees around a violinist standing still in an empty circular hall. Keep her eyes near the same point in frame, natural live-speed motion, constant camera distance, no zoom. Columns reveal genuine changing perspective. One uninterrupted eight-second take."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/162f0126a9bf65b574af148729712499.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/orbit-360.jpg",
+      "alt": "360-Degree Orbit frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/d272f82a8824765861ad77fb975af55e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-left-arc-left-mini.webp",
+      "alt": "Arc Left"
+    },
+    {
+      "kind": "video",
+      "path": "media/9f0cfe2921cd4a52ee9f3bb03b669001.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-left-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/627c7500d384beb2260120a87573cbff.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-right-arc-right-mini.webp",
+      "alt": "Arc Right"
+    },
+    {
+      "kind": "video",
+      "path": "media/9498695f34b770931d6614351a9561a9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-right-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e08a5e61f13e45920f57f62e20326731.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lazy-susan-lazy-susan-mini.webp",
+      "alt": "Lazy Susan"
+    },
+    {
+      "kind": "video",
+      "path": "media/de412fdb77aeb52f922e9ab38017a869.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lazy-susan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ae39ef60b27348f7b7ad63d220b6cf3d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/orbit-360/famous/00-the-matrix-1999.jpg",
+      "alt": "The Matrix 1999"
+    },
+    {
+      "kind": "image",
+      "path": "media/348098447e5de64ad43f579caec91df8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/orbit-360/famous/01-vertigo-1958.jpg",
+      "alt": "Vertigo 1958"
+    },
+    {
+      "kind": "image",
+      "path": "media/2f2cab182349bbb10bcff1dc3362aba7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/orbit-360/hero.jpg",
+      "alt": "360-Degree Orbit",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "e5ac41feff1b614e772cb15d48a4d22ccce3ced81f270d2480ab2101f8363b30"
+}

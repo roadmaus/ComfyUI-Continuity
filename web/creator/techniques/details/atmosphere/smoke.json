@@ -1,0 +1,441 @@
+{
+  "id": "atmosphere/smoke",
+  "slug": "smoke",
+  "title": "Smoke",
+  "categoryId": "atmosphere",
+  "categoryTitle": "Atmosphere and Weather",
+  "sourceUrl": "https://melies.co/cinematic-techniques/atmosphere/smoke",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smoke.webp",
+  "detail": "details/atmosphere/smoke.json",
+  "aliases": [
+    "haze",
+    "fog",
+    "dust",
+    "rain",
+    "snow",
+    "steam"
+  ],
+  "description": "Smoke is combustion particles with a source, a direction, and enough density to turn a room's air into a volume the light can strike. Unlike weather fog, it has a chimney, a cigarette, a tire, or a battlefield; backlight carves it into shafts and swirls.",
+  "thumbnail": "media/1a9bf825c36f7b7389de907847683752.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A practical lamp becomes a wedge through grey air. A drag on a cigarette writes a ribbon."
+        },
+        {
+          "type": "paragraph",
+          "text": "Photograph the air of a room. The walls were always there; now the air is too."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when volume should be visible indoors or when a battle, a chimney, or a club must have a source. It is the wrong tool when the veil is weather with no fire (Fog, Mist).",
+          "links": [
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            },
+            {
+              "text": "Mist",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the white stuff rises off a manhole because water met cold air: that is Steam. Without a key or backlight, smoke is only a smell.",
+          "links": [
+            {
+              "text": "Steam",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/steam"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Front-filling a room with unlit smoke turns faces to mud."
+        }
+      ],
+      "links": [
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Mist",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+        },
+        {
+          "text": "Steam",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/steam"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A practical lamp becomes a wedge through grey air. A drag on a cigarette writes a ribbon.Photograph the air of a room. The walls were always there; now the air is too.Use it when volume should be visible indoors or when a battle, a chimney, or a club must have a source. It is the wrong tool when the veil is weather with no fire (Fog, Mist).It is the wrong tool when the white stuff rises off a manhole because water met cold air: that is Steam. Without a key or backlight, smoke is only a smell.Front-filling a room with unlit smoke turns faces to mud."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pick a source and a particle (cigarette, incense, oil, battlefield pot). Control air currents so ribbons have direction."
+        },
+        {
+          "type": "paragraph",
+          "text": "Light from the side or behind so the volume renders; use a hard beam if you want shafts (Volumetric Light). Keep some clean path to the face.",
+          "links": [
+            {
+              "text": "Volumetric Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: smoke around [Subject], cigarette, chimney, or battle, shafts of light catching it, volume in the room."
+        }
+      ],
+      "links": [
+        {
+          "text": "Volumetric Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Pick a source and a particle (cigarette, incense, oil, battlefield pot). Control air currents so ribbons have direction.Light from the side or behind so the volume renders; use a hard beam if you want shafts (Volumetric Light). Keep some clean path to the face.Prompt: smoke around [Subject], cigarette, chimney, or battle, shafts of light catching it, volume in the room."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for apartments, temples, engine rooms, aftermath. Do not use it as a default 'atmosphere' pass on a sunny kitchen."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the beat is stillness in a closed parlor, Dust Motes in a shaft may be enough.",
+          "links": [
+            {
+              "text": "Dust Motes",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dust Motes",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it for apartments, temples, engine rooms, aftermath. Do not use it as a default 'atmosphere' pass on a sunny kitchen.If the beat is stillness in a closed parlor, Dust Motes in a shaft may be enough."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Atmospheric Haze in the distance is aerial perspective. A hazer used to fill a stage is a cousin of smoke but without a story source; still light it as volume.",
+          "links": [
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fog is wet weather. Steam is water vapor from heat, white, rising, condensing.",
+          "links": [
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            },
+            {
+              "text": "Steam",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/steam"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dust Motes are discrete specks in a beam, not a ribbon.",
+          "links": [
+            {
+              "text": "Dust Motes",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "displayText": "Atmospheric Haze\nShow kilometers, not just meters.",
+          "links": [
+            {
+              "text": "Atmospheric HazeShow kilometers, not just meters.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "displayText": "Volumetric Light\nAir has to be photographed, not just the subject.",
+          "links": [
+            {
+              "text": "Volumetric LightAir has to be photographed, not just the subject.",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "RainMake the air visible and the ground reflective.",
+          "displayText": "Rain\nMake the air visible and the ground reflective.",
+          "links": [
+            {
+              "text": "RainMake the air visible and the ground reflective.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Steam",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/steam"
+        },
+        {
+          "text": "Dust Motes",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+        },
+        {
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "RainMake the air visible and the ground reflective.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+          "alt": "Atmospheric Haze"
+        },
+        {
+          "kind": "image",
+          "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+          "alt": "Volumetric Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+          "alt": "Rain"
+        }
+      ],
+      "sourceText": "Compared with similar shots Atmospheric Haze in the distance is aerial perspective. A hazer used to fill a stage is a cousin of smoke but without a story source; still light it as volume.Fog is wet weather. Steam is water vapor from heat, white, rising, condensing.Dust Motes are discrete specks in a beam, not a ribbon.Atmospheric HazeShow kilometers, not just meters.Volumetric LightAir has to be photographed, not just the subject.RainMake the air visible and the ground reflective."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In the Mood for Love lets cigarette ribbons occupy cramped rooms. Blade Runner fills interiors so shafts and practicals have air to hit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Apocalypse Now makes battle and jungle air into volume. Give smoke a source and a light, not a generic grey."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film In the Mood for Love lets cigarette ribbons occupy cramped rooms. Blade Runner fills interiors so shafts and practicals have air to hit.Apocalypse Now makes battle and jungle air into volume. Give smoke a source and a light, not a generic grey."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Smoke around [Subject], cigarette, chimney, or battle, shafts of light catching it, volume in the room. Name the source, the backlight or side key, and the direction of the ribbon."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, swirling volume, not a static fog plate, and a still-readable face."
+        },
+        {
+          "type": "quote",
+          "text": "Smoke around [Subject], cigarette, chimney, or battle, shafts of light catching it, volume in the room."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Smoke+around+[Subject],+cigarette,+chimney,+or+battle,+shafts+of+light+catching+it,+volume+in+the+room."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Smoke around [Subject], cigarette, chimney, or battle, shafts of light catching it, volume in the room. Name the source, the backlight or side key, and the direction of the ribbon.For video, swirling volume, not a static fog plate, and a still-readable face.Copy promptUse in Image GeneratorSmoke around [Subject], cigarette, chimney, or battle, shafts of light catching it, volume in the room.Smoke around [Subject], cigarette, chimney, or battle, shafts of light catching it, volume in the room."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Fog (no source) or unlit fill that dirties skin. The tell: no chimney or cigarette, lamps without shafts, a muddy key.",
+          "links": [
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: a visible source, side or back light, a clean path to the eyes."
+        }
+      ],
+      "links": [
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Fog (no source) or unlit fill that dirties skin. The tell: no chimney or cigarette, lamps without shafts, a muddy key.The fix: a visible source, side or back light, a clean path to the eyes."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Smoke in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Smoke is airborne combustion particles from a source, dense enough that light can carve the room's air into volume. It has direction, swirls, and a reason to exist."
+        },
+        {
+          "type": "heading",
+          "text": "Smoke vs Atmospheric Haze",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Haze pales distant planes over kilometers. Smoke occupies a room or a battlefield and needs a source and a sculpting light. One is distance; the other is volume you could walk through."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Smoke?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to photograph a room's air, a chimney, a cigarette, a battle. Do not use it as weather, and do not fill a face with unlit particles."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Smoke for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name source and lighting. Example: smoke around [Subject], cigarette, chimney, or battle, shafts of light catching it. Demand a readable face and visible volume, not a grey grade."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Smoke in film?Smoke is airborne combustion particles from a source, dense enough that light can carve the room's air into volume. It has direction, swirls, and a reason to exist.Smoke vs Atmospheric HazeHaze pales distant planes over kilometers. Smoke occupies a room or a battlefield and needs a source and a sculpting light. One is distance; the other is volume you could walk through.When should I use Smoke?Use it to photograph a room's air, a chimney, a cigarette, a battle. Do not use it as weather, and do not fill a face with unlit particles.How do I prompt Smoke for AI image or video?Name source and lighting. Example: smoke around [Subject], cigarette, chimney, or battle, shafts of light catching it. Demand a readable face and visible volume, not a grey grade."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Smoke around [Subject], cigarette, chimney, or battle, shafts of light catching it, volume in the room. Name the source, the backlight or side key, and the direction of the ribbon.",
+      "For video, swirling volume, not a static fog plate, and a still-readable face."
+    ],
+    "example": "Smoke around [Subject], cigarette, chimney, or battle, shafts of light catching it, volume in the room."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/1a9bf825c36f7b7389de907847683752.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smoke.webp",
+      "alt": "Smoke example"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+      "alt": "Atmospheric Haze"
+    },
+    {
+      "kind": "image",
+      "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+      "alt": "Volumetric Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+      "alt": "Rain"
+    },
+    {
+      "kind": "image",
+      "path": "media/8eed5332c8feb7f7b47d8e69403c6354.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/smoke/hero.jpg",
+      "alt": "Smoke",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "ce151514fc5d1667044b2b7a9fc3c7740837aea952515edaa579f0e7c19b30ef"
+}

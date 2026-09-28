@@ -1,0 +1,405 @@
+{
+  "id": "camera-movement/arc",
+  "slug": "arc",
+  "title": "Arc",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/arc",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-arc-mini.webp",
+  "detail": "details/camera-movement/arc.json",
+  "aliases": [
+    "arc shot"
+  ],
+  "description": "An arc shot moves the camera around the subject along part of a circle while the lens stays aimed at them. A quarter or half orbit is enough: the axis of the scene changes without a cut, and the background slides.",
+  "thumbnail": "media/2c18dc5caa5e5b001b076c6f3ec05f43.webp",
+  "video": "media/f3e75b6e933b48c80f22cfd4b6d22027.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to reorient. A booth, a kiss, a standoff can turn from front to profile to reverse without a cut, so the relationship is rewritten by parallax."
+        },
+        {
+          "type": "paragraph",
+          "text": "The subject can stay put; the world is what orbits. A full 360 is a different promise."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you only need a new eyeline, a quarter circle is cleaner. If nobody's position in the room matters, an arc is empty decoration."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it to reorient. A booth, a kiss, a standoff can turn from front to profile to reverse without a cut, so the relationship is rewritten by parallax.The subject can stay put; the world is what orbits. A full 360 is a different promise.If you only need a new eyeline, a quarter circle is cleaner. If nobody's position in the room matters, an arc is empty decoration."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lay track or a circular dolly, or walk a steadicam on a curve of constant radius, camera facing inward. Height usually holds (eye or chest)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Foreground posts, chairs, or extras should shear faster than the far wall. Prompt: Arc around [Subject], camera traveling a curve while facing them, background sliding, a quarter or half orbit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lay track or a circular dolly, or walk a steadicam on a curve of constant radius, camera facing inward. Height usually holds (eye or chest).Foreground posts, chairs, or extras should shear faster than the far wall. Prompt: Arc around [Subject], camera traveling a curve while facing them, background sliding, a quarter or half orbit."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Change the axis without cutting: a table that becomes a two-shot, a reveal of who stands behind. Do not arc 180 degrees on every line; save the curve for a real change of power."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Change the axis without cutting: a table that becomes a two-shot, a reveal of who stands behind. Do not arc 180 degrees on every line; save the curve for a real change of power."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Arc Left and Arc Right name the direction of travel. 360-Degree Orbit completes the circle and usually inspects a body in space.",
+          "links": [
+            {
+              "text": "Arc Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc-left"
+            },
+            {
+              "text": "Arc Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc-right"
+            },
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Pan only yaws from a fixed point, so the background does not parallax the same way.",
+          "links": [
+            {
+              "text": "Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Arc LeftChange the axis of a conversation or reveal the other half of a room.",
+          "displayText": "Arc Left\nChange the axis of a conversation or reveal the other half of a room.",
+          "links": [
+            {
+              "text": "Arc LeftChange the axis of a conversation or reveal the other half of a room.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc-left"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Arc RightSame as arc left, other side.",
+          "displayText": "Arc Right\nSame as arc left, other side.",
+          "links": [
+            {
+              "text": "Arc RightSame as arc left, other side.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc-right"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "displayText": "360-Degree Orbit\nTime collapses around one person: kiss, threat, or product hero.",
+          "links": [
+            {
+              "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Arc Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc-left"
+        },
+        {
+          "text": "Arc Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc-right"
+        },
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan"
+        },
+        {
+          "text": "Arc LeftChange the axis of a conversation or reveal the other half of a room.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc-left"
+        },
+        {
+          "text": "Arc RightSame as arc left, other side.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc-right"
+        },
+        {
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d272f82a8824765861ad77fb975af55e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-left-arc-left-mini.webp",
+          "alt": "Arc Left"
+        },
+        {
+          "kind": "video",
+          "path": "media/9f0cfe2921cd4a52ee9f3bb03b669001.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-left-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/627c7500d384beb2260120a87573cbff.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-right-arc-right-mini.webp",
+          "alt": "Arc Right"
+        },
+        {
+          "kind": "video",
+          "path": "media/9498695f34b770931d6614351a9561a9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-right-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+          "alt": "360-Degree Orbit"
+        },
+        {
+          "kind": "video",
+          "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Arc Left and Arc Right name the direction of travel. 360-Degree Orbit completes the circle and usually inspects a body in space.A Pan only yaws from a fixed point, so the background does not parallax the same way.Arc LeftChange the axis of a conversation or reveal the other half of a room.Arc RightSame as arc left, other side.360-Degree OrbitTime collapses around one person: kiss, threat, or product hero."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Goodfellas often arcs around a booth or a table as alliances shift. Atonement uses curved travel inside longer takes to reorient a scene without a cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use them as grammar for changing axis, not as frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Goodfellas often arcs around a booth or a table as alliances shift. Atonement uses curved travel inside longer takes to reorient a scene without a cut.Use them as grammar for changing axis, not as frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the curve, the facing, and how much of the circle. Still: Arc around [Subject], camera traveling a curve while facing them, background sliding, a quarter or half orbit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera arcs around [Subject], always facing them, background sliding past. Say quarter or half."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a pan from sticks."
+        },
+        {
+          "type": "quote",
+          "text": "The camera arcs around [Subject], always facing them, background sliding past."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+arcs+around+[Subject],+always+facing+them,+background+sliding+past."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the curve, the facing, and how much of the circle. Still: Arc around [Subject], camera traveling a curve while facing them, background sliding, a quarter or half orbit.Video: The camera arcs around [Subject], always facing them, background sliding past. Say quarter or half.Forbid a pan from sticks.Copy promptUse in Video GeneratorThe camera arcs around [Subject], always facing them, background sliding past.The camera arcs around [Subject], always facing them, background sliding past."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a pan. The tell: the camera body never moves, only the head yaws, and near objects do not shear."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: travel a curve, keep the lens on the subject, and let the background slide."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a pan. The tell: the camera body never moves, only the head yaws, and near objects do not shear.The fix: travel a curve, keep the lens on the subject, and let the background slide."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Arc in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An arc shot travels the camera along part of a circle while facing the subject, so the background slides and the axis of the scene changes without a cut."
+        },
+        {
+          "type": "heading",
+          "text": "Arc vs 360-Degree Orbit",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An arc is a quarter or half circle used to change axis. An orbit-360 completes the loop and treats the figure as something to walk around."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Arc?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to reorient a scene without cutting: a table, a standoff, a reveal behind the subject. Do not use a full spin when a quarter will do."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Arc for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a curved travel that always faces the subject, and name a quarter or half orbit. Example: Arc around [Subject], camera traveling a curve while facing them, background sliding."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Arc in film?An arc shot travels the camera along part of a circle while facing the subject, so the background slides and the axis of the scene changes without a cut.Arc vs 360-Degree OrbitAn arc is a quarter or half circle used to change axis. An orbit-360 completes the loop and treats the figure as something to walk around.When should I use Arc?Use it to reorient a scene without cutting: a table, a standoff, a reveal behind the subject. Do not use a full spin when a quarter will do.How do I prompt Arc for AI image or video?Write a curved travel that always faces the subject, and name a quarter or half orbit. Example: Arc around [Subject], camera traveling a curve while facing them, background sliding."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the curve, the facing, and how much of the circle. Still: Arc around [Subject], camera traveling a curve while facing them, background sliding, a quarter or half orbit.",
+      "Video: The camera arcs around [Subject], always facing them, background sliding past. Say quarter or half.",
+      "Forbid a pan from sticks."
+    ],
+    "example": "The camera arcs around [Subject], always facing them, background sliding past."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/f3e75b6e933b48c80f22cfd4b6d22027.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2c18dc5caa5e5b001b076c6f3ec05f43.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-arc-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/99fbaa27aa88303992c9a5c44e5ee6db.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/arc.jpg",
+      "alt": "Arc frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/d272f82a8824765861ad77fb975af55e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-left-arc-left-mini.webp",
+      "alt": "Arc Left"
+    },
+    {
+      "kind": "video",
+      "path": "media/9f0cfe2921cd4a52ee9f3bb03b669001.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-left-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/627c7500d384beb2260120a87573cbff.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-right-arc-right-mini.webp",
+      "alt": "Arc Right"
+    },
+    {
+      "kind": "video",
+      "path": "media/9498695f34b770931d6614351a9561a9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-right-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+      "alt": "360-Degree Orbit"
+    },
+    {
+      "kind": "video",
+      "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/80fcd79a54c10da11c561f2df04f6c7d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/arc/hero.jpg",
+      "alt": "Arc",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "32ef843078eed698486770e438e38890c90872cbfc4cbc73fed00f3566811b03"
+}

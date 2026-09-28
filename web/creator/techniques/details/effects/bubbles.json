@@ -1,0 +1,389 @@
+{
+  "id": "effects/bubbles",
+  "slug": "bubbles",
+  "title": "Bubbles",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/bubbles",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bubbles-bubbles-mini.webp",
+  "detail": "details/effects/bubbles.json",
+  "aliases": [],
+  "description": "Bubbles cinematography fills the air with little lenses: soap films that refract the subject, rainbow edges, wet highlights. Each bubble is an optic, not a disk of bokeh.",
+  "thumbnail": "media/b6c16f8d77e1b033d6cca24bb07878ae.webp",
+  "video": "media/cd99ff2921fc3dee3090c88feb9a9cf4.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/bubbles-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face repeats in a drifting sphere. Joy or threat depends on the light."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the air should be glass, cheap optics that still photograph. It is the wrong tool for a boardroom, and for sparks that have no film surface."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the bits are solid motes, you want particles. If the picture is a mirror or a wet street, you want reflections on a plane."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A face repeats in a drifting sphere. Joy or threat depends on the light.Use it when the air should be glass, cheap optics that still photograph. It is the wrong tool for a boardroom, and for sparks that have no film surface.If the bits are solid motes, you want particles. If the picture is a mirror or a wet street, you want reflections on a plane."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Backlight or side-light soap films so each sphere shows a highlight and a refraction of the face. Keep surfaces: thin-film color at the edge, a wet tick."
+        },
+        {
+          "type": "paragraph",
+          "text": "The subject remains readable through the swarm. Shallow space helps."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not replace bubbles with out-of-focus lamps. Prompt bubbles around the subject: refraction worlds that still read as joy or threat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name soap or air bubbles, not bokeh."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Backlight or side-light soap films so each sphere shows a highlight and a refraction of the face. Keep surfaces: thin-film color at the edge, a wet tick.The subject remains readable through the swarm. Shallow space helps.Do not replace bubbles with out-of-focus lamps. Prompt bubbles around the subject: refraction worlds that still read as joy or threat.Name soap or air bubbles, not bokeh."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for joy, drowning, a spell, an underwater breath. Do not use it as fake bokeh on a night street with no soap films."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for joy, drowning, a spell, an underwater breath. Do not use it as fake bokeh on a night street with no soap films."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Particles are solid, countable motes: dust, sparks, pollen. Bubbles have surfaces and refraction.",
+          "links": [
+            {
+              "text": "Particles",
+              "url": "https://melies.co/cinematic-techniques/effects/particles"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Reflections are images on glass, water, or chrome planes. A bubble is a tiny closed optic in the air.",
+          "links": [
+            {
+              "text": "Reflections",
+              "url": "https://melies.co/cinematic-techniques/composition/reflections"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "ParticlesThe air should be countable.",
+          "displayText": "Particles\nThe air should be countable.",
+          "links": [
+            {
+              "text": "ParticlesThe air should be countable.",
+              "url": "https://melies.co/cinematic-techniques/effects/particles"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "ReflectionsShow looking and the looked-at together.",
+          "displayText": "Reflections\nShow looking and the looked-at together.",
+          "links": [
+            {
+              "text": "ReflectionsShow looking and the looked-at together.",
+              "url": "https://melies.co/cinematic-techniques/composition/reflections"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Particles",
+          "url": "https://melies.co/cinematic-techniques/effects/particles"
+        },
+        {
+          "text": "Reflections",
+          "url": "https://melies.co/cinematic-techniques/composition/reflections"
+        },
+        {
+          "text": "ParticlesThe air should be countable.",
+          "url": "https://melies.co/cinematic-techniques/effects/particles"
+        },
+        {
+          "text": "ReflectionsShow looking and the looked-at together.",
+          "url": "https://melies.co/cinematic-techniques/composition/reflections"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d3e34f0291639924a4c5ff1898e55451.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/particles-particles-mini.webp",
+          "alt": "Particles"
+        },
+        {
+          "kind": "video",
+          "path": "media/ddfc39957e978e9062f724fbb3c58908.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/particles-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/251078d8f4037d4032497d15261ced49.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reflections.webp",
+          "alt": "Reflections"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Particles are solid, countable motes: dust, sparks, pollen. Bubbles have surfaces and refraction.Reflections are images on glass, water, or chrome planes. A bubble is a tiny closed optic in the air.ParticlesThe air should be countable.ReflectionsShow looking and the looked-at together.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Shape of Water lets water optics and drifting spheres share space with a body. Music videos use soap-film refraction as a lyric field."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of air as glass, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Shape of Water lets water optics and drifting spheres share space with a body. Music videos use soap-film refraction as a lyric field.Grammar of air as glass, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bubbles around [Subject], refraction worlds that still read as joy or threat. Demand soap-film surfaces, rainbow edges, and a repeated face in the spheres."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban bokeh circles that are only out-of-focus lamps."
+        },
+        {
+          "type": "quote",
+          "text": "Bubbles around [Subject], refraction worlds, cheap magic that still reads as joy or threat."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Bubbles+around+[Subject],+refraction+worlds,+cheap+magic+that+still+reads+as+joy+or+threat."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Bubbles around [Subject], refraction worlds that still read as joy or threat. Demand soap-film surfaces, rainbow edges, and a repeated face in the spheres.Ban bokeh circles that are only out-of-focus lamps.Copy promptUse in Image GeneratorBubbles around [Subject], refraction worlds, cheap magic that still reads as joy or threat.Bubbles around [Subject], refraction worlds, cheap magic that still reads as joy or threat."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Bokeh disks or a particle mist. The tell is circles with no surface, no refraction, no wet edge.",
+          "links": [
+            {
+              "text": "Bokeh",
+              "url": "https://melies.co/cinematic-techniques/effects/bokeh"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is soap films as little lenses, highlights on a skin of air."
+        }
+      ],
+      "links": [
+        {
+          "text": "Bokeh",
+          "url": "https://melies.co/cinematic-techniques/effects/bokeh"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Bokeh disks or a particle mist. The tell is circles with no surface, no refraction, no wet edge.The fix is soap films as little lenses, highlights on a skin of air."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is bubbles in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Bubbles are little lenses in the air: soap films that refract the subject, with rainbow edges and wet highlights. Each one is an optic, not a blur disk."
+        },
+        {
+          "type": "heading",
+          "text": "Bubbles vs particles",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Particles are solid bits. Bubbles have a film surface and refraction. One you could sweep up. The other is a sphere of air with a wet skin."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use bubbles?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use them when the air should be glass: joy, drowning, a spell. Skip them in a dry room that only needs dust, and skip fake bokeh."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt bubbles for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Bubbles around [Subject], refraction worlds. Demand soap-film surfaces, rainbow edges, and the face repeating in the spheres. Do not ask for bokeh lamps."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is bubbles in film?Bubbles are little lenses in the air: soap films that refract the subject, with rainbow edges and wet highlights. Each one is an optic, not a blur disk.Bubbles vs particlesParticles are solid bits. Bubbles have a film surface and refraction. One you could sweep up. The other is a sphere of air with a wet skin.When should I use bubbles?Use them when the air should be glass: joy, drowning, a spell. Skip them in a dry room that only needs dust, and skip fake bokeh.How do I prompt bubbles for AI image or video?Write Bubbles around [Subject], refraction worlds. Demand soap-film surfaces, rainbow edges, and the face repeating in the spheres. Do not ask for bokeh lamps."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Bubbles around [Subject], refraction worlds that still read as joy or threat. Demand soap-film surfaces, rainbow edges, and a repeated face in the spheres.",
+      "Ban bokeh circles that are only out-of-focus lamps."
+    ],
+    "example": "Bubbles around [Subject], refraction worlds, cheap magic that still reads as joy or threat."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/cd99ff2921fc3dee3090c88feb9a9cf4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/bubbles-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b6c16f8d77e1b033d6cca24bb07878ae.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bubbles-bubbles-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ac48644fe3cf2af8d2f90eae1e959cee.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/bubbles.jpg",
+      "alt": "Bubbles frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/d3e34f0291639924a4c5ff1898e55451.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/particles-particles-mini.webp",
+      "alt": "Particles"
+    },
+    {
+      "kind": "video",
+      "path": "media/ddfc39957e978e9062f724fbb3c58908.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/particles-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/251078d8f4037d4032497d15261ced49.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reflections.webp",
+      "alt": "Reflections"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b834007dc6e7c173010006ad26eb1fd6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/bubbles/hero.jpg",
+      "alt": "Bubbles",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "fe7b2b7f09b371918419e9f7ce307e886be363a413bf0766b74165c27af74830"
+}

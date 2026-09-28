@@ -1,0 +1,421 @@
+{
+  "id": "composition/look-space",
+  "slug": "look-space",
+  "title": "Look Space",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/look-space",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/look-space.webp",
+  "detail": "details/composition/look-space.json",
+  "aliases": [
+    "Look-object relationship",
+    "Raccord regard"
+  ],
+  "description": "Look space framing is the field in front of a gaze, the air a look owns, often because the important object is off-screen. In cutting, that look may be joined to what is seen (raccord regard, the look-object relationship).",
+  "thumbnail": "media/bfed12ab0fca3db5ddc2cb0f7213aac9.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face and a rectangle of unused air can be a whole scene. We wait for the object: a person entering, a painting, a courtyard window."
+        },
+        {
+          "type": "paragraph",
+          "text": "The subject does not own the surplus. The unseen does."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when there is no look. Empty space beside a face that stares into lens is not look-space."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is leftover. If you need the object on-screen, put it there and stop pretending the air is a mystery."
+        },
+        {
+          "type": "paragraph",
+          "text": "Look-space is the composition. The POV cut is the completion."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can hold the look and never pay off, which is a different cruelty."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A face and a rectangle of unused air can be a whole scene. We wait for the object: a person entering, a painting, a courtyard window.The subject does not own the surplus. The unseen does.It is the wrong tool when there is no look. Empty space beside a face that stares into lens is not look-space.It is leftover. If you need the object on-screen, put it there and stop pretending the air is a mystery.Look-space is the composition. The POV cut is the completion.You can hold the look and never pay off, which is a different cruelty."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place more frame in the gaze direction than behind the head, unless you are short-siding. Match the height and direction of the look if the next shot is the object."
+        },
+        {
+          "type": "paragraph",
+          "text": "A profile or three-quarter makes the owned field obvious. Do not fill that field with competing faces unless the competition is the point."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Generous look space for [Subject], the off-screen gaze owning a field of air, tension in what we cannot see."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place more frame in the gaze direction than behind the head, unless you are short-siding. Match the height and direction of the look if the next shot is the object.A profile or three-quarter makes the owned field obvious. Do not fill that field with competing faces unless the competition is the point.Prompt: Generous look space for [Subject], the off-screen gaze owning a field of air, tension in what we cannot see."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the object of attention is off-screen or about to enter: a watcher, a painter, a sniper, a lover at a door. Do not leave dead air beside a to-camera interview and call it a look."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the object of attention is off-screen or about to enter: a watcher, a painter, a sniper, a lover at a door. Do not leave dead air beside a to-camera interview and call it a look."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lead Room includes motion and classical manners for a walk. Look-space is specifically the gaze, especially toward an off-screen object.",
+          "links": [
+            {
+              "text": "Lead Room",
+              "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Point of View is the shot of what they see. Look-space is the shot of them seeing.",
+          "links": [
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Short Siding withholds this field. Reaction Shot may be a look with almost no space if the face is the whole event.",
+          "links": [
+            {
+              "text": "Short Siding",
+              "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+            },
+            {
+              "text": "Reaction Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Frame within Frame can put the object in a window inside the look-space.",
+          "links": [
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lead RoomThey are going somewhere, even if standing.",
+          "displayText": "Lead Room\nThey are going somewhere, even if standing.",
+          "links": [
+            {
+              "text": "Lead RoomThey are going somewhere, even if standing.",
+              "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Point of ViewForce identification. The audience is the character.",
+          "displayText": "Point of View\nForce identification. The audience is the character.",
+          "links": [
+            {
+              "text": "Point of ViewForce identification. The audience is the character.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Lead Room",
+          "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+        },
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Short Siding",
+          "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+        },
+        {
+          "text": "Reaction Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/reaction-shot"
+        },
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Lead RoomThey are going somewhere, even if standing.",
+          "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+        },
+        {
+          "text": "Point of ViewForce identification. The audience is the character.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/00082839284cdeb7bf57bb7a3a31a168.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lead-room.webp",
+          "alt": "Lead Room"
+        },
+        {
+          "kind": "image",
+          "path": "media/33e364cb93ac77f7bba981d6a44b2dad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pov-090-subjective-optical-pov-mini.webp",
+          "alt": "Point of View"
+        },
+        {
+          "kind": "video",
+          "path": "media/ad782c8d50b2a756b366df24f8816406.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/090-subjective-optical-pov-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Lead Room includes motion and classical manners for a walk. Look-space is specifically the gaze, especially toward an off-screen object.Point of View is the shot of what they see. Look-space is the shot of them seeing.Short Siding withholds this field. Reaction Shot may be a look with almost no space if the face is the whole event.Frame within Frame can put the object in a window inside the look-space.Lead RoomThey are going somewhere, even if standing.Point of ViewForce identification. The audience is the character.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rear Window builds Jeff's looks and then pays them with courtyard activity. Portrait of a Lady on Fire makes looking the subject, space between painter and model as the true field."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Stendhal Syndrome matches Anna's looks to museum paintings. Grammar of eyeline, not a tourist view to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "Rear Window 1954Jeff looks out, followed by views of courtyard activity.",
+          "displayText": "Rear Window 1954\nJeff looks out, followed by views of courtyard activity."
+        },
+        {
+          "type": "list-item",
+          "text": "The Stendhal Syndrome 1996Anna’s looks are matched to museum paintings.",
+          "displayText": "The Stendhal Syndrome 1996\nAnna’s looks are matched to museum paintings."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Rear Window builds Jeff's looks and then pays them with courtyard activity. Portrait of a Lady on Fire makes looking the subject, space between painter and model as the true field.The Stendhal Syndrome matches Anna's looks to museum paintings. Grammar of eyeline, not a tourist view to copy.Rear Window 1954Jeff looks out, followed by views of courtyard activity.The Stendhal Syndrome 1996Anna’s looks are matched to museum paintings."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Give the gaze a field and keep the object off unless you want it. Generous look space for [Subject], the off-screen gaze owning a field of air, tension in what we cannot see."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say looking screen-left into empty frame, object not shown. If you will cut to Point of View, write that as a second shot.",
+          "links": [
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "quote",
+          "text": "Generate A: a seated woman looks upward and to her left toward a sound. Generate B: a slightly elevated wall clock seen from her seated side of the room. Generate C: return to her face as she understands she is late. Preserve look direction and plausible clock height."
+        }
+      ],
+      "links": [
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Generate+A:+a+seated+woman+looks+upward+and+to+her+left+toward+a+sound.+Generate+B:+a+slightly+elevated+wall+clock+seen+from+her+seated+side+of+the+room.+Generate+C:+return+to+her+face+as+she+understands+she+is+late.+Preserve+look+direction+and+plausible+clock+height."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Give the gaze a field and keep the object off unless you want it. Generous look space for [Subject], the off-screen gaze owning a field of air, tension in what we cannot see.Say looking screen-left into empty frame, object not shown. If you will cut to Point of View, write that as a second shot.Copy promptUse in Video GeneratorGenerate A: a seated woman looks upward and to her left toward a sound. Generate B: a slightly elevated wall clock seen from her seated side of the room. Generate C: return to her face as she understands she is late. Preserve look direction and plausible clock height.Generate A: a seated woman looks upward and to her left toward a sound. Generate B: a slightly elevated wall clock seen from her seated side of the room. Generate C: return to her face as she understands she is late. Preserve look direction and plausible clock height."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is leftover wallpaper, or a false eyeline cut. The tell is empty space on the wrong side of the face, or a next shot the look could not geometrically reach."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to put the surplus in the gaze direction and to match height and angle if you complete the look."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is leftover wallpaper, or a false eyeline cut. The tell is empty space on the wrong side of the face, or a next shot the look could not geometrically reach.The fix is to put the surplus in the gaze direction and to match height and angle if you complete the look."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is look space in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the area of frame a gaze owns, usually ahead of the eyes. Often the important object is off-screen, so the air is tension. In editing, the look may be joined to a shot of what is seen."
+        },
+        {
+          "type": "heading",
+          "text": "Look Space vs Lead Room",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Lead room is space in the direction of movement, and by extension a standing look. Look space is the gaze as a relationship to an object, present or withheld. A runner needs lead room. A watcher of a courtyard needs look-space. They overlap in a still profile. They are not the same job."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use look space?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when what matters is off-screen or about to arrive, and the face watching is the present tense. Do not confuse leftover margin on an interview with a look."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt look space for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Point the eyes and empty the field they face. Example: Generous look space for [Subject], the off-screen gaze owning a field of air, tension in what we cannot see. Say the object is not in frame. For video, you can add a second shot as POV."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is look space in film?It is the area of frame a gaze owns, usually ahead of the eyes. Often the important object is off-screen, so the air is tension. In editing, the look may be joined to a shot of what is seen.Look Space vs Lead RoomLead room is space in the direction of movement, and by extension a standing look. Look space is the gaze as a relationship to an object, present or withheld. A runner needs lead room. A watcher of a courtyard needs look-space. They overlap in a still profile. They are not the same job.When should I use look space?Use it when what matters is off-screen or about to arrive, and the face watching is the present tense. Do not confuse leftover margin on an interview with a look.How do I prompt look space for AI image or video?Point the eyes and empty the field they face. Example: Generous look space for [Subject], the off-screen gaze owning a field of air, tension in what we cannot see. Say the object is not in frame. For video, you can add a second shot as POV."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Give the gaze a field and keep the object off unless you want it. Generous look space for [Subject], the off-screen gaze owning a field of air, tension in what we cannot see.",
+      "Say looking screen-left into empty frame, object not shown. If you will cut to Point of View, write that as a second shot."
+    ],
+    "example": "Generate A: a seated woman looks upward and to her left toward a sound. Generate B: a slightly elevated wall clock seen from her seated side of the room. Generate C: return to her face as she understands she is late. Preserve look direction and plausible clock height."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/bfed12ab0fca3db5ddc2cb0f7213aac9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/look-space.webp",
+      "alt": "Look Space example"
+    },
+    {
+      "kind": "image",
+      "path": "media/00082839284cdeb7bf57bb7a3a31a168.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lead-room.webp",
+      "alt": "Lead Room"
+    },
+    {
+      "kind": "image",
+      "path": "media/33e364cb93ac77f7bba981d6a44b2dad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pov-090-subjective-optical-pov-mini.webp",
+      "alt": "Point of View"
+    },
+    {
+      "kind": "video",
+      "path": "media/ad782c8d50b2a756b366df24f8816406.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/090-subjective-optical-pov-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/dc12082095e516da847f20e3cb2c5b68.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/look-space/hero.jpg",
+      "alt": "Look Space",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "7b5c63ba508c016a0d809a609086cde1c7c9f9f12cbf68026e65faa62656a89d"
+}

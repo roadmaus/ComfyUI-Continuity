@@ -1,0 +1,401 @@
+{
+  "id": "camera-movement/through-object-out",
+  "slug": "through-object-out",
+  "title": "Through Object Out",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/through-object-out",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/through-object-out-through-object-out-mini.webp",
+  "detail": "details/camera-movement/through-object-out.json",
+  "aliases": [
+    "The Passenger final shot",
+    "Viewpoint detaches from protagonist"
+  ],
+  "description": "Through object out leaves the subject by traveling out through an object into a wider world, interior becoming exterior. The viewpoint can abandon the person and let the decisive event happen off its direct attention.",
+  "thumbnail": "media/2d5da937b46bdb0e89ca21d9ccd98aa0.webp",
+  "video": "media/c3c3001a333a0b11f52f0d38c016f8ab.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/through-object-out-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Leave through a thing. Endings, a mind opening onto a city, a room that becomes a street by way of a window, a pupil, a barred frame: absence can be the dramatic center."
+        },
+        {
+          "type": "paragraph",
+          "text": "The effect is the viewpoint abandoning the person, not merely passing an obstacle. A zoom out that never enters matter is not this shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "The object must occupy the frame as a tunnel."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Leave through a thing. Endings, a mind opening onto a city, a room that becomes a street by way of a window, a pupil, a barred frame: absence can be the dramatic center.The effect is the viewpoint abandoning the person, not merely passing an obstacle. A zoom out that never enters matter is not this shot.The object must occupy the frame as a tunnel."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stage room, object, and exterior as one spatial problem. Removable barrier, support transfer, or composite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Choreograph exterior action and offscreen sound to carry the event if the camera looks away. Prompt: Through-object-out from [Subject], the camera exiting via an object into a wider world, the interior becoming exterior."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Stage room, object, and exterior as one spatial problem. Removable barrier, support transfer, or composite.Choreograph exterior action and offscreen sound to carry the event if the camera looks away. Prompt: Through-object-out from [Subject], the camera exiting via an object into a wider world, the interior becoming exterior."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to leave a person through a thing into a larger space. Do not use a plain pull-out and claim a portal."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to leave a person through a thing into a larger space. Do not use a plain pull-out and claim a portal."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Through Object In arrives. Aerial Pullback leaves by gaining altitude until geography wins, without needing a prop as tunnel.",
+          "links": [
+            {
+              "text": "Through Object In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/through-object-in"
+            },
+            {
+              "text": "Aerial Pullback",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Through-object-out needs the object as the exit."
+        },
+        {
+          "type": "list-item",
+          "text": "Through Object InEnter through a thing.",
+          "displayText": "Through Object In\nEnter through a thing.",
+          "links": [
+            {
+              "text": "Through Object InEnter through a thing.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/through-object-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "displayText": "Aerial Pullback\nClose a chapter. Geography wins.",
+          "links": [
+            {
+              "text": "Aerial PullbackClose a chapter. Geography wins.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Through Object In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/through-object-in"
+        },
+        {
+          "text": "Aerial Pullback",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Through Object InEnter through a thing.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/through-object-in"
+        },
+        {
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f50d3a0400b8aff3510a0542238ce407.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/through-object-in-through-object-in-mini.webp",
+          "alt": "Through Object In"
+        },
+        {
+          "kind": "video",
+          "path": "media/09420a56235cbfd2a069fdf804510ad5.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/through-object-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+          "alt": "Aerial Pullback"
+        },
+        {
+          "kind": "video",
+          "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Through Object In arrives. Aerial Pullback leaves by gaining altitude until geography wins, without needing a prop as tunnel.Through-object-out needs the object as the exit.Through Object InEnter through a thing.Aerial PullbackClose a chapter. Geography wins.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Passenger's late hotel-room shot moves toward and beyond a barred window, then looks back. Contact and The Tree of Life use exits of scale and matter as revelation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: leave through a thing, interior becoming exterior."
+        },
+        {
+          "type": "list-item",
+          "text": "The Passenger 1975The late hotel-room shot moves toward and beyond the barred window, then looks back toward the room.",
+          "displayText": "The Passenger 1975\nThe late hotel-room shot moves toward and beyond the barred window, then looks back toward the room."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6ff8cd61f19ffec55be43aaaba15ff3a.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/through-object-out/famous/00-the-passenger-1975.jpg",
+          "alt": "The Passenger 1975"
+        }
+      ],
+      "sourceText": "In film The Passenger's late hotel-room shot moves toward and beyond a barred window, then looks back. Contact and The Tree of Life use exits of scale and matter as revelation.Grammar: leave through a thing, interior becoming exterior.The Passenger 1975The late hotel-room shot moves toward and beyond the barred window, then looks back toward the room."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Start on the subject, name the object, arrive larger. Still: Through-object-out from [Subject], the camera exiting via an object into a wider world, the interior becoming exterior."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera leaves [Subject] by traveling out through an object into a larger space. The object must be a tunnel."
+        },
+        {
+          "type": "quote",
+          "text": "Begin inside a quiet hotel room with a traveler seated near the edge of frame. Slowly approach a barred window, pass beyond it without visible interruption, drift into the courtyard, then turn to look back at the room. The traveler remains offscreen during a muffled disturbance. Use a planned barrier-removal composite, not bending metal."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Begin+inside+a+quiet+hotel+room+with+a+traveler+seated+near+the+edge+of+frame.+Slowly+approach+a+barred+window,+pass+beyond+it+without+visible+interruption,+drift+into+the+courtyard,+then+turn+to+look+back+at+the+room.+The+traveler+remains+offscreen+during+a+muffled+disturbance.+Use+a+planned+barrier-removal+composite,+not+bending+metal."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Start on the subject, name the object, arrive larger. Still: Through-object-out from [Subject], the camera exiting via an object into a wider world, the interior becoming exterior.Video: The camera leaves [Subject] by traveling out through an object into a larger space. The object must be a tunnel.Copy promptUse in Video GeneratorBegin inside a quiet hotel room with a traveler seated near the edge of frame. Slowly approach a barred window, pass beyond it without visible interruption, drift into the courtyard, then turn to look back at the room. The traveler remains offscreen during a muffled disturbance. Use a planned barrier-removal composite, not bending metal.Begin inside a quiet hotel room with a traveler seated near the edge of frame. Slowly approach a barred window, pass beyond it without visible interruption, drift into the courtyard, then turn to look back at the room. The traveler remains offscreen during a muffled disturbance. Use a planned barrier-removal composite, not bending metal."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a zoom out or a crane-up. The tell: the world enlarges but no object ever fills the frame as a passage."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: occupy the lens with the object, travel through it, then the wider world."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a zoom out or a crane-up. The tell: the world enlarges but no object ever fills the frame as a passage.The fix: occupy the lens with the object, travel through it, then the wider world."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Through Object Out in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Through object out is a moving viewpoint that leaves a subject by traveling out through an object into a larger space, interior becoming exterior."
+        },
+        {
+          "type": "heading",
+          "text": "Through Object Out vs Through Object In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Through-object-in enters via a prop and arrives on the person. Through-object-out exits via a prop and can abandon the person to a wider world."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Through Object Out?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for endings and scale reveals that leave through a thing. Do not use a plain pull-out with no portal."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Through Object Out for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Start on the subject, travel out through a named object, arrive in a larger space. Example: Through-object-out from [Subject], the camera exiting via an object into a wider world."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Through Object Out in film?Through object out is a moving viewpoint that leaves a subject by traveling out through an object into a larger space, interior becoming exterior.Through Object Out vs Through Object InThrough-object-in enters via a prop and arrives on the person. Through-object-out exits via a prop and can abandon the person to a wider world.When should I use Through Object Out?Use it for endings and scale reveals that leave through a thing. Do not use a plain pull-out with no portal.How do I prompt Through Object Out for AI image or video?Start on the subject, travel out through a named object, arrive in a larger space. Example: Through-object-out from [Subject], the camera exiting via an object into a wider world."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Start on the subject, name the object, arrive larger. Still: Through-object-out from [Subject], the camera exiting via an object into a wider world, the interior becoming exterior.",
+      "Video: The camera leaves [Subject] by traveling out through an object into a larger space. The object must be a tunnel."
+    ],
+    "example": "Begin inside a quiet hotel room with a traveler seated near the edge of frame. Slowly approach a barred window, pass beyond it without visible interruption, drift into the courtyard, then turn to look back at the room. The traveler remains offscreen during a muffled disturbance. Use a planned barrier-removal composite, not bending metal."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/c3c3001a333a0b11f52f0d38c016f8ab.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/through-object-out-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2d5da937b46bdb0e89ca21d9ccd98aa0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/through-object-out-through-object-out-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c17ee0c7c08a757d5740d578235f39d1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/through-object-out.jpg",
+      "alt": "Through Object Out frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/f50d3a0400b8aff3510a0542238ce407.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/through-object-in-through-object-in-mini.webp",
+      "alt": "Through Object In"
+    },
+    {
+      "kind": "video",
+      "path": "media/09420a56235cbfd2a069fdf804510ad5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/through-object-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+      "alt": "Aerial Pullback"
+    },
+    {
+      "kind": "video",
+      "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6ff8cd61f19ffec55be43aaaba15ff3a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/through-object-out/famous/00-the-passenger-1975.jpg",
+      "alt": "The Passenger 1975"
+    },
+    {
+      "kind": "image",
+      "path": "media/1c3f59fab3311f7c170eec0dbf4ec003.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/through-object-out/hero.jpg",
+      "alt": "Through Object Out",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "a19472c488d686772bd81b1ce18f2abfdfd3471b8ed197d84b511464df02da8e"
+}

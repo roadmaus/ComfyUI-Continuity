@@ -1,0 +1,395 @@
+{
+  "id": "composition/short-siding",
+  "slug": "short-siding",
+  "title": "Short Siding",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/short-siding",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/short-siding.webp",
+  "detail": "details/composition/short-siding.json",
+  "aliases": [],
+  "description": "Short siding places the face near the frame edge the character looks toward, crushing look-space and leaving surplus air behind the head. The edge they face becomes a wall, so the diagram denies them a future in the picture.",
+  "thumbnail": "media/2f33d83d9e10b44e03ac9d46e311e253.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Deny the character air and the scene tightens without a closer lens. An interrogator, a liar, a person who has just seen the worst thing: they look into almost nothing."
+        },
+        {
+          "type": "paragraph",
+          "text": "The leftover field behind them is wasted country they cannot use. It is the wrong tool for ordinary coverage."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do it by accident and the shot feels like a student pan. Do it on every close-up and the trap stops meaning."
+        },
+        {
+          "type": "paragraph",
+          "text": "Short siding is not the same as a big empty wall. If they look into a vast field, you have negative space in the look."
+        },
+        {
+          "type": "paragraph",
+          "text": "Short siding specifically starves the look."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Deny the character air and the scene tightens without a closer lens. An interrogator, a liar, a person who has just seen the worst thing: they look into almost nothing.The leftover field behind them is wasted country they cannot use. It is the wrong tool for ordinary coverage.Do it by accident and the shot feels like a student pan. Do it on every close-up and the trap stops meaning.Short siding is not the same as a big empty wall. If they look into a vast field, you have negative space in the look.Short siding specifically starves the look."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the eyes close to the edge they face. Leave the larger field behind the skull."
+        },
+        {
+          "type": "paragraph",
+          "text": "A profile or strong three-quarter makes the crush obvious. You can still use a 50mm or 75mm."
+        },
+        {
+          "type": "paragraph",
+          "text": "The crop does the violence, not a wider lens. Do not correct it in the pan."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Short-sided framing of [Subject], look space crushed, the face near the frame edge they look toward, trapped or urgent."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put the eyes close to the edge they face. Leave the larger field behind the skull.A profile or strong three-quarter makes the crush obvious. You can still use a 50mm or 75mm.The crop does the violence, not a wider lens. Do not correct it in the pan.Prompt: Short-sided framing of [Subject], look space crushed, the face near the frame edge they look toward, trapped or urgent."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for interrogation, guilt, panic, and any beat where the next thing should feel unreachable. Do not use it as default portrait grammar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for interrogation, guilt, panic, and any beat where the next thing should feel unreachable. Do not use it as default portrait grammar."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lead Room is the polite reverse: air ahead of the look. Negative Space may surround a small figure without starving the gaze.",
+          "links": [
+            {
+              "text": "Lead Room",
+              "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+            },
+            {
+              "text": "Negative Space",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Short siding can coexist with a large empty field behind the head, which is negative space used as a trap. Look Space is what you are withholding.",
+          "links": [
+            {
+              "text": "Look Space",
+              "url": "https://melies.co/cinematic-techniques/composition/look-space"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Close-Up size makes the crush louder but is not required.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lead RoomThey are going somewhere, even if standing.",
+          "displayText": "Lead Room\nThey are going somewhere, even if standing.",
+          "links": [
+            {
+              "text": "Lead RoomThey are going somewhere, even if standing.",
+              "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Negative SpaceLoneliness needs room.",
+          "displayText": "Negative Space\nLoneliness needs room.",
+          "links": [
+            {
+              "text": "Negative SpaceLoneliness needs room.",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Lead Room",
+          "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+        },
+        {
+          "text": "Negative Space",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Look Space",
+          "url": "https://melies.co/cinematic-techniques/composition/look-space"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Lead RoomThey are going somewhere, even if standing.",
+          "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+        },
+        {
+          "text": "Negative SpaceLoneliness needs room.",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/00082839284cdeb7bf57bb7a3a31a168.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lead-room.webp",
+          "alt": "Lead Room"
+        },
+        {
+          "kind": "image",
+          "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+          "alt": "Negative Space"
+        },
+        {
+          "kind": "video",
+          "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Lead Room is the polite reverse: air ahead of the look. Negative Space may surround a small figure without starving the gaze.Short siding can coexist with a large empty field behind the head, which is negative space used as a trap. Look Space is what you are withholding.Close-Up size makes the crush louder but is not required.Lead RoomThey are going somewhere, even if standing.Negative SpaceLoneliness needs room.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Silence of the Lambs uses short-sided faces so conversations feel like cages even in a medium. Prisoners presses heads toward the edge they look into, air wasted behind them."
+        },
+        {
+          "type": "paragraph",
+          "text": "The grammar is denial, not a filter. Use as pressure, not as a default crop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Silence of the Lambs uses short-sided faces so conversations feel like cages even in a medium. Prisoners presses heads toward the edge they look into, air wasted behind them.The grammar is denial, not a filter. Use as pressure, not as a default crop."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the crush. Short-sided framing of [Subject], look space crushed, the face near the frame edge they look toward, trapped or urgent."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say looking right, face against the right edge, empty space behind the head. Do not add looking room."
+        },
+        {
+          "type": "quote",
+          "text": "Short-sided framing of [Subject], look space crushed, the face near the frame edge they look toward, trapped or urgent."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Short-sided+framing+of+[Subject],+look+space+crushed,+the+face+near+the+frame+edge+they+look+toward,+trapped+or+urgent."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the crush. Short-sided framing of [Subject], look space crushed, the face near the frame edge they look toward, trapped or urgent.Say looking right, face against the right edge, empty space behind the head. Do not add looking room.Copy promptUse in Image GeneratorShort-sided framing of [Subject], look space crushed, the face near the frame edge they look toward, trapped or urgent.Short-sided framing of [Subject], look space crushed, the face near the frame edge they look toward, trapped or urgent."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is accidental bad coverage. The tell is a talking head kissing the look-edge in a scene that is not a trap, often from a rushed pan."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to give Lead Room unless the beat is confinement, in which case hold the crush and stop trying to rebalance.",
+          "links": [
+            {
+              "text": "Lead Room",
+              "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Lead Room",
+          "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is accidental bad coverage. The tell is a talking head kissing the look-edge in a scene that is not a trap, often from a rushed pan.The fix is to give Lead Room unless the beat is confinement, in which case hold the crush and stop trying to rebalance."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is short siding in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "The face sits near the edge it looks toward. Look-space is crushed. Extra air sits behind the head, unused. The character is denied a future in the frame."
+        },
+        {
+          "type": "heading",
+          "text": "Short Siding vs Lead Room",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Lead room puts surplus ahead of the gaze or walk. Short siding puts surplus behind and starves the look. One is classical manners. The other is a deliberate bad manner for pressure."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use short siding?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a character should feel trapped, guilty, or out of road: interrogation, dread, a look that cannot be answered. Do not use it as everyday singles."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt short siding for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "State the edge and the starved look. Example: Short-sided framing of [Subject], look space crushed, the face near the frame edge they look toward, trapped or urgent. Models love looking room. You must forbid it."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is short siding in film?The face sits near the edge it looks toward. Look-space is crushed. Extra air sits behind the head, unused. The character is denied a future in the frame.Short Siding vs Lead RoomLead room puts surplus ahead of the gaze or walk. Short siding puts surplus behind and starves the look. One is classical manners. The other is a deliberate bad manner for pressure.When should I use short siding?Use it when a character should feel trapped, guilty, or out of road: interrogation, dread, a look that cannot be answered. Do not use it as everyday singles.How do I prompt short siding for AI image or video?State the edge and the starved look. Example: Short-sided framing of [Subject], look space crushed, the face near the frame edge they look toward, trapped or urgent. Models love looking room. You must forbid it."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the crush. Short-sided framing of [Subject], look space crushed, the face near the frame edge they look toward, trapped or urgent.",
+      "Say looking right, face against the right edge, empty space behind the head. Do not add looking room."
+    ],
+    "example": "Short-sided framing of [Subject], look space crushed, the face near the frame edge they look toward, trapped or urgent."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/2f33d83d9e10b44e03ac9d46e311e253.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/short-siding.webp",
+      "alt": "Short Siding example"
+    },
+    {
+      "kind": "image",
+      "path": "media/00082839284cdeb7bf57bb7a3a31a168.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lead-room.webp",
+      "alt": "Lead Room"
+    },
+    {
+      "kind": "image",
+      "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+      "alt": "Negative Space"
+    },
+    {
+      "kind": "video",
+      "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/53a8039598f5e7633e1ac67024f5c5b3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/short-siding/hero.jpg",
+      "alt": "Short Siding",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "345601a1dd9d9b5638db45b2c35b4ed8094012868e91e292a994413c30925d03"
+}

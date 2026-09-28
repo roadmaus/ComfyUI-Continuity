@@ -1,0 +1,461 @@
+{
+  "id": "composition/negative-space",
+  "slug": "negative-space",
+  "title": "Negative Space",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/negative-space",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+  "detail": "details/composition/negative-space.json",
+  "aliases": [
+    "Unbalanced framing",
+    "Short-sided composition"
+  ],
+  "description": "Negative space in negative space cinematography leaves a large, relatively empty area around or beside the subject so absence becomes a mass. The unoccupied field is still a world (sky, wall, snow, sea), and the subject occupies a small or unusual portion of the diagram.",
+  "thumbnail": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+  "video": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Loneliness needs room. So does dread, and so does waiting."
+        },
+        {
+          "type": "paragraph",
+          "text": "A face low under a slab of architecture, a man tiny in a desert, a woman with a blank wall as her partner: the empty area is the other character. It is the wrong tool when the scene is crowded with story."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the blank wall is just an unlit set, you underexposed a failure. Empty is not automatically meaningful."
+        },
+        {
+          "type": "paragraph",
+          "text": "Unbalanced framing and short-sided composition are cousins, not synonyms. Negative space can sit above a head (headroom as weather), beside a look (air as future), or all around a speck (the world as indifference)."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Loneliness needs room. So does dread, and so does waiting.A face low under a slab of architecture, a man tiny in a desert, a woman with a blank wall as her partner: the empty area is the other character. It is the wrong tool when the scene is crowded with story.If the blank wall is just an unlit set, you underexposed a failure. Empty is not automatically meaningful.Unbalanced framing and short-sided composition are cousins, not synonyms. Negative space can sit above a head (headroom as weather), beside a look (air as future), or all around a speck (the world as indifference)."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Decide what the unoccupied area means before you widen. Control eyeline, headroom, and background detail."
+        },
+        {
+          "type": "paragraph",
+          "text": "A longer lens can isolate a small figure against a simple field. A wide lens can make the field truly large."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not automatically rebalance. Stop down if the empty weather must stay a texture, or open up if it should melt to tone."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Vast negative space around [Subject], the figure small, absence as weight, Antonioni emptiness."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Decide what the unoccupied area means before you widen. Control eyeline, headroom, and background detail.A longer lens can isolate a small figure against a simple field. A wide lens can make the field truly large.Do not automatically rebalance. Stop down if the empty weather must stay a texture, or open up if it should melt to tone.Prompt: Vast negative space around [Subject], the figure small, absence as weight, Antonioni emptiness."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when isolation, waiting, or land must outweigh a person: a figure under sky, a face under ceiling, a body at the edge of a pale wall. Do not confuse a blank backdrop with a designed void, and do not auto-balance if the imbalance is the beat."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when isolation, waiting, or land must outweigh a person: a figure under sky, a face under ceiling, a body at the edge of a pale wall. Do not confuse a blank backdrop with a designed void, and do not auto-balance if the imbalance is the beat."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Extreme Long Shot is a size that often produces this space. Negative space can also crush a close face under ceiling.",
+          "links": [
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Short Siding specifically denies look-space. Negative space may sit in any direction.",
+          "links": [
+            {
+              "text": "Short Siding",
+              "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Void erases the set into nothing. Negative space still belongs to a world.",
+          "links": [
+            {
+              "text": "Void",
+              "url": "https://melies.co/cinematic-techniques/composition/void"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Clean Frame tidies edges without requiring a small subject. Headroom is the vertical slice of this idea.",
+          "links": [
+            {
+              "text": "Clean Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/clean-frame"
+            },
+            {
+              "text": "Headroom",
+              "url": "https://melies.co/cinematic-techniques/composition/headroom"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Long ShotScale is the emotion.",
+          "displayText": "Extreme Long Shot\nScale is the emotion.",
+          "links": [
+            {
+              "text": "Extreme Long ShotScale is the emotion.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Short SidingDeny the character air.",
+          "displayText": "Short Siding\nDeny the character air.",
+          "links": [
+            {
+              "text": "Short SidingDeny the character air.",
+              "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Short Siding",
+          "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+        },
+        {
+          "text": "Void",
+          "url": "https://melies.co/cinematic-techniques/composition/void"
+        },
+        {
+          "text": "Clean Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/clean-frame"
+        },
+        {
+          "text": "Headroom",
+          "url": "https://melies.co/cinematic-techniques/composition/headroom"
+        },
+        {
+          "text": "Extreme Long ShotScale is the emotion.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Short SidingDeny the character air.",
+          "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+          "alt": "Extreme Long Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/2f33d83d9e10b44e03ac9d46e311e253.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/short-siding.webp",
+          "alt": "Short Siding"
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Extreme Long Shot is a size that often produces this space. Negative space can also crush a close face under ceiling.Short Siding specifically denies look-space. Negative space may sit in any direction.Void erases the set into nothing. Negative space still belongs to a world.Clean Frame tidies edges without requiring a small subject. Headroom is the vertical slice of this idea.Extreme Long ShotScale is the emotion.Short SidingDeny the character air.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ida parks faces low under large fields of architecture and sky. L'Avventura lets islands and empty coasts outweigh the searchers."
+        },
+        {
+          "type": "paragraph",
+          "text": "Her uses pale interiors and city air as partners for a small body. Mr."
+        },
+        {
+          "type": "paragraph",
+          "text": "Turner subordinates figures to weather. No Country for Old Men lets landscape refuse comfort."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of absence, not a desert kit."
+        },
+        {
+          "type": "list-item",
+          "text": "Ida 2013Low-positioned faces beneath large areas of architecture and sky.",
+          "displayText": "Ida 2013\nLow-positioned faces beneath large areas of architecture and sky."
+        },
+        {
+          "type": "list-item",
+          "text": "Mr. Turner 2014Figures can be subordinated to large spaces and atmosphere.",
+          "displayText": "Mr. Turner 2014\nFigures can be subordinated to large spaces and atmosphere."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/dd91fa62b3db8a4337ba16f3a1e84fff.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/negative-space/famous/00-ida-2013.jpg",
+          "alt": "Ida 2013"
+        },
+        {
+          "kind": "image",
+          "path": "media/3a8b500838eb9a835974b035e871b3f5.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/negative-space/famous/01-mr-turner-2014.jpg",
+          "alt": "Mr. Turner 2014"
+        }
+      ],
+      "sourceText": "In film Ida parks faces low under large fields of architecture and sky. L'Avventura lets islands and empty coasts outweigh the searchers.Her uses pale interiors and city air as partners for a small body. Mr.Turner subordinates figures to weather. No Country for Old Men lets landscape refuse comfort.Grammar of absence, not a desert kit.Ida 2013Low-positioned faces beneath large areas of architecture and sky.Mr. Turner 2014Figures can be subordinated to large spaces and atmosphere."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say what is empty and where the body sits. Vast negative space around [Subject], the figure small, absence as weight, Antonioni emptiness."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the field (wall, sky, snow, sea) and the placement (low in frame, far right, a speck). Do not write lonely as a substitute for geometry."
+        },
+        {
+          "type": "quote",
+          "text": "A young woman sits in the bottom-right corner of a tall, nearly empty waiting room. Most of the frame is pale wall and high windows. She looks toward the near edge rather than into the empty space. Static shot, restrained performance, no decorative camera movement."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+young+woman+sits+in+the+bottom-right+corner+of+a+tall,+nearly+empty+waiting+room.+Most+of+the+frame+is+pale+wall+and+high+windows.+She+looks+toward+the+near+edge+rather+than+into+the+empty+space.+Static+shot,+restrained+performance,+no+decorative+camera+movement."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say what is empty and where the body sits. Vast negative space around [Subject], the figure small, absence as weight, Antonioni emptiness.Name the field (wall, sky, snow, sea) and the placement (low in frame, far right, a speck). Do not write lonely as a substitute for geometry.Copy promptUse in Video GeneratorA young woman sits in the bottom-right corner of a tall, nearly empty waiting room. Most of the frame is pale wall and high windows. She looks toward the near edge rather than into the empty space. Static shot, restrained performance, no decorative camera movement.A young woman sits in the bottom-right corner of a tall, nearly empty waiting room. Most of the frame is pale wall and high windows. She looks toward the near edge rather than into the empty space. Static shot, restrained performance, no decorative camera movement."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an Extreme Long Shot with a busy horizon. The tell is a small figure against cluttered detail that competes.",
+          "links": [
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to simplify the field, or to own the clutter as Architexture instead of claiming emptiness.",
+          "links": [
+            {
+              "text": "Architexture",
+              "url": "https://melies.co/cinematic-techniques/composition/architexture"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Architexture",
+          "url": "https://melies.co/cinematic-techniques/composition/architexture"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an Extreme Long Shot with a busy horizon. The tell is a small figure against cluttered detail that competes.The fix is to simplify the field, or to own the clutter as Architexture instead of claiming emptiness."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is negative space in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a large unoccupied area around or beside the subject that still reads as world: sky, wall, snow, sea. The empty field has weight. The person does not automatically own the frame."
+        },
+        {
+          "type": "heading",
+          "text": "Negative Space vs Void",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Negative space is emptiness inside a place. Void erases the place: a figure against black, white, or nothing. Ida's sky is negative space. A body in an unlit nowhere is a void. Both isolate. Only one still has geography."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use negative space?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when absence should act: isolation, waiting, land that does not care. Do not use it as an unlit wall you forgot to dress. Tie the imbalance to pressure in the scene."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt negative space for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Place the figure and name the empty field. Example: Vast negative space around [Subject], the figure small, absence as weight, Antonioni emptiness. Say low in frame or far to one side. Forbid extra props in the empty area."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is negative space in film?It is a large unoccupied area around or beside the subject that still reads as world: sky, wall, snow, sea. The empty field has weight. The person does not automatically own the frame.Negative Space vs VoidNegative space is emptiness inside a place. Void erases the place: a figure against black, white, or nothing. Ida's sky is negative space. A body in an unlit nowhere is a void. Both isolate. Only one still has geography.When should I use negative space?Use it when absence should act: isolation, waiting, land that does not care. Do not use it as an unlit wall you forgot to dress. Tie the imbalance to pressure in the scene.How do I prompt negative space for AI image or video?Place the figure and name the empty field. Example: Vast negative space around [Subject], the figure small, absence as weight, Antonioni emptiness. Say low in frame or far to one side. Forbid extra props in the empty area."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say what is empty and where the body sits. Vast negative space around [Subject], the figure small, absence as weight, Antonioni emptiness.",
+      "Name the field (wall, sky, snow, sea) and the placement (low in frame, far right, a speck). Do not write lonely as a substitute for geometry."
+    ],
+    "example": "A young woman sits in the bottom-right corner of a tall, nearly empty waiting room. Most of the frame is pale wall and high windows. She looks toward the near edge rather than into the empty space. Static shot, restrained performance, no decorative camera movement."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e281508d142e31a99eeb68b790d36568.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/negative-space-042-negative-space-v2.jpg",
+      "alt": "Negative Space frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+      "alt": "Extreme Long Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/2f33d83d9e10b44e03ac9d46e311e253.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/short-siding.webp",
+      "alt": "Short Siding"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/dd91fa62b3db8a4337ba16f3a1e84fff.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/negative-space/famous/00-ida-2013.jpg",
+      "alt": "Ida 2013"
+    },
+    {
+      "kind": "image",
+      "path": "media/3a8b500838eb9a835974b035e871b3f5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/negative-space/famous/01-mr-turner-2014.jpg",
+      "alt": "Mr. Turner 2014"
+    },
+    {
+      "kind": "image",
+      "path": "media/2f0cf455ee47f75c9daac0bb794deec8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/negative-space/hero.jpg",
+      "alt": "Negative Space",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "1dcc662509e1ebffd883a588bbbb082acaef9528f886612c26f0449b730c862d"
+}

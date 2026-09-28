@@ -1,0 +1,433 @@
+{
+  "id": "genre-looks/cosmic-horror-look",
+  "slug": "cosmic-horror-look",
+  "title": "Cosmic Horror",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/cosmic-horror-look",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cosmic-horror-look.webp",
+  "detail": "details/genre-looks/cosmic-horror-look.json",
+  "aliases": [
+    "Lovecraftian horror",
+    "cosmic dread"
+  ],
+  "description": "Cosmic horror cinematography builds dread from human insignificance: extreme long shots, slightly illegal geometry, under-light on faces, and a brightness that reveals too much. The threat is not a man. Scale, entity, and knowledge that will not fit a face are the optical problem.",
+  "thumbnail": "media/2d44b5f4d5cb59bcd9353d14174b39b3.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The frame makes the person a mistake. A horizon does not match."
+        },
+        {
+          "type": "paragraph",
+          "text": "A structure has too many vanishing points. Light may be too hard, too colored, or too revealing, so looking is the harm."
+        },
+        {
+          "type": "paragraph",
+          "text": "Underlighting turns a familiar face into a specimen. It is the wrong tool for a slasher in a cabin or for family rot on a porch.",
+          "links": [
+            {
+              "text": "Underlighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Giallo is a gloved human. Southern Gothic is kin and heat.",
+          "links": [
+            {
+              "text": "Giallo",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+            },
+            {
+              "text": "Southern Gothic",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/southern-gothic"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cosmic horror needs the universe, a lab, an ice, a shimmer, or a ship that is also a geometry error."
+        }
+      ],
+      "links": [
+        {
+          "text": "Underlighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+        },
+        {
+          "text": "Giallo",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+        },
+        {
+          "text": "Southern Gothic",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/southern-gothic"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The frame makes the person a mistake. A horizon does not match.A structure has too many vanishing points. Light may be too hard, too colored, or too revealing, so looking is the harm.Underlighting turns a familiar face into a specimen. It is the wrong tool for a slasher in a cabin or for family rot on a porch.Giallo is a gloved human. Southern Gothic is kin and heat.Cosmic horror needs the universe, a lab, an ice, a shimmer, or a ship that is also a geometry error."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Start too wide: Extreme Long Shot of land, ice, or a structure that is the wrong size. Cheat perspective (forced, dutch, non-matching vanishing points) a little, not as cartoon expressionism.",
+          "links": [
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Light faces from below or from a source that has no sun logic. Overexpose the revelation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Palette: Antarctic bounce, alien shimmer, or red that is not a gel gag. Prompt scale wrong, geometry slightly illegal, a brightness that reveals too much, human irrelevance."
+        }
+      ],
+      "links": [
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Start too wide: Extreme Long Shot of land, ice, or a structure that is the wrong size. Cheat perspective (forced, dutch, non-matching vanishing points) a little, not as cartoon expressionism.Light faces from below or from a source that has no sun logic. Overexpose the revelation.Palette: Antarctic bounce, alien shimmer, or red that is not a gel gag. Prompt scale wrong, geometry slightly illegal, a brightness that reveals too much, human irrelevance."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the threat cannot be a person and the image must make knowledge dangerous. Do not use it for a masked killer in a hallway, or for a foggy swamp that is still a family story."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the threat cannot be a person and the image must make knowledge dangerous. Do not use it for a masked killer in a hallway, or for a foggy swamp that is still a family story."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cosmic horror is scale, illegal geometry, and revealing light. Extreme Long Shot is only size.",
+          "links": [
+            {
+              "text": "Cosmic horror",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cosmic-horror-look"
+            },
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Underlighting is only the angle. German Expressionism bends sets as a mind; cosmic horror bends them as an alien fact.",
+          "links": [
+            {
+              "text": "Underlighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+            },
+            {
+              "text": "German Expressionism",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/german-expressionism"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Southern Gothic keeps humans too near. Dreamcore is a soft liminal room, not a cosmos.",
+          "links": [
+            {
+              "text": "Southern Gothic",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/southern-gothic"
+            },
+            {
+              "text": "Dreamcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Long ShotScale is the emotion.",
+          "displayText": "Extreme Long Shot\nScale is the emotion.",
+          "links": [
+            {
+              "text": "Extreme Long ShotScale is the emotion.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "UnderlightingThe source is fire, a screen on the floor, or a monster.",
+          "displayText": "Underlighting\nThe source is fire, a screen on the floor, or a monster.",
+          "links": [
+            {
+              "text": "UnderlightingThe source is fire, a screen on the floor, or a monster.",
+              "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cosmic horror",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cosmic-horror-look"
+        },
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Underlighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+        },
+        {
+          "text": "German Expressionism",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/german-expressionism"
+        },
+        {
+          "text": "Southern Gothic",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/southern-gothic"
+        },
+        {
+          "text": "Dreamcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+        },
+        {
+          "text": "Extreme Long ShotScale is the emotion.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "UnderlightingThe source is fire, a screen on the floor, or a monster.",
+          "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+          "alt": "Extreme Long Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/37fd93cf4962f10e77869ecfc8008a95.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/under-light.webp",
+          "alt": "Underlighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Cosmic horror is scale, illegal geometry, and revealing light. Extreme Long Shot is only size.Underlighting is only the angle. German Expressionism bends sets as a mind; cosmic horror bends them as an alien fact.Southern Gothic keeps humans too near. Dreamcore is a soft liminal room, not a cosmos.Extreme Long ShotScale is the emotion.UnderlightingThe source is fire, a screen on the floor, or a monster.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Thing (1982): Antarctic bounce, isolation wides, a body that will not stay a body. Annihilation: shimmer, wrong color in daylight, landscape as mutation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Event Horizon: a ship interior whose lighting and geometry refuse comfort. Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Thing (1982): Antarctic bounce, isolation wides, a body that will not stay a body. Annihilation: shimmer, wrong color in daylight, landscape as mutation.Event Horizon: a ship interior whose lighting and geometry refuse comfort. Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cosmic horror framing of [Subject], scale wrong, geometry slightly illegal, under-lit face or a brightness that reveals too much, human irrelevance, extreme long shot or a corridor that does not vanish correctly. Do not prompt a gloved killer."
+        },
+        {
+          "type": "quote",
+          "text": "Cosmic horror framing of [Subject], scale wrong, geometry slightly illegal, a brightness that reveals too much, human irrelevance."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Cosmic+horror+framing+of+[Subject],+scale+wrong,+geometry+slightly+illegal,+a+brightness+that+reveals+too+much,+human+irrelevance."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Cosmic horror framing of [Subject], scale wrong, geometry slightly illegal, under-lit face or a brightness that reveals too much, human irrelevance, extreme long shot or a corridor that does not vanish correctly. Do not prompt a gloved killer.Copy promptUse in Image GeneratorCosmic horror framing of [Subject], scale wrong, geometry slightly illegal, a brightness that reveals too much, human irrelevance.Cosmic horror framing of [Subject], scale wrong, geometry slightly illegal, a brightness that reveals too much, human irrelevance."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a slasher, Southern Gothic, or generic fog. The tell is a human antagonist filling the frame, or a porch.",
+          "links": [
+            {
+              "text": "Southern Gothic",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/southern-gothic"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: widen until the person is small, break one vanishing point, and let the source be too bright or from below."
+        }
+      ],
+      "links": [
+        {
+          "text": "Southern Gothic",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/southern-gothic"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a slasher, Southern Gothic, or generic fog. The tell is a human antagonist filling the frame, or a porch.Fix: widen until the person is small, break one vanishing point, and let the source be too bright or from below."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Cosmic Horror in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A look that makes humans optically irrelevant: wrong scale, slightly illegal geometry, under-light or over-revealing brightness, and a threat that is not a person. Knowledge is the harm."
+        },
+        {
+          "type": "heading",
+          "text": "Cosmic Horror vs Southern Gothic",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Southern gothic traps you in kin, heat, and a house. Cosmic horror traps you in a universe that will not parse. One is too close. The other is too large and too wrong."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Cosmic Horror?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the antagonist cannot be a man and looking is dangerous. Skip it for slashers, for family decay, for giallo gloves, or for a foggy swamp with a human in it."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Cosmic Horror for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Cosmic horror framing of [Subject], scale wrong, geometry slightly illegal, a brightness that reveals too much, human irrelevance. Name the horizon error. Do not ask for a masked killer."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Cosmic Horror in film?A look that makes humans optically irrelevant: wrong scale, slightly illegal geometry, under-light or over-revealing brightness, and a threat that is not a person. Knowledge is the harm.Cosmic Horror vs Southern GothicSouthern gothic traps you in kin, heat, and a house. Cosmic horror traps you in a universe that will not parse. One is too close. The other is too large and too wrong.When should I use Cosmic Horror?When the antagonist cannot be a man and looking is dangerous. Skip it for slashers, for family decay, for giallo gloves, or for a foggy swamp with a human in it.How do I prompt Cosmic Horror for AI image or video?Write: Cosmic horror framing of [Subject], scale wrong, geometry slightly illegal, a brightness that reveals too much, human irrelevance. Name the horizon error. Do not ask for a masked killer."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Cosmic horror framing of [Subject], scale wrong, geometry slightly illegal, under-lit face or a brightness that reveals too much, human irrelevance, extreme long shot or a corridor that does not vanish correctly. Do not prompt a gloved killer."
+    ],
+    "example": "Cosmic horror framing of [Subject], scale wrong, geometry slightly illegal, a brightness that reveals too much, human irrelevance."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/2d44b5f4d5cb59bcd9353d14174b39b3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cosmic-horror-look.webp",
+      "alt": "Cosmic Horror example"
+    },
+    {
+      "kind": "image",
+      "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+      "alt": "Extreme Long Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/37fd93cf4962f10e77869ecfc8008a95.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/under-light.webp",
+      "alt": "Underlighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/4ffc9c5e044ce911f171739376223d2e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cosmic-horror-look/hero.jpg",
+      "alt": "Cosmic Horror",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "034af46d79e0c70ea47306cc067144c48795f21dc656f720c765dbb99188e638"
+}

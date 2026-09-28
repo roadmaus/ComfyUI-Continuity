@@ -1,0 +1,361 @@
+{
+  "id": "viral-looks/knights-diary",
+  "slug": "knights-diary",
+  "title": "Knight's Diary",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/knights-diary",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/knights-diary.webp",
+  "detail": "details/viral-looks/knights-diary.json",
+  "aliases": [],
+  "description": "Knight's diary, the medieval diary look, treats the frame as an illuminated page that still has mud on it: gold leaf as light, iron texture, dirt on cloth, a tired face like a saint who has been outside. It is period matter, not a plastic castle fair.",
+  "thumbnail": "media/97da26737bfb8cdad0e24291e5c9cca7.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Quest, confession, a modern person dressed by a medieval grade: gold in the highlights, chain or plate as texture, a shallow interior or a wet field. Agamemnon is antique sun on a king."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the book of the war. It is the wrong tool for clean LARP, shiny swords, and tourist battlements."
+        },
+        {
+          "type": "paragraph",
+          "text": "If there is no dirt and no gold, it is just the word medieval."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Quest, confession, a modern person dressed by a medieval grade: gold in the highlights, chain or plate as texture, a shallow interior or a wet field. Agamemnon is antique sun on a king.This is the book of the war. It is the wrong tool for clean LARP, shiny swords, and tourist battlements.If there is no dirt and no gold, it is just the word medieval."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height, 35mm to 50mm, lock-off. Gold leaf as highlight, not as a filter."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard or hard-soft daylight, mud on cloth, iron that has weight. One figure readable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Avoid clean costume steel. Prompt: Knight's-diary image of [Subject], illuminated-manuscript gold, iron, mud, a page from a crusade."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Eye height, 35mm to 50mm, lock-off. Gold leaf as highlight, not as a filter.Hard or hard-soft daylight, mud on cloth, iron that has weight. One figure readable.Avoid clean costume steel. Prompt: Knight's-diary image of [Subject], illuminated-manuscript gold, iron, mud, a page from a crusade."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A quest still, a confession, a crusade page that has a living face. Do not use it for a shiny fairground knight."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A quest still, a confession, a crusade page that has a living face. Do not use it for a shiny fairground knight."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Agamemnon is bronze dusk and tragic scale under a bad sky. Knight's diary is gold leaf, iron, and mud, manuscript as living picture.",
+          "links": [
+            {
+              "text": "Agamemnon",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard Light is the lamp. Here the lamp is gold on dirt.",
+          "links": [
+            {
+              "text": "Hard Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "displayText": "Hard Light\nGrit, noon sun, or interrogation.",
+          "links": [
+            {
+              "text": "Hard LightGrit, noon sun, or interrogation.",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Ink RiotThe image should spill.",
+          "displayText": "Ink Riot\nThe image should spill.",
+          "links": [
+            {
+              "text": "Ink RiotThe image should spill.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/ink-riot"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Agamemnon",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        },
+        {
+          "text": "Hard Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        },
+        {
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Ink RiotThe image should spill.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/ink-riot"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        },
+        {
+          "kind": "image",
+          "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+          "alt": "Hard Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/4f2e0687488ed5fe069887e8841b9eaa.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ink-riot-ink-riot-mini.webp",
+          "alt": "Ink Riot"
+        },
+        {
+          "kind": "video",
+          "path": "media/710fb78f97a115252986da945497849b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ink-riot-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Agamemnon is bronze dusk and tragic scale under a bad sky. Knight's diary is gold leaf, iron, and mud, manuscript as living picture.Hard Light is the lamp. Here the lamp is gold on dirt.AgamemnonMake them ancient and doomed.Hard LightGrit, noon sun, or interrogation.Ink RiotThe image should spill."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Green Knight puts mud, metal, and uncanny gold around a tired quester. A Knight's Tale still has quiet frames of iron and pageantry before the joke."
+        },
+        {
+          "type": "paragraph",
+          "text": "Page and mud together. Not a still to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Green Knight puts mud, metal, and uncanny gold around a tired quester. A Knight's Tale still has quiet frames of iron and pageantry before the joke.Page and mud together. Not a still to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Gold, iron, mud, one tired face. Knight's-diary image of [Subject], illuminated-manuscript gold, iron, mud, a page from a crusade."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add 35mm lock-off, hard daylight, dirty cloth, gold as highlight, no clean LARP steel."
+        },
+        {
+          "type": "quote",
+          "text": "Knight's-diary image of [Subject], illuminated-manuscript gold, iron, mud, a page from a crusade."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Knight's-diary+image+of+[Subject],+illuminated-manuscript+gold,+iron,+mud,+a+page+from+a+crusade."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Gold, iron, mud, one tired face. Knight's-diary image of [Subject], illuminated-manuscript gold, iron, mud, a page from a crusade.Add 35mm lock-off, hard daylight, dirty cloth, gold as highlight, no clean LARP steel.Copy promptUse in Image GeneratorKnight's-diary image of [Subject], illuminated-manuscript gold, iron, mud, a page from a crusade.Knight's-diary image of [Subject], illuminated-manuscript gold, iron, mud, a page from a crusade."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fantasy stock with shiny swords, or a slide into Agamemnon bruise-dusk. The tell is chrome steel and no dirt.",
+          "links": [
+            {
+              "text": "Agamemnon",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: gold leaf, iron weight, mud, a saint who is tired."
+        }
+      ],
+      "links": [
+        {
+          "text": "Agamemnon",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong Fantasy stock with shiny swords, or a slide into Agamemnon bruise-dusk. The tell is chrome steel and no dirt.Fix it: gold leaf, iron weight, mud, a saint who is tired."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Knight's Diary in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A medieval matter recipe: illuminated gold, iron, mud, a living face on a crusade page. It is texture and light, not a castle establishing shot."
+        },
+        {
+          "type": "heading",
+          "text": "Knight's Diary vs Agamemnon",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Agamemnon is bronze sun and a bruise sky. Knight's diary is gold leaf and mud, manuscript logic. Same hunger for antique metal, different page."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Knight's Diary?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Quest, confession, a period grade on a tired face. Skip clean LARP and shiny swords."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Knight's Diary for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name iron, mud, and gold as light, then: Knight's-diary image of [Subject], illuminated-manuscript gold, iron, mud, a page from a crusade. Lock the camera. Keep one readable figure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Knight's Diary in film?A medieval matter recipe: illuminated gold, iron, mud, a living face on a crusade page. It is texture and light, not a castle establishing shot.Knight's Diary vs AgamemnonAgamemnon is bronze sun and a bruise sky. Knight's diary is gold leaf and mud, manuscript logic. Same hunger for antique metal, different page.When should I use Knight's Diary?Quest, confession, a period grade on a tired face. Skip clean LARP and shiny swords.How do I prompt Knight's Diary for AI image or video?Name iron, mud, and gold as light, then: Knight's-diary image of [Subject], illuminated-manuscript gold, iron, mud, a page from a crusade. Lock the camera. Keep one readable figure."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Gold, iron, mud, one tired face. Knight's-diary image of [Subject], illuminated-manuscript gold, iron, mud, a page from a crusade.",
+      "Add 35mm lock-off, hard daylight, dirty cloth, gold as highlight, no clean LARP steel."
+    ],
+    "example": "Knight's-diary image of [Subject], illuminated-manuscript gold, iron, mud, a page from a crusade."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/97da26737bfb8cdad0e24291e5c9cca7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/knights-diary.webp",
+      "alt": "Knight's Diary example"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+      "alt": "Hard Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/4f2e0687488ed5fe069887e8841b9eaa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ink-riot-ink-riot-mini.webp",
+      "alt": "Ink Riot"
+    },
+    {
+      "kind": "video",
+      "path": "media/710fb78f97a115252986da945497849b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ink-riot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/02ae21b46490900f413b4adacf6d5a9f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/knights-diary/hero.jpg",
+      "alt": "Knight's Diary",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "b3c3be701780af28f6eaaddcafe21d2e616c9c05cb661e89f376f644cf7eacea"
+}

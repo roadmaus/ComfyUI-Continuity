@@ -1,0 +1,480 @@
+{
+  "id": "editing/match-action",
+  "slug": "match-action",
+  "title": "Match on Action",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/match-action",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-action-091-match-on-action-mini.webp",
+  "detail": "details/editing/match-action.json",
+  "aliases": [
+    "Cut on movement",
+    "Raccord mouvement"
+  ],
+  "description": "Match on action cuts during one continuous action so the movement itself bridges two camera positions. The outgoing shot starts the gesture; the incoming shot finishes it, which is why the edit can change size or angle without feeling interrupted.",
+  "thumbnail": "media/36fe4cdad4d3560862f74e16bb138e37.webp",
+  "video": "media/4cf4135997162440b197de8fe749fe08.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/091-match-on-action-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A hand reaches for a handle in a wide. In the close shot the same hand, same speed, same sleeve, finishes the turn."
+        },
+        {
+          "type": "paragraph",
+          "text": "The viewer follows the reach instead of inspecting the splice. That is the job: hide the cut in a movement."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the action is not continuous, or when you want the skip to be seen. Skipping time inside a similar frame is a Jump Cut.",
+          "links": [
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Jumping closer on the same axis without a bridging gesture is an Axial Cut. If hands swap, travel reverses, or too much of the motion is repeated on both sides, the glue fails and the cut becomes visible for the wrong reason.",
+          "links": [
+            {
+              "text": "Axial Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Axial Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A hand reaches for a handle in a wide. In the close shot the same hand, same speed, same sleeve, finishes the turn.The viewer follows the reach instead of inspecting the splice. That is the job: hide the cut in a movement.It is the wrong tool when the action is not continuous, or when you want the skip to be seen. Skipping time inside a similar frame is a Jump Cut.Jumping closer on the same axis without a bridging gesture is an Axial Cut. If hands swap, travel reverses, or too much of the motion is repeated on both sides, the glue fails and the cut becomes visible for the wrong reason."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Repeat the action with matching speed, hand, object position, and body orientation. Cut at a readable phase of motion, usually the acceleration or the midpoint, not after the gesture has already landed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Check screen direction and sound continuity across the join. The two sides are the same event, different views."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: the motion started in one shot and finished in the next, same hand, same object, two framings."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Repeat the action with matching speed, hand, object position, and body orientation. Cut at a readable phase of motion, usually the acceleration or the midpoint, not after the gesture has already landed.Check screen direction and sound continuity across the join. The two sides are the same event, different views.Prompt: the motion started in one shot and finished in the next, same hand, same object, two framings."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to change shot size or angle on a door, a punch, a sit-down, a pour. Do not use it to leap to another day or another room."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the world changes while the vector continues, that is Match Motion, not match on action.",
+          "links": [
+            {
+              "text": "Match Motion",
+              "url": "https://melies.co/cinematic-techniques/editing/match-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Match Motion",
+          "url": "https://melies.co/cinematic-techniques/editing/match-motion"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it to change shot size or angle on a door, a punch, a sit-down, a pour. Do not use it to leap to another day or another room.If the world changes while the vector continues, that is Match Motion, not match on action."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Match Cut rhymes two different images. Match on action is one action, two views.",
+          "links": [
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Axial Cut jumps distance on the same axis and does not need a bridging gesture. Match Motion can carry a body into another location or reality if direction and speed match.",
+          "links": [
+            {
+              "text": "Axial Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+            },
+            {
+              "text": "Match Motion",
+              "url": "https://melies.co/cinematic-techniques/editing/match-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Invisible Cut hides the splice in occlusion or blur, not in a readable gesture.",
+          "links": [
+            {
+              "text": "Invisible Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Axial CutChange shot size without changing angle.",
+          "displayText": "Axial Cut\nChange shot size without changing angle.",
+          "links": [
+            {
+              "text": "Axial CutChange shot size without changing angle.",
+              "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Graphic MatchForm carries you across time.",
+          "displayText": "Graphic Match\nForm carries you across time.",
+          "links": [
+            {
+              "text": "Graphic MatchForm carries you across time.",
+              "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Axial Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+        },
+        {
+          "text": "Match Motion",
+          "url": "https://melies.co/cinematic-techniques/editing/match-motion"
+        },
+        {
+          "text": "Invisible Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Axial CutChange shot size without changing angle.",
+          "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+        },
+        {
+          "text": "Graphic MatchForm carries you across time.",
+          "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8e36f1dab06b9b4dadc032bc5bf1a00e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/axial-cut-177-axial-cut-and-punch-in-cut-mini.webp",
+          "alt": "Axial Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/9bcd543d80e94c3b9d9c68405e7a75d4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/177-axial-cut-and-punch-in-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/87ceda0519aff5db427c7cd37728798e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/graphic-match-099-graphic-match-cut-mini.webp",
+          "alt": "Graphic Match"
+        },
+        {
+          "kind": "video",
+          "path": "media/ffba929ec8dc585d8a9c73346ee4cd87.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/099-graphic-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Match Cut rhymes two different images. Match on action is one action, two views.An Axial Cut jumps distance on the same axis and does not need a bridging gesture. Match Motion can carry a body into another location or reality if direction and speed match.Invisible Cut hides the splice in occlusion or blur, not in a readable gesture.Match CutTwo images are the same idea.Axial CutChange shot size without changing angle.Graphic MatchForm carries you across time."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Buster Keaton's Neighbors connects courtyard movement across changing views so the body remains the through-line. The Matrix links action across changing shot sizes and viewpoints while the gesture continues."
+        },
+        {
+          "type": "paragraph",
+          "text": "Classical continuity comedy and action both depend on this glue. Use the principle, not a copied punch."
+        },
+        {
+          "type": "list-item",
+          "text": "Neighbors 1920Keaton’s courtyard movement is connected across shots.",
+          "displayText": "Neighbors 1920\nKeaton’s courtyard movement is connected across shots."
+        },
+        {
+          "type": "list-item",
+          "text": "The Matrix 1999Action is linked across changing shot sizes and viewpoints.",
+          "displayText": "The Matrix 1999\nAction is linked across changing shot sizes and viewpoints."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Buster Keaton's Neighbors connects courtyard movement across changing views so the body remains the through-line. The Matrix links action across changing shot sizes and viewpoints while the gesture continues.Classical continuity comedy and action both depend on this glue. Use the principle, not a copied punch.Neighbors 1920Keaton’s courtyard movement is connected across shots.The Matrix 1999Action is linked across changing shot sizes and viewpoints."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Match on action through [Subject]'s gesture, the motion started in one shot and finished in the next. Name the wide and the close, the hand, the object, the direction of travel, and that the cut happens during the move."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, generate A and B of the same reach or step, then cut mid-motion. Do not reverse the hand or the walk."
+        },
+        {
+          "type": "quote",
+          "text": "Generate A: wide view of a courier reaching for a door handle with the right hand. Generate B: close view from the same side of the action axis, continuing that exact reach and turning the handle. Cut during the reach, preserving hand, speed, sleeve and handle position."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Generate+A:+wide+view+of+a+courier+reaching+for+a+door+handle+with+the+right+hand.+Generate+B:+close+view+from+the+same+side+of+the+action+axis,+continuing+that+exact+reach+and+turning+the+handle.+Cut+during+the+reach,+preserving+hand,+speed,+sleeve+and+handle+position."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Match on action through [Subject]'s gesture, the motion started in one shot and finished in the next. Name the wide and the close, the hand, the object, the direction of travel, and that the cut happens during the move.For video, generate A and B of the same reach or step, then cut mid-motion. Do not reverse the hand or the walk.Copy promptUse in Video GeneratorGenerate A: wide view of a courier reaching for a door handle with the right hand. Generate B: close view from the same side of the action axis, continuing that exact reach and turning the handle. Cut during the reach, preserving hand, speed, sleeve and handle position.Generate A: wide view of a courier reaching for a door handle with the right hand. Generate B: close view from the same side of the action axis, continuing that exact reach and turning the handle. Cut during the reach, preserving hand, speed, sleeve and handle position."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Jump Cut (time skipped, similar frame) or an Axial Cut (scale jump, no bridging move). The tell: the close shot uses the other hand, the walk flips screen direction, or the gesture completes twice.",
+          "links": [
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            },
+            {
+              "text": "Axial Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: match hand, speed, object, orientation; cut during the move, not after."
+        }
+      ],
+      "links": [
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Axial Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Jump Cut (time skipped, similar frame) or an Axial Cut (scale jump, no bridging move). The tell: the close shot uses the other hand, the walk flips screen direction, or the gesture completes twice.The fix: match hand, speed, object, orientation; cut during the move, not after."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Match on Action in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Match on action is a cut made during one continuous gesture so movement bridges two camera positions. One side starts the action; the other side finishes it."
+        },
+        {
+          "type": "heading",
+          "text": "Match on Action vs Match Cut",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Match on action stays inside one event and hides a change of view. A match cut joins two different images that correspond in form, space, sound, or idea."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Match on Action?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when you need a new size or angle on the same ongoing move: a door, a hit, a sit. Do not use it to skip time or change location."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Match on Action for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Describe a gesture started in one framing and finished in the next. Name the hand, the object, and the cut during motion. Example: Match on action through [Subject]'s gesture, continuity glue."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Match on Action in film?Match on action is a cut made during one continuous gesture so movement bridges two camera positions. One side starts the action; the other side finishes it.Match on Action vs Match CutMatch on action stays inside one event and hides a change of view. A match cut joins two different images that correspond in form, space, sound, or idea.When should I use Match on Action?Use it when you need a new size or angle on the same ongoing move: a door, a hit, a sit. Do not use it to skip time or change location.How do I prompt Match on Action for AI image or video?Describe a gesture started in one framing and finished in the next. Name the hand, the object, and the cut during motion. Example: Match on action through [Subject]'s gesture, continuity glue."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Match on action through [Subject]'s gesture, the motion started in one shot and finished in the next. Name the wide and the close, the hand, the object, the direction of travel, and that the cut happens during the move.",
+      "For video, generate A and B of the same reach or step, then cut mid-motion. Do not reverse the hand or the walk."
+    ],
+    "example": "Generate A: wide view of a courier reaching for a door handle with the right hand. Generate B: close view from the same side of the action axis, continuing that exact reach and turning the handle. Cut during the reach, preserving hand, speed, sleeve and handle position."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/4cf4135997162440b197de8fe749fe08.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/091-match-on-action-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/36fe4cdad4d3560862f74e16bb138e37.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-action-091-match-on-action-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f06dd72266b9f0fb1a15040e099e3f79.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/match-action.jpg",
+      "alt": "Match on Action frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8e36f1dab06b9b4dadc032bc5bf1a00e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/axial-cut-177-axial-cut-and-punch-in-cut-mini.webp",
+      "alt": "Axial Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/9bcd543d80e94c3b9d9c68405e7a75d4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/177-axial-cut-and-punch-in-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/87ceda0519aff5db427c7cd37728798e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/graphic-match-099-graphic-match-cut-mini.webp",
+      "alt": "Graphic Match"
+    },
+    {
+      "kind": "video",
+      "path": "media/ffba929ec8dc585d8a9c73346ee4cd87.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/099-graphic-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6cced5deb82f9ed5ab7a57c6b4aee7fe.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/match-action/hero.jpg",
+      "alt": "Match on Action",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "9a5bc5ccbd5f064fa4bb58587fa3f0e65f98dc9db7316a9d3cc3b4df28334198"
+}

@@ -1,0 +1,434 @@
+{
+  "id": "lighting/candlelight",
+  "slug": "candlelight",
+  "title": "Candlelight",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/candlelight",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/candlelight-066-candlelit-naturalism-mini.webp",
+  "detail": "details/lighting/candlelight.json",
+  "aliases": [
+    "Low-light period interior"
+  ],
+  "description": "Candlelight in candlelight cinematography is a small warm practical or a simulated flame with rapid falloff, often around 1800K, that carves faces near the flame and lets the rest of the room die. Flicker is part of the source, not a grade.",
+  "thumbnail": "media/63d3a366e4a80f088428e87b46d5c969.webp",
+  "video": "media/ca4aadaa8863da5b4b9ea93abb6843f2.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/066-candlelit-naturalism-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Period night and ritual live on this physics: people lean in because the light does not travel. A card table, a vigil, a cabin: faces emerge from the room instead of being separately lit for the viewer."
+        },
+        {
+          "type": "paragraph",
+          "text": "Darkness stays as lived space. It is the wrong tool for a wide court that must stay evenly readable, or for a modern kitchen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Not every period film used only candles; Barry Lyndon's approach is specifically documented, often with fast lenses and sometimes hidden augmentation matched to the flame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Period night and ritual live on this physics: people lean in because the light does not travel. A card table, a vigil, a cabin: faces emerge from the room instead of being separately lit for the viewer.Darkness stays as lived space. It is the wrong tool for a wide court that must stay evenly readable, or for a modern kitchen.Not every period film used only candles; Barry Lyndon's approach is specifically documented, often with fast lenses and sometimes hidden augmentation matched to the flame."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cluster real or LED candles close to faces. The apparent source is small, so shadows are fairly hard, but multiple flames wrap a little."
+        },
+        {
+          "type": "paragraph",
+          "text": "Falloff is steep (inverse square from a tiny source). Color is deep warm, well below tungsten."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the cluster sits below the chin you will also get some underlighting; if it sits at eye height it is a small frontal or three-quarter key. Prompt: Candlelight on [Subject], warm 1800K flicker, faces carved by flame, deep falloff.",
+          "links": [
+            {
+              "text": "underlighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "underlighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Cluster real or LED candles close to faces. The apparent source is small, so shadows are fairly hard, but multiple flames wrap a little.Falloff is steep (inverse square from a tiny source). Color is deep warm, well below tungsten.If the cluster sits below the chin you will also get some underlighting; if it sits at eye height it is a small frontal or three-quarter key. Prompt: Candlelight on [Subject], warm 1800K flicker, faces carved by flame, deep falloff."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for period night or ritual, a table of cards, a prayer. Do not claim a huge hall is only candles if you have even, modern fill."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for period night or ritual, a table of cards, a prayer. Do not claim a huge hall is only candles if you have even, modern fill."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Practical lighting is the broader class; candle is the small flame subset. Underlighting is direction, which a low candle can cause.",
+          "links": [
+            {
+              "text": "Practical lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            },
+            {
+              "text": "Underlighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Motivated lighting may hide units that match 1800K along the same throw. Chiaroscuro is the contrast language this falloff often creates.",
+          "links": [
+            {
+              "text": "Motivated lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            },
+            {
+              "text": "Chiaroscuro",
+              "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Glam will fight the falloff.",
+          "links": [
+            {
+              "text": "Glam",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Practical LightingLet the set light the face.",
+          "displayText": "Practical Lighting\nLet the set light the face.",
+          "links": [
+            {
+              "text": "Practical LightingLet the set light the face.",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "UnderlightingThe source is fire, a screen on the floor, or a monster.",
+          "displayText": "Underlighting\nThe source is fire, a screen on the floor, or a monster.",
+          "links": [
+            {
+              "text": "UnderlightingThe source is fire, a screen on the floor, or a monster.",
+              "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Practical lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "Underlighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+        },
+        {
+          "text": "Motivated lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Chiaroscuro",
+          "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+        },
+        {
+          "text": "Glam",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "Practical LightingLet the set light the face.",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "UnderlightingThe source is fire, a screen on the floor, or a monster.",
+          "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e57ccee4dac77a8b92955074bb2f3c0a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/practical-lighting-065-practical-source-motivation-mini.webp",
+          "alt": "Practical Lighting"
+        },
+        {
+          "kind": "video",
+          "path": "media/1aa504cae7d8c87fc765f9694501981f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/065-practical-source-motivation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/37fd93cf4962f10e77869ecfc8008a95.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/under-light.webp",
+          "alt": "Underlighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Practical lighting is the broader class; candle is the small flame subset. Underlighting is direction, which a low candle can cause.Motivated lighting may hide units that match 1800K along the same throw. Chiaroscuro is the contrast language this falloff often creates.Glam will fight the falloff.Practical LightingLet the set light the face.UnderlightingThe source is fire, a screen on the floor, or a monster.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Barry Lyndon is the documented candlelit card-table and evening interior, with fast optics and credible falloff. The Witch keeps flame as the logic of night in a dark New England."
+        },
+        {
+          "type": "paragraph",
+          "text": "Faces fade with distance from the cluster."
+        },
+        {
+          "type": "list-item",
+          "text": "Barry Lyndon 1975Candlelit card-table and evening interiors.",
+          "displayText": "Barry Lyndon 1975\nCandlelit card-table and evening interiors."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a9edabe37aeb1a9a141d4ccfdb5e40b5.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/candlelight/famous/00-barry-lyndon-1975.jpg",
+          "alt": "Barry Lyndon 1975"
+        }
+      ],
+      "sourceText": "In film Barry Lyndon is the documented candlelit card-table and evening interior, with fast optics and credible falloff. The Witch keeps flame as the logic of night in a dark New England.Faces fade with distance from the cluster.Barry Lyndon 1975Candlelit card-table and evening interiors."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the flame small and close. \" Cluster the candles, kill electric fill, and let corners go dark."
+        },
+        {
+          "type": "paragraph",
+          "text": "No orange wash on a bright room."
+        },
+        {
+          "type": "quote",
+          "text": "An eighteenth-century card game lit as if only by clustered candles on the table. Faces fade quickly into darkness with distance from the flames, warm uneven illumination, believable flame detail and subdued room corners. A slow restrained gesture, no bright modern fill or electric orange wash."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=An+eighteenth-century+card+game+lit+as+if+only+by+clustered+candles+on+the+table.+Faces+fade+quickly+into+darkness+with+distance+from+the+flames,+warm+uneven+illumination,+believable+flame+detail+and+subdued+room+corners.+A+slow+restrained+gesture,+no+bright+modern+fill+or+electric+orange+wash."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Keep the flame small and close. \" Cluster the candles, kill electric fill, and let corners go dark.No orange wash on a bright room.Copy promptUse in Video GeneratorAn eighteenth-century card game lit as if only by clustered candles on the table. Faces fade quickly into darkness with distance from the flames, warm uneven illumination, believable flame detail and subdued room corners. A slow restrained gesture, no bright modern fill or electric orange wash.An eighteenth-century card game lit as if only by clustered candles on the table. Faces fade quickly into darkness with distance from the flames, warm uneven illumination, believable flame detail and subdued room corners. A slow restrained gesture, no bright modern fill or electric orange wash."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a tungsten wash or underlighting from a big movie lamp. The tell is even exposure ten feet from the candle, or a single huge orange gel.",
+          "links": [
+            {
+              "text": "underlighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by making falloff rapid and keeping color at flame Kelvin."
+        }
+      ],
+      "links": [
+        {
+          "text": "underlighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a tungsten wash or underlighting from a big movie lamp. The tell is even exposure ten feet from the candle, or a single huge orange gel.Fix it by making falloff rapid and keeping color at flame Kelvin."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is candlelight in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A small warm flame source with rapid falloff and flicker. Faces near the flame are modeled; the rest of the room can go dark."
+        },
+        {
+          "type": "heading",
+          "text": "Candlelight vs underlighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Candlelight is the source type. Underlighting is a direction from below. A candle under the chin underlights; a candle at eye height keys from the front or side."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use candlelight?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for period night, vigils, and tables where people must lean toward the flame. Skip it for even modern interiors."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt candlelight for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify warm 1800K flicker, faces carved by flame, deep falloff. Cluster candles close. No bright modern fill."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is candlelight in film?A small warm flame source with rapid falloff and flicker. Faces near the flame are modeled; the rest of the room can go dark.Candlelight vs underlightingCandlelight is the source type. Underlighting is a direction from below. A candle under the chin underlights; a candle at eye height keys from the front or side.When should I use candlelight?Use it for period night, vigils, and tables where people must lean toward the flame. Skip it for even modern interiors.How do I prompt candlelight for AI image or video?Specify warm 1800K flicker, faces carved by flame, deep falloff. Cluster candles close. No bright modern fill."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Keep the flame small and close. \" Cluster the candles, kill electric fill, and let corners go dark.",
+      "No orange wash on a bright room."
+    ],
+    "example": "An eighteenth-century card game lit as if only by clustered candles on the table. Faces fade quickly into darkness with distance from the flames, warm uneven illumination, believable flame detail and subdued room corners. A slow restrained gesture, no bright modern fill or electric orange wash."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/ca4aadaa8863da5b4b9ea93abb6843f2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/066-candlelit-naturalism-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/63d3a366e4a80f088428e87b46d5c969.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/candlelight-066-candlelit-naturalism-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dd4d2a0a58ec521a9abc05ad732e01c8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/candlelight.jpg",
+      "alt": "Candlelight frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/e57ccee4dac77a8b92955074bb2f3c0a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/practical-lighting-065-practical-source-motivation-mini.webp",
+      "alt": "Practical Lighting"
+    },
+    {
+      "kind": "video",
+      "path": "media/1aa504cae7d8c87fc765f9694501981f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/065-practical-source-motivation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/37fd93cf4962f10e77869ecfc8008a95.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/under-light.webp",
+      "alt": "Underlighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/a9edabe37aeb1a9a141d4ccfdb5e40b5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/candlelight/famous/00-barry-lyndon-1975.jpg",
+      "alt": "Barry Lyndon 1975"
+    },
+    {
+      "kind": "image",
+      "path": "media/e8df847b291e8d3d471489e730b7b810.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/candlelight/hero.jpg",
+      "alt": "Candlelight",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "1efecdc08a54e65fda42320ca0f71f0d2e2680d523244953cfd3e94ba1495b39"
+}

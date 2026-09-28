@@ -1,0 +1,373 @@
+{
+  "id": "viral-looks/agamemnon",
+  "slug": "agamemnon",
+  "title": "Agamemnon",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/agamemnon",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+  "detail": "details/viral-looks/agamemnon.json",
+  "aliases": [],
+  "description": "Agamemnon, the agamemnon look, is a named grade of hard sun, bronze bounce, and a dusk sky the color of a bruise, so a living body reads as antique metal. The name is not a shot: you still lock a height, pick a lens, and place a figure who can hold that weather.",
+  "thumbnail": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it on a beat where the person is already doomed and the sky agrees. A rider on a ridge, a man on an empty platform, a coat at a parapet: the camera stays mostly still so metal and dusk can do the sentence."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scale may go statue-large or map-small. Either is legal if the sun is hard and the fill never turns the face into a beauty still."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the scene needs charm, flirtation, or a clean key. Pour it on a rom-com and you get a perfume ad with extra dirt, or a tragedy nobody asked for."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it on a beat where the person is already doomed and the sky agrees. A rider on a ridge, a man on an empty platform, a coat at a parapet: the camera stays mostly still so metal and dusk can do the sentence.Scale may go statue-large or map-small. Either is legal if the sun is hard and the fill never turns the face into a beauty still.It is the wrong tool when the scene needs charm, flirtation, or a clean key. Pour it on a rom-com and you get a perfume ad with extra dirt, or a tragedy nobody asked for."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock off, or use a slow push that does not steal the grade. Eye height to slightly low, 35mm to 50mm so faces do not melt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Key is hard sun or a hard HMI from camera-left or behind. Bounce is warm dust, bronze, or iron, not a white card."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shadows stay opaque. No neon, no beauty dish."
+        },
+        {
+          "type": "paragraph",
+          "text": "Then prompt: Agamemnon look on [Subject], bronze, blood-dusk, tragic scale, a king under a bad sky, antique epic as grade. Name the stand, the key side, and what must stay readable."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock off, or use a slow push that does not steal the grade. Eye height to slightly low, 35mm to 50mm so faces do not melt.Key is hard sun or a hard HMI from camera-left or behind. Bounce is warm dust, bronze, or iron, not a white card.Shadows stay opaque. No neon, no beauty dish.Then prompt: Agamemnon look on [Subject], bronze, blood-dusk, tragic scale, a king under a bad sky, antique epic as grade. Name the stand, the key side, and what must stay readable."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A myth, a war portrait, or a contemporary face that should feel cursed: the rider pauses on the ridge and the citadel below already looks like a tomb. Do not use it as a default warm LUT on any wide."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A myth, a war portrait, or a contemporary face that should feel cursed: the rider pauses on the ridge and the citadel below already looks like a tomb. Do not use it as a default warm LUT on any wide."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Spaghetti Western shares hard sun and dust, but its moral weather is frontier irony, not antique bronze. Hard Light is the lamp without the metal-and-dusk law.",
+          "links": [
+            {
+              "text": "Spaghetti Western",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western"
+            },
+            {
+              "text": "Hard Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Knight's Diary is the same period hunger written as gold leaf and mud on a page, not as a king under a bad sky.",
+          "links": [
+            {
+              "text": "Knight's Diary",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/knights-diary"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Spaghetti WesternMyth in dirt.",
+          "displayText": "Spaghetti Western\nMyth in dirt.",
+          "links": [
+            {
+              "text": "Spaghetti WesternMyth in dirt.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "displayText": "Hard Light\nGrit, noon sun, or interrogation.",
+          "links": [
+            {
+              "text": "Hard LightGrit, noon sun, or interrogation.",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Ink RiotThe image should spill.",
+          "displayText": "Ink Riot\nThe image should spill.",
+          "links": [
+            {
+              "text": "Ink RiotThe image should spill.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/ink-riot"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Spaghetti Western",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western"
+        },
+        {
+          "text": "Hard Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Knight's Diary",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/knights-diary"
+        },
+        {
+          "text": "Spaghetti WesternMyth in dirt.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western"
+        },
+        {
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Ink RiotThe image should spill.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/ink-riot"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/396709b7ac4ac372cf575f14795b8536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/spaghetti-western.webp",
+          "alt": "Spaghetti Western"
+        },
+        {
+          "kind": "image",
+          "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+          "alt": "Hard Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/4f2e0687488ed5fe069887e8841b9eaa.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ink-riot-ink-riot-mini.webp",
+          "alt": "Ink Riot"
+        },
+        {
+          "kind": "video",
+          "path": "media/710fb78f97a115252986da945497849b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ink-riot-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Spaghetti Western shares hard sun and dust, but its moral weather is frontier irony, not antique bronze. Hard Light is the lamp without the metal-and-dusk law.Knight's Diary is the same period hunger written as gold leaf and mud on a page, not as a king under a bad sky.Spaghetti WesternMyth in dirt.Hard LightGrit, noon sun, or interrogation.Ink RiotThe image should spill."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Troy gives the sun-and-metal grammar. The Northman gives mud, iron, and a face that already lost."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow light and metal, not a copyrighted still."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Troy gives the sun-and-metal grammar. The Northman gives mud, iron, and a face that already lost.Borrow light and metal, not a copyrighted still."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lead with the person and the stand, then the grade. Example: Agamemnon look on [Subject], bronze, blood-dusk, tragic scale, a king under a bad sky, antique epic as grade."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add hard sun camera-left, opaque shadows, 35mm, eye height, no neon. Do not write mood words in place of the key."
+        },
+        {
+          "type": "quote",
+          "text": "Agamemnon look on [Subject], bronze, blood-dusk, tragic scale, a king under a bad sky, antique epic as grade."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Agamemnon+look+on+[Subject],+bronze,+blood-dusk,+tragic+scale,+a+king+under+a+bad+sky,+antique+epic+as+grade."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lead with the person and the stand, then the grade. Example: Agamemnon look on [Subject], bronze, blood-dusk, tragic scale, a king under a bad sky, antique epic as grade.Add hard sun camera-left, opaque shadows, 35mm, eye height, no neon. Do not write mood words in place of the key.Copy promptUse in Image GeneratorAgamemnon look on [Subject], bronze, blood-dusk, tragic scale, a king under a bad sky, antique epic as grade.Agamemnon look on [Subject], bronze, blood-dusk, tragic scale, a king under a bad sky, antique epic as grade."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual cousin is a generic teal-and-gold prestige still, or a Hard Light beauty portrait. The tell is perfume-ad skin and a sky that is only pretty.",
+          "links": [
+            {
+              "text": "Hard Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: name bronze, bruise dusk, and a figure small or statue-large, then kill the fill."
+        }
+      ],
+      "links": [
+        {
+          "text": "Hard Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual cousin is a generic teal-and-gold prestige still, or a Hard Light beauty portrait. The tell is perfume-ad skin and a sky that is only pretty.Fix it: name bronze, bruise dusk, and a figure small or statue-large, then kill the fill."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Agamemnon in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A named grade, not a camera move: hard sun, bronze bounce, and a bruise-colored dusk that makes a living body read as antique metal. You still have to choose height, lens, and subject."
+        },
+        {
+          "type": "heading",
+          "text": "Agamemnon vs Hard Light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard light is any small, sharp source. Agamemnon is that hardness plus bronze skin-lights and a dusk that already judges the person. If you only spec a hard key, you have not asked for this look."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Agamemnon?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "On a tragic or mythic beat where the sky should feel wrong: a king, a rider, a modern portrait that wants to feel cursed. Skip it for flirtation, comedy, and clean fashion keys."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Agamemnon for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write the subject, camera height, and hard sun first, then the grade clause: Agamemnon look on [Subject], bronze, blood-dusk, tragic scale, a king under a bad sky, antique epic as grade. Lock the camera. No neon."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Agamemnon in film?A named grade, not a camera move: hard sun, bronze bounce, and a bruise-colored dusk that makes a living body read as antique metal. You still have to choose height, lens, and subject.Agamemnon vs Hard LightHard light is any small, sharp source. Agamemnon is that hardness plus bronze skin-lights and a dusk that already judges the person. If you only spec a hard key, you have not asked for this look.When should I use Agamemnon?On a tragic or mythic beat where the sky should feel wrong: a king, a rider, a modern portrait that wants to feel cursed. Skip it for flirtation, comedy, and clean fashion keys.How do I prompt Agamemnon for AI image or video?Write the subject, camera height, and hard sun first, then the grade clause: Agamemnon look on [Subject], bronze, blood-dusk, tragic scale, a king under a bad sky, antique epic as grade. Lock the camera. No neon."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lead with the person and the stand, then the grade. Example: Agamemnon look on [Subject], bronze, blood-dusk, tragic scale, a king under a bad sky, antique epic as grade.",
+      "Add hard sun camera-left, opaque shadows, 35mm, eye height, no neon. Do not write mood words in place of the key."
+    ],
+    "example": "Agamemnon look on [Subject], bronze, blood-dusk, tragic scale, a king under a bad sky, antique epic as grade."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon example"
+    },
+    {
+      "kind": "image",
+      "path": "media/396709b7ac4ac372cf575f14795b8536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/spaghetti-western.webp",
+      "alt": "Spaghetti Western"
+    },
+    {
+      "kind": "image",
+      "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+      "alt": "Hard Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/4f2e0687488ed5fe069887e8841b9eaa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ink-riot-ink-riot-mini.webp",
+      "alt": "Ink Riot"
+    },
+    {
+      "kind": "video",
+      "path": "media/710fb78f97a115252986da945497849b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ink-riot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0a6154b31021409c9bd4bec36894d8f6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/agamemnon/hero.jpg",
+      "alt": "Agamemnon",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "e68728ddd7b3789dcf6da0b0eafcf82c2dbac0617a1b26aa349265bfcb779107"
+}

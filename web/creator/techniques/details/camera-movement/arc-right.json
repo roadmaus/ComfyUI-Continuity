@@ -1,0 +1,404 @@
+{
+  "id": "camera-movement/arc-right",
+  "slug": "arc-right",
+  "title": "Arc Right",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/arc-right",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-right-arc-right-mini.webp",
+  "detail": "details/camera-movement/arc-right.json",
+  "aliases": [],
+  "description": "An arc right is a partial orbit to the right, usually about a quarter turn, with the lens remaining on the subject. Background slides while eyeline and distance stay roughly constant.",
+  "thumbnail": "media/627c7500d384beb2260120a87573cbff.webp",
+  "video": "media/9498695f34b770931d6614351a9561a9.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-right-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Same law as arc left, other side. The rightward curve can hide or reveal a gun, a window, a third person."
+        },
+        {
+          "type": "paragraph",
+          "text": "Choose the direction that produces the new fact, then stop. It is the wrong tool if a linear truck would keep a moving walker framed, or if you meant to inspect every side of a product."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Same law as arc left, other side. The rightward curve can hide or reveal a gun, a window, a third person.Choose the direction that produces the new fact, then stop. It is the wrong tool if a linear truck would keep a moving walker framed, or if you meant to inspect every side of a product."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Curved travel, constant radius, always facing the figure. Do not let the path straighten into a dolly-right."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a 90-degree arc right around the subject, curved travel, continuous eyeline on the figure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Curved travel, constant radius, always facing the figure. Do not let the path straighten into a dolly-right.Prompt a 90-degree arc right around the subject, curved travel, continuous eyeline on the figure."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it as arc left, other side. Concrete beat: arcing right off a speaker until the listener's face takes the key from a new window."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not keep circling."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it as arc left, other side. Concrete beat: arcing right off a speaker until the listener's face takes the key from a new window.Do not keep circling."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Arc Left is the mirrored curve. 360-Degree Orbit is the full inspection.",
+          "links": [
+            {
+              "text": "Arc Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc-left"
+            },
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly Right is a straight X translate. Arc right is a short azimuth change that keeps the person as center.",
+          "links": [
+            {
+              "text": "Dolly Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-right"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Arc LeftChange the axis of a conversation or reveal the other half of a room.",
+          "displayText": "Arc Left\nChange the axis of a conversation or reveal the other half of a room.",
+          "links": [
+            {
+              "text": "Arc LeftChange the axis of a conversation or reveal the other half of a room.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/arc-left"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "displayText": "360-Degree Orbit\nTime collapses around one person: kiss, threat, or product hero.",
+          "links": [
+            {
+              "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Arc Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc-left"
+        },
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Dolly Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-right"
+        },
+        {
+          "text": "Arc LeftChange the axis of a conversation or reveal the other half of a room.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/arc-left"
+        },
+        {
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d272f82a8824765861ad77fb975af55e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-left-arc-left-mini.webp",
+          "alt": "Arc Left"
+        },
+        {
+          "kind": "video",
+          "path": "media/9f0cfe2921cd4a52ee9f3bb03b669001.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-left-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+          "alt": "360-Degree Orbit"
+        },
+        {
+          "kind": "video",
+          "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Arc Left is the mirrored curve. 360-Degree Orbit is the full inspection.Dolly Right is a straight X translate. Arc right is a short azimuth change that keeps the person as center.Arc LeftChange the axis of a conversation or reveal the other half of a room.360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Children of Men relocates around bodies and vehicles so danger can enter from a new compass point without a cut. Pair it with the left-arc grammar in Goodfellas and Atonement: pick a side, change the wall, stop."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mechanism, not a car to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Children of Men relocates around bodies and vehicles so danger can enter from a new compass point without a cut. Pair it with the left-arc grammar in Goodfellas and Atonement: pick a side, change the wall, stop.Mechanism, not a car to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "90-degree arc right around [Subject], curved travel, continuous eyeline on the figure. For motion: the camera arcs right about 90 degrees around [Subject], always facing them."
+        },
+        {
+          "type": "quote",
+          "text": "The camera arcs right about 90 degrees around [Subject], always facing them."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+arcs+right+about+90+degrees+around+[Subject],+always+facing+them."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it 90-degree arc right around [Subject], curved travel, continuous eyeline on the figure. For motion: the camera arcs right about 90 degrees around [Subject], always facing them.Copy promptUse in Video GeneratorThe camera arcs right about 90 degrees around [Subject], always facing them.The camera arcs right about 90 degrees around [Subject], always facing them."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Dolly Right or 360-Degree Orbit. The tell is a straight slide that changes distance, or a spin past the new fact.",
+          "links": [
+            {
+              "text": "Dolly Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-right"
+            },
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: curve, constant radius, stop at the new axis."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-right"
+        },
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Dolly Right or 360-Degree Orbit. The tell is a straight slide that changes distance, or a spin past the new fact.The fix: curve, constant radius, stop at the new axis."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Arc Right in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a partial rightward orbit around a subject, camera still facing them, used to change background and face angle without a cut."
+        },
+        {
+          "type": "heading",
+          "text": "Arc Right vs Dolly Right",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly right is a straight lateral truck. Arc right travels a curve so the camera's compass heading around the person changes while distance holds."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Arc Right?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the new wall, window, or listener is to the right around the subject. Do not complete a circle unless you wanted an orbit."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Arc Right for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write 90-degree arc right around [Subject], always facing them, constant radius. Name the new background that must appear."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Arc Right in film?It is a partial rightward orbit around a subject, camera still facing them, used to change background and face angle without a cut.Arc Right vs Dolly RightDolly right is a straight lateral truck. Arc right travels a curve so the camera's compass heading around the person changes while distance holds.When should I use Arc Right?When the new wall, window, or listener is to the right around the subject. Do not complete a circle unless you wanted an orbit.How do I prompt Arc Right for AI image or video?Write 90-degree arc right around [Subject], always facing them, constant radius. Name the new background that must appear."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "90-degree arc right around [Subject], curved travel, continuous eyeline on the figure. For motion: the camera arcs right about 90 degrees around [Subject], always facing them."
+    ],
+    "example": "The camera arcs right about 90 degrees around [Subject], always facing them."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/9498695f34b770931d6614351a9561a9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-right-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/627c7500d384beb2260120a87573cbff.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-right-arc-right-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9982580c074829a65ca3d6661ddc5c97.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/arc-right.jpg",
+      "alt": "Arc Right frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/d272f82a8824765861ad77fb975af55e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arc-left-arc-left-mini.webp",
+      "alt": "Arc Left"
+    },
+    {
+      "kind": "video",
+      "path": "media/9f0cfe2921cd4a52ee9f3bb03b669001.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/arc-left-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+      "alt": "360-Degree Orbit"
+    },
+    {
+      "kind": "video",
+      "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1e2a91946686427c44e7c54ab502d19f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/arc-right/hero.jpg",
+      "alt": "Arc Right",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "578f85455dd9a8015989bb4ad9129ef2a3908d4eec0e932a8445741969b68680"
+}

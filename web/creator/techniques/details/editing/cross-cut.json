@@ -1,0 +1,466 @@
+{
+  "id": "editing/cross-cut",
+  "slug": "cross-cut",
+  "title": "Cross-Cutting",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/cross-cut",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-cut-111-cross-cutting-between-converging-actions-mini.webp",
+  "detail": "details/editing/cross-cut.json",
+  "aliases": [
+    "Misleading cross-cut",
+    "Wrong-door suspense"
+  ],
+  "description": "Cross-cutting alternates two or more locations or action lines, often implying they are happening at the same time. Each side of the join is a complete strand; the engine is meanwhile, two clocks racing.",
+  "thumbnail": "media/8f3e9fa837a5cfd76a9d6348a999ed0d.webp",
+  "video": "media/ffb85c669ad8b5e280269a83f59f771a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/111-cross-cutting-between-converging-actions-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A baptism in one room. Killings in others."
+        },
+        {
+          "type": "paragraph",
+          "text": "The film does not wait for one to finish. It braids them so ritual and murder share a tense."
+        },
+        {
+          "type": "paragraph",
+          "text": "Or: a team at a door, a listener at another door, and the cut teaches you they are about to meet until a reverse proves they are not. Use it when simultaneity, comparison, or false geography is the engine."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you need one compressed idea from unlike images: that is Montage. It is also the wrong tool when two rooms must be visible at once: that is Split Screen.",
+          "links": [
+            {
+              "text": "Montage",
+              "url": "https://melies.co/cinematic-techniques/editing/montage"
+            },
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fair misdirection relies on inference. Do not show matching house numbers and then pretend the doors were different."
+        }
+      ],
+      "links": [
+        {
+          "text": "Montage",
+          "url": "https://melies.co/cinematic-techniques/editing/montage"
+        },
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A baptism in one room. Killings in others.The film does not wait for one to finish. It braids them so ritual and murder share a tense.Or: a team at a door, a listener at another door, and the cut teaches you they are about to meet until a reverse proves they are not. Use it when simultaneity, comparison, or false geography is the engine.It is the wrong tool when you need one compressed idea from unlike images: that is Montage. It is also the wrong tool when two rooms must be visible at once: that is Split Screen.Fair misdirection relies on inference. Do not show matching house numbers and then pretend the doors were different."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shoot each line so it can be interrupted: clear geography, readable time of day or clock, compatible but not identical details if you plan a wrong-door surprise. Alternate with tightening duration if you want the clocks to race."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sound can bleed across (a bell, a vow) to bind the lines. Prompt: cross-cutting between [Subject] and a simultaneous other line, suspense by alternation, two clocks racing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Shoot each line so it can be interrupted: clear geography, readable time of day or clock, compatible but not identical details if you plan a wrong-door surprise. Alternate with tightening duration if you want the clocks to race.Sound can bleed across (a bell, a vow) to bind the lines. Prompt: cross-cutting between [Subject] and a simultaneous other line, suspense by alternation, two clocks racing."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a raid versus a doorbell, a ritual versus a crime, dream levels that must tick together. Do not use it to dump unused coverage of one scene."
+        },
+        {
+          "type": "paragraph",
+          "text": "If there is no second clock, you are just cutting."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a raid versus a doorbell, a ritual versus a crime, dream levels that must tick together. Do not use it to dump unused coverage of one scene.If there is no second clock, you are just cutting."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Montage collides images to make an argument or to compress months; cross-cutting keeps parallel actions alive. A Smash Cut is one contrast join, not a braid.",
+          "links": [
+            {
+              "text": "Montage",
+              "url": "https://melies.co/cinematic-techniques/editing/montage"
+            },
+            {
+              "text": "Smash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Split Screen shows both lines at once instead of alternating. An L-cut lets sound from one line sit on the picture of the other without changing the picture's location.",
+          "links": [
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            },
+            {
+              "text": "L-cut",
+              "url": "https://melies.co/cinematic-techniques/editing/l-cut-visual"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MontageYou need months in a minute.",
+          "displayText": "Montage\nYou need months in a minute.",
+          "links": [
+            {
+              "text": "MontageYou need months in a minute.",
+              "url": "https://melies.co/cinematic-techniques/editing/montage"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Smash CutThe next image should hurt.",
+          "displayText": "Smash Cut\nThe next image should hurt.",
+          "links": [
+            {
+              "text": "Smash CutThe next image should hurt.",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Montage",
+          "url": "https://melies.co/cinematic-techniques/editing/montage"
+        },
+        {
+          "text": "Smash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "L-cut",
+          "url": "https://melies.co/cinematic-techniques/editing/l-cut-visual"
+        },
+        {
+          "text": "MontageYou need months in a minute.",
+          "url": "https://melies.co/cinematic-techniques/editing/montage"
+        },
+        {
+          "text": "Smash CutThe next image should hurt.",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/27a33ae58cc5df616d945877bb4d3771.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/montage-114-elliptical-montage-mini.webp",
+          "alt": "Montage"
+        },
+        {
+          "kind": "video",
+          "path": "media/3ada756f953b73b014f2cf75085ab5b0.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/114-elliptical-montage-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bd7d68009bacf7d9970db0873ae94f1c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smash-cut-165-smash-cut-mini.webp",
+          "alt": "Smash Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/bb74b65d11d6f62c19ec9876a5b85953.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/165-smash-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Montage collides images to make an argument or to compress months; cross-cutting keeps parallel actions alive. A Smash Cut is one contrast join, not a braid.Split Screen shows both lines at once instead of alternating. An L-cut lets sound from one line sit on the picture of the other without changing the picture's location.MontageYou need months in a minute.Smash CutThe next image should hurt.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Godfather baptizes Michael while the rival killings land in other rooms. The Silence of the Lambs intercuts an FBI raid with a doorbell, then reveals the geography was wrong."
+        },
+        {
+          "type": "paragraph",
+          "text": "Inception alternates dream levels so one clock pressures another. Use the braid, not the blocking."
+        },
+        {
+          "type": "list-item",
+          "text": "The Silence of the Lambs 1991The FBI raid is intercut with the killer’s doorbell before the geography is revealed.",
+          "displayText": "The Silence of the Lambs 1991\nThe FBI raid is intercut with the killer’s doorbell before the geography is revealed."
+        },
+        {
+          "type": "list-item",
+          "text": "The Godfather 1972The baptism is intercut with the killings of Michael’s rivals.",
+          "displayText": "The Godfather 1972\nThe baptism is intercut with the killings of Michael’s rivals."
+        },
+        {
+          "type": "list-item",
+          "text": "Inception 2010The climax alternates between dream levels.",
+          "displayText": "Inception 2010\nThe climax alternates between dream levels."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Godfather baptizes Michael while the rival killings land in other rooms. The Silence of the Lambs intercuts an FBI raid with a doorbell, then reveals the geography was wrong.Inception alternates dream levels so one clock pressures another. Use the braid, not the blocking.The Silence of the Lambs 1991The FBI raid is intercut with the killer’s doorbell before the geography is revealed.The Godfather 1972The baptism is intercut with the killings of Michael’s rivals.Inception 2010The climax alternates between dream levels."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cross-cutting between [Subject] and a simultaneous other line, suspense by alternation, two clocks racing. Name both geographies, what the viewer is invited to assume, and whether that assumption is true."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, two distinct spaces, alternating shots, tightening duration. Do not morph one room into the other."
+        },
+        {
+          "type": "quote",
+          "text": "Generate A: a team approaches a building and presses a doorbell. Generate B: someone in a similar interior hears a bell and walks toward a door. Intercut as though they connect. Reveal in a wide reverse that B opens to a lone courier at a different address. Keep the earlier shots ambiguous rather than contradictory."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Generate+A:+a+team+approaches+a+building+and+presses+a+doorbell.+Generate+B:+someone+in+a+similar+interior+hears+a+bell+and+walks+toward+a+door.+Intercut+as+though+they+connect.+Reveal+in+a+wide+reverse+that+B+opens+to+a+lone+courier+at+a+different+address.+Keep+the+earlier+shots+ambiguous+rather+than+contradictory."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Cross-cutting between [Subject] and a simultaneous other line, suspense by alternation, two clocks racing. Name both geographies, what the viewer is invited to assume, and whether that assumption is true.For video, two distinct spaces, alternating shots, tightening duration. Do not morph one room into the other.Copy promptUse in Video GeneratorGenerate A: a team approaches a building and presses a doorbell. Generate B: someone in a similar interior hears a bell and walks toward a door. Intercut as though they connect. Reveal in a wide reverse that B opens to a lone courier at a different address. Keep the earlier shots ambiguous rather than contradictory.Generate A: a team approaches a building and presses a doorbell. Generate B: someone in a similar interior hears a bell and walks toward a door. Intercut as though they connect. Reveal in a wide reverse that B opens to a lone courier at a different address. Keep the earlier shots ambiguous rather than contradictory."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Montage (idea by collision) or Split Screen (both at once). The tell: the second line has no clock, or both lines are clearly the same hallway.",
+          "links": [
+            {
+              "text": "Montage",
+              "url": "https://melies.co/cinematic-techniques/editing/montage"
+            },
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: two geographies, implied simultaneity, a reveal if you are lying about the door."
+        }
+      ],
+      "links": [
+        {
+          "text": "Montage",
+          "url": "https://melies.co/cinematic-techniques/editing/montage"
+        },
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Montage (idea by collision) or Split Screen (both at once). The tell: the second line has no clock, or both lines are clearly the same hallway.The fix: two geographies, implied simultaneity, a reveal if you are lying about the door."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Cross-Cutting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Cross-cutting alternates locations or action lines, usually to imply they are simultaneous. Each side of the join is its own strand; the cut says meanwhile."
+        },
+        {
+          "type": "heading",
+          "text": "Cross-Cutting vs Montage",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Montage juxtaposes shots to compress time or produce an idea. Cross-cutting keeps two (or more) ongoing actions in play and braids them. One argues; the other races clocks."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Cross-Cutting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when two lines must tick together: raid and doorbell, vow and murder, two escapes. Do not use it as a pile of unused singles from one room."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Cross-Cutting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name both spaces and the race. Example: Cross-cutting between [Subject] and a simultaneous other line, two clocks racing. Keep the geographies distinct and the assumption of contact clear."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Cross-Cutting in film?Cross-cutting alternates locations or action lines, usually to imply they are simultaneous. Each side of the join is its own strand; the cut says meanwhile.Cross-Cutting vs MontageMontage juxtaposes shots to compress time or produce an idea. Cross-cutting keeps two (or more) ongoing actions in play and braids them. One argues; the other races clocks.When should I use Cross-Cutting?Use it when two lines must tick together: raid and doorbell, vow and murder, two escapes. Do not use it as a pile of unused singles from one room.How do I prompt Cross-Cutting for AI image or video?Name both spaces and the race. Example: Cross-cutting between [Subject] and a simultaneous other line, two clocks racing. Keep the geographies distinct and the assumption of contact clear."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Cross-cutting between [Subject] and a simultaneous other line, suspense by alternation, two clocks racing. Name both geographies, what the viewer is invited to assume, and whether that assumption is true.",
+      "For video, two distinct spaces, alternating shots, tightening duration. Do not morph one room into the other."
+    ],
+    "example": "Generate A: a team approaches a building and presses a doorbell. Generate B: someone in a similar interior hears a bell and walks toward a door. Intercut as though they connect. Reveal in a wide reverse that B opens to a lone courier at a different address. Keep the earlier shots ambiguous rather than contradictory."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/ffb85c669ad8b5e280269a83f59f771a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/111-cross-cutting-between-converging-actions-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8f3e9fa837a5cfd76a9d6348a999ed0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-cut-111-cross-cutting-between-converging-actions-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1851ff11c521b6e670eed3c55be9eb4f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/cross-cut.jpg",
+      "alt": "Cross-Cutting frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/27a33ae58cc5df616d945877bb4d3771.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/montage-114-elliptical-montage-mini.webp",
+      "alt": "Montage"
+    },
+    {
+      "kind": "video",
+      "path": "media/3ada756f953b73b014f2cf75085ab5b0.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/114-elliptical-montage-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bd7d68009bacf7d9970db0873ae94f1c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smash-cut-165-smash-cut-mini.webp",
+      "alt": "Smash Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/bb74b65d11d6f62c19ec9876a5b85953.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/165-smash-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/52537c0a178c8c97e9e93349ca1ab300.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cross-cut/hero.jpg",
+      "alt": "Cross-Cutting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "72f662e2cf6f45f20d985bb19cb41c91440743304402bb5e876db6fe5d6a408a"
+}

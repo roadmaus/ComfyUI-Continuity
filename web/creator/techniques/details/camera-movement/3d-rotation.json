@@ -1,0 +1,389 @@
+{
+  "id": "camera-movement/3d-rotation",
+  "slug": "3d-rotation",
+  "title": "3D Rotation",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/3d-rotation",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/3d-rotation-3d-rotation-mini.webp",
+  "detail": "details/camera-movement/3d-rotation.json",
+  "aliases": [],
+  "description": "A 3d rotation camera treats the figure as a sculptural object on a virtual turntable of space. The world may be a cyc or a void; the point is every side, not a street orbit.",
+  "thumbnail": "media/b3da6110b5a901f76d940a77dbcbc99f.webp",
+  "video": "media/34ccdf2fe2c7339571d352ea2b785cde.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/3d-rotation-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Show every side. Inspection, toys, a character as merchandise: even lighting or studio, the person as a model."
+        },
+        {
+          "type": "paragraph",
+          "text": "Combine with a computed look if they should feel rendered. A chase does not want a turntable."
+        },
+        {
+          "type": "paragraph",
+          "text": "A 360 walk around a street is an orbit: walls and extras shear in a real room. This is product-space."
+        },
+        {
+          "type": "paragraph",
+          "text": "A slight arc is not enough; we should sense the back will arrive."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Show every side. Inspection, toys, a character as merchandise: even lighting or studio, the person as a model.Combine with a computed look if they should feel rendered. A chase does not want a turntable.A 360 walk around a street is an orbit: walls and extras shear in a real room. This is product-space.A slight arc is not enough; we should sense the back will arrive."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Virtual camera on a circular or spherical spline, subject locked, often studio or void. One axis unless you mean a tumble."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: 3D rotation around [Subject], a turntable of space, the figure as a sculptural object in orbit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Virtual camera on a circular or spherical spline, subject locked, often studio or void. One axis unless you mean a tumble.Prompt: 3D rotation around [Subject], a turntable of space, the figure as a sculptural object in orbit."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to inspect a figure as an object. Do not use it in a chase or a blocked room that must stay a room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to inspect a figure as an object. Do not use it in a chase or a blocked room that must stay a room."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "360-Degree Orbit walks a real environment. Lazy Susan often rotates the subject on a physical disc with the camera locked.",
+          "links": [
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            },
+            {
+              "text": "Lazy Susan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "3D rotation is the virtual turntable of space, sculpture grammar, sometimes a freeze-turn."
+        },
+        {
+          "type": "list-item",
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "displayText": "360-Degree Orbit\nTime collapses around one person: kiss, threat, or product hero.",
+          "links": [
+            {
+              "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lazy SusanShow an object or costume from every side.",
+          "displayText": "Lazy Susan\nShow an object or costume from every side.",
+          "links": [
+            {
+              "text": "Lazy SusanShow an object or costume from every side.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Lazy Susan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+        },
+        {
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Lazy SusanShow an object or costume from every side.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+          "alt": "360-Degree Orbit"
+        },
+        {
+          "kind": "video",
+          "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/e08a5e61f13e45920f57f62e20326731.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lazy-susan-lazy-susan-mini.webp",
+          "alt": "Lazy Susan"
+        },
+        {
+          "kind": "video",
+          "path": "media/de412fdb77aeb52f922e9ab38017a869.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lazy-susan-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots 360-Degree Orbit walks a real environment. Lazy Susan often rotates the subject on a physical disc with the camera locked.3D rotation is the virtual turntable of space, sculpture grammar, sometimes a freeze-turn.360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.Lazy SusanShow an object or costume from every side.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Product films are the native grammar. The Matrix freeze-turn is the narrative cousin: a body as a sculpture in computed space."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the grammar, not the frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Product films are the native grammar. The Matrix freeze-turn is the narrative cousin: a body as a sculpture in computed space.Use the grammar, not the frame."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Turntable of space, figure as object. Still: 3D rotation around [Subject], a turntable of space, the figure as a sculptural object in orbit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera rotates in 3D around [Subject] as if on a virtual turntable. Studio or void helps."
+        },
+        {
+          "type": "paragraph",
+          "text": "One axis."
+        },
+        {
+          "type": "quote",
+          "text": "The camera rotates in 3D around [Subject] as if on a virtual turntable."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+rotates+in+3D+around+[Subject]+as+if+on+a+virtual+turntable."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Turntable of space, figure as object. Still: 3D rotation around [Subject], a turntable of space, the figure as a sculptural object in orbit.Video: The camera rotates in 3D around [Subject] as if on a virtual turntable. Studio or void helps.One axis.Copy promptUse in Video GeneratorThe camera rotates in 3D around [Subject] as if on a virtual turntable.The camera rotates in 3D around [Subject] as if on a virtual turntable."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a slight arc in a street. The tell: a living room shears a little and we never see the back."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: full turntable energy, subject as sculpture, studio or void, the back will arrive."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a slight arc in a street. The tell: a living room shears a little and we never see the back.The fix: full turntable energy, subject as sculpture, studio or void, the back will arrive."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is 3D Rotation in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "3D rotation treats the figure as a sculptural object on a virtual turntable of space, often in a studio or void, so every side can be shown."
+        },
+        {
+          "type": "heading",
+          "text": "3D Rotation vs Lazy Susan",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A lazy susan often turns a physical object while the camera stays put. 3D rotation is a virtual camera orbiting a figure as a model in computed or studio space."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use 3D Rotation?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to inspect a person or prop as an object. Do not use it for a chase or a real-room conversation."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt 3D Rotation for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a virtual turntable and the figure as sculpture. Example: 3D rotation around [Subject], a turntable of space, the figure as a sculptural object in orbit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is 3D Rotation in film?3D rotation treats the figure as a sculptural object on a virtual turntable of space, often in a studio or void, so every side can be shown.3D Rotation vs Lazy SusanA lazy susan often turns a physical object while the camera stays put. 3D rotation is a virtual camera orbiting a figure as a model in computed or studio space.When should I use 3D Rotation?Use it to inspect a person or prop as an object. Do not use it for a chase or a real-room conversation.How do I prompt 3D Rotation for AI image or video?Write a virtual turntable and the figure as sculpture. Example: 3D rotation around [Subject], a turntable of space, the figure as a sculptural object in orbit."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Turntable of space, figure as object. Still: 3D rotation around [Subject], a turntable of space, the figure as a sculptural object in orbit.",
+      "Video: The camera rotates in 3D around [Subject] as if on a virtual turntable. Studio or void helps.",
+      "One axis."
+    ],
+    "example": "The camera rotates in 3D around [Subject] as if on a virtual turntable."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/34ccdf2fe2c7339571d352ea2b785cde.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/3d-rotation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b3da6110b5a901f76d940a77dbcbc99f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/3d-rotation-3d-rotation-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e57bece46bf636e63065a3db806435f5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/3d-rotation.jpg",
+      "alt": "3D Rotation frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+      "alt": "360-Degree Orbit"
+    },
+    {
+      "kind": "video",
+      "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e08a5e61f13e45920f57f62e20326731.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lazy-susan-lazy-susan-mini.webp",
+      "alt": "Lazy Susan"
+    },
+    {
+      "kind": "video",
+      "path": "media/de412fdb77aeb52f922e9ab38017a869.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lazy-susan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cbfeea4a8dab89af1fccbd31e1c3b6f5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/3d-rotation/hero.jpg",
+      "alt": "3D Rotation",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "e48abbf6af94f0a3e1789e62276ff00562d5ef93c1c6046b8285553db7c36ac5"
+}

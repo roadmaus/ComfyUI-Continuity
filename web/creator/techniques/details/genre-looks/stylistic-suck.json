@@ -1,0 +1,422 @@
+{
+  "id": "genre-looks/stylistic-suck",
+  "slug": "stylistic-suck",
+  "title": "Stylistic Suck",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/stylistic-suck-stylistic-suck-mini.webp",
+  "detail": "details/genre-looks/stylistic-suck.json",
+  "aliases": [],
+  "description": "Stylistic suck is deliberate amateur cinematography: hunting zooms, cheap video, and the wrong white balance as a choice of the film's own camera, not necessarily of a character's recovered tape. Polish would be dishonest, so the image is ugly on purpose.",
+  "thumbnail": "media/ba7cb6c8f22259fd585930f1b2dc257b.webp",
+  "video": "media/35bef9b3524abc0d4790ab565b78e986.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/stylistic-suck-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Auto-exposure pumps. A zoom overshoots a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fluorescent kitchens go green. Highlights blow like 1990s VHS."
+        },
+        {
+          "type": "paragraph",
+          "text": "The film is allowed to look poorly made because that look is the argument: poverty, joke, cruelty, or anti-beauty. It overlaps Found Footage but is not the same.",
+          "links": [
+            {
+              "text": "Found Footage",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Found footage needs a diegetic operator and a tape story. Stylistic suck can be omniscient and still ugly: no timestamp required."
+        },
+        {
+          "type": "paragraph",
+          "text": "It also overlaps Cinéma Vérité, but vérité hunts in order to witness. Suck hunts in order to fail, as style.",
+          "links": [
+            {
+              "text": "Cinéma Vérité",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Found Footage",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        },
+        {
+          "text": "Cinéma Vérité",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Auto-exposure pumps. A zoom overshoots a face.Fluorescent kitchens go green. Highlights blow like 1990s VHS.The film is allowed to look poorly made because that look is the argument: poverty, joke, cruelty, or anti-beauty. It overlaps Found Footage but is not the same.Found footage needs a diegetic operator and a tape story. Stylistic suck can be omniscient and still ugly: no timestamp required.It also overlaps Cinéma Vérité, but vérité hunts in order to witness. Suck hunts in order to fail, as style."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Consumer camcorder or VHS: auto gain, hunting zoom, rolling shutter, blown practicals, wrong WB left wrong. Allow bad centering."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not 'fix' in the grade. If you add a pretty close-up, you have broken the contract."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt deliberate amateur look, bad zoom, cheap video, the wrong white balance as a choice."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Consumer camcorder or VHS: auto gain, hunting zoom, rolling shutter, blown practicals, wrong WB left wrong. Allow bad centering.Do not 'fix' in the grade. If you add a pretty close-up, you have broken the contract.Prompt deliberate amateur look, bad zoom, cheap video, the wrong white balance as a choice."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when polish would be dishonest. Do not use it as accidental incompetence, and do not use it as found footage without an operator story."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when polish would be dishonest. Do not use it as accidental incompetence, and do not use it as found footage without an operator story."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stylistic Suck is the film choosing ugliness. Found Footage is a character's recorder.",
+          "links": [
+            {
+              "text": "Stylistic Suck",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck"
+            },
+            {
+              "text": "Found Footage",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cinéma Vérité is available-light witnessing. Documentary may still be respectful and sharp.",
+          "links": [
+            {
+              "text": "Cinéma Vérité",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            },
+            {
+              "text": "Documentary",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If there is a timestamp and a diegetic reason the camera exists, you are in found footage. If the ugliness is the film's voice, you are here."
+        },
+        {
+          "type": "list-item",
+          "text": "Found FootageThe operator is in danger too.",
+          "displayText": "Found Footage\nThe operator is in danger too.",
+          "links": [
+            {
+              "text": "Found FootageThe operator is in danger too.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cinéma VéritéStyle would be propaganda.",
+          "displayText": "Cinéma Vérité\nStyle would be propaganda.",
+          "links": [
+            {
+              "text": "Cinéma VéritéStyle would be propaganda.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Stylistic Suck",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck"
+        },
+        {
+          "text": "Found Footage",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        },
+        {
+          "text": "Cinéma Vérité",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "Documentary",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+        },
+        {
+          "text": "Found FootageThe operator is in danger too.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        },
+        {
+          "text": "Cinéma VéritéStyle would be propaganda.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9666d1373fc66963ab24b66dc223a396.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/found-footage-look-167-found-footage-framing-mini.webp",
+          "alt": "Found Footage"
+        },
+        {
+          "kind": "video",
+          "path": "media/7bf374164a3dcd9eff596eb974779555.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/167-found-footage-framing-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/698c2a04908f5536012f8e28784057e5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinema-verite.webp",
+          "alt": "Cinéma Vérité"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Stylistic Suck is the film choosing ugliness. Found Footage is a character's recorder.Cinéma Vérité is available-light witnessing. Documentary may still be respectful and sharp.If there is a timestamp and a diegetic reason the camera exists, you are in found footage. If the ugliness is the film's voice, you are here.Found FootageThe operator is in danger too.Cinéma VéritéStyle would be propaganda.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Blair Witch Project (amateur optics; also found footage, so use it as overlap, not as the whole definition). Trash Humpers (VHS, blown highlights, ugliness as the work)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Blair Witch Project (amateur optics; also found footage, so use it as overlap, not as the whole definition). Trash Humpers (VHS, blown highlights, ugliness as the work).Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Deliberate amateur look on [Subject], hunting zoom, cheap video, wrong white balance as a choice, blown practicals, bad centering. Do not add a timestamp unless there is also a diegetic camera."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not correct the color."
+        },
+        {
+          "type": "quote",
+          "text": "Deliberate amateur look on [Subject], bad zoom, cheap video, the wrong white balance as a choice."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Deliberate+amateur+look+on+[Subject],+bad+zoom,+cheap+video,+the+wrong+white+balance+as+a+choice."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Deliberate amateur look on [Subject], hunting zoom, cheap video, wrong white balance as a choice, blown practicals, bad centering. Do not add a timestamp unless there is also a diegetic camera.Do not correct the color.Copy promptUse in Image GeneratorDeliberate amateur look on [Subject], bad zoom, cheap video, the wrong white balance as a choice.Deliberate amateur look on [Subject], bad zoom, cheap video, the wrong white balance as a choice."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Found Footage: you add a timestamp and an operator without meaning to. The tell is a recovered-tape premise you did not want, or a pretty backup angle.",
+          "links": [
+            {
+              "text": "Found Footage",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: keep the film's camera ugly and omniscient, or commit fully to a diegetic device if that is the story."
+        }
+      ],
+      "links": [
+        {
+          "text": "Found Footage",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Found Footage: you add a timestamp and an operator without meaning to. The tell is a recovered-tape premise you did not want, or a pretty backup angle.Fix: keep the film's camera ugly and omniscient, or commit fully to a diegetic device if that is the story."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Stylistic Suck in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A chosen amateur look: hunting zooms, cheap video, wrong white balance, blown highlights. The film's own camera refuses polish. It does not require a recovered-tape story."
+        },
+        {
+          "type": "heading",
+          "text": "Stylistic Suck vs Found Footage",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Found footage needs a diegetic recorder and a reason the tape exists. Stylistic suck can be the movie looking poorly made with no operator character. Blair Witch is both. Trash Humpers is suck as voice."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Stylistic Suck?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When polish would lie. Skip it if you need a recovered-camera plot, if you need vérité respect, or if a single pretty angle would sneak back in."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Stylistic Suck for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Deliberate amateur look on [Subject], bad zoom, cheap video, wrong white balance as a choice, blown practicals. Do not add a timestamp unless the camera is also a story object."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Stylistic Suck in film?A chosen amateur look: hunting zooms, cheap video, wrong white balance, blown highlights. The film's own camera refuses polish. It does not require a recovered-tape story.Stylistic Suck vs Found FootageFound footage needs a diegetic recorder and a reason the tape exists. Stylistic suck can be the movie looking poorly made with no operator character. Blair Witch is both. Trash Humpers is suck as voice.When should I use Stylistic Suck?When polish would lie. Skip it if you need a recovered-camera plot, if you need vérité respect, or if a single pretty angle would sneak back in.How do I prompt Stylistic Suck for AI image or video?Write: Deliberate amateur look on [Subject], bad zoom, cheap video, wrong white balance as a choice, blown practicals. Do not add a timestamp unless the camera is also a story object."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Deliberate amateur look on [Subject], hunting zoom, cheap video, wrong white balance as a choice, blown practicals, bad centering. Do not add a timestamp unless there is also a diegetic camera.",
+      "Do not correct the color."
+    ],
+    "example": "Deliberate amateur look on [Subject], bad zoom, cheap video, the wrong white balance as a choice."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/35bef9b3524abc0d4790ab565b78e986.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/stylistic-suck-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ba7cb6c8f22259fd585930f1b2dc257b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/stylistic-suck-stylistic-suck-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6b2590322fad3ddd47aa2869ea6a2e19.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/stylistic-suck.jpg",
+      "alt": "Stylistic Suck frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/9666d1373fc66963ab24b66dc223a396.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/found-footage-look-167-found-footage-framing-mini.webp",
+      "alt": "Found Footage"
+    },
+    {
+      "kind": "video",
+      "path": "media/7bf374164a3dcd9eff596eb974779555.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/167-found-footage-framing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/698c2a04908f5536012f8e28784057e5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinema-verite.webp",
+      "alt": "Cinéma Vérité"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/54c7d0b79ac25c59d5a5b0294604fa52.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/stylistic-suck/hero.jpg",
+      "alt": "Stylistic Suck",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "89e6a2372184b04b96fc82793f411efa658611978e05dec01f91b743178bc2e8"
+}

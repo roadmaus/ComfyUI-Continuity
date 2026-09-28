@@ -1,0 +1,455 @@
+{
+  "id": "color/palette",
+  "slug": "palette",
+  "title": "Palette",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/palette",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/palette.webp",
+  "detail": "details/color/palette.json",
+  "aliases": [
+    "Palette as location or story state"
+  ],
+  "description": "A color palette in color palette cinematography is a restricted set of hues used as law across set, costume, light, and grade. Too many colors would be noise; a few chosen hues do all the work and can mark location, timeline, or story state.",
+  "thumbnail": "media/a4ad6f9b3acabbfb5604abf31d449032.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Design as law. A yellow desert chapter, a red-cloth lie, a mint hotel: the audience learns the rule and then feels the break."
+        },
+        {
+          "type": "paragraph",
+          "text": "Traffic can tint strands so you know which plot you are in. A hotel can live in pinks and purples until a new room breaks the set."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the location must keep its un-designed color science (Natural Grade). It is the wrong tool if the only restriction is no chroma (Monochrome).",
+          "links": [
+            {
+              "text": "Natural Grade",
+              "url": "https://melies.co/cinematic-techniques/color/natural-grade"
+            },
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Split Toning paints the curve; a palette paints the world, including walls and clothes. Palette changes should distinguish meaningful states, not create arbitrary variety.",
+          "links": [
+            {
+              "text": "Split Toning",
+              "url": "https://melies.co/cinematic-techniques/color/split-tone"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Natural Grade",
+          "url": "https://melies.co/cinematic-techniques/color/natural-grade"
+        },
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Split Toning",
+          "url": "https://melies.co/cinematic-techniques/color/split-tone"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Design as law. A yellow desert chapter, a red-cloth lie, a mint hotel: the audience learns the rule and then feels the break.Traffic can tint strands so you know which plot you are in. A hotel can live in pinks and purples until a new room breaks the set.It is the wrong tool when the location must keep its un-designed color science (Natural Grade). It is the wrong tool if the only restriction is no chroma (Monochrome).A Split Toning paints the curve; a palette paints the world, including walls and clothes. Palette changes should distinguish meaningful states, not create arbitrary variety."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Define a palette rule for each strand across set design, costume, lighting, and grading. Keep the rule stable enough to be learned before breaking it deliberately."
+        },
+        {
+          "type": "paragraph",
+          "text": "Remove extra hues from frame (a stray neon, a blue plastic bag). Prompt: Restricted palette on [Subject], a few chosen hues doing all the work, design as law."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Define a palette rule for each strand across set design, costume, lighting, and grading. Keep the rule stable enough to be learned before breaking it deliberately.Remove extra hues from frame (a stray neon, a blue plastic bag). Prompt: Restricted palette on [Subject], a few chosen hues doing all the work, design as law."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when too many colors would be noise, or when strands of a story must be recognizable by hue. Do not use it as random look-variety, and do not confuse it with a grade-only split on a messy set."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when too many colors would be noise, or when strands of a story must be recognizable by hue. Do not use it as random look-variety, and do not confuse it with a grade-only split on a messy set."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Monochrome is one scale, no hue. Split Toning is highlight versus shadow in the grade.",
+          "links": [
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            },
+            {
+              "text": "Split Toning",
+              "url": "https://melies.co/cinematic-techniques/color/split-tone"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Color Shift is a change you watch. Hyper-Saturation can live inside a palette (Hero) but saturation is not the restriction.",
+          "links": [
+            {
+              "text": "Color Shift",
+              "url": "https://melies.co/cinematic-techniques/color/color-shift"
+            },
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Palette is the designed set of allowed hues."
+        },
+        {
+          "type": "list-item",
+          "text": "Split ToningShadows and lights belong to different gods.",
+          "displayText": "Split Toning\nShadows and lights belong to different gods.",
+          "links": [
+            {
+              "text": "Split ToningShadows and lights belong to different gods.",
+              "url": "https://melies.co/cinematic-techniques/color/split-tone"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MonochromeStrip to drawing.",
+          "displayText": "Monochrome\nStrip to drawing.",
+          "links": [
+            {
+              "text": "MonochromeStrip to drawing.",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Split Toning",
+          "url": "https://melies.co/cinematic-techniques/color/split-tone"
+        },
+        {
+          "text": "Color Shift",
+          "url": "https://melies.co/cinematic-techniques/color/color-shift"
+        },
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        },
+        {
+          "text": "Split ToningShadows and lights belong to different gods.",
+          "url": "https://melies.co/cinematic-techniques/color/split-tone"
+        },
+        {
+          "text": "MonochromeStrip to drawing.",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/31d92d2537ca6e93344aeb4ab840d233.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-tone.webp",
+          "alt": "Split Toning"
+        },
+        {
+          "kind": "image",
+          "path": "media/cdf5189c733a215f8f6312b537573dbd.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monochrome-073-selective-color-in-monochrome-mini.webp",
+          "alt": "Monochrome"
+        },
+        {
+          "kind": "video",
+          "path": "media/7a3685f47ea79cd2485426ecee14655b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/073-selective-color-in-monochrome-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Monochrome is one scale, no hue. Split Toning is highlight versus shadow in the grade.Color Shift is a change you watch. Hyper-Saturation can live inside a palette (Hero) but saturation is not the restriction.Palette is the designed set of allowed hues.Split ToningShadows and lights belong to different gods.MonochromeStrip to drawing.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hero organizes successive versions of events around changing dominant colors. The Grand Budapest Hotel runs hotel spaces as a learned set of pastels and purples."
+        },
+        {
+          "type": "paragraph",
+          "text": "Traffic uses distinct visual color treatments for different story strands. Grammar of rules, not a still of a desert army."
+        },
+        {
+          "type": "list-item",
+          "text": "Traffic 2000Different story strands use distinct visual color treatments.",
+          "displayText": "Traffic 2000\nDifferent story strands use distinct visual color treatments."
+        },
+        {
+          "type": "list-item",
+          "text": "Hero 2002Successive versions of events are organized around changing dominant colors.",
+          "displayText": "Hero 2002\nSuccessive versions of events are organized around changing dominant colors."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/cc9533d7648918f4dc3723b8695b618a.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/palette/famous/00-traffic-2000.jpg",
+          "alt": "Traffic 2000"
+        },
+        {
+          "kind": "image",
+          "path": "media/e3f06de587589744e990a48cbe48be67.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/palette/famous/01-hero-2002.jpg",
+          "alt": "Hero 2002"
+        }
+      ],
+      "sourceText": "In film Hero organizes successive versions of events around changing dominant colors. The Grand Budapest Hotel runs hotel spaces as a learned set of pastels and purples.Traffic uses distinct visual color treatments for different story strands. Grammar of rules, not a still of a desert army.Traffic 2000Different story strands use distinct visual color treatments.Hero 2002Successive versions of events are organized around changing dominant colors."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the allowed hues and ban the rest. Restricted palette on [Subject], a few chosen hues doing all the work, design as law."
+        },
+        {
+          "type": "paragraph",
+          "text": "List the two or three hues. Do not write mixed complementary clutter, and do not say colorful."
+        },
+        {
+          "type": "quote",
+          "text": "Generate three matched views of one train-station meeting as alternate recollections: warm amber, cool blue-gray and restrained white-green. Keep blocking and character identities identical while wardrobe accents, environment and light follow each version’s palette. Assemble as distinct narrative strands rather than cycling hues within one shot."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Generate+three+matched+views+of+one+train-station+meeting+as+alternate+recollections:+warm+amber,+cool+blue-gray+and+restrained+white-green.+Keep+blocking+and+character+identities+identical+while+wardrobe+accents,+environment+and+light+follow+each+version%E2%80%99s+palette.+Assemble+as+distinct+narrative+strands+rather+than+cycling+hues+within+one+shot."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the allowed hues and ban the rest. Restricted palette on [Subject], a few chosen hues doing all the work, design as law.List the two or three hues. Do not write mixed complementary clutter, and do not say colorful.Copy promptUse in Video GeneratorGenerate three matched views of one train-station meeting as alternate recollections: warm amber, cool blue-gray and restrained white-green. Keep blocking and character identities identical while wardrobe accents, environment and light follow each version’s palette. Assemble as distinct narrative strands rather than cycling hues within one shot.Generate three matched views of one train-station meeting as alternate recollections: warm amber, cool blue-gray and restrained white-green. Keep blocking and character identities identical while wardrobe accents, environment and light follow each version’s palette. Assemble as distinct narrative strands rather than cycling hues within one shot."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Split Toning on an uncontrolled set, or a Natural Grade with a LUT. The tell is extra hues leaking from wardrobe and extras, or a grade fighting the furniture.",
+          "links": [
+            {
+              "text": "Split Toning",
+              "url": "https://melies.co/cinematic-techniques/color/split-tone"
+            },
+            {
+              "text": "Natural Grade",
+              "url": "https://melies.co/cinematic-techniques/color/natural-grade"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: control walls, clothes, and lights first, then grade inside that law."
+        }
+      ],
+      "links": [
+        {
+          "text": "Split Toning",
+          "url": "https://melies.co/cinematic-techniques/color/split-tone"
+        },
+        {
+          "text": "Natural Grade",
+          "url": "https://melies.co/cinematic-techniques/color/natural-grade"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Split Toning on an uncontrolled set, or a Natural Grade with a LUT. The tell is extra hues leaking from wardrobe and extras, or a grade fighting the furniture.Fix: control walls, clothes, and lights first, then grade inside that law."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a palette in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a restricted set of hues used as a rule for a place, a timeline, or a story strand. Set, costume, light, and grade all obey the same few colors."
+        },
+        {
+          "type": "heading",
+          "text": "Palette vs Split Toning",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Split toning colors highlights and shadows in the grade. A palette is designed into the world: walls, clothes, props, and lights. You can split-tone a messy full-spectrum set. A palette would not allow that mess."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a palette?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a few hues should do all the work, or when strands must be recognized by color. Skip it when the real location must remain undesigned."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a palette for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Restricted palette on [Subject], a few chosen hues doing all the work, design as law. List the hues. Forbid extra colors in wardrobe and set."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a palette in film?It is a restricted set of hues used as a rule for a place, a timeline, or a story strand. Set, costume, light, and grade all obey the same few colors.Palette vs Split ToningSplit toning colors highlights and shadows in the grade. A palette is designed into the world: walls, clothes, props, and lights. You can split-tone a messy full-spectrum set. A palette would not allow that mess.When should I use a palette?Use it when a few hues should do all the work, or when strands must be recognized by color. Skip it when the real location must remain undesigned.How do I prompt a palette for AI image or video?Write: Restricted palette on [Subject], a few chosen hues doing all the work, design as law. List the hues. Forbid extra colors in wardrobe and set."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the allowed hues and ban the rest. Restricted palette on [Subject], a few chosen hues doing all the work, design as law.",
+      "List the two or three hues. Do not write mixed complementary clutter, and do not say colorful."
+    ],
+    "example": "Generate three matched views of one train-station meeting as alternate recollections: warm amber, cool blue-gray and restrained white-green. Keep blocking and character identities identical while wardrobe accents, environment and light follow each version’s palette. Assemble as distinct narrative strands rather than cycling hues within one shot."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/a4ad6f9b3acabbfb5604abf31d449032.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/palette.webp",
+      "alt": "Palette example"
+    },
+    {
+      "kind": "image",
+      "path": "media/31d92d2537ca6e93344aeb4ab840d233.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-tone.webp",
+      "alt": "Split Toning"
+    },
+    {
+      "kind": "image",
+      "path": "media/cdf5189c733a215f8f6312b537573dbd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monochrome-073-selective-color-in-monochrome-mini.webp",
+      "alt": "Monochrome"
+    },
+    {
+      "kind": "video",
+      "path": "media/7a3685f47ea79cd2485426ecee14655b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/073-selective-color-in-monochrome-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/cc9533d7648918f4dc3723b8695b618a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/palette/famous/00-traffic-2000.jpg",
+      "alt": "Traffic 2000"
+    },
+    {
+      "kind": "image",
+      "path": "media/e3f06de587589744e990a48cbe48be67.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/palette/famous/01-hero-2002.jpg",
+      "alt": "Hero 2002"
+    },
+    {
+      "kind": "image",
+      "path": "media/5549617dfe646c80e5d7b06f4097f200.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/palette/hero.jpg",
+      "alt": "Palette",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "6b1df8b4626f90d94142f0533b9c7e11faa23358929f16500df5d6bc690509fe"
+}

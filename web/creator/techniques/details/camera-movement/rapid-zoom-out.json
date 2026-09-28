@@ -1,0 +1,389 @@
+{
+  "id": "camera-movement/rapid-zoom-out",
+  "slug": "rapid-zoom-out",
+  "title": "Rapid Zoom Out",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/rapid-zoom-out",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rapid-zoom-out-rapid-zoom-out-mini.webp",
+  "detail": "details/camera-movement/rapid-zoom-out.json",
+  "aliases": [],
+  "description": "A rapid zoom out snaps from the subject to a wide, the environment exploding into view, then holds. Reveal as shock or joke; the camera body still does not travel.",
+  "thumbnail": "media/8eda7bf124be21efd98032a62652a157.webp",
+  "video": "media/9e772eaf6d3b1928f5c5226e27eae3dc.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/rapid-zoom-out-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Reveal as a joke or a shock. A close face becomes a tiny figure in a huge problem: a crowd, a desert, a mess."
+        },
+        {
+          "type": "paragraph",
+          "text": "The snap is the gag. A pull-out walks away with parallax."
+        },
+        {
+          "type": "paragraph",
+          "text": "A crash zoom out is the readable cousin. Rapid is the snap."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the environment does not suddenly exist, you only loosened a portrait."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Reveal as a joke or a shock. A close face becomes a tiny figure in a huge problem: a crowd, a desert, a mess.The snap is the gag. A pull-out walks away with parallax.A crash zoom out is the readable cousin. Rapid is the snap.If the environment does not suddenly exist, you only loosened a portrait."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Locked body, zoom thrown wide in a few frames, then hold. Tight to wide."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Rapid zoom out from [Subject], the environment exploding into view in a snap."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Locked body, zoom thrown wide in a few frames, then hold. Tight to wide.Prompt: Rapid zoom out from [Subject], the environment exploding into view in a snap."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to reveal scale or context as a shock. Do not use a slow zoom out and call it rapid."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to reveal scale or context as a shock. Do not use a slow zoom out and call it rapid."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crash Zoom Out is the readable optical reverse. Pull Out translates the camera away.",
+          "links": [
+            {
+              "text": "Crash Zoom Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-out"
+            },
+            {
+              "text": "Pull Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Rapid zoom out is the snap to a wide, then a hold, body still."
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom OutShock-reveal scale or undercut a close moment.",
+          "displayText": "Crash Zoom Out\nShock-reveal scale or undercut a close moment.",
+          "links": [
+            {
+              "text": "Crash Zoom OutShock-reveal scale or undercut a close moment.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pull OutShow the container around a feeling.",
+          "displayText": "Pull Out\nShow the container around a feeling.",
+          "links": [
+            {
+              "text": "Pull OutShow the container around a feeling.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crash Zoom Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-out"
+        },
+        {
+          "text": "Pull Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+        },
+        {
+          "text": "Crash Zoom OutShock-reveal scale or undercut a close moment.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-out"
+        },
+        {
+          "text": "Pull OutShow the container around a feeling.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/50f4effe5c52992f8b05bebf3c572d46.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-out-03-crash-zoom-out-v2-mini.webp",
+          "alt": "Crash Zoom Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/5a74b21f2d2f97e035b9035f20977f76.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-crash-zoom-out-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/37b5595bae8858283390769367c4f5d6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pull-out-pull-out-mini.webp",
+          "alt": "Pull Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/4c02c1f19b8cf15347f8a51749112685.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pull-out-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Crash Zoom Out is the readable optical reverse. Pull Out translates the camera away.Rapid zoom out is the snap to a wide, then a hold, body still.Crash Zoom OutShock-reveal scale or undercut a close moment.Pull OutShow the container around a feeling.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shaun of the Dead snaps out to dump a person into a problem. Scott Pilgrim uses snap outs as graphic punctuation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: environment exploding into view."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Shaun of the Dead snaps out to dump a person into a problem. Scott Pilgrim uses snap outs as graphic punctuation.Grammar: environment exploding into view."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Snap to wide, hold. Still: Rapid zoom out from [Subject], the environment exploding into view in a snap."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Snap zoom out from [Subject] to a wide, then hold. Name what appears."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a dolly reverse."
+        },
+        {
+          "type": "quote",
+          "text": "Snap zoom out from [Subject] to a wide, then hold."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Snap+zoom+out+from+[Subject]+to+a+wide,+then+hold."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Snap to wide, hold. Still: Rapid zoom out from [Subject], the environment exploding into view in a snap.Video: Snap zoom out from [Subject] to a wide, then hold. Name what appears.Forbid a dolly reverse.Copy promptUse in Video GeneratorSnap zoom out from [Subject] to a wide, then hold.Snap zoom out from [Subject] to a wide, then hold."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a pull-out. The tell: the camera walked, lamps sheared."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: lock the body, snap the glass wide, hold on the new map."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a pull-out. The tell: the camera walked, lamps sheared.The fix: lock the body, snap the glass wide, hold on the new map."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Rapid Zoom Out in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A rapid zoom out is a snap from the subject to a wide in a few frames, environment exploding into view, then a hold. No body travel."
+        },
+        {
+          "type": "heading",
+          "text": "Rapid Zoom Out vs Pull Out",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A pull-out physically retreats and produces parallax. Rapid zoom out only changes focal length, as a snap, then holds."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Rapid Zoom Out?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to reveal context as a shock or a joke. Do not use it as a slow opener."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Rapid Zoom Out for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a snap to a wide, then a hold. Example: Rapid zoom out from [Subject], the environment exploding into view in a snap."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Rapid Zoom Out in film?A rapid zoom out is a snap from the subject to a wide in a few frames, environment exploding into view, then a hold. No body travel.Rapid Zoom Out vs Pull OutA pull-out physically retreats and produces parallax. Rapid zoom out only changes focal length, as a snap, then holds.When should I use Rapid Zoom Out?Use it to reveal context as a shock or a joke. Do not use it as a slow opener.How do I prompt Rapid Zoom Out for AI image or video?Write a snap to a wide, then a hold. Example: Rapid zoom out from [Subject], the environment exploding into view in a snap."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Snap to wide, hold. Still: Rapid zoom out from [Subject], the environment exploding into view in a snap.",
+      "Video: Snap zoom out from [Subject] to a wide, then hold. Name what appears.",
+      "Forbid a dolly reverse."
+    ],
+    "example": "Snap zoom out from [Subject] to a wide, then hold."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/9e772eaf6d3b1928f5c5226e27eae3dc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/rapid-zoom-out-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8eda7bf124be21efd98032a62652a157.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rapid-zoom-out-rapid-zoom-out-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/894e74609cfd49157493b938117b9dab.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/rapid-zoom-out.jpg",
+      "alt": "Rapid Zoom Out frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/50f4effe5c52992f8b05bebf3c572d46.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-out-03-crash-zoom-out-v2-mini.webp",
+      "alt": "Crash Zoom Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/5a74b21f2d2f97e035b9035f20977f76.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-crash-zoom-out-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/37b5595bae8858283390769367c4f5d6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pull-out-pull-out-mini.webp",
+      "alt": "Pull Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/4c02c1f19b8cf15347f8a51749112685.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pull-out-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/52f016b74dc28e884768894c2dc42c85.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/rapid-zoom-out/hero.jpg",
+      "alt": "Rapid Zoom Out",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "1ced2e52243fbb3f13b8e3533e7887be5dd965ce86ff5bf7d75fc8feb574008f"
+}

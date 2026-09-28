@@ -1,0 +1,391 @@
+{
+  "id": "composition/headroom",
+  "slug": "headroom",
+  "title": "Headroom",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/headroom",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/headroom.webp",
+  "detail": "details/composition/headroom.json",
+  "aliases": [],
+  "description": "Headroom in headroom cinematography is the space between the crown of the head and the top frame edge. Tight headroom applies pressure, while generous headroom hands the upper field to air, architecture, or sky.",
+  "thumbnail": "media/f9177b5cdb26a7286836446aaee8ec0d.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The vertical diagram is easy to ignore until it is wrong. Too much accidental headroom makes a person sink, a student error."
+        },
+        {
+          "type": "paragraph",
+          "text": "Too little clips thought. Deliberate surplus (a nun under a pale wall, a man under oil derricks) makes emptiness a partner."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool to 'fix' by always parking the eyes on a thirds line. Some faces need to be crushed under a ceiling."
+        },
+        {
+          "type": "paragraph",
+          "text": "Some need to float. The rule of thirds is a default for the eyes, not a law for the top edge."
+        },
+        {
+          "type": "paragraph",
+          "text": "Headroom talks to costume and architecture. A tall hat, a halo lamp, a beam: the top edge is a character."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The vertical diagram is easy to ignore until it is wrong. Too much accidental headroom makes a person sink, a student error.Too little clips thought. Deliberate surplus (a nun under a pale wall, a man under oil derricks) makes emptiness a partner.It is the wrong tool to 'fix' by always parking the eyes on a thirds line. Some faces need to be crushed under a ceiling.Some need to float. The rule of thirds is a default for the eyes, not a law for the top edge.Headroom talks to costume and architecture. A tall hat, a halo lamp, a beam: the top edge is a character."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Measure from hair to the frame line, not from eyes. For a standard close-up, leave a modest band, enough that a nod will not clip."
+        },
+        {
+          "type": "paragraph",
+          "text": "For pressure, shave it to a hair. For weather or faith, drop the face in the lower third and let ceiling or sky own the rest."
+        },
+        {
+          "type": "paragraph",
+          "text": "Tilt and pedestal change headroom without changing lens. Prompt: Deliberate headroom on [Subject], either tight to the hair (pressure) or generously open (air, God, sky)."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Measure from hair to the frame line, not from eyes. For a standard close-up, leave a modest band, enough that a nod will not clip.For pressure, shave it to a hair. For weather or faith, drop the face in the lower third and let ceiling or sky own the rest.Tilt and pedestal change headroom without changing lens. Prompt: Deliberate headroom on [Subject], either tight to the hair (pressure) or generously open (air, God, sky)."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use tight headroom when the room is a trap or the thought has no ceiling. Use open headroom when land, church, or sky must outweigh the skull."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not leave extra sky because you failed to tilt down."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use tight headroom when the room is a trap or the thought has no ceiling. Use open headroom when land, church, or sky must outweigh the skull.Do not leave extra sky because you failed to tilt down."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lead Room is horizontal air in the direction of motion. Headroom is vertical.",
+          "links": [
+            {
+              "text": "Lead Room",
+              "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Close-Up is a size that makes headroom mistakes loud. Negative Space often lives in surplus headroom.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            },
+            {
+              "text": "Negative Space",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Short Siding crushes the look horizontally. Void can eat everything above a face until there is no ceiling, only nothing.",
+          "links": [
+            {
+              "text": "Short Siding",
+              "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+            },
+            {
+              "text": "Void",
+              "url": "https://melies.co/cinematic-techniques/composition/void"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lead RoomThey are going somewhere, even if standing.",
+          "displayText": "Lead Room\nThey are going somewhere, even if standing.",
+          "links": [
+            {
+              "text": "Lead RoomThey are going somewhere, even if standing.",
+              "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "displayText": "Close-Up\nRead micro-expression. Default for important dialogue.",
+          "links": [
+            {
+              "text": "Close-UpRead micro-expression. Default for important dialogue.",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Lead Room",
+          "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Negative Space",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Short Siding",
+          "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+        },
+        {
+          "text": "Void",
+          "url": "https://melies.co/cinematic-techniques/composition/void"
+        },
+        {
+          "text": "Lead RoomThey are going somewhere, even if standing.",
+          "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+        },
+        {
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/00082839284cdeb7bf57bb7a3a31a168.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lead-room.webp",
+          "alt": "Lead Room"
+        },
+        {
+          "kind": "image",
+          "path": "media/95136909e657a1816141551e20893339.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+          "alt": "Close-Up"
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Lead Room is horizontal air in the direction of motion. Headroom is vertical.Close-Up is a size that makes headroom mistakes loud. Negative Space often lives in surplus headroom.Short Siding crushes the look horizontally. Void can eat everything above a face until there is no ceiling, only nothing.Lead RoomThey are going somewhere, even if standing.Close-UpRead micro-expression. Default for important dialogue.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Classical coverage keeps modest headroom so a nod survives. Ida uses large upper fields of wall and sky as designed surplus, faces low in the diagram."
+        },
+        {
+          "type": "paragraph",
+          "text": "There Will Be Blood lets derricks and air dwarf a skull. Grammar of the top edge, not a crop preset."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Classical coverage keeps modest headroom so a nod survives. Ida uses large upper fields of wall and sky as designed surplus, faces low in the diagram.There Will Be Blood lets derricks and air dwarf a skull. Grammar of the top edge, not a crop preset."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "State tight or open, and what lives in the gap. Deliberate headroom on [Subject], either tight to the hair (pressure) or generously open (air, God, sky)."
+        },
+        {
+          "type": "paragraph",
+          "text": "If open, name the upper field (ceiling, sky, concrete). If tight, say hair almost touching the top frame edge."
+        },
+        {
+          "type": "quote",
+          "text": "Deliberate headroom on [Subject], either tight to the hair (pressure) or generously open (air, God, sky)."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Deliberate+headroom+on+[Subject],+either+tight+to+the+hair+(pressure)+or+generously+open+(air,+God,+sky)."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it State tight or open, and what lives in the gap. Deliberate headroom on [Subject], either tight to the hair (pressure) or generously open (air, God, sky).If open, name the upper field (ceiling, sky, concrete). If tight, say hair almost touching the top frame edge.Copy promptUse in Image GeneratorDeliberate headroom on [Subject], either tight to the hair (pressure) or generously open (air, God, sky).Deliberate headroom on [Subject], either tight to the hair (pressure) or generously open (air, God, sky)."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is accidental sink, a figure dropped because the operator did not tilt. The tell is leftover ceiling with no job and eyes nowhere near a decision."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to tilt down for a standard portrait, or to own the surplus as Negative Space and compose the face low on purpose.",
+          "links": [
+            {
+              "text": "Negative Space",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Negative Space",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is accidental sink, a figure dropped because the operator did not tilt. The tell is leftover ceiling with no job and eyes nowhere near a decision.The fix is to tilt down for a standard portrait, or to own the surplus as Negative Space and compose the face low on purpose."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is headroom in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the gap between the top of the head and the top of the frame. Small gap: pressure. Large gap: air, architecture, or weather owns the upper field. Accidental large gap is a common error. Deliberate large gap is a composition."
+        },
+        {
+          "type": "heading",
+          "text": "Headroom vs Lead Room",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Headroom is vertical space above the skull. Lead room is horizontal space in the direction of a walk or a look. You can have generous lead room and tight headroom in the same single. They are different edges of the diagram."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use headroom?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Always, as a decision. Tighten it to press. Open it when sky or ceiling should act. Do not leave extra air because you missed the tilt."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt headroom for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Say tight or generous and name the upper field. Example: Deliberate headroom on [Subject], either tight to the hair (pressure) or generously open (air, God, sky). Models default to too much sky. Be explicit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is headroom in film?It is the gap between the top of the head and the top of the frame. Small gap: pressure. Large gap: air, architecture, or weather owns the upper field. Accidental large gap is a common error. Deliberate large gap is a composition.Headroom vs Lead RoomHeadroom is vertical space above the skull. Lead room is horizontal space in the direction of a walk or a look. You can have generous lead room and tight headroom in the same single. They are different edges of the diagram.When should I use headroom?Always, as a decision. Tighten it to press. Open it when sky or ceiling should act. Do not leave extra air because you missed the tilt.How do I prompt headroom for AI image or video?Say tight or generous and name the upper field. Example: Deliberate headroom on [Subject], either tight to the hair (pressure) or generously open (air, God, sky). Models default to too much sky. Be explicit."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "State tight or open, and what lives in the gap. Deliberate headroom on [Subject], either tight to the hair (pressure) or generously open (air, God, sky).",
+      "If open, name the upper field (ceiling, sky, concrete). If tight, say hair almost touching the top frame edge."
+    ],
+    "example": "Deliberate headroom on [Subject], either tight to the hair (pressure) or generously open (air, God, sky)."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/f9177b5cdb26a7286836446aaee8ec0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/headroom.webp",
+      "alt": "Headroom example"
+    },
+    {
+      "kind": "image",
+      "path": "media/00082839284cdeb7bf57bb7a3a31a168.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lead-room.webp",
+      "alt": "Lead Room"
+    },
+    {
+      "kind": "image",
+      "path": "media/95136909e657a1816141551e20893339.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+      "alt": "Close-Up"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/97d7f5787df328faa0d45ffeaa875092.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/headroom/hero.jpg",
+      "alt": "Headroom",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "608a327289bd11628594dc44211b630ae51b8e46b46b7971a66e04db2a7fac58"
+}

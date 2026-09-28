@@ -1,0 +1,403 @@
+{
+  "id": "effects/distortions",
+  "slug": "distortions",
+  "title": "Distortions",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/distortions",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/distortions-distortions-mini.webp",
+  "detail": "details/effects/distortions.json",
+  "aliases": [],
+  "description": "Lens distortion cinematography warps space so straight lines bow, stretch, or melt: barrel, pincushion, mustache, extreme wide stretch, or a physical distorting optic such as a diopter, a bottle, or rain on glass. The lens is lying about geometry, not adding flare.",
+  "thumbnail": "media/2403358c9979120dac6b418a94aab6ee.webp",
+  "video": "media/d366fd1c3f219de50f876ecd6cf7f71d.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/distortions-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Walls lean. Faces balloon as they near the glass."
+        },
+        {
+          "type": "paragraph",
+          "text": "A hallway breathes. Space is not trustworthy."
+        },
+        {
+          "type": "paragraph",
+          "text": "The cause can be a very wide spherical, a fisheye, anamorphic mumps, heat shimmer, or a shot through a glass of water. Use it when the location should feel unsafe or subjective: a droogs' wide, a binge, a peephole, a fever."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pick a distortion family and keep it consistent with the glass. It is the wrong tool for a clean normal-lens master, for flare without warp, or for a kaleidoscope of mirrors."
+        },
+        {
+          "type": "paragraph",
+          "text": "If color fringes without bent lines, that is chromatic aberration. If the whole mind is unhooked, consider altered state, of which distortion may be one part."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Walls lean. Faces balloon as they near the glass.A hallway breathes. Space is not trustworthy.The cause can be a very wide spherical, a fisheye, anamorphic mumps, heat shimmer, or a shot through a glass of water. Use it when the location should feel unsafe or subjective: a droogs' wide, a binge, a peephole, a fever.Pick a distortion family and keep it consistent with the glass. It is the wrong tool for a clean normal-lens master, for flare without warp, or for a kaleidoscope of mirrors.If color fringes without bent lines, that is chromatic aberration. If the whole mind is unhooked, consider altered state, of which distortion may be one part."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose the glass: 14 mm or fisheye for barrel, long glass for pincushion, anamorphic for mumps and wave, a close diopter for melt at the edge. Get too close to faces on a wide and perspective distortion adds to optical distortion."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: optical distortion around [Subject], stretched edges, melted geometry, named wide or fisheye, not a flare overlay."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Choose the glass: 14 mm or fisheye for barrel, long glass for pincushion, anamorphic for mumps and wave, a close diopter for melt at the edge. Get too close to faces on a wide and perspective distortion adds to optical distortion.Prompt: optical distortion around [Subject], stretched edges, melted geometry, named wide or fisheye, not a flare overlay."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A close wide on a face in a tense interior, edges stretching, the room bowing, space untrustworthy. Do not keep a 50 mm rectilinear room and paste melted corners as a sticker."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A close wide on a face in a tense interior, edges stretching, the room bowing, space untrustworthy. Do not keep a 50 mm rectilinear room and paste melted corners as a sticker."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fisheye is the extreme barrel member of this family, with a circular or strongly bowed field. Lens Flare is scatter, not geometry.",
+          "links": [
+            {
+              "text": "Fisheye",
+              "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+            },
+            {
+              "text": "Lens Flare",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Chromatic Aberration fringes color on edges. 14mm Ultra-Wide distorts through field of view and proximity even when the designer corrects barrel.",
+          "links": [
+            {
+              "text": "Chromatic Aberration",
+              "url": "https://melies.co/cinematic-techniques/effects/chromatic-aberration"
+            },
+            {
+              "text": "14mm Ultra-Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Altered State may include distortion plus time and color.",
+          "links": [
+            {
+              "text": "Altered State",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "FisheyeThe mind is warped, or the space is a dome.",
+          "displayText": "Fisheye\nThe mind is warped, or the space is a dome.",
+          "links": [
+            {
+              "text": "FisheyeThe mind is warped, or the space is a dome.",
+              "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "displayText": "Anamorphic Flare\nNight lights and headlights should write on the lens.",
+          "links": [
+            {
+              "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+              "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Fisheye",
+          "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+        },
+        {
+          "text": "Lens Flare",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "Chromatic Aberration",
+          "url": "https://melies.co/cinematic-techniques/effects/chromatic-aberration"
+        },
+        {
+          "text": "14mm Ultra-Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        },
+        {
+          "text": "Altered State",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        },
+        {
+          "text": "FisheyeThe mind is warped, or the space is a dome.",
+          "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b4071aa0661c71f8a9389dce80bf833c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fisheye-059-fisheye-space-distortion-mini.webp",
+          "alt": "Fisheye"
+        },
+        {
+          "kind": "video",
+          "path": "media/3c8bcf6380e4b2040179ecc443e9bdf3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/059-fisheye-space-distortion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/dd60ac3e349447877925814c6440f811.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+          "alt": "Anamorphic Flare"
+        }
+      ],
+      "sourceText": "Compared with similar shots Fisheye is the extreme barrel member of this family, with a circular or strongly bowed field. Lens Flare is scatter, not geometry.Chromatic Aberration fringes color on edges. 14mm Ultra-Wide distorts through field of view and proximity even when the designer corrects barrel.Altered State may include distortion plus time and color.FisheyeThe mind is warped, or the space is a dome.Lens FlareLight is too strong to be polite.Anamorphic FlareNight lights and headlights should write on the lens."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Clockwork Orange uses extreme wides so rooms and faces are geometrically hostile. Fear and Loathing in Las Vegas melts space as intoxication."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those are glass and proximity, not a warp filter parked on a normal lens."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film A Clockwork Orange uses extreme wides so rooms and faces are geometrically hostile. Fear and Loathing in Las Vegas melts space as intoxication.Those are glass and proximity, not a warp filter parked on a normal lens."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bend the space with glass. Example: Optical distortion around [Subject], stretched edges, barrel or melted geometry from ultra-wide or fisheye glass close to the face, the lens lying about space, not a flare pack."
+        },
+        {
+          "type": "quote",
+          "text": "Optical distortion around [Subject], stretched edges, melted geometry, the lens lying about space."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Optical+distortion+around+[Subject],+stretched+edges,+melted+geometry,+the+lens+lying+about+space."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Bend the space with glass. Example: Optical distortion around [Subject], stretched edges, barrel or melted geometry from ultra-wide or fisheye glass close to the face, the lens lying about space, not a flare pack.Copy promptUse in Image GeneratorOptical distortion around [Subject], stretched edges, melted geometry, the lens lying about space.Optical distortion around [Subject], stretched edges, melted geometry, the lens lying about space."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: lens flare, fisheye circular crop without the scene, or altered-state color smear with straight walls. Tell: rainbow streaks, a round porthole sticker, or a clean rectilinear room with a melted overlay."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: choose a lens family, bow lines, let near faces balloon, keep the warp attached to the optic."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: lens flare, fisheye circular crop without the scene, or altered-state color smear with straight walls. Tell: rainbow streaks, a round porthole sticker, or a clean rectilinear room with a melted overlay.Fix: choose a lens family, bow lines, let near faces balloon, keep the warp attached to the optic."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is lens distortion in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Geometric warping of space by the optic or by shooting through a distorting surface. Straight lines bow or stretch. The map of the room is no longer true."
+        },
+        {
+          "type": "heading",
+          "text": "Distortions vs fisheye",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fisheye is a specific extreme barrel lens. Distortions is the larger family: barrel, pincushion, anamorphic wave, heat, glass of water. Fisheye is one tool in that kit."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use distortions?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When space should not be trustworthy. Do not use them on coverage that still has to be architecturally honest."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt distortions for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the glass (ultra-wide, fisheye) or the surface, describe bowed lines and stretched edges, and forbid flare-only artifacts or a sticker warp."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is lens distortion in film?Geometric warping of space by the optic or by shooting through a distorting surface. Straight lines bow or stretch. The map of the room is no longer true.Distortions vs fisheyeFisheye is a specific extreme barrel lens. Distortions is the larger family: barrel, pincushion, anamorphic wave, heat, glass of water. Fisheye is one tool in that kit.When should I use distortions?When space should not be trustworthy. Do not use them on coverage that still has to be architecturally honest.How do I prompt distortions for AI image or video?Name the glass (ultra-wide, fisheye) or the surface, describe bowed lines and stretched edges, and forbid flare-only artifacts or a sticker warp."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Bend the space with glass. Example: Optical distortion around [Subject], stretched edges, barrel or melted geometry from ultra-wide or fisheye glass close to the face, the lens lying about space, not a flare pack."
+    ],
+    "example": "Optical distortion around [Subject], stretched edges, melted geometry, the lens lying about space."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/d366fd1c3f219de50f876ecd6cf7f71d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/distortions-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2403358c9979120dac6b418a94aab6ee.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/distortions-distortions-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/eb67ac5e1b050e04f3d92f73bc69daa4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/distortions.jpg",
+      "alt": "Distortions frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/b4071aa0661c71f8a9389dce80bf833c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fisheye-059-fisheye-space-distortion-mini.webp",
+      "alt": "Fisheye"
+    },
+    {
+      "kind": "video",
+      "path": "media/3c8bcf6380e4b2040179ecc443e9bdf3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/059-fisheye-space-distortion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dd60ac3e349447877925814c6440f811.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+      "alt": "Anamorphic Flare"
+    },
+    {
+      "kind": "image",
+      "path": "media/6f436db072f2b5495b46f53e81e22084.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/distortions/hero.jpg",
+      "alt": "Distortions",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "eb023613879094b42508ef64afbabe0e61a7a9813d7d0e11d3357393a5b404f6"
+}

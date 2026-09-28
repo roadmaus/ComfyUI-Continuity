@@ -1,0 +1,401 @@
+{
+  "id": "camera-movement/dutch-roll",
+  "slug": "dutch-roll",
+  "title": "Dutch Roll",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-roll-dutch-roll-mini.webp",
+  "detail": "details/camera-movement/dutch-roll.json",
+  "aliases": [
+    "continuous roll",
+    "horizon roll"
+  ],
+  "description": "A Dutch roll rotates the camera around the lens axis over time, so a level horizon becomes a canted one. Unease arrives as a move, not as a frozen Dutch still.",
+  "thumbnail": "media/bb8189d9c5960a57f1ebb107154d2464.webp",
+  "video": "media/cd5fb60adefb4ef7a32067187d802aa7.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dutch-roll-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The world itself tilts while we watch. Rank, gravity, and architecture go off their contract in duration rather than in a single locked cant."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can stop on a Dutch angle, but the technique is the roll that got you there. It is the wrong tool when the floor is already the story (a listing ship), and the wrong tool if you needed a full continuous spin until up is gone."
+        },
+        {
+          "type": "paragraph",
+          "text": "A slow roll into a cant is not a revolving corridor."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The world itself tilts while we watch. Rank, gravity, and architecture go off their contract in duration rather than in a single locked cant.You can stop on a Dutch angle, but the technique is the roll that got you there. It is the wrong tool when the floor is already the story (a listing ship), and the wrong tool if you needed a full continuous spin until up is gone.A slow roll into a cant is not a revolving corridor."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rotate around the optical axis (roll), usually from a locked nodal point. Keep pan and tilt still unless you combine on purpose."
+        },
+        {
+          "type": "paragraph",
+          "text": "End on a readable Dutch or return to level when the character finds the floor. Prompt a slow roll on the lens axis, horizon rotating from level into a Dutch angle."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Rotate around the optical axis (roll), usually from a locked nodal point. Keep pan and tilt still unless you combine on purpose.End on a readable Dutch or return to level when the character finds the floor. Prompt a slow roll on the lens axis, horizon rotating from level into a Dutch angle."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for unease that arrives in time, not as a still cant. Concrete beat: a level street, then the horizon slowly dies as a fever starts."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not start already tilted if the arrival is the point."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for unease that arrives in time, not as a still cant. Concrete beat: a level street, then the horizon slowly dies as a fever starts.Do not start already tilted if the arrival is the point."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Dutch Angle is a still cant. A Camera Roll continues until gravity is optional, or uses a rotating set.",
+          "links": [
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            },
+            {
+              "text": "Camera Roll",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/camera-roll"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dutch roll is the timed transition on the roll axis into (or out of) a Dutch. Do not confuse it with terrain incline."
+        },
+        {
+          "type": "list-item",
+          "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+          "displayText": "Dutch Angle\nThe world is off its axis. Do not use as decoration.",
+          "links": [
+            {
+              "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Camera RollGravity is optional.",
+          "displayText": "Camera Roll\nGravity is optional.",
+          "links": [
+            {
+              "text": "Camera RollGravity is optional.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/camera-roll"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "Camera Roll",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/camera-roll"
+        },
+        {
+          "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "Camera RollGravity is optional.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/camera-roll"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b87a1699cd3cd68781b68c037559849a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-angle-161-dutch-angle-mini.webp",
+          "alt": "Dutch Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/705061adfd657c913629f2fb72bc9a79.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/161-dutch-angle-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d2d53ff1041eb987820d34d5c024fc89.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/camera-roll-016-camera-roll-mini.webp",
+          "alt": "Camera Roll"
+        },
+        {
+          "kind": "video",
+          "path": "media/91f52bd41b8df84cbe73edca6ab15991.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/016-camera-roll-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Dutch Angle is a still cant. A Camera Roll continues until gravity is optional, or uses a rotating set.Dutch roll is the timed transition on the roll axis into (or out of) a Dutch. Do not confuse it with terrain incline.Dutch AngleThe world is off its axis. Do not use as decoration.Camera RollGravity is optional.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Third Man is the still-cant grammar this move can arrive at: Vienna off its axis. Do the Right Thing lets living camera attitude, including roll and cant, sit in a hot street."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the moving horizon, not a postcard of a tilted doorway."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Third Man is the still-cant grammar this move can arrive at: Vienna off its axis. Do the Right Thing lets living camera attitude, including roll and cant, sit in a hot street.Use the moving horizon, not a postcard of a tilted doorway."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Slow roll of the camera on its lens axis around [Subject], horizon rotating from level into a Dutch angle, the world itself tilting. For motion: the camera slowly rolls, tilting the horizon around [Subject] into a Dutch angle."
+        },
+        {
+          "type": "quote",
+          "text": "The camera slowly rolls, tilting the horizon around [Subject] into a Dutch angle."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+slowly+rolls,+tilting+the+horizon+around+[Subject]+into+a+Dutch+angle."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Slow roll of the camera on its lens axis around [Subject], horizon rotating from level into a Dutch angle, the world itself tilting. For motion: the camera slowly rolls, tilting the horizon around [Subject] into a Dutch angle.Copy promptUse in Video GeneratorThe camera slowly rolls, tilting the horizon around [Subject] into a Dutch angle.The camera slowly rolls, tilting the horizon around [Subject] into a Dutch angle."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a locked Dutch Angle or a full Camera Roll. The tell is a still tilt from frame one, or a continuous spin past 45 degrees with no stop.",
+          "links": [
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            },
+            {
+              "text": "Camera Roll",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/camera-roll"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: start level, roll on axis over time, end on a chosen cant."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "Camera Roll",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/camera-roll"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a locked Dutch Angle or a full Camera Roll. The tell is a still tilt from frame one, or a continuous spin past 45 degrees with no stop.The fix: start level, roll on axis over time, end on a chosen cant."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dutch Roll in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a camera roll around the lens axis over time, turning a level horizon into a Dutch angle (or the reverse) as a move."
+        },
+        {
+          "type": "heading",
+          "text": "Dutch Roll vs Dutch Angle",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A Dutch angle is a still canted frame. Dutch roll is the motion that creates or releases that cant."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dutch Roll?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When unease should arrive in duration. Do not use it if you only needed a locked cant, or a full gravity-free spin."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dutch Roll for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write camera slowly rolls on its lens axis, horizon from level into a Dutch angle around [Subject]. No pan, no full 360 roll unless you change technique."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dutch Roll in film?It is a camera roll around the lens axis over time, turning a level horizon into a Dutch angle (or the reverse) as a move.Dutch Roll vs Dutch AngleA Dutch angle is a still canted frame. Dutch roll is the motion that creates or releases that cant.When should I use Dutch Roll?When unease should arrive in duration. Do not use it if you only needed a locked cant, or a full gravity-free spin.How do I prompt Dutch Roll for AI image or video?Write camera slowly rolls on its lens axis, horizon from level into a Dutch angle around [Subject]. No pan, no full 360 roll unless you change technique."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Slow roll of the camera on its lens axis around [Subject], horizon rotating from level into a Dutch angle, the world itself tilting. For motion: the camera slowly rolls, tilting the horizon around [Subject] into a Dutch angle."
+    ],
+    "example": "The camera slowly rolls, tilting the horizon around [Subject] into a Dutch angle."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/cd5fb60adefb4ef7a32067187d802aa7.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dutch-roll-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bb8189d9c5960a57f1ebb107154d2464.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-roll-dutch-roll-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/75d952151443a59148aa36884c402e0b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/dutch-roll.jpg",
+      "alt": "Dutch Roll frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/b87a1699cd3cd68781b68c037559849a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-angle-161-dutch-angle-mini.webp",
+      "alt": "Dutch Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/705061adfd657c913629f2fb72bc9a79.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/161-dutch-angle-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d2d53ff1041eb987820d34d5c024fc89.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/camera-roll-016-camera-roll-mini.webp",
+      "alt": "Camera Roll"
+    },
+    {
+      "kind": "video",
+      "path": "media/91f52bd41b8df84cbe73edca6ab15991.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/016-camera-roll-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b9fe8416373ab5039b139d2bd8f93a12.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dutch-roll/hero.jpg",
+      "alt": "Dutch Roll",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "fe3211b513cb85d117139518880384f4c28b84dfa6a908c29f4e41cb576c566c"
+}

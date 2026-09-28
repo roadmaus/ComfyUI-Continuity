@@ -1,0 +1,486 @@
+{
+  "id": "camera-angles/dutch-angle",
+  "slug": "dutch-angle",
+  "title": "Dutch Angle",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-angle-161-dutch-angle-mini.webp",
+  "detail": "details/camera-angles/dutch-angle.json",
+  "aliases": [
+    "canted angle",
+    "oblique angle",
+    "Dutch tilt",
+    "Canted framing",
+    "Plan débullé"
+  ],
+  "description": "A Dutch angle rolls the camera so verticals and the horizon appear tilted. The cant is usually static: gravity's down is no longer the bottom of the frame, which is why the world reads as off its axis.",
+  "thumbnail": "media/b87a1699cd3cd68781b68c037559849a.webp",
+  "video": "media/705061adfd657c913629f2fb72bc9a79.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/161-dutch-angle-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pitch looks up or down. Roll breaks the floor."
+        },
+        {
+          "type": "paragraph",
+          "text": "A Dutch (canted, oblique) shot is a choice about gravity, not about power height. Use it when the moral or mental line is already bent: a sick city, a fight that will not stay fair, a mind that cannot stand up."
+        },
+        {
+          "type": "paragraph",
+          "text": "Adjacent level shots make the cant mean something. If every setup is Dutch, nothing is."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not a Low Angle. Looking up with a level roll is a different axis.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not a Dutch Roll either: that is the move that rotates into a cant during the shot. A static Dutch is a frozen decision.",
+          "links": [
+            {
+              "text": "Dutch Roll",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Dutch Roll",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Pitch looks up or down. Roll breaks the floor.A Dutch (canted, oblique) shot is a choice about gravity, not about power height. Use it when the moral or mental line is already bent: a sick city, a fight that will not stay fair, a mind that cannot stand up.Adjacent level shots make the cant mean something. If every setup is Dutch, nothing is.It is not a Low Angle. Looking up with a level roll is a different axis.It is not a Dutch Roll either: that is the move that rotates into a cant during the shot. A static Dutch is a frozen decision."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rotate the camera around the lens axis. A readable working cant is about 15 to 30 degrees; past 45 the frame often just looks like a mistake."
+        },
+        {
+          "type": "paragraph",
+          "text": "Compose diagonals on purpose: stair rails, streets, a leaning body that agrees or argues with the roll. Keep the set rigid."
+        },
+        {
+          "type": "paragraph",
+          "text": "The sensation should come from the viewpoint, not from warped walls. Decide whether the reverse stays level for contrast."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Dutch angle, camera rolled 20 to 30 degrees, diagonal horizon."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Rotate the camera around the lens axis. A readable working cant is about 15 to 30 degrees; past 45 the frame often just looks like a mistake.Compose diagonals on purpose: stair rails, streets, a leaning body that agrees or argues with the roll. Keep the set rigid.The sensation should come from the viewpoint, not from warped walls. Decide whether the reverse stays level for contrast.Prompt: Dutch angle, camera rolled 20 to 30 degrees, diagonal horizon."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the world is off its axis. Concrete beat: a stairwell confrontation, banister as a diagonal, both feet still planted on real steps."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it as decoration on every villain or every night street."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the world is off its axis. Concrete beat: a stairwell confrontation, banister as a diagonal, both feet still planted on real steps.Do not use it as decoration on every villain or every night street."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye Level with a level horizon is the control condition. Incline is a gentler cant, a few degrees of slope rather than a full lean.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            },
+            {
+              "text": "Incline",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/incline"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dutch Roll and Camera Roll are motion on this axis. Low Angle pitches up; High Angle pitches down.",
+          "links": [
+            {
+              "text": "Dutch Roll",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+            },
+            {
+              "text": "Camera Roll",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/camera-roll"
+            },
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Neither is a Dutch until you also roll."
+        },
+        {
+          "type": "list-item",
+          "text": "Dutch RollUnease that arrives in time, not as a still cant.",
+          "displayText": "Dutch Roll\nUnease that arrives in time, not as a still cant.",
+          "links": [
+            {
+              "text": "Dutch RollUnease that arrives in time, not as a still cant.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "displayText": "High Angle\nVulnerability, surveillance, or a map of a room.",
+          "links": [
+            {
+              "text": "High AngleVulnerability, surveillance, or a map of a room.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Incline",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/incline"
+        },
+        {
+          "text": "Dutch Roll",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+        },
+        {
+          "text": "Camera Roll",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/camera-roll"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Dutch RollUnease that arrives in time, not as a still cant.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/bb8189d9c5960a57f1ebb107154d2464.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-roll-dutch-roll-mini.webp",
+          "alt": "Dutch Roll"
+        },
+        {
+          "kind": "video",
+          "path": "media/cd5fb60adefb4ef7a32067187d802aa7.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dutch-roll-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        },
+        {
+          "kind": "image",
+          "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+          "alt": "High Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Eye Level with a level horizon is the control condition. Incline is a gentler cant, a few degrees of slope rather than a full lean.Dutch Roll and Camera Roll are motion on this axis. Low Angle pitches up; High Angle pitches down.Neither is a Dutch until you also roll.Dutch RollUnease that arrives in time, not as a still cant.Eye LevelDefault honesty. Do not look down or up unless you mean it.High AngleVulnerability, surveillance, or a map of a room."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Third Man cants Vienna's streets and encounters so the postwar city will not sit true. Do the Right Thing angles selected confrontations rather than the whole film."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mission: Impossible uses canted Prague coverage; the later rotating vault is a different trick (the set moves). Borrow a motivated static roll, not a permanent lean."
+        },
+        {
+          "type": "list-item",
+          "text": "The Third Man 1949Canted views of Vienna’s streets and encounters.",
+          "displayText": "The Third Man 1949\nCanted views of Vienna’s streets and encounters."
+        },
+        {
+          "type": "list-item",
+          "text": "Do the Right Thing 1989Angled compositions intensify selected confrontations.",
+          "displayText": "Do the Right Thing 1989\nAngled compositions intensify selected confrontations."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Third Man cants Vienna's streets and encounters so the postwar city will not sit true. Do the Right Thing angles selected confrontations rather than the whole film.Mission: Impossible uses canted Prague coverage; the later rotating vault is a different trick (the set moves). Borrow a motivated static roll, not a permanent lean.The Third Man 1949Canted views of Vienna’s streets and encounters.Do the Right Thing 1989Angled compositions intensify selected confrontations."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the roll in degrees and keep the buildings straight. Quote: Dutch angle of [Subject], camera rolled 20 to 30 degrees, diagonal horizon, moral or mental tilt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: static cant, walls rigid, not a low angle, not a rolling camera. If the model warps anatomy, say natural body proportions, only the horizon is tilted."
+        },
+        {
+          "type": "quote",
+          "text": "A tenant confronts a landlord in a narrow stairwell. Static camera canted fifteen degrees, strong diagonal banister, rigid walls and natural anatomy. Both actors remain grounded. No rolling camera, fisheye distortion or vibrating image; the tension comes from the tilted composition."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+tenant+confronts+a+landlord+in+a+narrow+stairwell.+Static+camera+canted+fifteen+degrees,+strong+diagonal+banister,+rigid+walls+and+natural+anatomy.+Both+actors+remain+grounded.+No+rolling+camera,+fisheye+distortion+or+vibrating+image;+the+tension+comes+from+the+tilted+composition."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the roll in degrees and keep the buildings straight. Quote: Dutch angle of [Subject], camera rolled 20 to 30 degrees, diagonal horizon, moral or mental tilt.Add: static cant, walls rigid, not a low angle, not a rolling camera. If the model warps anatomy, say natural body proportions, only the horizon is tilted.Copy promptUse in Video GeneratorA tenant confronts a landlord in a narrow stairwell. Static camera canted fifteen degrees, strong diagonal banister, rigid walls and natural anatomy. Both actors remain grounded. No rolling camera, fisheye distortion or vibrating image; the tension comes from the tilted composition.A tenant confronts a landlord in a narrow stairwell. Static camera canted fifteen degrees, strong diagonal banister, rigid walls and natural anatomy. Both actors remain grounded. No rolling camera, fisheye distortion or vibrating image; the tension comes from the tilted composition."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Low Angle (pitch) or a moving Dutch Roll. Tell: ceiling in frame but horizon level, or the camera rotating during the shot when you wanted a still lean.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "Dutch Roll",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: level pitch, roll 20 to 30 degrees, lock it. The other failure is 60-degree decoration on every setup."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the next shot is also canted, the cant has no contrast."
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Dutch Roll",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dutch-roll"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Low Angle (pitch) or a moving Dutch Roll. Tell: ceiling in frame but horizon level, or the camera rotating during the shot when you wanted a still lean.Fix: level pitch, roll 20 to 30 degrees, lock it. The other failure is 60-degree decoration on every setup.If the next shot is also canted, the cant has no contrast."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a Dutch angle in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A Dutch angle rolls the camera so the horizon and verticals tilt. The frame's relationship to gravity is broken on purpose, usually as a static cant."
+        },
+        {
+          "type": "heading",
+          "text": "Dutch angle vs low angle",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A low angle pitches the camera up from below the eyes. A Dutch angle rolls the camera; the floor slants. You can combine them, but they are different axes."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a Dutch angle?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when disequilibrium, aggression, or a stylized sick world should be in the geometry. Do not use it as a default mood for night or villains."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a Dutch angle for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Dutch angle of [Subject], camera rolled 20 to 30 degrees, diagonal horizon, static cant, walls not warped. Say it is not a low angle and not a rolling camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a Dutch angle in film?A Dutch angle rolls the camera so the horizon and verticals tilt. The frame's relationship to gravity is broken on purpose, usually as a static cant.Dutch angle vs low angleA low angle pitches the camera up from below the eyes. A Dutch angle rolls the camera; the floor slants. You can combine them, but they are different axes.When should I use a Dutch angle?Use it when disequilibrium, aggression, or a stylized sick world should be in the geometry. Do not use it as a default mood for night or villains.How do I prompt a Dutch angle for AI image or video?Write: Dutch angle of [Subject], camera rolled 20 to 30 degrees, diagonal horizon, static cant, walls not warped. Say it is not a low angle and not a rolling camera."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the roll in degrees and keep the buildings straight. Quote: Dutch angle of [Subject], camera rolled 20 to 30 degrees, diagonal horizon, moral or mental tilt.",
+      "Add: static cant, walls rigid, not a low angle, not a rolling camera. If the model warps anatomy, say natural body proportions, only the horizon is tilted."
+    ],
+    "example": "A tenant confronts a landlord in a narrow stairwell. Static camera canted fifteen degrees, strong diagonal banister, rigid walls and natural anatomy. Both actors remain grounded. No rolling camera, fisheye distortion or vibrating image; the tension comes from the tilted composition."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/705061adfd657c913629f2fb72bc9a79.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/161-dutch-angle-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b87a1699cd3cd68781b68c037559849a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-angle-161-dutch-angle-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/65bf96b07ba531a04a18e9e182c58cec.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/dutch-angle.jpg",
+      "alt": "Dutch Angle frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/bb8189d9c5960a57f1ebb107154d2464.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-roll-dutch-roll-mini.webp",
+      "alt": "Dutch Roll"
+    },
+    {
+      "kind": "video",
+      "path": "media/cd5fb60adefb4ef7a32067187d802aa7.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dutch-roll-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+      "alt": "High Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8710b28b32bcc6ece01368f02d4fa217.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dutch-angle/hero.jpg",
+      "alt": "Dutch Angle",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "4880ef67d5a0877a1b6b9dbe54167dc311d7357d3e5ead47baabc03c1168419c"
+}

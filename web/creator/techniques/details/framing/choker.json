@@ -1,0 +1,391 @@
+{
+  "id": "framing/choker",
+  "slug": "choker",
+  "title": "Choker Shot (BCU)",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/choker",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choker.webp",
+  "detail": "details/framing/choker.json",
+  "aliases": [
+    "Big Close-Up",
+    "Big Close Up",
+    "BCU"
+  ],
+  "description": "A choker shot, also called a big close-up (BCU), frames the face from hairline to chin, often clipping the skull on every side. Shoulders are out; almost no background remains.",
+  "thumbnail": "media/d5bdd8f53c2bc0f78a3e63efcaac2a30.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A choker traps a person in their own face. There is nowhere to gesture, no collar to hide in, no room tone in the corners."
+        },
+        {
+          "type": "paragraph",
+          "text": "Emotion has to happen in the eyes, the mouth, and the tiny muscles around them. It is the wrong tool when you still need a swallow, a shoulder, or a hand at the chest."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool if you only wanted pores on one feature: that job belongs to a tighter fragment. Hold a choker when the scene is a confession, a breakdown, or a stare with no escape, then cut out before the crop feels like a passport photo."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A choker traps a person in their own face. There is nowhere to gesture, no collar to hide in, no room tone in the corners.Emotion has to happen in the eyes, the mouth, and the tiny muscles around them. It is the wrong tool when you still need a swallow, a shoulder, or a hand at the chest.It is also the wrong tool if you only wanted pores on one feature: that job belongs to a tighter fragment. Hold a choker when the scene is a confession, a breakdown, or a stare with no escape, then cut out before the crop feels like a passport photo."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the top frame at the hairline and the bottom at the chin. Ears often clip."
+        },
+        {
+          "type": "paragraph",
+          "text": "Headroom is nearly zero. A 75mm to 100mm from portrait distance keeps the face from ballooning; a wide lens this close will warp the skull."
+        },
+        {
+          "type": "paragraph",
+          "text": "Camera at Eye Level unless you want a power tilt. Focus the nearer eye.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Light can be hard enough to show sweat, or wrapped if the performance is the only contrast. Prompt: Choker shot of [Subject] from hairline to chin, almost no background."
+        }
+      ],
+      "links": [
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Put the top frame at the hairline and the bottom at the chin. Ears often clip.Headroom is nearly zero. A 75mm to 100mm from portrait distance keeps the face from ballooning; a wide lens this close will warp the skull.Camera at Eye Level unless you want a power tilt. Focus the nearer eye.Light can be hard enough to show sweat, or wrapped if the performance is the only contrast. Prompt: Choker shot of [Subject] from hairline to chin, almost no background."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when emotion has nowhere to hide: a whispered admission, a stare across a table that has become a cell. Do not use it if you still need upper body language, or if the story is actually one feature (an eye, a mouth) rather than the whole face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when emotion has nowhere to hide: a whispered admission, a stare across a table that has become a cell. Do not use it if you still need upper body language, or if the story is actually one feature (an eye, a mouth) rather than the whole face."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An Extreme Close-Up is tighter than the face: one feature, not hairline-to-chin. A Close-Up includes the upper shoulders and a little air around the head.",
+          "links": [
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            },
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A choker, also called a big close-up or BCU, is the in-between prison: a complete face with no body. Do not treat BCU and ECU as synonyms."
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "displayText": "Close-Up\nRead micro-expression. Default for important dialogue.",
+          "links": [
+            {
+              "text": "Close-UpRead micro-expression. Default for important dialogue.",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Medium Close-UpTalk without losing body language.",
+          "displayText": "Medium Close-Up\nTalk without losing body language.",
+          "links": [
+            {
+              "text": "Medium Close-UpTalk without losing body language.",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Medium Close-UpTalk without losing body language.",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/95136909e657a1816141551e20893339.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+          "alt": "Close-Up"
+        },
+        {
+          "kind": "image",
+          "path": "media/7df131a7bb3865fbb2b48a5c82d56f2b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-close-up.webp",
+          "alt": "Medium Close-Up"
+        }
+      ],
+      "sourceText": "Compared with similar shots An Extreme Close-Up is tighter than the face: one feature, not hairline-to-chin. A Close-Up includes the upper shoulders and a little air around the head.A choker, also called a big close-up or BCU, is the in-between prison: a complete face with no body. Do not treat BCU and ECU as synonyms.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.Close-UpRead micro-expression. Default for important dialogue.Medium Close-UpTalk without losing body language."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Persona pushes faces until they occupy the whole rectangle and start to trade identity. Black Swan uses this proximity when the performance has no backstage left."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use those as grammar for pressure, not as a look-alike brief."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Persona pushes faces until they occupy the whole rectangle and start to trade identity. Black Swan uses this proximity when the performance has no backstage left.Use those as grammar for pressure, not as a look-alike brief."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Quote the crop. Example: Choker shot of [Subject] from hairline to chin, almost no background."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add lens only if you need undistorted proportion (75mm to 100mm). Do not write extreme close-up, and do not ask for shoulders."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, lock the head in that crop; a lean that reveals clavicle has left the size."
+        },
+        {
+          "type": "quote",
+          "text": "Choker shot of [Subject] from hairline to chin, almost no background, claustrophobic portrait, Bergman proximity."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Choker+shot+of+[Subject]+from+hairline+to+chin,+almost+no+background,+claustrophobic+portrait,+Bergman+proximity."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Quote the crop. Example: Choker shot of [Subject] from hairline to chin, almost no background.Add lens only if you need undistorted proportion (75mm to 100mm). Do not write extreme close-up, and do not ask for shoulders.For video, lock the head in that crop; a lean that reveals clavicle has left the size.Copy promptUse in Image GeneratorChoker shot of [Subject] from hairline to chin, almost no background, claustrophobic portrait, Bergman proximity.Choker shot of [Subject] from hairline to chin, almost no background, claustrophobic portrait, Bergman proximity."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an Extreme Close-Up (only an eye) or a Close-Up (shoulders still in). The tell is either a fragment with no chin, or a collar and headroom.",
+          "links": [
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            },
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: hairline and chin are the frame lines; nothing below the jaw."
+        }
+      ],
+      "links": [
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an Extreme Close-Up (only an eye) or a Close-Up (shoulders still in). The tell is either a fragment with no chin, or a collar and headroom.Fix: hairline and chin are the frame lines; nothing below the jaw."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Choker Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A choker shot, also called a big close-up (BCU), is a very tight face crop, usually from hairline to chin, with almost no background and no shoulders. It is not an extreme close-up of a single feature."
+        },
+        {
+          "type": "heading",
+          "text": "Choker Shot vs Close-Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A close-up holds the head and upper shoulders, so a little body and air remain. A choker cuts at the chin and hairline, so the face is the entire subject. If you can still see clavicle or coat collar, you are in close-up, not choker."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Choker Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a face has nowhere to hide: confession, panic, a stare that is the scene. Do not use it for ordinary dialogue, and do not use it when the story is one feature rather than the whole face."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Choker Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Choker shot of [Subject] from hairline to chin, almost no background. Forbid shoulders. For video, keep that crop locked so a nod does not introduce chest or sky."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Choker Shot in film?A choker shot, also called a big close-up (BCU), is a very tight face crop, usually from hairline to chin, with almost no background and no shoulders. It is not an extreme close-up of a single feature.Choker Shot vs Close-UpA close-up holds the head and upper shoulders, so a little body and air remain. A choker cuts at the chin and hairline, so the face is the entire subject. If you can still see clavicle or coat collar, you are in close-up, not choker.When should I use Choker Shot?Use it when a face has nowhere to hide: confession, panic, a stare that is the scene. Do not use it for ordinary dialogue, and do not use it when the story is one feature rather than the whole face.How do I prompt Choker Shot for AI image or video?Write Choker shot of [Subject] from hairline to chin, almost no background. Forbid shoulders. For video, keep that crop locked so a nod does not introduce chest or sky."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Quote the crop. Example: Choker shot of [Subject] from hairline to chin, almost no background.",
+      "Add lens only if you need undistorted proportion (75mm to 100mm). Do not write extreme close-up, and do not ask for shoulders.",
+      "For video, lock the head in that crop; a lean that reveals clavicle has left the size."
+    ],
+    "example": "Choker shot of [Subject] from hairline to chin, almost no background, claustrophobic portrait, Bergman proximity."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/d5bdd8f53c2bc0f78a3e63efcaac2a30.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choker.webp",
+      "alt": "Choker Shot example"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/95136909e657a1816141551e20893339.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+      "alt": "Close-Up"
+    },
+    {
+      "kind": "image",
+      "path": "media/7df131a7bb3865fbb2b48a5c82d56f2b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-close-up.webp",
+      "alt": "Medium Close-Up"
+    },
+    {
+      "kind": "image",
+      "path": "media/2b2110740cdf83109967c56992592f73.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/choker/hero-bcu.jpg",
+      "alt": "Choker Shot (BCU)",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "8030d4ab45ec7ab686572b7bf8af2e3f5cede236deed6e5537e6ce5120a1f705"
+}

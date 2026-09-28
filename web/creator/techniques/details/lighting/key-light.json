@@ -1,0 +1,388 @@
+{
+  "id": "lighting/key-light",
+  "slug": "key-light",
+  "title": "Key Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/key-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/key-light.webp",
+  "detail": "details/lighting/key-light.json",
+  "aliases": [],
+  "description": "A key light in key light cinematography is the principal source that sets the subject's dominant direction, shape, and exposure. Shadows fall away from it; every other light is measured against it.",
+  "thumbnail": "media/060335b879d527a7f44190f4b1d160cf.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Deciding the key is deciding where the world is lit from. A window, a bare bulb, the sun, or a hidden unit standing in for those things will tell the audience what time it is and who is exposed."
+        },
+        {
+          "type": "paragraph",
+          "text": "The rest of the plot of the lighting is contrast, color, and whether anyone else gets a face. It is the wrong tool to think of as a product."
+        },
+        {
+          "type": "paragraph",
+          "text": "You do not add a key on top of a finished picture. If two equally bright sources fight from opposite sides, you no longer have a key."
+        },
+        {
+          "type": "paragraph",
+          "text": "You have cross lighting or a flattened stand-off.",
+          "links": [
+            {
+              "text": "cross lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "cross lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Deciding the key is deciding where the world is lit from. A window, a bare bulb, the sun, or a hidden unit standing in for those things will tell the audience what time it is and who is exposed.The rest of the plot of the lighting is contrast, color, and whether anyone else gets a face. It is the wrong tool to think of as a product.You do not add a key on top of a finished picture. If two equally bright sources fight from opposite sides, you no longer have a key.You have cross lighting or a flattened stand-off."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pick one source and one side. Typical portrait keys sit 30 to 45 degrees off camera and above eye line; a split key sits at 90 degrees; a butterfly key sits on axis and high."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness follows apparent size: a small distant lamp or noon sun cuts a sharp nose shadow; a large silk or bounce wraps. Color follows the story source: daylight 5600K, tungsten around 3200K, flame nearer 1800K."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Strong directional key light on [Subject] from a single defined source, the brightest light in the frame, shadows placed as composition."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Pick one source and one side. Typical portrait keys sit 30 to 45 degrees off camera and above eye line; a split key sits at 90 degrees; a butterfly key sits on axis and high.Hardness follows apparent size: a small distant lamp or noon sun cuts a sharp nose shadow; a large silk or bounce wraps. Color follows the story source: daylight 5600K, tungsten around 3200K, flame nearer 1800K.Prompt: Strong directional key light on [Subject] from a single defined source, the brightest light in the frame, shadows placed as composition."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it the moment you must say which direction the scene is lit from, for example a don in an office keyed from a high practical. Do not add a second equally bright key on the other cheek."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it the moment you must say which direction the scene is lit from, for example a don in an office keyed from a high practical. Do not add a second equally bright key on the other cheek."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fill light only lifts what the key cannot reach. Hard light and soft light are qualities the key can have, not replacements for it.",
+          "links": [
+            {
+              "text": "Fill light",
+              "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+            },
+            {
+              "text": "Hard light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            },
+            {
+              "text": "soft light",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Three-point lighting is a system that includes a key. Motivated lighting decides whether that key could exist in the room.",
+          "links": [
+            {
+              "text": "Three-point lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            },
+            {
+              "text": "Motivated lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Fill LightControl how much of the dark you can still read.",
+          "displayText": "Fill Light\nControl how much of the dark you can still read.",
+          "links": [
+            {
+              "text": "Fill LightControl how much of the dark you can still read.",
+              "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "displayText": "Hard Light\nGrit, noon sun, or interrogation.",
+          "links": [
+            {
+              "text": "Hard LightGrit, noon sun, or interrogation.",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Fill light",
+          "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+        },
+        {
+          "text": "Hard light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "soft light",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "Three-point lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        },
+        {
+          "text": "Motivated lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Fill LightControl how much of the dark you can still read.",
+          "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+        },
+        {
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/bf5c953c02683c6a73c9786a0e1cebe6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fill-light.webp",
+          "alt": "Fill Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+          "alt": "Hard Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Fill light only lifts what the key cannot reach. Hard light and soft light are qualities the key can have, not replacements for it.Three-point lighting is a system that includes a key. Motivated lighting decides whether that key could exist in the room.Fill LightControl how much of the dark you can still read.Hard LightGrit, noon sun, or interrogation.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Godfather often lets a high, underexposed key leave eyes in wells of shadow. Apocalypse Now uses a hard, small key on faces so the jungle night stays black."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those films treat the key as the sentence, not as one of three equal lamps."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Godfather often lets a high, underexposed key leave eyes in wells of shadow. Apocalypse Now uses a hard, small key on faces so the jungle night stays black.Those films treat the key as the sentence, not as one of three equal lamps."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the source and the side before any style word. \" Add height (high, eye, table), hardness, and Kelvin."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you only write dramatic lighting, the model invents two keys."
+        },
+        {
+          "type": "quote",
+          "text": "Strong directional key light on [Subject] from a single defined source, the brightest storyteller in the frame, shadows as composition."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Strong+directional+key+light+on+[Subject]+from+a+single+defined+source,+the+brightest+storyteller+in+the+frame,+shadows+as+composition."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the source and the side before any style word. \" Add height (high, eye, table), hardness, and Kelvin.If you only write dramatic lighting, the model invents two keys.Copy promptUse in Image GeneratorStrong directional key light on [Subject] from a single defined source, the brightest storyteller in the frame, shadows as composition.Strong directional key light on [Subject] from a single defined source, the brightest storyteller in the frame, shadows as composition."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is fill bright enough to become a second key. The tell is two nose highlights and no clear shadow side.",
+          "links": [
+            {
+              "text": "fill",
+              "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by dimming or killing the fill until one direction owns exposure."
+        }
+      ],
+      "links": [
+        {
+          "text": "fill",
+          "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is fill bright enough to become a second key. The tell is two nose highlights and no clear shadow side.Fix it by dimming or killing the fill until one direction owns exposure."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is key light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "The principal light that defines the subject's dominant direction, shape, and exposure. Other lights are ratios against it."
+        },
+        {
+          "type": "heading",
+          "text": "Key light vs fill light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "The key creates the shadow pattern. Fill reduces that contrast without inventing a second dominant direction."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use key light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Always, in the sense that every lit scene has a brightest story source. Name it first, then decide fill, back, and color."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt key light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "State one source, one side, hardness, and color. Example: hard tungsten key from camera left, 45 degrees off axis, no second key."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is key light in film?The principal light that defines the subject's dominant direction, shape, and exposure. Other lights are ratios against it.Key light vs fill lightThe key creates the shadow pattern. Fill reduces that contrast without inventing a second dominant direction.When should I use key light?Always, in the sense that every lit scene has a brightest story source. Name it first, then decide fill, back, and color.How do I prompt key light for AI image or video?State one source, one side, hardness, and color. Example: hard tungsten key from camera left, 45 degrees off axis, no second key."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the source and the side before any style word. \" Add height (high, eye, table), hardness, and Kelvin.",
+      "If you only write dramatic lighting, the model invents two keys."
+    ],
+    "example": "Strong directional key light on [Subject] from a single defined source, the brightest storyteller in the frame, shadows as composition."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/060335b879d527a7f44190f4b1d160cf.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/key-light.webp",
+      "alt": "Key Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/bf5c953c02683c6a73c9786a0e1cebe6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fill-light.webp",
+      "alt": "Fill Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+      "alt": "Hard Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/69e415f3f02a87a0b981871619eb352c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/key-light/hero.jpg",
+      "alt": "Key Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "b561a3415e6f294abfc4c95ac560c906bca14364636cae8893c50e94a1203a62"
+}

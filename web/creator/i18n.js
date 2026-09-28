@@ -50,7 +50,7 @@ const DICTIONARIES = { ja, ko, zh, "zh-TW": zh };
 /** The dictionary for the frontend's current locale, or null for English.
  *  Read per call rather than cached: the setting can change under a running
  *  page, and everything this pack draws is rebuilt often enough to follow. */
-function dictionary() {
+function readLocale() {
   let locale;
   try {
     locale = globalThis.app?.extensionManager?.setting?.get?.("Comfy.Locale");
@@ -58,6 +58,19 @@ function dictionary() {
     locale = null;
   }
   locale ||= (typeof navigator !== "undefined" && navigator.language) || "en";
+  return locale;
+}
+
+/** Offline explanation catalogues use the same language as ComfyUI's UI.
+ * Keep this normalized content locale separate from dictionary selection so
+ * t() retains its existing regional-locale and English fallback semantics. */
+export function getLocale() {
+  const language = readLocale().split("-")[0];
+  return ["ko", "ja", "zh"].includes(language) ? language : "en";
+}
+
+function dictionary() {
+  const locale = readLocale();
   return DICTIONARIES[locale] ?? DICTIONARIES[locale.split("-")[0]] ?? null;
 }
 

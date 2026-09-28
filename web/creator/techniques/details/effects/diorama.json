@@ -1,0 +1,410 @@
+{
+  "id": "effects/diorama",
+  "slug": "diorama",
+  "title": "Diorama",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/diorama",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diorama-diorama-mini.webp",
+  "detail": "details/effects/diorama.json",
+  "aliases": [
+    "Scale-model effects",
+    "Model photography"
+  ],
+  "description": "Diorama cinematography photographs a physical scale model so that it stands in for a much larger object or environment, with real light hitting real miniature surfaces. Scale is sold by texture, camera speed, depth of field, and movement, not by a toy-like tilt of focus.",
+  "thumbnail": "media/181d3dd7ea713bbb349f3475266cdf7f.webp",
+  "video": "media/4a23017cfb59808a2d3cee76a9fc5a28.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/diorama-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A city, a ship, a hotel wing sits on a table or a stage, built at an inch to the foot or another ratio. The camera treats it as full size: enough stop for deep focus, a slow pass, fine windows, hard distant key."
+        },
+        {
+          "type": "paragraph",
+          "text": "Water, fire, and smoke are the hard parts, because fluids do not scale. Use it when a world should be tactile and built: a spacecraft, an industrial skyline, a storybook hotel."
+        },
+        {
+          "type": "paragraph",
+          "text": "The pleasure is that light is true on small surfaces. It is the wrong tool when you point a tilt-shift lens at a real city to make it look like a model, or when you align two live actors at different distances to lie about size."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those are cousins. If depth of field is a thin band, the miniature will look like a miniature."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A city, a ship, a hotel wing sits on a table or a stage, built at an inch to the foot or another ratio. The camera treats it as full size: enough stop for deep focus, a slow pass, fine windows, hard distant key.Water, fire, and smoke are the hard parts, because fluids do not scale. Use it when a world should be tactile and built: a spacecraft, an industrial skyline, a storybook hotel.The pleasure is that light is true on small surfaces. It is the wrong tool when you point a tilt-shift lens at a real city to make it look like a model, or when you align two live actors at different distances to lie about size.Those are cousins. If depth of field is a thin band, the miniature will look like a miniature."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Build surface scale (panel lines, dirt, tiny lights). Light with a hard, distant key as if the sun were far."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stop down. Move slowly."
+        },
+        {
+          "type": "paragraph",
+          "text": "For water and fire, high-speed capture can help scale. Prompt: miniature world photographed as full size, deep enough focus, tactile model surfaces, not tilt-shift toy blur."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Build surface scale (panel lines, dirt, tiny lights). Light with a hard, distant key as if the sun were far.Stop down. Move slowly.For water and fire, high-speed capture can help scale. Prompt: miniature world photographed as full size, deep enough focus, tactile model surfaces, not tilt-shift toy blur."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An orbital freighter as a detailed model, slow camera pass, tiny windows, deep focus against a black field. Do not add a thin horizontal band of focus that announces tabletop scale."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it An orbital freighter as a detailed model, slow camera pass, tiny windows, deep focus against a black field. Do not add a thin horizontal band of focus that announces tabletop scale."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tilt-Shift tilts the plane of focus to make a real landscape look like a toy. Diorama is an actual model, usually shot deep to hide scale.",
+          "links": [
+            {
+              "text": "Tilt-Shift",
+              "url": "https://melies.co/cinematic-techniques/lenses/tilt-shift"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Forced Perspective uses live people and scaled set pieces from one viewpoint. Macro is close focus on small things as small things.",
+          "links": [
+            {
+              "text": "Forced Perspective",
+              "url": "https://melies.co/cinematic-techniques/effects/forced-perspective"
+            },
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Diorama wants the small thing to read as large."
+        },
+        {
+          "type": "list-item",
+          "text": "Tilt-ShiftMake a city a model, or slice focus through a crowd.",
+          "displayText": "Tilt-Shift\nMake a city a model, or slice focus through a crowd.",
+          "links": [
+            {
+              "text": "Tilt-ShiftMake a city a model, or slice focus through a crowd.",
+              "url": "https://melies.co/cinematic-techniques/lenses/tilt-shift"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Forced PerspectiveChange size without VFX.",
+          "displayText": "Forced Perspective\nChange size without VFX.",
+          "links": [
+            {
+              "text": "Forced PerspectiveChange size without VFX.",
+              "url": "https://melies.co/cinematic-techniques/effects/forced-perspective"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Tilt-Shift",
+          "url": "https://melies.co/cinematic-techniques/lenses/tilt-shift"
+        },
+        {
+          "text": "Forced Perspective",
+          "url": "https://melies.co/cinematic-techniques/effects/forced-perspective"
+        },
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "Tilt-ShiftMake a city a model, or slice focus through a crowd.",
+          "url": "https://melies.co/cinematic-techniques/lenses/tilt-shift"
+        },
+        {
+          "text": "Forced PerspectiveChange size without VFX.",
+          "url": "https://melies.co/cinematic-techniques/effects/forced-perspective"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/3967493b2757c4d18946c0b8560b8f38.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-shift-062-miniature-look-selective-focus-mini.webp",
+          "alt": "Tilt-Shift"
+        },
+        {
+          "kind": "video",
+          "path": "media/8f4baa0ec1ccda8162e2507cc145822f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/062-miniature-look-selective-focus-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/47eb6933699b353186630c52b97cede8.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/forced-perspective-143-forced-perspective-and-scale-illusion-mini.webp",
+          "alt": "Forced Perspective"
+        },
+        {
+          "kind": "video",
+          "path": "media/df55c234331c9b2aefb91e526852904a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/143-forced-perspective-and-scale-illusion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Tilt-Shift tilts the plane of focus to make a real landscape look like a toy. Diorama is an actual model, usually shot deep to hide scale.Forced Perspective uses live people and scaled set pieces from one viewpoint. Macro is close focus on small things as small things.Diorama wants the small thing to read as large.Tilt-ShiftMake a city a model, or slice focus through a crowd.Forced PerspectiveChange size without VFX.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blade Runner uses industrial miniatures for city and architecture. 2001: A Space Odyssey photographs spacecraft and stations as models."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Grand Budapest Hotel uses storybook miniatures as a designed world. Those are model stages, not tilt-shift streets."
+        },
+        {
+          "type": "list-item",
+          "text": "Blade Runner 1982The industrial cityscape and large architectural exteriors.",
+          "displayText": "Blade Runner 1982\nThe industrial cityscape and large architectural exteriors."
+        },
+        {
+          "type": "list-item",
+          "text": "2001: A Space Odyssey 1968Spacecraft and space-station imagery.",
+          "displayText": "2001: A Space Odyssey 1968\nSpacecraft and space-station imagery."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Blade Runner uses industrial miniatures for city and architecture. 2001: A Space Odyssey photographs spacecraft and stations as models.The Grand Budapest Hotel uses storybook miniatures as a designed world. Those are model stages, not tilt-shift streets.Blade Runner 1982The industrial cityscape and large architectural exteriors.2001: A Space Odyssey 1968Spacecraft and space-station imagery."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Photograph a model as a world. Example: Diorama view of [Subject], physical miniature, tactile surfaces, deep enough focus for full-size scale, slow camera, not tilt-shift toy blur."
+        },
+        {
+          "type": "quote",
+          "text": "Photograph a practical-looking miniature orbital freighter as if it were enormous. Slow precise camera pass, deep enough focus for convincing scale, hard distant key light, tiny windows and layered surface detail. No shallow tabletop focus or fast toy-like acceleration."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Photograph+a+practical-looking+miniature+orbital+freighter+as+if+it+were+enormous.+Slow+precise+camera+pass,+deep+enough+focus+for+convincing+scale,+hard+distant+key+light,+tiny+windows+and+layered+surface+detail.+No+shallow+tabletop+focus+or+fast+toy-like+acceleration."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Photograph a model as a world. Example: Diorama view of [Subject], physical miniature, tactile surfaces, deep enough focus for full-size scale, slow camera, not tilt-shift toy blur.Copy promptUse in Video GeneratorPhotograph a practical-looking miniature orbital freighter as if it were enormous. Slow precise camera pass, deep enough focus for convincing scale, hard distant key light, tiny windows and layered surface detail. No shallow tabletop focus or fast toy-like acceleration.Photograph a practical-looking miniature orbital freighter as if it were enormous. Slow precise camera pass, deep enough focus for convincing scale, hard distant key light, tiny windows and layered surface detail. No shallow tabletop focus or fast toy-like acceleration."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: tilt-shift, or a digital city with shallow tabletop focus. Tell: a thin focus band, fast toy-like motion, coarse textures, fluids that look like pouring on a desk."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: finer detail, deeper stop, slower move, scale-aware effects."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: tilt-shift, or a digital city with shallow tabletop focus. Tell: a thin focus band, fast toy-like motion, coarse textures, fluids that look like pouring on a desk.Fix: finer detail, deeper stop, slower move, scale-aware effects."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is diorama in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Photography of scale models standing in for large objects or places. Real light on real miniature surfaces, sold as full size by focus, speed, and texture."
+        },
+        {
+          "type": "heading",
+          "text": "Diorama vs tilt-shift",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Diorama is a real model, usually shot with enough depth of field to look large. Tilt-shift is a focus trick that makes a real full-size scene look small."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use diorama?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a world should be a built, tactile miniature. Do not use it if you only want a toy look on a real city, or a live-action size lie between two actors."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt diorama for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify a physical miniature, fine surface scale, deep focus, slow camera. Forbid tilt-shift shallow bands and fast toy acceleration."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is diorama in film?Photography of scale models standing in for large objects or places. Real light on real miniature surfaces, sold as full size by focus, speed, and texture.Diorama vs tilt-shiftDiorama is a real model, usually shot with enough depth of field to look large. Tilt-shift is a focus trick that makes a real full-size scene look small.When should I use diorama?When a world should be a built, tactile miniature. Do not use it if you only want a toy look on a real city, or a live-action size lie between two actors.How do I prompt diorama for AI image or video?Specify a physical miniature, fine surface scale, deep focus, slow camera. Forbid tilt-shift shallow bands and fast toy acceleration."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Photograph a model as a world. Example: Diorama view of [Subject], physical miniature, tactile surfaces, deep enough focus for full-size scale, slow camera, not tilt-shift toy blur."
+    ],
+    "example": "Photograph a practical-looking miniature orbital freighter as if it were enormous. Slow precise camera pass, deep enough focus for convincing scale, hard distant key light, tiny windows and layered surface detail. No shallow tabletop focus or fast toy-like acceleration."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/4a23017cfb59808a2d3cee76a9fc5a28.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/diorama-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/181d3dd7ea713bbb349f3475266cdf7f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diorama-diorama-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2bba6be96d34883ee93dd760e75b0ecf.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/diorama.jpg",
+      "alt": "Diorama frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/3967493b2757c4d18946c0b8560b8f38.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-shift-062-miniature-look-selective-focus-mini.webp",
+      "alt": "Tilt-Shift"
+    },
+    {
+      "kind": "video",
+      "path": "media/8f4baa0ec1ccda8162e2507cc145822f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/062-miniature-look-selective-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47eb6933699b353186630c52b97cede8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/forced-perspective-143-forced-perspective-and-scale-illusion-mini.webp",
+      "alt": "Forced Perspective"
+    },
+    {
+      "kind": "video",
+      "path": "media/df55c234331c9b2aefb91e526852904a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/143-forced-perspective-and-scale-illusion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47da41967e02666e176da10dae911e11.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/diorama/hero.jpg",
+      "alt": "Diorama",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "e469c936aad75a49ed630ff289845ae99087e71153c1a83163cd52bd1e1a8d37"
+}

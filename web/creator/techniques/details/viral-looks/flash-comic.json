@@ -1,0 +1,368 @@
+{
+  "id": "viral-looks/flash-comic",
+  "slug": "flash-comic",
+  "title": "Flash Comic",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/flash-comic",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/flash-comic-flash-comic-mini.webp",
+  "detail": "details/viral-looks/flash-comic.json",
+  "aliases": [],
+  "description": "Flash comic, the flash comic look, is comic ink plus a strobe bang: inked edges, halftone, and a hard white burst, print and paparazzi in one hit. A panel that detonates: quiet comic ink without the flash is the cousin, not this.",
+  "thumbnail": "media/ccfadcdde9087a82bd4e28549fecf8e4.webp",
+  "video": "media/1ea35fc1142edb1bf35f6a5c7132dc8a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/flash-comic-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Punches, reveals, a joke that should look published and stolen: subject mid-gesture, one color spot, no balloons. Comic gives you the page."
+        },
+        {
+          "type": "paragraph",
+          "text": "This adds a white bang as a panel border of light. It is the wrong tool for a hush portrait, and the wrong tool if you only flash a photograph with no ink."
+        },
+        {
+          "type": "paragraph",
+          "text": "If there is no print law, you shot paparazzi. If there is no strobe, you shot comic."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Punches, reveals, a joke that should look published and stolen: subject mid-gesture, one color spot, no balloons. Comic gives you the page.This adds a white bang as a panel border of light. It is the wrong tool for a hush portrait, and the wrong tool if you only flash a photograph with no ink.If there is no print law, you shot paparazzi. If there is no strobe, you shot comic."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height, 35mm to 50mm, lock-off at mid-gesture. Inked edges, halftone, hard on-camera flash burst, one color spot."
+        },
+        {
+          "type": "paragraph",
+          "text": "No balloons. Prompt: Flash-comic of [Subject], inked edges plus a strobe bang, print and paparazzi in one hit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Eye height, 35mm to 50mm, lock-off at mid-gesture. Inked edges, halftone, hard on-camera flash burst, one color spot.No balloons. Prompt: Flash-comic of [Subject], inked edges plus a strobe bang, print and paparazzi in one hit."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A punch, a reveal, a published theft of a moment. Do not use it on a quiet study, and do not add balloons."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A punch, a reveal, a published theft of a moment. Do not use it on a quiet study, and do not add balloons."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Comic is the page without the bang. 2000s Paparazzi is the strobe without the ink.",
+          "links": [
+            {
+              "text": "Comic",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/comic"
+            },
+            {
+              "text": "2000s Paparazzi",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Flash comic is both in one hit. If you can delete the flash and keep the look, you wanted comic."
+        },
+        {
+          "type": "list-item",
+          "text": "ComicPrint is the world.",
+          "displayText": "Comic\nPrint is the world.",
+          "links": [
+            {
+              "text": "ComicPrint is the world.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/comic"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "2000s PaparazziFame as a strobe.",
+          "displayText": "2000s Paparazzi\nFame as a strobe.",
+          "links": [
+            {
+              "text": "2000s PaparazziFame as a strobe.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Comic",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/comic"
+        },
+        {
+          "text": "2000s Paparazzi",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi"
+        },
+        {
+          "text": "ComicPrint is the world.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/comic"
+        },
+        {
+          "text": "2000s PaparazziFame as a strobe.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/be483d79e4573084a858dc96a52b2f8e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/comic-comic-mini.webp",
+          "alt": "Comic"
+        },
+        {
+          "kind": "video",
+          "path": "media/6751e6f95d02ffafa5726984dd2e462d.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/comic-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/06642059ad749895e9403b5a4e19a430.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/2000s-paparazzi-2000s-paparazzi-mini.webp",
+          "alt": "2000s Paparazzi"
+        },
+        {
+          "kind": "video",
+          "path": "media/6764560fe3048c902e391df99ef78685.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/2000s-paparazzi-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Comic is the page without the bang. 2000s Paparazzi is the strobe without the ink.Flash comic is both in one hit. If you can delete the flash and keep the look, you wanted comic.ComicPrint is the world.2000s PaparazziFame as a strobe.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dick Tracy's print faces can take a strobe. Spider-Man: Into the Spider-Verse supplies the print language you may wear as a grade, not copy as a frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "The still should look like a panel that went off."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Dick Tracy's print faces can take a strobe. Spider-Man: Into the Spider-Verse supplies the print language you may wear as a grade, not copy as a frame.The still should look like a panel that went off."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ink plus bang, mid-gesture. Flash-comic of [Subject], inked edges plus a strobe bang, print and paparazzi in one hit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add halftone, one color spot, on-camera flash, no balloons, photographic structure under the ink."
+        },
+        {
+          "type": "quote",
+          "text": "Flash-comic of [Subject], inked edges plus a strobe bang, print and paparazzi in one hit."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Flash-comic+of+[Subject],+inked+edges+plus+a+strobe+bang,+print+and+paparazzi+in+one+hit."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Ink plus bang, mid-gesture. Flash-comic of [Subject], inked edges plus a strobe bang, print and paparazzi in one hit.Add halftone, one color spot, on-camera flash, no balloons, photographic structure under the ink.Copy promptUse in Image GeneratorFlash-comic of [Subject], inked edges plus a strobe bang, print and paparazzi in one hit.Flash-comic of [Subject], inked edges plus a strobe bang, print and paparazzi in one hit."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Comic without a strobe, or paparazzi without ink. The tell is only one half of the recipe."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: inked edges and a white bang on a mid-gesture."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Comic without a strobe, or paparazzi without ink. The tell is only one half of the recipe.Fix it: inked edges and a white bang on a mid-gesture."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Flash Comic in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Print law plus a strobe: inked edges, halftone, a hard flash burst. A panel that detonates. Not quiet comic, not plain paparazzi."
+        },
+        {
+          "type": "heading",
+          "text": "Flash Comic vs Comic",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Comic is live action wearing print. Flash comic adds a paparazzi bang. If the frame is quiet ink, you wanted comic."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Flash Comic?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Punches, reveals, published theft. Skip hush portraits and balloons."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Flash Comic for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Mid-gesture, then: Flash-comic of [Subject], inked edges plus a strobe bang, print and paparazzi in one hit. Keep one color spot. No balloons."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Flash Comic in film?Print law plus a strobe: inked edges, halftone, a hard flash burst. A panel that detonates. Not quiet comic, not plain paparazzi.Flash Comic vs ComicComic is live action wearing print. Flash comic adds a paparazzi bang. If the frame is quiet ink, you wanted comic.When should I use Flash Comic?Punches, reveals, published theft. Skip hush portraits and balloons.How do I prompt Flash Comic for AI image or video?Mid-gesture, then: Flash-comic of [Subject], inked edges plus a strobe bang, print and paparazzi in one hit. Keep one color spot. No balloons."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Ink plus bang, mid-gesture. Flash-comic of [Subject], inked edges plus a strobe bang, print and paparazzi in one hit.",
+      "Add halftone, one color spot, on-camera flash, no balloons, photographic structure under the ink."
+    ],
+    "example": "Flash-comic of [Subject], inked edges plus a strobe bang, print and paparazzi in one hit."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/1ea35fc1142edb1bf35f6a5c7132dc8a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/flash-comic-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ccfadcdde9087a82bd4e28549fecf8e4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/flash-comic-flash-comic-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e36b43a893ac72c258a7e07c06f570c1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/flash-comic.jpg",
+      "alt": "Flash Comic frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/be483d79e4573084a858dc96a52b2f8e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/comic-comic-mini.webp",
+      "alt": "Comic"
+    },
+    {
+      "kind": "video",
+      "path": "media/6751e6f95d02ffafa5726984dd2e462d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/comic-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/06642059ad749895e9403b5a4e19a430.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/2000s-paparazzi-2000s-paparazzi-mini.webp",
+      "alt": "2000s Paparazzi"
+    },
+    {
+      "kind": "video",
+      "path": "media/6764560fe3048c902e391df99ef78685.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/2000s-paparazzi-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/767b9333be28609d1f93b8aa263bc889.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/flash-comic/hero.jpg",
+      "alt": "Flash Comic",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "045a1d88b865985d2e94cd3b927e15b28fc58958b6c31adb4e9f2789aac89d18"
+}

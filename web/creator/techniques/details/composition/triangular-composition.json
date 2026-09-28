@@ -1,0 +1,394 @@
+{
+  "id": "composition/triangular-composition",
+  "slug": "triangular-composition",
+  "title": "Triangular Composition",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/triangular-composition",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/triangular-composition.webp",
+  "detail": "details/composition/triangular-composition.json",
+  "aliases": [],
+  "description": "Triangular composition arranges subjects or visual masses into a triangle so three points lock the frame. A group gets a hierarchy: the apex is usually power, witness, or the object of desire, and the base is support, threat, or the audience inside the picture.",
+  "thumbnail": "media/6a8d3d5ba0d1f6c1f6f2427e8016ade2.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Two people and a desk, a family and a doorway, three men and a gun: the triangle tells you who sits at the top of the diagram. Renaissance blocking taught this before cinema."
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera inherited the altar. It is the wrong tool for a true two-hander that should be a flat axis, or for a crowd that has no hierarchy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forcing a triangle onto two people plus a plant is a fake court. The apex can be low (a child, a corpse, a briefcase) and still run the picture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Height is not automatically rank. Placement in the triangle is."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Two people and a desk, a family and a doorway, three men and a gun: the triangle tells you who sits at the top of the diagram. Renaissance blocking taught this before cinema.The camera inherited the altar. It is the wrong tool for a true two-hander that should be a flat axis, or for a crowd that has no hierarchy.Forcing a triangle onto two people plus a plant is a fake court. The apex can be low (a child, a corpse, a briefcase) and still run the picture.Height is not automatically rank. Placement in the triangle is."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Block three masses with clear vertices. Check the silhouette on a wide enough lens that all three read (often 27mm to 40mm, or a longer lens at a distance)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep depth of field sufficient for the intended points. A Three-Shot is a size.",
+          "links": [
+            {
+              "text": "Three-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The triangle is the geometry inside it. Prompt: Triangular arrangement with [Subject] at an apex, three masses locking the frame, Renaissance blocking."
+        }
+      ],
+      "links": [
+        {
+          "text": "Three-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Block three masses with clear vertices. Check the silhouette on a wide enough lens that all three read (often 27mm to 40mm, or a longer lens at a distance).Keep depth of field sufficient for the intended points. A Three-Shot is a size.The triangle is the geometry inside it. Prompt: Triangular arrangement with [Subject] at an apex, three masses locking the frame, Renaissance blocking."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a group has a hierarchy: a don and two captains, a family portrait with a secret, a bargaining table. Do not invent a third mass to complete a shape nobody in the scene would form."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a group has a hierarchy: a don and two captains, a family portrait with a secret, a bargaining table. Do not invent a third mass to complete a shape nobody in the scene would form."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Three-Shot is coverage of three bodies, which may sit in a line. Triangular composition is the pyramid, even if one mass is a doorway or a lamp.",
+          "links": [
+            {
+              "text": "Three-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Visual Weight decides which vertex wins the eye. Centered Composition may plant the apex on the axis.",
+          "links": [
+            {
+              "text": "Visual Weight",
+              "url": "https://melies.co/cinematic-techniques/composition/visual-weight"
+            },
+            {
+              "text": "Centered Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tableau can freeze the triangle for duration. Symmetry may split a triangle into a formal court.",
+          "links": [
+            {
+              "text": "Tableau",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            },
+            {
+              "text": "Symmetry",
+              "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-ShotA trio has politics.",
+          "displayText": "Three-Shot\nA trio has politics.",
+          "links": [
+            {
+              "text": "Three-ShotA trio has politics.",
+              "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Visual WeightThe eye should land where the story is.",
+          "displayText": "Visual Weight\nThe eye should land where the story is.",
+          "links": [
+            {
+              "text": "Visual WeightThe eye should land where the story is.",
+              "url": "https://melies.co/cinematic-techniques/composition/visual-weight"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Three-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+        },
+        {
+          "text": "Visual Weight",
+          "url": "https://melies.co/cinematic-techniques/composition/visual-weight"
+        },
+        {
+          "text": "Centered Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Tableau",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "Symmetry",
+          "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+        },
+        {
+          "text": "Three-ShotA trio has politics.",
+          "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+        },
+        {
+          "text": "Visual WeightThe eye should land where the story is.",
+          "url": "https://melies.co/cinematic-techniques/composition/visual-weight"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/993aa813c3ad1027061cf473597be748.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-shot.webp",
+          "alt": "Three-Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/b912105d62d1a5737291d24c7df04440.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/visual-weight.webp",
+          "alt": "Visual Weight"
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Three-Shot is coverage of three bodies, which may sit in a line. Triangular composition is the pyramid, even if one mass is a doorway or a lamp.Visual Weight decides which vertex wins the eye. Centered Composition may plant the apex on the axis.Tableau can freeze the triangle for duration. Symmetry may split a triangle into a formal court.Three-ShotA trio has politics.Visual WeightThe eye should land where the story is.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Godfather uses office blocking as a pyramid of power: who sits, who stands, who waits at the door. Painters' Last Supper language (a central apex, flanking groups) is the ancestor of that court."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cinema borrowed the altar long before it borrowed the name. Grammar of rank, not a painting to clone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Godfather uses office blocking as a pyramid of power: who sits, who stands, who waits at the door. Painters' Last Supper language (a central apex, flanking groups) is the ancestor of that court.Cinema borrowed the altar long before it borrowed the name. Grammar of rank, not a painting to clone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the three masses and the apex. Triangular arrangement with [Subject] at an apex, three masses locking the frame, Renaissance blocking."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say who or what occupies the other two vertices. If rank is the point, say the apex is the authority."
+        },
+        {
+          "type": "quote",
+          "text": "Triangular arrangement with [Subject] at an apex, three masses locking the frame, Renaissance blocking."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Triangular+arrangement+with+[Subject]+at+an+apex,+three+masses+locking+the+frame,+Renaissance+blocking."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the three masses and the apex. Triangular arrangement with [Subject] at an apex, three masses locking the frame, Renaissance blocking.Say who or what occupies the other two vertices. If rank is the point, say the apex is the authority.Copy promptUse in Image GeneratorTriangular arrangement with [Subject] at an apex, three masses locking the frame, Renaissance blocking.Triangular arrangement with [Subject] at an apex, three masses locking the frame, Renaissance blocking."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a flat Three-Shot in a line. The tell is three heads at one height, no pyramid.",
+          "links": [
+            {
+              "text": "Three-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to sit one figure, stand another, and give the third a doorway or a chair so the triangle actually locks."
+        }
+      ],
+      "links": [
+        {
+          "text": "Three-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/three-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a flat Three-Shot in a line. The tell is three heads at one height, no pyramid.The fix is to sit one figure, stand another, and give the third a doorway or a chair so the triangle actually locks."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is triangular composition in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Subjects or masses form a triangle in the frame. Three points lock the picture. The apex usually holds power, desire, or the thing being judged. The base supports or threatens."
+        },
+        {
+          "type": "heading",
+          "text": "Triangular Composition vs Three-Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A three-shot is a framing size: three people in the picture. They might stand in a row. Triangular composition is geometry. One vertex can even be an object or a doorway. Size is not shape."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use triangular composition?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a group has rank or a secret third term: family, court, deal, interrogation. Do not fake a third point with furniture that has no job."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt triangular composition for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the apex and the other two masses. Example: Triangular arrangement with [Subject] at an apex, three masses locking the frame, Renaissance blocking. State standing versus sitting if height is the hierarchy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is triangular composition in film?Subjects or masses form a triangle in the frame. Three points lock the picture. The apex usually holds power, desire, or the thing being judged. The base supports or threatens.Triangular Composition vs Three-ShotA three-shot is a framing size: three people in the picture. They might stand in a row. Triangular composition is geometry. One vertex can even be an object or a doorway. Size is not shape.When should I use triangular composition?Use it when a group has rank or a secret third term: family, court, deal, interrogation. Do not fake a third point with furniture that has no job.How do I prompt triangular composition for AI image or video?Name the apex and the other two masses. Example: Triangular arrangement with [Subject] at an apex, three masses locking the frame, Renaissance blocking. State standing versus sitting if height is the hierarchy."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the three masses and the apex. Triangular arrangement with [Subject] at an apex, three masses locking the frame, Renaissance blocking.",
+      "Say who or what occupies the other two vertices. If rank is the point, say the apex is the authority."
+    ],
+    "example": "Triangular arrangement with [Subject] at an apex, three masses locking the frame, Renaissance blocking."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/6a8d3d5ba0d1f6c1f6f2427e8016ade2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/triangular-composition.webp",
+      "alt": "Triangular Composition example"
+    },
+    {
+      "kind": "image",
+      "path": "media/993aa813c3ad1027061cf473597be748.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-shot.webp",
+      "alt": "Three-Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/b912105d62d1a5737291d24c7df04440.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/visual-weight.webp",
+      "alt": "Visual Weight"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/c316c6898d40dc95d535d25d39a9952d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/triangular-composition/hero.jpg",
+      "alt": "Triangular Composition",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "6fe6b95eff08768968202450dd0392b37832b761912d2dfe8cd1445ea54219c2"
+}

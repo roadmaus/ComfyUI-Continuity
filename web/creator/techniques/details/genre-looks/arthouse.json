@@ -1,0 +1,463 @@
+{
+  "id": "genre-looks/arthouse",
+  "slug": "arthouse",
+  "title": "Arthouse",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/arthouse",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arthouse.webp",
+  "detail": "details/genre-looks/arthouse.json",
+  "aliases": [],
+  "description": "Arthouse cinematography leaves space for thought: a Static Locked-Off camera, odd Headroom, natural or window light, and a frame willing to be empty. Duration is implied even in a still. The picture does not sell itself as a poster.",
+  "thumbnail": "media/fe20bb52fba80d6b2c95e5c712d2cf29.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Someone sits. The room keeps being a room."
+        },
+        {
+          "type": "paragraph",
+          "text": "Headroom is a little wrong. The light is a window, not a rim."
+        },
+        {
+          "type": "paragraph",
+          "text": "You are allowed to get bored, which is how thought enters. Negative space is not a mistake."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the shot must play on a billboard or when the camera should hunt. Blockbuster Gloss shapes every edge.",
+          "links": [
+            {
+              "text": "Blockbuster Gloss",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "French New Wave is impatient and jump-cut. Photography may also hold still, but as a print: posed, decisive, often centered.",
+          "links": [
+            {
+              "text": "French New Wave",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/french-new-wave"
+            },
+            {
+              "text": "Photography",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/photography"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Arthouse can be off-center, slightly ugly, and long."
+        }
+      ],
+      "links": [
+        {
+          "text": "Blockbuster Gloss",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+        },
+        {
+          "text": "French New Wave",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/french-new-wave"
+        },
+        {
+          "text": "Photography",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/photography"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Someone sits. The room keeps being a room.Headroom is a little wrong. The light is a window, not a rim.You are allowed to get bored, which is how thought enters. Negative space is not a mistake.It is the wrong tool when the shot must play on a billboard or when the camera should hunt. Blockbuster Gloss shapes every edge.French New Wave is impatient and jump-cut. Photography may also hold still, but as a print: posed, decisive, often centered.Arthouse can be off-center, slightly ugly, and long."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock the tripod. 35mm or 50mm spherical, modest stop, available or window key, little or no fill."
+        },
+        {
+          "type": "paragraph",
+          "text": "Allow odd headroom and Negative Space. Do not add a backlight rim unless the room has one.",
+          "links": [
+            {
+              "text": "Negative Space",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Color stays mixed or quietly naturalistic. Prompt patience, odd headroom, natural light, the frame willing to be empty, duration implied."
+        }
+      ],
+      "links": [
+        {
+          "text": "Negative Space",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Lock the tripod. 35mm or 50mm spherical, modest stop, available or window key, little or no fill.Allow odd headroom and Negative Space. Do not add a backlight rim unless the room has one.Color stays mixed or quietly naturalistic. Prompt patience, odd headroom, natural light, the frame willing to be empty, duration implied."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a beat needs time and air more than emphasis. Do not use it on an action geography pass, and do not confuse it with a centered stills-like tableau."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a beat needs time and air more than emphasis. Do not use it on an action geography pass, and do not confuse it with a centered stills-like tableau."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Arthouse is empty, patient, and often slightly mis-framed. Blockbuster Gloss is the opposite finish.",
+          "links": [
+            {
+              "text": "Arthouse",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+            },
+            {
+              "text": "Blockbuster Gloss",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Negative Space is a composition tool. Static Locked-Off is the locked camera.",
+          "links": [
+            {
+              "text": "Negative Space",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            },
+            {
+              "text": "Static Locked-Off",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Photography pretends to be a print: posed light, decisive moment. Arthouse may refuse the decisive moment and keep running.",
+          "links": [
+            {
+              "text": "Photography",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/photography"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Negative SpaceLoneliness needs room.",
+          "displayText": "Negative Space\nLoneliness needs room.",
+          "links": [
+            {
+              "text": "Negative SpaceLoneliness needs room.",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Static Locked-OffTrust blocking and duration. Movement would be noise.",
+          "displayText": "Static Locked-Off\nTrust blocking and duration. Movement would be noise.",
+          "links": [
+            {
+              "text": "Static Locked-OffTrust blocking and duration. Movement would be noise.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Arthouse",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+        },
+        {
+          "text": "Blockbuster Gloss",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+        },
+        {
+          "text": "Negative Space",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Static Locked-Off",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+        },
+        {
+          "text": "Photography",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/photography"
+        },
+        {
+          "text": "Negative SpaceLoneliness needs room.",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Static Locked-OffTrust blocking and duration. Movement would be noise.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+          "alt": "Negative Space"
+        },
+        {
+          "kind": "video",
+          "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ef92f0234960c354d232051aa99779ce.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/static-022-locked-off-duration-mini.webp",
+          "alt": "Static Locked-Off"
+        },
+        {
+          "kind": "video",
+          "path": "media/761eb0bcc8b403eab53e427ad9a96b85.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/022-locked-off-duration-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Arthouse is empty, patient, and often slightly mis-framed. Blockbuster Gloss is the opposite finish.Negative Space is a composition tool. Static Locked-Off is the locked camera.Photography pretends to be a print: posed light, decisive moment. Arthouse may refuse the decisive moment and keep running.Negative SpaceLoneliness needs room.Static Locked-OffTrust blocking and duration. Movement would be noise.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Toni Erdmann (plain light, social duration, frames that do not flatter). Roma (65mm black-and-white patience, even when the set is full)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Drive My Car (holds on cars, rooms, and grief). Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Toni Erdmann (plain light, social duration, frames that do not flatter). Roma (65mm black-and-white patience, even when the set is full).Drive My Car (holds on cars, rooms, and grief). Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Arthouse still of [Subject], patience, odd headroom, natural window light, the frame willing to be empty, static camera, duration implied. Name the unused air in the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a heroic rim or clean poster skies."
+        },
+        {
+          "type": "quote",
+          "text": "Arthouse still of [Subject], patience, odd headroom, natural light, the frame willing to be empty, duration implied."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Arthouse+still+of+[Subject],+patience,+odd+headroom,+natural+light,+the+frame+willing+to+be+empty,+duration+implied."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Arthouse still of [Subject], patience, odd headroom, natural window light, the frame willing to be empty, static camera, duration implied. Name the unused air in the frame.Do not add a heroic rim or clean poster skies.Copy promptUse in Image GeneratorArthouse still of [Subject], patience, odd headroom, natural light, the frame willing to be empty, duration implied.Arthouse still of [Subject], patience, odd headroom, natural light, the frame willing to be empty, duration implied."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Blockbuster Gloss or Photography: a rim-lit poster, or a perfectly posed print. The tell is a hair light, centered beauty, and no empty duration.",
+          "links": [
+            {
+              "text": "Blockbuster Gloss",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+            },
+            {
+              "text": "Photography",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/photography"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: lock off, raise the headroom, kill the rim, and let the room stay a room."
+        }
+      ],
+      "links": [
+        {
+          "text": "Blockbuster Gloss",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+        },
+        {
+          "text": "Photography",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/photography"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Blockbuster Gloss or Photography: a rim-lit poster, or a perfectly posed print. The tell is a hair light, centered beauty, and no empty duration.Fix: lock off, raise the headroom, kill the rim, and let the room stay a room."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Arthouse in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A patient look: locked camera, odd headroom, natural light, and a willingness to be empty. The frame leaves time for thought instead of selling a poster."
+        },
+        {
+          "type": "heading",
+          "text": "Arthouse vs Blockbuster Gloss",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Arthouse withholds polish and fills the frame with air. Blockbuster gloss rims, contrasts, and designs the sky so the still could sell tickets. Choose based on whether emptiness is allowed."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Arthouse?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a scene needs space and duration more than emphasis. Skip it for action posters, for vérité hunting zooms, or for a posed photographic tableau that wants to be a print."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Arthouse for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Arthouse still of [Subject], patience, odd headroom, natural light, the frame willing to be empty, static camera. Name the unused air. Do not add a heroic rim."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Arthouse in film?A patient look: locked camera, odd headroom, natural light, and a willingness to be empty. The frame leaves time for thought instead of selling a poster.Arthouse vs Blockbuster GlossArthouse withholds polish and fills the frame with air. Blockbuster gloss rims, contrasts, and designs the sky so the still could sell tickets. Choose based on whether emptiness is allowed.When should I use Arthouse?When a scene needs space and duration more than emphasis. Skip it for action posters, for vérité hunting zooms, or for a posed photographic tableau that wants to be a print.How do I prompt Arthouse for AI image or video?Write: Arthouse still of [Subject], patience, odd headroom, natural light, the frame willing to be empty, static camera. Name the unused air. Do not add a heroic rim."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Arthouse still of [Subject], patience, odd headroom, natural window light, the frame willing to be empty, static camera, duration implied. Name the unused air in the frame.",
+      "Do not add a heroic rim or clean poster skies."
+    ],
+    "example": "Arthouse still of [Subject], patience, odd headroom, natural light, the frame willing to be empty, duration implied."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/fe20bb52fba80d6b2c95e5c712d2cf29.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/arthouse.webp",
+      "alt": "Arthouse example"
+    },
+    {
+      "kind": "image",
+      "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+      "alt": "Negative Space"
+    },
+    {
+      "kind": "video",
+      "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ef92f0234960c354d232051aa99779ce.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/static-022-locked-off-duration-mini.webp",
+      "alt": "Static Locked-Off"
+    },
+    {
+      "kind": "video",
+      "path": "media/761eb0bcc8b403eab53e427ad9a96b85.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/022-locked-off-duration-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/0b8bc856cfe750bbeebc54151f9ffeb6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/arthouse/hero.jpg",
+      "alt": "Arthouse",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "2b54e52d7fba1e25f23c1f1c762d4e3801d7ff5d8da7d78e9e331dd7ef9874b8"
+}
