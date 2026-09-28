@@ -87,16 +87,19 @@ def feather_grid(rules):
     the source's last one, and the join jumps by the difference.
 
     The single frame is always offered — the classic seam, and on an 8n+1
-    family it is the grid's own first member — and three widths above it is
-    what the picker has room for. H3's set is (1, 5, 22, 39), which is 0.21 s,
-    0.92 s and 1.63 s of inherited motion; LTX 2.5's is (1, 9, 17, 25).
+    family it is the grid's own first member — and five widths above it is
+    what the picker offers. H3's set is (1, 5, 22, 39, 56, 73), which is
+    0.21 s, 0.92 s, 1.63 s, 2.33 s and 3.04 s of inherited motion; LTX 2.5's
+    is (1, 9, 17, 25, 33, 41). The two widest only fit long cards: the run is
+    re-generated and trimmed off, so `maxFeather` hides a width the card
+    cannot afford twice over.
 
     That difference is not cosmetic. `LTXVAddGuide` crops a guide to the
     nearest 8n+1 itself, so H3's 5-frame blend handed to LTX reaches the model
     as a *single* frame while the strip goes on subtracting five — a seam that
     silently stops being feathered, with nothing in the log.
     """
-    return (1, *[n for n in legal_frame_counts(rules) if n > 1][:3])
+    return (1, *[n for n in legal_frame_counts(rules) if n > 1][:5])
 
 
 def is_trained_length(frames, rules):

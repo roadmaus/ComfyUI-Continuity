@@ -77,12 +77,12 @@ export const isTrainedLength = (frames, rules) =>
 
 // Mirrors canvas.feather_grid: the seam widths this family's video VAE can
 // encode standalone, which is the frame grid again for the same reason — the
-// VAE's temporal cycle. The single frame is always offered; three widths above
-// it is what the picker has room for. H3's set is [1, 5, 22, 39] and LTX 2.5's
-// is [1, 9, 17, 25], and borrowing one for the other is a seam that quietly
+// VAE's temporal cycle. The single frame is always offered; five widths above
+// it is what the picker offers. H3's set is [1, 5, 22, 39, 56, 73] and LTX
+// 2.5's is [1, 9, 17, 25, 33, 41], and borrowing one for the other is a seam that quietly
 // stops being feathered — see canvas.py for the whole of why.
 export function featherGrid(rules) {
-  return [1, ...legalFrameCounts(rules).filter((n) => n > 1).slice(0, 3)];
+  return [1, ...legalFrameCounts(rules).filter((n) => n > 1).slice(0, 5)];
 }
 
 // Whole UI seconds -> nearest legal frame count. There is no 6.00 s H3 video;

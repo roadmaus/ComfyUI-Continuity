@@ -347,9 +347,9 @@ expect_error("modality guidance below its off value",
 # the graph got the grid's numbers rather than H3's.
 
 FEATHER = canvas.feather_grid(LTX25)
-check("LTX's seam widths are its own frame grid", FEATHER, (1, 9, 17, 25))
+check("LTX's seam widths are its own frame grid", FEATHER, (1, 9, 17, 25, 33, 41))
 check("...and every one of them is a legal guide length",
-      [n % 8 for n in FEATHER], [1, 1, 1, 1])
+      [n % 8 for n in FEATHER], [1] * len(FEATHER))
 
 chained = by_class(build(piece(
     prompt="a house at dusk",
@@ -412,7 +412,7 @@ expect_error("a seam width H3's VAE encodes and LTX's does not is refused",
                  {"prompt": "closer", "duration_s": 5, "assets": [], "loras": [],
                   "continue": True, "feather": 22},
              ])),
-             "a seam can inherit 1, 9, 17, 25 frames")
+             "a seam can inherit 1, 9, 17, 25, 33, 41 frames")
 
 # ---- multishot ---------------------------------------------------------------
 #

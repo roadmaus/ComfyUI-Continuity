@@ -47,7 +47,7 @@ import {
  *  is 17 — but "short, medium, long" is what the user is choosing between
  *  either way, and the seconds beside it say what it costs. Keyed on the
  *  numbers, this read "Blend" for every LTX width. */
-const BLEND_NAMES = ["None", "Short", "Medium", "Long"];
+const BLEND_NAMES = ["None", "Short", "Medium", "Long", "Extra long", "Longest"];
 
 // Functional groups, not inferred from button classes: source and blend share
 // a class but belong to the same optional group. Empty groups draw no divider.

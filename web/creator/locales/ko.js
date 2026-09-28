@@ -990,6 +990,8 @@ export const ko = {
  "Short": "짧게",
  "Medium": "보통",
  "Long": "길게",
+ "Extra long": "아주 길게",
+ "Longest": "가장 길게",
  "Blend": "블렌드",
  "Blend into segment {n}": "세그먼트 {n}으로 블렌드",
  "segment {n} — previous": "세그먼트 {n} — 이전",

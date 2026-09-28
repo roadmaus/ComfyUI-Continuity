@@ -991,6 +991,8 @@ export const zh = {
  "Short": "短",
  "Medium": "中",
  "Long": "长",
+ "Extra long": "超长",
+ "Longest": "最长",
  "Blend": "混合",
  "Blend into segment {n}": "混合进片段 {n}",
  "segment {n} — previous": "片段 {n}——前一个",

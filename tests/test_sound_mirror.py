@@ -51,8 +51,8 @@ LANES = [
 # agree about the one case that cannot drift.
 #
 # The last number is an *index into the family's own feather grid*, not a frame
-# count, and that is not tidiness. H3 inherits (1, 5, 22, 39) and LTX 2.5
-# inherits (1, 9, 17, 25) — the video VAE's temporal cycle, which is different
+# count, and that is not tidiness. H3 inherits (1, 5, 22, 39, 56, 73) and LTX 2.5
+# inherits (1, 9, 17, 25, 33, 41) — the video VAE's temporal cycle, which is different
 # weights and so a different grid. A hardcoded 22 is a legal seam on one family
 # and a blob `compile_request` refuses on the other, and a mirror comparing two
 # readings of a request that will never render is a mirror reporting a

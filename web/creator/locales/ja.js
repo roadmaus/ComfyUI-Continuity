@@ -989,6 +989,8 @@ export const ja = {
  "Short": "短",
  "Medium": "中",
  "Long": "長",
+ "Extra long": "超長",
+ "Longest": "最長",
  "Blend": "ブレンド",
  "Blend into segment {n}": "セグメント {n} へブレンド",
  "segment {n} — previous": "セグメント {n} — 前",
