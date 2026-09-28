@@ -7,7 +7,7 @@ checks: **ComfyUI does not gain a Playwright/runtime dependency**.
 ## Run
 
 Use a recent Node.js version. If `playwright` is already resolvable, install its
-Chromium browser with `npx playwright install chromium`, then run the three scripts
+Chromium browser with `npx playwright install chromium`, then run the four scripts
 below from the repository root. Script paths are resolved relative to the script,
 not the current working directory.
 

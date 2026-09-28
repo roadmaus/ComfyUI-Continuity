@@ -42,7 +42,7 @@ const results=[];
 let browser;
 const test=async(name,fn)=>{await fn();results.push(name);console.log(`PASS ${name}`);};
 (async()=>{
-  const executablePath=process.env.BROWSER_EXECUTABLE || (process.platform==='win32'?'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe':undefined);
+  const executablePath=process.env.BROWSER_EXECUTABLE_PATH || process.env.BROWSER_EXECUTABLE;
   browser=await chromium.launch({headless:true,...(executablePath?{executablePath}:{})});
   const context=await browser.newContext({viewport:{width:1400,height:950},locale:'en-US',permissions:['clipboard-read','clipboard-write']});
   const page=await context.newPage();
