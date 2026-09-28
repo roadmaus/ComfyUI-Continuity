@@ -1,0 +1,404 @@
+{
+  "id": "genre-looks/magical-realism",
+  "slug": "magical-realism",
+  "title": "Magical Realism",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/magical-realism",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/magical-realism.webp",
+  "detail": "details/genre-looks/magical-realism.json",
+  "aliases": [],
+  "description": "Magical realism cinematography treats an extraordinary event as ordinary inside a recognizable world: the same window light, the same 35mm coverage, with one impossible fact staged as if it were weather. The camera does not gawk, add a rim, or warp the lens.",
+  "thumbnail": "media/408fa07d4330f163bdf3bb4f178ff90f.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A girl sees a monster and the exposure does not change. Snow falls in a kitchen and the practicals stay kitchen practicals."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wonder is not a lighting cue. If you add shafts, dutch angles, and a choir of haze, you have left the contract."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Dreamcore (liminal rooms, unresolved memory). It is not Altered State (perception smear).",
+          "links": [
+            {
+              "text": "Dreamcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+            },
+            {
+              "text": "Altered State",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not blockbuster spectacle. The world stays real."
+        },
+        {
+          "type": "paragraph",
+          "text": "One fact does not."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dreamcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+        },
+        {
+          "text": "Altered State",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A girl sees a monster and the exposure does not change. Snow falls in a kitchen and the practicals stay kitchen practicals.Wonder is not a lighting cue. If you add shafts, dutch angles, and a choir of haze, you have left the contract.It is not Dreamcore (liminal rooms, unresolved memory). It is not Altered State (perception smear).It is not blockbuster spectacle. The world stays real.One fact does not."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Motivated naturalistic light: window, overcast, a household bulb. 35mm or 50mm, eye level, coverage as if nothing were impossible."
+        },
+        {
+          "type": "paragraph",
+          "text": "Play the miracle in the same size you would play a kettle. Do not under-light, dutch, or add volumetric spectacle for the impossible beat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt ordinary light, one impossible fact treated as weather."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Motivated naturalistic light: window, overcast, a household bulb. 35mm or 50mm, eye level, coverage as if nothing were impossible.Play the miracle in the same size you would play a kettle. Do not under-light, dutch, or add volumetric spectacle for the impossible beat.Prompt ordinary light, one impossible fact treated as weather."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a miracle must not become a set-piece. Do not use it for a trip sequence, a liminal corridor, or an effects showcase."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a miracle must not become a set-piece. Do not use it for a trip sequence, a liminal corridor, or an effects showcase."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Magical Realism keeps ordinary light and one impossible fact. Dreamcore empties and softens the room.",
+          "links": [
+            {
+              "text": "Magical Realism",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/magical-realism"
+            },
+            {
+              "text": "Dreamcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Altered State warps perception. Southern Gothic can host strange events but its optical problem is heat and decay, not a calmly covered miracle.",
+          "links": [
+            {
+              "text": "Altered State",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            },
+            {
+              "text": "Southern Gothic",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/southern-gothic"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera gawks, it is spectacle, not this look."
+        },
+        {
+          "type": "list-item",
+          "text": "DreamcoreNostalgia with the safety removed.",
+          "displayText": "Dreamcore\nNostalgia with the safety removed.",
+          "links": [
+            {
+              "text": "DreamcoreNostalgia with the safety removed.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Neo-NoirNoir after color was invented.",
+          "displayText": "Neo-Noir\nNoir after color was invented.",
+          "links": [
+            {
+              "text": "Neo-NoirNoir after color was invented.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Magical Realism",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/magical-realism"
+        },
+        {
+          "text": "Dreamcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+        },
+        {
+          "text": "Altered State",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        },
+        {
+          "text": "Southern Gothic",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/southern-gothic"
+        },
+        {
+          "text": "DreamcoreNostalgia with the safety removed.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Neo-NoirNoir after color was invented.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f3b6c79e809226ceda09f46eeebf2c7d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dreamcore.webp",
+          "alt": "Dreamcore"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        },
+        {
+          "kind": "image",
+          "path": "media/ea5ae8a2e30baa75c39a22cd02fb3d7b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neo-noir.webp",
+          "alt": "Neo-Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Magical Realism keeps ordinary light and one impossible fact. Dreamcore empties and softens the room.Altered State warps perception. Southern Gothic can host strange events but its optical problem is heat and decay, not a calmly covered miracle.If the camera gawks, it is spectacle, not this look.DreamcoreNostalgia with the safety removed.Film NoirCrime, guilt, and streetlamps.Neo-NoirNoir after color was invented."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Spirit of the Beehive (honeyed natural light, a child's encounter played as afternoon). Beasts of the Southern Wild (aural and visual wonders inside humid daylight realism)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Spirit of the Beehive (honeyed natural light, a child's encounter played as afternoon). Beasts of the Southern Wild (aural and visual wonders inside humid daylight realism).Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Magical-realist image of [Subject], ordinary window or overcast light, 35mm eye level, one impossible fact treated as weather, no extra rim, no dutch. Name the ordinary room and the single impossibility."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add spectacle shafts."
+        },
+        {
+          "type": "quote",
+          "text": "Magical-realist image of [Subject], ordinary light, one impossible fact treated as weather."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Magical-realist+image+of+[Subject],+ordinary+light,+one+impossible+fact+treated+as+weather."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Magical-realist image of [Subject], ordinary window or overcast light, 35mm eye level, one impossible fact treated as weather, no extra rim, no dutch. Name the ordinary room and the single impossibility.Do not add spectacle shafts.Copy promptUse in Image GeneratorMagical-realist image of [Subject], ordinary light, one impossible fact treated as weather.Magical-realist image of [Subject], ordinary light, one impossible fact treated as weather."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Dreamcore, Altered State, or gloss: a liminal hall, a smear, or a volumetric miracle. The tell is a lighting change at the impossible beat.",
+          "links": [
+            {
+              "text": "Dreamcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+            },
+            {
+              "text": "Altered State",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: keep the same key, the same lens height, and stage the impossibility as weather."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dreamcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dreamcore"
+        },
+        {
+          "text": "Altered State",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Dreamcore, Altered State, or gloss: a liminal hall, a smear, or a volumetric miracle. The tell is a lighting change at the impossible beat.Fix: keep the same key, the same lens height, and stage the impossibility as weather."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Magical Realism in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A look that covers extraordinary events with ordinary, motivated light and realist blocking. The camera does not change grammar for the miracle. The world stays recognizable. One fact does not."
+        },
+        {
+          "type": "heading",
+          "text": "Magical Realism vs Dreamcore",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dreamcore is an unresolved liminal interior with childhood light gone wrong. Magical realism is a real town or house with one impossible fact played like weather. Different rooms, different contracts."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Magical Realism?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a miracle must not become spectacle. Skip it for trip warps, for empty memory halls, for cosmic scale, or for a lighting cue that announces wonder."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Magical Realism for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Magical-realist image of [Subject], ordinary light, one impossible fact treated as weather, 35mm eye level, no extra rim. Name the room and the single impossibility."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Magical Realism in film?A look that covers extraordinary events with ordinary, motivated light and realist blocking. The camera does not change grammar for the miracle. The world stays recognizable. One fact does not.Magical Realism vs DreamcoreDreamcore is an unresolved liminal interior with childhood light gone wrong. Magical realism is a real town or house with one impossible fact played like weather. Different rooms, different contracts.When should I use Magical Realism?When a miracle must not become spectacle. Skip it for trip warps, for empty memory halls, for cosmic scale, or for a lighting cue that announces wonder.How do I prompt Magical Realism for AI image or video?Write: Magical-realist image of [Subject], ordinary light, one impossible fact treated as weather, 35mm eye level, no extra rim. Name the room and the single impossibility."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Magical-realist image of [Subject], ordinary window or overcast light, 35mm eye level, one impossible fact treated as weather, no extra rim, no dutch. Name the ordinary room and the single impossibility.",
+      "Do not add spectacle shafts."
+    ],
+    "example": "Magical-realist image of [Subject], ordinary light, one impossible fact treated as weather."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/408fa07d4330f163bdf3bb4f178ff90f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/magical-realism.webp",
+      "alt": "Magical Realism example"
+    },
+    {
+      "kind": "image",
+      "path": "media/f3b6c79e809226ceda09f46eeebf2c7d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dreamcore.webp",
+      "alt": "Dreamcore"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/ea5ae8a2e30baa75c39a22cd02fb3d7b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neo-noir.webp",
+      "alt": "Neo-Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/0d47014d3dd4312b7cb9d0020d68946d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/magical-realism/hero.jpg",
+      "alt": "Magical Realism",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "9e3f0a21375369c498ea2801329410eb66c3f263a199c845220eae43f3e8fcf3"
+}

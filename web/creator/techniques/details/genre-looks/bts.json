@@ -1,0 +1,406 @@
+{
+  "id": "genre-looks/bts",
+  "slug": "bts",
+  "title": "BTS",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/bts",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bts.webp",
+  "detail": "details/genre-looks/bts.json",
+  "aliases": [],
+  "description": "Behind the scenes cinematography shows the making: C-stands, flags, the set wall, and crew in the same frame as the fiction, so the constructed world leaks. Documentary light (worklamps, mixed Kinos) sits beside the scene's key.",
+  "thumbnail": "media/5ba1f0120ea54f194e6b6ab16b925d7f.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The shot admits the apparatus. An actor holds a mark."
+        },
+        {
+          "type": "paragraph",
+          "text": "A boom dips. The apartment has no fourth wall."
+        },
+        {
+          "type": "paragraph",
+          "text": "You came for the scene and got the factory that makes it. That leak can be comic, tender, or cruel."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Cinéma Vérité of real life, and not a sit-down Interview unless you plant one on the set. It is documentary rhetoric aimed at a film set.",
+          "links": [
+            {
+              "text": "Cinéma Vérité",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            },
+            {
+              "text": "Interview",
+              "url": "https://melies.co/cinematic-techniques/framing/interview"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Documentary of a non-film subject will not show stands and flags.",
+          "links": [
+            {
+              "text": "Documentary",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cinéma Vérité",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "Interview",
+          "url": "https://melies.co/cinematic-techniques/framing/interview"
+        },
+        {
+          "text": "Documentary",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The shot admits the apparatus. An actor holds a mark.A boom dips. The apartment has no fourth wall.You came for the scene and got the factory that makes it. That leak can be comic, tender, or cruel.It is not Cinéma Vérité of real life, and not a sit-down Interview unless you plant one on the set. It is documentary rhetoric aimed at a film set.Documentary of a non-film subject will not show stands and flags."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Two lighting worlds: the scene's motivated key on the actor, and unstyled worklight on crew and the studio. Include a stand, a flag, a slate, or the unfinished set edge."
+        },
+        {
+          "type": "paragraph",
+          "text": "Camera: observational handheld or a wider locked shot that keeps crew readable. Do not pretty the crew with the movie rim."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt crew, stands, and the set edge visible, the fiction leaking, documentary light on a constructed world."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Two lighting worlds: the scene's motivated key on the actor, and unstyled worklight on crew and the studio. Include a stand, a flag, a slate, or the unfinished set edge.Camera: observational handheld or a wider locked shot that keeps crew readable. Do not pretty the crew with the movie rim.Prompt crew, stands, and the set edge visible, the fiction leaking, documentary light on a constructed world."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the making must be visible, not only the make-believe. Do not use it as a vérité street look with no set, and do not hide every stand if you claimed BTS."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the making must be visible, not only the make-believe. Do not use it as a vérité street look with no set, and do not hide every stand if you claimed BTS."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "BTS is a set with its crew visible. Cinéma Vérité is real life with a filmmaker.",
+          "links": [
+            {
+              "text": "BTS",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/bts"
+            },
+            {
+              "text": "Cinéma Vérité",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Documentary is evidence rhetoric at large. Interview may appear inside BTS (a director talk) but is not the leak of the set.",
+          "links": [
+            {
+              "text": "Documentary",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+            },
+            {
+              "text": "Interview",
+              "url": "https://melies.co/cinematic-techniques/framing/interview"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If there is no apparatus in frame, it is not behind the scenes."
+        },
+        {
+          "type": "list-item",
+          "text": "Cinéma VéritéStyle would be propaganda.",
+          "displayText": "Cinéma Vérité\nStyle would be propaganda.",
+          "links": [
+            {
+              "text": "Cinéma VéritéStyle would be propaganda.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "InterviewSomeone is answering a question we did not hear.",
+          "displayText": "Interview\nSomeone is answering a question we did not hear.",
+          "links": [
+            {
+              "text": "InterviewSomeone is answering a question we did not hear.",
+              "url": "https://melies.co/cinematic-techniques/framing/interview"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "BTS",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/bts"
+        },
+        {
+          "text": "Cinéma Vérité",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "Documentary",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+        },
+        {
+          "text": "Interview",
+          "url": "https://melies.co/cinematic-techniques/framing/interview"
+        },
+        {
+          "text": "Cinéma VéritéStyle would be propaganda.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "InterviewSomeone is answering a question we did not hear.",
+          "url": "https://melies.co/cinematic-techniques/framing/interview"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/698c2a04908f5536012f8e28784057e5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinema-verite.webp",
+          "alt": "Cinéma Vérité"
+        },
+        {
+          "kind": "image",
+          "path": "media/da395574cb94b3fc9f5a9b56398abbab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/interview.webp",
+          "alt": "Interview"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots BTS is a set with its crew visible. Cinéma Vérité is real life with a filmmaker.Documentary is evidence rhetoric at large. Interview may appear inside BTS (a director talk) but is not the leak of the set.If there is no apparatus in frame, it is not behind the scenes.Cinéma VéritéStyle would be propaganda.InterviewSomeone is answering a question we did not hear.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Day for Night (a production as the subject, the set as a factory). Living in Oblivion (independent-set chaos as comedy)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Day for Night (a production as the subject, the set as a factory). Living in Oblivion (independent-set chaos as comedy).Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Behind-the-scenes look at [Subject], crew, C-stands, and the set edge visible, the fiction leaking, worklight mixed with the scene key. Name a stand or a flag."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not hide the apparatus."
+        },
+        {
+          "type": "quote",
+          "text": "Behind-the-scenes look at [Subject], crew, stands, and the set edge visible, the fiction leaking, documentary light on a constructed world."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Behind-the-scenes+look+at+[Subject],+crew,+stands,+and+the+set+edge+visible,+the+fiction+leaking,+documentary+light+on+a+constructed+world."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Behind-the-scenes look at [Subject], crew, C-stands, and the set edge visible, the fiction leaking, worklight mixed with the scene key. Name a stand or a flag.Do not hide the apparatus.Copy promptUse in Image GeneratorBehind-the-scenes look at [Subject], crew, stands, and the set edge visible, the fiction leaking, documentary light on a constructed world.Behind-the-scenes look at [Subject], crew, stands, and the set edge visible, the fiction leaking, documentary light on a constructed world."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Cinéma Vérité or a clean production still: street vérité, or the scene with no crew. The tell is a finished fourth wall and no stands.",
+          "links": [
+            {
+              "text": "Cinéma Vérité",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: show the wall missing, a flag, a person with a boom, and mixed worklight."
+        }
+      ],
+      "links": [
+        {
+          "text": "Cinéma Vérité",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Cinéma Vérité or a clean production still: street vérité, or the scene with no crew. The tell is a finished fourth wall and no stands.Fix: show the wall missing, a flag, a person with a boom, and mixed worklight."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is BTS in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Behind-the-scenes coverage: crew, stands, and the unfinished set visible in the same frame as the fiction. Documentary light on a constructed world, so the making leaks."
+        },
+        {
+          "type": "heading",
+          "text": "BTS vs Cinéma Vérité",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Vérité watches unstaged life. BTS watches a set. Both may be handheld and mixed-color. Only BTS needs C-stands, flags, and a missing fourth wall as the subject."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use BTS?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the story or the still must show the making. Skip it for recovered-tape horror, for street vérité with no set, or for a finished scene with the apparatus hidden."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt BTS for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Behind-the-scenes look at [Subject], crew, C-stands, and the set edge visible, worklight mixed with the scene key. Name a flag or boom. Do not hide the apparatus."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is BTS in film?Behind-the-scenes coverage: crew, stands, and the unfinished set visible in the same frame as the fiction. Documentary light on a constructed world, so the making leaks.BTS vs Cinéma VéritéVérité watches unstaged life. BTS watches a set. Both may be handheld and mixed-color. Only BTS needs C-stands, flags, and a missing fourth wall as the subject.When should I use BTS?When the story or the still must show the making. Skip it for recovered-tape horror, for street vérité with no set, or for a finished scene with the apparatus hidden.How do I prompt BTS for AI image or video?Write: Behind-the-scenes look at [Subject], crew, C-stands, and the set edge visible, worklight mixed with the scene key. Name a flag or boom. Do not hide the apparatus."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Behind-the-scenes look at [Subject], crew, C-stands, and the set edge visible, the fiction leaking, worklight mixed with the scene key. Name a stand or a flag.",
+      "Do not hide the apparatus."
+    ],
+    "example": "Behind-the-scenes look at [Subject], crew, stands, and the set edge visible, the fiction leaking, documentary light on a constructed world."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/5ba1f0120ea54f194e6b6ab16b925d7f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bts.webp",
+      "alt": "BTS example"
+    },
+    {
+      "kind": "image",
+      "path": "media/698c2a04908f5536012f8e28784057e5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinema-verite.webp",
+      "alt": "Cinéma Vérité"
+    },
+    {
+      "kind": "image",
+      "path": "media/da395574cb94b3fc9f5a9b56398abbab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/interview.webp",
+      "alt": "Interview"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/ada03e8e1864d367b5bcad0ee4691cb6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/bts/hero.jpg",
+      "alt": "BTS",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "2754a7056c4f30b8e73ab161d150a4f6bab6f49cd5e0101ca2915228e3596605"
+}

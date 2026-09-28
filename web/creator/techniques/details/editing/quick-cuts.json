@@ -1,0 +1,455 @@
+{
+  "id": "editing/quick-cuts",
+  "slug": "quick-cuts",
+  "title": "Quick Cuts",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/quick-cuts",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/quick-cuts-06-quick-cuts-mini.webp",
+  "detail": "details/editing/quick-cuts.json",
+  "aliases": [
+    "Accelerating cut pattern",
+    "Metric tension"
+  ],
+  "description": "Quick cuts editing strings shots shorter than a breath, so duration itself becomes rhythm, pressure, or music. Each side of a join is a full view from a changing setup; the meaning is the rate, not a skip inside one frame.",
+  "thumbnail": "media/827000a51dd7ef6ee0d76f3174fb083a.webp",
+  "video": "media/59fc33993a7c64ccfb5f4a6ef15a5d67.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/06-quick-cuts-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eyes, hands, a kit, a face, the room, the stick, faster. You feel a release coming before the last hit lands."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pace is the meaning. A sudden hold in that pattern can be the climax."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when acceleration or a metric pulse should do narrative work: a showdown tightening from bodies to eyes, a raid, a practice that becomes punishment. It is the wrong tool when the similar frame is losing time: that is a Jump Cut.",
+          "links": [
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you are withholding the complete event in shards: that is Fragments. Faster is not always more tense.",
+          "links": [
+            {
+              "text": "Fragments",
+              "url": "https://melies.co/cinematic-techniques/editing/fragments"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Contrast between acceleration and a held pause often carries the payoff."
+        }
+      ],
+      "links": [
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Fragments",
+          "url": "https://melies.co/cinematic-techniques/editing/fragments"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Eyes, hands, a kit, a face, the room, the stick, faster. You feel a release coming before the last hit lands.Pace is the meaning. A sudden hold in that pattern can be the climax.Use it when acceleration or a metric pulse should do narrative work: a showdown tightening from bodies to eyes, a raid, a practice that becomes punishment. It is the wrong tool when the similar frame is losing time: that is a Jump Cut.It is the wrong tool when you are withholding the complete event in shards: that is Fragments. Faster is not always more tense.Contrast between acceleration and a held pause often carries the payoff."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Design a duration curve and a progression of shot sizes. Alternate angles enough that each cut is a new view, not a hole in one view."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use musical or physical accents selectively; not every splice must land on a beat. Prompt: quick cuts around [Subject], shots shorter than a breath, rhythm as violence or music."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Design a duration curve and a progression of shot sizes. Alternate angles enough that each cut is a new view, not a hole in one view.Use musical or physical accents selectively; not every splice must land on a beat. Prompt: quick cuts around [Subject], shots shorter than a breath, rhythm as violence or music."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to tighten a duel, a performance, a chase through hands and gauges. Do not use it on a conversation that needs air."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the pattern never rests, the last hit has nowhere to land."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to tighten a duel, a performance, a chase through hands and gauges. Do not use it on a conversation that needs air.If the pattern never rests, the last hit has nowhere to land."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Jump Cut is a skip inside a similar setup. A Crash Cut is one brutal join.",
+          "links": [
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            },
+            {
+              "text": "Crash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Montage may use short shots, but montage's job is collision of meaning or collapsed months; quick cuts' job is rate. Fragments hide the whole action; quick cuts often show the action in many complete, brief views.",
+          "links": [
+            {
+              "text": "Montage",
+              "url": "https://melies.co/cinematic-techniques/editing/montage"
+            },
+            {
+              "text": "Fragments",
+              "url": "https://melies.co/cinematic-techniques/editing/fragments"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Jump CutDo not soothe. Show the skip.",
+          "displayText": "Jump Cut\nDo not soothe. Show the skip.",
+          "links": [
+            {
+              "text": "Jump CutDo not soothe. Show the skip.",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash CutThe next image must hurt.",
+          "displayText": "Crash Cut\nThe next image must hurt.",
+          "links": [
+            {
+              "text": "Crash CutThe next image must hurt.",
+              "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Crash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+        },
+        {
+          "text": "Montage",
+          "url": "https://melies.co/cinematic-techniques/editing/montage"
+        },
+        {
+          "text": "Fragments",
+          "url": "https://melies.co/cinematic-techniques/editing/fragments"
+        },
+        {
+          "text": "Jump CutDo not soothe. Show the skip.",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Crash CutThe next image must hurt.",
+          "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/30e16a300df23158df8edae534b8363d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+          "alt": "Jump Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/48db69b77d2fa3ebe58e56551a9e40ee.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-cut-02-crash-cut-mini.webp",
+          "alt": "Crash Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/3c68828a0b24b8eb8e6cd3614839346b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-crash-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Jump Cut is a skip inside a similar setup. A Crash Cut is one brutal join.Montage may use short shots, but montage's job is collision of meaning or collapsed months; quick cuts' job is rate. Fragments hide the whole action; quick cuts often show the action in many complete, brief views.Jump CutDo not soothe. Show the skip.Crash CutThe next image must hurt.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Good, the Bad and the Ugly tightens the three-way showdown from bodies and positions toward faces and eyes. Whiplash binds image duration to pressure and rhythm."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mad Max: Fury Road and Requiem for a Dream use short shots as pulse. Steal the curve, not the coverage plan."
+        },
+        {
+          "type": "list-item",
+          "text": "The Good, the Bad and the Ugly 1966The three-way showdown tightens from bodies and positions toward faces and eyes.",
+          "displayText": "The Good, the Bad and the Ugly 1966\nThe three-way showdown tightens from bodies and positions toward faces and eyes."
+        },
+        {
+          "type": "list-item",
+          "text": "Whiplash 2014Performance passages bind image duration to pressure and rhythm.",
+          "displayText": "Whiplash 2014\nPerformance passages bind image duration to pressure and rhythm."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Good, the Bad and the Ugly tightens the three-way showdown from bodies and positions toward faces and eyes. Whiplash binds image duration to pressure and rhythm.Mad Max: Fury Road and Requiem for a Dream use short shots as pulse. Steal the curve, not the coverage plan.The Good, the Bad and the Ugly 1966The three-way showdown tightens from bodies and positions toward faces and eyes.Whiplash 2014Performance passages bind image duration to pressure and rhythm."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Quick cuts around [Subject], shots shorter than a breath, rhythm as violence or music. List a progression of sizes (wide to eyes, or hands to kit) and a duration curve."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, many distinct angles, short holds, no morph, and one planned pause if you need a landing."
+        },
+        {
+          "type": "quote",
+          "text": "Create a tense three-person card-game ending. Begin with wide spatial views, then progressively shorter shots of faces, hands and one face-down card. Accelerate the cutting while preserving who sits where, then hold a long silent close-up before the card turns. Assemble rhythm in the edit."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Create+a+tense+three-person+card-game+ending.+Begin+with+wide+spatial+views,+then+progressively+shorter+shots+of+faces,+hands+and+one+face-down+card.+Accelerate+the+cutting+while+preserving+who+sits+where,+then+hold+a+long+silent+close-up+before+the+card+turns.+Assemble+rhythm+in+the+edit."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Quick cuts around [Subject], shots shorter than a breath, rhythm as violence or music. List a progression of sizes (wide to eyes, or hands to kit) and a duration curve.For video, many distinct angles, short holds, no morph, and one planned pause if you need a landing.Copy promptUse in Video GeneratorCreate a tense three-person card-game ending. Begin with wide spatial views, then progressively shorter shots of faces, hands and one face-down card. Accelerate the cutting while preserving who sits where, then hold a long silent close-up before the card turns. Assemble rhythm in the edit.Create a tense three-person card-game ending. Begin with wide spatial views, then progressively shorter shots of faces, hands and one face-down card. Accelerate the cutting while preserving who sits where, then hold a long silent close-up before the card turns. Assemble rhythm in the edit."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Jump Cut (same frame, missing time) or chaos with no curve. The tell: every shot is the same length and size, or the camera never changes axis.",
+          "links": [
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: new views, shortening (or a designed break), a last image that can resolve the pulse."
+        }
+      ],
+      "links": [
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Jump Cut (same frame, missing time) or chaos with no curve. The tell: every shot is the same length and size, or the camera never changes axis.The fix: new views, shortening (or a designed break), a last image that can resolve the pulse."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Quick Cuts in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Quick cuts are a run of very short shots from changing setups, so duration becomes rhythm. Each side of a join is a new view; the rate is the meaning."
+        },
+        {
+          "type": "heading",
+          "text": "Quick Cuts vs Jump Cut",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A jump cut skips time inside a similar framing. Quick cuts change angle, size, or subject every breath. One is a hole in a setup; the other is a metric pattern."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Quick Cuts?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when pace should tighten a duel, a performance, or a chase. Do not use it as default coverage, and do not confuse it with a jump inside one frame."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Quick Cuts for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for many short, distinct shots and a duration curve. Example: Quick cuts around [Subject], shots shorter than a breath, rhythm as violence or music. Name the progression of sizes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Quick Cuts in film?Quick cuts are a run of very short shots from changing setups, so duration becomes rhythm. Each side of a join is a new view; the rate is the meaning.Quick Cuts vs Jump CutA jump cut skips time inside a similar framing. Quick cuts change angle, size, or subject every breath. One is a hole in a setup; the other is a metric pattern.When should I use Quick Cuts?Use it when pace should tighten a duel, a performance, or a chase. Do not use it as default coverage, and do not confuse it with a jump inside one frame.How do I prompt Quick Cuts for AI image or video?Ask for many short, distinct shots and a duration curve. Example: Quick cuts around [Subject], shots shorter than a breath, rhythm as violence or music. Name the progression of sizes."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Quick cuts around [Subject], shots shorter than a breath, rhythm as violence or music. List a progression of sizes (wide to eyes, or hands to kit) and a duration curve.",
+      "For video, many distinct angles, short holds, no morph, and one planned pause if you need a landing."
+    ],
+    "example": "Create a tense three-person card-game ending. Begin with wide spatial views, then progressively shorter shots of faces, hands and one face-down card. Accelerate the cutting while preserving who sits where, then hold a long silent close-up before the card turns. Assemble rhythm in the edit."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/59fc33993a7c64ccfb5f4a6ef15a5d67.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/06-quick-cuts-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/827000a51dd7ef6ee0d76f3174fb083a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/quick-cuts-06-quick-cuts-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f4d6a865194054eee0c3048b7a5acbab.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/quick-cuts.jpg",
+      "alt": "Quick Cuts frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/30e16a300df23158df8edae534b8363d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+      "alt": "Jump Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/48db69b77d2fa3ebe58e56551a9e40ee.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-cut-02-crash-cut-mini.webp",
+      "alt": "Crash Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/3c68828a0b24b8eb8e6cd3614839346b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-crash-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/446a7d8f42765614b5652f48f9cdcdcd.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/quick-cuts/hero.jpg",
+      "alt": "Quick Cuts",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "337cd06da804ae48a412abee16e8c6fe12f3e9d8c084504024d41ec4b86a7c51"
+}

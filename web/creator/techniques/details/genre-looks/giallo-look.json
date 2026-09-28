@@ -1,0 +1,434 @@
+{
+  "id": "genre-looks/giallo-look",
+  "slug": "giallo-look",
+  "title": "Giallo",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/giallo-look",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/giallo-look.webp",
+  "detail": "details/genre-looks/giallo-look.json",
+  "aliases": [],
+  "description": "Giallo cinematography is Italian thriller grammar: hyper-saturated primaries from gelled windows and glass, fashion interiors, and a camera that often zooms rather than dollies toward threat. Beauty lighting sits on the victim. The violence is styled, not silver.",
+  "thumbnail": "media/6fffff8a122580e32891c039dcb4e8c7.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Horror here is also wardrobe. A cobalt window, a red hallway, black leather in the foreground."
+        },
+        {
+          "type": "paragraph",
+          "text": "The frame is chic until the glove enters. Subjective threat is a color, a zoom, and a Dutch Angle, not a wet black alley.",
+          "links": [
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for low-key crime or for density-as-ornament. Film Noir withholds with black.",
+          "links": [
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Maximalism fills every zone with pattern for pleasure. Giallo uses primaries as a weapon inside relatively designed, often sparse, interiors.",
+          "links": [
+            {
+              "text": "Maximalism",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/maximalism"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Maximalism",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/maximalism"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Horror here is also wardrobe. A cobalt window, a red hallway, black leather in the foreground.The frame is chic until the glove enters. Subjective threat is a color, a zoom, and a Dutch Angle, not a wet black alley.It is the wrong tool for low-key crime or for density-as-ornament. Film Noir withholds with black.Maximalism fills every zone with pattern for pleasure. Giallo uses primaries as a weapon inside relatively designed, often sparse, interiors."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Gel the keys: red, green, cobalt through windows or colored glass, so the palette is primary, not pastel. Keep contrast high but chroma higher."
+        },
+        {
+          "type": "paragraph",
+          "text": "35 Techniscope wides for interiors. Dutch a few degrees on the kill or the stare."
+        },
+        {
+          "type": "paragraph",
+          "text": "Foreground a black glove, a blade, or a fashion object. Prompt hyper-saturated primaries, implied black leather, Argento color crime, and beauty as the lighting on the face, not a slogan."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Gel the keys: red, green, cobalt through windows or colored glass, so the palette is primary, not pastel. Keep contrast high but chroma higher.35 Techniscope wides for interiors. Dutch a few degrees on the kill or the stare.Foreground a black glove, a blade, or a fashion object. Prompt hyper-saturated primaries, implied black leather, Argento color crime, and beauty as the lighting on the face, not a slogan."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a stylish interior has to turn hostile through color, a zoom, and a gloved hand. Do not use it as generic saturated horror or as noir with a red grade."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a stylish interior has to turn hostile through color, a zoom, and a gloved hand. Do not use it as generic saturated horror or as noir with a red grade."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Giallo is gelled primaries and fashion-threat. Film Noir is unfilled silver.",
+          "links": [
+            {
+              "text": "Giallo",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+            },
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hyper-Saturation is a grade; giallo is that grade plus zoom, dutch, and leather-glove blocking. Maximalism packs ornament; giallo often leaves chic negative space and stains it with one violent hue.",
+          "links": [
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            },
+            {
+              "text": "Maximalism",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/maximalism"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dutch Angle is a tilt. Giallo uses the tilt as one tool among gels and zooms.",
+          "links": [
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hyper-SaturationFeeling is louder than fact.",
+          "displayText": "Hyper-Saturation\nFeeling is louder than fact.",
+          "links": [
+            {
+              "text": "Hyper-SaturationFeeling is louder than fact.",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+          "displayText": "Dutch Angle\nThe world is off its axis. Do not use as decoration.",
+          "links": [
+            {
+              "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Giallo",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+        },
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        },
+        {
+          "text": "Maximalism",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/maximalism"
+        },
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "Hyper-SaturationFeeling is louder than fact.",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        },
+        {
+          "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ff7af3ff1afd93718ceacc3cdb976b00.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hyper-saturation.webp",
+          "alt": "Hyper-Saturation"
+        },
+        {
+          "kind": "image",
+          "path": "media/b87a1699cd3cd68781b68c037559849a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-angle-161-dutch-angle-mini.webp",
+          "alt": "Dutch Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/705061adfd657c913629f2fb72bc9a79.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/161-dutch-angle-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Giallo is gelled primaries and fashion-threat. Film Noir is unfilled silver.Hyper-Saturation is a grade; giallo is that grade plus zoom, dutch, and leather-glove blocking. Maximalism packs ornament; giallo often leaves chic negative space and stains it with one violent hue.Dutch Angle is a tilt. Giallo uses the tilt as one tool among gels and zooms.Hyper-SaturationFeeling is louder than fact.Dutch AngleThe world is off its axis. Do not use as decoration.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Suspiria (1977): colored glass as motivated key, dance-school architecture as a trap. Deep Red: zoomed inserts, primary interiors, investigation as fashion-horror."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Suspiria (1977): colored glass as motivated key, dance-school architecture as a trap. Deep Red: zoomed inserts, primary interiors, investigation as fashion-horror.Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Giallo look on [Subject], hyper-saturated primaries, gelled window key, black leather implied in the foreground, 35mm zoom threat, Argento color crime. Name the red, green, or cobalt source."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not prompt a black-and-white alley."
+        },
+        {
+          "type": "quote",
+          "text": "Giallo look on [Subject], hyper-saturated primaries, black leather gloves implied, Argento color crime, beauty as threat."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Giallo+look+on+[Subject],+hyper-saturated+primaries,+black+leather+gloves+implied,+Argento+color+crime,+beauty+as+threat."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Giallo look on [Subject], hyper-saturated primaries, gelled window key, black leather implied in the foreground, 35mm zoom threat, Argento color crime. Name the red, green, or cobalt source.Do not prompt a black-and-white alley.Copy promptUse in Image GeneratorGiallo look on [Subject], hyper-saturated primaries, black leather gloves implied, Argento color crime, beauty as threat.Giallo look on [Subject], hyper-saturated primaries, black leather gloves implied, Argento color crime, beauty as threat."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Film Noir or plain Hyper-Saturation: a fedora night, or a loud grade with no glove, no gelled window, and no zoom. The tell is teal-orange rain or even, pretty color with no threat axis.",
+          "links": [
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            },
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: pick one primary as the key, dutch or zoom toward the threat, and put a dark fashion object in the foreground."
+        }
+      ],
+      "links": [
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Film Noir or plain Hyper-Saturation: a fedora night, or a loud grade with no glove, no gelled window, and no zoom. The tell is teal-orange rain or even, pretty color with no threat axis.Fix: pick one primary as the key, dutch or zoom toward the threat, and put a dark fashion object in the foreground."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Giallo in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An Italian mystery-horror look: gelled primary color, fashion interiors, zooms, dutch angles, and stylized violence. The lighting is often glamorous. The threat arrives as a color and a glove."
+        },
+        {
+          "type": "heading",
+          "text": "Giallo vs Film Noir",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Noir withholds with black and wet silver streets. Giallo attacks with red, green, and cobalt in designed interiors. Both can dutch the camera. Only giallo treats a window gel as the murder weapon."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Giallo?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When horror has to look like a fashion spread until the glove enters. Skip it for silver crime, for future neon investigation, or for busy ornament that is not a threat."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Giallo for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Giallo look on [Subject], hyper-saturated primaries, gelled window key, black leather in the foreground, 35mm zoom implied. Name the primary. Do not ask for noir silver or a generic saturated grade."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Giallo in film?An Italian mystery-horror look: gelled primary color, fashion interiors, zooms, dutch angles, and stylized violence. The lighting is often glamorous. The threat arrives as a color and a glove.Giallo vs Film NoirNoir withholds with black and wet silver streets. Giallo attacks with red, green, and cobalt in designed interiors. Both can dutch the camera. Only giallo treats a window gel as the murder weapon.When should I use Giallo?When horror has to look like a fashion spread until the glove enters. Skip it for silver crime, for future neon investigation, or for busy ornament that is not a threat.How do I prompt Giallo for AI image or video?Write: Giallo look on [Subject], hyper-saturated primaries, gelled window key, black leather in the foreground, 35mm zoom implied. Name the primary. Do not ask for noir silver or a generic saturated grade."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Giallo look on [Subject], hyper-saturated primaries, gelled window key, black leather implied in the foreground, 35mm zoom threat, Argento color crime. Name the red, green, or cobalt source.",
+      "Do not prompt a black-and-white alley."
+    ],
+    "example": "Giallo look on [Subject], hyper-saturated primaries, black leather gloves implied, Argento color crime, beauty as threat."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/6fffff8a122580e32891c039dcb4e8c7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/giallo-look.webp",
+      "alt": "Giallo example"
+    },
+    {
+      "kind": "image",
+      "path": "media/ff7af3ff1afd93718ceacc3cdb976b00.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hyper-saturation.webp",
+      "alt": "Hyper-Saturation"
+    },
+    {
+      "kind": "image",
+      "path": "media/b87a1699cd3cd68781b68c037559849a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-angle-161-dutch-angle-mini.webp",
+      "alt": "Dutch Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/705061adfd657c913629f2fb72bc9a79.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/161-dutch-angle-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/d9d442947bf8df9de1e5758f4ea55de6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/giallo-look/hero.jpg",
+      "alt": "Giallo",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "0c41a2f91bed7acff4cbbb46353ee8c5bbf3068174457cdd3c9f72e290c66eb9"
+}

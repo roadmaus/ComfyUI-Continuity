@@ -1,0 +1,369 @@
+{
+  "id": "viral-looks/akrill",
+  "slug": "akrill",
+  "title": "Akrill",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/akrill",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/akrill.webp",
+  "detail": "details/viral-looks/akrill.json",
+  "aliases": [],
+  "description": "Akrill, the acrylic paint look, is pigment as a plastic skin on the world: thick ridges, poster edges, high chroma, paint that still looks wet. Color sits on top: if it soaked in, you shot a wash.",
+  "thumbnail": "media/67909b15296c2b3e96e4def9f50b2040.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pop, a kids' myth, a poster that came alive: graphic shapes, a face still modeled, wet highlights on the paint itself. Canvas is gallery oil."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ink riot is airborne liquid. Akrill is toy and poster matter."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a period oil portrait, and the wrong tool if the color went watercolor-thin. Acrylic should look like plastic paint."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Pop, a kids' myth, a poster that came alive: graphic shapes, a face still modeled, wet highlights on the paint itself. Canvas is gallery oil.Ink riot is airborne liquid. Akrill is toy and poster matter.It is the wrong tool for a period oil portrait, and the wrong tool if the color went watercolor-thin. Acrylic should look like plastic paint."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height, 35mm to 50mm, lock-off. Hard or hard-soft studio key so ridges catch a wet highlight."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for thick acrylic, high chroma, graphic shapes, modeled face. Prompt: Acrylic look on [Subject], thick plastic color, poster edges, paint that still looks wet."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Eye height, 35mm to 50mm, lock-off. Hard or hard-soft studio key so ridges catch a wet highlight.Ask for thick acrylic, high chroma, graphic shapes, modeled face. Prompt: Acrylic look on [Subject], thick plastic color, poster edges, paint that still looks wet."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pop, poster-come-alive, a toy myth. Do not use it for soaked-in watercolor or a period oil."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Pop, poster-come-alive, a toy myth. Do not use it for soaked-in watercolor or a period oil."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Canvas is gallery oil, bristle and tooth. Ink Riot is liquid in air.",
+          "links": [
+            {
+              "text": "Canvas",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+            },
+            {
+              "text": "Ink Riot",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/ink-riot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Akrill is thick plastic color sitting on the subject. Comic adds halftone.",
+          "links": [
+            {
+              "text": "Comic",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/comic"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Here the tell is ridges and candy chroma."
+        },
+        {
+          "type": "list-item",
+          "text": "CanvasThe stock is paint.",
+          "displayText": "Canvas\nThe stock is paint.",
+          "links": [
+            {
+              "text": "CanvasThe stock is paint.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Ink RiotThe image should spill.",
+          "displayText": "Ink Riot\nThe image should spill.",
+          "links": [
+            {
+              "text": "Ink RiotThe image should spill.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/ink-riot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Canvas",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+        },
+        {
+          "text": "Ink Riot",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/ink-riot"
+        },
+        {
+          "text": "Comic",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/comic"
+        },
+        {
+          "text": "CanvasThe stock is paint.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+        },
+        {
+          "text": "Ink RiotThe image should spill.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/ink-riot"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1d3244991bc2e19cddb76634840966ac.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/canvas.webp",
+          "alt": "Canvas"
+        },
+        {
+          "kind": "image",
+          "path": "media/4f2e0687488ed5fe069887e8841b9eaa.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ink-riot-ink-riot-mini.webp",
+          "alt": "Ink Riot"
+        },
+        {
+          "kind": "video",
+          "path": "media/710fb78f97a115252986da945497849b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ink-riot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Canvas is gallery oil, bristle and tooth. Ink Riot is liquid in air.Akrill is thick plastic color sitting on the subject. Comic adds halftone.Here the tell is ridges and candy chroma.CanvasThe stock is paint.Ink RiotThe image should spill.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dick Tracy's spot color and makeup sit on faces like poster pigment. Pop-art cinema treats paint as candy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the plastic color, not a frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Dick Tracy's spot color and makeup sit on faces like poster pigment. Pop-art cinema treats paint as candy.Borrow the plastic color, not a frame."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pigment on top, wet ridges. Acrylic look on [Subject], thick plastic color, poster edges, paint that still looks wet."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add hard key, high chroma, modeled face, wet highlights on the paint, no thin wash."
+        },
+        {
+          "type": "quote",
+          "text": "Acrylic look on [Subject], thick plastic color, poster edges, paint that still looks wet."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Acrylic+look+on+[Subject],+thick+plastic+color,+poster+edges,+paint+that+still+looks+wet."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Pigment on top, wet ridges. Acrylic look on [Subject], thick plastic color, poster edges, paint that still looks wet.Add hard key, high chroma, modeled face, wet highlights on the paint, no thin wash.Copy promptUse in Image GeneratorAcrylic look on [Subject], thick plastic color, poster edges, paint that still looks wet.Acrylic look on [Subject], thick plastic color, poster edges, paint that still looks wet."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Thin watercolor, or a mash with Canvas oil. The tell is soaked-in color and no ridges.",
+          "links": [
+            {
+              "text": "Canvas",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: thick acrylic, poster edges, wet plastic highlights."
+        }
+      ],
+      "links": [
+        {
+          "text": "Canvas",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong Thin watercolor, or a mash with Canvas oil. The tell is soaked-in color and no ridges.Fix it: thick acrylic, poster edges, wet plastic highlights."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Akrill in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An acrylic-matter look: thick plastic color, poster edges, wet pigment sitting on the world. It is paint as object, not a wash."
+        },
+        {
+          "type": "heading",
+          "text": "Akrill vs Canvas",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Canvas is oil and tooth, gallery stock. Akrill is acrylic ridges and poster chroma. If it looks like candy plastic, you are on akrill. If you see canvas weave, you wanted canvas."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Akrill?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Pop, toys, posters that come alive. Skip period oil and thin watercolor."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Akrill for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard key, then: Acrylic look on [Subject], thick plastic color, poster edges, paint that still looks wet. Demand ridges and wet highlights. Keep the face modeled."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Akrill in film?An acrylic-matter look: thick plastic color, poster edges, wet pigment sitting on the world. It is paint as object, not a wash.Akrill vs CanvasCanvas is oil and tooth, gallery stock. Akrill is acrylic ridges and poster chroma. If it looks like candy plastic, you are on akrill. If you see canvas weave, you wanted canvas.When should I use Akrill?Pop, toys, posters that come alive. Skip period oil and thin watercolor.How do I prompt Akrill for AI image or video?Hard key, then: Acrylic look on [Subject], thick plastic color, poster edges, paint that still looks wet. Demand ridges and wet highlights. Keep the face modeled."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Pigment on top, wet ridges. Acrylic look on [Subject], thick plastic color, poster edges, paint that still looks wet.",
+      "Add hard key, high chroma, modeled face, wet highlights on the paint, no thin wash."
+    ],
+    "example": "Acrylic look on [Subject], thick plastic color, poster edges, paint that still looks wet."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/67909b15296c2b3e96e4def9f50b2040.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/akrill.webp",
+      "alt": "Akrill example"
+    },
+    {
+      "kind": "image",
+      "path": "media/1d3244991bc2e19cddb76634840966ac.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/canvas.webp",
+      "alt": "Canvas"
+    },
+    {
+      "kind": "image",
+      "path": "media/4f2e0687488ed5fe069887e8841b9eaa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ink-riot-ink-riot-mini.webp",
+      "alt": "Ink Riot"
+    },
+    {
+      "kind": "video",
+      "path": "media/710fb78f97a115252986da945497849b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ink-riot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/5918ed331552a50745d3a40897ddd357.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/akrill/hero.jpg",
+      "alt": "Akrill",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "65d7b22e57b1aae2fc2b7670e4bbc0439ff42965e73d0481f49d14e1b64013a1"
+}

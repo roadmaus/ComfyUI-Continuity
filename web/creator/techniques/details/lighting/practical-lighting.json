@@ -1,0 +1,409 @@
+{
+  "id": "lighting/practical-lighting",
+  "slug": "practical-lighting",
+  "title": "Practical Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/practical-lighting",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/practical-lighting-065-practical-source-motivation-mini.webp",
+  "detail": "details/lighting/practical-lighting.json",
+  "aliases": [],
+  "description": "Practical lighting uses a visible or logically present light source within the set as a real contributor: lamps, neon, candles, screens. You see the fixture, and it (or a unit matching it) actually lights the face.",
+  "thumbnail": "media/e57ccee4dac77a8b92955074bb2f3c0a.webp",
+  "video": "media/1aa504cae7d8c87fc765f9694501981f.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/065-practical-source-motivation-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The set becomes the lighting department. A table lamp in the foreground, a TV, a diner sign: the audience believes the room because the source is in the shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mixed color temperatures are a feature, not a mistake. It is the wrong tool when the fixture is only set dressing and a frontal key from nowhere does the work."
+        },
+        {
+          "type": "paragraph",
+          "text": "A dark lamp in frame with a face lit from camera is a lie. If the lamp is off-screen but implied, you have shifted toward motivated lighting.",
+          "links": [
+            {
+              "text": "motivated lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "motivated lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The set becomes the lighting department. A table lamp in the foreground, a TV, a diner sign: the audience believes the room because the source is in the shot.Mixed color temperatures are a feature, not a mistake. It is the wrong tool when the fixture is only set dressing and a frontal key from nowhere does the work.A dark lamp in frame with a face lit from camera is a lie. If the lamp is off-screen but implied, you have shifted toward motivated lighting."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put working fixtures in frame, often brighter than a real living room so they expose on camera. Control them with bulbs, dimmers, and flags."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness is whatever the shade allows: a bare bulb is hard; a cloth shade is softer. Color is mixed on purpose: tungsten 2700 to 3200K, neon magenta or cyan, screens cooler."
+        },
+        {
+          "type": "paragraph",
+          "text": "You may hide a small unit in the same shade. Prompt: Practical lighting on [Subject] from visible lamps, neon, candles, or screens in frame, mixed color temperatures, no hidden movie lights."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put working fixtures in frame, often brighter than a real living room so they expose on camera. Control them with bulbs, dimmers, and flags.Hardness is whatever the shade allows: a bare bulb is hard; a cloth shade is softer. Color is mixed on purpose: tungsten 2700 to 3200K, neon magenta or cyan, screens cooler.You may hide a small unit in the same shade. Prompt: Practical lighting on [Subject] from visible lamps, neon, candles, or screens in frame, mixed color temperatures, no hidden movie lights."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the set should light the face, a night apartment, a bar, a car dash. Do not leave dead props in frame while a beauty key does the real job."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the set should light the face, a night apartment, a bar, a car dash. Do not leave dead props in frame while a beauty key does the real job."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Motivated lighting can hide units that match a source; practicals are the sources you see. Candlelight is a specific small warm practical with fast falloff.",
+          "links": [
+            {
+              "text": "Motivated lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            },
+            {
+              "text": "Candlelight",
+              "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Neon practicals are a color-and-sign subset. Available light might include existing fixtures but forbids adding them.",
+          "links": [
+            {
+              "text": "Neon practicals",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            },
+            {
+              "text": "Available light",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Window light is often a practical architecture plus sky.",
+          "links": [
+            {
+              "text": "Window light",
+              "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Motivated LightingRealism with control. Light like a world, not a studio.",
+          "displayText": "Motivated Lighting\nRealism with control. Light like a world, not a studio.",
+          "links": [
+            {
+              "text": "Motivated LightingRealism with control. Light like a world, not a studio.",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CandlelightPeriod night or ritual.",
+          "displayText": "Candlelight\nPeriod night or ritual.",
+          "links": [
+            {
+              "text": "CandlelightPeriod night or ritual.",
+              "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Motivated lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Candlelight",
+          "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+        },
+        {
+          "text": "Neon practicals",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "Available light",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Window light",
+          "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+        },
+        {
+          "text": "Motivated LightingRealism with control. Light like a world, not a studio.",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "CandlelightPeriod night or ritual.",
+          "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/72b4a8abf049e156a7fe62f44ecbdf57.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motivated-lighting.webp",
+          "alt": "Motivated Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/63d3a366e4a80f088428e87b46d5c969.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/candlelight-066-candlelit-naturalism-mini.webp",
+          "alt": "Candlelight"
+        },
+        {
+          "kind": "video",
+          "path": "media/ca4aadaa8863da5b4b9ea93abb6843f2.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/066-candlelit-naturalism-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Motivated lighting can hide units that match a source; practicals are the sources you see. Candlelight is a specific small warm practical with fast falloff.Neon practicals are a color-and-sign subset. Available light might include existing fixtures but forbids adding them.Window light is often a practical architecture plus sky.Motivated LightingRealism with control. Light like a world, not a studio.CandlelightPeriod night or ritual.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Barry Lyndon puts flame in frame as the logic of night. In the Mood for Love and Blade Runner 2049 let lamps, neon, and screens in the set do visible work on faces."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fixture is part of the composition, not only the plot."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Barry Lyndon puts flame in frame as the logic of night. In the Mood for Love and Blade Runner 2049 let lamps, neon, and screens in the set do visible work on faces.The fixture is part of the composition, not only the plot."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Show the lamp and let it work. Use: \"Practical lighting on [Subject] from visible lamps, neon, candles, or screens in frame, mixed color temperatures, no hidden movie lights.\" Name which fixture is the key and its color."
+        },
+        {
+          "type": "quote",
+          "text": "Practical lighting on [Subject] from visible lamps, neon, candles, or screens in frame, mixed color temperatures, no hidden movie lights."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Practical+lighting+on+[Subject]+from+visible+lamps,+neon,+candles,+or+screens+in+frame,+mixed+color+temperatures,+no+hidden+movie+lights."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Show the lamp and let it work. Use: \"Practical lighting on [Subject] from visible lamps, neon, candles, or screens in frame, mixed color temperatures, no hidden movie lights.\" Name which fixture is the key and its color.Copy promptUse in Image GeneratorPractical lighting on [Subject] from visible lamps, neon, candles, or screens in frame, mixed color temperatures, no hidden movie lights.Practical lighting on [Subject] from visible lamps, neon, candles, or screens in frame, mixed color temperatures, no hidden movie lights."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a dummy lamp plus an off-screen key. The tell is a dark shade and a face lit from the camera.",
+          "links": [
+            {
+              "text": "key",
+              "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by turning the practical up (or matching a hidden unit inside it) and killing the orphan frontal."
+        }
+      ],
+      "links": [
+        {
+          "text": "key",
+          "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a dummy lamp plus an off-screen key. The tell is a dark shade and a face lit from the camera.Fix it by turning the practical up (or matching a hidden unit inside it) and killing the orphan frontal."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is practical lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Using visible set fixtures as real lights: lamps, neon, candles, screens. The source is in the world of the shot and it contributes exposure."
+        },
+        {
+          "type": "heading",
+          "text": "Practical lighting vs motivated lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Practicals are the fixtures you see. Motivated lighting is the matching logic, which can include hidden units that imitate a window or lamp."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use practical lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the room should visibly light the people. Skip dummy lamps that do not expose."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt practical lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name visible lamps, neon, candles, or screens as the keys, mixed color temperatures, no hidden movie lights. Say which fixture hits the face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is practical lighting in film?Using visible set fixtures as real lights: lamps, neon, candles, screens. The source is in the world of the shot and it contributes exposure.Practical lighting vs motivated lightingPracticals are the fixtures you see. Motivated lighting is the matching logic, which can include hidden units that imitate a window or lamp.When should I use practical lighting?Use it when the room should visibly light the people. Skip dummy lamps that do not expose.How do I prompt practical lighting for AI image or video?Name visible lamps, neon, candles, or screens as the keys, mixed color temperatures, no hidden movie lights. Say which fixture hits the face."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Show the lamp and let it work. Use: \"Practical lighting on [Subject] from visible lamps, neon, candles, or screens in frame, mixed color temperatures, no hidden movie lights.\" Name which fixture is the key and its color."
+    ],
+    "example": "Practical lighting on [Subject] from visible lamps, neon, candles, or screens in frame, mixed color temperatures, no hidden movie lights."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/1aa504cae7d8c87fc765f9694501981f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/065-practical-source-motivation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e57ccee4dac77a8b92955074bb2f3c0a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/practical-lighting-065-practical-source-motivation-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7960285606b43241cd1a2b4f1764d56f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/practical-lighting.jpg",
+      "alt": "Practical Lighting frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/72b4a8abf049e156a7fe62f44ecbdf57.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motivated-lighting.webp",
+      "alt": "Motivated Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/63d3a366e4a80f088428e87b46d5c969.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/candlelight-066-candlelit-naturalism-mini.webp",
+      "alt": "Candlelight"
+    },
+    {
+      "kind": "video",
+      "path": "media/ca4aadaa8863da5b4b9ea93abb6843f2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/066-candlelit-naturalism-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/2e99446e6bc2f46b96436e1d5c74e063.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/practical-lighting/hero.jpg",
+      "alt": "Practical Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "c43e375fefdd61ccdf03cb5a26911dbd23c644ec6885473c9ae69488a63c22f9"
+}

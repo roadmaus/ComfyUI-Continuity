@@ -1,0 +1,424 @@
+{
+  "id": "genre-looks/video-game",
+  "slug": "video-game",
+  "title": "Video Game",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/video-game",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/video-game-video-game-mini.webp",
+  "detail": "details/genre-looks/video-game.json",
+  "aliases": [],
+  "description": "Video game cinematography uses playable camera logic: a follow cam, an isometric view, or an FPS eyeline, with space readable as a level and a HUD implied. Collision, boom height, and pathing constrain the lens the way a game engine would.",
+  "thumbnail": "media/cc466960f60cd3e61df21437f741fe05.webp",
+  "video": "media/095bd1cd39fbd09d3f9223ba9e781bfd.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/video-game-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The world is playable. A character moves and the camera booms behind at a fixed height, or the map is seen at 45 degrees, or we look through a reticle."
+        },
+        {
+          "type": "paragraph",
+          "text": "Collectible space, ledges, and arenas matter. A HUD may sit in the glass."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Pixel Art unless the level is also tiled. It is not FPV Drone (a real or simulated racing drone through a physical world).",
+          "links": [
+            {
+              "text": "Pixel Art",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+            },
+            {
+              "text": "FPV Drone",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not photoreal live action with a fake reticle slapped on. The camera must behave like a game camera."
+        }
+      ],
+      "links": [
+        {
+          "text": "Pixel Art",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+        },
+        {
+          "text": "FPV Drone",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The world is playable. A character moves and the camera booms behind at a fixed height, or the map is seen at 45 degrees, or we look through a reticle.Collectible space, ledges, and arenas matter. A HUD may sit in the glass.It is not Pixel Art unless the level is also tiled. It is not FPV Drone (a real or simulated racing drone through a physical world).It is not photoreal live action with a fake reticle slapped on. The camera must behave like a game camera."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pick the logic: third-person follow (boom 2 to 3 meters, lag, collision), isometric 45-degree orthographic, or FPS. Keep the path readable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add a HUD only if the beat is play, not if it is a movie cover of a game. Motion: analog stick ease, not a film dolly's ease."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt follow cam or isometric logic, HUD implied, space as a level."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Pick the logic: third-person follow (boom 2 to 3 meters, lag, collision), isometric 45-degree orthographic, or FPS. Keep the path readable.Add a HUD only if the beat is play, not if it is a movie cover of a game. Motion: analog stick ease, not a film dolly's ease.Prompt follow cam or isometric logic, HUD implied, space as a level."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when space must feel playable. Do not use it as a skin on a normal coverage scene, and do not reduce it to chunky pixels unless the game is pixel-art."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when space must feel playable. Do not use it as a skin on a normal coverage scene, and do not reduce it to chunky pixels unless the game is pixel-art."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Video Game is engine-like camera logic. Pixel Art is sampling.",
+          "links": [
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            },
+            {
+              "text": "Pixel Art",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "FPV Drone is a physical flying camera through real space. Animation may render a game, or not.",
+          "links": [
+            {
+              "text": "FPV Drone",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            },
+            {
+              "text": "Animation",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera dollies like a film crew and there is no follow, iso, or FPS constraint, it is not this look."
+        },
+        {
+          "type": "list-item",
+          "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "displayText": "FPV Drone\nImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "links": [
+            {
+              "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pixel ArtThe world is tiles.",
+          "displayText": "Pixel Art\nThe world is tiles.",
+          "links": [
+            {
+              "text": "Pixel ArtThe world is tiles.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "Pixel Art",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+        },
+        {
+          "text": "FPV Drone",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "Animation",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        },
+        {
+          "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "Pixel ArtThe world is tiles.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+          "alt": "FPV Drone"
+        },
+        {
+          "kind": "video",
+          "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/adf6b729f06ea45773c8a8d952f4eaf4.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pixel-art.webp",
+          "alt": "Pixel Art"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Video Game is engine-like camera logic. Pixel Art is sampling.FPV Drone is a physical flying camera through real space. Animation may render a game, or not.If the camera dollies like a film crew and there is no follow, iso, or FPS constraint, it is not this look.FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.Pixel ArtThe world is tiles.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Free Guy (a life inside a game's follow-cam and HUD logic). Scott Pilgrim vs."
+        },
+        {
+          "type": "paragraph",
+          "text": "the World (fight space, UI, and level logic inside live action). Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Free Guy (a life inside a game's follow-cam and HUD logic). Scott Pilgrim vs.the World (fight space, UI, and level logic inside live action). Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Video-game camera on [Subject], follow cam or isometric logic, HUD implied, space as a level, boom height locked, path readable. Name the camera type."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not describe a film dolly unless the game would dolly."
+        },
+        {
+          "type": "quote",
+          "text": "Video-game camera on [Subject], follow cam or isometric logic, HUD implied, space as a level."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Video-game+camera+on+[Subject],+follow+cam+or+isometric+logic,+HUD+implied,+space+as+a+level."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Video-game camera on [Subject], follow cam or isometric logic, HUD implied, space as a level, boom height locked, path readable. Name the camera type.Do not describe a film dolly unless the game would dolly.Copy promptUse in Image GeneratorVideo-game camera on [Subject], follow cam or isometric logic, HUD implied, space as a level.Video-game camera on [Subject], follow cam or isometric logic, HUD implied, space as a level."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Pixel Art or a film Follow Shot shot with a reticle overlay. The tell is continuous film blocking, or tiles you did not want.",
+          "links": [
+            {
+              "text": "Pixel Art",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+            },
+            {
+              "text": "Follow Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: lock boom height or isometric angle, make the path a level, and let the camera collide or lag like an engine."
+        }
+      ],
+      "links": [
+        {
+          "text": "Pixel Art",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+        },
+        {
+          "text": "Follow Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Pixel Art or a film Follow Shot shot with a reticle overlay. The tell is continuous film blocking, or tiles you did not want.Fix: lock boom height or isometric angle, make the path a level, and let the camera collide or lag like an engine."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Video Game in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A look that borrows playable camera logic: follow cam, isometric, or FPS, with space as a level and often a HUD. The lens is constrained like an engine, not like a film crew."
+        },
+        {
+          "type": "heading",
+          "text": "Video Game vs Pixel Art",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Pixel art is how the image is sampled. Video-game cinematography is how the camera is allowed to move through a playable space. A game look can be 3D and continuous. Pixel art cannot hide its tiles."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Video Game?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the beat is play: a level, a follow, a HUD, a boss arena. Skip it for a normal coverage scene with a fake overlay, for drone FPV, or for pixel tiles that are not in the brief."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Video Game for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Video-game camera on [Subject], follow cam or isometric logic, HUD implied, space as a level. Name boom height or the 45-degree view. Do not describe a film dolly by default."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Video Game in film?A look that borrows playable camera logic: follow cam, isometric, or FPS, with space as a level and often a HUD. The lens is constrained like an engine, not like a film crew.Video Game vs Pixel ArtPixel art is how the image is sampled. Video-game cinematography is how the camera is allowed to move through a playable space. A game look can be 3D and continuous. Pixel art cannot hide its tiles.When should I use Video Game?When the beat is play: a level, a follow, a HUD, a boss arena. Skip it for a normal coverage scene with a fake overlay, for drone FPV, or for pixel tiles that are not in the brief.How do I prompt Video Game for AI image or video?Write: Video-game camera on [Subject], follow cam or isometric logic, HUD implied, space as a level. Name boom height or the 45-degree view. Do not describe a film dolly by default."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Video-game camera on [Subject], follow cam or isometric logic, HUD implied, space as a level, boom height locked, path readable. Name the camera type.",
+      "Do not describe a film dolly unless the game would dolly."
+    ],
+    "example": "Video-game camera on [Subject], follow cam or isometric logic, HUD implied, space as a level."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/095bd1cd39fbd09d3f9223ba9e781bfd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/video-game-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cc466960f60cd3e61df21437f741fe05.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/video-game-video-game-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fd58668af056226c16d8336c79e90e29.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/video-game.jpg",
+      "alt": "Video Game frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+      "alt": "FPV Drone"
+    },
+    {
+      "kind": "video",
+      "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/adf6b729f06ea45773c8a8d952f4eaf4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pixel-art.webp",
+      "alt": "Pixel Art"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/c34b78ec79a689739576d37945b640e5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/video-game/hero.jpg",
+      "alt": "Video Game",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "71d5bbf8cb53319222234e721a8214086b6a1d1f64161ad423be2b28af7c49a3"
+}

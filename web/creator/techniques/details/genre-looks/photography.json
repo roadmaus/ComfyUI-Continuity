@@ -1,0 +1,414 @@
+{
+  "id": "genre-looks/photography",
+  "slug": "photography",
+  "title": "Photography",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/photography",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/photography.webp",
+  "detail": "details/genre-looks/photography.json",
+  "aliases": [],
+  "description": "Photographic cinematography treats the movie as a print: a single decisive frame, posed or found light, often Centered Composition or Tableau blocking, with the camera pretending it could hang on a wall. Motion is allowed, but the still is the law.",
+  "thumbnail": "media/899261eaa688c60cb47a0aae1dbd24e2.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hold. This is the picture."
+        },
+        {
+          "type": "paragraph",
+          "text": "A candlelit room is arranged like a painting. A river still is exposed for the sky."
+        },
+        {
+          "type": "paragraph",
+          "text": "People occupy the frame as if a shutter, not a scene, were about to close. It is close to Arthouse patience but not the same.",
+          "links": [
+            {
+              "text": "Arthouse",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Arthouse may be empty, slightly ugly, and long. Photography wants the print: a chosen moment, shaped light, a composition that would survive without time."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera hunts, you have left the still."
+        }
+      ],
+      "links": [
+        {
+          "text": "Arthouse",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Hold. This is the picture.A candlelit room is arranged like a painting. A river still is exposed for the sky.People occupy the frame as if a shutter, not a scene, were about to close. It is close to Arthouse patience but not the same.Arthouse may be empty, slightly ugly, and long. Photography wants the print: a chosen moment, shaped light, a composition that would survive without time.If the camera hunts, you have left the still."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tripod. One frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pose the bodies or wait for a still gesture. Light as a stills photographer would: window, candle, or a single shaped key, not a moving TV-style fill."
+        },
+        {
+          "type": "paragraph",
+          "text": "35mm to 85mm, sometimes a zoom used as a stills crop (as in Barry Lyndon). Prompt still-photography grammar, a single decisive frame, posed light, the movie pretending to be a print."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Tripod. One frame.Pose the bodies or wait for a still gesture. Light as a stills photographer would: window, candle, or a single shaped key, not a moving TV-style fill.35mm to 85mm, sometimes a zoom used as a stills crop (as in Barry Lyndon). Prompt still-photography grammar, a single decisive frame, posed light, the movie pretending to be a print."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the beat is a picture, not a passage. Do not use it for coverage that must cut, or for empty duration that refuses to compose."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the beat is a picture, not a passage. Do not use it for coverage that must cut, or for empty duration that refuses to compose."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Photography is the print as grammar. Tableau is staged group composition.",
+          "links": [
+            {
+              "text": "Photography",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/photography"
+            },
+            {
+              "text": "Tableau",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Centered Composition is a placement rule. Arthouse may refuse the decisive moment.",
+          "links": [
+            {
+              "text": "Centered Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            },
+            {
+              "text": "Arthouse",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Static Locked-Off is only the locked head. A photographically lit moving shot can still be this look if every frame could hang.",
+          "links": [
+            {
+              "text": "Static Locked-Off",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A locked empty hold with odd headroom is arthouse first."
+        },
+        {
+          "type": "list-item",
+          "text": "TableauHold the arrangement.",
+          "displayText": "Tableau\nHold the arrangement.",
+          "links": [
+            {
+              "text": "TableauHold the arrangement.",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "displayText": "Centered Composition\nControl, ritual, comedy, or fate.",
+          "links": [
+            {
+              "text": "Centered CompositionControl, ritual, comedy, or fate.",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Photography",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/photography"
+        },
+        {
+          "text": "Tableau",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "Centered Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Arthouse",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+        },
+        {
+          "text": "Static Locked-Off",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+        },
+        {
+          "text": "TableauHold the arrangement.",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a93c30aeb2ed5bcd737dc27a09898a53.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tableau.webp",
+          "alt": "Tableau"
+        },
+        {
+          "kind": "image",
+          "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+          "alt": "Centered Composition"
+        },
+        {
+          "kind": "video",
+          "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Photography is the print as grammar. Tableau is staged group composition.Centered Composition is a placement rule. Arthouse may refuse the decisive moment.Static Locked-Off is only the locked head. A photographically lit moving shot can still be this look if every frame could hang.A locked empty hold with odd headroom is arthouse first.TableauHold the arrangement.Centered CompositionControl, ritual, comedy, or fate.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Barry Lyndon (candlelit stills, zoom as a painter's crop). The New World (natural light, frames that behave like exposed plates)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Barry Lyndon (candlelit stills, zoom as a painter's crop). The New World (natural light, frames that behave like exposed plates).Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Still-photography grammar on [Subject], a single decisive frame, posed or window light, tripod, the movie pretending to be a print. Name the print logic (candle tableau, river still, posed portrait)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a hunting zoom or a rim that only exists for motion."
+        },
+        {
+          "type": "quote",
+          "text": "Still-photography grammar on [Subject], a single decisive frame, posed light, the movie pretending to be a print."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Still-photography+grammar+on+[Subject],+a+single+decisive+frame,+posed+light,+the+movie+pretending+to+be+a+print."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Still-photography grammar on [Subject], a single decisive frame, posed or window light, tripod, the movie pretending to be a print. Name the print logic (candle tableau, river still, posed portrait).Do not add a hunting zoom or a rim that only exists for motion.Copy promptUse in Image GeneratorStill-photography grammar on [Subject], a single decisive frame, posed light, the movie pretending to be a print.Still-photography grammar on [Subject], a single decisive frame, posed light, the movie pretending to be a print."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Arthouse emptiness or a moving coverage scene: odd unused air, or a walk-and-talk. The tell is a frame that would not survive as a still, or a camera that hunts.",
+          "links": [
+            {
+              "text": "Arthouse",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: lock, compose as a print, and shape one light."
+        }
+      ],
+      "links": [
+        {
+          "text": "Arthouse",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Arthouse emptiness or a moving coverage scene: odd unused air, or a walk-and-talk. The tell is a frame that would not survive as a still, or a camera that hunts.Fix: lock, compose as a print, and shape one light."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Photography in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A look that treats motion pictures as prints: decisive framing, posed or found stills light, often tableau or centered, with the camera behaving like a shutter rather than like coverage."
+        },
+        {
+          "type": "heading",
+          "text": "Photography vs Arthouse",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Both may lock the camera. Arthouse uses duration and empty air, even if the still is imperfect. Photography wants a picture that could hang: posed light, a chosen moment. One waits. The other composes."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Photography?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the beat is a still: a portrait, a landscape plate, a candlelit tableau. Skip it for hunting vérité, for jump-cut streets, or for empty holds that refuse to compose."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Photography for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Still-photography grammar on [Subject], a single decisive frame, posed light, tripod, the movie pretending to be a print. Name the print type. Do not add a hunting camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Photography in film?A look that treats motion pictures as prints: decisive framing, posed or found stills light, often tableau or centered, with the camera behaving like a shutter rather than like coverage.Photography vs ArthouseBoth may lock the camera. Arthouse uses duration and empty air, even if the still is imperfect. Photography wants a picture that could hang: posed light, a chosen moment. One waits. The other composes.When should I use Photography?When the beat is a still: a portrait, a landscape plate, a candlelit tableau. Skip it for hunting vérité, for jump-cut streets, or for empty holds that refuse to compose.How do I prompt Photography for AI image or video?Write: Still-photography grammar on [Subject], a single decisive frame, posed light, tripod, the movie pretending to be a print. Name the print type. Do not add a hunting camera."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Still-photography grammar on [Subject], a single decisive frame, posed or window light, tripod, the movie pretending to be a print. Name the print logic (candle tableau, river still, posed portrait).",
+      "Do not add a hunting zoom or a rim that only exists for motion."
+    ],
+    "example": "Still-photography grammar on [Subject], a single decisive frame, posed light, the movie pretending to be a print."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/899261eaa688c60cb47a0aae1dbd24e2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/photography.webp",
+      "alt": "Photography example"
+    },
+    {
+      "kind": "image",
+      "path": "media/a93c30aeb2ed5bcd737dc27a09898a53.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tableau.webp",
+      "alt": "Tableau"
+    },
+    {
+      "kind": "image",
+      "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+      "alt": "Centered Composition"
+    },
+    {
+      "kind": "video",
+      "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/dcf812c3edd77afa460051b67df0f836.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/photography/hero.jpg",
+      "alt": "Photography",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "0ad3cafb825cc91ef77d0ef92b4be948703aae80bc134a79b4a300c84dc29843"
+}

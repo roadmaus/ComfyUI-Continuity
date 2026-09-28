@@ -1,0 +1,405 @@
+{
+  "id": "effects/photogrammetry",
+  "slug": "photogrammetry",
+  "title": "Photogrammetry",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/photogrammetry",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/photogrammetry-photogrammetry-mini.webp",
+  "detail": "details/effects/photogrammetry.json",
+  "aliases": [
+    "Gravitational lensing",
+    "Simulation-led imagery"
+  ],
+  "description": "The photogrammetry look reconstructs 3D geometry and texture from overlapping photographs, so a real place is turned into a scanned mesh. Slightly wrong normals, stretched texture, and holes are the evidence of capture.",
+  "thumbnail": "media/957a017589c7b51a4d5760fff297fe41.webp",
+  "video": "media/49e95e6615363ed1518e87b33735818a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/photogrammetry-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The camera can orbit a courtyard that was photographed, not built. Faces of stone look photographed because they were, then wrapped onto geometry."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the scene should feel surveyed: a real site captured as a model. It is the wrong tool for a handmade miniature, and it is not proof of a physics simulation."
+        },
+        {
+          "type": "paragraph",
+          "text": "A black-hole visualization is simulation-led imagery, a cousin name in the catalog, not a scan."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The camera can orbit a courtyard that was photographed, not built. Faces of stone look photographed because they were, then wrapped onto geometry.Use it when the scene should feel surveyed: a real site captured as a model. It is the wrong tool for a handmade miniature, and it is not proof of a physics simulation.A black-hole visualization is simulation-led imagery, a cousin name in the catalog, not a scan."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shoot many overlapping stills around the subject, triangulate a mesh, project the photographs as texture. The look: texture stretching at grazing angles, missing undersides, a seam where coverage failed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Light can be the captured light, or a new CG key on the mesh. The camera path is free because the space is geometry."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a photogrammetry look: scanned space, slightly wrong mesh, a real place turned into a model."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Shoot many overlapping stills around the subject, triangulate a mesh, project the photographs as texture. The look: texture stretching at grazing angles, missing undersides, a seam where coverage failed.Light can be the captured light, or a new CG key on the mesh. The camera path is free because the space is geometry.Prompt a photogrammetry look: scanned space, slightly wrong mesh, a real place turned into a model."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when a real location should be inspectable as a model, slightly too virtual. Do not use it to claim a scientific render is a scan."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when a real location should be inspectable as a model, slightly too virtual. Do not use it to claim a scientific render is a scan."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Diorama is a built miniature with model lighting. Photogrammetry is photographed reality wrapped on a mesh.",
+          "links": [
+            {
+              "text": "Diorama",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Video Game uses engine lighting and authored assets. The photogrammetry look keeps photo texture and scan error.",
+          "links": [
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DioramaShrink the epic until it fits a shelf.",
+          "displayText": "Diorama\nShrink the epic until it fits a shelf.",
+          "links": [
+            {
+              "text": "DioramaShrink the epic until it fits a shelf.",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Video GameThe world is playable.",
+          "displayText": "Video Game\nThe world is playable.",
+          "links": [
+            {
+              "text": "Video GameThe world is playable.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Diorama",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        },
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "DioramaShrink the epic until it fits a shelf.",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        },
+        {
+          "text": "Video GameThe world is playable.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/181d3dd7ea713bbb349f3475266cdf7f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diorama-diorama-mini.webp",
+          "alt": "Diorama"
+        },
+        {
+          "kind": "video",
+          "path": "media/4a23017cfb59808a2d3cee76a9fc5a28.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/diorama-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/cc466960f60cd3e61df21437f741fe05.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/video-game-video-game-mini.webp",
+          "alt": "Video Game"
+        },
+        {
+          "kind": "video",
+          "path": "media/095bd1cd39fbd09d3f9223ba9e781bfd.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/video-game-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Diorama is a built miniature with model lighting. Photogrammetry is photographed reality wrapped on a mesh.Video Game uses engine lighting and authored assets. The photogrammetry look keeps photo texture and scan error.DioramaShrink the epic until it fits a shelf.Video GameThe world is playable.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Experimental documentaries and game cutscenes orbit scanned spaces. Interstellar is listed beside them as simulation-led imagery (Gargantua's computed disk), a cousin of modeled pictures, not a photogrammetric mesh."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the scan look for places. Use simulation when the phenomenon was computed."
+        },
+        {
+          "type": "list-item",
+          "text": "Interstellar 2014Gargantua and its gravitationally lensed accretion-disk imagery.",
+          "displayText": "Interstellar 2014\nGargantua and its gravitationally lensed accretion-disk imagery."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Experimental documentaries and game cutscenes orbit scanned spaces. Interstellar is listed beside them as simulation-led imagery (Gargantua's computed disk), a cousin of modeled pictures, not a photogrammetric mesh.Use the scan look for places. Use simulation when the phenomenon was computed.Interstellar 2014Gargantua and its gravitationally lensed accretion-disk imagery."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Photogrammetry look of [Subject], scanned space, slightly wrong mesh, a real place turned into a model. Name overlapping-photo texture, a hole or stretch, and an orbit or inspection camera."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban a toy diorama and ban a perfect game render."
+        },
+        {
+          "type": "quote",
+          "text": "Create a visualization concept for a spinning black hole with an accretion disk appearing lensed around the dark central region. Use a validated ray-traced simulation as the geometric reference and preserve its major contours. Label this as a cinematic visualization, not a newly computed scientific result."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Create+a+visualization+concept+for+a+spinning+black+hole+with+an+accretion+disk+appearing+lensed+around+the+dark+central+region.+Use+a+validated+ray-traced+simulation+as+the+geometric+reference+and+preserve+its+major+contours.+Label+this+as+a+cinematic+visualization,+not+a+newly+computed+scientific+result."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Photogrammetry look of [Subject], scanned space, slightly wrong mesh, a real place turned into a model. Name overlapping-photo texture, a hole or stretch, and an orbit or inspection camera.Ban a toy diorama and ban a perfect game render.Copy promptUse in Video GeneratorCreate a visualization concept for a spinning black hole with an accretion disk appearing lensed around the dark central region. Use a validated ray-traced simulation as the geometric reference and preserve its major contours. Label this as a cinematic visualization, not a newly computed scientific result.Create a visualization concept for a spinning black hole with an accretion disk appearing lensed around the dark central region. Use a validated ray-traced simulation as the geometric reference and preserve its major contours. Label this as a cinematic visualization, not a newly computed scientific result."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousins are a Diorama and a clean engine render. The tell is painted miniature charm, or PBR plastic with no photo texture.",
+          "links": [
+            {
+              "text": "Diorama",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is photographic skin on imperfect geometry, seams included."
+        }
+      ],
+      "links": [
+        {
+          "text": "Diorama",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousins are a Diorama and a clean engine render. The tell is painted miniature charm, or PBR plastic with no photo texture.The fix is photographic skin on imperfect geometry, seams included."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is photogrammetry in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Photogrammetry reconstructs 3D geometry and texture from overlapping photographs. The look is a real place turned into a scanned mesh, often with slight error."
+        },
+        {
+          "type": "heading",
+          "text": "Photogrammetry vs diorama",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A diorama is built at miniature scale. Photogrammetry starts from photographs of a real site and wraps them on computed geometry. One is a model you light. The other is a survey you inspect."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use photogrammetry?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a location should read as captured and then modeled, inspectable, slightly wrong. Skip it for handmade miniatures or for computed phenomena that were never photographed."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt photogrammetry for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Photogrammetry look of [Subject], scanned space, slightly wrong mesh. Demand photo texture, stretch or holes, and a camera that can orbit the model."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is photogrammetry in film?Photogrammetry reconstructs 3D geometry and texture from overlapping photographs. The look is a real place turned into a scanned mesh, often with slight error.Photogrammetry vs dioramaA diorama is built at miniature scale. Photogrammetry starts from photographs of a real site and wraps them on computed geometry. One is a model you light. The other is a survey you inspect.When should I use photogrammetry?Use it when a location should read as captured and then modeled, inspectable, slightly wrong. Skip it for handmade miniatures or for computed phenomena that were never photographed.How do I prompt photogrammetry for AI image or video?Write Photogrammetry look of [Subject], scanned space, slightly wrong mesh. Demand photo texture, stretch or holes, and a camera that can orbit the model."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Photogrammetry look of [Subject], scanned space, slightly wrong mesh, a real place turned into a model. Name overlapping-photo texture, a hole or stretch, and an orbit or inspection camera.",
+      "Ban a toy diorama and ban a perfect game render."
+    ],
+    "example": "Create a visualization concept for a spinning black hole with an accretion disk appearing lensed around the dark central region. Use a validated ray-traced simulation as the geometric reference and preserve its major contours. Label this as a cinematic visualization, not a newly computed scientific result."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/49e95e6615363ed1518e87b33735818a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/photogrammetry-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/957a017589c7b51a4d5760fff297fe41.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/photogrammetry-photogrammetry-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8dfde3a92861d2de425c681bb63fe4f5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/photogrammetry.jpg",
+      "alt": "Photogrammetry frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/181d3dd7ea713bbb349f3475266cdf7f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diorama-diorama-mini.webp",
+      "alt": "Diorama"
+    },
+    {
+      "kind": "video",
+      "path": "media/4a23017cfb59808a2d3cee76a9fc5a28.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/diorama-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cc466960f60cd3e61df21437f741fe05.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/video-game-video-game-mini.webp",
+      "alt": "Video Game"
+    },
+    {
+      "kind": "video",
+      "path": "media/095bd1cd39fbd09d3f9223ba9e781bfd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/video-game-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d9950733b2956b17800ee1f86cd5eb58.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/photogrammetry/hero.jpg",
+      "alt": "Photogrammetry",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "d5f468681332ce4f80730eaca01c7b2f1dfeb2a86f465e9299d2b0ccd5759b25"
+}

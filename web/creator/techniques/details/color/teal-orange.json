@@ -1,0 +1,424 @@
+{
+  "id": "color/teal-orange",
+  "slug": "teal-orange",
+  "title": "Teal and Orange",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/teal-orange",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+  "detail": "details/color/teal-orange.json",
+  "aliases": [],
+  "description": "A teal and orange color grade pushes shadows and often skies toward cyan-teal while keeping skin and warm sources in the orange half of the wheel. It is a complementary split with faces protected, not a silver-retention process and not a general cool wash.",
+  "thumbnail": "media/8024e05302f03abdeb0207516678a536.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Skin stays peach or tan. Asphalt, night air, and foliage slide toward teal."
+        },
+        {
+          "type": "paragraph",
+          "text": "Explosions, practicals, and desert sand sit on the orange side. The split is why contemporary studio action reads as punchy: complementary colors vibrate, and the audience still finds a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the world should be drained, metallic, and merciless. That is Bleach Bypass, which crushes chroma and raises contrast instead of parking hues on a complementary axis.",
+          "links": [
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool if you wanted an overall honey interior (Warm Amber) or a steel institution (Cool Blue). Taste is the limiter; the split becomes a cliche when every exterior night is the same teal wall.",
+          "links": [
+            {
+              "text": "Warm Amber",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            },
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Warm Amber",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        },
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Skin stays peach or tan. Asphalt, night air, and foliage slide toward teal.Explosions, practicals, and desert sand sit on the orange side. The split is why contemporary studio action reads as punchy: complementary colors vibrate, and the audience still finds a face.It is the wrong tool when the world should be drained, metallic, and merciless. That is Bleach Bypass, which crushes chroma and raises contrast instead of parking hues on a complementary axis.It is also the wrong tool if you wanted an overall honey interior (Warm Amber) or a steel institution (Cool Blue). Taste is the limiter; the split becomes a cliche when every exterior night is the same teal wall."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Grade shadows and non-skin midtones toward cyan-teal. Isolate skin so it remains warm; push highlights and practicals toward amber or orange if the scene supports it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not paint half a face teal and half orange unless two sources actually do that. Contrast can be healthy, but this is hue geometry, not silver."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Teal-and-orange grade on [Subject], skin staying warm, shadows and skies pushed cyan, complementary split."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Grade shadows and non-skin midtones toward cyan-teal. Isolate skin so it remains warm; push highlights and practicals toward amber or orange if the scene supports it.Do not paint half a face teal and half orange unless two sources actually do that. Contrast can be healthy, but this is hue geometry, not silver.Prompt: Teal-and-orange grade on [Subject], skin staying warm, shadows and skies pushed cyan, complementary split."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when you want contemporary studio punch: a night street with warm skin against cyan air. Do not use it on a war or crime world that should feel silver and exhausted, and do not teal every shadow by default."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when you want contemporary studio punch: a night street with warm skin against cyan air. Do not use it on a war or crime world that should feel silver and exhausted, and do not teal every shadow by default."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bleach Bypass desaturates and densifies; it does not park skin on orange against teal air. Split Toning is the general tool (any highlight hue versus any shadow hue).",
+          "links": [
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            },
+            {
+              "text": "Split Toning",
+              "url": "https://melies.co/cinematic-techniques/color/split-tone"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Teal-orange is one popular complementary instance, usually with skin isolation. Warm Amber is an overall warm world.",
+          "links": [
+            {
+              "text": "Warm Amber",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Blockbuster Gloss is a broader finish that often includes this split.",
+          "links": [
+            {
+              "text": "Blockbuster Gloss",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Blockbuster GlossThe shot must play on a billboard.",
+          "displayText": "Blockbuster Gloss\nThe shot must play on a billboard.",
+          "links": [
+            {
+              "text": "Blockbuster GlossThe shot must play on a billboard.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Warm AmberHome, memory, or invitation.",
+          "displayText": "Warm Amber\nHome, memory, or invitation.",
+          "links": [
+            {
+              "text": "Warm AmberHome, memory, or invitation.",
+              "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "displayText": "Bleach Bypass\nWar, crime, or a world without mercy.",
+          "links": [
+            {
+              "text": "Bleach BypassWar, crime, or a world without mercy.",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Split Toning",
+          "url": "https://melies.co/cinematic-techniques/color/split-tone"
+        },
+        {
+          "text": "Warm Amber",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        },
+        {
+          "text": "Blockbuster Gloss",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+        },
+        {
+          "text": "Blockbuster GlossThe shot must play on a billboard.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+        },
+        {
+          "text": "Warm AmberHome, memory, or invitation.",
+          "url": "https://melies.co/cinematic-techniques/color/warm-amber"
+        },
+        {
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/18f85213fad25ca54f2043844a4189fc.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blockbuster-gloss.webp",
+          "alt": "Blockbuster Gloss"
+        },
+        {
+          "kind": "image",
+          "path": "media/fc71119f525bca52371384855ac969b0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/warm-amber.webp",
+          "alt": "Warm Amber"
+        },
+        {
+          "kind": "image",
+          "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+          "alt": "Bleach Bypass"
+        },
+        {
+          "kind": "video",
+          "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Bleach Bypass desaturates and densifies; it does not park skin on orange against teal air. Split Toning is the general tool (any highlight hue versus any shadow hue).Teal-orange is one popular complementary instance, usually with skin isolation. Warm Amber is an overall warm world.Blockbuster Gloss is a broader finish that often includes this split.Blockbuster GlossThe shot must play on a billboard.Warm AmberHome, memory, or invitation.Bleach BypassWar, crime, or a world without mercy."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Transformers-era Hollywood made the complementary split a default for studio action. Mad Max: Fury Road runs a harsher cousin: fire and chrome-orange against cyan-teal desert air."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the hue geometry, not a copied still of a truck."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Transformers-era Hollywood made the complementary split a default for studio action. Mad Max: Fury Road runs a harsher cousin: fire and chrome-orange against cyan-teal desert air.Use the hue geometry, not a copied still of a truck."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Protect skin, then split the rest. Teal-and-orange grade on [Subject], skin staying warm, shadows and skies pushed cyan, complementary split."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name a warm practical if one exists. Do not write bleach-bypass, silver retention, or overall blue."
+        },
+        {
+          "type": "quote",
+          "text": "Teal-and-orange grade on [Subject], skin staying warm, shadows and skies pushed cyan, blockbuster complementary split."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Teal-and-orange+grade+on+[Subject],+skin+staying+warm,+shadows+and+skies+pushed+cyan,+blockbuster+complementary+split."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Protect skin, then split the rest. Teal-and-orange grade on [Subject], skin staying warm, shadows and skies pushed cyan, complementary split.Name a warm practical if one exists. Do not write bleach-bypass, silver retention, or overall blue.Copy promptUse in Image GeneratorTeal-and-orange grade on [Subject], skin staying warm, shadows and skies pushed cyan, blockbuster complementary split.Teal-and-orange grade on [Subject], skin staying warm, shadows and skies pushed cyan, blockbuster complementary split."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Bleach Bypass (drained, contrasty, metallic) or a full Cool Blue wash that turns faces cyan. The tell is grey-green skin, or no orange left in highlights.",
+          "links": [
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            },
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: warm skin, cyan shadows and skies, complementary split, faces readable."
+        }
+      ],
+      "links": [
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Bleach Bypass (drained, contrasty, metallic) or a full Cool Blue wash that turns faces cyan. The tell is grey-green skin, or no orange left in highlights.Fix: warm skin, cyan shadows and skies, complementary split, faces readable."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is teal and orange in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a color grade that parks shadows and skies toward teal or cyan while keeping skin and warm sources orange. Faces stay human; the world splits on a complementary axis."
+        },
+        {
+          "type": "heading",
+          "text": "Teal and Orange vs Bleach Bypass",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Teal-orange is a hue split with protected warm skin. Bleach bypass retains silver, raises contrast, and drains color into a metallic, grainy image. One is complementary grading. The other is density and desaturation."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use teal and orange?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for contemporary studio punch when warm skin should sit against cool air. Skip it for merciless silver worlds, overall amber homes, and any grade that would turn faces teal."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt teal and orange for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Teal-and-orange grade on [Subject], skin staying warm, shadows and skies pushed cyan, complementary split. Forbid bleach-bypass grit and a full blue wash."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is teal and orange in film?It is a color grade that parks shadows and skies toward teal or cyan while keeping skin and warm sources orange. Faces stay human; the world splits on a complementary axis.Teal and Orange vs Bleach BypassTeal-orange is a hue split with protected warm skin. Bleach bypass retains silver, raises contrast, and drains color into a metallic, grainy image. One is complementary grading. The other is density and desaturation.When should I use teal and orange?Use it for contemporary studio punch when warm skin should sit against cool air. Skip it for merciless silver worlds, overall amber homes, and any grade that would turn faces teal.How do I prompt teal and orange for AI image or video?Write: Teal-and-orange grade on [Subject], skin staying warm, shadows and skies pushed cyan, complementary split. Forbid bleach-bypass grit and a full blue wash."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Protect skin, then split the rest. Teal-and-orange grade on [Subject], skin staying warm, shadows and skies pushed cyan, complementary split.",
+      "Name a warm practical if one exists. Do not write bleach-bypass, silver retention, or overall blue."
+    ],
+    "example": "Teal-and-orange grade on [Subject], skin staying warm, shadows and skies pushed cyan, blockbuster complementary split."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange example"
+    },
+    {
+      "kind": "image",
+      "path": "media/18f85213fad25ca54f2043844a4189fc.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blockbuster-gloss.webp",
+      "alt": "Blockbuster Gloss"
+    },
+    {
+      "kind": "image",
+      "path": "media/fc71119f525bca52371384855ac969b0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/warm-amber.webp",
+      "alt": "Warm Amber"
+    },
+    {
+      "kind": "image",
+      "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+      "alt": "Bleach Bypass"
+    },
+    {
+      "kind": "video",
+      "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e5d0f4f984d30855b9316c7c071da3e9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/teal-orange/hero.jpg",
+      "alt": "Teal and Orange",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "8e0e631bc7864088d4a294f7e8ae4f0ce15f66e584a481315577517a79e6f86b"
+}

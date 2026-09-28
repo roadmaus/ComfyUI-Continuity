@@ -1,0 +1,472 @@
+{
+  "id": "color/bleach-bypass",
+  "slug": "bleach-bypass",
+  "title": "Bleach Bypass",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/bleach-bypass",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+  "detail": "details/color/bleach-bypass.json",
+  "aliases": [
+    "Silver-retention look",
+    "Desaturated high-density image"
+  ],
+  "description": "Bleach bypass retains silver during processing, or simulates that retention, so the dye image sits on leftover metallic density. Contrast rises, grain shows, saturation falls, and highlights turn harsh rather than candy-colored.",
+  "thumbnail": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+  "video": "media/0fc6f62494b27827878da7adc857f097.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The world looks abrasive, contaminated, or exhausted. Combat, crime, and unforgiving cities live here because color has been punished, not tastefully split."
+        },
+        {
+          "type": "paragraph",
+          "text": "Skin can go towards brass or grey. Blacks pack down."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a coordinated tonal system, not just the removal of hue. It is the wrong tool when you wanted complementary studio punch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Teal and Orange keeps faces warm and skies cyan; bleach-bypass does not throw a party on the color wheel. It is also the wrong tool if you need full Monochrome: there is still some chroma, just crushed.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            },
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A simple Desaturation without the silver contrast is a paler, softer cousin.",
+          "links": [
+            {
+              "text": "Desaturation",
+              "url": "https://melies.co/cinematic-techniques/color/desaturation"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Desaturation",
+          "url": "https://melies.co/cinematic-techniques/color/desaturation"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The world looks abrasive, contaminated, or exhausted. Combat, crime, and unforgiving cities live here because color has been punished, not tastefully split.Skin can go towards brass or grey. Blacks pack down.It is a coordinated tonal system, not just the removal of hue. It is the wrong tool when you wanted complementary studio punch.Teal and Orange keeps faces warm and skies cyan; bleach-bypass does not throw a party on the color wheel. It is also the wrong tool if you need full Monochrome: there is still some chroma, just crushed.A simple Desaturation without the silver contrast is a paler, softer cousin."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "For a digital recreation, grade contrast, saturation, and highlight roll-off separately and test skin. Lift nothing in the blacks that should stay packed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep a little hue so it does not collapse into black and white unless that is the intent. Original films may use different negative, intermediate, or print treatments; do not assume one lab recipe."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Bleach-bypass look on [Subject], retained silver, crushed color, harsh contrast, metallic midtones."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works For a digital recreation, grade contrast, saturation, and highlight roll-off separately and test skin. Lift nothing in the blacks that should stay packed.Keep a little hue so it does not collapse into black and white unless that is the intent. Original films may use different negative, intermediate, or print treatments; do not assume one lab recipe.Prompt: Bleach-bypass look on [Subject], retained silver, crushed color, harsh contrast, metallic midtones."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for war, crime, or a world without mercy: a landing, a hunt through rain, a fluorescent interrogation. Do not use it as a synonym for teal-orange action gloss, and do not call every desaturated image bleach-bypass."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for war, crime, or a world without mercy: a landing, a hunt through rain, a fluorescent interrogation. Do not use it as a synonym for teal-orange action gloss, and do not call every desaturated image bleach-bypass."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Desaturation only pulls chroma; contrast and silver behavior may stay gentle. Monochrome removes hue entirely.",
+          "links": [
+            {
+              "text": "Desaturation",
+              "url": "https://melies.co/cinematic-techniques/color/desaturation"
+            },
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Teal and Orange is a complementary grade with warm skin. Tonal Contrast is how you place dark against light in the rectangle, not a lab process.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            },
+            {
+              "text": "Tonal Contrast",
+              "url": "https://melies.co/cinematic-techniques/composition/contrast-composition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DesaturationDrain the world without going fully mono.",
+          "displayText": "Desaturation\nDrain the world without going fully mono.",
+          "links": [
+            {
+              "text": "DesaturationDrain the world without going fully mono.",
+              "url": "https://melies.co/cinematic-techniques/color/desaturation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MonochromeStrip to drawing.",
+          "displayText": "Monochrome\nStrip to drawing.",
+          "links": [
+            {
+              "text": "MonochromeStrip to drawing.",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Desaturation",
+          "url": "https://melies.co/cinematic-techniques/color/desaturation"
+        },
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Tonal Contrast",
+          "url": "https://melies.co/cinematic-techniques/composition/contrast-composition"
+        },
+        {
+          "text": "DesaturationDrain the world without going fully mono.",
+          "url": "https://melies.co/cinematic-techniques/color/desaturation"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "MonochromeStrip to drawing.",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/0f72075d6c8e171f20ccd3752d5558a2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/desaturation.webp",
+          "alt": "Desaturation"
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        },
+        {
+          "kind": "image",
+          "path": "media/cdf5189c733a215f8f6312b537573dbd.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monochrome-073-selective-color-in-monochrome-mini.webp",
+          "alt": "Monochrome"
+        },
+        {
+          "kind": "video",
+          "path": "media/7a3685f47ea79cd2485426ecee14655b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/073-selective-color-in-monochrome-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Desaturation only pulls chroma; contrast and silver behavior may stay gentle. Monochrome removes hue entirely.Teal and Orange is a complementary grade with warm skin. Tonal Contrast is how you place dark against light in the rectangle, not a lab process.DesaturationDrain the world without going fully mono.Teal and OrangeYou want contemporary studio punch. Use with taste.MonochromeStrip to drawing."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Saving Private Ryan's combat imagery has a harsh, desaturated, high-contrast character associated with silver retention. Se7en packs interiors and city scenes with dense shadows and restrained color."
+        },
+        {
+          "type": "paragraph",
+          "text": "Minority Report is often cited for a related cold, dense, drained finish. Grammar of density, not a still to clone."
+        },
+        {
+          "type": "list-item",
+          "text": "Saving Private Ryan 1998Combat imagery has a harsh, desaturated, high-contrast character.",
+          "displayText": "Saving Private Ryan 1998\nCombat imagery has a harsh, desaturated, high-contrast character."
+        },
+        {
+          "type": "list-item",
+          "text": "Se7en 1995Dark interiors and city scenes use dense shadows and restrained color.",
+          "displayText": "Se7en 1995\nDark interiors and city scenes use dense shadows and restrained color."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/749a9e255df025accbecb9d3bbaf183d.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/bleach-bypass/famous/00-saving-private-ryan-1998.jpg",
+          "alt": "Saving Private Ryan 1998"
+        },
+        {
+          "kind": "image",
+          "path": "media/b273893eb33fa09601d28ed79e28bb93.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/bleach-bypass/famous/01-se7en-1995.jpg",
+          "alt": "Se7en 1995"
+        }
+      ],
+      "sourceText": "In film Saving Private Ryan's combat imagery has a harsh, desaturated, high-contrast character associated with silver retention. Se7en packs interiors and city scenes with dense shadows and restrained color.Minority Report is often cited for a related cold, dense, drained finish. Grammar of density, not a still to clone.Saving Private Ryan 1998Combat imagery has a harsh, desaturated, high-contrast character.Se7en 1995Dark interiors and city scenes use dense shadows and restrained color."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name silver, crush, and metal. Bleach-bypass look on [Subject], retained silver, crushed color, harsh contrast, metallic midtones."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add grain if the stock would show it. Do not write teal-orange, and do not ask for candy complementary skies."
+        },
+        {
+          "type": "quote",
+          "text": "Rain-soaked industrial street with restrained color, dense but separated blacks, pale stressed skin and hard wet highlights. Bleach-bypass-inspired tonal treatment, visible fine texture, no crushed black voids or monochrome conversion. Slow observational camera."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Rain-soaked+industrial+street+with+restrained+color,+dense+but+separated+blacks,+pale+stressed+skin+and+hard+wet+highlights.+Bleach-bypass-inspired+tonal+treatment,+visible+fine+texture,+no+crushed+black+voids+or+monochrome+conversion.+Slow+observational+camera."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name silver, crush, and metal. Bleach-bypass look on [Subject], retained silver, crushed color, harsh contrast, metallic midtones.Add grain if the stock would show it. Do not write teal-orange, and do not ask for candy complementary skies.Copy promptUse in Video GeneratorRain-soaked industrial street with restrained color, dense but separated blacks, pale stressed skin and hard wet highlights. Bleach-bypass-inspired tonal treatment, visible fine texture, no crushed black voids or monochrome conversion. Slow observational camera.Rain-soaked industrial street with restrained color, dense but separated blacks, pale stressed skin and hard wet highlights. Bleach-bypass-inspired tonal treatment, visible fine texture, no crushed black voids or monochrome conversion. Slow observational camera."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Teal and Orange or mild Desaturation. The tell is warm peach skin against cyan night, or a flat grey wash with no extra density.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            },
+            {
+              "text": "Desaturation",
+              "url": "https://melies.co/cinematic-techniques/color/desaturation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: packed blacks, harsh highlights, drained but not absent color, metallic mids. A look label does not verify the exact photochemical stage of a particular release."
+        }
+      ],
+      "links": [
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Desaturation",
+          "url": "https://melies.co/cinematic-techniques/color/desaturation"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Teal and Orange or mild Desaturation. The tell is warm peach skin against cyan night, or a flat grey wash with no extra density.Fix: packed blacks, harsh highlights, drained but not absent color, metallic mids. A look label does not verify the exact photochemical stage of a particular release."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is bleach bypass in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a silver-retention process, or a digital imitation, that leaves metallic density in the image. Contrast and grain go up, saturation goes down, and highlights look harsh."
+        },
+        {
+          "type": "heading",
+          "text": "Bleach Bypass vs Desaturation",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Desaturation only reduces chroma. Bleach bypass also densifies the image: deeper blacks, harsher highlights, a metallic leftover. Drained color without that density is not bleach-bypass."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use bleach bypass?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for war, crime, or any world that should feel merciless and abrasive. Skip it for studio complementary gloss and for true black and white."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt bleach bypass for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Bleach-bypass look on [Subject], retained silver, crushed color, harsh contrast, metallic midtones. Forbid teal-orange skin splits and candy saturation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is bleach bypass in film?It is a silver-retention process, or a digital imitation, that leaves metallic density in the image. Contrast and grain go up, saturation goes down, and highlights look harsh.Bleach Bypass vs DesaturationDesaturation only reduces chroma. Bleach bypass also densifies the image: deeper blacks, harsher highlights, a metallic leftover. Drained color without that density is not bleach-bypass.When should I use bleach bypass?Use it for war, crime, or any world that should feel merciless and abrasive. Skip it for studio complementary gloss and for true black and white.How do I prompt bleach bypass for AI image or video?Write: Bleach-bypass look on [Subject], retained silver, crushed color, harsh contrast, metallic midtones. Forbid teal-orange skin splits and candy saturation."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name silver, crush, and metal. Bleach-bypass look on [Subject], retained silver, crushed color, harsh contrast, metallic midtones.",
+      "Add grain if the stock would show it. Do not write teal-orange, and do not ask for candy complementary skies."
+    ],
+    "example": "Rain-soaked industrial street with restrained color, dense but separated blacks, pale stressed skin and hard wet highlights. Bleach-bypass-inspired tonal treatment, visible fine texture, no crushed black voids or monochrome conversion. Slow observational camera."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8a735dc32ef9f25cade86eba9a19c320.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/bleach-bypass.jpg",
+      "alt": "Bleach Bypass frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/0f72075d6c8e171f20ccd3752d5558a2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/desaturation.webp",
+      "alt": "Desaturation"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/cdf5189c733a215f8f6312b537573dbd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monochrome-073-selective-color-in-monochrome-mini.webp",
+      "alt": "Monochrome"
+    },
+    {
+      "kind": "video",
+      "path": "media/7a3685f47ea79cd2485426ecee14655b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/073-selective-color-in-monochrome-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/749a9e255df025accbecb9d3bbaf183d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/bleach-bypass/famous/00-saving-private-ryan-1998.jpg",
+      "alt": "Saving Private Ryan 1998"
+    },
+    {
+      "kind": "image",
+      "path": "media/b273893eb33fa09601d28ed79e28bb93.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/bleach-bypass/famous/01-se7en-1995.jpg",
+      "alt": "Se7en 1995"
+    },
+    {
+      "kind": "image",
+      "path": "media/b46166931f7bbdb5d9bf41f8138b5097.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/bleach-bypass/hero.jpg",
+      "alt": "Bleach Bypass",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "e46a0cd79ec961f2fc0c11526c55ba5fabf588815b507c46988246eb9f9f07d6"
+}

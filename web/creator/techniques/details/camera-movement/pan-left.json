@@ -1,0 +1,417 @@
+{
+  "id": "camera-movement/pan-left",
+  "slug": "pan-left",
+  "title": "Pan Left",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/pan-left",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-left-pan-left-mini.webp",
+  "detail": "details/camera-movement/pan-left.json",
+  "aliases": [],
+  "description": "A pan left is pan shot cinematography that rotates the camera on a fixed tripod or head around its vertical axis, sweeping the view to the left. The support does not travel; only the direction of the lens changes.",
+  "thumbnail": "media/e29cddf050f61f946c3cb766cfe71638.webp",
+  "video": "media/0cdf798de2f0032a1e8662a6e008a690.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pan-left-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Two facts in one geography get connected by a look. A rider and a doorway, a speaker and the person they will not face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Because the sticks stay put, the audience remains in one station and is asked only to turn. It is the wrong tool when you must pass behind a column with true parallax, or when the blur of a whip is the point."
+        },
+        {
+          "type": "paragraph",
+          "text": "If foreground does not need to slide, a pan is enough. If it does, truck."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Two facts in one geography get connected by a look. A rider and a doorway, a speaker and the person they will not face.Because the sticks stay put, the audience remains in one station and is asked only to turn. It is the wrong tool when you must pass behind a column with true parallax, or when the blur of a whip is the point.If foreground does not need to slide, a pan is enough. If it does, truck."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Level the horizon on a fluid head. Rotate yaw only."
+        },
+        {
+          "type": "paragraph",
+          "text": "Start and end on composed frames, feather the start and stop, and keep the nodal point over the tripod so the pan does not walk. No body travel."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a slow pan left from a locked tripod, rotation on the vertical axis, level horizon, new architecture to the left."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Level the horizon on a fluid head. Rotate yaw only.Start and end on composed frames, feather the start and stop, and keep the nodal point over the tripod so the pan does not walk. No body travel.Prompt a slow pan left from a locked tripod, rotation on the vertical axis, level horizon, new architecture to the left."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to connect two things in one geography without moving the support. Concrete beat: a look off left, then the pan finds what they see."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not tour a whole room if a cut or a track would be cleaner."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to connect two things in one geography without moving the support. Concrete beat: a look off left, then the pan finds what they see.Do not tour a whole room if a cut or a track would be cleaner."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Dolly Left translates and peels planes. A Pan Right is the same rotation the other way.",
+          "links": [
+            {
+              "text": "Dolly Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+            },
+            {
+              "text": "Pan Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Whip Pan is this axis past the blur threshold, often used as a join. A Tilt Up rotates on the horizontal axis instead.",
+          "links": [
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            },
+            {
+              "text": "Tilt Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pan RightSame as pan left, other direction. End on the story beat.",
+          "displayText": "Pan Right\nSame as pan left, other direction. End on the story beat.",
+          "links": [
+            {
+              "text": "Pan RightSame as pan left, other direction. End on the story beat.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "displayText": "Whip Pan\nTransition, punchline, or sudden attention shift.",
+          "links": [
+            {
+              "text": "Whip PanTransition, punchline, or sudden attention shift.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tilt UpReveal height, awe, or a face last.",
+          "displayText": "Tilt Up\nReveal height, awe, or a face last.",
+          "links": [
+            {
+              "text": "Tilt UpReveal height, awe, or a face last.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+        },
+        {
+          "text": "Pan Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Tilt Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        },
+        {
+          "text": "Pan RightSame as pan left, other direction. End on the story beat.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+        },
+        {
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Tilt UpReveal height, awe, or a face last.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/333aea1b396b4f8bb512847a5d486835.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-right-008-pan-and-discovery-mini.webp",
+          "alt": "Pan Right"
+        },
+        {
+          "kind": "video",
+          "path": "media/4939347f523db67283fabf104312adf7.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/008-pan-and-discovery-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+          "alt": "Whip Pan"
+        },
+        {
+          "kind": "video",
+          "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ba0d5d532fbf6a3cf122ffc10add8687.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-up-009-tilt-reveal-mini.webp",
+          "alt": "Tilt Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/de2a0060534bd4c5940a383f5d15c5a9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/009-tilt-reveal-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Dolly Left translates and peels planes. A Pan Right is the same rotation the other way.A Whip Pan is this axis past the blur threshold, often used as a join. A Tilt Up rotates on the horizontal axis instead.Pan RightSame as pan left, other direction. End on the story beat.Whip PanTransition, punchline, or sudden attention shift.Tilt UpReveal height, awe, or a face last."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Searchers connects rider, land, and doorway with turning looks from a held position. The Rules of the Game (on the sister page as a right pan) is the same Renoir law: a head turn through deep space."
+        },
+        {
+          "type": "paragraph",
+          "text": "Weekend is often listed beside long connecting moves; confirm whether a given beat is a pan or a lateral track before copying its mechanism."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Searchers connects rider, land, and doorway with turning looks from a held position. The Rules of the Game (on the sister page as a right pan) is the same Renoir law: a head turn through deep space.Weekend is often listed beside long connecting moves; confirm whether a given beat is a pan or a lateral track before copying its mechanism."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Slow pan left from a locked tripod across [Subject], camera rotating on its vertical axis, horizon level, revealing new architecture to the left. For motion: the camera pans left from a fixed tripod, sweeping across [Subject] and the environment."
+        },
+        {
+          "type": "paragraph",
+          "text": "No body travel."
+        },
+        {
+          "type": "quote",
+          "text": "The camera pans left from a fixed tripod, sweeping across [Subject] and the environment. No body travel."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+pans+left+from+a+fixed+tripod,+sweeping+across+[Subject]+and+the+environment.+No+body+travel."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Slow pan left from a locked tripod across [Subject], camera rotating on its vertical axis, horizon level, revealing new architecture to the left. For motion: the camera pans left from a fixed tripod, sweeping across [Subject] and the environment.No body travel.Copy promptUse in Video GeneratorThe camera pans left from a fixed tripod, sweeping across [Subject] and the environment. No body travel.The camera pans left from a fixed tripod, sweeping across [Subject] and the environment. No body travel."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Dolly Left. The tell is missing parallax of near objects, or the opposite: you added a slide by accident.",
+          "links": [
+            {
+              "text": "Dolly Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: freeze the tripod position, yaw left, level horizon, composed start and end."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Dolly Left. The tell is missing parallax of near objects, or the opposite: you added a slide by accident.The fix: freeze the tripod position, yaw left, level horizon, composed start and end."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Pan Left in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a leftward rotation of a camera on a locked support around the vertical axis, changing where the lens points without relocating the tripod."
+        },
+        {
+          "type": "heading",
+          "text": "Pan Left vs Dolly Left",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly left moves the camera sideways through space. Pan left only turns the head, so perspective from the station point stays the same."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Pan Left?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When two facts share a geography and a turn of attention is enough. Do not pan if you need to physically pass objects in depth."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Pan Left for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Say locked tripod, pan left, vertical-axis rotation only, level horizon, no body travel. Name the start subject and what is revealed to the left."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Pan Left in film?It is a leftward rotation of a camera on a locked support around the vertical axis, changing where the lens points without relocating the tripod.Pan Left vs Dolly LeftDolly left moves the camera sideways through space. Pan left only turns the head, so perspective from the station point stays the same.When should I use Pan Left?When two facts share a geography and a turn of attention is enough. Do not pan if you need to physically pass objects in depth.How do I prompt Pan Left for AI image or video?Say locked tripod, pan left, vertical-axis rotation only, level horizon, no body travel. Name the start subject and what is revealed to the left."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Slow pan left from a locked tripod across [Subject], camera rotating on its vertical axis, horizon level, revealing new architecture to the left. For motion: the camera pans left from a fixed tripod, sweeping across [Subject] and the environment.",
+      "No body travel."
+    ],
+    "example": "The camera pans left from a fixed tripod, sweeping across [Subject] and the environment. No body travel."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/0cdf798de2f0032a1e8662a6e008a690.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pan-left-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e29cddf050f61f946c3cb766cfe71638.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-left-pan-left-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/33924420c64b54b0d49f013c0a612557.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/pan-left.jpg",
+      "alt": "Pan Left frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/333aea1b396b4f8bb512847a5d486835.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-right-008-pan-and-discovery-mini.webp",
+      "alt": "Pan Right"
+    },
+    {
+      "kind": "video",
+      "path": "media/4939347f523db67283fabf104312adf7.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/008-pan-and-discovery-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+      "alt": "Whip Pan"
+    },
+    {
+      "kind": "video",
+      "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ba0d5d532fbf6a3cf122ffc10add8687.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-up-009-tilt-reveal-mini.webp",
+      "alt": "Tilt Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/de2a0060534bd4c5940a383f5d15c5a9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/009-tilt-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ae4a0f656e95ca73d0de0da5ebb1ad03.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pan-left/hero.jpg",
+      "alt": "Pan Left",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "54f4c8cddbfe2e48fe81c6518fabca41b20dcb4904ce865d47546a61bfb89350"
+}

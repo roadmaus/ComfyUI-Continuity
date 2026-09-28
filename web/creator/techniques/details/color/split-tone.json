@@ -1,0 +1,410 @@
+{
+  "id": "color/split-tone",
+  "slug": "split-tone",
+  "title": "Split Toning",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/split-tone",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-tone.webp",
+  "detail": "details/color/split-tone.json",
+  "aliases": [],
+  "description": "Split toning in split toning cinematography assigns one hue to highlights and another to shadows, so the tone curve becomes a two-color world. Any pair is legal; teal-and-orange is only one famous instance.",
+  "thumbnail": "media/31d92d2537ca6e93344aeb4ab840d233.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shadows and lights belong to different gods. Gold over teal, magenta over green, steel over amber: the split is a law for the whole image, not a pair of gels in the room."
+        },
+        {
+          "type": "paragraph",
+          "text": "Drive's night can feel like candy highlights over cool dark. A future city can put warm sun on one side of the curve and cyan smog on the other."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the split should come from real lamps (a 3200K room and a cold window). That is Tungsten Balance or mixed Practical Lighting, including Neon Practicals.",
+          "links": [
+            {
+              "text": "Tungsten Balance",
+              "url": "https://melies.co/cinematic-techniques/color/tungsten-balance"
+            },
+            {
+              "text": "Practical Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            },
+            {
+              "text": "Neon Practicals",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool if you only wanted overall steel or overall honey. And it is not bleach-bypass, which is density, not a two-hue curve."
+        }
+      ],
+      "links": [
+        {
+          "text": "Tungsten Balance",
+          "url": "https://melies.co/cinematic-techniques/color/tungsten-balance"
+        },
+        {
+          "text": "Practical Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "Neon Practicals",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Shadows and lights belong to different gods. Gold over teal, magenta over green, steel over amber: the split is a law for the whole image, not a pair of gels in the room.Drive's night can feel like candy highlights over cool dark. A future city can put warm sun on one side of the curve and cyan smog on the other.It is the wrong tool when the split should come from real lamps (a 3200K room and a cold window). That is Tungsten Balance or mixed Practical Lighting, including Neon Practicals.It is the wrong tool if you only wanted overall steel or overall honey. And it is not bleach-bypass, which is density, not a two-hue curve."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In the grade, map the toe to hue A and the shoulder to hue B, with a crossover in the mids you actually like on skin. Keep the pair limited; more hues are not a stronger split."
+        },
+        {
+          "type": "paragraph",
+          "text": "Test faces at the crossover. Prompt: Split-toned grade on [Subject], highlights one hue, shadows another, for example gold over teal, a two-color world."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works In the grade, map the toe to hue A and the shoulder to hue B, with a crossover in the mids you actually like on skin. Keep the pair limited; more hues are not a stronger split.Test faces at the crossover. Prompt: Split-toned grade on [Subject], highlights one hue, shadows another, for example gold over teal, a two-color world."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when highlights and shadows should belong to different hues as a law: a night drive, a future city. Do not use it as a substitute for mixed practicals, and do not assume the pair must be teal and orange."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when highlights and shadows should belong to different hues as a law: a night drive, a future city. Do not use it as a substitute for mixed practicals, and do not assume the pair must be teal and orange."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Teal and Orange is a specific complementary split that also isolates skin. Split-tone is the general method and can be gold/teal, magenta/green, or something else.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Neon Practicals is colored light in the room. Cross Process skews primaries chemically rather than splitting the curve cleanly.",
+          "links": [
+            {
+              "text": "Neon Practicals",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            },
+            {
+              "text": "Cross Process",
+              "url": "https://melies.co/cinematic-techniques/color/cross-process"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Palette restricts production design hues; split-tone paints the tone curve.",
+          "links": [
+            {
+              "text": "Palette",
+              "url": "https://melies.co/cinematic-techniques/color/palette"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "displayText": "Neon Practicals\nThe city is the lighting department.",
+          "links": [
+            {
+              "text": "Neon PracticalsThe city is the lighting department.",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "displayText": "Bleach Bypass\nWar, crime, or a world without mercy.",
+          "links": [
+            {
+              "text": "Bleach BypassWar, crime, or a world without mercy.",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Neon Practicals",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "Cross Process",
+          "url": "https://melies.co/cinematic-techniques/color/cross-process"
+        },
+        {
+          "text": "Palette",
+          "url": "https://melies.co/cinematic-techniques/color/palette"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        },
+        {
+          "kind": "image",
+          "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+          "alt": "Neon Practicals"
+        },
+        {
+          "kind": "image",
+          "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+          "alt": "Bleach Bypass"
+        },
+        {
+          "kind": "video",
+          "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Teal and Orange is a specific complementary split that also isolates skin. Split-tone is the general method and can be gold/teal, magenta/green, or something else.Neon Practicals is colored light in the room. Cross Process skews primaries chemically rather than splitting the curve cleanly.Palette restricts production design hues; split-tone paints the tone curve.Teal and OrangeYou want contemporary studio punch. Use with taste.Neon PracticalsThe city is the lighting department.Bleach BypassWar, crime, or a world without mercy."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Drive often lets night highlights and shadows sit in different hue families. Blade Runner 2049 grades future light so sun, smog, and interior color occupy different parts of the curve."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of two-hue curves, not a still of a car."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Drive often lets night highlights and shadows sit in different hue families. Blade Runner 2049 grades future light so sun, smog, and interior color occupy different parts of the curve.Grammar of two-hue curves, not a still of a car."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name both hues and which owns shadows. Split-toned grade on [Subject], highlights one hue, shadows another, for example gold over teal, a two-color world."
+        },
+        {
+          "type": "paragraph",
+          "text": "State the pair. Do not write bleach-bypass, and do not require teal-orange unless that is the pair."
+        },
+        {
+          "type": "quote",
+          "text": "Split-toned grade on [Subject], highlights one hue, shadows another, for example gold over teal, a two-color world."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Split-toned+grade+on+[Subject],+highlights+one+hue,+shadows+another,+for+example+gold+over+teal,+a+two-color+world."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name both hues and which owns shadows. Split-toned grade on [Subject], highlights one hue, shadows another, for example gold over teal, a two-color world.State the pair. Do not write bleach-bypass, and do not require teal-orange unless that is the pair.Copy promptUse in Image GeneratorSplit-toned grade on [Subject], highlights one hue, shadows another, for example gold over teal, a two-color world.Split-toned grade on [Subject], highlights one hue, shadows another, for example gold over teal, a two-color world."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Teal and Orange used as the only imaginable split, or mixed lamps called split tone. The tell is peach skin plus cyan streets with no other pair allowed, or colored neon in the set with a neutral grade.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: declare highlight hue and shadow hue, apply them on the curve, keep the law consistent."
+        }
+      ],
+      "links": [
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Teal and Orange used as the only imaginable split, or mixed lamps called split tone. The tell is peach skin plus cyan streets with no other pair allowed, or colored neon in the set with a neutral grade.Fix: declare highlight hue and shadow hue, apply them on the curve, keep the law consistent."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is split toning in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a grade that gives highlights one hue and shadows another. The tone curve becomes a two-color world. The pair can be any two hues, not only teal and orange."
+        },
+        {
+          "type": "heading",
+          "text": "Split Toning vs Teal and Orange",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Teal-orange is one complementary split, usually with protected skin. Split toning is the general tool. Gold over teal, magenta over green, or steel over amber are also split tones."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use split toning?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when shadows and highlights should obey different hues as a law. Skip it when mixed practicals already tell the color story, or when you wanted a single overall wash."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt split toning for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Split-toned grade on [Subject], highlights one hue, shadows another, a two-color world. Name both hues. Forbid assuming teal-orange, and forbid calling set neon a split-tone grade."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is split toning in film?It is a grade that gives highlights one hue and shadows another. The tone curve becomes a two-color world. The pair can be any two hues, not only teal and orange.Split Toning vs Teal and OrangeTeal-orange is one complementary split, usually with protected skin. Split toning is the general tool. Gold over teal, magenta over green, or steel over amber are also split tones.When should I use split toning?Use it when shadows and highlights should obey different hues as a law. Skip it when mixed practicals already tell the color story, or when you wanted a single overall wash.How do I prompt split toning for AI image or video?Write: Split-toned grade on [Subject], highlights one hue, shadows another, a two-color world. Name both hues. Forbid assuming teal-orange, and forbid calling set neon a split-tone grade."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name both hues and which owns shadows. Split-toned grade on [Subject], highlights one hue, shadows another, for example gold over teal, a two-color world.",
+      "State the pair. Do not write bleach-bypass, and do not require teal-orange unless that is the pair."
+    ],
+    "example": "Split-toned grade on [Subject], highlights one hue, shadows another, for example gold over teal, a two-color world."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/31d92d2537ca6e93344aeb4ab840d233.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-tone.webp",
+      "alt": "Split Toning example"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+      "alt": "Neon Practicals"
+    },
+    {
+      "kind": "image",
+      "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+      "alt": "Bleach Bypass"
+    },
+    {
+      "kind": "video",
+      "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8c8dc4b00fe94cc032bb23b32580ffa7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/split-tone/hero.jpg",
+      "alt": "Split Toning",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "f822a597e0d96ab0da863e18f8dc5670c2a568f8492a6fff69846728a53c5d27"
+}

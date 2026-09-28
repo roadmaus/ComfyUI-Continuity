@@ -1,0 +1,390 @@
+{
+  "id": "lighting/kicker",
+  "slug": "kicker",
+  "title": "Kicker",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/kicker",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/kicker.webp",
+  "detail": "details/lighting/kicker.json",
+  "aliases": [
+    "Kicker light"
+  ],
+  "description": "A kicker light is a relatively hard side-back accent on cheek, jaw, shoulder, or an object edge, placed behind and to one side of the subject. It is a slice, not a full wrap and not a hair-only rim.",
+  "thumbnail": "media/f5db697a5950db2cf3bb33cc9b59213b.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The far plane of the face suddenly has a strip of glamour or menace. In noir it can be a streetlight kissing the jaw of someone who is otherwise in the key's shadow."
+        },
+        {
+          "type": "paragraph",
+          "text": "In a commercial portrait it is the same physics with a kinder color: a small lamp that says the cheek has a plane. It is the wrong tool if you need an even beauty wrap, or if the accent becomes a beam shooting out of the neck."
+        },
+        {
+          "type": "paragraph",
+          "text": "One kicker. If you add its twin on the other side you are in cross lighting.",
+          "links": [
+            {
+              "text": "cross lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "cross lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The far plane of the face suddenly has a strip of glamour or menace. In noir it can be a streetlight kissing the jaw of someone who is otherwise in the key's shadow.In a commercial portrait it is the same physics with a kinder color: a small lamp that says the cheek has a plane. It is the wrong tool if you need an even beauty wrap, or if the accent becomes a beam shooting out of the neck.One kicker. If you add its twin on the other side you are in cross lighting."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Park a small hard source behind the subject, 30 to 60 degrees off the back axis, at about cheek height or a little above. Flag it off the camera and off the nose."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness should be harder than the key so the accent is a clean line. Color is often a step warmer (tungsten, amber practical) against a cooler key, or white against tungsten."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: A small warm lamp behind and to the side of [Subject], a thin highlight on the far jaw and coat shoulder only. No beam shooting out of the body."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Park a small hard source behind the subject, 30 to 60 degrees off the back axis, at about cheek height or a little above. Flag it off the camera and off the nose.Hardness should be harder than the key so the accent is a clean line. Color is often a step warmer (tungsten, amber practical) against a cooler key, or white against tungsten.Prompt: A small warm lamp behind and to the side of [Subject], a thin highlight on the far jaw and coat shoulder only. No beam shooting out of the body."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to add a slice of glamour or menace on the far side of a keyed face, for example a jawline in a night interior. Do not fire kickers from both sides unless you want a concert edge."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to add a slice of glamour or menace on the far side of a keyed face, for example a jawline in a night interior. Do not fire kickers from both sides unless you want a concert edge."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rim light traces the whole outline and leaves the cheek darker. Backlight sits more directly behind.",
+          "links": [
+            {
+              "text": "Rim light",
+              "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+            },
+            {
+              "text": "Backlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hair light aims up at the hair, not the jaw. Side lighting keys the face from 90 degrees; a kicker does not become the key.",
+          "links": [
+            {
+              "text": "Hair light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hair-light"
+            },
+            {
+              "text": "Side lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rim LightGraphic silhouette with just enough flesh.",
+          "displayText": "Rim Light\nGraphic silhouette with just enough flesh.",
+          "links": [
+            {
+              "text": "Rim LightGraphic silhouette with just enough flesh.",
+              "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "BacklightSeparate a dark figure from a dark world.",
+          "displayText": "Backlight\nSeparate a dark figure from a dark world.",
+          "links": [
+            {
+              "text": "BacklightSeparate a dark figure from a dark world.",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Rim light",
+          "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+        },
+        {
+          "text": "Backlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "Hair light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hair-light"
+        },
+        {
+          "text": "Side lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+        },
+        {
+          "text": "Rim LightGraphic silhouette with just enough flesh.",
+          "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+        },
+        {
+          "text": "BacklightSeparate a dark figure from a dark world.",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/24ba922f93c8786e2def76713b970c9f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rim-light.webp",
+          "alt": "Rim Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+          "alt": "Backlight"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Rim light traces the whole outline and leaves the cheek darker. Backlight sits more directly behind.Hair light aims up at the hair, not the jaw. Side lighting keys the face from 90 degrees; a kicker does not become the key.Rim LightGraphic silhouette with just enough flesh.BacklightSeparate a dark figure from a dark world.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Film noir portraits, including work in the neighborhood of Double Indemnity and The Big Combo, use a hard far-side kicker on jaw and shoulder. Commercial portraiture borrowed the same accent with softer keys."
+        },
+        {
+          "type": "paragraph",
+          "text": "Treat those as a placement, not a costume."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Film noir portraits, including work in the neighborhood of Double Indemnity and The Big Combo, use a hard far-side kicker on jaw and shoulder. Commercial portraiture borrowed the same accent with softer keys.Treat those as a placement, not a costume."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Localize the highlight. Use: \"A small warm lamp behind and to the side of [Subject], a thin highlight on the far jaw and coat shoulder only."
+        },
+        {
+          "type": "paragraph",
+          "text": "\" Name left or right. Keep the key on the other side."
+        },
+        {
+          "type": "quote",
+          "text": "A small warm lamp behind and to the side of [Subject], a thin highlight on the far jaw and coat shoulder only. No beam shooting out of the body."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=A+small+warm+lamp+behind+and+to+the+side+of+[Subject],+a+thin+highlight+on+the+far+jaw+and+coat+shoulder+only.+No+beam+shooting+out+of+the+body."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Localize the highlight. Use: \"A small warm lamp behind and to the side of [Subject], a thin highlight on the far jaw and coat shoulder only.\" Name left or right. Keep the key on the other side.Copy promptUse in Image GeneratorA small warm lamp behind and to the side of [Subject], a thin highlight on the far jaw and coat shoulder only. No beam shooting out of the body.A small warm lamp behind and to the side of [Subject], a thin highlight on the far jaw and coat shoulder only. No beam shooting out of the body."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a rim or a light saber from the neck. The tell is a closed outline, or a shaft growing out of the shoulder.",
+          "links": [
+            {
+              "text": "rim",
+              "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by shrinking the source, flagging it, and stopping the highlight on jaw and cloth."
+        }
+      ],
+      "links": [
+        {
+          "text": "rim",
+          "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a rim or a light saber from the neck. The tell is a closed outline, or a shaft growing out of the shoulder.Fix it by shrinking the source, flagging it, and stopping the highlight on jaw and cloth."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a kicker in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A relatively hard side-back accent on cheek, jaw, shoulder, or object edge. It sits behind and to the side, and it is not the key."
+        },
+        {
+          "type": "heading",
+          "text": "Kicker vs rim light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A kicker is a localized slash of flesh and cloth. A rim is a thinner outline highlight that does not open the far cheek as much."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a kicker?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the far jaw or shoulder needs a hard accent of glamour or threat while the key still owns the face."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a kicker for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Place a small warm lamp behind and to one side. Limit the highlight to far jaw and shoulder. Forbid beams coming out of the body."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a kicker in film?A relatively hard side-back accent on cheek, jaw, shoulder, or object edge. It sits behind and to the side, and it is not the key.Kicker vs rim lightA kicker is a localized slash of flesh and cloth. A rim is a thinner outline highlight that does not open the far cheek as much.When should I use a kicker?Use it when the far jaw or shoulder needs a hard accent of glamour or threat while the key still owns the face.How do I prompt a kicker for AI image or video?Place a small warm lamp behind and to one side. Limit the highlight to far jaw and shoulder. Forbid beams coming out of the body."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Localize the highlight. Use: \"A small warm lamp behind and to the side of [Subject], a thin highlight on the far jaw and coat shoulder only.",
+      "\" Name left or right. Keep the key on the other side."
+    ],
+    "example": "A small warm lamp behind and to the side of [Subject], a thin highlight on the far jaw and coat shoulder only. No beam shooting out of the body."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/f5db697a5950db2cf3bb33cc9b59213b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/kicker.webp",
+      "alt": "Kicker example"
+    },
+    {
+      "kind": "image",
+      "path": "media/24ba922f93c8786e2def76713b970c9f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rim-light.webp",
+      "alt": "Rim Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+      "alt": "Backlight"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/c8a0c78adc87acd0a1d3e44e551aea8c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/kicker/hero.jpg",
+      "alt": "Kicker",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "1be9ce9a8c8165cea5e4c8578c0e78b12159a2972c81a4b93350f4ed2e63022f"
+}

@@ -1,0 +1,399 @@
+{
+  "id": "camera-movement/mouth-in",
+  "slug": "mouth-in",
+  "title": "Mouth In",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/mouth-in",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mouth-in-mouth-in-mini.webp",
+  "detail": "details/camera-movement/mouth-in.json",
+  "aliases": [],
+  "description": "A mouth in camera move enters speech or appetite until lips and teeth become the set. The camera travels past the portrait into the orifice as landscape.",
+  "thumbnail": "media/ddd9d09cf91c46eb1e8e38f56f855f47.webp",
+  "video": "media/59234568de5cd8001820c1207faf15b7.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mouth-in-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Speech or hunger is the scene. A threat spoken, a kiss that should feel like a location, a bite that is architecture: the mouth is not a detail in a portrait."
+        },
+        {
+          "type": "paragraph",
+          "text": "Eating zoom is the comic, food-first version of the same aggression. A random gore insert is not this shot unless the film has already made the mouth a room."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the rest of the body out."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Speech or hunger is the scene. A threat spoken, a kiss that should feel like a location, a bite that is architecture: the mouth is not a detail in a portrait.Eating zoom is the comic, food-first version of the same aggression. A random gore insert is not this shot unless the film has already made the mouth a room.Keep the rest of the body out."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Prompt a push into the mouth, lips as foreground, interior as arrival. One move."
+        },
+        {
+          "type": "paragraph",
+          "text": "Light the teeth like architecture. Do not also rack focus or whip-pan."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Mouth-in move on [Subject], the camera entering speech or appetite, lips as landscape."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Prompt a push into the mouth, lips as foreground, interior as arrival. One move.Light the teeth like architecture. Do not also rack focus or whip-pan.Prompt: Mouth-in move on [Subject], the camera entering speech or appetite, lips as landscape."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for appetite, a spoken threat, a kiss as a location. Avoid it as unmotivated body horror unless that is the film."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for appetite, a spoken threat, a kiss as a location. Avoid it as unmotivated body horror unless that is the film."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eyes In goes to the iris. Eating Zoom is an optical crash whose last foreground is food meeting mouth.",
+          "links": [
+            {
+              "text": "Eyes In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/eyes-in"
+            },
+            {
+              "text": "Eating Zoom",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/eating-zoom"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Extreme Close-Up can be a locked mouth; mouth-in travels until lips and teeth are the set.",
+          "links": [
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eyes InThe thought is in the eye. Go there.",
+          "displayText": "Eyes In\nThe thought is in the eye. Go there.",
+          "links": [
+            {
+              "text": "Eyes InThe thought is in the eye. Go there.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/eyes-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eating ZoomThe bite is the cut.",
+          "displayText": "Eating Zoom\nThe bite is the cut.",
+          "links": [
+            {
+              "text": "Eating ZoomThe bite is the cut.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/eating-zoom"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Eyes In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/eyes-in"
+        },
+        {
+          "text": "Eating Zoom",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/eating-zoom"
+        },
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Eyes InThe thought is in the eye. Go there.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/eyes-in"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Eating ZoomThe bite is the cut.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/eating-zoom"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/3ecbe80d8f428c7648727b3ff26b0283.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eyes-in-eyes-in-mini.webp",
+          "alt": "Eyes In"
+        },
+        {
+          "kind": "video",
+          "path": "media/6d217d643f1e4f618bc524b14cc986bd.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/eyes-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7acd10096e85efe07609a189dafedc8c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eating-zoom-eating-zoom-mini.webp",
+          "alt": "Eating Zoom"
+        },
+        {
+          "kind": "video",
+          "path": "media/1f110a62bde4c8db9d01515690bd0df9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/eating-zoom-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Eyes In goes to the iris. Eating Zoom is an optical crash whose last foreground is food meeting mouth.Extreme Close-Up can be a locked mouth; mouth-in travels until lips and teeth are the set.Eyes InThe thought is in the eye. Go there.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.Eating ZoomThe bite is the cut."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Cook, the Thief, His Wife & Her Lover treats orifices and appetite as rooms. Requiem for a Dream uses close oral imagery as locations of need."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: the mouth as landscape."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Cook, the Thief, His Wife & Her Lover treats orifices and appetite as rooms. Requiem for a Dream uses close oral imagery as locations of need.Grammar: the mouth as landscape."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand the camera end past the lips. Still: Mouth-in move on [Subject], the camera entering speech or appetite, lips as landscape."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera pushes into [Subject]'s mouth until lips and teeth become the set. Keep the rest of the body out."
+        },
+        {
+          "type": "paragraph",
+          "text": "One move."
+        },
+        {
+          "type": "quote",
+          "text": "The camera pushes into [Subject]'s mouth until lips and teeth become the set."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+pushes+into+[Subject]'s+mouth+until+lips+and+teeth+become+the+set."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Demand the camera end past the lips. Still: Mouth-in move on [Subject], the camera entering speech or appetite, lips as landscape.Video: The camera pushes into [Subject]'s mouth until lips and teeth become the set. Keep the rest of the body out.One move.Copy promptUse in Video GeneratorThe camera pushes into [Subject]'s mouth until lips and teeth become the set.The camera pushes into [Subject]'s mouth until lips and teeth become the set."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a face with an open mouth. The tell: a portrait, teeth visible, camera never arriving inside."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: end past the lips, teeth as architecture, no leftover MCU."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a face with an open mouth. The tell: a portrait, teeth visible, camera never arriving inside.The fix: end past the lips, teeth as architecture, no leftover MCU."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Mouth In in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Mouth in is a camera move that enters the mouth until lips and teeth become the set. Speech or appetite is treated as a location."
+        },
+        {
+          "type": "heading",
+          "text": "Mouth In vs Eating Zoom",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Mouth in travels into the orifice as landscape. Eating zoom is a snap into the bite, with food or a utensil as the last foreground."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Mouth In?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when speech, hunger, or a kiss should feel like a place. Do not use it as a random shock insert."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Mouth In for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a push that ends past the lips. Example: Mouth-in move on [Subject], the camera entering speech or appetite, lips as landscape."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Mouth In in film?Mouth in is a camera move that enters the mouth until lips and teeth become the set. Speech or appetite is treated as a location.Mouth In vs Eating ZoomMouth in travels into the orifice as landscape. Eating zoom is a snap into the bite, with food or a utensil as the last foreground.When should I use Mouth In?Use it when speech, hunger, or a kiss should feel like a place. Do not use it as a random shock insert.How do I prompt Mouth In for AI image or video?Write a push that ends past the lips. Example: Mouth-in move on [Subject], the camera entering speech or appetite, lips as landscape."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Demand the camera end past the lips. Still: Mouth-in move on [Subject], the camera entering speech or appetite, lips as landscape.",
+      "Video: The camera pushes into [Subject]'s mouth until lips and teeth become the set. Keep the rest of the body out.",
+      "One move."
+    ],
+    "example": "The camera pushes into [Subject]'s mouth until lips and teeth become the set."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/59234568de5cd8001820c1207faf15b7.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mouth-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ddd9d09cf91c46eb1e8e38f56f855f47.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mouth-in-mouth-in-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d52e1ff50cf79a81734ae721ad5efc3d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/mouth-in.jpg",
+      "alt": "Mouth In frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/3ecbe80d8f428c7648727b3ff26b0283.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eyes-in-eyes-in-mini.webp",
+      "alt": "Eyes In"
+    },
+    {
+      "kind": "video",
+      "path": "media/6d217d643f1e4f618bc524b14cc986bd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/eyes-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7acd10096e85efe07609a189dafedc8c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eating-zoom-eating-zoom-mini.webp",
+      "alt": "Eating Zoom"
+    },
+    {
+      "kind": "video",
+      "path": "media/1f110a62bde4c8db9d01515690bd0df9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/eating-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/68cb7fce99a07ea08a7343b5cfd33ad8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/mouth-in/hero.jpg",
+      "alt": "Mouth In",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "73f0181d5dce5730cb45eda233369e144217711ce124df111d0ff57e4f30779e"
+}

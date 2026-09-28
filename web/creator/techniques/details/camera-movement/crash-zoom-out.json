@@ -1,0 +1,412 @@
+{
+  "id": "camera-movement/crash-zoom-out",
+  "slug": "crash-zoom-out",
+  "title": "Crash Zoom Out",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-out",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-out-03-crash-zoom-out-v2-mini.webp",
+  "detail": "details/camera-movement/crash-zoom-out.json",
+  "aliases": [],
+  "description": "A crash zoom out is a sudden, fast widening of the lens from a tight frame into a much wider one, usually without moving the camera. It dumps the subject back into the environment in a fraction of a second.",
+  "thumbnail": "media/50f4effe5c52992f8b05bebf3c572d46.webp",
+  "video": "media/5a74b21f2d2f97e035b9035f20977f76.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-crash-zoom-out-v2-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Scale, danger, or a joke appears all at once. The close moment is undercut because the world was always that large; the lens simply confessed."
+        },
+        {
+          "type": "paragraph",
+          "text": "The snap is the comedy or the horror, not a polite reveal. It is the wrong tool when you need to walk backward through furniture, or when the newly revealed space must pass the camera in layers."
+        },
+        {
+          "type": "paragraph",
+          "text": "Optical dump is not a retreat."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Scale, danger, or a joke appears all at once. The close moment is undercut because the world was always that large; the lens simply confessed.The snap is the comedy or the horror, not a polite reveal. It is the wrong tool when you need to walk backward through furniture, or when the newly revealed space must pass the camera in layers.Optical dump is not a retreat."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock the body. Center the zoom so the subject does not smear sideways."
+        },
+        {
+          "type": "paragraph",
+          "text": "Snap from the tight composition to a pre-composed wide in under a second, then hold the wide. Radial blur during the change, not handheld bounce."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a sudden crash zoom out, environment exploding into view, then a locked wide hold."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock the body. Center the zoom so the subject does not smear sideways.Snap from the tight composition to a pre-composed wide in under a second, then hold the wide. Radial blur during the change, not handheld bounce.Prompt a sudden crash zoom out, environment exploding into view, then a locked wide hold."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to shock-reveal scale or undercut a close moment. Concrete beat: an intimate two-shot snaps to a parking lot full of witnesses."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it when the camera must physically leave the subject."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to shock-reveal scale or undercut a close moment. Concrete beat: an intimate two-shot snaps to a parking lot full of witnesses.Do not use it when the camera must physically leave the subject."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Crash Zoom In punches the other way, into a detail. A Pull Out translates the camera backward with parallax.",
+          "links": [
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            },
+            {
+              "text": "Pull Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Slow Zoom Out discloses the same optical widening without the sting. Crash zoom out is the dump, then the hold.",
+          "links": [
+            {
+              "text": "Slow Zoom Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "displayText": "Crash Zoom In\nPunctuate a hit, a realization, or a comic sting.",
+          "links": [
+            {
+              "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pull OutShow the container around a feeling.",
+          "displayText": "Pull Out\nShow the container around a feeling.",
+          "links": [
+            {
+              "text": "Pull OutShow the container around a feeling.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Pull Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+        },
+        {
+          "text": "Slow Zoom Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out"
+        },
+        {
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Pull OutShow the container around a feeling.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+          "alt": "Crash Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/37b5595bae8858283390769367c4f5d6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pull-out-pull-out-mini.webp",
+          "alt": "Pull Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/4c02c1f19b8cf15347f8a51749112685.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pull-out-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Crash Zoom In punches the other way, into a detail. A Pull Out translates the camera backward with parallax.A Slow Zoom Out discloses the same optical widening without the sting. Crash zoom out is the dump, then the hold.Crash Zoom InPunctuate a hit, a realization, or a comic sting.Pull OutShow the container around a feeling.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shaun of the Dead snaps from faces into wider comic geography. Evil Dead uses violent optical widening as shock."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hot Fuzz works the same family in both directions. Copy the snap-and-hold, not the gag content."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Shaun of the Dead snaps from faces into wider comic geography. Evil Dead uses violent optical widening as shock.Hot Fuzz works the same family in both directions. Copy the snap-and-hold, not the gag content."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sudden crash zoom out from [Subject], the environment exploding into view in a fraction of a second, then a locked wide hold. For motion: snap zoom out from [Subject] in under a second, revealing the wider scene, then hold."
+        },
+        {
+          "type": "quote",
+          "text": "Snap zoom out from [Subject] in under a second, revealing the wider scene, then hold."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Snap+zoom+out+from+[Subject]+in+under+a+second,+revealing+the+wider+scene,+then+hold."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Sudden crash zoom out from [Subject], the environment exploding into view in a fraction of a second, then a locked wide hold. For motion: snap zoom out from [Subject] in under a second, revealing the wider scene, then hold.Copy promptUse in Video GeneratorSnap zoom out from [Subject] in under a second, revealing the wider scene, then hold.Snap zoom out from [Subject] in under a second, revealing the wider scene, then hold."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Dolly Out or a Crash Zoom In fired in the wrong direction. The tell is sliding foreground or a punch that gets tighter instead of wider.",
+          "links": [
+            {
+              "text": "Dolly Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+            },
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: locked body, pre-composed wide end, snap out, hold."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+        },
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Dolly Out or a Crash Zoom In fired in the wrong direction. The tell is sliding foreground or a punch that gets tighter instead of wider.The fix: locked body, pre-composed wide end, snap out, hold."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Crash Zoom Out in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a very fast decrease of focal length that throws a tight image into a wide one, usually from a still camera, then holds the wide."
+        },
+        {
+          "type": "heading",
+          "text": "Crash Zoom Out vs Pull Out",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A pull out moves the camera away so space opens with parallax. A crash zoom out only widens the lens, so the station point never changes."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Crash Zoom Out?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When you need an instant scale joke, a threat revealed around a close face, or a hard undercut. Do not use it as a slow exit."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Crash Zoom Out for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write snap zoom out in under a second, camera body still, environment appearing at once, then a locked wide hold. Ban physical retreat."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Crash Zoom Out in film?It is a very fast decrease of focal length that throws a tight image into a wide one, usually from a still camera, then holds the wide.Crash Zoom Out vs Pull OutA pull out moves the camera away so space opens with parallax. A crash zoom out only widens the lens, so the station point never changes.When should I use Crash Zoom Out?When you need an instant scale joke, a threat revealed around a close face, or a hard undercut. Do not use it as a slow exit.How do I prompt Crash Zoom Out for AI image or video?Write snap zoom out in under a second, camera body still, environment appearing at once, then a locked wide hold. Ban physical retreat."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Sudden crash zoom out from [Subject], the environment exploding into view in a fraction of a second, then a locked wide hold. For motion: snap zoom out from [Subject] in under a second, revealing the wider scene, then hold."
+    ],
+    "example": "Snap zoom out from [Subject] in under a second, revealing the wider scene, then hold."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/5a74b21f2d2f97e035b9035f20977f76.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-crash-zoom-out-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/50f4effe5c52992f8b05bebf3c572d46.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-out-03-crash-zoom-out-v2-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/63a56acb4a4b7893767e41c912b7c1e3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/crash-zoom-out-03-crash-zoom-out-v2.jpg",
+      "alt": "Crash Zoom Out frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": "Crash Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/37b5595bae8858283390769367c4f5d6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pull-out-pull-out-mini.webp",
+      "alt": "Pull Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/4c02c1f19b8cf15347f8a51749112685.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pull-out-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3054b1516c3b8c019ff2ad86462ebb9e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crash-zoom-out/hero.jpg",
+      "alt": "Crash Zoom Out",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "b3de63e5edbe1dc6a0661fd71d059409c471536ea868e9398f1ac1b3e6aa513e"
+}

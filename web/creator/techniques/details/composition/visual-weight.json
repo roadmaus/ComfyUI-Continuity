@@ -1,0 +1,364 @@
+{
+  "id": "composition/visual-weight",
+  "slug": "visual-weight",
+  "title": "Visual Weight",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/visual-weight",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/visual-weight.webp",
+  "detail": "details/composition/visual-weight.json",
+  "aliases": [],
+  "description": "Visual weight in visual weight composition is the attention an element attracts through size, contrast, color, position, focus, faces, or motion. A small bright thing can equal a large dark mass, because scale of attention is not scale of object.",
+  "thumbnail": "media/b912105d62d1a5737291d24c7df04440.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The diagram is a set of weights, not a ruler. A cigarette in a pool of light can outweigh a sofa."
+        },
+        {
+          "type": "paragraph",
+          "text": "A face, even tiny, will beat a mountain unless you starve the face of contrast. Who owns space is who wins the glance in the first half second, then the second glance you designed."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool as a slogan. Saying visual weight without choosing a winner is a wish."
+        },
+        {
+          "type": "paragraph",
+          "text": "If two masses fight to a draw, the beat is confused unless the fight is the point. Motion and faces cheat."
+        },
+        {
+          "type": "paragraph",
+          "text": "A still landscape that was balanced becomes a different picture when a figure turns. Recheck weight when action starts."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The diagram is a set of weights, not a ruler. A cigarette in a pool of light can outweigh a sofa.A face, even tiny, will beat a mountain unless you starve the face of contrast. Who owns space is who wins the glance in the first half second, then the second glance you designed.It is the wrong tool as a slogan. Saying visual weight without choosing a winner is a wish.If two masses fight to a draw, the beat is confused unless the fight is the point. Motion and faces cheat.A still landscape that was balanced becomes a different picture when a figure turns. Recheck weight when action starts."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "List the masses and their currencies: size, tone, chroma, sharpness, position (center and upper field weigh more), faces, movement. Dim or desaturate the losers, or throw them out of focus."
+        },
+        {
+          "type": "paragraph",
+          "text": "A hard key on a small object is a common way to mint weight. Prompt: Composition balancing visual weight around [Subject], a bright small thing equal to a large dark mass, scale of attention."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works List the masses and their currencies: size, tone, chroma, sharpness, position (center and upper field weigh more), faces, movement. Dim or desaturate the losers, or throw them out of focus.A hard key on a small object is a common way to mint weight. Prompt: Composition balancing visual weight around [Subject], a bright small thing equal to a large dark mass, scale of attention."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it whenever more than one mass could steal the shot: a deal on a table, a child in a window, a red coat in a grey street. Do not light every surface equally and hope the script will point."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it whenever more than one mass could steal the shot: a deal on a table, a child in a window, a red coat in a grey street. Do not light every surface equally and hope the script will point."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Asymmetry is often how unequal weights still hold as a picture. Tonal Contrast is specifically tonal punch, lightest versus darkest.",
+          "links": [
+            {
+              "text": "Asymmetry",
+              "url": "https://melies.co/cinematic-techniques/composition/asymmetry"
+            },
+            {
+              "text": "Tonal Contrast",
+              "url": "https://melies.co/cinematic-techniques/composition/contrast-composition"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Visual weight includes color, faces, and motion. Figure-Ground is the first-read separation of person from field.",
+          "links": [
+            {
+              "text": "Figure-Ground",
+              "url": "https://melies.co/cinematic-techniques/composition/figure-ground"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Triangular Composition assigns rank by geometry. Weight can override the apex if you light the wrong vertex.",
+          "links": [
+            {
+              "text": "Triangular Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/triangular-composition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AsymmetryLife is not a diagram.",
+          "displayText": "Asymmetry\nLife is not a diagram.",
+          "links": [
+            {
+              "text": "AsymmetryLife is not a diagram.",
+              "url": "https://melies.co/cinematic-techniques/composition/asymmetry"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tonal ContrastMake a poster out of a frame.",
+          "displayText": "Tonal Contrast\nMake a poster out of a frame.",
+          "links": [
+            {
+              "text": "Tonal ContrastMake a poster out of a frame.",
+              "url": "https://melies.co/cinematic-techniques/composition/contrast-composition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Asymmetry",
+          "url": "https://melies.co/cinematic-techniques/composition/asymmetry"
+        },
+        {
+          "text": "Tonal Contrast",
+          "url": "https://melies.co/cinematic-techniques/composition/contrast-composition"
+        },
+        {
+          "text": "Figure-Ground",
+          "url": "https://melies.co/cinematic-techniques/composition/figure-ground"
+        },
+        {
+          "text": "Triangular Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/triangular-composition"
+        },
+        {
+          "text": "AsymmetryLife is not a diagram.",
+          "url": "https://melies.co/cinematic-techniques/composition/asymmetry"
+        },
+        {
+          "text": "Tonal ContrastMake a poster out of a frame.",
+          "url": "https://melies.co/cinematic-techniques/composition/contrast-composition"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/4aa8809e69b8801f562128547133cdcd.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/asymmetry.webp",
+          "alt": "Asymmetry"
+        },
+        {
+          "kind": "image",
+          "path": "media/4e25cab2b250aeef87cc81fad7db7f47.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/contrast-composition.webp",
+          "alt": "Tonal Contrast"
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Asymmetry is often how unequal weights still hold as a picture. Tonal Contrast is specifically tonal punch, lightest versus darkest.Visual weight includes color, faces, and motion. Figure-Ground is the first-read separation of person from field.Triangular Composition assigns rank by geometry. Weight can override the apex if you light the wrong vertex.AsymmetryLife is not a diagram.Tonal ContrastMake a poster out of a frame.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Painterly cinema is a school of weight: a lit hand, a dark coat, a window. Barry Lyndon and other candlelit pictures let a small warm mass equal a room."
+        },
+        {
+          "type": "paragraph",
+          "text": "Westerns and desert films let a tiny rider equal a butte by placing them on a line and isolating tone. Grammar of attention, not a painting to duplicate."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Painterly cinema is a school of weight: a lit hand, a dark coat, a window. Barry Lyndon and other candlelit pictures let a small warm mass equal a room.Westerns and desert films let a tiny rider equal a butte by placing them on a line and isolating tone. Grammar of attention, not a painting to duplicate."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the winner and the equalizer. Composition balancing visual weight around [Subject], a bright small thing equal to a large dark mass, scale of attention."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say what is small and bright, what is large and dark, and where the eye should land first. Forbid equal lighting on all masses."
+        },
+        {
+          "type": "quote",
+          "text": "Composition balancing visual weight around [Subject], a bright small thing equal to a large dark mass, scale of attention."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Composition+balancing+visual+weight+around+[Subject],+a+bright+small+thing+equal+to+a+large+dark+mass,+scale+of+attention."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the winner and the equalizer. Composition balancing visual weight around [Subject], a bright small thing equal to a large dark mass, scale of attention.Say what is small and bright, what is large and dark, and where the eye should land first. Forbid equal lighting on all masses.Copy promptUse in Image GeneratorComposition balancing visual weight around [Subject], a bright small thing equal to a large dark mass, scale of attention.Composition balancing visual weight around [Subject], a bright small thing equal to a large dark mass, scale of attention."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is even, polite illumination. The tell is every object at the same brightness and sharpness, a catalogue page."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to pick a winner and tax the rest: darker, softer, smaller, or less chromatic."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is even, polite illumination. The tell is every object at the same brightness and sharpness, a catalogue page.The fix is to pick a winner and tax the rest: darker, softer, smaller, or less chromatic."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is visual weight in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is how strongly an element pulls the eye: size, contrast, color, position, focus, faces, motion. A small bright face can outweigh a large dark wall. The first glance should match the story."
+        },
+        {
+          "type": "heading",
+          "text": "Visual Weight vs Tonal Contrast",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Tonal contrast is a graphic fight of light against dark. Visual weight is the broader ledger. Color, faces, and motion count. A mid-grey moving face can outweigh a static white wall."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use visual weight?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "On every frame that contains more than one claim. Consciously, when a small object or distant person must beat a large set. Do not light the room like a showroom unless the showroom is the joke."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt visual weight for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Declare the winner. Example: Composition balancing visual weight around [Subject], a bright small thing equal to a large dark mass, scale of attention. Name both masses. Say the eye lands on the subject first."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is visual weight in film?It is how strongly an element pulls the eye: size, contrast, color, position, focus, faces, motion. A small bright face can outweigh a large dark wall. The first glance should match the story.Visual Weight vs Tonal ContrastTonal contrast is a graphic fight of light against dark. Visual weight is the broader ledger. Color, faces, and motion count. A mid-grey moving face can outweigh a static white wall.When should I use visual weight?On every frame that contains more than one claim. Consciously, when a small object or distant person must beat a large set. Do not light the room like a showroom unless the showroom is the joke.How do I prompt visual weight for AI image or video?Declare the winner. Example: Composition balancing visual weight around [Subject], a bright small thing equal to a large dark mass, scale of attention. Name both masses. Say the eye lands on the subject first."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the winner and the equalizer. Composition balancing visual weight around [Subject], a bright small thing equal to a large dark mass, scale of attention.",
+      "Say what is small and bright, what is large and dark, and where the eye should land first. Forbid equal lighting on all masses."
+    ],
+    "example": "Composition balancing visual weight around [Subject], a bright small thing equal to a large dark mass, scale of attention."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/b912105d62d1a5737291d24c7df04440.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/visual-weight.webp",
+      "alt": "Visual Weight example"
+    },
+    {
+      "kind": "image",
+      "path": "media/4aa8809e69b8801f562128547133cdcd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/asymmetry.webp",
+      "alt": "Asymmetry"
+    },
+    {
+      "kind": "image",
+      "path": "media/4e25cab2b250aeef87cc81fad7db7f47.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/contrast-composition.webp",
+      "alt": "Tonal Contrast"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/cb6ab4fc89ca458bafd7ba663b8d84fd.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/visual-weight/hero.jpg",
+      "alt": "Visual Weight",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "17007cb4fb9b6821ad6f78ab3070e52abcff3239b22f4d57b62ad77a13f28f4b"
+}

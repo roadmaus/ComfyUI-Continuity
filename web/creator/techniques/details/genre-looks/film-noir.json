@@ -1,0 +1,452 @@
+{
+  "id": "genre-looks/film-noir",
+  "slug": "film-noir",
+  "title": "Film Noir",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/film-noir",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+  "detail": "details/genre-looks/film-noir.json",
+  "aliases": [],
+  "description": "Film noir lighting is a low-key, high-contrast setup: a hard key, often cut by a venetian gobo or a streetlamp cookie, leaves one cheek in true black while wet pavement returns silver. The camera sits at eye height on a 35mm or 50mm spherical lens, tungsten practicals as motivated sources, and blocking that isolates a figure in a doorway, an alley, or a pool of light.",
+  "thumbnail": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The shot withholds the room. A face is half a mask."
+        },
+        {
+          "type": "paragraph",
+          "text": "Guilt has to live in the sliver that remains, which is why voice-over can sit on this image without explaining the picture. Streets are wet so the night has a specular path back to the lens."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the crime is colorful, fashionable, or futuristic. If the threat is a gelled primary, use Giallo.",
+          "links": [
+            {
+              "text": "Giallo",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the night is neon and the year is now, use Neo-Noir. If the architecture itself is bent, use German Expressionism, not a wet street.",
+          "links": [
+            {
+              "text": "Neo-Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            },
+            {
+              "text": "German Expressionism",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/german-expressionism"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Giallo",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+        },
+        {
+          "text": "Neo-Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        },
+        {
+          "text": "German Expressionism",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/german-expressionism"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The shot withholds the room. A face is half a mask.Guilt has to live in the sliver that remains, which is why voice-over can sit on this image without explaining the picture. Streets are wet so the night has a specular path back to the lens.It is the wrong tool when the crime is colorful, fashionable, or futuristic. If the threat is a gelled primary, use Giallo.If the night is neon and the year is now, use Neo-Noir. If the architecture itself is bent, use German Expressionism, not a wet street."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Key with a hard Fresnel or open-face through slats, 45 to 90 degrees off camera, fill killed so the ratio sits near 8:1. Wet-down the street so the same key returns as bounce."
+        },
+        {
+          "type": "paragraph",
+          "text": "Practicals (desk lamp, cafe sign, streetlamp) must match the direction even if they are not the exposure. Lens: 35mm for a street, 50mm for a face, moderate stop so walls fall off."
+        },
+        {
+          "type": "paragraph",
+          "text": "Camera locked or a short dolly, eye level or a touch below. Prompt the gobo, the unfilled cheek, the wet asphalt, and 1940s crime blocking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Key with a hard Fresnel or open-face through slats, 45 to 90 degrees off camera, fill killed so the ratio sits near 8:1. Wet-down the street so the same key returns as bounce.Practicals (desk lamp, cafe sign, streetlamp) must match the direction even if they are not the exposure. Lens: 35mm for a street, 50mm for a face, moderate stop so walls fall off.Camera locked or a short dolly, eye level or a touch below. Prompt the gobo, the unfilled cheek, the wet asphalt, and 1940s crime blocking."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a character steps under a streetlamp and the shadow has to accuse them. Do not use it as a generic dark-crime grade on a color-saturated fashion interior."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a character steps under a streetlamp and the shadow has to accuse them. Do not use it as a generic dark-crime grade on a color-saturated fashion interior."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Film noir is silver, hard, and unfilled. Neo-noir keeps the guilty geometry but paints it with color practicals.",
+          "links": [
+            {
+              "text": "Film noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            },
+            {
+              "text": "Neo-noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tech noir adds future screens as keys. Giallo is the opposite palette: hyper-saturated primaries, not black-and-white pools.",
+          "links": [
+            {
+              "text": "Tech noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+            },
+            {
+              "text": "Giallo",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "German Expressionism distorts the set; noir usually keeps real streets and lets light do the distortion. Kit cousins: Low-Key Lighting, Gobo Lighting, Wet-Down, Chiaroscuro.",
+          "links": [
+            {
+              "text": "German Expressionism",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/german-expressionism"
+            },
+            {
+              "text": "Low-Key Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            },
+            {
+              "text": "Gobo Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+            },
+            {
+              "text": "Wet-Down",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/wet-down"
+            },
+            {
+              "text": "Chiaroscuro",
+              "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "displayText": "Low-Key Lighting\nMystery, crime, or moral night.",
+          "links": [
+            {
+              "text": "Low-Key LightingMystery, crime, or moral night.",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Gobo LightingThe room writes on the person.",
+          "displayText": "Gobo Lighting\nThe room writes on the person.",
+          "links": [
+            {
+              "text": "Gobo LightingThe room writes on the person.",
+              "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Wet-DownNight exteriors that must sparkle.",
+          "displayText": "Wet-Down\nNight exteriors that must sparkle.",
+          "links": [
+            {
+              "text": "Wet-DownNight exteriors that must sparkle.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/wet-down"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Film noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Neo-noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        },
+        {
+          "text": "Tech noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+        },
+        {
+          "text": "Giallo",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+        },
+        {
+          "text": "German Expressionism",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/german-expressionism"
+        },
+        {
+          "text": "Low-Key Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Gobo Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+        },
+        {
+          "text": "Wet-Down",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/wet-down"
+        },
+        {
+          "text": "Chiaroscuro",
+          "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+        },
+        {
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Gobo LightingThe room writes on the person.",
+          "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+        },
+        {
+          "text": "Wet-DownNight exteriors that must sparkle.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/wet-down"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+          "alt": "Low-Key Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/9d2fae3d817782fff1bed611023e5a33.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gobo-lighting.webp",
+          "alt": "Gobo Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/2ac0a10c34d96287d30d062f6762fbb5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wet-down.webp",
+          "alt": "Wet-Down"
+        }
+      ],
+      "sourceText": "Compared with similar shots Film noir is silver, hard, and unfilled. Neo-noir keeps the guilty geometry but paints it with color practicals.Tech noir adds future screens as keys. Giallo is the opposite palette: hyper-saturated primaries, not black-and-white pools.German Expressionism distorts the set; noir usually keeps real streets and lets light do the distortion. Kit cousins: Low-Key Lighting, Gobo Lighting, Wet-Down, Chiaroscuro.Low-Key LightingMystery, crime, or moral night.Gobo LightingThe room writes on the person.Wet-DownNight exteriors that must sparkle."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Third Man (wet Vienna, hard raking keys, a face in a doorway). Double Indemnity (venetian gobos, a confession in a dark living room)."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Big Combo (a fogged spotlight as the only map of a killing ground). Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Third Man (wet Vienna, hard raking keys, a face in a doorway). Double Indemnity (venetian gobos, a confession in a dark living room).The Big Combo (a fogged spotlight as the only map of a killing ground). Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lead with the treatment, then lock physics. Film-noir treatment of [Subject], hard venetian gobos, unfilled far cheek, wet-down street bounce, 50mm spherical, 1940s crime blocking."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name who stands where and which practical is the motivated key. Do not replace the gobo, the ratio, and the wet pavement with mood adjectives."
+        },
+        {
+          "type": "quote",
+          "text": "Film-noir treatment of [Subject], hard venetian gobos, wet streets, fedora shadows, moral night, 1940s crime grammar."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Film-noir+treatment+of+[Subject],+hard+venetian+gobos,+wet+streets,+fedora+shadows,+moral+night,+1940s+crime+grammar."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lead with the treatment, then lock physics. Film-noir treatment of [Subject], hard venetian gobos, unfilled far cheek, wet-down street bounce, 50mm spherical, 1940s crime blocking.Name who stands where and which practical is the motivated key. Do not replace the gobo, the ratio, and the wet pavement with mood adjectives.Copy promptUse in Image GeneratorFilm-noir treatment of [Subject], hard venetian gobos, wet streets, fedora shadows, moral night, 1940s crime grammar.Film-noir treatment of [Subject], hard venetian gobos, wet streets, fedora shadows, moral night, 1940s crime grammar."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Neo-Noir or generic Low-Key Lighting: color neon rain, or a softly underexposed room with no hard edge. The tell is a filled shadow, dry pavement, and no slat texture on the wall.",
+          "links": [
+            {
+              "text": "Neo-Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            },
+            {
+              "text": "Low-Key Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: kill the fill, add a venetian or tree cookie, wet the ground, and keep the palette silver."
+        }
+      ],
+      "links": [
+        {
+          "text": "Neo-Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        },
+        {
+          "text": "Low-Key Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Neo-Noir or generic Low-Key Lighting: color neon rain, or a softly underexposed room with no hard edge. The tell is a filled shadow, dry pavement, and no slat texture on the wall.Fix: kill the fill, add a venetian or tree cookie, wet the ground, and keep the palette silver."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Film Noir in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A 1940s crime look built from hard, unfilled keys, gobo texture, wet streets, and eye-level 35mm or 50mm blocking. The picture withholds information. Silver contrast does the work that color would do in later noir."
+        },
+        {
+          "type": "heading",
+          "text": "Film Noir vs Neo-Noir",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Film noir is low-key silver with tungsten practicals and wet-down bounce. Neo-noir keeps the guilty geometry but keys with color: sodium, neon, and contemporary flesh. If you can name a gel hue as the mood, you have left classic noir."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Film Noir?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a crime scene needs the room to refuse the face: a doorway, a slatted office, a wet alley. Skip it for fashion-horror color, future screens, or any beat that needs a readable, filled close-up."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Film Noir for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Film-noir treatment of [Subject], hard venetian gobos, unfilled far cheek, wet-down street, 50mm spherical, 1940s crime blocking. Specify the practical that motivates the key. Do not ask for color neon or a soft underexposed room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Film Noir in film?A 1940s crime look built from hard, unfilled keys, gobo texture, wet streets, and eye-level 35mm or 50mm blocking. The picture withholds information. Silver contrast does the work that color would do in later noir.Film Noir vs Neo-NoirFilm noir is low-key silver with tungsten practicals and wet-down bounce. Neo-noir keeps the guilty geometry but keys with color: sodium, neon, and contemporary flesh. If you can name a gel hue as the mood, you have left classic noir.When should I use Film Noir?When a crime scene needs the room to refuse the face: a doorway, a slatted office, a wet alley. Skip it for fashion-horror color, future screens, or any beat that needs a readable, filled close-up.How do I prompt Film Noir for AI image or video?Write: Film-noir treatment of [Subject], hard venetian gobos, unfilled far cheek, wet-down street, 50mm spherical, 1940s crime blocking. Specify the practical that motivates the key. Do not ask for color neon or a soft underexposed room."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lead with the treatment, then lock physics. Film-noir treatment of [Subject], hard venetian gobos, unfilled far cheek, wet-down street bounce, 50mm spherical, 1940s crime blocking.",
+      "Name who stands where and which practical is the motivated key. Do not replace the gobo, the ratio, and the wet pavement with mood adjectives."
+    ],
+    "example": "Film-noir treatment of [Subject], hard venetian gobos, wet streets, fedora shadows, moral night, 1940s crime grammar."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir example"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+      "alt": "Low-Key Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/9d2fae3d817782fff1bed611023e5a33.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gobo-lighting.webp",
+      "alt": "Gobo Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/2ac0a10c34d96287d30d062f6762fbb5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wet-down.webp",
+      "alt": "Wet-Down"
+    },
+    {
+      "kind": "image",
+      "path": "media/9ff81a9ac19521e6091c6d5156eb8454.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/film-noir/hero.jpg",
+      "alt": "Film Noir",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "0949bebb6cf18b73cb18ecc69baa1c4a6f108b8a0f5359e302f8c0311dc19a4c"
+}

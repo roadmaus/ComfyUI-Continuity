@@ -1,0 +1,459 @@
+{
+  "id": "editing/fade",
+  "slug": "fade",
+  "title": "Fade In / Fade Out",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/fade",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fade-103-fade-to-a-field-of-black-or-color-mini.webp",
+  "detail": "details/editing/fade.json",
+  "aliases": [
+    "Fade-out",
+    "Punctuation through absence"
+  ],
+  "description": "A fade in or fade out takes the picture to or from a uniform field of black or color, rather than handing the frame straight to another visible scene. One side of the join is a world; the other side is absence, sleep, death, or a chapter break.",
+  "thumbnail": "media/eb3012a31c74b1950233bd05e60d3644.webp",
+  "video": "media/8012073caede219e3dd4f356b367853d.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/103-fade-to-a-field-of-black-or-color-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The room goes. Red remains, or black does, long enough to feel like a closed book."
+        },
+        {
+          "type": "paragraph",
+          "text": "Then another room is born from the same field. A fade is punctuation, not a mix of two stories."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a scene is a chapter, when consciousness drops, or when you want a pause the audience can rest in. It is the wrong tool for a gentle bleed between two images that should both stay present: that is a Dissolve.",
+          "links": [
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool if you only want to point at a face inside a shrinking circle: that is an Iris. A fade does not automatically mean a long period has passed.",
+          "links": [
+            {
+              "text": "Iris",
+              "url": "https://melies.co/cinematic-techniques/editing/iris"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Sound that continues over black can mean a second of unconsciousness. Sound that dies with the picture can mean an ending."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        },
+        {
+          "text": "Iris",
+          "url": "https://melies.co/cinematic-techniques/editing/iris"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The room goes. Red remains, or black does, long enough to feel like a closed book.Then another room is born from the same field. A fade is punctuation, not a mix of two stories.Use it when a scene is a chapter, when consciousness drops, or when you want a pause the audience can rest in. It is the wrong tool for a gentle bleed between two images that should both stay present: that is a Dissolve.It is also the wrong tool if you only want to point at a face inside a shrinking circle: that is an Iris. A fade does not automatically mean a long period has passed.Sound that continues over black can mean a second of unconsciousness. Sound that dies with the picture can mean an ending."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Reduce the picture to a field (or raise a picture out of one). Choose black for neutral chaptering, or a color (deep red, white) when the field itself should feel like a mood."
+        },
+        {
+          "type": "paragraph",
+          "text": "Coordinate whether sound survives the empty picture. Do not fill the room with fog or smoke to fake a fade; the image must leave, not get weather."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: fade to or from black around [Subject], chapter punctuation, sleep, death, or the start of a world."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Reduce the picture to a field (or raise a picture out of one). Choose black for neutral chaptering, or a color (deep red, white) when the field itself should feel like a mood.Coordinate whether sound survives the empty picture. Do not fill the room with fog or smoke to fake a fade; the image must leave, not get weather.Prompt: fade to or from black around [Subject], chapter punctuation, sleep, death, or the start of a world."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to open a film, close an act, or mark a blackout of awareness. Do not use it between every scene in a contemporary dialogue piece unless you want a period cadence."
+        },
+        {
+          "type": "paragraph",
+          "text": "If two pictures should overlap, dissolve."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to open a film, close an act, or mark a blackout of awareness. Do not use it between every scene in a contemporary dialogue piece unless you want a period cadence.If two pictures should overlap, dissolve."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Dissolve overlaps two scenes; a fade empties the frame first. An Iris is a moving mask that points at a detail while the rest goes black, not a full-field fade.",
+          "links": [
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            },
+            {
+              "text": "Iris",
+              "url": "https://melies.co/cinematic-techniques/editing/iris"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Wipe keeps both pictures alive, divided by a traveling edge. Vignette is optical falloff on a living image, not a transition.",
+          "links": [
+            {
+              "text": "Wipe",
+              "url": "https://melies.co/cinematic-techniques/editing/wipe"
+            },
+            {
+              "text": "Vignette",
+              "url": "https://melies.co/cinematic-techniques/effects/vignette"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DissolveMemory, passage, or a gentle death of a scene.",
+          "displayText": "Dissolve\nMemory, passage, or a gentle death of a scene.",
+          "links": [
+            {
+              "text": "DissolveMemory, passage, or a gentle death of a scene.",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "IrisPoint with the mask itself.",
+          "displayText": "Iris\nPoint with the mask itself.",
+          "links": [
+            {
+              "text": "IrisPoint with the mask itself.",
+              "url": "https://melies.co/cinematic-techniques/editing/iris"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        },
+        {
+          "text": "Iris",
+          "url": "https://melies.co/cinematic-techniques/editing/iris"
+        },
+        {
+          "text": "Wipe",
+          "url": "https://melies.co/cinematic-techniques/editing/wipe"
+        },
+        {
+          "text": "Vignette",
+          "url": "https://melies.co/cinematic-techniques/effects/vignette"
+        },
+        {
+          "text": "DissolveMemory, passage, or a gentle death of a scene.",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        },
+        {
+          "text": "IrisPoint with the mask itself.",
+          "url": "https://melies.co/cinematic-techniques/editing/iris"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1332a951776aaa53a01036439d1680be.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dissolve-102-dissolve-and-temporal-layering-mini.webp",
+          "alt": "Dissolve"
+        },
+        {
+          "kind": "video",
+          "path": "media/1ec6c76a16b746e9cd93c6c2b5299211.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/102-dissolve-and-temporal-layering-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ac66d050cb3a40e5efe5550f1b3c9242.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/iris-104-iris-opening-or-closing-mini.webp",
+          "alt": "Iris"
+        },
+        {
+          "kind": "video",
+          "path": "media/df975cf4d452b48274b222e578129ce2.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/104-iris-opening-or-closing-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Dissolve overlaps two scenes; a fade empties the frame first. An Iris is a moving mask that points at a detail while the rest goes black, not a full-field fade.A Wipe keeps both pictures alive, divided by a traveling edge. Vignette is optical falloff on a living image, not a transition.DissolveMemory, passage, or a gentle death of a scene.IrisPoint with the mask itself.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cries and Whispers uses red fields as emotional punctuation between rooms and crises. 1917 uses a blackout to separate lapse and return of consciousness."
+        },
+        {
+          "type": "paragraph",
+          "text": "Classical studio films chapter with fades to black as a default. Borrow the pause, not a tint as a trademark."
+        },
+        {
+          "type": "list-item",
+          "text": "Cries and Whispers 1972Red transitions give the film a distinctive emotional punctuation.",
+          "displayText": "Cries and Whispers 1972\nRed transitions give the film a distinctive emotional punctuation."
+        },
+        {
+          "type": "list-item",
+          "text": "1917 2019A blackout separates the protagonist’s lapse and return of consciousness.",
+          "displayText": "1917 2019\nA blackout separates the protagonist’s lapse and return of consciousness."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Cries and Whispers uses red fields as emotional punctuation between rooms and crises. 1917 uses a blackout to separate lapse and return of consciousness.Classical studio films chapter with fades to black as a default. Borrow the pause, not a tint as a trademark.Cries and Whispers 1972Red transitions give the film a distinctive emotional punctuation.1917 2019A blackout separates the protagonist’s lapse and return of consciousness."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fade to or from black around [Subject], chapter punctuation, sleep, death, or the start of a world. Name the field color if it is not black."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, specify whether sound dies with the picture or hangs over the empty field. Do not describe smoke filling the room."
+        },
+        {
+          "type": "quote",
+          "text": "A woman closes her eyes in a quiet room. Fade the image slowly into deep dark red while the room’s ticking continues for one second, then stops. Hold the empty color field before the next scene. Produce the fade and sound timing in post, not as red smoke filling the room."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+woman+closes+her+eyes+in+a+quiet+room.+Fade+the+image+slowly+into+deep+dark+red+while+the+room%E2%80%99s+ticking+continues+for+one+second,+then+stops.+Hold+the+empty+color+field+before+the+next+scene.+Produce+the+fade+and+sound+timing+in+post,+not+as+red+smoke+filling+the+room."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Fade to or from black around [Subject], chapter punctuation, sleep, death, or the start of a world. Name the field color if it is not black.For video, specify whether sound dies with the picture or hangs over the empty field. Do not describe smoke filling the room.Copy promptUse in Video GeneratorA woman closes her eyes in a quiet room. Fade the image slowly into deep dark red while the room’s ticking continues for one second, then stops. Hold the empty color field before the next scene. Produce the fade and sound timing in post, not as red smoke filling the room.A woman closes her eyes in a quiet room. Fade the image slowly into deep dark red while the room’s ticking continues for one second, then stops. Hold the empty color field before the next scene. Produce the fade and sound timing in post, not as red smoke filling the room."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Dissolve (two pictures mixed) or fog as a fake fade. ' The fix: go to a uniform field, hold it, then let the next scene emerge.",
+          "links": [
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "No overlap, no weather."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Dissolve (two pictures mixed) or fog as a fake fade. ' The fix: go to a uniform field, hold it, then let the next scene emerge.No overlap, no weather."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Fade In / Fade Out in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A fade takes the image to or from a uniform black or color field. One side of the join is a scene; the other is absence, not another picture mixed on top."
+        },
+        {
+          "type": "heading",
+          "text": "Fade In / Fade Out vs Dissolve",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dissolve overlaps two shots so both are visible at once. A fade inserts a field of black or color between worlds. Dissolve bleeds; fade punctuates."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Fade In / Fade Out?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for chapter breaks, openings, endings, sleep, or a loss of consciousness. Do not use it as a blend between two images that should share the frame."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Fade In / Fade Out for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the subject and the field. Example: Fade to or from black around [Subject], chapter punctuation. Say whether sound continues over the empty field, and do not fake it with smoke."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Fade In / Fade Out in film?A fade takes the image to or from a uniform black or color field. One side of the join is a scene; the other is absence, not another picture mixed on top.Fade In / Fade Out vs DissolveA dissolve overlaps two shots so both are visible at once. A fade inserts a field of black or color between worlds. Dissolve bleeds; fade punctuates.When should I use Fade In / Fade Out?Use it for chapter breaks, openings, endings, sleep, or a loss of consciousness. Do not use it as a blend between two images that should share the frame.How do I prompt Fade In / Fade Out for AI image or video?Name the subject and the field. Example: Fade to or from black around [Subject], chapter punctuation. Say whether sound continues over the empty field, and do not fake it with smoke."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Fade to or from black around [Subject], chapter punctuation, sleep, death, or the start of a world. Name the field color if it is not black.",
+      "For video, specify whether sound dies with the picture or hangs over the empty field. Do not describe smoke filling the room."
+    ],
+    "example": "A woman closes her eyes in a quiet room. Fade the image slowly into deep dark red while the room’s ticking continues for one second, then stops. Hold the empty color field before the next scene. Produce the fade and sound timing in post, not as red smoke filling the room."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/8012073caede219e3dd4f356b367853d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/103-fade-to-a-field-of-black-or-color-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/eb3012a31c74b1950233bd05e60d3644.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fade-103-fade-to-a-field-of-black-or-color-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/580371d1a2b461a23a76697dce385b3d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/fade.jpg",
+      "alt": "Fade In / Fade Out frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/1332a951776aaa53a01036439d1680be.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dissolve-102-dissolve-and-temporal-layering-mini.webp",
+      "alt": "Dissolve"
+    },
+    {
+      "kind": "video",
+      "path": "media/1ec6c76a16b746e9cd93c6c2b5299211.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/102-dissolve-and-temporal-layering-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ac66d050cb3a40e5efe5550f1b3c9242.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/iris-104-iris-opening-or-closing-mini.webp",
+      "alt": "Iris"
+    },
+    {
+      "kind": "video",
+      "path": "media/df975cf4d452b48274b222e578129ce2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/104-iris-opening-or-closing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7b7fd65c4deca6f6c5581ddb57e70d1b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fade/hero.jpg",
+      "alt": "Fade In / Fade Out",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "202b47f30a993315303ff46b4821762a4b348e8cf7f4403819e022776d5c4843"
+}

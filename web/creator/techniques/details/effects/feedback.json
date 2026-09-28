@@ -1,0 +1,385 @@
+{
+  "id": "effects/feedback",
+  "slug": "feedback",
+  "title": "Feedback",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/feedback",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/feedback-feedback-mini.webp",
+  "detail": "details/effects/feedback.json",
+  "aliases": [],
+  "description": "Video feedback is made by pointing a camera at its own live output so the picture nests into a recursive corridor of the same face. Each generation is a rephotograph of the monitor, with bloom, lag, and a tunnel of shrinking frames.",
+  "thumbnail": "media/106b30127da98de50cc851e97b9297c0.webp",
+  "video": "media/b608b9581e5e64bb71964f1af27c3a66.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/feedback-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The medium stares at itself. A face on a tube is recaptured, recaptured again, and the room becomes a hallway of the same look."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the story is about watching, broadcast, or a mind that cannot get out of the signal. It is the wrong tool for a simple loop of action."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the last frame merely sews to the first, you have a cycle in time, not a camera eating its monitor."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The medium stares at itself. A face on a tube is recaptured, recaptured again, and the room becomes a hallway of the same look.Use it when the story is about watching, broadcast, or a mind that cannot get out of the signal. It is the wrong tool for a simple loop of action.If the last frame merely sews to the first, you have a cycle in time, not a camera eating its monitor."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aim the taking lens at a playback screen that shows the live feed. A slight off-axis angle builds a corridor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dead-on nesting builds rectangles inside rectangles. Gain, lag, and the phosphor or pixel bloom set how fast the tunnel eats itself."
+        },
+        {
+          "type": "paragraph",
+          "text": "The subject is usually close to the screen so the first generation is readable. Prompt video feedback around the subject: camera looking into its own output, infinite corridor of the same face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Aim the taking lens at a playback screen that shows the live feed. A slight off-axis angle builds a corridor.Dead-on nesting builds rectangles inside rectangles. Gain, lag, and the phosphor or pixel bloom set how fast the tunnel eats itself.The subject is usually close to the screen so the first generation is readable. Prompt video feedback around the subject: camera looking into its own output, infinite corridor of the same face."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a person is trapped in a transmission, a title, or a night of monitors. Do not use it as wallpaper behind a dialogue scene that still needs geography."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a person is trapped in a transmission, a title, or a night of monitors. Do not use it as wallpaper behind a dialogue scene that still needs geography."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Kaleidoscope mirrors facets of one image into symmetry. Feedback nests generations of the same capture.",
+          "links": [
+            {
+              "text": "Kaleidoscope",
+              "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Infinite Loop sews the last frame to the first in time. Feedback is optical recursion, not a cycle of action.",
+          "links": [
+            {
+              "text": "Infinite Loop",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "KaleidoscopeOrnament, drugs, or chorus girls.",
+          "displayText": "Kaleidoscope\nOrnament, drugs, or chorus girls.",
+          "links": [
+            {
+              "text": "KaleidoscopeOrnament, drugs, or chorus girls.",
+              "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Infinite LoopDuration without progress.",
+          "displayText": "Infinite Loop\nDuration without progress.",
+          "links": [
+            {
+              "text": "Infinite LoopDuration without progress.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Kaleidoscope",
+          "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+        },
+        {
+          "text": "Infinite Loop",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+        },
+        {
+          "text": "KaleidoscopeOrnament, drugs, or chorus girls.",
+          "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+        },
+        {
+          "text": "Infinite LoopDuration without progress.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/5ede83e45262e78398144de105f26f7b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/kaleidoscope.webp",
+          "alt": "Kaleidoscope"
+        },
+        {
+          "kind": "image",
+          "path": "media/214e076659063e613c529a0a7ea87725.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infinite-loop-126-time-loop-with-evolving-behavior-mini.webp",
+          "alt": "Infinite Loop"
+        },
+        {
+          "kind": "video",
+          "path": "media/67fd3e9c12a65abbee2ff75f8fb0b181.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/126-time-loop-with-evolving-behavior-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Kaleidoscope mirrors facets of one image into symmetry. Feedback nests generations of the same capture.Infinite Loop sews the last frame to the first in time. Feedback is optical recursion, not a cycle of action.KaleidoscopeOrnament, drugs, or chorus girls.Infinite LoopDuration without progress.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "1960s tape experiments pointed cameras at monitors until the image tunnelled. The Doctor Who howlaround titles are the famous broadcast version."
+        },
+        {
+          "type": "paragraph",
+          "text": "Music videos still use the same recursive corridor. Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film 1960s tape experiments pointed cameras at monitors until the image tunnelled. The Doctor Who howlaround titles are the famous broadcast version.Music videos still use the same recursive corridor. Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Video feedback around [Subject], camera looking into its own output, infinite corridor of the same face. For video: Recursive video feedback of [Subject], the image eating itself into a tunnel."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the first generation (a face, a room) so the nest has a source."
+        },
+        {
+          "type": "quote",
+          "text": "Recursive video feedback of [Subject], the image eating itself into a tunnel."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Recursive+video+feedback+of+[Subject],+the+image+eating+itself+into+a+tunnel."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Video feedback around [Subject], camera looking into its own output, infinite corridor of the same face. For video: Recursive video feedback of [Subject], the image eating itself into a tunnel.Name the first generation (a face, a room) so the nest has a source.Copy promptUse in Video GeneratorRecursive video feedback of [Subject], the image eating itself into a tunnel.Recursive video feedback of [Subject], the image eating itself into a tunnel."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Kaleidoscope or a simple video loop. The tell is mirrored wedges or a repeating walk with no nested screen.",
+          "links": [
+            {
+              "text": "Kaleidoscope",
+              "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is a camera aimed at its own output, generations shrinking down a tunnel."
+        }
+      ],
+      "links": [
+        {
+          "text": "Kaleidoscope",
+          "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Kaleidoscope or a simple video loop. The tell is mirrored wedges or a repeating walk with no nested screen.The fix is a camera aimed at its own output, generations shrinking down a tunnel."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is feedback in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Video feedback is a camera looking into its own output so the image rephotographs itself into a nested corridor. Bloom, lag, and a tunnel of the same face are the picture."
+        },
+        {
+          "type": "heading",
+          "text": "Feedback vs kaleidoscope",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A kaleidoscope mirrors one image into symmetric facets. Feedback recaptures the live picture from a monitor, stacking generations rather than folding the frame."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use feedback?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the story is the signal watching itself: broadcast, hypnosis, a face trapped in a tube. Skip it for ordinary looping action."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt feedback for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Say video feedback, camera looking into its own output, infinite corridor of the same face. For motion, the image should eat itself into a tunnel. Keep a readable first generation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is feedback in film?Video feedback is a camera looking into its own output so the image rephotographs itself into a nested corridor. Bloom, lag, and a tunnel of the same face are the picture.Feedback vs kaleidoscopeA kaleidoscope mirrors one image into symmetric facets. Feedback recaptures the live picture from a monitor, stacking generations rather than folding the frame.When should I use feedback?Use it when the story is the signal watching itself: broadcast, hypnosis, a face trapped in a tube. Skip it for ordinary looping action.How do I prompt feedback for AI image or video?Say video feedback, camera looking into its own output, infinite corridor of the same face. For motion, the image should eat itself into a tunnel. Keep a readable first generation."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Video feedback around [Subject], camera looking into its own output, infinite corridor of the same face. For video: Recursive video feedback of [Subject], the image eating itself into a tunnel.",
+      "Name the first generation (a face, a room) so the nest has a source."
+    ],
+    "example": "Recursive video feedback of [Subject], the image eating itself into a tunnel."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/b608b9581e5e64bb71964f1af27c3a66.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/feedback-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/106b30127da98de50cc851e97b9297c0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/feedback-feedback-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2a79d1c607dfc2ea0b8e59e7a9c7f028.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/feedback.jpg",
+      "alt": "Feedback frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/5ede83e45262e78398144de105f26f7b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/kaleidoscope.webp",
+      "alt": "Kaleidoscope"
+    },
+    {
+      "kind": "image",
+      "path": "media/214e076659063e613c529a0a7ea87725.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infinite-loop-126-time-loop-with-evolving-behavior-mini.webp",
+      "alt": "Infinite Loop"
+    },
+    {
+      "kind": "video",
+      "path": "media/67fd3e9c12a65abbee2ff75f8fb0b181.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/126-time-loop-with-evolving-behavior-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5bdd62efc9a95409b29dcae2b5bbe1fc.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/feedback/hero.jpg",
+      "alt": "Feedback",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "40da0f2f9c1acb9aa21b8e47628be4fe0736c6eeb16eeea11039834098964f6a"
+}

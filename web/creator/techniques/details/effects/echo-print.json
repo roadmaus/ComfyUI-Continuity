@@ -1,0 +1,394 @@
+{
+  "id": "effects/echo-print",
+  "slug": "echo-print",
+  "title": "Echo Print",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/echo-print",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/echo-print-echo-print-mini.webp",
+  "detail": "details/effects/echo-print.json",
+  "aliases": [],
+  "description": "An echo print is an echo print effect that leaves a ghosted afterimage offset in time or register, so the last pose is still printed on this frame. The ghost is a stain of a previous exposure, not a second complete picture sharing the same plane.",
+  "thumbnail": "media/a397668ff6836db8614f8a7281966935.webp",
+  "video": "media/adaee68cf25b8ef34e7db041db08cef9.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/echo-print-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a gesture has already happened and the present cannot shake it. A head turns and the old profile hangs a few pixels away."
+        },
+        {
+          "type": "paragraph",
+          "text": "A step leaves a faint body where the foot was. Time reads as a registration error."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a clean double of two living people in conversation. If both images are fully exposed and equally sharp, you shot a superimposition, not a stain."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when a gesture has already happened and the present cannot shake it. A head turns and the old profile hangs a few pixels away.A step leaves a faint body where the foot was. Time reads as a registration error.It is the wrong tool for a clean double of two living people in conversation. If both images are fully exposed and equally sharp, you shot a superimposition, not a stain."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the camera locked or on a short path. Copy the previous frame, offset it along the motion vector by a few pixels or a few milliseconds, and print it at lower opacity."
+        },
+        {
+          "type": "paragraph",
+          "text": "Optical printers did this with a slight mis-register. Video echo does it with delay."
+        },
+        {
+          "type": "paragraph",
+          "text": "One key still lights the live body. The ghost has no second key."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt an afterimage offset in time or register, and say that the last frame is still printed on this one."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Keep the camera locked or on a short path. Copy the previous frame, offset it along the motion vector by a few pixels or a few milliseconds, and print it at lower opacity.Optical printers did this with a slight mis-register. Video echo does it with delay.One key still lights the live body. The ghost has no second key.Prompt an afterimage offset in time or register, and say that the last frame is still printed on this one."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat after a look, a blow, or a departure, when the last pose should remain as a stain. Do not use it to introduce a twin who must occupy the room as a solid person."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat after a look, a blow, or a departure, when the last pose should remain as a stain. Do not use it to introduce a twin who must occupy the room as a solid person."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Double Exposure combines two complete pictures. An echo print is a faded offset of the same action.",
+          "links": [
+            {
+              "text": "Double Exposure",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Step Printing repeats discrete frames to slow or stutter a take. The echo is a smear of register, not a held frame.",
+          "links": [
+            {
+              "text": "Step Printing",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Double ExposureTwo times or two selves occupy one frame.",
+          "displayText": "Double Exposure\nTwo times or two selves occupy one frame.",
+          "links": [
+            {
+              "text": "Double ExposureTwo times or two selves occupy one frame.",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Step PrintingLonging that cannot move at normal speed.",
+          "displayText": "Step Printing\nLonging that cannot move at normal speed.",
+          "links": [
+            {
+              "text": "Step PrintingLonging that cannot move at normal speed.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Double Exposure",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        },
+        {
+          "text": "Step Printing",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+        },
+        {
+          "text": "Double ExposureTwo times or two selves occupy one frame.",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        },
+        {
+          "text": "Step PrintingLonging that cannot move at normal speed.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+          "alt": "Double Exposure"
+        },
+        {
+          "kind": "image",
+          "path": "media/ddf553d30941e6f3586104451a1b324f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/step-printing-083-step-printing-and-smeared-motion-mini.webp",
+          "alt": "Step Printing"
+        },
+        {
+          "kind": "video",
+          "path": "media/917e3ac6fea636f9034c88a2d59e5fcb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/083-step-printing-and-smeared-motion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Double Exposure combines two complete pictures. An echo print is a faded offset of the same action.Step Printing repeats discrete frames to slow or stutter a take. The echo is a smear of register, not a held frame.Double ExposureTwo times or two selves occupy one frame.Step PrintingLonging that cannot move at normal speed.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Experimental optical printing and title-design ghosts are the grammar: a credit or a figure that leaves a trail of itself. Video-echo music videos do the same with delay."
+        },
+        {
+          "type": "paragraph",
+          "text": "These are uses of the stain, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Experimental optical printing and title-design ghosts are the grammar: a credit or a figure that leaves a trail of itself. Video-echo music videos do the same with delay.These are uses of the stain, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write the still as a photochemical hold, then name the ghost. Quote: Echo print of [Subject], a ghosted afterimage offset in time or register, the last frame still printed on this one."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video: Afterimages of [Subject] trail the present, an echo print of the previous moment. Name the offset direction."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban a second full scene."
+        },
+        {
+          "type": "quote",
+          "text": "Afterimages of [Subject] trail the present, an echo print of the previous moment."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Afterimages+of+[Subject]+trail+the+present,+an+echo+print+of+the+previous+moment."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write the still as a photochemical hold, then name the ghost. Quote: Echo print of [Subject], a ghosted afterimage offset in time or register, the last frame still printed on this one.For video: Afterimages of [Subject] trail the present, an echo print of the previous moment. Name the offset direction.Ban a second full scene.Copy promptUse in Video GeneratorAfterimages of [Subject] trail the present, an echo print of the previous moment.Afterimages of [Subject] trail the present, an echo print of the previous moment."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Double Exposure. The tell is two equally solid bodies, both keyed, both sharp.",
+          "links": [
+            {
+              "text": "Double Exposure",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is one live subject and a fainter, offset copy of the same pose, no second lamp."
+        }
+      ],
+      "links": [
+        {
+          "text": "Double Exposure",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Double Exposure. The tell is two equally solid bodies, both keyed, both sharp.The fix is one live subject and a fainter, offset copy of the same pose, no second lamp."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is echo print in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Echo print leaves a ghosted afterimage offset in time or register, as if the last frame were still printed on this one. The past of the gesture remains visible as a stain."
+        },
+        {
+          "type": "heading",
+          "text": "Echo print vs double exposure",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Double exposure combines two complete images. Echo print reprints a delayed or mis-registered copy of the same action at lower strength. One is two pictures. The other is a trail."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use echo print?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a movement should leave a mark: a turn, a blow, a person already gone. Skip it when you need two solid people sharing a scene."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt echo print for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the subject, then demand a ghosted afterimage offset in time or register. Keep one key. Say the last frame is still printed on this one. For video, afterimages should trail the present pose."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is echo print in film?Echo print leaves a ghosted afterimage offset in time or register, as if the last frame were still printed on this one. The past of the gesture remains visible as a stain.Echo print vs double exposureDouble exposure combines two complete images. Echo print reprints a delayed or mis-registered copy of the same action at lower strength. One is two pictures. The other is a trail.When should I use echo print?Use it when a movement should leave a mark: a turn, a blow, a person already gone. Skip it when you need two solid people sharing a scene.How do I prompt echo print for AI image or video?Name the subject, then demand a ghosted afterimage offset in time or register. Keep one key. Say the last frame is still printed on this one. For video, afterimages should trail the present pose."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write the still as a photochemical hold, then name the ghost. Quote: Echo print of [Subject], a ghosted afterimage offset in time or register, the last frame still printed on this one.",
+      "For video: Afterimages of [Subject] trail the present, an echo print of the previous moment. Name the offset direction.",
+      "Ban a second full scene."
+    ],
+    "example": "Afterimages of [Subject] trail the present, an echo print of the previous moment."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/adaee68cf25b8ef34e7db041db08cef9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/echo-print-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a397668ff6836db8614f8a7281966935.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/echo-print-echo-print-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a869aeef73cc9782782f778965f72653.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/echo-print.jpg",
+      "alt": "Echo Print frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+      "alt": "Double Exposure"
+    },
+    {
+      "kind": "image",
+      "path": "media/ddf553d30941e6f3586104451a1b324f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/step-printing-083-step-printing-and-smeared-motion-mini.webp",
+      "alt": "Step Printing"
+    },
+    {
+      "kind": "video",
+      "path": "media/917e3ac6fea636f9034c88a2d59e5fcb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/083-step-printing-and-smeared-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8bd755c2802609c95c4e2e7d50cb8e00.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/echo-print/hero.jpg",
+      "alt": "Echo Print",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "879201c80bcabfbb14d94415ac56050dc064db4ea5ceed128b0fafa3bd3a6043"
+}

@@ -1,0 +1,377 @@
+{
+  "id": "effects/night-vision",
+  "slug": "night-vision",
+  "title": "Night Vision",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/night-vision",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/night-vision.webp",
+  "detail": "details/effects/night-vision.json",
+  "aliases": [],
+  "description": "Night vision in night vision cinematography is image intensification: residual photons, and often a near-IR illuminator, amplified through a photocathode and microchannel plate onto a phosphor. The picture is typically green, grainy, blooming around lamps, with the framing of goggles, a weapon sight, or a camera in the dark.",
+  "thumbnail": "media/57004862851c5391970cbe491d31bfae.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Someone is hunting or hiding. The world is a tube."
+        },
+        {
+          "type": "paragraph",
+          "text": "Speculars bloom. Resolution is poor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grain is the gain. You are not looking at a graded night exterior."
+        },
+        {
+          "type": "paragraph",
+          "text": "You are looking through a device that makes the dark usable. Use it as a point of view: a raid, a found camera, a basement with goggles on."
+        },
+        {
+          "type": "paragraph",
+          "text": "The green (or white phosphor) is the display, not a color grade on a normal sensor. It is the wrong tool for a moonlit scene, for pale IR woods, or for heat outlines."
+        },
+        {
+          "type": "paragraph",
+          "text": "If trees go white and skies black in clean daylight contrast, that is infrared photography. If bodies are warm masks against cold walls, that is thermal."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Someone is hunting or hiding. The world is a tube.Speculars bloom. Resolution is poor.Grain is the gain. You are not looking at a graded night exterior.You are looking through a device that makes the dark usable. Use it as a point of view: a raid, a found camera, a basement with goggles on.The green (or white phosphor) is the display, not a color grade on a normal sensor. It is the wrong tool for a moonlit scene, for pale IR woods, or for heat outlines.If trees go white and skies black in clean daylight contrast, that is infrared photography. If bodies are warm masks against cold walls, that is thermal."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Motivate the device: goggles, rifle sight, security cam. High gain, scintillation, blooming highlights, limited dynamic range, maybe a circular or binocular mask, maybe an IR illuminator hot-spot."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: green phosphor, grainy intensification, surveillance or military eye, blooming lamps, not a teal grade, not thermal."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Motivate the device: goggles, rifle sight, security cam. High gain, scintillation, blooming highlights, limited dynamic range, maybe a circular or binocular mask, maybe an IR illuminator hot-spot.Prompt: green phosphor, grainy intensification, surveillance or military eye, blooming lamps, not a teal grade, not thermal."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A figure on a snow platform seen through goggles, green, noisy, lamps blooming, as a hunter's feed. Do not paint a normal night master green."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A figure on a snow platform seen through goggles, green, noisy, lamps blooming, as a hunter's feed. Do not paint a normal night master green."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Thermal sees emitted heat, not intensified light. Faces become temperature.",
+          "links": [
+            {
+              "text": "Thermal",
+              "url": "https://melies.co/cinematic-techniques/effects/thermal"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Infrared is a near-IR photograph of reflectance, often in daylight woods. Found Footage is the amateur or diegetic-camera wrapper that night vision often sits inside.",
+          "links": [
+            {
+              "text": "Infrared",
+              "url": "https://melies.co/cinematic-techniques/effects/infrared"
+            },
+            {
+              "text": "Found Footage",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Night vision is the tube. Found footage is the alibi."
+        },
+        {
+          "type": "list-item",
+          "text": "ThermalSee temperature, not light.",
+          "displayText": "Thermal\nSee temperature, not light.",
+          "links": [
+            {
+              "text": "ThermalSee temperature, not light.",
+              "url": "https://melies.co/cinematic-techniques/effects/thermal"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Found FootageThe operator is in danger too.",
+          "displayText": "Found Footage\nThe operator is in danger too.",
+          "links": [
+            {
+              "text": "Found FootageThe operator is in danger too.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Thermal",
+          "url": "https://melies.co/cinematic-techniques/effects/thermal"
+        },
+        {
+          "text": "Infrared",
+          "url": "https://melies.co/cinematic-techniques/effects/infrared"
+        },
+        {
+          "text": "Found Footage",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        },
+        {
+          "text": "ThermalSee temperature, not light.",
+          "url": "https://melies.co/cinematic-techniques/effects/thermal"
+        },
+        {
+          "text": "Found FootageThe operator is in danger too.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/dfe75425132e409b7e17839e57127e62.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/thermal.webp",
+          "alt": "Thermal"
+        },
+        {
+          "kind": "image",
+          "path": "media/9666d1373fc66963ab24b66dc223a396.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/found-footage-look-167-found-footage-framing-mini.webp",
+          "alt": "Found Footage"
+        },
+        {
+          "kind": "video",
+          "path": "media/7bf374164a3dcd9eff596eb974779555.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/167-found-footage-framing-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Thermal sees emitted heat, not intensified light. Faces become temperature.Infrared is a near-IR photograph of reflectance, often in daylight woods. Found Footage is the amateur or diegetic-camera wrapper that night vision often sits inside.Night vision is the tube. Found footage is the alibi.ThermalSee temperature, not light.Found FootageThe operator is in danger too.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Hurt Locker uses intensification as a combat eye. Zero Dark Thirty uses goggle and raid imagery as the operation's seeing."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Silence of the Lambs puts the audience in night-vision goggles in the dark."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Hurt Locker uses intensification as a combat eye. Zero Dark Thirty uses goggle and raid imagery as the operation's seeing.The Silence of the Lambs puts the audience in night-vision goggles in the dark."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Make it a device, not a grade. Example: Night-vision green phosphor of [Subject], grainy image intensification, blooming lamps, goggle or sight framing, surveillance or military eye, not a thermal palette."
+        },
+        {
+          "type": "quote",
+          "text": "Night-vision green phosphor of [Subject], grainy, surveillance, found-footage military eye."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Night-vision+green+phosphor+of+[Subject],+grainy,+surveillance,+found-footage+military+eye."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Make it a device, not a grade. Example: Night-vision green phosphor of [Subject], grainy image intensification, blooming lamps, goggle or sight framing, surveillance or military eye, not a thermal palette.Copy promptUse in Image GeneratorNight-vision green phosphor of [Subject], grainy, surveillance, found-footage military eye.Night-vision green phosphor of [Subject], grainy, surveillance, found-footage military eye."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: a green color grade, thermal ironbow, or infrared woods. Tell: normal contrast with a hue shift, or heat-colored people, or no grain and no bloom."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: high gain noise, phosphor color, highlight bloom, diegetic device framing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: a green color grade, thermal ironbow, or infrared woods. Tell: normal contrast with a hue shift, or heat-colored people, or no grain and no bloom.Fix: high gain noise, phosphor color, highlight bloom, diegetic device framing."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is night vision in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Image intensification of residual light onto a phosphor, usually green and grainy, as goggles, a sight, or a camera in the dark. It is a device look, not a grade."
+        },
+        {
+          "type": "heading",
+          "text": "Night vision vs thermal",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Night vision amplifies light. Thermal maps temperature. One blooms lamps and shows a grainy room. The other paints heat and can ignore visible lamps."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use night vision?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a character or camera is hunting in the dark through a tube. Do not use it as a green wash on a normally exposed night scene."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt night vision for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify green (or white) phosphor, grain, blooming highlights, and goggle or sight framing. Forbid thermal palettes and ordinary night grades."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is night vision in film?Image intensification of residual light onto a phosphor, usually green and grainy, as goggles, a sight, or a camera in the dark. It is a device look, not a grade.Night vision vs thermalNight vision amplifies light. Thermal maps temperature. One blooms lamps and shows a grainy room. The other paints heat and can ignore visible lamps.When should I use night vision?When a character or camera is hunting in the dark through a tube. Do not use it as a green wash on a normally exposed night scene.How do I prompt night vision for AI image or video?Specify green (or white) phosphor, grain, blooming highlights, and goggle or sight framing. Forbid thermal palettes and ordinary night grades."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Make it a device, not a grade. Example: Night-vision green phosphor of [Subject], grainy image intensification, blooming lamps, goggle or sight framing, surveillance or military eye, not a thermal palette."
+    ],
+    "example": "Night-vision green phosphor of [Subject], grainy, surveillance, found-footage military eye."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/57004862851c5391970cbe491d31bfae.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/night-vision.webp",
+      "alt": "Night Vision example"
+    },
+    {
+      "kind": "image",
+      "path": "media/dfe75425132e409b7e17839e57127e62.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/thermal.webp",
+      "alt": "Thermal"
+    },
+    {
+      "kind": "image",
+      "path": "media/9666d1373fc66963ab24b66dc223a396.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/found-footage-look-167-found-footage-framing-mini.webp",
+      "alt": "Found Footage"
+    },
+    {
+      "kind": "video",
+      "path": "media/7bf374164a3dcd9eff596eb974779555.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/167-found-footage-framing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6c90b66d305e503e7ecc129b0fadcf8e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/night-vision/hero.jpg",
+      "alt": "Night Vision",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "634f518e090d6bfaa77535f416a2971e2520f7f2d7ae498ead75de8673e907bd"
+}

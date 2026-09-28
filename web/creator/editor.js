@@ -14,6 +14,7 @@
 import { el, icon, ICONS, dismissable, keepScroll, placeNear, svg, swappable } from "./dom.js";
 import { CastShelf } from "./cast.js";
 import { isVisualReference, previewable, openReferencePreview } from "./reference-preview.js";
+import { techniqueTargetsForPiece, techniqueButton, renderTechniqueBar, openTechniqueLibrary } from "./technique-controls.js";
 import { castFamilies, keepAsMod } from "./refmod.js";
 import { t } from "./i18n.js";
 import { openPicker } from "./picker.js";
@@ -122,6 +123,24 @@ export function pickTakes(anchor, asset, commit) {
   });
 }
 
+/** Reuse the ordinary citation lifecycle for the actual changed segment. A
+ * non-visible segment has no editor to redraw; this scoped context never swaps
+ * the current editor's state or commits through its unrelated prompt owner. */
+export function syncTechniqueReferences({ owner, piece, castPiece = piece, before, after, editor = null }) {
+  const warnings = [];
+  const context = Object.assign(Object.create(editor ?? CreatorEditor.prototype), {
+    state: owner, piece, castPiece, commit() {}, flash: message => warnings.push(message),
+  });
+  const oldHandles = new Set(before.match(/@[\p{L}\p{N}_-]+/gu) ?? []);
+  const newHandles = new Set(after.match(/@[\p{L}\p{N}_-]+/gu) ?? []);
+  const removed = [...oldHandles].filter(handle => !newHandles.has(handle)).map(handle => handle.slice(1));
+  const fresh = [...newHandles].filter(handle => !oldHandles.has(handle)).map(handle => handle.slice(1));
+  if (removed.length) context.dropCited(removed);
+  if (fresh.length) context.liveCited(fresh);
+  S.normalizeCheckpoint(owner, S.pieceFamily(piece));
+  return warnings;
+}
+
 export class CreatorEditor {
   /**
    * @param {object} options
@@ -223,7 +242,7 @@ export class CreatorEditor {
                 samplingStore = null, pinFamily = null,
                 clearTool = null, seedTarget = null, compiledPrompt = null,
                 castFromLibrary = null, fullscreen = null, varies = null,
-                openCast = null }) {
+                openCast = null, techniqueContextCurrent = null }) {
     // The seed and card a `{day|night}` in this prompt is chosen on, for the
     // box to light the alternative the render will take. Null where there is
     // no node under the box to answer for it — see `PromptBox.paintVariations`.
@@ -244,6 +263,9 @@ export class CreatorEditor {
     // its strip — takes a name pressed in the sentence and opens it there.
     // Null everywhere the shelf is a row of this body; see `renderCastShelf`.
     this.openCast = openCast;
+    // The host can replace its piece while this nested editor still exists.
+    // Technique transactions must check that host, not just our old pointer.
+    this.techniqueContextCurrent = techniqueContextCurrent;
     // Folded or up, as the Cast tool last set it; null until it is pressed,
     // which is "up whenever there is a cast" unless the host says otherwise
     // (`castDefaultOpen`, stamped by the body for the shell's simple view).
@@ -324,6 +346,7 @@ export class CreatorEditor {
         // Citing a pool reference is what attaches it, so the finished prompt
         // moves on keystrokes that never touch the sentence's own words.
         this.prompt.refreshCompiled();
+        this.renderTechniques();
       },
       compiled: this.compiledPrompt ? () => this.compiledPrompt() : null,
       pick: () => this.varies?.() ?? null,
@@ -474,7 +497,9 @@ export class CreatorEditor {
         // keepScroll: the well is the face's scroll container once a rewrite
         // outgrows the node, and on the canvas the wheel is the zoom.
         this.well = keepScroll(el("div", { class: "mmc-well" }, [
-          this.prompt.frame, this.refinePanel.root,
+          this.prompt.frame,
+          this.techniqueHost = el("div", { class: "mmc-technique-bar", hidden: true }),
+          this.refinePanel.root,
         ])),
         this.pillsHost,
       ]),
@@ -508,6 +533,7 @@ export class CreatorEditor {
 
   /** Called when the node body goes away. */
   destroy() {
+    this.destroyed = true;
     if (this.ownsStage) this.stage?.destroy();
   }
 
@@ -1152,7 +1178,7 @@ export class CreatorEditor {
         if (!sleeping.has(handle)) carried.add(handle);
       }
     }
-    for (const asset of this.state.assets) {
+    for (const asset of this.state.assets ?? []) {
       if (asset.role !== "reference" || S.muted(asset)) continue;
       const named = handles.includes(asset.handle) && gone(asset.handle);
       if (!named && !quiet.has(asset.handle)) continue;
@@ -1192,7 +1218,7 @@ export class CreatorEditor {
       if (!handles.includes(subject.handle)) continue;
       for (const handle of S.subjectFiles(subject)) wanted.add(handle);
     }
-    for (const asset of this.state.assets) {
+    for (const asset of this.state.assets ?? []) {
       if (asset.role !== "reference" || !S.muted(asset)) continue;
       if (!wanted.has(asset.handle)) continue;
       delete asset.enabled;
@@ -1707,6 +1733,7 @@ export class CreatorEditor {
       ] : [],
     })] : []));
     this.prompt.refresh();
+    this.renderTechniques();
     this.syncPrompt();
     this.prompt.refreshCompiled();
     this.refinePanel.render();
@@ -1793,11 +1820,14 @@ export class CreatorEditor {
    */
   openEditor({ caret = null } = {}) {
     if (this.sheet) return;
+    const sourceState = this.state, sourcePiece = this.piece;
     const editor = new CreatorEditor({
       state: this.state,
       onCommit: () => { this.onCommit?.(); this.render(); },
       canvasPills: this.canvasPills,
       piece: this.piece,
+      techniqueContextCurrent: () => !this.destroyed && this.piece === sourcePiece
+        && this.state === sourceState && (this.techniqueContextCurrent?.() ?? true),
       pinFamily: this.pinFamilyOf,
       castPiece: this.castPiece,
       durationPill: this.durationPill,
@@ -1855,6 +1885,46 @@ export class CreatorEditor {
   syncPrompt() {
     const refined = this.state.refined;
     this.prompt.setSuperseded(!!refined?.body?.trim() && refined.enabled !== false);
+  }
+
+  techniqueTargets() {
+    const state = this.state;
+    const piece = this.piece;
+    return techniqueTargetsForPiece({ owner: state, piece,
+      subjects: () => this.castPiece?.subjects ?? state.cast ?? [],
+      isCurrent: () => !this.destroyed && this.state === state && this.piece === piece
+        && (this.techniqueContextCurrent?.() ?? true),
+      onChange: ({ before, after, owner, kind }) => {
+        const warnings = kind === "segment" ? syncTechniqueReferences({ before, after, owner, piece,
+          castPiece: this.castPiece ?? piece, editor: owner === this.state ? this : null }) : [];
+        if (owner === this.state) {
+          this.techniqueHost.dataset.techniqueEdited = "true";
+          this.prompt.setValue(owner.prompt ?? "");
+          this.commit();
+        } else {
+          // Persist via the piece's host, then refresh dependent citations and
+          // compiled views without replacing the current editor's draft text.
+          this.onCommit?.();
+          this.render();
+        }
+        return warnings;
+      },
+    });
+  }
+
+  openTechniques(initialTechnique = null) {
+    const targets = this.techniqueTargets();
+    openTechniqueLibrary({ target: targets.find(target => target.owner === this.state), targets,
+      getTargets: () => this.techniqueTargets(), initialTechnique });
+  }
+
+  renderTechniques() {
+    if (!this.techniqueHost) return;
+    const target = this.techniqueTargets().find(entry => entry.owner === this.state);
+    if (!target) { this.techniqueHost.replaceChildren(); this.techniqueHost.hidden = true; return; }
+    renderTechniqueBar(this.techniqueHost, target, {
+      open: id => this.openTechniques(id),
+    });
   }
 
   renderNotices() {
@@ -2157,6 +2227,7 @@ export class CreatorEditor {
         // With the machine's cluster rather than the piece's: a preset outlives
         // this generation the way the gallery and the settings do, and applying
         // one is reaching for something already made rather than making it.
+        techniqueButton(() => this.openTechniques()),
         ...(this.presetTarget ? [el("button", {
           class: "mmc-tool",
           title: t("Save this setup so you can put it back, or apply one you saved before"),

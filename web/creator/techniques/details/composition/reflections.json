@@ -1,0 +1,470 @@
+{
+  "id": "composition/reflections",
+  "slug": "reflections",
+  "title": "Reflections",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/reflections",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reflections.webp",
+  "detail": "details/composition/reflections.json",
+  "aliases": [
+    "Mirror dialogue",
+    "One-way-glass staging"
+  ],
+  "description": "Reflections in reflection cinematography put observer and observed in one plane by using glass, water, chrome, or a mirror. Mirror dialogue and one-way-glass staging let two spaces occupy a single composition, because optics, not a filter, do the doubling.",
+  "thumbnail": "media/251078d8f4037d4032497d15261ced49.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Show looking and the looked-at together and you skip a cut. A man and a woman speak through a booth."
+        },
+        {
+          "type": "paragraph",
+          "text": "A face and a street stack in a shop window. Identity splits without a dissolve."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the reflection is an unreadable smear, or when it cheats physics (a mirror that does not answer a head turn). If you cannot map the sightline, the audience will feel the fake even if they cannot name it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Reflections can dirty a frame or frame-in-frame a second world. Decide which space is brighter."
+        },
+        {
+          "type": "paragraph",
+          "text": "The brighter side writes itself onto the darker glass."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Show looking and the looked-at together and you skip a cut. A man and a woman speak through a booth.A face and a street stack in a shop window. Identity splits without a dissolve.It is the wrong tool when the reflection is an unreadable smear, or when it cheats physics (a mirror that does not answer a head turn). If you cannot map the sightline, the audience will feel the fake even if they cannot name it.Reflections can dirty a frame or frame-in-frame a second world. Decide which space is brighter.The brighter side writes itself onto the darker glass."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Map optics before you light. Control which side is hotter: the reflection needs a brighter source to read on glass."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hide the camera, or let it appear if that is the joke. Keep gaze and reflection geometrically honest."
+        },
+        {
+          "type": "paragraph",
+          "text": "Polarizers kill or manage bounce. Water needs an angle and a still or living surface."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Reflections of [Subject] in glass, water, or chrome, observer and observed in one plane."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Map optics before you light. Control which side is hotter: the reflection needs a brighter source to read on glass.Hide the camera, or let it appear if that is the joke. Keep gaze and reflection geometrically honest.Polarizers kill or manage bounce. Water needs an angle and a still or living surface.Prompt: Reflections of [Subject] in glass, water, or chrome, observer and observed in one plane."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for split identity, conversations that cannot be face to face, cities on windows, a child seeing a parent in a cabinet. Do not add a random mirror because the set has one."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for split identity, conversations that cannot be face to face, cities on windows, a child seeing a parent in a cabinet. Do not add a random mirror because the set has one."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Frame within Frame uses a hard inner rectangle. A reflection may be a smear, a stack, or a perfect copy.",
+          "links": [
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Silhouette can appear in glass as outline. Screen in Screen is an electronic or projected picture, not a bounce.",
+          "links": [
+            {
+              "text": "Silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            },
+            {
+              "text": "Screen in Screen",
+              "url": "https://melies.co/cinematic-techniques/composition/screen-in-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dirty Frame often uses glass as an edge chew. Here the glass is the sentence.",
+          "links": [
+            {
+              "text": "Dirty Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Windows may include reflections, but windows as a technique are stacked apertures of lives.",
+          "links": [
+            {
+              "text": "Windows",
+              "url": "https://melies.co/cinematic-techniques/composition/windows"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+          "displayText": "Frame within Frame\nSomeone is watched, trapped, or pictured.",
+          "links": [
+            {
+              "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SilhouetteIdentity is less important than shape.",
+          "displayText": "Silhouette\nIdentity is less important than shape.",
+          "links": [
+            {
+              "text": "SilhouetteIdentity is less important than shape.",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Screen in Screen",
+          "url": "https://melies.co/cinematic-techniques/composition/screen-in-screen"
+        },
+        {
+          "text": "Dirty Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+        },
+        {
+          "text": "Windows",
+          "url": "https://melies.co/cinematic-techniques/composition/windows"
+        },
+        {
+          "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "SilhouetteIdentity is less important than shape.",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+          "alt": "Frame within Frame"
+        },
+        {
+          "kind": "video",
+          "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/b5d6146a73c5baa985f280578740ef59.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/silhouette-049-silhouette-as-graphic-storytelling-mini.webp",
+          "alt": "Silhouette"
+        },
+        {
+          "kind": "video",
+          "path": "media/aa375d20479989e1dab53b000981e0c5.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/049-silhouette-as-graphic-storytelling-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Frame within Frame uses a hard inner rectangle. A reflection may be a smear, a stack, or a perfect copy.Silhouette can appear in glass as outline. Screen in Screen is an electronic or projected picture, not a bounce.Dirty Frame often uses glass as an edge chew. Here the glass is the sentence.Windows may include reflections, but windows as a technique are stacked apertures of lives.Frame within FrameSomeone is watched, trapped, or pictured.SilhouetteIdentity is less important than shape.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Lady from Shanghai multiplies positions in a mirror maze until aiming becomes impossible. Paris, Texas stages Travis and Jane across a one-way-glass booth so seeing is not symmetrical."
+        },
+        {
+          "type": "paragraph",
+          "text": "In the Mood for Love catches bodies in glass and rain. Contact uses a cabinet mirror in a child's race down a hall: reflection as geography."
+        },
+        {
+          "type": "list-item",
+          "text": "Paris, Texas 1984Travis and Jane speak across the one-way-glass booth.",
+          "displayText": "Paris, Texas 1984\nTravis and Jane speak across the one-way-glass booth."
+        },
+        {
+          "type": "list-item",
+          "text": "The Lady from Shanghai 1947The mirror-maze climax multiplies possible positions.",
+          "displayText": "The Lady from Shanghai 1947\nThe mirror-maze climax multiplies possible positions."
+        },
+        {
+          "type": "list-item",
+          "text": "Contact 1997Young Ellie races for the bathroom medicine cabinet after discovering her father collapsed.",
+          "displayText": "Contact 1997\nYoung Ellie races for the bathroom medicine cabinet after discovering her father collapsed."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b18ca5471a70dfec873687707c527bef.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reflections/famous/00-paris-texas-1984.jpg",
+          "alt": "Paris, Texas 1984"
+        },
+        {
+          "kind": "image",
+          "path": "media/e5e8a92c63f0aca4bab2a7556522153f.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reflections/famous/01-the-lady-from-shanghai-1947.jpg",
+          "alt": "The Lady from Shanghai 1947"
+        },
+        {
+          "kind": "image",
+          "path": "media/b1c6f6022851f44581eb067a4e3927a7.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reflections/famous/00-contact-1997.jpg",
+          "alt": "Contact 1997"
+        }
+      ],
+      "sourceText": "In film The Lady from Shanghai multiplies positions in a mirror maze until aiming becomes impossible. Paris, Texas stages Travis and Jane across a one-way-glass booth so seeing is not symmetrical.In the Mood for Love catches bodies in glass and rain. Contact uses a cabinet mirror in a child's race down a hall: reflection as geography.Paris, Texas 1984Travis and Jane speak across the one-way-glass booth.The Lady from Shanghai 1947The mirror-maze climax multiplies possible positions.Contact 1997Young Ellie races for the bathroom medicine cabinet after discovering her father collapsed."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the surface and both occupants. Reflections of [Subject] in glass, water, or chrome, observer and observed in one plane."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say shop window, one-way glass, puddle, or chrome. State who is real in front of the surface and who appears in it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add camera hidden if the camera must not appear."
+        },
+        {
+          "type": "quote",
+          "text": "A man and woman speak across a one-way-glass booth. Her illuminated face is visible while his dim reflection gradually overlays the glass as the light balance changes. Keep their positions consistent and the reflection optically plausible. Slow, restrained performance; no supernatural double."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+man+and+woman+speak+across+a+one-way-glass+booth.+Her+illuminated+face+is+visible+while+his+dim+reflection+gradually+overlays+the+glass+as+the+light+balance+changes.+Keep+their+positions+consistent+and+the+reflection+optically+plausible.+Slow,+restrained+performance;+no+supernatural+double."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the surface and both occupants. Reflections of [Subject] in glass, water, or chrome, observer and observed in one plane.Say shop window, one-way glass, puddle, or chrome. State who is real in front of the surface and who appears in it.Add camera hidden if the camera must not appear.Copy promptUse in Video GeneratorA man and woman speak across a one-way-glass booth. Her illuminated face is visible while his dim reflection gradually overlays the glass as the light balance changes. Keep their positions consistent and the reflection optically plausible. Slow, restrained performance; no supernatural double.A man and woman speak across a one-way-glass booth. Her illuminated face is visible while his dim reflection gradually overlays the glass as the light balance changes. Keep their positions consistent and the reflection optically plausible. Slow, restrained performance; no supernatural double."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a pasted-on double, or a mirror that ignores head movement. The tell is a reflection that does not match angle, brightness, or motion."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to build a real optic: brighter observed side, correct eyeline, and a surface that could actually see both."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a pasted-on double, or a mirror that ignores head movement. The tell is a reflection that does not match angle, brightness, or motion.The fix is to build a real optic: brighter observed side, correct eyeline, and a surface that could actually see both."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is reflections in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Glass, water, chrome, or a mirror puts two spaces into one picture. Observer and observed can share a plane. The bounce must obey optics: angle, brightness, and motion."
+        },
+        {
+          "type": "heading",
+          "text": "Reflections vs Frame within Frame",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A frame within a frame is a second rectangle, often a door or window opening. A reflection is an optical copy or overlay on a surface. A window can do both: it can be an aperture and a mirror at once if you light both sides."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use reflections?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use them to show looking and the looked-at together, to split a self, or to have a conversation that cannot be face to face. Do not insert a mirror as furniture with no optical job."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt reflections for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the surface and both parties. Example: Reflections of [Subject] in glass, water, or chrome, observer and observed in one plane. Specify one-way glass, shop window, or water. For video, demand the reflection match head movement."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is reflections in film?Glass, water, chrome, or a mirror puts two spaces into one picture. Observer and observed can share a plane. The bounce must obey optics: angle, brightness, and motion.Reflections vs Frame within FrameA frame within a frame is a second rectangle, often a door or window opening. A reflection is an optical copy or overlay on a surface. A window can do both: it can be an aperture and a mirror at once if you light both sides.When should I use reflections?Use them to show looking and the looked-at together, to split a self, or to have a conversation that cannot be face to face. Do not insert a mirror as furniture with no optical job.How do I prompt reflections for AI image or video?Name the surface and both parties. Example: Reflections of [Subject] in glass, water, or chrome, observer and observed in one plane. Specify one-way glass, shop window, or water. For video, demand the reflection match head movement."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the surface and both occupants. Reflections of [Subject] in glass, water, or chrome, observer and observed in one plane.",
+      "Say shop window, one-way glass, puddle, or chrome. State who is real in front of the surface and who appears in it.",
+      "Add camera hidden if the camera must not appear."
+    ],
+    "example": "A man and woman speak across a one-way-glass booth. Her illuminated face is visible while his dim reflection gradually overlays the glass as the light balance changes. Keep their positions consistent and the reflection optically plausible. Slow, restrained performance; no supernatural double."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/251078d8f4037d4032497d15261ced49.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reflections.webp",
+      "alt": "Reflections example"
+    },
+    {
+      "kind": "image",
+      "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+      "alt": "Frame within Frame"
+    },
+    {
+      "kind": "video",
+      "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b5d6146a73c5baa985f280578740ef59.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/silhouette-049-silhouette-as-graphic-storytelling-mini.webp",
+      "alt": "Silhouette"
+    },
+    {
+      "kind": "video",
+      "path": "media/aa375d20479989e1dab53b000981e0c5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/049-silhouette-as-graphic-storytelling-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/b18ca5471a70dfec873687707c527bef.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reflections/famous/00-paris-texas-1984.jpg",
+      "alt": "Paris, Texas 1984"
+    },
+    {
+      "kind": "image",
+      "path": "media/e5e8a92c63f0aca4bab2a7556522153f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reflections/famous/01-the-lady-from-shanghai-1947.jpg",
+      "alt": "The Lady from Shanghai 1947"
+    },
+    {
+      "kind": "image",
+      "path": "media/b1c6f6022851f44581eb067a4e3927a7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reflections/famous/00-contact-1997.jpg",
+      "alt": "Contact 1997"
+    },
+    {
+      "kind": "image",
+      "path": "media/8b47fef7e9b1495527172d5cdf2b910c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reflections/hero.jpg",
+      "alt": "Reflections",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "7fd12a3872201e5079c4fd72a297fe69b311a27ff3b1fd9654427312acc1bcdd"
+}

@@ -1,0 +1,385 @@
+{
+  "id": "camera-movement/fixed-cam",
+  "slug": "fixed-cam",
+  "title": "Fixed Cam",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/fixed-cam",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fixed-cam-fixed-cam-mini.webp",
+  "detail": "details/camera-movement/fixed-cam.json",
+  "aliases": [
+    "locked camera"
+  ],
+  "description": "A fixed camera locks position and tilt so all motion belongs to the world, not the operator. The mount does not pan, tilt, or travel; blocking has to finish the shot.",
+  "thumbnail": "media/124ac5a5929538f73597b1a268d64490.webp",
+  "video": "media/af13c2dcf3128c2b99e9b6a83848bcc6.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fixed-cam-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Trust blocking. A kitchen, a hallway, a stage: people enter, work, leave, and the frame stays a law."
+        },
+        {
+          "type": "paragraph",
+          "text": "Duration becomes visible because the camera refuses to help. It is the wrong tool when a look or a stand requires a reframe to keep power readable."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you start drifting to be kind, you no longer have a fixed cam. You have a timid pan."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Trust blocking. A kitchen, a hallway, a stage: people enter, work, leave, and the frame stays a law.Duration becomes visible because the camera refuses to help. It is the wrong tool when a look or a stand requires a reframe to keep power readable.If you start drifting to be kind, you no longer have a fixed cam. You have a timid pan."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sticks, a wall mount, or a hidden lock-off. Pick height (often eye or a formal chest) and a lens that holds the room (often 35 to 50mm)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Deep enough focus that action in more than one plane can be read. Prompt: Fixed camera on [Subject], locked position and tilt, all motion belonging to the world, not the operator."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Sticks, a wall mount, or a hidden lock-off. Pick height (often eye or a formal chest) and a lens that holds the room (often 35 to 50mm).Deep enough focus that action in more than one plane can be read. Prompt: Fixed camera on [Subject], locked position and tilt, all motion belonging to the world, not the operator."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the scene is blocking: chores, a ritual, a joke that happens in the wide. Do not free the head to chase a line."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the scene is blocking: chores, a ritual, a joke that happens in the wide. Do not free the head to chase a line."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Static Locked-Off is the locked-off shot as a catalog size of move (none). Tableau is a staging idea: a composed field to be read as a picture.",
+          "links": [
+            {
+              "text": "Static Locked-Off",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+            },
+            {
+              "text": "Tableau",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fixed cam is the camera-movement rule: the support does not participate. A Pan that only adjusts a little is already a different contract.",
+          "links": [
+            {
+              "text": "Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Static Locked-OffTrust blocking and duration. Movement would be noise.",
+          "displayText": "Static Locked-Off\nTrust blocking and duration. Movement would be noise.",
+          "links": [
+            {
+              "text": "Static Locked-OffTrust blocking and duration. Movement would be noise.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "TableauHold the arrangement.",
+          "displayText": "Tableau\nHold the arrangement.",
+          "links": [
+            {
+              "text": "TableauHold the arrangement.",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Static Locked-Off",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+        },
+        {
+          "text": "Tableau",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan"
+        },
+        {
+          "text": "Static Locked-OffTrust blocking and duration. Movement would be noise.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+        },
+        {
+          "text": "TableauHold the arrangement.",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ef92f0234960c354d232051aa99779ce.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/static-022-locked-off-duration-mini.webp",
+          "alt": "Static Locked-Off"
+        },
+        {
+          "kind": "video",
+          "path": "media/761eb0bcc8b403eab53e427ad9a96b85.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/022-locked-off-duration-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/a93c30aeb2ed5bcd737dc27a09898a53.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tableau.webp",
+          "alt": "Tableau"
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Static Locked-Off is the locked-off shot as a catalog size of move (none). Tableau is a staging idea: a composed field to be read as a picture.Fixed cam is the camera-movement rule: the support does not participate. A Pan that only adjusts a little is already a different contract.Static Locked-OffTrust blocking and duration. Movement would be noise.TableauHold the arrangement.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Jeanne Dielman holds rooms until chores become the film. Rope is often cited for long takes, but those cameras travel; a true fixed cam would not."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use Akerman as the lock-off grammar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Jeanne Dielman holds rooms until chores become the film. Rope is often cited for long takes, but those cameras travel; a true fixed cam would not.Use Akerman as the lock-off grammar."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock it. Still: Fixed camera on [Subject], locked position and tilt, all motion belonging to the world, not the operator."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Camera locked. Only [Subject] and the air move."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the height. Forbid even a small pan."
+        },
+        {
+          "type": "quote",
+          "text": "Camera locked. Only [Subject] and the air move."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Camera+locked.+Only+[Subject]+and+the+air+move."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lock it. Still: Fixed camera on [Subject], locked position and tilt, all motion belonging to the world, not the operator.Video: Camera locked. Only [Subject] and the air move.Name the height. Forbid even a small pan.Copy promptUse in Video GeneratorCamera locked. Only [Subject] and the air move.Camera locked. Only [Subject] and the air move."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a slow wander or a motivated pan. The tell: the frame eases to keep a face centered."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: pick a composition, lock pan and tilt, and let people leave the frame if they must."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a slow wander or a motivated pan. The tell: the frame eases to keep a face centered.The fix: pick a composition, lock pan and tilt, and let people leave the frame if they must."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Fixed Cam in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A fixed camera is locked in position and tilt. People and weather may move; the operator does not."
+        },
+        {
+          "type": "heading",
+          "text": "Fixed Cam vs Tableau",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Tableau is a staging idea, a picture to be read. Fixed cam is the mechanical rule that the support does not pan, tilt, or travel. They often meet, but they are not the same word."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Fixed Cam?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when blocking can carry the scene: a room, a ritual, a gag in the wide. Do not free the head to chase dialogue."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Fixed Cam for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a locked position and tilt. Example: Fixed camera on [Subject], locked position and tilt, all motion belonging to the world, not the operator."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Fixed Cam in film?A fixed camera is locked in position and tilt. People and weather may move; the operator does not.Fixed Cam vs TableauTableau is a staging idea, a picture to be read. Fixed cam is the mechanical rule that the support does not pan, tilt, or travel. They often meet, but they are not the same word.When should I use Fixed Cam?Use it when blocking can carry the scene: a room, a ritual, a gag in the wide. Do not free the head to chase dialogue.How do I prompt Fixed Cam for AI image or video?Write a locked position and tilt. Example: Fixed camera on [Subject], locked position and tilt, all motion belonging to the world, not the operator."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lock it. Still: Fixed camera on [Subject], locked position and tilt, all motion belonging to the world, not the operator.",
+      "Video: Camera locked. Only [Subject] and the air move.",
+      "Name the height. Forbid even a small pan."
+    ],
+    "example": "Camera locked. Only [Subject] and the air move."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/af13c2dcf3128c2b99e9b6a83848bcc6.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fixed-cam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/124ac5a5929538f73597b1a268d64490.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fixed-cam-fixed-cam-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bf56afc59da5aadfbe4fc6005e3dc507.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/fixed-cam.jpg",
+      "alt": "Fixed Cam frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/ef92f0234960c354d232051aa99779ce.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/static-022-locked-off-duration-mini.webp",
+      "alt": "Static Locked-Off"
+    },
+    {
+      "kind": "video",
+      "path": "media/761eb0bcc8b403eab53e427ad9a96b85.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/022-locked-off-duration-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a93c30aeb2ed5bcd737dc27a09898a53.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tableau.webp",
+      "alt": "Tableau"
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9adbbea9009a461eb6862f9b0e725256.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fixed-cam/hero.jpg",
+      "alt": "Fixed Cam",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "d08f069e93e15a5b288c4a7928abdb92114888cfa131e1d56a58b659aba6f85d"
+}

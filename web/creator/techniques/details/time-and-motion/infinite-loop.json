@@ -1,0 +1,427 @@
+{
+  "id": "time-and-motion/infinite-loop",
+  "slug": "infinite-loop",
+  "title": "Infinite Loop",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/infinite-loop",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infinite-loop-126-time-loop-with-evolving-behavior-mini.webp",
+  "detail": "details/time-and-motion/infinite-loop.json",
+  "aliases": [
+    "Repeated day",
+    "Iterative narrative"
+  ],
+  "description": "An infinite loop video sews the last frame to the first so motion never arrives at an ending. The cycle can be a seamless visual join, or, in narrative use, a repeated day whose variables change.",
+  "thumbnail": "media/214e076659063e613c529a0a7ea87725.webp",
+  "video": "media/67fd3e9c12a65abbee2ff75f8fb0b181.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/126-time-loop-with-evolving-behavior-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "As a picture machine, design a motion whose end state matches its start: position, light, pose. The cut should vanish."
+        },
+        {
+          "type": "paragraph",
+          "text": "As a story machine, repeat an event sequence while knowledge or one decision changes. Those are cousins that share a name."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not prompt them as one blob. It is the wrong tool for a forward-back toy (boomerang) or a mostly still image with one living detail (cinemagraph)."
+        },
+        {
+          "type": "paragraph",
+          "text": "A loop that changes everything at once has no baseline. A join that flashes is just a cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function As a picture machine, design a motion whose end state matches its start: position, light, pose. The cut should vanish.As a story machine, repeat an event sequence while knowledge or one decision changes. Those are cousins that share a name.Do not prompt them as one blob. It is the wrong tool for a forward-back toy (boomerang) or a mostly still image with one living detail (cinemagraph).A loop that changes everything at once has no baseline. A join that flashes is just a cut."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "For a visual loop, match the first and last frames and keep the action forward. For a narrative loop, establish a reset cue and a stable baseline, then vary a small number of actions per cycle."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Infinite loop of [Subject], the last frame sewing to the first, a motion that never arrives."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works For a visual loop, match the first and last frames and keep the action forward. For a narrative loop, establish a reset cue and a stable baseline, then vary a small number of actions per cycle.Prompt: Infinite loop of [Subject], the last frame sewing to the first, a motion that never arrives."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a motion or a day should fail to conclude, such as a walk cycle that sews or a morning that resets. Do not use it when you want a boomerang snap."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a motion or a day should fail to conclude, such as a walk cycle that sews or a morning that resets. Do not use it when you want a boomerang snap."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An infinite loop is not a Boomerang, which rewinds the same samples. A Cinemagraph holds a still and loops one island of motion.",
+          "links": [
+            {
+              "text": "Boomerang",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+            },
+            {
+              "text": "Cinemagraph",
+              "url": "https://melies.co/cinematic-techniques/effects/cinemagraph"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Reverse Motion is direction, not a sew. Narrative loops (Groundhog Day) change behavior inside a repeated event.",
+          "links": [
+            {
+              "text": "Reverse Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Visual loops must match ends."
+        },
+        {
+          "type": "list-item",
+          "text": "BoomerangTurn a gesture into a toy.",
+          "displayText": "Boomerang\nTurn a gesture into a toy.",
+          "links": [
+            {
+              "text": "BoomerangTurn a gesture into a toy.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CinemagraphA photograph that refuses to die.",
+          "displayText": "Cinemagraph\nA photograph that refuses to die.",
+          "links": [
+            {
+              "text": "CinemagraphA photograph that refuses to die.",
+              "url": "https://melies.co/cinematic-techniques/effects/cinemagraph"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Boomerang",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+        },
+        {
+          "text": "Cinemagraph",
+          "url": "https://melies.co/cinematic-techniques/effects/cinemagraph"
+        },
+        {
+          "text": "Reverse Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/reverse-motion"
+        },
+        {
+          "text": "BoomerangTurn a gesture into a toy.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+        },
+        {
+          "text": "CinemagraphA photograph that refuses to die.",
+          "url": "https://melies.co/cinematic-techniques/effects/cinemagraph"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/3807ab61c9fb3adc52edf60b250034b9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/boomerang-02-boomerang-mini.webp",
+          "alt": "Boomerang"
+        },
+        {
+          "kind": "video",
+          "path": "media/7c35712d882d0899c197afcf888ffeaa.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-boomerang-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/5e31f6b855e7fe96ca6f97144033b3bd.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinemagraph-cinemagraph-mini.webp",
+          "alt": "Cinemagraph"
+        },
+        {
+          "kind": "video",
+          "path": "media/ab617a228494596144b6b44f078fcd61.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/cinemagraph-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots An infinite loop is not a Boomerang, which rewinds the same samples. A Cinemagraph holds a still and loops one island of motion.Reverse Motion is direction, not a sew. Narrative loops (Groundhog Day) change behavior inside a repeated event.Visual loops must match ends.BoomerangTurn a gesture into a toy.CinemagraphA photograph that refuses to die.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "GIF culture and installation video are the visual grammar: a motion that can play forever. Groundhog Day returns the same morning while Phil's behavior changes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Run Lola Run repeats attempts with varied actions and outcomes. Edge of Tomorrow turns repetition into training."
+        },
+        {
+          "type": "list-item",
+          "text": "Groundhog Day 1993The same morning returns while Phil’s behavior changes.",
+          "displayText": "Groundhog Day 1993\nThe same morning returns while Phil’s behavior changes."
+        },
+        {
+          "type": "list-item",
+          "text": "Run Lola Run 1998Repeated attempts vary actions and outcomes.",
+          "displayText": "Run Lola Run 1998\nRepeated attempts vary actions and outcomes."
+        },
+        {
+          "type": "list-item",
+          "text": "Edge of Tomorrow 2014Repeated experience produces learned adaptations.",
+          "displayText": "Edge of Tomorrow 2014\nRepeated experience produces learned adaptations."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film GIF culture and installation video are the visual grammar: a motion that can play forever. Groundhog Day returns the same morning while Phil's behavior changes.Run Lola Run repeats attempts with varied actions and outcomes. Edge of Tomorrow turns repetition into training.Groundhog Day 1993The same morning returns while Phil’s behavior changes.Run Lola Run 1998Repeated attempts vary actions and outcomes.Edge of Tomorrow 2014Repeated experience produces learned adaptations."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say whether you want a seamless visual sew or a repeated-day story. Still: a pose that could be both start and end."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: A seamless loop of [Subject], end matching start, no cut visible. Forward motion unless you explicitly want a boomerang."
+        },
+        {
+          "type": "quote",
+          "text": "Design three repetitions of a commuter’s morning: the same alarm, dropped coin and departing bus. In each cycle she changes one decision, producing a different encounter. Reuse matched camera positions and reset sounds. Generate the baseline once, then controlled variations with stable people and geography."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Design+three+repetitions+of+a+commuter%E2%80%99s+morning:+the+same+alarm,+dropped+coin+and+departing+bus.+In+each+cycle+she+changes+one+decision,+producing+a+different+encounter.+Reuse+matched+camera+positions+and+reset+sounds.+Generate+the+baseline+once,+then+controlled+variations+with+stable+people+and+geography."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say whether you want a seamless visual sew or a repeated-day story. Still: a pose that could be both start and end.Video: A seamless loop of [Subject], end matching start, no cut visible. Forward motion unless you explicitly want a boomerang.Copy promptUse in Video GeneratorDesign three repetitions of a commuter’s morning: the same alarm, dropped coin and departing bus. In each cycle she changes one decision, producing a different encounter. Reuse matched camera positions and reset sounds. Generate the baseline once, then controlled variations with stable people and geography.Design three repetitions of a commuter’s morning: the same alarm, dropped coin and departing bus. In each cycle she changes one decision, producing a different encounter. Reuse matched camera positions and reset sounds. Generate the baseline once, then controlled variations with stable people and geography."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Boomerang. The tell is a visible rewind, or a reset with no matching frames.",
+          "links": [
+            {
+              "text": "Boomerang",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: match last frame to first, keep direction consistent, and change only the variables you mean to change."
+        }
+      ],
+      "links": [
+        {
+          "text": "Boomerang",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/boomerang"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Boomerang. The tell is a visible rewind, or a reset with no matching frames.Fix: match last frame to first, keep direction consistent, and change only the variables you mean to change."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Infinite Loop in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An infinite loop either sews last frame to first so a motion never ends, or repeats an event sequence while knowledge or choices change."
+        },
+        {
+          "type": "heading",
+          "text": "Infinite Loop vs Boomerang",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A boomerang runs forward then backward on the same path. A visual infinite loop usually stays forward and matches its ends so the join vanishes."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Infinite Loop?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When duration should not progress: a seamless cycle, or a repeated day that makes one changed decision comparable."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Infinite Loop for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a seamless loop, end matching start, no visible cut. If you mean a repeated-day story, say the reset cue and what changes each cycle."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Infinite Loop in film?An infinite loop either sews last frame to first so a motion never ends, or repeats an event sequence while knowledge or choices change.Infinite Loop vs BoomerangA boomerang runs forward then backward on the same path. A visual infinite loop usually stays forward and matches its ends so the join vanishes.When should I use Infinite Loop?When duration should not progress: a seamless cycle, or a repeated day that makes one changed decision comparable.How do I prompt Infinite Loop for AI image or video?Write a seamless loop, end matching start, no visible cut. If you mean a repeated-day story, say the reset cue and what changes each cycle."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say whether you want a seamless visual sew or a repeated-day story. Still: a pose that could be both start and end.",
+      "Video: A seamless loop of [Subject], end matching start, no cut visible. Forward motion unless you explicitly want a boomerang."
+    ],
+    "example": "Design three repetitions of a commuter’s morning: the same alarm, dropped coin and departing bus. In each cycle she changes one decision, producing a different encounter. Reuse matched camera positions and reset sounds. Generate the baseline once, then controlled variations with stable people and geography."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/67fd3e9c12a65abbee2ff75f8fb0b181.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/126-time-loop-with-evolving-behavior-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/214e076659063e613c529a0a7ea87725.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infinite-loop-126-time-loop-with-evolving-behavior-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a532892be2e97e553c01541518274b8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/infinite-loop.jpg",
+      "alt": "Infinite Loop frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/3807ab61c9fb3adc52edf60b250034b9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/boomerang-02-boomerang-mini.webp",
+      "alt": "Boomerang"
+    },
+    {
+      "kind": "video",
+      "path": "media/7c35712d882d0899c197afcf888ffeaa.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-boomerang-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5e31f6b855e7fe96ca6f97144033b3bd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinemagraph-cinemagraph-mini.webp",
+      "alt": "Cinemagraph"
+    },
+    {
+      "kind": "video",
+      "path": "media/ab617a228494596144b6b44f078fcd61.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/cinemagraph-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/71822f6b91fdc3207e87dfe1081316eb.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/infinite-loop/hero.jpg",
+      "alt": "Infinite Loop",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "21380e06c2e49d97edf5f44ae37a5ac8886ab16cd5a147d68a126514bdb15a1b"
+}

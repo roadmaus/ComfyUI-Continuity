@@ -1,0 +1,414 @@
+{
+  "id": "camera-movement/walk-and-talk",
+  "slug": "walk-and-talk",
+  "title": "Walk and Talk",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/walk-and-talk",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/walk-and-talk-walk-and-talk-mini.webp",
+  "detail": "details/camera-movement/walk-and-talk.json",
+  "aliases": [
+    "follow shot",
+    "lead shot",
+    "side-follow",
+    "chase shot",
+    "walk-and-talk"
+  ],
+  "description": "A walk and talk shot moves with speaking people, camera leading or flanking at medium, so information and geography travel together. Architecture flows while a moving two-shot (or a moving single with interruptions) carries the dialogue.",
+  "thumbnail": "media/a3a84d528fafaf16ccfe4646eac6d9c7.webp",
+  "video": "media/53d2bf226f93b39e3f3c591fba822a28.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/walk-and-talk-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Talk does not pause for a room, and the room does not pause for talk. Doorways, extras, and turning corners become the punctuation of the lines."
+        },
+        {
+          "type": "paragraph",
+          "text": "The job is coverage of conversation in motion, not a silent hunt. It is the wrong tool for a chase with no words, and the wrong tool for a seated interrogation."
+        },
+        {
+          "type": "paragraph",
+          "text": "If nobody is walking while talking, it is just a track."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Talk does not pause for a room, and the room does not pause for talk. Doorways, extras, and turning corners become the punctuation of the lines.The job is coverage of conversation in motion, not a silent hunt. It is the wrong tool for a chase with no words, and the wrong tool for a seated interrogation.If nobody is walking while talking, it is just a track."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Steadicam or gimbal, often leading, sometimes flanking. Hold a moving medium, shoulder height, leave headroom for doorways."
+        },
+        {
+          "type": "paragraph",
+          "text": "Recorders and extras must be blocked as part of the path. Prompt walk-and-talk tracking, camera leading or flanking at medium, architecture flowing, corridor energy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Steadicam or gimbal, often leading, sometimes flanking. Hold a moving medium, shoulder height, leave headroom for doorways.Recorders and extras must be blocked as part of the path. Prompt walk-and-talk tracking, camera leading or flanking at medium, architecture flowing, corridor energy."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when information and geography must move together. Concrete beat: two people argue policy while threading a bullpen, never sitting."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not walk-and-talk a scene that wants a table."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when information and geography must move together. Concrete beat: two people argue policy while threading a bullpen, never sitting.Do not walk-and-talk a scene that wants a table."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tracking Shot is the broader travel job and may be silent action. A Follow Shot hides faces behind heads.",
+          "links": [
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            },
+            {
+              "text": "Follow Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Steadicam is the usual support. Walk-and-talk is specifically dialogue plus path: West Wing grammar, not a hammer fight.",
+          "links": [
+            {
+              "text": "Steadicam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "displayText": "Tracking Shot\nAccompany a walker. The shot is a journey, not a picture.",
+          "links": [
+            {
+              "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "displayText": "Steadicam\nLong connecting moves through architecture. Neither handheld nor dolly.",
+          "links": [
+            {
+              "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Follow Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+        },
+        {
+          "text": "Steadicam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+          "alt": "Tracking Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+          "alt": "Steadicam"
+        },
+        {
+          "kind": "video",
+          "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Tracking Shot is the broader travel job and may be silent action. A Follow Shot hides faces behind heads.Steadicam is the usual support. Walk-and-talk is specifically dialogue plus path: West Wing grammar, not a hammer fight.Tracking ShotAccompany a walker. The shot is a journey, not a picture.SteadicamLong connecting moves through architecture. Neither handheld nor dolly.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The West Wing made corridor walk-and-talk the series' coverage engine. The Social Network uses walking conversation so status and architecture share the lines."
+        },
+        {
+          "type": "paragraph",
+          "text": "Birdman is a cousin in longer connecting talk. Speech in motion: that is the grammar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The West Wing made corridor walk-and-talk the series' coverage engine. The Social Network uses walking conversation so status and architecture share the lines.Birdman is a cousin in longer connecting talk. Speech in motion: that is the grammar."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Walk-and-talk tracking of [Subject] in conversation motion, camera leading or flanking at medium, architecture flowing, West Wing corridor energy. For motion: the camera leads [Subject] walking through a space, holding a moving medium two-shot energy even if one figure."
+        },
+        {
+          "type": "quote",
+          "text": "The camera leads [Subject] walking through a space, holding a moving medium two-shot energy even if one figure."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+leads+[Subject]+walking+through+a+space,+holding+a+moving+medium+two-shot+energy+even+if+one+figure."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Walk-and-talk tracking of [Subject] in conversation motion, camera leading or flanking at medium, architecture flowing, West Wing corridor energy. For motion: the camera leads [Subject] walking through a space, holding a moving medium two-shot energy even if one figure.Copy promptUse in Video GeneratorThe camera leads [Subject] walking through a space, holding a moving medium two-shot energy even if one figure.The camera leads [Subject] walking through a space, holding a moving medium two-shot energy even if one figure."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a silent Follow Shot or a seated two-shot with a slow Dolly In. The tell is the back of a head, or feet that do not walk.",
+          "links": [
+            {
+              "text": "Follow Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+            },
+            {
+              "text": "Dolly In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: people talking while walking, camera leading or flanking, faces readable, rooms changing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Follow Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+        },
+        {
+          "text": "Dolly In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a silent Follow Shot or a seated two-shot with a slow Dolly In. The tell is the back of a head, or feet that do not walk.The fix: people talking while walking, camera leading or flanking, faces readable, rooms changing."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Walk and Talk in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is moving coverage of conversation: the camera travels with people who are walking while they speak, so the lines and the building unfold together."
+        },
+        {
+          "type": "heading",
+          "text": "Walk and Talk vs Tracking Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Tracking can follow a silent walker or a fight. Walk-and-talk requires dialogue in motion, usually as a leading or flanking medium."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Walk and Talk?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When exposition or argument should happen on the move through a workplace or campus. Do not use it for a still confession."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Walk and Talk for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write camera leads or flanks [Subject] walking and talking, moving medium, architecture flowing, faces readable. Ban a silent follow from behind."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Walk and Talk in film?It is moving coverage of conversation: the camera travels with people who are walking while they speak, so the lines and the building unfold together.Walk and Talk vs Tracking ShotTracking can follow a silent walker or a fight. Walk-and-talk requires dialogue in motion, usually as a leading or flanking medium.When should I use Walk and Talk?When exposition or argument should happen on the move through a workplace or campus. Do not use it for a still confession.How do I prompt Walk and Talk for AI image or video?Write camera leads or flanks [Subject] walking and talking, moving medium, architecture flowing, faces readable. Ban a silent follow from behind."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Walk-and-talk tracking of [Subject] in conversation motion, camera leading or flanking at medium, architecture flowing, West Wing corridor energy. For motion: the camera leads [Subject] walking through a space, holding a moving medium two-shot energy even if one figure."
+    ],
+    "example": "The camera leads [Subject] walking through a space, holding a moving medium two-shot energy even if one figure."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/53d2bf226f93b39e3f3c591fba822a28.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/walk-and-talk-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a3a84d528fafaf16ccfe4646eac6d9c7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/walk-and-talk-walk-and-talk-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3d0c674b3b72c6da847da898375f59ae.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/walk-and-talk.jpg",
+      "alt": "Walk and Talk frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+      "alt": "Tracking Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+      "alt": "Steadicam"
+    },
+    {
+      "kind": "video",
+      "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fa0ca93e55462ef6d1c01a6fafd32f87.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/walk-and-talk/hero.jpg",
+      "alt": "Walk and Talk",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "e51fec677632664e5be54b8af228044bb2b5470eac621839913a67dcab015cd4"
+}

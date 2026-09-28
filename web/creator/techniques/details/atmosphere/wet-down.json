@@ -1,0 +1,400 @@
+{
+  "id": "atmosphere/wet-down",
+  "slug": "wet-down",
+  "title": "Wet-Down",
+  "categoryId": "atmosphere",
+  "categoryTitle": "Atmosphere and Weather",
+  "sourceUrl": "https://melies.co/cinematic-techniques/atmosphere/wet-down",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wet-down.webp",
+  "detail": "details/atmosphere/wet-down.json",
+  "aliases": [],
+  "description": "A wet-down sprays pavement, asphalt, and cars so night lights double themselves in reflection, often with no rain in the air. The street is the effect; water is a surface treatment, not weather.",
+  "thumbnail": "media/2ac0a10c34d96287d30d062f6762fbb5.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sodium, neon, a traffic headlamp: each finds a second copy on blacktop. Night exteriors that must sparkle."
+        },
+        {
+          "type": "paragraph",
+          "text": "Studio crews invented this because dry asphalt eats light. The trick is the shine, not the storm."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a night street, alley, or overpass must specularize practicals. It is the wrong tool when you need falling streaks and umbrellas as percussion: add Rain.",
+          "links": [
+            {
+              "text": "Rain",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the color should come only from tubes on walls with a dry floor: that is Neon Practicals without a mirror. If the air is full of drops, you have rain (usually on top of a wet-down).",
+          "links": [
+            {
+              "text": "Neon Practicals",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the air is empty and the ground is a black mirror, you have the wet-down alone."
+        }
+      ],
+      "links": [
+        {
+          "text": "Rain",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        },
+        {
+          "text": "Neon Practicals",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Sodium, neon, a traffic headlamp: each finds a second copy on blacktop. Night exteriors that must sparkle.Studio crews invented this because dry asphalt eats light. The trick is the shine, not the storm.Use it when a night street, alley, or overpass must specularize practicals. It is the wrong tool when you need falling streaks and umbrellas as percussion: add Rain.It is the wrong tool when the color should come only from tubes on walls with a dry floor: that is Neon Practicals without a mirror. If the air is full of drops, you have rain (usually on top of a wet-down).If the air is empty and the ground is a black mirror, you have the wet-down alone."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hose or rain-bar the travel path until it sheets. Place practicals (sodium, neon, shop windows) so their reflections fall in frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the camera low enough to catch the mirror, or lose it. No need for backlight in the air unless rain is also falling."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: wet-down streets around [Subject], pavement sprayed for night, double the lights by reflection."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Hose or rain-bar the travel path until it sheets. Place practicals (sodium, neon, shop windows) so their reflections fall in frame.Keep the camera low enough to catch the mirror, or lose it. No need for backlight in the air unless rain is also falling.Prompt: wet-down streets around [Subject], pavement sprayed for night, double the lights by reflection."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for night driving, a sidewalk wait, a neon block. Do not soak a dusty noon street unless the story has just rained."
+        },
+        {
+          "type": "paragraph",
+          "text": "A wet-down in hard sun can look like a spill, not night grammar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for night driving, a sidewalk wait, a neon block. Do not soak a dusty noon street unless the story has just rained.A wet-down in hard sun can look like a spill, not night grammar."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rain puts drops in the optical path. Neon Practicals is the source color; wet-down is how that color doubles on the ground.",
+          "links": [
+            {
+              "text": "Rain",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            },
+            {
+              "text": "Neon Practicals",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fog blooms lamps in air. Wet-down blooms them on the floor.",
+          "links": [
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Atmospheric Haze does not spec the asphalt.",
+          "links": [
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "RainMake the air visible and the ground reflective.",
+          "displayText": "Rain\nMake the air visible and the ground reflective.",
+          "links": [
+            {
+              "text": "RainMake the air visible and the ground reflective.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "displayText": "Neon Practicals\nThe city is the lighting department.",
+          "links": [
+            {
+              "text": "Neon PracticalsThe city is the lighting department.",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "FogHide geography. Delay the reveal.",
+          "displayText": "Fog\nHide geography. Delay the reveal.",
+          "links": [
+            {
+              "text": "FogHide geography. Delay the reveal.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Rain",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        },
+        {
+          "text": "Neon Practicals",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "RainMake the air visible and the ground reflective.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        },
+        {
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "FogHide geography. Delay the reveal.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+          "alt": "Rain"
+        },
+        {
+          "kind": "image",
+          "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+          "alt": "Neon Practicals"
+        },
+        {
+          "kind": "image",
+          "path": "media/a8973955095d2a7214fd549c40d15a8a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fog.webp",
+          "alt": "Fog"
+        }
+      ],
+      "sourceText": "Compared with similar shots Rain puts drops in the optical path. Neon Practicals is the source color; wet-down is how that color doubles on the ground.Fog blooms lamps in air. Wet-down blooms them on the floor.Atmospheric Haze does not spec the asphalt.RainMake the air visible and the ground reflective.Neon PracticalsThe city is the lighting department.FogHide geography. Delay the reveal."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Drive and Collateral make Los Angeles nights out of wet asphalt and practicals. Who Framed Roger Rabbit's night streets use the same studio-wet logic so lamps have copies."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the mirror, not a copied car."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Drive and Collateral make Los Angeles nights out of wet asphalt and practicals. Who Framed Roger Rabbit's night streets use the same studio-wet logic so lamps have copies.Use the mirror, not a copied car."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wet-down streets around [Subject], pavement sprayed for night, double the lights by reflection. Name the practicals, the sheeting water on asphalt, and empty air unless rain is also requested."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, moving reflections, tire tracks in water, no falling streaks if you do not want rain."
+        },
+        {
+          "type": "quote",
+          "text": "Wet-down streets around [Subject], pavement sprayed for night, double the lights by reflection, studio-night trick made beautiful."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Wet-down+streets+around+[Subject],+pavement+sprayed+for+night,+double+the+lights+by+reflection,+studio-night+trick+made+beautiful."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Wet-down streets around [Subject], pavement sprayed for night, double the lights by reflection. Name the practicals, the sheeting water on asphalt, and empty air unless rain is also requested.For video, moving reflections, tire tracks in water, no falling streaks if you do not want rain.Copy promptUse in Image GeneratorWet-down streets around [Subject], pavement sprayed for night, double the lights by reflection, studio-night trick made beautiful.Wet-down streets around [Subject], pavement sprayed for night, double the lights by reflection, studio-night trick made beautiful."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Rain (streaks in air) or a glossy grade on dry pavement. The tell: drops around lamps, or no reflections despite 'wet streets.' The fix: sheet the ground, place lights that can reflect, keep air empty if rain is not the job.",
+          "links": [
+            {
+              "text": "Rain",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Rain",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Rain (streaks in air) or a glossy grade on dry pavement. The tell: drops around lamps, or no reflections despite 'wet streets.' The fix: sheet the ground, place lights that can reflect, keep air empty if rain is not the job."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Wet-Down in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A wet-down is a sprayed street or surface that turns night practicals into reflections. It is a ground treatment. Rain is optional."
+        },
+        {
+          "type": "heading",
+          "text": "Wet-Down vs Rain",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Rain is weather in the air. Wet-down is water on the ground so lights double. Night work often uses both; they are not the same request."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Wet-Down?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a night exterior must sparkle from the pavement. Do not use it as a substitute for falling rain, and do not soak a dry noon scene without a story reason."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Wet-Down for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for sprayed pavement and reflected practicals. Example: wet-down streets around [Subject], pavement sprayed for night, double the lights by reflection. Specify empty air if you do not want rain."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Wet-Down in film?A wet-down is a sprayed street or surface that turns night practicals into reflections. It is a ground treatment. Rain is optional.Wet-Down vs RainRain is weather in the air. Wet-down is water on the ground so lights double. Night work often uses both; they are not the same request.When should I use Wet-Down?Use it when a night exterior must sparkle from the pavement. Do not use it as a substitute for falling rain, and do not soak a dry noon scene without a story reason.How do I prompt Wet-Down for AI image or video?Ask for sprayed pavement and reflected practicals. Example: wet-down streets around [Subject], pavement sprayed for night, double the lights by reflection. Specify empty air if you do not want rain."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Wet-down streets around [Subject], pavement sprayed for night, double the lights by reflection. Name the practicals, the sheeting water on asphalt, and empty air unless rain is also requested.",
+      "For video, moving reflections, tire tracks in water, no falling streaks if you do not want rain."
+    ],
+    "example": "Wet-down streets around [Subject], pavement sprayed for night, double the lights by reflection, studio-night trick made beautiful."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/2ac0a10c34d96287d30d062f6762fbb5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wet-down.webp",
+      "alt": "Wet-Down example"
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+      "alt": "Rain"
+    },
+    {
+      "kind": "image",
+      "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+      "alt": "Neon Practicals"
+    },
+    {
+      "kind": "image",
+      "path": "media/a8973955095d2a7214fd549c40d15a8a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fog.webp",
+      "alt": "Fog"
+    },
+    {
+      "kind": "image",
+      "path": "media/3ee1c631d0412d0f8abb12546521f0a5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/wet-down/hero.jpg",
+      "alt": "Wet-Down",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "ffa63f23c028e7917c2eb935a3da228454f7ac8ae2ce6d4d551ba6c822e12621"
+}

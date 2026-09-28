@@ -1,0 +1,426 @@
+{
+  "id": "effects/double-exposure",
+  "slug": "double-exposure",
+  "title": "Double Exposure",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/double-exposure",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+  "detail": "details/effects/double-exposure.json",
+  "aliases": [
+    "Cloning",
+    "Split matte",
+    "Superimposition"
+  ],
+  "description": "Double exposure in double exposure film combines two or more image records on one frame, in camera by winding back, optically in a printer, or digitally as an additive composite. Both pictures occupy the same emulsion or file unless a matte fully holds one off.",
+  "thumbnail": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face in a city. A ghost in rain."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fireplace flames laid over a locked interior. Two times share density."
+        },
+        {
+          "type": "paragraph",
+          "text": "The result can be lyrical (memory, a second self) or purely practical (an element you could not shoot with the first pass). Use it when two records should coexist: a thought over a room, a spirit over a landscape, fire added later."
+        },
+        {
+          "type": "paragraph",
+          "text": "Superimposition is the family. Actor doubling with a split matte is one application, not the whole technique."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you need two solid bodies that occlude each other, cast contact shadows, and pass objects. That is duplication or a split-matte composite, not a ghosted overlay."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool when a dissolve would carry you from one time to the next instead of stacking them."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A face in a city. A ghost in rain.Fireplace flames laid over a locked interior. Two times share density.The result can be lyrical (memory, a second self) or purely practical (an element you could not shoot with the first pass). Use it when two records should coexist: a thought over a room, a spirit over a landscape, fire added later.Superimposition is the family. Actor doubling with a split matte is one application, not the whole technique.It is the wrong tool when you need two solid bodies that occlude each other, cast contact shadows, and pass objects. That is duplication or a split-matte composite, not a ghosted overlay.It is also the wrong tool when a dissolve would carry you from one time to the next instead of stacking them."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In camera: expose, matte off part of the gate or shoot a full overlay, rewind, expose again with matched lighting. Optically: bi-pack or printer pass."
+        },
+        {
+          "type": "paragraph",
+          "text": "Digitally: additive mix or screened layers, or a hard split matte for twins. Lock the camera unless both passes share motion control."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt two named images sharing one frame, optical overlay, not a hard cut and not a morph."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works In camera: expose, matte off part of the gate or shoot a full overlay, rewind, expose again with matched lighting. Optically: bi-pack or printer pass.Digitally: additive mix or screened layers, or a hard split matte for twins. Lock the camera unless both passes share motion control.Prompt two named images sharing one frame, optical overlay, not a hard cut and not a morph."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face superimposed over rain-soaked rooftops so memory and place occupy one still. Do not use a translucent overlay when two twins must sit at one table and pour tea."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A face superimposed over rain-soaked rooftops so memory and place occupy one still. Do not use a translucent overlay when two twins must sit at one table and pour tea."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dissolve is a temporal crossfade from shot A to shot B. Double exposure holds both at once.",
+          "links": [
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Duplication makes two solid performances of the same body in one space, usually with mattes, not ghosts. Morph interpolates geometry from one form into another.",
+          "links": [
+            {
+              "text": "Duplication",
+              "url": "https://melies.co/cinematic-techniques/effects/duplication"
+            },
+            {
+              "text": "Morph",
+              "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Overlay is not transformation. Match Cut joins two shots.",
+          "links": [
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Double exposure never cuts."
+        },
+        {
+          "type": "list-item",
+          "text": "DissolveMemory, passage, or a gentle death of a scene.",
+          "displayText": "Dissolve\nMemory, passage, or a gentle death of a scene.",
+          "links": [
+            {
+              "text": "DissolveMemory, passage, or a gentle death of a scene.",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        },
+        {
+          "text": "Duplication",
+          "url": "https://melies.co/cinematic-techniques/effects/duplication"
+        },
+        {
+          "text": "Morph",
+          "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "DissolveMemory, passage, or a gentle death of a scene.",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1332a951776aaa53a01036439d1680be.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dissolve-102-dissolve-and-temporal-layering-mini.webp",
+          "alt": "Dissolve"
+        },
+        {
+          "kind": "video",
+          "path": "media/1ec6c76a16b746e9cd93c6c2b5299211.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/102-dissolve-and-temporal-layering-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Dissolve is a temporal crossfade from shot A to shot B. Double exposure holds both at once.Duplication makes two solid performances of the same body in one space, usually with mattes, not ghosts. Morph interpolates geometry from one form into another.Overlay is not transformation. Match Cut joins two shots.Double exposure never cuts.DissolveMemory, passage, or a gentle death of a scene.Match CutTwo images are the same idea.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Persona stacks faces until identity is a density problem. The Tree of Life lays memory over photographed nature."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Shining adds fireplace flames with a separate exposure. The Parent Trap and Adaptation use related splitting and doubling when two bodies must coexist, which is the cousin, not the same overlay."
+        },
+        {
+          "type": "list-item",
+          "text": "The Parent Trap 1961The same performer appears as both twins in shared compositions.",
+          "displayText": "The Parent Trap 1961\nThe same performer appears as both twins in shared compositions."
+        },
+        {
+          "type": "list-item",
+          "text": "Adaptation 2002Charlie and Donald occupy the same scenes.",
+          "displayText": "Adaptation 2002\nCharlie and Donald occupy the same scenes."
+        },
+        {
+          "type": "list-item",
+          "text": "The Shining 1980Fireplace flames were added with a separate exposure.",
+          "displayText": "The Shining 1980\nFireplace flames were added with a separate exposure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Persona stacks faces until identity is a density problem. The Tree of Life lays memory over photographed nature.The Shining adds fireplace flames with a separate exposure. The Parent Trap and Adaptation use related splitting and doubling when two bodies must coexist, which is the cousin, not the same overlay.The Parent Trap 1961The same performer appears as both twins in shared compositions.Adaptation 2002Charlie and Donald occupy the same scenes.The Shining 1980Fireplace flames were added with a separate exposure."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name both records and the mix. Example: Double exposure of [Subject] overlaid with a second named image, faces in cities, a ghost in rain, optical composite in camera, both exposures visible, not a morph and not a split-screen join."
+        },
+        {
+          "type": "quote",
+          "text": "A woman argues with an identical version of herself across a kitchen table. Generate each performance as a separate plate from the same locked camera and clean kitchen reference. Match eyelines and timing; keep their silhouettes separate. Composite them together with consistent shadows and no identity blending."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+woman+argues+with+an+identical+version+of+herself+across+a+kitchen+table.+Generate+each+performance+as+a+separate+plate+from+the+same+locked+camera+and+clean+kitchen+reference.+Match+eyelines+and+timing;+keep+their+silhouettes+separate.+Composite+them+together+with+consistent+shadows+and+no+identity+blending."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name both records and the mix. Example: Double exposure of [Subject] overlaid with a second named image, faces in cities, a ghost in rain, optical composite in camera, both exposures visible, not a morph and not a split-screen join.Copy promptUse in Video GeneratorA woman argues with an identical version of herself across a kitchen table. Generate each performance as a separate plate from the same locked camera and clean kitchen reference. Match eyelines and timing; keep their silhouettes separate. Composite them together with consistent shadows and no identity blending.A woman argues with an identical version of herself across a kitchen table. Generate each performance as a separate plate from the same locked camera and clean kitchen reference. Match eyelines and timing; keep their silhouettes separate. Composite them together with consistent shadows and no identity blending."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: dissolve, morph, or twin duplication. Tell: one image simply fades into the next, or two solid people with no shared density, or a face melting into a building."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: keep both images present, set opacity or a matte on purpose, and decide whether the second pass is ghost or solid."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: dissolve, morph, or twin duplication. Tell: one image simply fades into the next, or two solid people with no shared density, or a face melting into a building.Fix: keep both images present, set opacity or a matte on purpose, and decide whether the second pass is ghost or solid."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is double exposure in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Two image records combined on one frame, in camera, in an optical printer, or digitally. Elements shot at different times appear together."
+        },
+        {
+          "type": "heading",
+          "text": "Double exposure vs dissolve",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dissolve is a transition that leaves shot A for shot B. A double exposure is a stack: both pictures remain visible in the same frame."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use double exposure?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When two times, two selves, or two elements should occupy one image. Do not use it when you need two solid, occluding bodies."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt double exposure for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name both images, say optical overlay or in-camera double exposure, and specify whether the second pass is translucent or matted. Ban morph and hard split-screen unless that is the job."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is double exposure in film?Two image records combined on one frame, in camera, in an optical printer, or digitally. Elements shot at different times appear together.Double exposure vs dissolveA dissolve is a transition that leaves shot A for shot B. A double exposure is a stack: both pictures remain visible in the same frame.When should I use double exposure?When two times, two selves, or two elements should occupy one image. Do not use it when you need two solid, occluding bodies.How do I prompt double exposure for AI image or video?Name both images, say optical overlay or in-camera double exposure, and specify whether the second pass is translucent or matted. Ban morph and hard split-screen unless that is the job."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name both records and the mix. Example: Double exposure of [Subject] overlaid with a second named image, faces in cities, a ghost in rain, optical composite in camera, both exposures visible, not a morph and not a split-screen join."
+    ],
+    "example": "A woman argues with an identical version of herself across a kitchen table. Generate each performance as a separate plate from the same locked camera and clean kitchen reference. Match eyelines and timing; keep their silhouettes separate. Composite them together with consistent shadows and no identity blending."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+      "alt": "Double Exposure example"
+    },
+    {
+      "kind": "image",
+      "path": "media/1332a951776aaa53a01036439d1680be.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dissolve-102-dissolve-and-temporal-layering-mini.webp",
+      "alt": "Dissolve"
+    },
+    {
+      "kind": "video",
+      "path": "media/1ec6c76a16b746e9cd93c6c2b5299211.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/102-dissolve-and-temporal-layering-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9f1edb6f19b2579a01c94648f1f75502.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/double-exposure/hero.jpg",
+      "alt": "Double Exposure",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "9f664723de5d81a59b9678f5c02ac7a546597988b8f42c23134f285f580357fe"
+}

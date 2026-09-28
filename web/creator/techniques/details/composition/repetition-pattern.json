@@ -1,0 +1,394 @@
+{
+  "id": "composition/repetition-pattern",
+  "slug": "repetition-pattern",
+  "title": "Repetition and Pattern",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/repetition-pattern",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/repetition-pattern.webp",
+  "detail": "details/composition/repetition-pattern.json",
+  "aliases": [
+    "Repeated staging",
+    "Structural echo"
+  ],
+  "description": "Repetition and pattern composition repeats shapes, colors, lines, positions, or actions so the eye reads a system of columns, windows, soldiers, or hotel doors. A break in that pattern is often the story, because the grid had already set the expectation.",
+  "thumbnail": "media/61d5be392d8c6ec44bb5d1ce08a9a464.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Systems, armies, hotels, and factories love this diagram. Who owns space is the grid."
+        },
+        {
+          "type": "paragraph",
+          "text": "A person is a unit until they fail to match. That failure (an empty desk, a red coat, a late soldier) becomes the subject without a closer lens."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the location is unique and irregular. Forcing a pattern onto a messy apartment is a graphic lie unless the character is trying to impose one."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pattern can also return in time: the same blocking on a different day. That is structural echo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Compositionally it still needs a recognizable spatial rhyme so the audience can measure change."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Systems, armies, hotels, and factories love this diagram. Who owns space is the grid.A person is a unit until they fail to match. That failure (an empty desk, a red coat, a late soldier) becomes the subject without a closer lens.It is the wrong tool when the location is unique and irregular. Forcing a pattern onto a messy apartment is a graphic lie unless the character is trying to impose one.Pattern can also return in time: the same blocking on a different day. That is structural echo.Compositionally it still needs a recognizable spatial rhyme so the audience can measure change."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Find a repeating unit and put the camera where the unit tiles: elevation of a facade, a long lens compressing a row, an overhead of desks. Align so the repeat is countable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Place the break on a power position (a missing unit, a different color, a still figure in a marching line). Prompt: Repeating pattern around [Subject], columns, windows, soldiers, a break in the pattern as the story."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Find a repeating unit and put the camera where the unit tiles: elevation of a facade, a long lens compressing a row, an overhead of desks. Align so the repeat is countable.Place the break on a power position (a missing unit, a different color, a still figure in a marching line). Prompt: Repeating pattern around [Subject], columns, windows, soldiers, a break in the pattern as the story."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for institutions and copies: hotels, offices, armies, data centers, choruses. Do not use it as wallpaper if nothing can break."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for institutions and copies: hotels, offices, armies, data centers, choruses. Do not use it as wallpaper if nothing can break."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Symmetry is a mirror, which is one kind of repeat. Pattern can run in a line or a field without mirroring.",
+          "links": [
+            {
+              "text": "Symmetry",
+              "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Bird's-Eye View often reveals pattern by removing horizon. Architexture treats material and facade as texture until the person is a detail.",
+          "links": [
+            {
+              "text": "Bird's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            },
+            {
+              "text": "Architexture",
+              "url": "https://melies.co/cinematic-techniques/composition/architexture"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Pattern is the countable grid inside that texture. One-Point Perspective can aim the repeat into a tunnel.",
+          "links": [
+            {
+              "text": "One-Point Perspective",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SymmetryThe world is designed. Or pretending to be.",
+          "displayText": "Symmetry\nThe world is designed. Or pretending to be.",
+          "links": [
+            {
+              "text": "SymmetryThe world is designed. Or pretending to be.",
+              "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+          "displayText": "Bird's-Eye View\nTurn life into a board game or a ritual.",
+          "links": [
+            {
+              "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Symmetry",
+          "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+        },
+        {
+          "text": "Bird's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        },
+        {
+          "text": "Architexture",
+          "url": "https://melies.co/cinematic-techniques/composition/architexture"
+        },
+        {
+          "text": "One-Point Perspective",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "SymmetryThe world is designed. Or pretending to be.",
+          "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+        },
+        {
+          "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/433ff490835bf3f002cef6f2447f05d3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/symmetry.webp",
+          "alt": "Symmetry"
+        },
+        {
+          "kind": "image",
+          "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+          "alt": "Bird's-Eye View"
+        },
+        {
+          "kind": "video",
+          "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Symmetry is a mirror, which is one kind of repeat. Pattern can run in a line or a field without mirroring.Bird's-Eye View often reveals pattern by removing horizon. Architexture treats material and facade as texture until the person is a detail.Pattern is the countable grid inside that texture. One-Point Perspective can aim the repeat into a tunnel.SymmetryThe world is designed. Or pretending to be.Bird's-Eye ViewTurn life into a board game or a ritual.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Grand Budapest Hotel tiles uniforms, doors, and pastry boxes so a scuff reads. The Matrix uses copies as a philosophical pattern."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shaun of the Dead rhymes a trip to the shop across a changed world. Jaws and The Empire Strikes Back also teach recurrence in sound, a cousin of visual echo: a figure that returns until it is a system."
+        },
+        {
+          "type": "list-item",
+          "text": "Shaun of the Dead 2004The repeated trip to the local shop changes meaning as the world changes.",
+          "displayText": "Shaun of the Dead 2004\nThe repeated trip to the local shop changes meaning as the world changes."
+        },
+        {
+          "type": "list-item",
+          "text": "Jaws 1975A recurring musical figure becomes associated with the shark threat.",
+          "displayText": "Jaws 1975\nA recurring musical figure becomes associated with the shark threat."
+        },
+        {
+          "type": "list-item",
+          "text": "The Empire Strikes Back 1980The Imperial March gives the Empire a recurring musical identity.",
+          "displayText": "The Empire Strikes Back 1980\nThe Imperial March gives the Empire a recurring musical identity."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Grand Budapest Hotel tiles uniforms, doors, and pastry boxes so a scuff reads. The Matrix uses copies as a philosophical pattern.Shaun of the Dead rhymes a trip to the shop across a changed world. Jaws and The Empire Strikes Back also teach recurrence in sound, a cousin of visual echo: a figure that returns until it is a system.Shaun of the Dead 2004The repeated trip to the local shop changes meaning as the world changes.Jaws 1975A recurring musical figure becomes associated with the shark threat.The Empire Strikes Back 1980The Imperial March gives the Empire a recurring musical identity."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the unit and the break. Repeating pattern around [Subject], columns, windows, soldiers, a break in the pattern as the story."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say what repeats, how many units are visible, and which unit is different. Do not write patterned as a mood."
+        },
+        {
+          "type": "quote",
+          "text": "Create two versions of a woman’s morning walk through the same apartment courtyard. First, she ignores three neighbors while checking her phone. Later, repeat the camera positions and route, but she greets each neighbor and notices a repaired fountain. Keep the environment consistent so changed attention, not a new location, carries the meaning."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Create+two+versions+of+a+woman%E2%80%99s+morning+walk+through+the+same+apartment+courtyard.+First,+she+ignores+three+neighbors+while+checking+her+phone.+Later,+repeat+the+camera+positions+and+route,+but+she+greets+each+neighbor+and+notices+a+repaired+fountain.+Keep+the+environment+consistent+so+changed+attention,+not+a+new+location,+carries+the+meaning."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the unit and the break. Repeating pattern around [Subject], columns, windows, soldiers, a break in the pattern as the story.Say what repeats, how many units are visible, and which unit is different. Do not write patterned as a mood.Copy promptUse in Video GeneratorCreate two versions of a woman’s morning walk through the same apartment courtyard. First, she ignores three neighbors while checking her phone. Later, repeat the camera positions and route, but she greets each neighbor and notices a repaired fountain. Keep the environment consistent so changed attention, not a new location, carries the meaning.Create two versions of a woman’s morning walk through the same apartment courtyard. First, she ignores three neighbors while checking her phone. Later, repeat the camera positions and route, but she greets each neighbor and notices a repaired fountain. Keep the environment consistent so changed attention, not a new location, carries the meaning."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is busy production design. The tell is lots of stuff and no countable unit."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to pick one motif, align the camera to tile it, and isolate the one mismatch."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is busy production design. The tell is lots of stuff and no countable unit.The fix is to pick one motif, align the camera to tile it, and isolate the one mismatch."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is repetition and pattern in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Shapes, colors, lines, positions, or actions repeat until the frame reads as a system. The pattern sets expectation. A break in the pattern is often the subject. Formal rhyme can also return on another day."
+        },
+        {
+          "type": "heading",
+          "text": "Repetition and Pattern vs Symmetry",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Symmetry mirrors across an axis. Pattern repeats a unit in a row, a grid, or in time. A line of hotel doors can be a pattern without left matching right. A mirrored lobby can be symmetrical with only two wings."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use repetition and pattern?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for systems: armies, hotels, factories, offices, choruses. Use a break when someone fails to be a unit. Skip it in irregular private space unless the character is imposing order."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt repetition and pattern for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the repeating unit and the exception. Example: Repeating pattern around [Subject], columns, windows, soldiers, a break in the pattern as the story. Count the units if you can. Specify the break."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is repetition and pattern in film?Shapes, colors, lines, positions, or actions repeat until the frame reads as a system. The pattern sets expectation. A break in the pattern is often the subject. Formal rhyme can also return on another day.Repetition and Pattern vs SymmetrySymmetry mirrors across an axis. Pattern repeats a unit in a row, a grid, or in time. A line of hotel doors can be a pattern without left matching right. A mirrored lobby can be symmetrical with only two wings.When should I use repetition and pattern?Use it for systems: armies, hotels, factories, offices, choruses. Use a break when someone fails to be a unit. Skip it in irregular private space unless the character is imposing order.How do I prompt repetition and pattern for AI image or video?Name the repeating unit and the exception. Example: Repeating pattern around [Subject], columns, windows, soldiers, a break in the pattern as the story. Count the units if you can. Specify the break."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the unit and the break. Repeating pattern around [Subject], columns, windows, soldiers, a break in the pattern as the story.",
+      "Say what repeats, how many units are visible, and which unit is different. Do not write patterned as a mood."
+    ],
+    "example": "Create two versions of a woman’s morning walk through the same apartment courtyard. First, she ignores three neighbors while checking her phone. Later, repeat the camera positions and route, but she greets each neighbor and notices a repaired fountain. Keep the environment consistent so changed attention, not a new location, carries the meaning."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/61d5be392d8c6ec44bb5d1ce08a9a464.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/repetition-pattern.webp",
+      "alt": "Repetition and Pattern example"
+    },
+    {
+      "kind": "image",
+      "path": "media/433ff490835bf3f002cef6f2447f05d3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/symmetry.webp",
+      "alt": "Symmetry"
+    },
+    {
+      "kind": "image",
+      "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+      "alt": "Bird's-Eye View"
+    },
+    {
+      "kind": "video",
+      "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/46adb4f4dfcb6cbe7348526ffd6aacd6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/repetition-pattern/hero.jpg",
+      "alt": "Repetition and Pattern",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "b8f8d92c73068ad6dff333e99b7f5f933e7733fd9eb1e80055e4469416b20e58"
+}

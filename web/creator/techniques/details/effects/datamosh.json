@@ -1,0 +1,390 @@
+{
+  "id": "effects/datamosh",
+  "slug": "datamosh",
+  "title": "Datamosh",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/datamosh",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/datamosh-datamosh-mini.webp",
+  "detail": "details/effects/datamosh.json",
+  "aliases": [],
+  "description": "Datamosh is intentional codec failure: inter-frame prediction continues after keyframes are removed or broken, so motion vectors smear the previous picture into the next GOP and faces bleed into the following shot. The image is file wreckage, not a lens error.",
+  "thumbnail": "media/99367fe56b9910063f44dfb7e302be10.webp",
+  "video": "media/ca4b11c1af5cb6d2477aac8673509b82.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/datamosh-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The I-frame never arrives. P-frames keep describing motion that no longer has a valid picture."
+        },
+        {
+          "type": "paragraph",
+          "text": "A mouth stretches into a wall. A cut happens in time but not in pixels."
+        },
+        {
+          "type": "paragraph",
+          "text": "Digital ruin is the style. Use it when the file should break on purpose: a music video, a corrupted memory, a broadcast that fails."
+        },
+        {
+          "type": "paragraph",
+          "text": "The smear should follow motion vectors, not a random RGB offset. It is the wrong tool for a stutter of whole frames (that is stop-stutter), for chromatic fringing, or for an altered-state smear from a long shutter."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the image trails because the shutter was open, that is photography. If it trails because the codec predicted the wrong future, that is datamosh."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The I-frame never arrives. P-frames keep describing motion that no longer has a valid picture.A mouth stretches into a wall. A cut happens in time but not in pixels.Digital ruin is the style. Use it when the file should break on purpose: a music video, a corrupted memory, a broadcast that fails.The smear should follow motion vectors, not a random RGB offset. It is the wrong tool for a stutter of whole frames (that is stop-stutter), for chromatic fringing, or for an altered-state smear from a long shutter.If the image trails because the shutter was open, that is photography. If it trails because the codec predicted the wrong future, that is datamosh."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Encode with inter-frame compression, drop or repeat I-frames, let P-frames or B-frames run. The artifact is temporal and blocky, often with residual macroblocks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: inter-frame collapse, faces smearing into the next GOP, codec wreckage, not RGB split, not film smear."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Encode with inter-frame compression, drop or repeat I-frames, let P-frames or B-frames run. The artifact is temporal and blocky, often with residual macroblocks.Prompt: inter-frame collapse, faces smearing into the next GOP, codec wreckage, not RGB split, not film smear."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A cut from a face to a city in which the face's pixels are dragged across the skyline by leftover motion vectors. Do not step-print the same clip or add red-cyan edge fringe and call it datamosh."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A cut from a face to a city in which the face's pixels are dragged across the skyline by leftover motion vectors. Do not step-print the same clip or add red-cyan edge fringe and call it datamosh."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stutter / Stop-Stutter repeats or steps whole frames as a temporal rhythm. Datamosh destroys the picture between frames.",
+          "links": [
+            {
+              "text": "Stutter / Stop-Stutter",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/stutter"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Altered State is perceptual and photographic. Chromatic Aberration is optical color fringing.",
+          "links": [
+            {
+              "text": "Altered State",
+              "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+            },
+            {
+              "text": "Chromatic Aberration",
+              "url": "https://melies.co/cinematic-techniques/effects/chromatic-aberration"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Datamosh is codec wreckage, not a general noise overlay."
+        },
+        {
+          "type": "list-item",
+          "text": "Stutter / Stop-StutterThe mind skips.",
+          "displayText": "Stutter / Stop-Stutter\nThe mind skips.",
+          "links": [
+            {
+              "text": "Stutter / Stop-StutterThe mind skips.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/stutter"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "displayText": "Anamorphic Flare\nNight lights and headlights should write on the lens.",
+          "links": [
+            {
+              "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+              "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Stutter / Stop-Stutter",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/stutter"
+        },
+        {
+          "text": "Altered State",
+          "url": "https://melies.co/cinematic-techniques/effects/altered-state"
+        },
+        {
+          "text": "Chromatic Aberration",
+          "url": "https://melies.co/cinematic-techniques/effects/chromatic-aberration"
+        },
+        {
+          "text": "Stutter / Stop-StutterThe mind skips.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/stutter"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/fda5cd6d4de3d5a0b33956b6c61103ac.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/stutter-086-short-shutter-staccato-action-mini.webp",
+          "alt": "Stutter / Stop-Stutter"
+        },
+        {
+          "kind": "video",
+          "path": "media/920fc45aa4a3a7f6709e3aa1962fca0d.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/086-short-shutter-staccato-action-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/dd60ac3e349447877925814c6440f811.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+          "alt": "Anamorphic Flare"
+        }
+      ],
+      "sourceText": "Compared with similar shots Stutter / Stop-Stutter repeats or steps whole frames as a temporal rhythm. Datamosh destroys the picture between frames.Altered State is perceptual and photographic. Chromatic Aberration is optical color fringing.Datamosh is codec wreckage, not a general noise overlay.Stutter / Stop-StutterThe mind skips.Lens FlareLight is too strong to be polite.Anamorphic FlareNight lights and headlights should write on the lens."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Chairlift's Evident Utensil is a well-known datamosh music video: GOP collapse as the picture. Other music videos adopted the same inter-frame smear."
+        },
+        {
+          "type": "paragraph",
+          "text": "Features rarely hold it long because it destroys coverage."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Chairlift's Evident Utensil is a well-known datamosh music video: GOP collapse as the picture. Other music videos adopted the same inter-frame smear.Features rarely hold it long because it destroys coverage."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Break prediction, not the lens. Still: Datamosh of [Subject], inter-frame collapse, faces smearing into the next GOP, digital ruin as style."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Datamosh corruption around [Subject], frames bleeding into the next, codec wreckage as image, not a shutter smear."
+        },
+        {
+          "type": "quote",
+          "text": "Datamosh corruption around [Subject], frames bleeding into the next, codec wreckage as image."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Datamosh+corruption+around+[Subject],+frames+bleeding+into+the+next,+codec+wreckage+as+image."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Break prediction, not the lens. Still: Datamosh of [Subject], inter-frame collapse, faces smearing into the next GOP, digital ruin as style.Video: Datamosh corruption around [Subject], frames bleeding into the next, codec wreckage as image, not a shutter smear.Copy promptUse in Video GeneratorDatamosh corruption around [Subject], frames bleeding into the next, codec wreckage as image.Datamosh corruption around [Subject], frames bleeding into the next, codec wreckage as image."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: stutter, long-shutter smear, or RGB split. Tell: clean frame repeats, photochemical motion blur, or three colored copies of the subject."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: blocky temporal bleed across a cut, leftover pixels from the previous picture, no new I-frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: stutter, long-shutter smear, or RGB split. Tell: clean frame repeats, photochemical motion blur, or three colored copies of the subject.Fix: blocky temporal bleed across a cut, leftover pixels from the previous picture, no new I-frame."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is datamosh in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Deliberate video-codec collapse. Without a fresh keyframe, motion vectors smear the last valid picture into the next, producing inter-frame wreckage."
+        },
+        {
+          "type": "heading",
+          "text": "Datamosh vs stutter",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Stutter repeats or steps complete frames. Datamosh lets predicted frames destroy the image. One is a rhythm of whole pictures. The other is a melt between them."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use datamosh?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the file should fail as the point: music video, corrupted feed, a digital breakdown. Do not use it as a substitute for optical smear or a simple jump cut."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt datamosh for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for inter-frame collapse, GOP smear, codec wreckage across a cut. Forbid shutter blur, RGB channel split, and freeze-frame stutter unless those are extra."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is datamosh in film?Deliberate video-codec collapse. Without a fresh keyframe, motion vectors smear the last valid picture into the next, producing inter-frame wreckage.Datamosh vs stutterStutter repeats or steps complete frames. Datamosh lets predicted frames destroy the image. One is a rhythm of whole pictures. The other is a melt between them.When should I use datamosh?When the file should fail as the point: music video, corrupted feed, a digital breakdown. Do not use it as a substitute for optical smear or a simple jump cut.How do I prompt datamosh for AI image or video?Ask for inter-frame collapse, GOP smear, codec wreckage across a cut. Forbid shutter blur, RGB channel split, and freeze-frame stutter unless those are extra."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Break prediction, not the lens. Still: Datamosh of [Subject], inter-frame collapse, faces smearing into the next GOP, digital ruin as style.",
+      "Video: Datamosh corruption around [Subject], frames bleeding into the next, codec wreckage as image, not a shutter smear."
+    ],
+    "example": "Datamosh corruption around [Subject], frames bleeding into the next, codec wreckage as image."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/ca4b11c1af5cb6d2477aac8673509b82.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/datamosh-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/99367fe56b9910063f44dfb7e302be10.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/datamosh-datamosh-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1a0b0834143b66148e5269d2f18896e4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/datamosh.jpg",
+      "alt": "Datamosh frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/fda5cd6d4de3d5a0b33956b6c61103ac.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/stutter-086-short-shutter-staccato-action-mini.webp",
+      "alt": "Stutter / Stop-Stutter"
+    },
+    {
+      "kind": "video",
+      "path": "media/920fc45aa4a3a7f6709e3aa1962fca0d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/086-short-shutter-staccato-action-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dd60ac3e349447877925814c6440f811.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+      "alt": "Anamorphic Flare"
+    },
+    {
+      "kind": "image",
+      "path": "media/c1e2a319f4a2787fee4c55bca1af8231.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/datamosh/hero.jpg",
+      "alt": "Datamosh",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "3d3ac2127bd8f8e0a1c5d7e2bef88364f6983372b04f4d749248446f014238b7"
+}

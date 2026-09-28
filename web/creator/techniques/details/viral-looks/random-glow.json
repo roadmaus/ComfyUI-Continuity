@@ -1,0 +1,361 @@
+{
+  "id": "viral-looks/random-glow",
+  "slug": "random-glow",
+  "title": "Random Glow",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/random-glow",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/random-glow-random-glow-mini.webp",
+  "detail": "details/viral-looks/random-glow.json",
+  "aliases": [],
+  "description": "Random glow, the random glow look, is unmotivated orbs and analog leaks: a frame haunted by lamps that will not sit still. Optical accidents as style: even diffusion is the failure.",
+  "thumbnail": "media/9bd2de80e370c10ba66593cc7a6565e9.webp",
+  "video": "media/4a832176a9b82096e334aedda18363b8.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/random-glow-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dreams, nightlife, a memory with bad film: some orbs, some clean skin, a face still in the clear. Motivated lighting is the opposite discipline."
+        },
+        {
+          "type": "paragraph",
+          "text": "A surgical drama should not glow at random. It is the wrong tool when every lamp is explained, and the wrong tool when the whole frame floods and the subject dies."
+        },
+        {
+          "type": "paragraph",
+          "text": "Random means uneven."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Dreams, nightlife, a memory with bad film: some orbs, some clean skin, a face still in the clear. Motivated lighting is the opposite discipline.A surgical drama should not glow at random. It is the wrong tool when every lamp is explained, and the wrong tool when the whole frame floods and the subject dies.Random means uneven."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock off, 35mm to 50mm. Face in the clear."
+        },
+        {
+          "type": "paragraph",
+          "text": "Irregular blooms, colored orbs, analog leak, not full-frame wash. Prompt: Random glow on [Subject], unmotivated orbs and analog leaks, a frame haunted by lamps."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock off, 35mm to 50mm. Face in the clear.Irregular blooms, colored orbs, analog leak, not full-frame wash. Prompt: Random glow on [Subject], unmotivated orbs and analog leaks, a frame haunted by lamps."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A dream, nightlife, analog-horror memory. Do not use it in a surgical drama, and do not even out the glow."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A dream, nightlife, analog-horror memory. Do not use it in a surgical drama, and do not even out the glow."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Light Leak is a specific edge of unexposed light. Halation is red glow around highlights on film stock.",
+          "links": [
+            {
+              "text": "Light Leak",
+              "url": "https://melies.co/cinematic-techniques/effects/light-leak"
+            },
+            {
+              "text": "Halation",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Random glow is the named mix of unmotivated orbs and leaks. Motivated practicals are the opposite job."
+        },
+        {
+          "type": "list-item",
+          "text": "Light LeakMemory, damaged time, or analog accident.",
+          "displayText": "Light Leak\nMemory, damaged time, or analog accident.",
+          "links": [
+            {
+              "text": "Light LeakMemory, damaged time, or analog accident.",
+              "url": "https://melies.co/cinematic-techniques/effects/light-leak"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "displayText": "Halation\nHighlights should bleed like film, not clip like video.",
+          "links": [
+            {
+              "text": "HalationHighlights should bleed like film, not clip like video.",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Light Leak",
+          "url": "https://melies.co/cinematic-techniques/effects/light-leak"
+        },
+        {
+          "text": "Halation",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "Light LeakMemory, damaged time, or analog accident.",
+          "url": "https://melies.co/cinematic-techniques/effects/light-leak"
+        },
+        {
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/722f29356ed237fedec07d560c90f258.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/light-leak.webp",
+          "alt": "Light Leak"
+        },
+        {
+          "kind": "image",
+          "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+          "alt": "Halation"
+        },
+        {
+          "kind": "video",
+          "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Light Leak is a specific edge of unexposed light. Halation is red glow around highlights on film stock.Random glow is the named mix of unmotivated orbs and leaks. Motivated practicals are the opposite job.Light LeakMemory, damaged time, or analog accident.HalationHighlights should bleed like film, not clip like video.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Music-video opticals keep accidents on purpose. Analog-horror loops haunt a frame with lamps that should not be there."
+        },
+        {
+          "type": "paragraph",
+          "text": "Accidents you keep. Not a clip to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Music-video opticals keep accidents on purpose. Analog-horror loops haunt a frame with lamps that should not be there.Accidents you keep. Not a clip to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Uneven orbs, face clear. Random glow on [Subject], unmotivated orbs and analog leaks, a frame haunted by lamps."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add lock-off, some clean skin, irregular blooms, analog leak. Not even diffusion."
+        },
+        {
+          "type": "paragraph",
+          "text": "Not a full wash."
+        },
+        {
+          "type": "quote",
+          "text": "Random glow on [Subject], unmotivated orbs and analog leaks, a frame haunted by lamps."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Random+glow+on+[Subject],+unmotivated+orbs+and+analog+leaks,+a+frame+haunted+by+lamps."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Uneven orbs, face clear. Random glow on [Subject], unmotivated orbs and analog leaks, a frame haunted by lamps.Add lock-off, some clean skin, irregular blooms, analog leak. Not even diffusion.Not a full wash.Copy promptUse in Image GeneratorRandom glow on [Subject], unmotivated orbs and analog leaks, a frame haunted by lamps.Random glow on [Subject], unmotivated orbs and analog leaks, a frame haunted by lamps."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Even diffusion, or a flood that deletes the face. The tell is uniform glow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: uneven orbs, leaks, some clean skin, subject still readable."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Even diffusion, or a flood that deletes the face. The tell is uniform glow.Fix it: uneven orbs, leaks, some clean skin, subject still readable."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Random Glow in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Unmotivated orbs and analog leaks kept as style. The frame is haunted by lamps. Even, pretty diffusion is not the look."
+        },
+        {
+          "type": "heading",
+          "text": "Random Glow vs Light Leak",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A light leak is a specific unexposed edge or flare of stock. Random glow may include leaks plus orbs that have no practical. If every bloom has a lamp, you wanted motivated light, not this."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Random Glow?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dreams, nightlife, analog-horror memory. Skip surgical coverage and even diffusion."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Random Glow for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Hold the face, then: Random glow on [Subject], unmotivated orbs and analog leaks, a frame haunted by lamps. Demand uneven blooms and some clean skin."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Random Glow in film?Unmotivated orbs and analog leaks kept as style. The frame is haunted by lamps. Even, pretty diffusion is not the look.Random Glow vs Light LeakA light leak is a specific unexposed edge or flare of stock. Random glow may include leaks plus orbs that have no practical. If every bloom has a lamp, you wanted motivated light, not this.When should I use Random Glow?Dreams, nightlife, analog-horror memory. Skip surgical coverage and even diffusion.How do I prompt Random Glow for AI image or video?Hold the face, then: Random glow on [Subject], unmotivated orbs and analog leaks, a frame haunted by lamps. Demand uneven blooms and some clean skin."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Uneven orbs, face clear. Random glow on [Subject], unmotivated orbs and analog leaks, a frame haunted by lamps.",
+      "Add lock-off, some clean skin, irregular blooms, analog leak. Not even diffusion.",
+      "Not a full wash."
+    ],
+    "example": "Random glow on [Subject], unmotivated orbs and analog leaks, a frame haunted by lamps."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/4a832176a9b82096e334aedda18363b8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/random-glow-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9bd2de80e370c10ba66593cc7a6565e9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/random-glow-random-glow-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/000e0f5463c96be67fc3a3c12cb49013.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/random-glow.jpg",
+      "alt": "Random Glow frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/722f29356ed237fedec07d560c90f258.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/light-leak.webp",
+      "alt": "Light Leak"
+    },
+    {
+      "kind": "image",
+      "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+      "alt": "Halation"
+    },
+    {
+      "kind": "video",
+      "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/4844f3b40b6157b38a3de919efc165d6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/random-glow/hero.jpg",
+      "alt": "Random Glow",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "25c1dad8f7b4d1c3d2f94cc63a0ed06ec43cc4522c60f09bf86cd3c3d9d2f20d"
+}

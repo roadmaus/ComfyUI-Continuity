@@ -1,0 +1,399 @@
+{
+  "id": "camera-movement/buckle-up",
+  "slug": "buckle-up",
+  "title": "Buckle Up",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/buckle-up",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/buckle-up-buckle-up-mini.webp",
+  "detail": "details/camera-movement/buckle-up.json",
+  "aliases": [],
+  "description": "A buckle up camera straps the lens to the cabin with the subject, so the vehicle is the tripod and acceleration is the grammar. Interior stays sharp; the world streaks past the glass.",
+  "thumbnail": "media/1a5a91179e81ed04df12f47530b9abda.webp",
+  "video": "media/323f164d8eed16c39d56f20d9f2bd54a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/buckle-up-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The car is the tripod. You are a passenger."
+        },
+        {
+          "type": "paragraph",
+          "text": "Talks that happen at speed, a date that is a getaway, a chase from inside: the cabin is the set, the road is weather. If we are not in the seats, you shot a product film."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the background through the glass is sharp, you are parked. Car grip lives on the metal outside; this shot lives with the people."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The car is the tripod. You are a passenger.Talks that happen at speed, a date that is a getaway, a chase from inside: the cabin is the set, the road is weather. If we are not in the seats, you shot a product film.If the background through the glass is sharp, you are parked. Car grip lives on the metal outside; this shot lives with the people."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mount inside: dash, passenger cage, or a hostess bar. Wide enough to hold faces and glass."
+        },
+        {
+          "type": "paragraph",
+          "text": "Interior sharp, exterior smeared by speed. Engine vibration optional."
+        },
+        {
+          "type": "paragraph",
+          "text": "No orbit. Prompt: Buckle-up camera with [Subject] in a vehicle, the lens strapped to the cabin, acceleration as the grammar, road rushing past."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Mount inside: dash, passenger cage, or a hostess bar. Wide enough to hold faces and glass.Interior sharp, exterior smeared by speed. Engine vibration optional.No orbit. Prompt: Buckle-up camera with [Subject] in a vehicle, the lens strapped to the cabin, acceleration as the grammar, road rushing past."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for cabin life at speed: a chase from inside, a night drive, a talk at 80. Do not use it for a parked conversation unless the gag is stillness."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for cabin life at speed: a chase from inside, a night drive, a talk at 80. Do not use it for a parked conversation unless the gag is stillness."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Car Grip bolts to hood or door, bodywork in the near plane. Road Rush is low asphalt, the road as subject.",
+          "links": [
+            {
+              "text": "Car Grip",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/car-grip"
+            },
+            {
+              "text": "Road Rush",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/road-rush"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Locked-On is the general idea of a camera glued to a moving thing; buckle-up is specifically the cabin.",
+          "links": [
+            {
+              "text": "Locked-On",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Car GripBolt the camera to the machine.",
+          "displayText": "Car Grip\nBolt the camera to the machine.",
+          "links": [
+            {
+              "text": "Car GripBolt the camera to the machine.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/car-grip"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Road RushThe road is the subject.",
+          "displayText": "Road Rush\nThe road is the subject.",
+          "links": [
+            {
+              "text": "Road RushThe road is the subject.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/road-rush"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Locked-OnOne thing is the only stable point in a moving world.",
+          "displayText": "Locked-On\nOne thing is the only stable point in a moving world.",
+          "links": [
+            {
+              "text": "Locked-OnOne thing is the only stable point in a moving world.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Car Grip",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/car-grip"
+        },
+        {
+          "text": "Road Rush",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/road-rush"
+        },
+        {
+          "text": "Locked-On",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+        },
+        {
+          "text": "Car GripBolt the camera to the machine.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/car-grip"
+        },
+        {
+          "text": "Road RushThe road is the subject.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/road-rush"
+        },
+        {
+          "text": "Locked-OnOne thing is the only stable point in a moving world.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b269859f5360bfd86e4dba3fa6b00b82.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/car-grip-car-grip-mini.webp",
+          "alt": "Car Grip"
+        },
+        {
+          "kind": "video",
+          "path": "media/9df5e0b628c0c4cf8794ad194a63589f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/car-grip-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/daa51a0826c38fc809d7e5bab0bbaf87.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/road-rush-road-rush-mini.webp",
+          "alt": "Road Rush"
+        },
+        {
+          "kind": "video",
+          "path": "media/cb213c03417486dcc41ff8bef4c379a1.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/road-rush-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4790b7e023e1de9ff71cdf19b2f02238.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/locked-on-020-object-locked-moving-camera-mini.webp",
+          "alt": "Locked-On"
+        },
+        {
+          "kind": "video",
+          "path": "media/f1e2073d98c065752bc9f43a7462a2aa.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/020-object-locked-moving-camera-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Car Grip bolts to hood or door, bodywork in the near plane. Road Rush is low asphalt, the road as subject.Locked-On is the general idea of a camera glued to a moving thing; buckle-up is specifically the cabin.Car GripBolt the camera to the machine.Road RushThe road is the subject.Locked-OnOne thing is the only stable point in a moving world."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Baby Driver stages cabin mounts as musical grammar. Drive keeps faces sharp while night glass streaks."
+        },
+        {
+          "type": "paragraph",
+          "text": "The still should show window smear or a speed-read dashboard without readable type."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Baby Driver stages cabin mounts as musical grammar. Drive keeps faces sharp while night glass streaks.The still should show window smear or a speed-read dashboard without readable type."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock to the cabin. Still: Buckle-up camera with [Subject] in a vehicle, the lens strapped to the cabin, acceleration as the grammar, road rushing past."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Camera locked in the vehicle with [Subject], the world streaking past the glass. Interior sharp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid an exterior beauty pass as the whole shot."
+        },
+        {
+          "type": "quote",
+          "text": "Camera locked in the vehicle with [Subject], the world streaking past the glass."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Camera+locked+in+the+vehicle+with+[Subject],+the+world+streaking+past+the+glass."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lock to the cabin. Still: Buckle-up camera with [Subject] in a vehicle, the lens strapped to the cabin, acceleration as the grammar, road rushing past.Video: Camera locked in the vehicle with [Subject], the world streaking past the glass. Interior sharp.Forbid an exterior beauty pass as the whole shot.Copy promptUse in Video GeneratorCamera locked in the vehicle with [Subject], the world streaking past the glass.Camera locked in the vehicle with [Subject], the world streaking past the glass."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a pretty car exterior. The tell: we never sit in the seats, or the glass is sharp at highway speed."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: strap the lens inside, faces sharp, world streaking in the windows."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a pretty car exterior. The tell: we never sit in the seats, or the glass is sharp at highway speed.The fix: strap the lens inside, faces sharp, world streaking in the windows."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Buckle Up in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Buckle up straps the camera to the vehicle cabin with the people. The car is the tripod; the world streaks in the glass."
+        },
+        {
+          "type": "heading",
+          "text": "Buckle Up vs Car Grip",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Car grip is bolted to exterior bodywork. Buckle up lives inside with the occupants, interior sharp and road smeared on the glass."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Buckle Up?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for cabin scenes at speed. Do not use it as a parked product shot of a car."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Buckle Up for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a cabin lock and streaking glass. Example: Buckle-up camera with [Subject] in a vehicle, the lens strapped to the cabin, acceleration as the grammar, road rushing past."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Buckle Up in film?Buckle up straps the camera to the vehicle cabin with the people. The car is the tripod; the world streaks in the glass.Buckle Up vs Car GripCar grip is bolted to exterior bodywork. Buckle up lives inside with the occupants, interior sharp and road smeared on the glass.When should I use Buckle Up?Use it for cabin scenes at speed. Do not use it as a parked product shot of a car.How do I prompt Buckle Up for AI image or video?Write a cabin lock and streaking glass. Example: Buckle-up camera with [Subject] in a vehicle, the lens strapped to the cabin, acceleration as the grammar, road rushing past."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lock to the cabin. Still: Buckle-up camera with [Subject] in a vehicle, the lens strapped to the cabin, acceleration as the grammar, road rushing past.",
+      "Video: Camera locked in the vehicle with [Subject], the world streaking past the glass. Interior sharp.",
+      "Forbid an exterior beauty pass as the whole shot."
+    ],
+    "example": "Camera locked in the vehicle with [Subject], the world streaking past the glass."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/323f164d8eed16c39d56f20d9f2bd54a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/buckle-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1a5a91179e81ed04df12f47530b9abda.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/buckle-up-buckle-up-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f7fb19d1013fb10e7f0046be09dbf567.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/buckle-up.jpg",
+      "alt": "Buckle Up frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/b269859f5360bfd86e4dba3fa6b00b82.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/car-grip-car-grip-mini.webp",
+      "alt": "Car Grip"
+    },
+    {
+      "kind": "video",
+      "path": "media/9df5e0b628c0c4cf8794ad194a63589f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/car-grip-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/daa51a0826c38fc809d7e5bab0bbaf87.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/road-rush-road-rush-mini.webp",
+      "alt": "Road Rush"
+    },
+    {
+      "kind": "video",
+      "path": "media/cb213c03417486dcc41ff8bef4c379a1.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/road-rush-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4790b7e023e1de9ff71cdf19b2f02238.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/locked-on-020-object-locked-moving-camera-mini.webp",
+      "alt": "Locked-On"
+    },
+    {
+      "kind": "video",
+      "path": "media/f1e2073d98c065752bc9f43a7462a2aa.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/020-object-locked-moving-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/498464fcb30d303d94d67ebd53361006.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/buckle-up/hero.jpg",
+      "alt": "Buckle Up",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "190d2dc585eabe2a7c7df583d446d00e717153b24724501def5599debdc6c097"
+}

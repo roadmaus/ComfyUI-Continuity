@@ -1,0 +1,416 @@
+{
+  "id": "effects/transformation",
+  "slug": "transformation",
+  "title": "Transformation",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/transformation",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/transformation-147-continuous-material-transformation-mini.webp",
+  "detail": "details/effects/transformation.json",
+  "aliases": [
+    "Psychological background transformation",
+    "Subject-stable world change"
+  ],
+  "description": "Transformation cinematography makes a body, room, or object become something else in continuous view. The camera keeps watching while the state changes, with a stable anchor so the becoming can be read.",
+  "thumbnail": "media/2b2f4bf7ab8e9ab09f2e0fc9e723cf5d.webp",
+  "video": "media/411facd0b31da9993f6629ce59666775.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/147-continuous-material-transformation-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A kiss turns the restaurant into a memory. A man becomes an animal in stages."
+        },
+        {
+          "type": "paragraph",
+          "text": "A liquid takes a face. Use it when the audience should not be allowed a cut to skip the becoming."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you only need a landmark warp of one contour into another, or when a new scene should simply start. If the job is matched geometry between two portraits, morphing is cleaner."
+        },
+        {
+          "type": "paragraph",
+          "text": "If both body and world melt at random, the anchor is gone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A kiss turns the restaurant into a memory. A man becomes an animal in stages.A liquid takes a face. Use it when the audience should not be allowed a cut to skip the becoming.It is the wrong tool when you only need a landmark warp of one contour into another, or when a new scene should simply start. If the job is matched geometry between two portraits, morphing is cleaner.If both body and world melt at random, the anchor is gone."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Decide what stays. A subject-stable world change matches pose, contact, and key while the background is exchanged by a move, an occlusion, a projection, a set change, or a tracked composite."
+        },
+        {
+          "type": "paragraph",
+          "text": "A body transformation stages makeup, puppet, or digital change in order, with weight and effort. Light the new state with a source that still makes sense on the skin."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a transformation of the subject: a body, room, or object becoming something else in continuous view."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Decide what stays. A subject-stable world change matches pose, contact, and key while the background is exchanged by a move, an occlusion, a projection, a set change, or a tracked composite.A body transformation stages makeup, puppet, or digital change in order, with weight and effort. Light the new state with a source that still makes sense on the skin.Prompt a transformation of the subject: a body, room, or object becoming something else in continuous view."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when becoming is the action: a memory room, a creature, a substance taking form. Do not use it as a morph between two unmatched stills."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when becoming is the action: a memory room, a creature, a substance taking form. Do not use it as a morph between two unmatched stills."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Morphing interpolates landmarks from one contour to another. Transformation can be practical, architectural, or a world swap around a stable person.",
+          "links": [
+            {
+              "text": "Morphing",
+              "url": "https://melies.co/cinematic-techniques/effects/morphing"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Morph uses the warp as an edit join. Creature stages (werewolf cinema) are performance and makeup, not only a warp.",
+          "links": [
+            {
+              "text": "Morph",
+              "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MorphingBecoming is visible.",
+          "displayText": "Morphing\nBecoming is visible.",
+          "links": [
+            {
+              "text": "MorphingBecoming is visible.",
+              "url": "https://melies.co/cinematic-techniques/effects/morphing"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "displayText": "Anamorphic Flare\nNight lights and headlights should write on the lens.",
+          "links": [
+            {
+              "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+              "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Morphing",
+          "url": "https://melies.co/cinematic-techniques/effects/morphing"
+        },
+        {
+          "text": "Morph",
+          "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+        },
+        {
+          "text": "MorphingBecoming is visible.",
+          "url": "https://melies.co/cinematic-techniques/effects/morphing"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/3e0961caa225ee0edff07ce811460ef7.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/morphing-morphing-mini.webp",
+          "alt": "Morphing"
+        },
+        {
+          "kind": "video",
+          "path": "media/0f4148849d67d9c9aa6bfff44212963f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/morphing-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/dd60ac3e349447877925814c6440f811.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+          "alt": "Anamorphic Flare"
+        }
+      ],
+      "sourceText": "Compared with similar shots Morphing interpolates landmarks from one contour to another. Transformation can be practical, architectural, or a world swap around a stable person.Morph uses the warp as an edit join. Creature stages (werewolf cinema) are performance and makeup, not only a warp.MorphingBecoming is visible.Lens FlareLight is too strong to be polite.Anamorphic FlareNight lights and headlights should write on the lens."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vertigo's revolving kiss shifts the surrounding setting toward memory. Eternal Sunshine of the Spotless Mind lets memory spaces change around the couple."
+        },
+        {
+          "type": "paragraph",
+          "text": "An American Werewolf in London and The Fly stage the body as a visible change of state. Terminator 2 and The Abyss sit nearby as shape that reforms."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "Vertigo 1958The revolving kiss shifts the surrounding setting toward Scottie’s memory.",
+          "displayText": "Vertigo 1958\nThe revolving kiss shifts the surrounding setting toward Scottie’s memory."
+        },
+        {
+          "type": "list-item",
+          "text": "Eternal Sunshine of the Spotless Mind 2004Memory spaces change or lose continuity around the characters.",
+          "displayText": "Eternal Sunshine of the Spotless Mind 2004\nMemory spaces change or lose continuity around the characters."
+        },
+        {
+          "type": "list-item",
+          "text": "Terminator 2: Judgment Day 1991The T-1000 changes shape and reforms within scenes.",
+          "displayText": "Terminator 2: Judgment Day 1991\nThe T-1000 changes shape and reforms within scenes."
+        },
+        {
+          "type": "list-item",
+          "text": "The Abyss 1989The water pseudopod takes on a face.",
+          "displayText": "The Abyss 1989\nThe water pseudopod takes on a face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Vertigo's revolving kiss shifts the surrounding setting toward memory. Eternal Sunshine of the Spotless Mind lets memory spaces change around the couple.An American Werewolf in London and The Fly stage the body as a visible change of state. Terminator 2 and The Abyss sit nearby as shape that reforms.Grammar, not frames to copy.Vertigo 1958The revolving kiss shifts the surrounding setting toward Scottie’s memory.Eternal Sunshine of the Spotless Mind 2004Memory spaces change or lose continuity around the characters.Terminator 2: Judgment Day 1991The T-1000 changes shape and reforms within scenes.The Abyss 1989The water pseudopod takes on a face."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Transformation of [Subject], a body, room, or object becoming something else in continuous view. Video: [Subject] transforms across the shot, a visible change of state."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name what stays (pose, face, contact) and what changes (room, species, substance)."
+        },
+        {
+          "type": "quote",
+          "text": "Orbit slowly around two fictional former friends embracing in a modern station. Keep their bodies and contact continuous while the architecture behind them gradually becomes the childhood railway platform they remember. Change only the surrounding world, with coherent light and perspective. Plan matched environment plates and composite the transition; no melting faces."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Orbit+slowly+around+two+fictional+former+friends+embracing+in+a+modern+station.+Keep+their+bodies+and+contact+continuous+while+the+architecture+behind+them+gradually+becomes+the+childhood+railway+platform+they+remember.+Change+only+the+surrounding+world,+with+coherent+light+and+perspective.+Plan+matched+environment+plates+and+composite+the+transition;+no+melting+faces."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Transformation of [Subject], a body, room, or object becoming something else in continuous view. Video: [Subject] transforms across the shot, a visible change of state.Name what stays (pose, face, contact) and what changes (room, species, substance).Copy promptUse in Video GeneratorOrbit slowly around two fictional former friends embracing in a modern station. Keep their bodies and contact continuous while the architecture behind them gradually becomes the childhood railway platform they remember. Change only the surrounding world, with coherent light and perspective. Plan matched environment plates and composite the transition; no melting faces.Orbit slowly around two fictional former friends embracing in a modern station. Keep their bodies and contact continuous while the architecture behind them gradually becomes the childhood railway platform they remember. Change only the surrounding world, with coherent light and perspective. Plan matched environment plates and composite the transition; no melting faces."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a generic morph of everything. The tell is melting faces and melting walls at once, no anchor.",
+          "links": [
+            {
+              "text": "morph",
+              "url": "https://melies.co/cinematic-techniques/effects/morphing"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is a stable perceptual center and a designed change of state."
+        }
+      ],
+      "links": [
+        {
+          "text": "morph",
+          "url": "https://melies.co/cinematic-techniques/effects/morphing"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a generic morph of everything. The tell is melting faces and melting walls at once, no anchor.The fix is a stable perceptual center and a designed change of state."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is transformation in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Transformation makes a body, room, or object become something else in continuous view. The change is the scene, not a cut to a new state."
+        },
+        {
+          "type": "heading",
+          "text": "Transformation vs morphing",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Morphing is geometric interpolation between matched forms. Transformation is a change of state that can be makeup, a walking set, or a world exchanged around a stable subject. One is landmarks. The other is becoming."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use transformation?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the audience must watch the becoming: memory rooms, creature stages, a substance taking a face. Skip it for a simple fade or an unmatched morph."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt transformation for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Transformation of [Subject], a body, room, or object becoming something else in continuous view. Name the anchor and the new state. For video, transform across the shot."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is transformation in film?Transformation makes a body, room, or object become something else in continuous view. The change is the scene, not a cut to a new state.Transformation vs morphingMorphing is geometric interpolation between matched forms. Transformation is a change of state that can be makeup, a walking set, or a world exchanged around a stable subject. One is landmarks. The other is becoming.When should I use transformation?Use it when the audience must watch the becoming: memory rooms, creature stages, a substance taking a face. Skip it for a simple fade or an unmatched morph.How do I prompt transformation for AI image or video?Write Transformation of [Subject], a body, room, or object becoming something else in continuous view. Name the anchor and the new state. For video, transform across the shot."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Transformation of [Subject], a body, room, or object becoming something else in continuous view. Video: [Subject] transforms across the shot, a visible change of state.",
+      "Name what stays (pose, face, contact) and what changes (room, species, substance)."
+    ],
+    "example": "Orbit slowly around two fictional former friends embracing in a modern station. Keep their bodies and contact continuous while the architecture behind them gradually becomes the childhood railway platform they remember. Change only the surrounding world, with coherent light and perspective. Plan matched environment plates and composite the transition; no melting faces."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/411facd0b31da9993f6629ce59666775.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/147-continuous-material-transformation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2b2f4bf7ab8e9ab09f2e0fc9e723cf5d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/transformation-147-continuous-material-transformation-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/644bd9e9a2b03943e79caa2b36e8da96.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/transformation.jpg",
+      "alt": "Transformation frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/3e0961caa225ee0edff07ce811460ef7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/morphing-morphing-mini.webp",
+      "alt": "Morphing"
+    },
+    {
+      "kind": "video",
+      "path": "media/0f4148849d67d9c9aa6bfff44212963f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/morphing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dd60ac3e349447877925814c6440f811.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+      "alt": "Anamorphic Flare"
+    },
+    {
+      "kind": "image",
+      "path": "media/944fd2fddf4ca5e732f3b0c3f7a3367c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/transformation/hero.jpg",
+      "alt": "Transformation",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "005d329144f2cfac13c5bd920b6903f42f9637846efc7dfc6ed5787eb7e2ce97"
+}

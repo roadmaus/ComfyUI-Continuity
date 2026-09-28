@@ -1,0 +1,451 @@
+{
+  "id": "color/warm-amber",
+  "slug": "warm-amber",
+  "title": "Warm Amber",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/warm-amber",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/warm-amber.webp",
+  "detail": "details/color/warm-amber.json",
+  "aliases": [],
+  "description": "A warm amber grade in warm color grade work biases mids and highlights toward tungsten honey, candle, and practical glow. Safety, home, or nostalgia sits in the mids; the world is invited rather than chilled.",
+  "thumbnail": "media/fc71119f525bca52371384855ac969b0.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Interiors go honey. Skin picks up lamp color."
+        },
+        {
+          "type": "paragraph",
+          "text": "Windows, if they stay, can go relatively cooler, but the room itself is an invitation. Memory dinners, fairy-tale hotels, and domestic hearths live here because the grade says stay."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a past that should look like a toned print. That is Sepia, brown-gold with chroma mostly gone.",
+          "links": [
+            {
+              "text": "Sepia",
+              "url": "https://melies.co/cinematic-techniques/color/sepia"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for mixed-source truth where 3200K rooms meet 5600K windows as a relationship: that is Tungsten Balance, a white-balance fact, not only a honey LUT. Golden Hour is actual low sun, a capture window you can grade warm, not a synonym.",
+          "links": [
+            {
+              "text": "Tungsten Balance",
+              "url": "https://melies.co/cinematic-techniques/color/tungsten-balance"
+            },
+            {
+              "text": "Golden Hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Sepia",
+          "url": "https://melies.co/cinematic-techniques/color/sepia"
+        },
+        {
+          "text": "Tungsten Balance",
+          "url": "https://melies.co/cinematic-techniques/color/tungsten-balance"
+        },
+        {
+          "text": "Golden Hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Interiors go honey. Skin picks up lamp color.Windows, if they stay, can go relatively cooler, but the room itself is an invitation. Memory dinners, fairy-tale hotels, and domestic hearths live here because the grade says stay.It is the wrong tool for a past that should look like a toned print. That is Sepia, brown-gold with chroma mostly gone.It is the wrong tool for mixed-source truth where 3200K rooms meet 5600K windows as a relationship: that is Tungsten Balance, a white-balance fact, not only a honey LUT. Golden Hour is actual low sun, a capture window you can grade warm, not a synonym."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bias the grade toward 2800K to 4000K in the mids. Let practicals and candles carry the key when you can (Candlelight, Practical Lighting).",
+          "links": [
+            {
+              "text": "Candlelight",
+              "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+            },
+            {
+              "text": "Practical Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep whites from clipping to paper unless overexposure is the point. Skin should look blooded, not jaundiced; pull green if tungsten goes sick."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Warm amber grade on [Subject], tungsten honey, candle and practical glow, safety or nostalgia in the mids."
+        }
+      ],
+      "links": [
+        {
+          "text": "Candlelight",
+          "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+        },
+        {
+          "text": "Practical Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Bias the grade toward 2800K to 4000K in the mids. Let practicals and candles carry the key when you can (Candlelight, Practical Lighting).Keep whites from clipping to paper unless overexposure is the point. Skin should look blooded, not jaundiced; pull green if tungsten goes sick.Prompt: Warm amber grade on [Subject], tungsten honey, candle and practical glow, safety or nostalgia in the mids."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for home, memory, or invitation: a kitchen at night, a hotel corridor that wants you. Do not use it as sepia, and do not honey a crime scene that should stay merciless."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for home, memory, or invitation: a kitchen at night, a hotel corridor that wants you. Do not use it as sepia, and do not honey a crime scene that should stay merciless."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sepia is a brown-gold toned scale, not full color. Golden Hour is a time of day.",
+          "links": [
+            {
+              "text": "Sepia",
+              "url": "https://melies.co/cinematic-techniques/color/sepia"
+            },
+            {
+              "text": "Golden Hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tungsten Balance is the camera's white balance at about 3200K, which can make windows blue. Teal and Orange warms skin while cooling the world.",
+          "links": [
+            {
+              "text": "Tungsten Balance",
+              "url": "https://melies.co/cinematic-techniques/color/tungsten-balance"
+            },
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Candlelight is the source; warm-amber is the overall grade.",
+          "links": [
+            {
+              "text": "Candlelight",
+              "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Golden HourYou have twenty minutes of truth.",
+          "displayText": "Golden Hour\nYou have twenty minutes of truth.",
+          "links": [
+            {
+              "text": "Golden HourYou have twenty minutes of truth.",
+              "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CandlelightPeriod night or ritual.",
+          "displayText": "Candlelight\nPeriod night or ritual.",
+          "links": [
+            {
+              "text": "CandlelightPeriod night or ritual.",
+              "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Sepia",
+          "url": "https://melies.co/cinematic-techniques/color/sepia"
+        },
+        {
+          "text": "Golden Hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+        },
+        {
+          "text": "Tungsten Balance",
+          "url": "https://melies.co/cinematic-techniques/color/tungsten-balance"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Candlelight",
+          "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+        },
+        {
+          "text": "Golden HourYou have twenty minutes of truth.",
+          "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+        },
+        {
+          "text": "CandlelightPeriod night or ritual.",
+          "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ed33713845cad9f645afdfb4eadcf62d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-hour.webp",
+          "alt": "Golden Hour"
+        },
+        {
+          "kind": "image",
+          "path": "media/63d3a366e4a80f088428e87b46d5c969.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/candlelight-066-candlelit-naturalism-mini.webp",
+          "alt": "Candlelight"
+        },
+        {
+          "kind": "video",
+          "path": "media/ca4aadaa8863da5b4b9ea93abb6843f2.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/066-candlelit-naturalism-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Sepia is a brown-gold toned scale, not full color. Golden Hour is a time of day.Tungsten Balance is the camera's white balance at about 3200K, which can make windows blue. Teal and Orange warms skin while cooling the world.Candlelight is the source; warm-amber is the overall grade.Golden HourYou have twenty minutes of truth.CandlelightPeriod night or ritual.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Amélie keeps interiors in inviting warm practical color so Paris is a hearth. The Grand Budapest Hotel paints hotel spaces with designed warm (and pastel) invitation."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of hospitality in the mids, not a copied lobby."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Amélie keeps interiors in inviting warm practical color so Paris is a hearth. The Grand Budapest Hotel paints hotel spaces with designed warm (and pastel) invitation.Grammar of hospitality in the mids, not a copied lobby."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name honey mids and practical glow. Warm amber grade on [Subject], tungsten honey, candle and practical glow, safety or nostalgia in the mids."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep full color, not sepia. Do not write bleach-bypass, and do not add a teal complementary wall unless you mean that split."
+        },
+        {
+          "type": "quote",
+          "text": "Warm amber grade on [Subject], tungsten honey, candle and practical glow, safety or nostalgia in the mids."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Warm+amber+grade+on+[Subject],+tungsten+honey,+candle+and+practical+glow,+safety+or+nostalgia+in+the+mids."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name honey mids and practical glow. Warm amber grade on [Subject], tungsten honey, candle and practical glow, safety or nostalgia in the mids.Keep full color, not sepia. Do not write bleach-bypass, and do not add a teal complementary wall unless you mean that split.Copy promptUse in Image GeneratorWarm amber grade on [Subject], tungsten honey, candle and practical glow, safety or nostalgia in the mids.Warm amber grade on [Subject], tungsten honey, candle and practical glow, safety or nostalgia in the mids."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Sepia or Teal and Orange. The tell is no true hue left, or cyan streets with only the face warm.",
+          "links": [
+            {
+              "text": "Sepia",
+              "url": "https://melies.co/cinematic-techniques/color/sepia"
+            },
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: overall amber bias, lamps as hearths, color still present in costumes and walls."
+        }
+      ],
+      "links": [
+        {
+          "text": "Sepia",
+          "url": "https://melies.co/cinematic-techniques/color/sepia"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Sepia or Teal and Orange. The tell is no true hue left, or cyan streets with only the face warm.Fix: overall amber bias, lamps as hearths, color still present in costumes and walls."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is warm amber in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is an overall warm grade: tungsten honey, candle, and practical glow in the midtones. The world reads as inviting, domestic, or remembered, with hues still present."
+        },
+        {
+          "type": "heading",
+          "text": "Warm Amber vs Sepia",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Warm amber is a color image biased toward honey. Sepia is a brown-gold tone replacing the grey scale, with modern chroma mostly gone. One is hospitality. The other is a print of the past."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use warm amber?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for home, memory, or invitation. Skip it for merciless worlds, toned-print flashbacks, and complementary teal-orange nights."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt warm amber for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Warm amber grade on [Subject], tungsten honey, candle and practical glow, safety or nostalgia in the mids. Forbid sepia toning and teal complementary walls."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is warm amber in film?It is an overall warm grade: tungsten honey, candle, and practical glow in the midtones. The world reads as inviting, domestic, or remembered, with hues still present.Warm Amber vs SepiaWarm amber is a color image biased toward honey. Sepia is a brown-gold tone replacing the grey scale, with modern chroma mostly gone. One is hospitality. The other is a print of the past.When should I use warm amber?Use it for home, memory, or invitation. Skip it for merciless worlds, toned-print flashbacks, and complementary teal-orange nights.How do I prompt warm amber for AI image or video?Write: Warm amber grade on [Subject], tungsten honey, candle and practical glow, safety or nostalgia in the mids. Forbid sepia toning and teal complementary walls."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name honey mids and practical glow. Warm amber grade on [Subject], tungsten honey, candle and practical glow, safety or nostalgia in the mids.",
+      "Keep full color, not sepia. Do not write bleach-bypass, and do not add a teal complementary wall unless you mean that split."
+    ],
+    "example": "Warm amber grade on [Subject], tungsten honey, candle and practical glow, safety or nostalgia in the mids."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/fc71119f525bca52371384855ac969b0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/warm-amber.webp",
+      "alt": "Warm Amber example"
+    },
+    {
+      "kind": "image",
+      "path": "media/ed33713845cad9f645afdfb4eadcf62d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-hour.webp",
+      "alt": "Golden Hour"
+    },
+    {
+      "kind": "image",
+      "path": "media/63d3a366e4a80f088428e87b46d5c969.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/candlelight-066-candlelit-naturalism-mini.webp",
+      "alt": "Candlelight"
+    },
+    {
+      "kind": "video",
+      "path": "media/ca4aadaa8863da5b4b9ea93abb6843f2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/066-candlelit-naturalism-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/25d739a7c92098e03cce4457b139dc7a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/warm-amber/hero.jpg",
+      "alt": "Warm Amber",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "a6c2f928f96122a59e8999165906ececf21a787816b8d738eb7a18df9f0ee471"
+}

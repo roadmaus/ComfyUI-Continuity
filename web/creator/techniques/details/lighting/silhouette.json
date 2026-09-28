@@ -1,0 +1,427 @@
+{
+  "id": "lighting/silhouette",
+  "slug": "silhouette",
+  "title": "Silhouette",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/silhouette",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/silhouette-049-silhouette-as-graphic-storytelling-mini.webp",
+  "detail": "details/lighting/silhouette.json",
+  "aliases": [
+    "Shape-led composition",
+    "Ombre chinoise"
+  ],
+  "description": "A silhouette shot places the subject dark against a brighter background so the figure reads as shape, not as a modeled face. Gesture and contour do the work; surface detail is gone.",
+  "thumbnail": "media/b5d6146a73c5baa985f280578740ef59.webp",
+  "video": "media/aa375d20479989e1dab53b000981e0c5.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/049-silhouette-as-graphic-storytelling-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Identity is less important than emblem: a rider on a ridge, a bicycle against a moon, a man in a doorway. The audience recognizes an action from outline alone."
+        },
+        {
+          "type": "paragraph",
+          "text": "If two shapes merge, the sentence is lost. It is the wrong tool when a line of dialogue needs a mouth, or when you still want pores and color in the coat."
+        },
+        {
+          "type": "paragraph",
+          "text": "A little rim is not a silhouette. If you can name the eye color, you overexposed the figure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Identity is less important than emblem: a rider on a ridge, a bicycle against a moon, a man in a doorway. The audience recognizes an action from outline alone.If two shapes merge, the sentence is lost. It is the wrong tool when a line of dialogue needs a mouth, or when you still want pores and color in the coat.A little rim is not a silhouette. If you can name the eye color, you overexposed the figure."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Expose for the bright ground (sky, doorway, fire, sun disk). Keep the key off the subject, or far below the background."
+        },
+        {
+          "type": "paragraph",
+          "text": "Backlight may exist as a sky, not as a facial key. Separate limbs, hats, and props so the outline parses."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness of the background source can be hard sun or a bright overcast; the subject is simply underexposed. Prompt: Silhouette of [Subject] as a dark shape against a bright ground, surface detail gone, mythic outline only."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Expose for the bright ground (sky, doorway, fire, sun disk). Keep the key off the subject, or far below the background.Backlight may exist as a sky, not as a facial key. Separate limbs, hats, and props so the outline parses.Hardness of the background source can be hard sun or a bright overcast; the subject is simply underexposed. Prompt: Silhouette of [Subject] as a dark shape against a bright ground, surface detail gone, mythic outline only."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when identity matters less than shape, a departure through a door, a figure against dusk. Do not use it if the action cannot be read from the outline."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when identity matters less than shape, a departure through a door, a figure against dusk. Do not use it if the action cannot be read from the outline."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Backlight can create a silhouette if you expose for it, or a rim if you hold the face a little. Rim light keeps a thread of flesh highlight; silhouette usually does not.",
+          "links": [
+            {
+              "text": "Backlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            },
+            {
+              "text": "Rim light",
+              "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cameo lighting is the inverse: a lit figure on a black ground. Low-key lighting still models something in the pool.",
+          "links": [
+            {
+              "text": "Cameo lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            },
+            {
+              "text": "Low-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "BacklightSeparate a dark figure from a dark world.",
+          "displayText": "Backlight\nSeparate a dark figure from a dark world.",
+          "links": [
+            {
+              "text": "BacklightSeparate a dark figure from a dark world.",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rim LightGraphic silhouette with just enough flesh.",
+          "displayText": "Rim Light\nGraphic silhouette with just enough flesh.",
+          "links": [
+            {
+              "text": "Rim LightGraphic silhouette with just enough flesh.",
+              "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Backlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "Rim light",
+          "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+        },
+        {
+          "text": "Cameo lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Low-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "BacklightSeparate a dark figure from a dark world.",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "Rim LightGraphic silhouette with just enough flesh.",
+          "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+          "alt": "Backlight"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/24ba922f93c8786e2def76713b970c9f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rim-light.webp",
+          "alt": "Rim Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Backlight can create a silhouette if you expose for it, or a rim if you hold the face a little. Rim light keeps a thread of flesh highlight; silhouette usually does not.Cameo lighting is the inverse: a lit figure on a black ground. Low-key lighting still models something in the pool.BacklightSeparate a dark figure from a dark world.Rim LightGraphic silhouette with just enough flesh.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "T. the Extra-Terrestrial puts bicycle and riders in silhouette across the moon."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Searchers isolates a figure against a bright doorway and landscape. Lawrence of Arabia and Skyfall use desert and sun as the bright field that turns bodies into emblems."
+        },
+        {
+          "type": "list-item",
+          "text": "E.T. the Extra-Terrestrial 1982The bicycle and riders pass in silhouette across the moon.",
+          "displayText": "E.T. the Extra-Terrestrial 1982\nThe bicycle and riders pass in silhouette across the moon."
+        },
+        {
+          "type": "list-item",
+          "text": "The Searchers 1956The figure is isolated against the bright doorway and landscape.",
+          "displayText": "The Searchers 1956\nThe figure is isolated against the bright doorway and landscape."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/05779d0fee5034075f3607834f4c0416.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/silhouette/famous/00-e-t-the-extra-terrestrial-1982.jpg",
+          "alt": "E.T. the Extra-Terrestrial 1982"
+        },
+        {
+          "kind": "image",
+          "path": "media/37c6a5fe0bbab045474fc32fc2f9ad50.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/silhouette/famous/01-the-searchers-1956.jpg",
+          "alt": "The Searchers 1956"
+        }
+      ],
+      "sourceText": "In film T. the Extra-Terrestrial puts bicycle and riders in silhouette across the moon.The Searchers isolates a figure against a bright doorway and landscape. Lawrence of Arabia and Skyfall use desert and sun as the bright field that turns bodies into emblems.E.T. the Extra-Terrestrial 1982The bicycle and riders pass in silhouette across the moon.The Searchers 1956The figure is isolated against the bright doorway and landscape."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Expose the ground, starve the body. \" Name a readable outline (limbs separated)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid facial detail and neon rims."
+        },
+        {
+          "type": "quote",
+          "text": "A parent and child carry a small telescope up a ridge at dusk, rendered as clean dark silhouettes against a luminous pale sky. Keep their limbs and the telescope distinct. Locked wide view, gentle wind, no visible facial detail or artificial rim halo."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+parent+and+child+carry+a+small+telescope+up+a+ridge+at+dusk,+rendered+as+clean+dark+silhouettes+against+a+luminous+pale+sky.+Keep+their+limbs+and+the+telescope+distinct.+Locked+wide+view,+gentle+wind,+no+visible+facial+detail+or+artificial+rim+halo."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Expose the ground, starve the body. \" Name a readable outline (limbs separated).Forbid facial detail and neon rims.Copy promptUse in Video GeneratorA parent and child carry a small telescope up a ridge at dusk, rendered as clean dark silhouettes against a luminous pale sky. Keep their limbs and the telescope distinct. Locked wide view, gentle wind, no visible facial detail or artificial rim halo.A parent and child carry a small telescope up a ridge at dusk, rendered as clean dark silhouettes against a luminous pale sky. Keep their limbs and the telescope distinct. Locked wide view, gentle wind, no visible facial detail or artificial rim halo."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a rim portrait or a muddy underexposure on a dark ground. The tell is visible eyes, or a black figure on a black field.",
+          "links": [
+            {
+              "text": "rim",
+              "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by brightening the background, killing keys on the body, and separating the limbs."
+        }
+      ],
+      "links": [
+        {
+          "text": "rim",
+          "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a rim portrait or a muddy underexposure on a dark ground. The tell is visible eyes, or a black figure on a black field.Fix it by brightening the background, killing keys on the body, and separating the limbs."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a silhouette in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A subject placed dark against a brighter background so contour and gesture read instead of facial detail."
+        },
+        {
+          "type": "heading",
+          "text": "Silhouette vs rim light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A silhouette is an unmodeled dark shape on a bright field. Rim light keeps a thin highlight on the edge of a still-dark figure, often on a dark field."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a silhouette?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the outline is the sentence: departure, arrival, emblem. Skip it when the face must speak."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a silhouette for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for a dark shape against a bright ground, no surface detail, limbs separated. Expose for the sky or doorway, not the face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a silhouette in film?A subject placed dark against a brighter background so contour and gesture read instead of facial detail.Silhouette vs rim lightA silhouette is an unmodeled dark shape on a bright field. Rim light keeps a thin highlight on the edge of a still-dark figure, often on a dark field.When should I use a silhouette?Use it when the outline is the sentence: departure, arrival, emblem. Skip it when the face must speak.How do I prompt a silhouette for AI image or video?Ask for a dark shape against a bright ground, no surface detail, limbs separated. Expose for the sky or doorway, not the face."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Expose the ground, starve the body. \" Name a readable outline (limbs separated).",
+      "Forbid facial detail and neon rims."
+    ],
+    "example": "A parent and child carry a small telescope up a ridge at dusk, rendered as clean dark silhouettes against a luminous pale sky. Keep their limbs and the telescope distinct. Locked wide view, gentle wind, no visible facial detail or artificial rim halo."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/aa375d20479989e1dab53b000981e0c5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/049-silhouette-as-graphic-storytelling-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b5d6146a73c5baa985f280578740ef59.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/silhouette-049-silhouette-as-graphic-storytelling-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d70e6f4842b8cec5df23351a90dbf637.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/silhouette.jpg",
+      "alt": "Silhouette frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+      "alt": "Backlight"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/24ba922f93c8786e2def76713b970c9f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rim-light.webp",
+      "alt": "Rim Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/05779d0fee5034075f3607834f4c0416.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/silhouette/famous/00-e-t-the-extra-terrestrial-1982.jpg",
+      "alt": "E.T. the Extra-Terrestrial 1982"
+    },
+    {
+      "kind": "image",
+      "path": "media/37c6a5fe0bbab045474fc32fc2f9ad50.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/silhouette/famous/01-the-searchers-1956.jpg",
+      "alt": "The Searchers 1956"
+    },
+    {
+      "kind": "image",
+      "path": "media/ef6036c7481ad0c95d7bc43b925d7c93.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/silhouette/hero.jpg",
+      "alt": "Silhouette",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "0e16ba893757e190e0b4e81b1ddf1820aa726ff27c27989f1aea478f3a31acd8"
+}

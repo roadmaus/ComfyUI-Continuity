@@ -1,0 +1,359 @@
+{
+  "id": "viral-looks/origami",
+  "slug": "origami",
+  "title": "Origami",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/origami",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/origami.webp",
+  "detail": "details/viral-looks/origami.json",
+  "aliases": [],
+  "description": "Origami, in origami look cinematography, is paper as lawful sculpture: creases, planar color, a person or city becoming a fold. The world folds, and torn pulp without crease law is paper, not this.",
+  "thumbnail": "media/cf45da92595b4d5f62bad9978a168416.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Myths, titles, a delicate threat: visible creases, hard studio or sun, edges sharp. A living figure can be paper or stand among folds."
+        },
+        {
+          "type": "paragraph",
+          "text": "A person holding a paper crane as a prop is a craft-table extra, not the look. It is the wrong tool for a muddy war still, and the wrong tool if the stock is torn fiber with no facets."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crease as line."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Myths, titles, a delicate threat: visible creases, hard studio or sun, edges sharp. A living figure can be paper or stand among folds.A person holding a paper crane as a prop is a craft-table extra, not the look. It is the wrong tool for a muddy war still, and the wrong tool if the stock is torn fiber with no facets.Crease as line."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height, 35mm to 50mm, lock-off. Hard studio or sun."
+        },
+        {
+          "type": "paragraph",
+          "text": "Visible creases, planar color, folded creature or city. Keep edges sharp."
+        },
+        {
+          "type": "paragraph",
+          "text": "No letters on the paper. Prompt: Origami world of [Subject], lawful creases, planar color, a person or city becoming a fold."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Eye height, 35mm to 50mm, lock-off. Hard studio or sun.Visible creases, planar color, folded creature or city. Keep edges sharp.No letters on the paper. Prompt: Origami world of [Subject], lawful creases, planar color, a person or city becoming a fold."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Myths, titles, a delicate folded threat. Do not use it as a craft-table crane in a real room, and do not use torn pulp without folds."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Myths, titles, a delicate folded threat. Do not use it as a craft-table crane in a real room, and do not use torn pulp without folds."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Paper is torn stock and fibers. Diorama is miniature space.",
+          "links": [
+            {
+              "text": "Paper",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/paper"
+            },
+            {
+              "text": "Diorama",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Origami is crease law: planar facets, a world that folds. If you can see a tear and no facet, you wanted paper."
+        },
+        {
+          "type": "list-item",
+          "text": "PaperThe world is pulp.",
+          "displayText": "Paper\nThe world is pulp.",
+          "links": [
+            {
+              "text": "PaperThe world is pulp.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/paper"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DioramaShrink the epic until it fits a shelf.",
+          "displayText": "Diorama\nShrink the epic until it fits a shelf.",
+          "links": [
+            {
+              "text": "DioramaShrink the epic until it fits a shelf.",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Paper",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/paper"
+        },
+        {
+          "text": "Diorama",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        },
+        {
+          "text": "PaperThe world is pulp.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/paper"
+        },
+        {
+          "text": "DioramaShrink the epic until it fits a shelf.",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a7800a6e5872222a0cb7c3c956175f43.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/paper.webp",
+          "alt": "Paper"
+        },
+        {
+          "kind": "image",
+          "path": "media/181d3dd7ea713bbb349f3475266cdf7f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diorama-diorama-mini.webp",
+          "alt": "Diorama"
+        },
+        {
+          "kind": "video",
+          "path": "media/4a23017cfb59808a2d3cee76a9fc5a28.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/diorama-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Paper is torn stock and fibers. Diorama is miniature space.Origami is crease law: planar facets, a world that folds. If you can see a tear and no facet, you wanted paper.PaperThe world is pulp.DioramaShrink the epic until it fits a shelf.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Kubo and the Two Strings treats folded paper as living matter. Stop-motion paper and title design are the well-known uses of crease as line."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of the fold, not a craft still to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Kubo and the Two Strings treats folded paper as living matter. Stop-motion paper and title design are the well-known uses of crease as line.Grammar of the fold, not a craft still to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Creases, planes, sharp edges. Origami world of [Subject], lawful creases, planar color, a person or city becoming a fold."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add hard light, no torn-fiber paper look, no letters, the world folding, not a prop crane."
+        },
+        {
+          "type": "quote",
+          "text": "Origami world of [Subject], lawful creases, planar color, a person or city becoming a fold."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Origami+world+of+[Subject],+lawful+creases,+planar+color,+a+person+or+city+becoming+a+fold."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Creases, planes, sharp edges. Origami world of [Subject], lawful creases, planar color, a person or city becoming a fold.Add hard light, no torn-fiber paper look, no letters, the world folding, not a prop crane.Copy promptUse in Image GeneratorOrigami world of [Subject], lawful creases, planar color, a person or city becoming a fold.Origami world of [Subject], lawful creases, planar color, a person or city becoming a fold."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A person holding a paper crane, or a slide into Paper tears. The tell is a craft extra.",
+          "links": [
+            {
+              "text": "Paper",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/paper"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: the world is the fold, lawful creases, planar color."
+        }
+      ],
+      "links": [
+        {
+          "text": "Paper",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/paper"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A person holding a paper crane, or a slide into Paper tears. The tell is a craft extra.Fix it: the world is the fold, lawful creases, planar color."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Origami in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Paper as sculpture: lawful creases, planar color, a person or city becoming a fold. The world folds. A prop crane is not the look."
+        },
+        {
+          "type": "heading",
+          "text": "Origami vs Paper",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Paper is pulp, tear, fiber, cut-out. Origami is crease and facet. Tear versus fold."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Origami?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Myths, titles, delicate threat. Skip muddy war stills and craft-table extras."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Origami for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard light, then: Origami world of [Subject], lawful creases, planar color, a person or city becoming a fold. Demand creases. Forbid a handheld crane as the only paper."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Origami in film?Paper as sculpture: lawful creases, planar color, a person or city becoming a fold. The world folds. A prop crane is not the look.Origami vs PaperPaper is pulp, tear, fiber, cut-out. Origami is crease and facet. Tear versus fold.When should I use Origami?Myths, titles, delicate threat. Skip muddy war stills and craft-table extras.How do I prompt Origami for AI image or video?Hard light, then: Origami world of [Subject], lawful creases, planar color, a person or city becoming a fold. Demand creases. Forbid a handheld crane as the only paper."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Creases, planes, sharp edges. Origami world of [Subject], lawful creases, planar color, a person or city becoming a fold.",
+      "Add hard light, no torn-fiber paper look, no letters, the world folding, not a prop crane."
+    ],
+    "example": "Origami world of [Subject], lawful creases, planar color, a person or city becoming a fold."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/cf45da92595b4d5f62bad9978a168416.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/origami.webp",
+      "alt": "Origami example"
+    },
+    {
+      "kind": "image",
+      "path": "media/a7800a6e5872222a0cb7c3c956175f43.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/paper.webp",
+      "alt": "Paper"
+    },
+    {
+      "kind": "image",
+      "path": "media/181d3dd7ea713bbb349f3475266cdf7f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/diorama-diorama-mini.webp",
+      "alt": "Diorama"
+    },
+    {
+      "kind": "video",
+      "path": "media/4a23017cfb59808a2d3cee76a9fc5a28.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/diorama-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/bf0c4948cb51ab15735e58e3b50da332.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/origami/hero.jpg",
+      "alt": "Origami",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "58b86db76fea613192eaa1133906d3cde0da67ecfd3b173cd5613c423bb340af"
+}

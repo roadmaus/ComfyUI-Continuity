@@ -1,0 +1,402 @@
+{
+  "id": "effects/match-morph",
+  "slug": "match-morph",
+  "title": "Morph",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/match-morph",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-morph-108-morph-transition-mini.webp",
+  "detail": "details/effects/match-morph.json",
+  "aliases": [
+    "Morphing / Dissolve Effect"
+  ],
+  "description": "A morphing effect transforms one image, face, shape, or object into another by interpolating corresponding geometry over time. It is a continuous becoming, not a crossfade of opacities and not two exposures stacked.",
+  "thumbnail": "media/dcb8cfd262c43c8b46735742cf21e23c.webp",
+  "video": "media/7a188a730ee1b83e803a81c50de9fe76.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/108-morph-transition-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face does not cut to another face. Vertices travel."
+        },
+        {
+          "type": "paragraph",
+          "text": "The nose, the jaw, the silhouette pass through illegal in-between states. Identity is unstable for a measured number of seconds, then a new form is solid."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the story is transformation: a liquid metal man, a mask that is anatomy, a person becoming another person. The audience should watch the change, not infer it across a dissolve."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when two images should merely trade dominance (dissolve), coexist (double exposure), or rhyme across a cut (match cut). If you still see both complete faces as ghosts, you dissolved."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the cut is hard and only the outline matches, you graphic-matched."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A face does not cut to another face. Vertices travel.The nose, the jaw, the silhouette pass through illegal in-between states. Identity is unstable for a measured number of seconds, then a new form is solid.Use it when the story is transformation: a liquid metal man, a mask that is anatomy, a person becoming another person. The audience should watch the change, not infer it across a dissolve.It is the wrong tool when two images should merely trade dominance (dissolve), coexist (double exposure), or rhyme across a cut (match cut). If you still see both complete faces as ghosts, you dissolved.If the cut is hard and only the outline matches, you graphic-matched."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Establish correspondence: eyes to eyes, contour to contour. Interpolate, often with a cross-dissolve of textures on top of the warp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Duration is part of the grammar (a six-second become is a sentence). Prompt: [Subject] morphs into a named second form over N seconds, continuous transformation, not a dissolve, not a cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Establish correspondence: eyes to eyes, contour to contour. Interpolate, often with a cross-dissolve of textures on top of the warp.Duration is part of the grammar (a six-second become is a sentence). Prompt: [Subject] morphs into a named second form over N seconds, continuous transformation, not a dissolve, not a cut."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face becomes another face over about six seconds, features traveling, one identity at the end. Do not crossfade two full portraits and call it a morph."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A face becomes another face over about six seconds, features traveling, one identity at the end. Do not crossfade two full portraits and call it a morph."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dissolve changes opacity from shot A to shot B. Forms do not have to correspond.",
+          "links": [
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Double Exposure holds both images. Match Cut joins two shots at a similar shape without interpolating the in-between.",
+          "links": [
+            {
+              "text": "Double Exposure",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            },
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Duplication places two solid versions of one person in a space. Morph turns one into the other.",
+          "links": [
+            {
+              "text": "Duplication",
+              "url": "https://melies.co/cinematic-techniques/effects/duplication"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DissolveMemory, passage, or a gentle death of a scene.",
+          "displayText": "Dissolve\nMemory, passage, or a gentle death of a scene.",
+          "links": [
+            {
+              "text": "DissolveMemory, passage, or a gentle death of a scene.",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Double ExposureTwo times or two selves occupy one frame.",
+          "displayText": "Double Exposure\nTwo times or two selves occupy one frame.",
+          "links": [
+            {
+              "text": "Double ExposureTwo times or two selves occupy one frame.",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        },
+        {
+          "text": "Double Exposure",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Duplication",
+          "url": "https://melies.co/cinematic-techniques/effects/duplication"
+        },
+        {
+          "text": "DissolveMemory, passage, or a gentle death of a scene.",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        },
+        {
+          "text": "Double ExposureTwo times or two selves occupy one frame.",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1332a951776aaa53a01036439d1680be.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dissolve-102-dissolve-and-temporal-layering-mini.webp",
+          "alt": "Dissolve"
+        },
+        {
+          "kind": "video",
+          "path": "media/1ec6c76a16b746e9cd93c6c2b5299211.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/102-dissolve-and-temporal-layering-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+          "alt": "Double Exposure"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Dissolve changes opacity from shot A to shot B. Forms do not have to correspond.Double Exposure holds both images. Match Cut joins two shots at a similar shape without interpolating the in-between.Duplication places two solid versions of one person in a space. Morph turns one into the other.DissolveMemory, passage, or a gentle death of a scene.Double ExposureTwo times or two selves occupy one frame.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Terminator 2 interpolates the T-1000 through chrome and human geometry. The Mask treats anatomy as a morph target."
+        },
+        {
+          "type": "paragraph",
+          "text": "Willow (1988) and Michael Jackson's Black or White are early digital morph grammar: correspondence plus time."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Terminator 2 interpolates the T-1000 through chrome and human geometry. The Mask treats anatomy as a morph target.Willow (1988) and Michael Jackson's Black or White are early digital morph grammar: correspondence plus time."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name both states and the duration. Still: Morph between [Subject] and another named state, face or body becoming, in-between geometry visible."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: [Subject] morphs into another form or face over 6 seconds, a continuous transformation, not a dissolve."
+        },
+        {
+          "type": "quote",
+          "text": "[Subject] morphs into another form or face over 6 seconds, a continuous transformation."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=[Subject]+morphs+into+another+form+or+face+over+6+seconds,+a+continuous+transformation."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name both states and the duration. Still: Morph between [Subject] and another named state, face or body becoming, in-between geometry visible.Video: [Subject] morphs into another form or face over 6 seconds, a continuous transformation, not a dissolve.Copy promptUse in Video Generator[Subject] morphs into another form or face over 6 seconds, a continuous transformation.[Subject] morphs into another form or face over 6 seconds, a continuous transformation."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: dissolve, double exposure, or match cut. Tell: two ghosts, a hard cut on similar shapes, or a texture fade with no warp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: require corresponding features to travel, show illegal in-betweens, land on one solid form."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: dissolve, double exposure, or match cut. Tell: two ghosts, a hard cut on similar shapes, or a texture fade with no warp.Fix: require corresponding features to travel, show illegal in-betweens, land on one solid form."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a morph in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A continuous geometric transformation from one image or body into another. Features correspond and interpolate. It is not a fade and not a stack."
+        },
+        {
+          "type": "heading",
+          "text": "Morph vs dissolve",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dissolve is opacity. A morph is shape. In a dissolve you can see two complete pictures. In a morph you see one picture whose anatomy is traveling."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a morph?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When identity or matter is unstable and the change must be watched. Do not use it as a fancy dissolve between unrelated scenes."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a morph for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the start form, the end form, and the duration. Demand continuous transformation with traveling features. Ban dissolve and double exposure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a morph in film?A continuous geometric transformation from one image or body into another. Features correspond and interpolate. It is not a fade and not a stack.Morph vs dissolveA dissolve is opacity. A morph is shape. In a dissolve you can see two complete pictures. In a morph you see one picture whose anatomy is traveling.When should I use a morph?When identity or matter is unstable and the change must be watched. Do not use it as a fancy dissolve between unrelated scenes.How do I prompt a morph for AI image or video?Name the start form, the end form, and the duration. Demand continuous transformation with traveling features. Ban dissolve and double exposure."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name both states and the duration. Still: Morph between [Subject] and another named state, face or body becoming, in-between geometry visible.",
+      "Video: [Subject] morphs into another form or face over 6 seconds, a continuous transformation, not a dissolve."
+    ],
+    "example": "[Subject] morphs into another form or face over 6 seconds, a continuous transformation."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/7a188a730ee1b83e803a81c50de9fe76.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/108-morph-transition-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dcb8cfd262c43c8b46735742cf21e23c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-morph-108-morph-transition-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fe33a285c8911ac90d8dd1792521372f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/match-morph.jpg",
+      "alt": "Morph frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/1332a951776aaa53a01036439d1680be.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dissolve-102-dissolve-and-temporal-layering-mini.webp",
+      "alt": "Dissolve"
+    },
+    {
+      "kind": "video",
+      "path": "media/1ec6c76a16b746e9cd93c6c2b5299211.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/102-dissolve-and-temporal-layering-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+      "alt": "Double Exposure"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3fb3fa84597384feffb3b6c17d661606.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/match-morph/hero.jpg",
+      "alt": "Morph",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "8d7a0bef4e62190f762f2f4330302023fa22c3a17f299a98ee772f6832c8a213"
+}

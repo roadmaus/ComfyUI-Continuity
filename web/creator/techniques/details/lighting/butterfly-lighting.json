@@ -1,0 +1,418 @@
+{
+  "id": "lighting/butterfly-lighting",
+  "slug": "butterfly-lighting",
+  "title": "Butterfly Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/butterfly-lighting.webp",
+  "detail": "details/lighting/butterfly-lighting.json",
+  "aliases": [
+    "Paramount lighting"
+  ],
+  "description": "Butterfly lighting, also called Paramount lighting, places the key high and on the camera axis so a small butterfly-shaped shadow falls under the nose on the philtrum. Both cheeks stay open; both eyes take light.",
+  "thumbnail": "media/a0bc77407f831c1eb1760bbae139236c.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This is beauty lighting with a structure: cheekbones lift, the nose has a tidy shadow, and the face stays symmetrical for the lens. Classical glamour portraits used it because a star looking into camera still has modeling, not a flat flash."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a liar in half-light, a bruised antihero, or anyone whose story is asymmetry. If you swing the key off axis, the butterfly becomes a loop.",
+          "links": [
+            {
+              "text": "loop",
+              "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If you raise it to the ceiling and kill the frontal component, you get top light sockets.",
+          "links": [
+            {
+              "text": "top light",
+              "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "loop",
+          "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+        },
+        {
+          "text": "top light",
+          "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function This is beauty lighting with a structure: cheekbones lift, the nose has a tidy shadow, and the face stays symmetrical for the lens. Classical glamour portraits used it because a star looking into camera still has modeling, not a flat flash.It is the wrong tool for a liar in half-light, a bruised antihero, or anyone whose story is asymmetry. If you swing the key off axis, the butterfly becomes a loop.If you raise it to the ceiling and kill the frontal component, you get top light sockets."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Center a large or medium source above the lens, aimed down at the face, high enough for the under-nose shadow but not so high the eye sockets collapse. A reflector under the chin is optional fill."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness is usually soft to medium so skin wraps. Color is often tungsten or daylight beauty-neutral, not a green overhead."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Key light high and centered on [Subject]'s face, a small shadow under the nose on the philtrum, both eyes open, glamour portrait."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Center a large or medium source above the lens, aimed down at the face, high enough for the under-nose shadow but not so high the eye sockets collapse. A reflector under the chin is optional fill.Hardness is usually soft to medium so skin wraps. Color is often tungsten or daylight beauty-neutral, not a green overhead.Prompt: Key light high and centered on [Subject]'s face, a small shadow under the nose on the philtrum, both eyes open, glamour portrait."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a glamour close-up, a singer facing camera, a studio beauty still. Do not use it on a crime profile that should be short-lit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a glamour close-up, a singer facing camera, a studio beauty still. Do not use it on a crime profile that should be short-lit."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Loop lighting moves the key slightly off axis so the nose shadow slides toward the mouth corner. Rembrandt lighting is further off and higher, with a cheek triangle.",
+          "links": [
+            {
+              "text": "Loop lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+            },
+            {
+              "text": "Rembrandt lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Glam is the broader beauty package (diffusion, catchlights) that often uses butterfly but does not have to. High-key lighting is frame contrast, not this nose-shadow pattern.",
+          "links": [
+            {
+              "text": "Glam",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            },
+            {
+              "text": "High-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Top light is overhead enough to bury the eyes.",
+          "links": [
+            {
+              "text": "Top light",
+              "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Loop LightingNatural portrait that is still shaped.",
+          "displayText": "Loop Lighting\nNatural portrait that is still shaped.",
+          "links": [
+            {
+              "text": "Loop LightingNatural portrait that is still shaped.",
+              "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+          "displayText": "High-Key Lighting\nComedy, heaven, hospital, or candy.",
+          "links": [
+            {
+              "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Loop lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+        },
+        {
+          "text": "Rembrandt lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "Glam",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "High-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Top light",
+          "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+        },
+        {
+          "text": "Loop LightingNatural portrait that is still shaped.",
+          "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+        },
+        {
+          "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/71bb1f150be1ca6edd65b3043aaab886.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/loop-lighting.webp",
+          "alt": "Loop Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/633961526d0799af2b516a1929d04ff7.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-key-064-high-key-brightness-mini.webp",
+          "alt": "High-Key Lighting"
+        },
+        {
+          "kind": "video",
+          "path": "media/501404f06979d708f24c98a578ccaf9a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/064-high-key-brightness-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Loop lighting moves the key slightly off axis so the nose shadow slides toward the mouth corner. Rembrandt lighting is further off and higher, with a cheek triangle.Glam is the broader beauty package (diffusion, catchlights) that often uses butterfly but does not have to. High-key lighting is frame contrast, not this nose-shadow pattern.Top light is overhead enough to bury the eyes.Loop LightingNatural portrait that is still shaped.High-Key LightingComedy, heaven, hospital, or candy.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Classic Hollywood glamour, including Paramount-style portraits and films such as Gilda and Shanghai Express, parks the key high and frontal so the butterfly sits under the nose. The face stays a product the camera can sell."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Classic Hollywood glamour, including Paramount-style portraits and films such as Gilda and Shanghai Express, parks the key high and frontal so the butterfly sits under the nose. The face stays a product the camera can sell."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the key on center and high. \" Forbid a shadow cheek."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mention both eyes taking light."
+        },
+        {
+          "type": "quote",
+          "text": "Key light high and centered on [Subject]'s face, a small shadow under the nose on the philtrum, both eyes open, glamour portrait."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Key+light+high+and+centered+on+[Subject]'s+face,+a+small+shadow+under+the+nose+on+the+philtrum,+both+eyes+open,+glamour+portrait."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Keep the key on center and high. \" Forbid a shadow cheek.Mention both eyes taking light.Copy promptUse in Image GeneratorKey light high and centered on [Subject]'s face, a small shadow under the nose on the philtrum, both eyes open, glamour portrait.Key light high and centered on [Subject]'s face, a small shadow under the nose on the philtrum, both eyes open, glamour portrait."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is loop or top light. The tell is a nose shadow that leans to one side, or hollow eyes.",
+          "links": [
+            {
+              "text": "loop",
+              "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+            },
+            {
+              "text": "top light",
+              "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by centering the key and lowering it until sockets open and the butterfly sits on the philtrum."
+        }
+      ],
+      "links": [
+        {
+          "text": "loop",
+          "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+        },
+        {
+          "text": "top light",
+          "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is loop or top light. The tell is a nose shadow that leans to one side, or hollow eyes.Fix it by centering the key and lowering it until sockets open and the butterfly sits on the philtrum."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is butterfly lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A high, on-axis key that throws a small butterfly-shaped shadow under the nose. Both cheeks and both eyes stay lit. It is also called Paramount lighting."
+        },
+        {
+          "type": "heading",
+          "text": "Butterfly lighting vs loop lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Butterfly keeps the key centered; the nose shadow sits under the septum. Loop offsets the key so the shadow becomes a small loop toward the mouth, still not touching the cheek shadow."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use butterfly lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for glamour and frontal beauty with a little structure. Skip it when the face should be secretive or half in shadow."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt butterfly lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Put the key high and centered. Ask for a small shadow under the nose on the philtrum, both eyes open, both cheeks lit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is butterfly lighting in film?A high, on-axis key that throws a small butterfly-shaped shadow under the nose. Both cheeks and both eyes stay lit. It is also called Paramount lighting.Butterfly lighting vs loop lightingButterfly keeps the key centered; the nose shadow sits under the septum. Loop offsets the key so the shadow becomes a small loop toward the mouth, still not touching the cheek shadow.When should I use butterfly lighting?Use it for glamour and frontal beauty with a little structure. Skip it when the face should be secretive or half in shadow.How do I prompt butterfly lighting for AI image or video?Put the key high and centered. Ask for a small shadow under the nose on the philtrum, both eyes open, both cheeks lit."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Keep the key on center and high. \" Forbid a shadow cheek.",
+      "Mention both eyes taking light."
+    ],
+    "example": "Key light high and centered on [Subject]'s face, a small shadow under the nose on the philtrum, both eyes open, glamour portrait."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/a0bc77407f831c1eb1760bbae139236c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/butterfly-lighting.webp",
+      "alt": "Butterfly Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/71bb1f150be1ca6edd65b3043aaab886.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/loop-lighting.webp",
+      "alt": "Loop Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/633961526d0799af2b516a1929d04ff7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-key-064-high-key-brightness-mini.webp",
+      "alt": "High-Key Lighting"
+    },
+    {
+      "kind": "video",
+      "path": "media/501404f06979d708f24c98a578ccaf9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/064-high-key-brightness-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/38746e98e90596469ee473b213ac3c10.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/butterfly-lighting/hero.jpg",
+      "alt": "Butterfly Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "6ba9c4a31ced8b2e34ef1f3313066ea6bd4bef7f1075cec5b02fa5ca63f2f8e1"
+}

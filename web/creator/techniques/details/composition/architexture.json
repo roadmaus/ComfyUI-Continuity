@@ -1,0 +1,383 @@
+{
+  "id": "composition/architexture",
+  "slug": "architexture",
+  "title": "Architexture",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/architexture",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/architexture.webp",
+  "detail": "details/composition/architexture.json",
+  "aliases": [],
+  "description": "Architexture, a nickname for architectural cinematography that treats the set as subject, fills the frame with facades, grids, and materials until a person is a detail of the building. Texture, module, and mass own space, and the body is an ornament or a scale figure.",
+  "thumbnail": "media/e2f56e1f09dfa91a56c501b016961039.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "When the set is the subject, human plot becomes a visitor. Concrete, glass, carpet, and window bands do the talking."
+        },
+        {
+          "type": "paragraph",
+          "text": "A figure gives scale, then disappears into the pattern. It is the wrong tool when a close-up of a lie is the scene."
+        },
+        {
+          "type": "paragraph",
+          "text": "Architecture cannot deliver an eye twitch. If you drown a dialogue in facade, you will photograph a building and call it a conversation."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is not automatically one-point ceremony. A flat elevation, a brutalist soffit, a repeating office ceiling can be architexture without a vanishing tunnel."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function When the set is the subject, human plot becomes a visitor. Concrete, glass, carpet, and window bands do the talking.A figure gives scale, then disappears into the pattern. It is the wrong tool when a close-up of a lie is the scene.Architecture cannot deliver an eye twitch. If you drown a dialogue in facade, you will photograph a building and call it a conversation.This is not automatically one-point ceremony. A flat elevation, a brutalist soffit, a repeating office ceiling can be architexture without a vanishing tunnel."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Expose for the material: raking light for relief, or flat light for graphic grids. Use a longer lens to compress floors into texture, or a wide lens close to a wall so the body is tiny against a single plane."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stop down so brick and joint stay sharp if texture is the point. Prompt: Architecture as texture around [Subject], facades, grids, and materials filling the frame until the person is a detail of the building."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Expose for the material: raking light for relief, or flat light for graphic grids. Use a longer lens to compress floors into texture, or a wide lens close to a wall so the body is tiny against a single plane.Stop down so brick and joint stay sharp if texture is the point. Prompt: Architecture as texture around [Subject], facades, grids, and materials filling the frame until the person is a detail of the building."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when place outweighs person: first arrival in a city, a worker in a machine, a critic of a monument. Do not use it as the only coverage of an intimate scene."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when place outweighs person: first arrival in a city, a worker in a machine, a critic of a monument. Do not use it as the only coverage of an intimate scene."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "One-Point Perspective aims space as a tunnel. Architexture may be a flat, tactile wall.",
+          "links": [
+            {
+              "text": "One-Point Perspective",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Repetition and Pattern counts units. Architexture can be irregular material, poured and stained.",
+          "links": [
+            {
+              "text": "Repetition and Pattern",
+              "url": "https://melies.co/cinematic-techniques/composition/repetition-pattern"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Extreme Long Shot shrinks a person in land. This shrinks them in built matter.",
+          "links": [
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Windows makes apertures the subject. Architexture may have almost no people in those apertures.",
+          "links": [
+            {
+              "text": "Windows",
+              "url": "https://melies.co/cinematic-techniques/composition/windows"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "One-Point PerspectiveDestiny has a vanishing point.",
+          "displayText": "One-Point Perspective\nDestiny has a vanishing point.",
+          "links": [
+            {
+              "text": "One-Point PerspectiveDestiny has a vanishing point.",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Repetition and PatternSystems, armies, hotels, factories.",
+          "displayText": "Repetition and Pattern\nSystems, armies, hotels, factories.",
+          "links": [
+            {
+              "text": "Repetition and PatternSystems, armies, hotels, factories.",
+              "url": "https://melies.co/cinematic-techniques/composition/repetition-pattern"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "One-Point Perspective",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Repetition and Pattern",
+          "url": "https://melies.co/cinematic-techniques/composition/repetition-pattern"
+        },
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Windows",
+          "url": "https://melies.co/cinematic-techniques/composition/windows"
+        },
+        {
+          "text": "One-Point PerspectiveDestiny has a vanishing point.",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Repetition and PatternSystems, armies, hotels, factories.",
+          "url": "https://melies.co/cinematic-techniques/composition/repetition-pattern"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/fd42e6b828b510faf2cf566bcbd2d93b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-point-perspective-037-symmetry-and-one-point-perspective-mini.webp",
+          "alt": "One-Point Perspective"
+        },
+        {
+          "kind": "video",
+          "path": "media/6a0595c4b52cce7843ef5c4ab8eb4adf.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/037-symmetry-and-one-point-perspective-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/61d5be392d8c6ec44bb5d1ce08a9a464.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/repetition-pattern.webp",
+          "alt": "Repetition and Pattern"
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots One-Point Perspective aims space as a tunnel. Architexture may be a flat, tactile wall.Repetition and Pattern counts units. Architexture can be irregular material, poured and stained.Extreme Long Shot shrinks a person in land. This shrinks them in built matter.Windows makes apertures the subject. Architexture may have almost no people in those apertures.One-Point PerspectiveDestiny has a vanishing point.Repetition and PatternSystems, armies, hotels, factories.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Playtime (PlayTime) lets modern Paris eat its visitors: glass, grid, and waiting room as comedy of texture. The Brutalist language puts poured mass and material ahead of comfort."
+        },
+        {
+          "type": "paragraph",
+          "text": "The person remains, as scale. Grammar of buildings, not a tourist postcard."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Playtime (PlayTime) lets modern Paris eat its visitors: glass, grid, and waiting room as comedy of texture. The Brutalist language puts poured mass and material ahead of comfort.The person remains, as scale. Grammar of buildings, not a tourist postcard."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Let the building win. Architecture as texture around [Subject], facades, grids, and materials filling the frame until the person is a detail of the building."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the material (concrete board-form, glass curtain, hotel carpet). Say the figure is small in the architecture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not crop as a portrait."
+        },
+        {
+          "type": "quote",
+          "text": "Architecture as texture around [Subject], façades, grids, and materials filling the frame until the person is a detail of the building."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Architecture+as+texture+around+[Subject],+fa%C3%A7ades,+grids,+and+materials+filling+the+frame+until+the+person+is+a+detail+of+the+building."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Let the building win. Architecture as texture around [Subject], facades, grids, and materials filling the frame until the person is a detail of the building.Name the material (concrete board-form, glass curtain, hotel carpet). Say the figure is small in the architecture.Do not crop as a portrait.Copy promptUse in Image GeneratorArchitecture as texture around [Subject], façades, grids, and materials filling the frame until the person is a detail of the building.Architecture as texture around [Subject], façades, grids, and materials filling the frame until the person is a detail of the building."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a human portrait with a famous building behind. The tell is a large face and a postcard sliver of facade."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to step back or go longer until the body is a module among modules, or to admit you wanted a portrait and drop the claim."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a human portrait with a famous building behind. The tell is a large face and a postcard sliver of facade.The fix is to step back or go longer until the body is a module among modules, or to admit you wanted a portrait and drop the claim."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is architexture in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is composition that treats architecture as the subject: facades, grids, and materials filling the frame. A person remains as a detail or a scale figure. The set owns space."
+        },
+        {
+          "type": "heading",
+          "text": "Architexture vs One-Point Perspective",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "One-point perspective is a tunnel of receding parallels, often ceremonial. Architexture is material and module, which might be a flat wall, a ceiling grid, or a poured mass with no vanishing showpiece. They can combine in a designed hall. They need not."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use architexture?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the building is the story: arrival, labor, monument, a system of rooms. Do not use it as the only shot of a face that must be read."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt architexture for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Make the person small in material. Example: Architecture as texture around [Subject], facades, grids, and materials filling the frame until the person is a detail of the building. Name concrete, glass, or grid. Forbid portrait crop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is architexture in film?It is composition that treats architecture as the subject: facades, grids, and materials filling the frame. A person remains as a detail or a scale figure. The set owns space.Architexture vs One-Point PerspectiveOne-point perspective is a tunnel of receding parallels, often ceremonial. Architexture is material and module, which might be a flat wall, a ceiling grid, or a poured mass with no vanishing showpiece. They can combine in a designed hall. They need not.When should I use architexture?Use it when the building is the story: arrival, labor, monument, a system of rooms. Do not use it as the only shot of a face that must be read.How do I prompt architexture for AI image or video?Make the person small in material. Example: Architecture as texture around [Subject], facades, grids, and materials filling the frame until the person is a detail of the building. Name concrete, glass, or grid. Forbid portrait crop."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Let the building win. Architecture as texture around [Subject], facades, grids, and materials filling the frame until the person is a detail of the building.",
+      "Name the material (concrete board-form, glass curtain, hotel carpet). Say the figure is small in the architecture.",
+      "Do not crop as a portrait."
+    ],
+    "example": "Architecture as texture around [Subject], façades, grids, and materials filling the frame until the person is a detail of the building."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/e2f56e1f09dfa91a56c501b016961039.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/architexture.webp",
+      "alt": "Architexture example"
+    },
+    {
+      "kind": "image",
+      "path": "media/fd42e6b828b510faf2cf566bcbd2d93b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-point-perspective-037-symmetry-and-one-point-perspective-mini.webp",
+      "alt": "One-Point Perspective"
+    },
+    {
+      "kind": "video",
+      "path": "media/6a0595c4b52cce7843ef5c4ab8eb4adf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/037-symmetry-and-one-point-perspective-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/61d5be392d8c6ec44bb5d1ce08a9a464.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/repetition-pattern.webp",
+      "alt": "Repetition and Pattern"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/51cb716fa0d8f1a9d6da4de32af095c4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/architexture/hero.jpg",
+      "alt": "Architexture",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "aa2a5befc2fcce643b62e7317e6d225fabb1357f044abe1020067870f82933fd"
+}

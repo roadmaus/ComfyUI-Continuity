@@ -1,0 +1,414 @@
+{
+  "id": "atmosphere/underwater",
+  "slug": "underwater",
+  "title": "Underwater",
+  "categoryId": "atmosphere",
+  "categoryTitle": "Atmosphere and Weather",
+  "sourceUrl": "https://melies.co/cinematic-techniques/atmosphere/underwater",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/underwater-underwater-mini.webp",
+  "detail": "details/atmosphere/underwater.json",
+  "aliases": [],
+  "description": "Underwater cinematography leaves air: the camera is in water, so caustics, buoyancy, and a missing horizon rewrite every edge. The medium is the matter; particles are silt and bubbles, and bodies move as if the world had gone slow without a slow-motion shutter.",
+  "thumbnail": "media/fd420b0e034c5e2ab01183f84983fe9c.webp",
+  "video": "media/64ef0f8f2668206cb2692f2d00919c1e.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/underwater-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hair and cloth delay. Light arrives as moving lattice from a surface that is now a ceiling."
+        },
+        {
+          "type": "paragraph",
+          "text": "There is no standing horizon, only up toward silver and down toward dark. Leave air."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the scene is actually submerged: a pool, a sea, a tank, a flood. It is the wrong tool when you only want grace: dry Slow Motion with a blue grade is a lie, and it shows in hair that still falls at air speed.",
+          "links": [
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the story is on the swell with a sky: that is Ocean. Color dies with depth (reds first).",
+          "links": [
+            {
+              "text": "Ocean",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/ocean"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the red dress is still loud at ten meters, you stayed in air."
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Ocean",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/ocean"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Hair and cloth delay. Light arrives as moving lattice from a surface that is now a ceiling.There is no standing horizon, only up toward silver and down toward dark. Leave air.Use it when the scene is actually submerged: a pool, a sea, a tank, a flood. It is the wrong tool when you only want grace: dry Slow Motion with a blue grade is a lie, and it shows in hair that still falls at air speed.It is the wrong tool when the story is on the swell with a sky: that is Ocean. Color dies with depth (reds first).If the red dress is still loud at ten meters, you stayed in air."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the lens in a housing in water (or a convincing tank). Expose for caustics from the real sun or a hard source through the surface."
+        },
+        {
+          "type": "paragraph",
+          "text": "Let bubbles and silt backlight. Wardrobe and hair must float."
+        },
+        {
+          "type": "paragraph",
+          "text": "Camera moves fight drag; they read slower. Prompt: underwater of [Subject], caustics, muffled space, hair and cloth in slow water, a world without horizon."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put the lens in a housing in water (or a convincing tank). Expose for caustics from the real sun or a hard source through the surface.Let bubbles and silt backlight. Wardrobe and hair must float.Camera moves fight drag; they read slower. Prompt: underwater of [Subject], caustics, muffled space, hair and cloth in slow water, a world without horizon."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a dive, a drowning, a creature, a flooded corridor. Do not use it as a look for a dry bedroom."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you need the surface and the sky, shoot ocean, then go under for a beat if the story dives."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a dive, a drowning, a creature, a flooded corridor. Do not use it as a look for a dry bedroom.If you need the surface and the sky, shoot ocean, then go under for a beat if the story dives."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ocean is the surface world: swell, horizon, salt light. Atmospheric Haze is air scatter.",
+          "links": [
+            {
+              "text": "Ocean",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/ocean"
+            },
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Slow Motion is a frame-rate choice that often accompanies underwater but is not the medium. Underwater is a different optical path: refraction, caustics, buoyancy, no air horizon.",
+          "links": [
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "displayText": "Atmospheric Haze\nShow kilometers, not just meters.",
+          "links": [
+            {
+              "text": "Atmospheric HazeShow kilometers, not just meters.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "RainMake the air visible and the ground reflective.",
+          "displayText": "Rain\nMake the air visible and the ground reflective.",
+          "links": [
+            {
+              "text": "RainMake the air visible and the ground reflective.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Ocean",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/ocean"
+        },
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "RainMake the air visible and the ground reflective.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+          "alt": "Atmospheric Haze"
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+          "alt": "Rain"
+        }
+      ],
+      "sourceText": "Compared with similar shots Ocean is the surface world: swell, horizon, salt light. Atmospheric Haze is air scatter.Slow Motion is a frame-rate choice that often accompanies underwater but is not the medium. Underwater is a different optical path: refraction, caustics, buoyancy, no air horizon.Atmospheric HazeShow kilometers, not just meters.Slow MotionA second contains a scene.RainMake the air visible and the ground reflective."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Big Blue lives in the medium, not in a tint. The Shape of Water makes tanks and canals a second gravity."
+        },
+        {
+          "type": "paragraph",
+          "text": "Thunderball proved action can be staged as true submerged geography. Use caustics and float, not a teal LUT on a dry actor."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Big Blue lives in the medium, not in a tint. The Shape of Water makes tanks and canals a second gravity.Thunderball proved action can be staged as true submerged geography. Use caustics and float, not a teal LUT on a dry actor."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Underwater of [Subject], caustics, muffled space, hair and cloth in slow water, a world without horizon. Name depth, the surface as ceiling or absence, floating wardrobe, silt or bubbles in backlight."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, buoyancy and drag; no air-speed hair, no standing horizon unless looking up at the underside of the surface."
+        },
+        {
+          "type": "quote",
+          "text": "Underwater of [Subject], caustics, muffled space, hair and cloth in slow water, a world without horizon."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Underwater+of+[Subject],+caustics,+muffled+space,+hair+and+cloth+in+slow+water,+a+world+without+horizon."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Underwater of [Subject], caustics, muffled space, hair and cloth in slow water, a world without horizon. Name depth, the surface as ceiling or absence, floating wardrobe, silt or bubbles in backlight.For video, buoyancy and drag; no air-speed hair, no standing horizon unless looking up at the underside of the surface.Copy promptUse in Image GeneratorUnderwater of [Subject], caustics, muffled space, hair and cloth in slow water, a world without horizon.Underwater of [Subject], caustics, muffled space, hair and cloth in slow water, a world without horizon."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a blue grade in air, or Ocean from a boat. The tell: cloth hangs, hair falls, a skyline, no caustics.",
+          "links": [
+            {
+              "text": "Ocean",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/ocean"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: submerge the camera, float the fabrics, add caustics and backlit silt, kill the air horizon."
+        }
+      ],
+      "links": [
+        {
+          "text": "Ocean",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/ocean"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a blue grade in air, or Ocean from a boat. The tell: cloth hangs, hair falls, a skyline, no caustics.The fix: submerge the camera, float the fabrics, add caustics and backlit silt, kill the air horizon."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Underwater in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Underwater work puts camera and subject in water, so caustics, buoyancy, particles, and a missing air horizon rewrite the frame. The medium is the atmosphere."
+        },
+        {
+          "type": "heading",
+          "text": "Underwater vs Ocean",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ocean is the surface: swell, sky, a horizon that can kill you. Underwater leaves that sky and treats the surface as a ceiling. One is a seascape; the other is a different world."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Underwater?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the scene is submerged. Do not use a blue grade or slow motion in air as a substitute, and do not call a boat horizon underwater."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Underwater for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Demand caustics, floating cloth, and no air horizon. Example: underwater of [Subject], caustics, muffled space, hair and cloth in slow water. Specify silt or bubbles in backlight."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Underwater in film?Underwater work puts camera and subject in water, so caustics, buoyancy, particles, and a missing air horizon rewrite the frame. The medium is the atmosphere.Underwater vs OceanOcean is the surface: swell, sky, a horizon that can kill you. Underwater leaves that sky and treats the surface as a ceiling. One is a seascape; the other is a different world.When should I use Underwater?Use it when the scene is submerged. Do not use a blue grade or slow motion in air as a substitute, and do not call a boat horizon underwater.How do I prompt Underwater for AI image or video?Demand caustics, floating cloth, and no air horizon. Example: underwater of [Subject], caustics, muffled space, hair and cloth in slow water. Specify silt or bubbles in backlight."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Underwater of [Subject], caustics, muffled space, hair and cloth in slow water, a world without horizon. Name depth, the surface as ceiling or absence, floating wardrobe, silt or bubbles in backlight.",
+      "For video, buoyancy and drag; no air-speed hair, no standing horizon unless looking up at the underside of the surface."
+    ],
+    "example": "Underwater of [Subject], caustics, muffled space, hair and cloth in slow water, a world without horizon."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/64ef0f8f2668206cb2692f2d00919c1e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/underwater-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fd420b0e034c5e2ab01183f84983fe9c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/underwater-underwater-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/60cdfc8e3b9711d6f0363bcfdaadf7c4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/underwater.jpg",
+      "alt": "Underwater frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+      "alt": "Atmospheric Haze"
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+      "alt": "Rain"
+    },
+    {
+      "kind": "image",
+      "path": "media/ee14581e8b5ff17a38f88e6c44938516.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/underwater/hero.jpg",
+      "alt": "Underwater",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "2b1a41985347693ad1636aba5d1f02fc29996e2256815c76db32d926b1ffe128"
+}

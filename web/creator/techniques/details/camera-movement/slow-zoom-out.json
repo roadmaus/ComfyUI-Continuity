@@ -1,0 +1,405 @@
+{
+  "id": "camera-movement/slow-zoom-out",
+  "slug": "slow-zoom-out",
+  "title": "Slow Zoom Out",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-out-02-slow-zoom-out-v2-mini.webp",
+  "detail": "details/camera-movement/slow-zoom-out.json",
+  "aliases": [],
+  "description": "A slow zoom out widens the frame by decreasing focal length while the support stays put. More architecture and negative space enter the picture, yet the camera never travels, so true parallax does not appear.",
+  "thumbnail": "media/4ac31249e720e1115c85ec7206f447e1.webp",
+  "video": "media/e4dcf30309cadb6112f74b8f705e8d05.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-slow-zoom-out-v2-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The joke, the trap, or the social system was already around the person. The lens simply admits it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Because the station point is unchanged, the reveal feels observational: we were always this far away, we only chose to see more. It is the wrong tool when the camera must retreat through a doorway, lose a foreground, or leave someone behind in real space."
+        },
+        {
+          "type": "paragraph",
+          "text": "Optical widening cannot walk out of a room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The joke, the trap, or the social system was already around the person. The lens simply admits it.Because the station point is unchanged, the reveal feels observational: we were always this far away, we only chose to see more. It is the wrong tool when the camera must retreat through a doorway, lose a foreground, or leave someone behind in real space.Optical widening cannot walk out of a room."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock the tripod and reverse the zoom. Start on a composed tight frame and pre-compose the wide end so heads, signs, and negative space land."
+        },
+        {
+          "type": "paragraph",
+          "text": "Focus will deepen as focal length shortens. Prompt a tripod-locked optical zoom out, no camera body travel, and name what architecture must appear by the last frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock the tripod and reverse the zoom. Start on a composed tight frame and pre-compose the wide end so heads, signs, and negative space land.Focus will deepen as focal length shortens. Prompt a tripod-locked optical zoom out, no camera body travel, and name what architecture must appear by the last frame."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to reveal context, isolation, or an off-screen joke that was already in the location. Concrete beat: a tight face opening onto a dinner table that has been watching."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it to exit a location: that is a physical pull."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to reveal context, isolation, or an off-screen joke that was already in the location. Concrete beat: a tight face opening onto a dinner table that has been watching.Do not use it to exit a location: that is a physical pull."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Pull Out and a Dolly Out move the camera backward, so foreground objects leave the frame with parallax. A slow zoom out only changes the lens angle of view.",
+          "links": [
+            {
+              "text": "Pull Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+            },
+            {
+              "text": "Dolly Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If you also need a Slow Zoom In cousin in the same scene, keep both bodies locked so the pair stays optical.",
+          "links": [
+            {
+              "text": "Slow Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pull OutShow the container around a feeling.",
+          "displayText": "Pull Out\nShow the container around a feeling.",
+          "links": [
+            {
+              "text": "Pull OutShow the container around a feeling.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly OutLeave someone behind, or show how small they are in the system.",
+          "displayText": "Dolly Out\nLeave someone behind, or show how small they are in the system.",
+          "links": [
+            {
+              "text": "Dolly OutLeave someone behind, or show how small they are in the system.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Pull Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+        },
+        {
+          "text": "Dolly Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+        },
+        {
+          "text": "Slow Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        },
+        {
+          "text": "Pull OutShow the container around a feeling.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+        },
+        {
+          "text": "Dolly OutLeave someone behind, or show how small they are in the system.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/37b5595bae8858283390769367c4f5d6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pull-out-pull-out-mini.webp",
+          "alt": "Pull Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/4c02c1f19b8cf15347f8a51749112685.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pull-out-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/250b08be437f19b68ce05ee85ac60c70.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-out-04-dolly-out-v2-mini.webp",
+          "alt": "Dolly Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/92e21cccbf00e7cb0422d0c370c86118.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/04-dolly-out-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Pull Out and a Dolly Out move the camera backward, so foreground objects leave the frame with parallax. A slow zoom out only changes the lens angle of view.If you also need a Slow Zoom In cousin in the same scene, keep both bodies locked so the pair stays optical.Pull OutShow the container around a feeling.Dolly OutLeave someone behind, or show how small they are in the system.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Barry Lyndon widens into painterly social tableaux without walking the camera into the party. The Social Network, Her, and Lost in Translation use slow optical opening to place a person inside a system they cannot leave."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Barry Lyndon widens into painterly social tableaux without walking the camera into the party. The Social Network, Her, and Lost in Translation use slow optical opening to place a person inside a system they cannot leave.Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Slow optical zoom out from [Subject], tripod locked, the frame breathing open to reveal surrounding architecture and negative space, no camera body travel. For motion: the lens slowly zooms out for 6 seconds from a tight frame on [Subject] into a wider environment."
+        },
+        {
+          "type": "paragraph",
+          "text": "Camera body stays still."
+        },
+        {
+          "type": "quote",
+          "text": "The lens slowly zooms out for 6 seconds from a tight frame on [Subject] into a wider environment. Camera body stays still."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+lens+slowly+zooms+out+for+6+seconds+from+a+tight+frame+on+[Subject]+into+a+wider+environment.+Camera+body+stays+still."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Slow optical zoom out from [Subject], tripod locked, the frame breathing open to reveal surrounding architecture and negative space, no camera body travel. For motion: the lens slowly zooms out for 6 seconds from a tight frame on [Subject] into a wider environment.Camera body stays still.Copy promptUse in Video GeneratorThe lens slowly zooms out for 6 seconds from a tight frame on [Subject] into a wider environment. Camera body stays still.The lens slowly zooms out for 6 seconds from a tight frame on [Subject] into a wider environment. Camera body stays still."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Dolly Out. The tell is a sliding foreground: plants, shoulders, or door jambs changing their overlap.",
+          "links": [
+            {
+              "text": "Dolly Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to freeze the support and drive only focal length, then hold the wide."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Dolly Out. The tell is a sliding foreground: plants, shoulders, or door jambs changing their overlap.The fix is to freeze the support and drive only focal length, then hold the wide."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Slow Zoom Out in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a gradual decrease of focal length from a locked camera, so the frame widens while the camera's position stays the same."
+        },
+        {
+          "type": "heading",
+          "text": "Slow Zoom Out vs Dolly Out",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly out retreats through space and creates parallax. Slow zoom out stays on the sticks and only widens the lens, so planes keep their original perspective relation."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Slow Zoom Out?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the surrounding situation is the punchline or the prison, and you want to disclose it without relocating the camera. Do not use it as a substitute for leaving the room."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Slow Zoom Out for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "State locked tripod, optical zoom out, and what must be revealed. Example: tripod locked, lens slowly zooming out for 6 seconds, architecture entering, no body travel."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Slow Zoom Out in film?It is a gradual decrease of focal length from a locked camera, so the frame widens while the camera's position stays the same.Slow Zoom Out vs Dolly OutDolly out retreats through space and creates parallax. Slow zoom out stays on the sticks and only widens the lens, so planes keep their original perspective relation.When should I use Slow Zoom Out?When the surrounding situation is the punchline or the prison, and you want to disclose it without relocating the camera. Do not use it as a substitute for leaving the room.How do I prompt Slow Zoom Out for AI image or video?State locked tripod, optical zoom out, and what must be revealed. Example: tripod locked, lens slowly zooming out for 6 seconds, architecture entering, no body travel."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Slow optical zoom out from [Subject], tripod locked, the frame breathing open to reveal surrounding architecture and negative space, no camera body travel. For motion: the lens slowly zooms out for 6 seconds from a tight frame on [Subject] into a wider environment.",
+      "Camera body stays still."
+    ],
+    "example": "The lens slowly zooms out for 6 seconds from a tight frame on [Subject] into a wider environment. Camera body stays still."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/e4dcf30309cadb6112f74b8f705e8d05.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-slow-zoom-out-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4ac31249e720e1115c85ec7206f447e1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-out-02-slow-zoom-out-v2-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/634b9e864d09da3ec2a1fa0431c999c0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/slow-zoom-out-02-slow-zoom-out-v2.jpg",
+      "alt": "Slow Zoom Out frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/37b5595bae8858283390769367c4f5d6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pull-out-pull-out-mini.webp",
+      "alt": "Pull Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/4c02c1f19b8cf15347f8a51749112685.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pull-out-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/250b08be437f19b68ce05ee85ac60c70.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-out-04-dolly-out-v2-mini.webp",
+      "alt": "Dolly Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/92e21cccbf00e7cb0422d0c370c86118.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/04-dolly-out-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7a6da1778570c05928872526e1adcb0a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slow-zoom-out/hero.jpg",
+      "alt": "Slow Zoom Out",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "f75478029674a8a4787bc6a5f4a715e1fa9adcea420015885a5bf9fedbda6b43"
+}

@@ -1,0 +1,466 @@
+{
+  "id": "framing/establishing-shot",
+  "slug": "establishing-shot",
+  "title": "Establishing Shot",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/establishing-shot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/establishing-shot-096-establishing-and-reestablishing-shots-mini.webp",
+  "detail": "details/framing/establishing-shot.json",
+  "aliases": [
+    "opening establishing shot",
+    "re-establishing shot",
+    "aerial establishing shot",
+    "Transitional still life",
+    "Unpeopled interval"
+  ],
+  "description": "An establishing shot introduces or re-establishes location, geography, time of day, or social context. It is a job in the sequence, not a synonym for wide or extreme long shot.",
+  "thumbnail": "media/36a71bb159fb3a26051fe83669a032ee.webp",
+  "video": "media/3749142ffcb30b9332f50b8ac15c9fb6.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/096-establishing-and-reestablishing-shots-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Before coverage begins, or when a scene has drifted, the audience needs to know where and when. An establishing shot declares the building, the street, the hour, the weather, sometimes the class of the place."
+        },
+        {
+          "type": "paragraph",
+          "text": "A later re-establishing shot can remind us of the same geography after the scene has moved. It is the wrong tool when you actually needed the skeleton of the action: that is a master."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool as empty postcard filler. Not every empty room is a pillow shot; placement and duration create the function."
+        },
+        {
+          "type": "paragraph",
+          "text": "A clock, a sign, or a doorway can establish. A huge landscape that never connects to the next cut does not."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Before coverage begins, or when a scene has drifted, the audience needs to know where and when. An establishing shot declares the building, the street, the hour, the weather, sometimes the class of the place.A later re-establishing shot can remind us of the same geography after the scene has moved. It is the wrong tool when you actually needed the skeleton of the action: that is a master.It is also the wrong tool as empty postcard filler. Not every empty room is a pillow shot; placement and duration create the function.A clock, a sign, or a doorway can establish. A huge landscape that never connects to the next cut does not."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose a vantage that names spatial relations: who can reach which door, which way is the city, what the light is doing. Often a Wide Shot or Extreme Long Shot, sometimes a facade, an aerial, or an unpeopled interval.",
+          "links": [
+            {
+              "text": "Wide Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+            },
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hold long enough to read time of day. Preserve ambient sound in editorial thinking even if you are prompting a still."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Wide establishing shot of [Subject] and the location at once, time of day and spatial relations declared before coverage begins."
+        }
+      ],
+      "links": [
+        {
+          "text": "Wide Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+        },
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Choose a vantage that names spatial relations: who can reach which door, which way is the city, what the light is doing. Often a Wide Shot or Extreme Long Shot, sometimes a facade, an aerial, or an unpeopled interval.Hold long enough to read time of day. Preserve ambient sound in editorial thinking even if you are prompting a still.Prompt: Wide establishing shot of [Subject] and the location at once, time of day and spatial relations declared before coverage begins."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to open a scene or to tell us where and when: a hotel at blue hour, a jury building in morning smog, a re-establish after a time jump. Do not fire one on every recut if geography has not changed, and do not confuse it with a master that must play the scene."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to open a scene or to tell us where and when: a hotel at blue hour, a jury building in morning smog, a re-establish after a time jump. Do not fire one on every recut if geography has not changed, and do not confuse it with a master that must play the scene."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Master Shot covers the dramatic action and blocking of this scene. An establishing shot names the place and time; it does not have to contain the argument.",
+          "links": [
+            {
+              "text": "Master Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Extreme Long Shot is a size that often does this job. A Wide Shot is environment-forward coverage inside a scene, not automatically an establish.",
+          "links": [
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            },
+            {
+              "text": "Wide Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Long Shot places a person in land; that may or may not be the first image of the location.",
+          "links": [
+            {
+              "text": "Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Long ShotScale is the emotion.",
+          "displayText": "Extreme Long Shot\nScale is the emotion.",
+          "links": [
+            {
+              "text": "Extreme Long ShotScale is the emotion.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Master ShotProtect the scene. You can always go tighter.",
+          "displayText": "Master Shot\nProtect the scene. You can always go tighter.",
+          "links": [
+            {
+              "text": "Master ShotProtect the scene. You can always go tighter.",
+              "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Master Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+        },
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Wide Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+        },
+        {
+          "text": "Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+        },
+        {
+          "text": "Extreme Long ShotScale is the emotion.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Master ShotProtect the scene. You can always go tighter.",
+          "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+          "alt": "Extreme Long Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/b25d5a381b507fb58a45e000e1880381.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/master-shot.webp",
+          "alt": "Master Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Master Shot covers the dramatic action and blocking of this scene. An establishing shot names the place and time; it does not have to contain the argument.An Extreme Long Shot is a size that often does this job. A Wide Shot is environment-forward coverage inside a scene, not automatically an establish.A Long Shot places a person in land; that may or may not be the first image of the location.Extreme Long ShotScale is the emotion.Master ShotProtect the scene. You can always go tighter.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blade Runner opens on a city that is already a time and a social order. The Shining uses the Overlook approach as geography before the interiors take over."
+        },
+        {
+          "type": "paragraph",
+          "text": "Tokyo Story and Late Spring let empty rooms and streets punctuate, which is related grammar: the world persisting between people. Peking Opera Blues reestablishes a party in broader views."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use those as where-and-when grammar, not as frames to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "Tokyo Story 1953Empty rooms, streets and industrial views punctuate the family narrative.",
+          "displayText": "Tokyo Story 1953\nEmpty rooms, streets and industrial views punctuate the family narrative."
+        },
+        {
+          "type": "list-item",
+          "text": "Late Spring 1949Still-life and room imagery interrupts or outlasts the human exchange.",
+          "displayText": "Late Spring 1949\nStill-life and room imagery interrupts or outlasts the human exchange."
+        },
+        {
+          "type": "list-item",
+          "text": "Peking Opera Blues 1986The opening party is introduced and later reestablished in broader views.",
+          "displayText": "Peking Opera Blues 1986\nThe opening party is introduced and later reestablished in broader views."
+        },
+        {
+          "type": "list-item",
+          "text": "12 Angry Men 1957Wider room views clarify the changing jury arrangement.",
+          "displayText": "12 Angry Men 1957\nWider room views clarify the changing jury arrangement."
+        },
+        {
+          "type": "list-item",
+          "text": "Black Narcissus 1947The Himalayan convent and vertiginous cliff environments.",
+          "displayText": "Black Narcissus 1947\nThe Himalayan convent and vertiginous cliff environments."
+        },
+        {
+          "type": "list-item",
+          "text": "Star Wars 1977Large hangar and space-station environments extend beyond the built sets.",
+          "displayText": "Star Wars 1977\nLarge hangar and space-station environments extend beyond the built sets."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Blade Runner opens on a city that is already a time and a social order. The Shining uses the Overlook approach as geography before the interiors take over.Tokyo Story and Late Spring let empty rooms and streets punctuate, which is related grammar: the world persisting between people. Peking Opera Blues reestablishes a party in broader views.Use those as where-and-when grammar, not as frames to copy.Tokyo Story 1953Empty rooms, streets and industrial views punctuate the family narrative.Late Spring 1949Still-life and room imagery interrupts or outlasts the human exchange.Peking Opera Blues 1986The opening party is introduced and later reestablished in broader views.12 Angry Men 1957Wider room views clarify the changing jury arrangement.Black Narcissus 1947The Himalayan convent and vertiginous cliff environments.Star Wars 1977Large hangar and space-station environments extend beyond the built sets."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Declare place and time. Example: Wide establishing shot of [Subject] and the location at once, time of day and spatial relations declared before coverage begins."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the hour, the weather, and what building or street this is. For video, a small environmental motion (traffic, steam, a flag) is enough; do not tour if the job is only to plant geography."
+        },
+        {
+          "type": "quote",
+          "text": "After a daughter leaves the house, hold a static shot of the empty entryway: her shoes are gone, afternoon light remains on the floor and distant street noise continues. No person enters, no camera move, no sentimental insert music. Cut to the next scene only after the room has registered as its own space."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=After+a+daughter+leaves+the+house,+hold+a+static+shot+of+the+empty+entryway:+her+shoes+are+gone,+afternoon+light+remains+on+the+floor+and+distant+street+noise+continues.+No+person+enters,+no+camera+move,+no+sentimental+insert+music.+Cut+to+the+next+scene+only+after+the+room+has+registered+as+its+own+space."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Declare place and time. Example: Wide establishing shot of [Subject] and the location at once, time of day and spatial relations declared before coverage begins.Name the hour, the weather, and what building or street this is. For video, a small environmental motion (traffic, steam, a flag) is enough; do not tour if the job is only to plant geography.Copy promptUse in Video GeneratorAfter a daughter leaves the house, hold a static shot of the empty entryway: her shoes are gone, afternoon light remains on the floor and distant street noise continues. No person enters, no camera move, no sentimental insert music. Cut to the next scene only after the room has registered as its own space.After a daughter leaves the house, hold a static shot of the empty entryway: her shoes are gone, afternoon light remains on the floor and distant street noise continues. No person enters, no camera move, no sentimental insert music. Cut to the next scene only after the room has registered as its own space."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Master Shot (action skeleton) or a pretty Extreme Long Shot with no relation to the next cut. The tell is a landscape postcard, or a wide that already plays the whole scene and gets labeled establish.",
+          "links": [
+            {
+              "text": "Master Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+            },
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: the shot should answer where and when, then coverage can begin."
+        }
+      ],
+      "links": [
+        {
+          "text": "Master Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+        },
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Master Shot (action skeleton) or a pretty Extreme Long Shot with no relation to the next cut. The tell is a landscape postcard, or a wide that already plays the whole scene and gets labeled establish.Fix: the shot should answer where and when, then coverage can begin."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Establishing Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An establishing shot introduces or re-establishes location, geography, time, or social context. It is a function in the edit. It is often wide, but a sign, a clock, or a building can do the same job."
+        },
+        {
+          "type": "heading",
+          "text": "Establishing Shot vs Master Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A master covers the complete dramatic action and spatial blocking so you could play the scene in that one setup. An establishing shot tells you where and when, and does not have to contain the argument. You can cut from an establish into a master, or skip one if geography is already known."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Establishing Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to open a scene or to re-establish after a jump in time or place. Do not insert one as decoration on every reverse, and do not use it when you actually needed the scene's action covered in a master."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Establishing Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Wide establishing shot of [Subject] and the location at once, and name time of day and spatial relations. Put the place in the sentence, not only the person. Keep the next coverage in mind so the geography matches."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Establishing Shot in film?An establishing shot introduces or re-establishes location, geography, time, or social context. It is a function in the edit. It is often wide, but a sign, a clock, or a building can do the same job.Establishing Shot vs Master ShotA master covers the complete dramatic action and spatial blocking so you could play the scene in that one setup. An establishing shot tells you where and when, and does not have to contain the argument. You can cut from an establish into a master, or skip one if geography is already known.When should I use Establishing Shot?Use it to open a scene or to re-establish after a jump in time or place. Do not insert one as decoration on every reverse, and do not use it when you actually needed the scene's action covered in a master.How do I prompt Establishing Shot for AI image or video?Write Wide establishing shot of [Subject] and the location at once, and name time of day and spatial relations. Put the place in the sentence, not only the person. Keep the next coverage in mind so the geography matches."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Declare place and time. Example: Wide establishing shot of [Subject] and the location at once, time of day and spatial relations declared before coverage begins.",
+      "Name the hour, the weather, and what building or street this is. For video, a small environmental motion (traffic, steam, a flag) is enough; do not tour if the job is only to plant geography."
+    ],
+    "example": "After a daughter leaves the house, hold a static shot of the empty entryway: her shoes are gone, afternoon light remains on the floor and distant street noise continues. No person enters, no camera move, no sentimental insert music. Cut to the next scene only after the room has registered as its own space."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/3749142ffcb30b9332f50b8ac15c9fb6.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/096-establishing-and-reestablishing-shots-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/36a71bb159fb3a26051fe83669a032ee.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/establishing-shot-096-establishing-and-reestablishing-shots-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3f3183bba73f56a57631298675aa78f5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/establishing-shot.jpg",
+      "alt": "Establishing Shot frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+      "alt": "Extreme Long Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/b25d5a381b507fb58a45e000e1880381.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/master-shot.webp",
+      "alt": "Master Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/66ddc3fc94c195d3077c403eef95f460.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/establishing-shot/hero.jpg",
+      "alt": "Establishing Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "bc1a715ef966a03d11a7fd53cb9ea203387ea1463bf9ce085c199fb380e5efe3"
+}

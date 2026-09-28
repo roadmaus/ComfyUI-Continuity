@@ -1,0 +1,438 @@
+{
+  "id": "time-and-motion/bullet-time",
+  "slug": "bullet-time",
+  "title": "Bullet Time",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bullet-time-080-bullet-time-mini.webp",
+  "detail": "details/time-and-motion/bullet-time.json",
+  "aliases": [
+    "Time-slice orbit",
+    "The Matrix effect"
+  ],
+  "description": "Bullet time freezes or radically slows action while the viewpoint travels around it, decoupling camera speed from subject time. The instant becomes inspectable space: a time-slice orbit around a sculpture of speed, not ordinary slow motion with a handheld camera.",
+  "thumbnail": "media/ebe019bb5b6086b3f4e494a68586760b.webp",
+  "video": "media/8fcec48b1bd8a21cecb0d881e78ad77c.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/080-bullet-time-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a split-second decision should become architecture. The audience seems to occupy a viewpoint no observer inside the event could have."
+        },
+        {
+          "type": "paragraph",
+          "text": "Debris, rain, and coat tails hang so we can walk around them. The path is one move, usually an arc."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a dinner scene, a lyric walk, or a simple impact study from a locked camera. If the camera is locked, you wanted frozen in motion or a freeze."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the fighter keeps moving at stretched rate and the camera stays put, you wanted slow motion. Do not add a zoom on top of the orbit unless you are making a different shot."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when a split-second decision should become architecture. The audience seems to occupy a viewpoint no observer inside the event could have.Debris, rain, and coat tails hang so we can walk around them. The path is one move, usually an arc.It is the wrong tool for a dinner scene, a lyric walk, or a simple impact study from a locked camera. If the camera is locked, you wanted frozen in motion or a freeze.If the fighter keeps moving at stretched rate and the camera stays put, you wanted slow motion. Do not add a zoom on top of the orbit unless you are making a different shot."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use a synchronized or time-offset multi-camera array with interpolation, or a fully controlled 3D scene. Enforce frozen or near-frozen subject geometry while changing viewpoint."
+        },
+        {
+          "type": "paragraph",
+          "text": "Particles should be countable and rigid enough to survive the arc. Prompt: Bullet time around [Subject], the moment frozen while the camera orbits, a slice of time as a sculpture."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Use a synchronized or time-offset multi-camera array with interpolation, or a fully controlled 3D scene. Enforce frozen or near-frozen subject geometry while changing viewpoint.Particles should be countable and rigid enough to survive the arc. Prompt: Bullet time around [Subject], the moment frozen while the camera orbits, a slice of time as a sculpture."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to inspect an impact, a leap, or a dodge that already happened, as on a rooftop lean under gunfire. Do not use it as slow motion with a shaky camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to inspect an impact, a leap, or a dodge that already happened, as on a rooftop lean under gunfire. Do not use it as slow motion with a shaky camera."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bullet time is not Slow Motion, which stretches action without requiring a traveling viewpoint around a hold. It is not a normal 360-Degree Orbit, which circles living time.",
+          "links": [
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            },
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Freeze Frame, which stops the camera too. Frozen in Motion may let a chosen person move through a stopped world.",
+          "links": [
+            {
+              "text": "Freeze Frame",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+            },
+            {
+              "text": "Frozen in Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Bullet time stops or crushes the event while the camera walks around it."
+        },
+        {
+          "type": "list-item",
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "displayText": "360-Degree Orbit\nTime collapses around one person: kiss, threat, or product hero.",
+          "links": [
+            {
+              "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Fast MotionToo much life for real time.",
+          "displayText": "Fast Motion\nToo much life for real time.",
+          "links": [
+            {
+              "text": "Fast MotionToo much life for real time.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Freeze Frame",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+        },
+        {
+          "text": "Frozen in Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion"
+        },
+        {
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Fast MotionToo much life for real time.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+          "alt": "360-Degree Orbit"
+        },
+        {
+          "kind": "video",
+          "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+          "alt": "Fast Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Bullet time is not Slow Motion, which stretches action without requiring a traveling viewpoint around a hold. It is not a normal 360-Degree Orbit, which circles living time.It is not Freeze Frame, which stops the camera too. Frozen in Motion may let a chosen person move through a stopped world.Bullet time stops or crushes the event while the camera walks around it.360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.Slow MotionA second contains a scene.Fast MotionToo much life for real time."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Matrix rooftop, Neo leaning under gunfire, is the textbook array move. Wanted curves bullets as inspectable paths through space."
+        },
+        {
+          "type": "paragraph",
+          "text": "Later action films borrow the split between body-time and camera-time. Prompt the physics, not a trademark."
+        },
+        {
+          "type": "list-item",
+          "text": "The Matrix 1999Neo leans backward under gunfire on the rooftop.",
+          "displayText": "The Matrix 1999\nNeo leans backward under gunfire on the rooftop."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/66b5cc7527df66d38d24adf158c36261.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/bullet-time/famous/00-the-matrix-1999.jpg",
+          "alt": "The Matrix 1999"
+        }
+      ],
+      "sourceText": "In film The Matrix rooftop, Neo leaning under gunfire, is the textbook array move. Wanted curves bullets as inspectable paths through space.Later action films borrow the split between body-time and camera-time. Prompt the physics, not a trademark.The Matrix 1999Neo leans backward under gunfire on the rooftop."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write two clocks: action stopped or crushed, camera continuing on a path. Still: one instant seen as if from a step along an orbit, hanging debris, consistent anatomy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Time freezes around [Subject] while the camera orbits, a bullet-time array move. No handheld slow-mo, no lock-off freeze."
+        },
+        {
+          "type": "quote",
+          "text": "A dancer is suspended at the peak of a leap while loose paper hangs around her. The camera moves smoothly through a 90-degree arc at normal viewing speed while the leap advances only slightly. Consistent anatomy, rigid paper shapes, coherent shadows, no repeated body limbs. Build with multi-view keyframes or 3D for control."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+dancer+is+suspended+at+the+peak+of+a+leap+while+loose+paper+hangs+around+her.+The+camera+moves+smoothly+through+a+90-degree+arc+at+normal+viewing+speed+while+the+leap+advances+only+slightly.+Consistent+anatomy,+rigid+paper+shapes,+coherent+shadows,+no+repeated+body+limbs.+Build+with+multi-view+keyframes+or+3D+for+control."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write two clocks: action stopped or crushed, camera continuing on a path. Still: one instant seen as if from a step along an orbit, hanging debris, consistent anatomy.Video: Time freezes around [Subject] while the camera orbits, a bullet-time array move. No handheld slow-mo, no lock-off freeze.Copy promptUse in Video GeneratorA dancer is suspended at the peak of a leap while loose paper hangs around her. The camera moves smoothly through a 90-degree arc at normal viewing speed while the leap advances only slightly. Consistent anatomy, rigid paper shapes, coherent shadows, no repeated body limbs. Build with multi-view keyframes or 3D for control.A dancer is suspended at the peak of a leap while loose paper hangs around her. The camera moves smoothly through a 90-degree arc at normal viewing speed while the leap advances only slightly. Consistent anatomy, rigid paper shapes, coherent shadows, no repeated body limbs. Build with multi-view keyframes or 3D for control."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is handheld Slow Motion. The tell is a moving fighter and a camera that does not orbit, or a freeze with no parallax.",
+          "links": [
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: subject frozen or nearly frozen, camera orbits a named arc, debris hanging, consistent shadows."
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is handheld Slow Motion. The tell is a moving fighter and a camera that does not orbit, or a freeze with no parallax.Fix: subject frozen or nearly frozen, camera orbits a named arc, debris hanging, consistent shadows."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Bullet Time in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Bullet time is a viewpoint traveling around an event that is frozen or radically slowed, so camera speed and subject time are no longer the same clock."
+        },
+        {
+          "type": "heading",
+          "text": "Bullet Time vs Slow Motion",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Slow motion stretches the action. Bullet time nearly stops the action and moves the camera around it, often with an array or a 3D reconstruction."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Bullet Time?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a split-second must be inspected as space: a dodge, a leap, an impact the audience should walk around."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Bullet Time for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write that time freezes around [Subject] while the camera orbits. Demand hanging debris and frozen geometry. Ban ordinary slow motion and lock-off stills."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Bullet Time in film?Bullet time is a viewpoint traveling around an event that is frozen or radically slowed, so camera speed and subject time are no longer the same clock.Bullet Time vs Slow MotionSlow motion stretches the action. Bullet time nearly stops the action and moves the camera around it, often with an array or a 3D reconstruction.When should I use Bullet Time?When a split-second must be inspected as space: a dodge, a leap, an impact the audience should walk around.How do I prompt Bullet Time for AI image or video?Write that time freezes around [Subject] while the camera orbits. Demand hanging debris and frozen geometry. Ban ordinary slow motion and lock-off stills."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write two clocks: action stopped or crushed, camera continuing on a path. Still: one instant seen as if from a step along an orbit, hanging debris, consistent anatomy.",
+      "Video: Time freezes around [Subject] while the camera orbits, a bullet-time array move. No handheld slow-mo, no lock-off freeze."
+    ],
+    "example": "A dancer is suspended at the peak of a leap while loose paper hangs around her. The camera moves smoothly through a 90-degree arc at normal viewing speed while the leap advances only slightly. Consistent anatomy, rigid paper shapes, coherent shadows, no repeated body limbs. Build with multi-view keyframes or 3D for control."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/8fcec48b1bd8a21cecb0d881e78ad77c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/080-bullet-time-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ebe019bb5b6086b3f4e494a68586760b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bullet-time-080-bullet-time-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2206bfc22258b7f954d944fca714fe74.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/bullet-time.jpg",
+      "alt": "Bullet Time frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+      "alt": "360-Degree Orbit"
+    },
+    {
+      "kind": "video",
+      "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+      "alt": "Fast Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/66b5cc7527df66d38d24adf158c36261.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/bullet-time/famous/00-the-matrix-1999.jpg",
+      "alt": "The Matrix 1999"
+    },
+    {
+      "kind": "image",
+      "path": "media/0ecae1bf8a6dcae4915bd46956e30558.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/bullet-time/hero.jpg",
+      "alt": "Bullet Time",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "f052ec04bb57a3f84c950a4d858fc3b609e5d10347c62e1f6c928d5bc76dfadd"
+}

@@ -1,0 +1,456 @@
+{
+  "id": "time-and-motion/fast-motion",
+  "slug": "fast-motion",
+  "title": "Fast Motion",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+  "detail": "details/time-and-motion/fast-motion.json",
+  "aliases": [
+    "undercranking"
+  ],
+  "description": "Fast motion cinematography compresses screen duration so action plays faster than it occurred, by undercranking the camera or by retiming a normal-rate take. Crowds smear, clouds race, and labor can look absurdly efficient because too many events occupy too little time.",
+  "thumbnail": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+  "video": "media/130e2acf7b9854438912121a809533b3.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when real time cannot hold the life in front of the lens: a factory that never stops, a city that should feel over-efficient, a chase whose danger is relentlessness rather than one punch. Subtle acceleration can be funnier or more oppressive than a cartoon speed-up."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep sound on its own clock. Pitch-shifted footsteps often betray the trick."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for weather, construction, or a night becoming morning. Those need interval sampling, not sped-up continuous action."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera itself steps through space while hours collapse, you wanted a hyperlapse. Do not accelerate a performance whose contacts and gravity must stay honest."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when real time cannot hold the life in front of the lens: a factory that never stops, a city that should feel over-efficient, a chase whose danger is relentlessness rather than one punch. Subtle acceleration can be funnier or more oppressive than a cartoon speed-up.Keep sound on its own clock. Pitch-shifted footsteps often betray the trick.It is the wrong tool for weather, construction, or a night becoming morning. Those need interval sampling, not sped-up continuous action.If the camera itself steps through space while hours collapse, you wanted a hyperlapse. Do not accelerate a performance whose contacts and gravity must stay honest."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Undercrank (shoot fewer frames per second than playback) or retime in the cut with a planned speed ratio. Longer exposure per frame, if the shutter stays open, increases motion blur."
+        },
+        {
+          "type": "paragraph",
+          "text": "Check hands, object contacts, and foot cadence after the speed change. Prompt: Undercranked fast motion of [Subject], crowds smearing, clouds racing, planned speed ratio, coherent contacts."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Undercrank (shoot fewer frames per second than playback) or retime in the cut with a planned speed ratio. Longer exposure per frame, if the shutter stays open, increases motion blur.Check hands, object contacts, and foot cadence after the speed change. Prompt: Undercranked fast motion of [Subject], crowds smearing, clouds racing, planned speed ratio, coherent contacts."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a mailroom, assembly line, or crowd must feel over-efficient, as in a comic or cosmic crush of ordinary work. Do not use it to stand in for a day-to-night sky."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a mailroom, assembly line, or crowd must feel over-efficient, as in a comic or cosmic crush of ordinary work. Do not use it to stand in for a day-to-night sky."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fast motion speeds continuous action. Time-Lapse samples the world at long intervals so slow change (shadows, crowds as systems) plays quickly.",
+          "links": [
+            {
+              "text": "Time-Lapse",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hyperlapse is time-lapse plus a camera that advances through space. Slow Motion is the inverse stretch.",
+          "links": [
+            {
+              "text": "Hyperlapse",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/hyperlapse"
+            },
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Speed Ramp changes rate inside one shot rather than holding a constant acceleration.",
+          "links": [
+            {
+              "text": "Speed Ramp",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/speed-ramp"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+          "displayText": "Time-Lapse\nShow weather, construction, or a night becoming morning.",
+          "links": [
+            {
+              "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HyperlapseShow duration as velocity.",
+          "displayText": "Hyperlapse\nShow duration as velocity.",
+          "links": [
+            {
+              "text": "HyperlapseShow duration as velocity.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/hyperlapse"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Time-Lapse",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "Hyperlapse",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/hyperlapse"
+        },
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Speed Ramp",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/speed-ramp"
+        },
+        {
+          "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "HyperlapseShow duration as velocity.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/hyperlapse"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/59f00cc372fa5e18d3dc936d0959e111.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/time-lapse-084-time-lapse-and-accelerated-systems-mini.webp",
+          "alt": "Time-Lapse"
+        },
+        {
+          "kind": "video",
+          "path": "media/98976fbe19bbaefa951c514246128a5b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/084-time-lapse-and-accelerated-systems-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d0eb328bcb7de97a20c1d02beeb96044.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hyperlapse-hyperlapse-mini.webp",
+          "alt": "Hyperlapse"
+        },
+        {
+          "kind": "video",
+          "path": "media/192f9c64ef09ea5e3e6fb2397c00c9b0.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/hyperlapse-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Fast motion speeds continuous action. Time-Lapse samples the world at long intervals so slow change (shadows, crowds as systems) plays quickly.Hyperlapse is time-lapse plus a camera that advances through space. Slow Motion is the inverse stretch.A Speed Ramp changes rate inside one shot rather than holding a constant acceleration.Time-LapseShow weather, construction, or a night becoming morning.HyperlapseShow duration as velocity.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Modern Times uses factory rhythm so mechanized work feels like a speeded machine wearing a man. A Clockwork Orange undercranks selected passages so appetite and violence become brisk, grotesque efficiency."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mad Max: Fury Road alters cadence on chosen action beats rather than running the whole film as a cartoon. Koyaanisqatsi is often grouped here, but its urban crush is mostly interval time-lapse."
+        },
+        {
+          "type": "list-item",
+          "text": "Modern Times 1936Factory rhythms exaggerate the pressure of mechanized work.",
+          "displayText": "Modern Times 1936\nFactory rhythms exaggerate the pressure of mechanized work."
+        },
+        {
+          "type": "list-item",
+          "text": "Mad Max: Fury Road 2015Selected action beats use altered motion cadence and speed.",
+          "displayText": "Mad Max: Fury Road 2015\nSelected action beats use altered motion cadence and speed."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/868ac7a871dfc75ccb61d7aad618d5b2.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fast-motion/famous/00-modern-times-1936.jpg",
+          "alt": "Modern Times 1936"
+        },
+        {
+          "kind": "image",
+          "path": "media/9d69f87616c2099664cf313b31e5e51a.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fast-motion/famous/01-mad-max-fury-road-2015.jpg",
+          "alt": "Mad Max: Fury Road 2015"
+        }
+      ],
+      "sourceText": "In film Modern Times uses factory rhythm so mechanized work feels like a speeded machine wearing a man. A Clockwork Orange undercranks selected passages so appetite and violence become brisk, grotesque efficiency.Mad Max: Fury Road alters cadence on chosen action beats rather than running the whole film as a cartoon. Koyaanisqatsi is often grouped here, but its urban crush is mostly interval time-lapse.Modern Times 1936Factory rhythms exaggerate the pressure of mechanized work.Mad Max: Fury Road 2015Selected action beats use altered motion cadence and speed."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "State that time is compressed and what races. Still: a pose that implies acceleration (smeared extras, streaked traffic) while the subject, if they must stay readable, holds."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Fast-motion view of [Subject] and the environment, time compressed, crowds and weather racing, coherent hands and footsteps, not a motionless sun over a smoking crowd."
+        },
+        {
+          "type": "quote",
+          "text": "A harried mailroom worker sorts envelopes in slightly accelerated motion while maintaining physically coherent hand actions. Fixed medium-wide view, increasingly comic efficiency, no teleporting objects or time-lapse crowd trails. Retime a clean base shot if exact cadence is required."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+harried+mailroom+worker+sorts+envelopes+in+slightly+accelerated+motion+while+maintaining+physically+coherent+hand+actions.+Fixed+medium-wide+view,+increasingly+comic+efficiency,+no+teleporting+objects+or+time-lapse+crowd+trails.+Retime+a+clean+base+shot+if+exact+cadence+is+required."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it State that time is compressed and what races. Still: a pose that implies acceleration (smeared extras, streaked traffic) while the subject, if they must stay readable, holds.Video: Fast-motion view of [Subject] and the environment, time compressed, crowds and weather racing, coherent hands and footsteps, not a motionless sun over a smoking crowd.Copy promptUse in Video GeneratorA harried mailroom worker sorts envelopes in slightly accelerated motion while maintaining physically coherent hand actions. Fixed medium-wide view, increasingly comic efficiency, no teleporting objects or time-lapse crowd trails. Retime a clean base shot if exact cadence is required.A harried mailroom worker sorts envelopes in slightly accelerated motion while maintaining physically coherent hand actions. Fixed medium-wide view, increasingly comic efficiency, no teleporting objects or time-lapse crowd trails. Retime a clean base shot if exact cadence is required."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Time-Lapse. The tell is a racing crowd under a sun and shadows that never move, or people who teleport instead of stepping.",
+          "links": [
+            {
+              "text": "Time-Lapse",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: keep continuous action and a planned speed ratio, then check contacts. If hours must collapse, change to interval photography."
+        }
+      ],
+      "links": [
+        {
+          "text": "Time-Lapse",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Time-Lapse. The tell is a racing crowd under a sun and shadows that never move, or people who teleport instead of stepping.Fix: keep continuous action and a planned speed ratio, then check contacts. If hours must collapse, change to interval photography."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Fast Motion in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fast motion is undercranked or retimed action that occupies less screen time than it took in the world, so movement looks accelerated."
+        },
+        {
+          "type": "heading",
+          "text": "Fast Motion vs Time-Lapse",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fast motion speeds a continuous take. Time-lapse captures frames at long intervals so processes too slow for real time (light, weather, crowds as flow) play in seconds."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Fast Motion?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When ordinary movement should feel over-efficient, comic, or relentless, and the action itself is still a continuous performance."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Fast Motion for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write undercranked or accelerated playback, crowds and weather racing, and coherent contacts. Do not ask for hours of sun travel unless you actually want time-lapse."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Fast Motion in film?Fast motion is undercranked or retimed action that occupies less screen time than it took in the world, so movement looks accelerated.Fast Motion vs Time-LapseFast motion speeds a continuous take. Time-lapse captures frames at long intervals so processes too slow for real time (light, weather, crowds as flow) play in seconds.When should I use Fast Motion?When ordinary movement should feel over-efficient, comic, or relentless, and the action itself is still a continuous performance.How do I prompt Fast Motion for AI image or video?Write undercranked or accelerated playback, crowds and weather racing, and coherent contacts. Do not ask for hours of sun travel unless you actually want time-lapse."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "State that time is compressed and what races. Still: a pose that implies acceleration (smeared extras, streaked traffic) while the subject, if they must stay readable, holds.",
+      "Video: Fast-motion view of [Subject] and the environment, time compressed, crowds and weather racing, coherent hands and footsteps, not a motionless sun over a smoking crowd."
+    ],
+    "example": "A harried mailroom worker sorts envelopes in slightly accelerated motion while maintaining physically coherent hand actions. Fixed medium-wide view, increasingly comic efficiency, no teleporting objects or time-lapse crowd trails. Retime a clean base shot if exact cadence is required."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/98fe519b53a2554aa93e50cda35311f3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/fast-motion.jpg",
+      "alt": "Fast Motion frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/59f00cc372fa5e18d3dc936d0959e111.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/time-lapse-084-time-lapse-and-accelerated-systems-mini.webp",
+      "alt": "Time-Lapse"
+    },
+    {
+      "kind": "video",
+      "path": "media/98976fbe19bbaefa951c514246128a5b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/084-time-lapse-and-accelerated-systems-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d0eb328bcb7de97a20c1d02beeb96044.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hyperlapse-hyperlapse-mini.webp",
+      "alt": "Hyperlapse"
+    },
+    {
+      "kind": "video",
+      "path": "media/192f9c64ef09ea5e3e6fb2397c00c9b0.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/hyperlapse-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/868ac7a871dfc75ccb61d7aad618d5b2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fast-motion/famous/00-modern-times-1936.jpg",
+      "alt": "Modern Times 1936"
+    },
+    {
+      "kind": "image",
+      "path": "media/9d69f87616c2099664cf313b31e5e51a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fast-motion/famous/01-mad-max-fury-road-2015.jpg",
+      "alt": "Mad Max: Fury Road 2015"
+    },
+    {
+      "kind": "image",
+      "path": "media/124415eaa78db01f864848ee4cc258a1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fast-motion/hero.jpg",
+      "alt": "Fast Motion",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "0c0b020e4cb167711257084cd473106e039199c2be75f01fbb9ab0552441393e"
+}

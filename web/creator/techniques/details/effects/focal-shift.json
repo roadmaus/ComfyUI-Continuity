@@ -1,0 +1,399 @@
+{
+  "id": "effects/focal-shift",
+  "slug": "focal-shift",
+  "title": "Focal Shift",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/focal-shift",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/focal-shift-focal-shift-mini.webp",
+  "detail": "details/effects/focal-shift.json",
+  "aliases": [
+    "focus pull",
+    "slow rack",
+    "snap rack",
+    "multiple rack"
+  ],
+  "description": "A focal shift moves the plane of sharpness from one subject or distance to another during the shot, so attention travels as a pull. The camera body can stay put, and only the focus mechanism walks the depth.",
+  "thumbnail": "media/2893db1938efb47c2a14302f8450d8f9.webp",
+  "video": "media/06525c190cd29462bf708beedcf2dd86.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/focal-shift-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Someone in the foreground owns the frame, then the helix turns and a face in the room takes over. No cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "The blur itself is the sentence. Use it when who matters changes while geography stays."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool if both planes must stay readable at once, or if you only need a static shallow portrait. If nothing is sharp at either end, you did not shift focus."
+        },
+        {
+          "type": "paragraph",
+          "text": "You lost it."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Someone in the foreground owns the frame, then the helix turns and a face in the room takes over. No cut.The blur itself is the sentence. Use it when who matters changes while geography stays.It is the wrong tool if both planes must stay readable at once, or if you only need a static shallow portrait. If nothing is sharp at either end, you did not shift focus.You lost it."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mark two distances. Keep depth of field shallow enough that only one plane is crisp, often a 50mm to 85mm near T2."
+        },
+        {
+          "type": "paragraph",
+          "text": "A follow-focus or remote motor walks the helical from A to B. The camera is usually locked or slow so the pull is the only event."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lens breathing may thicken the image slightly as glass moves. Prompt a focal shift: the plane of sharpness traveling from one fact to another."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, pull from a foreground object onto the subject, or the reverse."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Mark two distances. Keep depth of field shallow enough that only one plane is crisp, often a 50mm to 85mm near T2.A follow-focus or remote motor walks the helical from A to B. The camera is usually locked or slow so the pull is the only event.Lens breathing may thicken the image slightly as glass moves. Prompt a focal shift: the plane of sharpness traveling from one fact to another.For video, pull from a foreground object onto the subject, or the reverse."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when a glass, a gun, or a listener in the foreground yields to the person who must answer. Do not use it as decoration on a single face with no second plane."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when a glass, a gun, or a listener in the foreground yields to the person who must answer. Do not use it as decoration on a single face with no second plane."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rack Focus is the standard two-mark transfer, often about two seconds, composition held. Focal shift is the traveling plane as the event, including a slow rack, a snap rack, or several racks in a row.",
+          "links": [
+            {
+              "text": "Rack Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Shallow Focus is a state: one plane already sharp. A shift is the move between states.",
+          "links": [
+            {
+              "text": "Shallow Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rack FocusChange who owns the shot without cutting.",
+          "displayText": "Rack Focus\nChange who owns the shot without cutting.",
+          "links": [
+            {
+              "text": "Rack FocusChange who owns the shot without cutting.",
+              "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Shallow FocusNothing else is invited.",
+          "displayText": "Shallow Focus\nNothing else is invited.",
+          "links": [
+            {
+              "text": "Shallow FocusNothing else is invited.",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Rack Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+        },
+        {
+          "text": "Shallow Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "Rack FocusChange who owns the shot without cutting.",
+          "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+        },
+        {
+          "text": "Shallow FocusNothing else is invited.",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d8621e52db925c8d69c6da997747f829.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rack-focus-053-rack-focus-mini.webp",
+          "alt": "Rack Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/396e12ac75a8a03a4ec4597dc1dbcafd.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/053-rack-focus-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+          "alt": "Shallow Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Rack Focus is the standard two-mark transfer, often about two seconds, composition held. Focal shift is the traveling plane as the event, including a slow rack, a snap rack, or several racks in a row.Shallow Focus is a state: one plane already sharp. A shift is the move between states.Rack FocusChange who owns the shot without cutting.Shallow FocusNothing else is invited.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Graduate organizes attention between Benjamin and the figures around him by selective focus. There Will Be Blood uses the same grammar in hard interiors: who is true in the room changes without a cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Graduate organizes attention between Benjamin and the figures around him by selective focus. There Will Be Blood uses the same grammar in hard interiors: who is true in the room changes without a cut.Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Focal shift on [Subject], the plane of sharpness traveling from one fact to another, attention as a pull. Video: Focus pulls from a foreground object onto [Subject], or the reverse."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name both planes, the lens, and that the camera body stays put."
+        },
+        {
+          "type": "quote",
+          "text": "Focus pulls from a foreground object onto [Subject], or the reverse."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Focus+pulls+from+a+foreground+object+onto+[Subject],+or+the+reverse."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Focal shift on [Subject], the plane of sharpness traveling from one fact to another, attention as a pull. Video: Focus pulls from a foreground object onto [Subject], or the reverse.Name both planes, the lens, and that the camera body stays put.Copy promptUse in Video GeneratorFocus pulls from a foreground object onto [Subject], or the reverse.Focus pulls from a foreground object onto [Subject], or the reverse."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a cut, or a morph of detail during the pull. The tell is both planes sharp, or the face warping as focus moves."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is two marked distances, shallow field, and a clean travel of the plane."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a cut, or a morph of detail during the pull. The tell is both planes sharp, or the face warping as focus moves.The fix is two marked distances, shallow field, and a clean travel of the plane."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is focal shift in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A focal shift moves the plane of sharpness from one subject or distance to another during a shot. Attention changes without cutting, as a pull through depth."
+        },
+        {
+          "type": "heading",
+          "text": "Focal shift vs rack focus",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Rack focus is the textbook two-mark pull with the composition held. Focal shift is the same physics treated as the event itself, including slow, snap, or multiple racks. One is the procedure. The other is the traveling plane."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use focal shift?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a foreground fact must hand the shot to a face, or the reverse, inside one take. Skip it if you need both planes sharp, or if there is no second subject."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt focal shift for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name both planes. Say the plane of sharpness travels from one fact to another while the camera body stays. For video, pull from a foreground object onto the subject, or the reverse."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is focal shift in film?A focal shift moves the plane of sharpness from one subject or distance to another during a shot. Attention changes without cutting, as a pull through depth.Focal shift vs rack focusRack focus is the textbook two-mark pull with the composition held. Focal shift is the same physics treated as the event itself, including slow, snap, or multiple racks. One is the procedure. The other is the traveling plane.When should I use focal shift?Use it when a foreground fact must hand the shot to a face, or the reverse, inside one take. Skip it if you need both planes sharp, or if there is no second subject.How do I prompt focal shift for AI image or video?Name both planes. Say the plane of sharpness travels from one fact to another while the camera body stays. For video, pull from a foreground object onto the subject, or the reverse."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Focal shift on [Subject], the plane of sharpness traveling from one fact to another, attention as a pull. Video: Focus pulls from a foreground object onto [Subject], or the reverse.",
+      "Name both planes, the lens, and that the camera body stays put."
+    ],
+    "example": "Focus pulls from a foreground object onto [Subject], or the reverse."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/06525c190cd29462bf708beedcf2dd86.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/focal-shift-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2893db1938efb47c2a14302f8450d8f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/focal-shift-focal-shift-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cf809f1ed6d70f9b3a09cbc6eacc4e38.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/focal-shift.jpg",
+      "alt": "Focal Shift frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/d8621e52db925c8d69c6da997747f829.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rack-focus-053-rack-focus-mini.webp",
+      "alt": "Rack Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/396e12ac75a8a03a4ec4597dc1dbcafd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/053-rack-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+      "alt": "Shallow Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3b86cbab322a989917c52a38b36be810.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/focal-shift/hero.jpg",
+      "alt": "Focal Shift",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "ca2d7810e7e8c0f3c0c5aab1c34c689cd00081247a6670b4b05e1c58856c3dfc"
+}

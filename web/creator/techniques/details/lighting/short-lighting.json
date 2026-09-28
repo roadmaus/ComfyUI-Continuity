@@ -1,0 +1,387 @@
+{
+  "id": "lighting/short-lighting",
+  "slug": "short-lighting",
+  "title": "Short Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/short-lighting",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/short-lighting.webp",
+  "detail": "details/lighting/short-lighting.json",
+  "aliases": [],
+  "description": "Short lighting in short lighting terms keys the side of the face turned away from camera, so the camera sees more shadow than light. The head looks slimmer and more dimensional because the near cheek falls off.",
+  "thumbnail": "media/5d50bc5c4bba91975b25d4c884864181.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mystery sits on the camera side. We look at the dark plane and infer the person from the far, lit cheek."
+        },
+        {
+          "type": "paragraph",
+          "text": "Noir portraits and serious close-ups use it so a face is sculpted instead of presented like a passport photo. It is the wrong tool when a comic or public figure should feel open to us."
+        },
+        {
+          "type": "paragraph",
+          "text": "Short is not a shadow pattern by itself: you can light short as Rembrandt, loop, or even a soft wrap. The definition is which cheek faces the lens, not the nose shadow.",
+          "links": [
+            {
+              "text": "Rembrandt",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            },
+            {
+              "text": "loop",
+              "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Rembrandt",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "loop",
+          "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Mystery sits on the camera side. We look at the dark plane and infer the person from the far, lit cheek.Noir portraits and serious close-ups use it so a face is sculpted instead of presented like a passport photo. It is the wrong tool when a comic or public figure should feel open to us.Short is not a shadow pattern by itself: you can light short as Rembrandt, loop, or even a soft wrap. The definition is which cheek faces the lens, not the nose shadow."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Turn the face so the far cheek takes the key (often 45 to 90 degrees from camera). The near cheek, the one occupying more of the frame, goes toward shadow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness can be hard for noir or medium for drama. Color follows the key source."
+        },
+        {
+          "type": "paragraph",
+          "text": "Combine with a low fill so the near eye does not die unless you want it to. Prompt: Short lighting on [Subject], the side turned away from camera is keyed, the near side falls toward shadow, slimming and dramatic."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Turn the face so the far cheek takes the key (often 45 to 90 degrees from camera). The near cheek, the one occupying more of the frame, goes toward shadow.Hardness can be hard for noir or medium for drama. Color follows the key source.Combine with a low fill so the near eye does not die unless you want it to. Prompt: Short lighting on [Subject], the side turned away from camera is keyed, the near side falls toward shadow, slimming and dramatic."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to sculpt a face and put mystery on the camera side, a close-up in an office or a night bar. Do not use it when the character is presenting themselves to the public in a broad, open way."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to sculpt a face and put mystery on the camera side, a close-up in an office or a night bar. Do not use it when the character is presenting themselves to the public in a broad, open way."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Broad lighting keys the camera-facing cheek, the reverse. Rembrandt lighting is a triangle pattern often shot short, but Rembrandt can be broad if the triangle is on the near cheek.",
+          "links": [
+            {
+              "text": "Broad lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/broad-lighting"
+            },
+            {
+              "text": "Rembrandt lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Split lighting is a 90-degree cut that is usually short if the dark half faces us. Side lighting describes direction, not which cheek is near camera.",
+          "links": [
+            {
+              "text": "Split lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+            },
+            {
+              "text": "Side lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Broad LightingOpen, readable, less mystery.",
+          "displayText": "Broad Lighting\nOpen, readable, less mystery.",
+          "links": [
+            {
+              "text": "Broad LightingOpen, readable, less mystery.",
+              "url": "https://melies.co/cinematic-techniques/lighting/broad-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rembrandt LightingClassic dramatic portrait.",
+          "displayText": "Rembrandt Lighting\nClassic dramatic portrait.",
+          "links": [
+            {
+              "text": "Rembrandt LightingClassic dramatic portrait.",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Broad lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/broad-lighting"
+        },
+        {
+          "text": "Rembrandt lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "Split lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+        },
+        {
+          "text": "Side lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+        },
+        {
+          "text": "Broad LightingOpen, readable, less mystery.",
+          "url": "https://melies.co/cinematic-techniques/lighting/broad-lighting"
+        },
+        {
+          "text": "Rembrandt LightingClassic dramatic portrait.",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b0073bddd7022e9ff98efe24b0655d79.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/broad-lighting.webp",
+          "alt": "Broad Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/0731eeefead98e8a64c8429a412becb9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rembrandt.webp",
+          "alt": "Rembrandt Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Broad lighting keys the camera-facing cheek, the reverse. Rembrandt lighting is a triangle pattern often shot short, but Rembrandt can be broad if the triangle is on the near cheek.Split lighting is a 90-degree cut that is usually short if the dark half faces us. Side lighting describes direction, not which cheek is near camera.Broad LightingOpen, readable, less mystery.Rembrandt LightingClassic dramatic portrait.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Portrait noir and Godfather-adjacent close-ups often key the far cheek so the camera sits with the shadow. Road to Perdition does the same sculpting in dark interiors."
+        },
+        {
+          "type": "paragraph",
+          "text": "Read the near cheek: if it is the dark one, you are short."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Portrait noir and Godfather-adjacent close-ups often key the far cheek so the camera sits with the shadow. Road to Perdition does the same sculpting in dark interiors.Read the near cheek: if it is the dark one, you are short."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name which cheek is near. Use: \"Short lighting on [Subject], the side turned away from camera is keyed, the near side falls toward shadow, slimming and dramatic.\" Add that the camera-facing cheek is the darker one."
+        },
+        {
+          "type": "quote",
+          "text": "Short lighting on [Subject], the side turned away from camera is keyed, the near side falls toward shadow, slimming and dramatic."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Short+lighting+on+[Subject],+the+side+turned+away+from+camera+is+keyed,+the+near+side+falls+toward+shadow,+slimming+and+dramatic."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name which cheek is near. Use: \"Short lighting on [Subject], the side turned away from camera is keyed, the near side falls toward shadow, slimming and dramatic.\" Add that the camera-facing cheek is the darker one.Copy promptUse in Image GeneratorShort lighting on [Subject], the side turned away from camera is keyed, the near side falls toward shadow, slimming and dramatic.Short lighting on [Subject], the side turned away from camera is keyed, the near side falls toward shadow, slimming and dramatic."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is broad lighting or a frontal butterfly. The tell is a bright near cheek filling the frame.",
+          "links": [
+            {
+              "text": "broad lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/broad-lighting"
+            },
+            {
+              "text": "butterfly",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by turning the face or swinging the key onto the far side."
+        }
+      ],
+      "links": [
+        {
+          "text": "broad lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/broad-lighting"
+        },
+        {
+          "text": "butterfly",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is broad lighting or a frontal butterfly. The tell is a bright near cheek filling the frame.Fix it by turning the face or swinging the key onto the far side."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is short lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Lighting the side of the face turned away from camera so the near, camera-facing cheek falls toward shadow. It slims and adds dimension."
+        },
+        {
+          "type": "heading",
+          "text": "Short lighting vs broad lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Short keys the far cheek; the camera sees more shadow. Broad keys the near cheek; the camera sees more light."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use short lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to sculpt a face and keep mystery on the camera side. Skip it for open, public, comic portraits."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt short lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "State that the side turned away from camera is keyed and the near cheek falls toward shadow. Mention a slimming, dimensional face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is short lighting in film?Lighting the side of the face turned away from camera so the near, camera-facing cheek falls toward shadow. It slims and adds dimension.Short lighting vs broad lightingShort keys the far cheek; the camera sees more shadow. Broad keys the near cheek; the camera sees more light.When should I use short lighting?Use it to sculpt a face and keep mystery on the camera side. Skip it for open, public, comic portraits.How do I prompt short lighting for AI image or video?State that the side turned away from camera is keyed and the near cheek falls toward shadow. Mention a slimming, dimensional face."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name which cheek is near. Use: \"Short lighting on [Subject], the side turned away from camera is keyed, the near side falls toward shadow, slimming and dramatic.\" Add that the camera-facing cheek is the darker one."
+    ],
+    "example": "Short lighting on [Subject], the side turned away from camera is keyed, the near side falls toward shadow, slimming and dramatic."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/5d50bc5c4bba91975b25d4c884864181.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/short-lighting.webp",
+      "alt": "Short Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b0073bddd7022e9ff98efe24b0655d79.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/broad-lighting.webp",
+      "alt": "Broad Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/0731eeefead98e8a64c8429a412becb9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rembrandt.webp",
+      "alt": "Rembrandt Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/84a6ec0e7e835e8e120ddefd5c11b8fc.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/short-lighting/hero.jpg",
+      "alt": "Short Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "7f8578c917f8f2f5f02c89ce20468aeff380622c421600425d630a9d0d8ce16b"
+}

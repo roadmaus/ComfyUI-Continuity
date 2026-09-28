@@ -1,0 +1,481 @@
+{
+  "id": "time-and-motion/slow-motion",
+  "slug": "slow-motion",
+  "title": "Slow Motion",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+  "detail": "details/time-and-motion/slow-motion.json",
+  "aliases": [
+    "Overcranking",
+    "Ralenti"
+  ],
+  "description": "Slow motion cinematography plays action over more screen time than the event occupied during capture, usually by overcranking (recording 120 to 240 fps and playing at 24). The extra samples reveal fabric delay, particle hang, and impact mechanics that a 24 fps shutter would compress into a few smeared frames.",
+  "thumbnail": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+  "video": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a second already contains a scene: a fall, a look that decides, a hit whose mechanics matter. Stretching the instant can turn it into dread, grief, or inspection."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sound is half the meaning. Stretched diegetic noise makes the world heavy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Real-time audio against slow picture can feel like a memory or a lie. It is the wrong tool when the beat needs speed, comic timing, or spatial inspection of a frozen pose."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera orbits a nearly stopped body, you wanted bullet time. If frames are duplicated and smeared, you wanted step printing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not slow every punch or the rate stops meaning anything."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when a second already contains a scene: a fall, a look that decides, a hit whose mechanics matter. Stretching the instant can turn it into dread, grief, or inspection.Sound is half the meaning. Stretched diegetic noise makes the world heavy.Real-time audio against slow picture can feel like a memory or a lie. It is the wrong tool when the beat needs speed, comic timing, or spatial inspection of a frozen pose.If the camera orbits a nearly stopped body, you wanted bullet time. If frames are duplicated and smeared, you wanted step printing.Do not slow every punch or the rate stops meaning anything."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Capture at a higher frame rate than playback and keep a planned shutter (often 180 degrees, so 120 fps is about 1/240 s per frame). You need more light because each exposure is shorter."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep gravity, contacts, and anatomy continuous through the extra samples. For generated footage, ask for real intermediate motion, not interpolated mush."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Slow motion of [Subject] at 120 to 240 fps playback, dust hanging, fabric delayed, continuous gravity."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Capture at a higher frame rate than playback and keep a planned shutter (often 180 degrees, so 120 fps is about 1/240 s per frame). You need more light because each exposure is shorter.Keep gravity, contacts, and anatomy continuous through the extra samples. For generated footage, ask for real intermediate motion, not interpolated mush.Prompt: Slow motion of [Subject] at 120 to 240 fps playback, dust hanging, fabric delayed, continuous gravity."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it on a decisive instant a normal rate would hide, such as a glass leaving a waiter's hand. Do not use it as a default look for an entire fight."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it on a decisive instant a normal rate would hide, such as a glass leaving a waiter's hand. Do not use it as a default look for an entire fight."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Constant slow motion is not a Speed Ramp, which changes rate inside the shot and then recovers. It is not Step Printing, which duplicates low-rate, long-exposure frames into a stuttered lyric smear.",
+          "links": [
+            {
+              "text": "Speed Ramp",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/speed-ramp"
+            },
+            {
+              "text": "Step Printing",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Bullet Time, which decouples a traveling viewpoint from near-frozen action. Freeze Frame stops sampling altogether.",
+          "links": [
+            {
+              "text": "Bullet Time",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+            },
+            {
+              "text": "Freeze Frame",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fast Motion and Time-Lapse crush duration instead of stretching it.",
+          "links": [
+            {
+              "text": "Fast Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+            },
+            {
+              "text": "Time-Lapse",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Speed RampMark one instant inside a fight or a look.",
+          "displayText": "Speed Ramp\nMark one instant inside a fight or a look.",
+          "links": [
+            {
+              "text": "Speed RampMark one instant inside a fight or a look.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/speed-ramp"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Step PrintingLonging that cannot move at normal speed.",
+          "displayText": "Step Printing\nLonging that cannot move at normal speed.",
+          "links": [
+            {
+              "text": "Step PrintingLonging that cannot move at normal speed.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Fast MotionToo much life for real time.",
+          "displayText": "Fast Motion\nToo much life for real time.",
+          "links": [
+            {
+              "text": "Fast MotionToo much life for real time.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Speed Ramp",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/speed-ramp"
+        },
+        {
+          "text": "Step Printing",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+        },
+        {
+          "text": "Bullet Time",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+        },
+        {
+          "text": "Freeze Frame",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/freeze-frame"
+        },
+        {
+          "text": "Fast Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+        },
+        {
+          "text": "Time-Lapse",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "Speed RampMark one instant inside a fight or a look.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/speed-ramp"
+        },
+        {
+          "text": "Step PrintingLonging that cannot move at normal speed.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+        },
+        {
+          "text": "Fast MotionToo much life for real time.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/5830a4bde5d41dd3d555f54f4119dd65.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/speed-ramp-079-speed-ramp-mini.webp",
+          "alt": "Speed Ramp"
+        },
+        {
+          "kind": "video",
+          "path": "media/1055170f1851ae017a5ed0883f8c29d2.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/079-speed-ramp-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ddf553d30941e6f3586104451a1b324f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/step-printing-083-step-printing-and-smeared-motion-mini.webp",
+          "alt": "Step Printing"
+        },
+        {
+          "kind": "video",
+          "path": "media/917e3ac6fea636f9034c88a2d59e5fcb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/083-step-printing-and-smeared-motion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+          "alt": "Fast Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Constant slow motion is not a Speed Ramp, which changes rate inside the shot and then recovers. It is not Step Printing, which duplicates low-rate, long-exposure frames into a stuttered lyric smear.It is not Bullet Time, which decouples a traveling viewpoint from near-frozen action. Freeze Frame stops sampling altogether.Fast Motion and Time-Lapse crush duration instead of stretching it.Speed RampMark one instant inside a fight or a look.Step PrintingLonging that cannot move at normal speed.Fast MotionToo much life for real time."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Seven Samurai stretches the kidnapper's fall so the death occupies more than its wall-clock instant. The Wild Bunch fragments gunfights through varied slow-motion views so violence becomes duration."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Matrix is often filed here, but the rooftop lean is closer to bullet time. In the Mood for Love belongs with step printing more than with clean overcranked silk."
+        },
+        {
+          "type": "list-item",
+          "text": "Seven Samurai 1954The rescued child’s kidnapper falls in slowed motion.",
+          "displayText": "Seven Samurai 1954\nThe rescued child’s kidnapper falls in slowed motion."
+        },
+        {
+          "type": "list-item",
+          "text": "The Wild Bunch 1969Violence is fragmented and expanded through varied slow-motion views.",
+          "displayText": "The Wild Bunch 1969\nViolence is fragmented and expanded through varied slow-motion views."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e1dd2d0ab12625de06d234eaba41fc62.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slow-motion/famous/00-seven-samurai-1954.jpg",
+          "alt": "Seven Samurai 1954"
+        },
+        {
+          "kind": "image",
+          "path": "media/756fb73001ff6715efd674a8292a45b8.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slow-motion/famous/01-the-wild-bunch-1969.jpg",
+          "alt": "The Wild Bunch 1969"
+        }
+      ],
+      "sourceText": "In film Seven Samurai stretches the kidnapper's fall so the death occupies more than its wall-clock instant. The Wild Bunch fragments gunfights through varied slow-motion views so violence becomes duration.The Matrix is often filed here, but the rooftop lean is closer to bullet time. In the Mood for Love belongs with step printing more than with clean overcranked silk.Seven Samurai 1954The rescued child’s kidnapper falls in slowed motion.The Wild Bunch 1969Violence is fragmented and expanded through varied slow-motion views."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the fps feel and what the extra time reveals. Still: a physically plausible mid-action pose with hanging dust, delayed fabric, and readable contacts, not a statue."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Slow-motion 6-second shot of [Subject], time stretched, particles hanging in light, 120fps feel, locked or simple camera, no frozen background orbit."
+        },
+        {
+          "type": "quote",
+          "text": "A glass slips from a waiter’s hand and falls in elegant slow motion. Fingers release naturally, the glass rotates coherently and fabric moves with plausible inertia. Locked close shot, smooth temporal detail, no frozen background or bullet-time orbit."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+glass+slips+from+a+waiter%E2%80%99s+hand+and+falls+in+elegant+slow+motion.+Fingers+release+naturally,+the+glass+rotates+coherently+and+fabric+moves+with+plausible+inertia.+Locked+close+shot,+smooth+temporal+detail,+no+frozen+background+or+bullet-time+orbit."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the fps feel and what the extra time reveals. Still: a physically plausible mid-action pose with hanging dust, delayed fabric, and readable contacts, not a statue.Video: Slow-motion 6-second shot of [Subject], time stretched, particles hanging in light, 120fps feel, locked or simple camera, no frozen background orbit.Copy promptUse in Video GeneratorA glass slips from a waiter’s hand and falls in elegant slow motion. Fingers release naturally, the glass rotates coherently and fabric moves with plausible inertia. Locked close shot, smooth temporal detail, no frozen background or bullet-time orbit.A glass slips from a waiter’s hand and falls in elegant slow motion. Fingers release naturally, the glass rotates coherently and fabric moves with plausible inertia. Locked close shot, smooth temporal detail, no frozen background or bullet-time orbit."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Bullet Time or a freeze. The tell is a stopped body with a moving camera, or a still with no new frames of motion.",
+          "links": [
+            {
+              "text": "Bullet Time",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: keep the subject traveling through the action, keep anatomy and gravity continuous, and specify 120 to 240 fps playback rather than an orbit around a sculpture."
+        }
+      ],
+      "links": [
+        {
+          "text": "Bullet Time",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Bullet Time or a freeze. The tell is a stopped body with a moving camera, or a still with no new frames of motion.Fix: keep the subject traveling through the action, keep anatomy and gravity continuous, and specify 120 to 240 fps playback rather than an orbit around a sculpture."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Slow Motion in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Slow motion is overcranked or retimed footage that occupies more screen time than the event took to happen, so small physical details become readable."
+        },
+        {
+          "type": "heading",
+          "text": "Slow Motion vs Bullet Time",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Slow motion stretches the subject's action while the camera may stay simple. Bullet time nearly freezes the action while the viewpoint travels around it."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Slow Motion?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When one second already contains the scene: a fall, a look, or an impact whose mechanics or grief need extra duration."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Slow Motion for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write 120 to 240 fps playback, delayed fabric, hanging particles, and continuous anatomy. Forbid a frozen subject with an orbiting camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Slow Motion in film?Slow motion is overcranked or retimed footage that occupies more screen time than the event took to happen, so small physical details become readable.Slow Motion vs Bullet TimeSlow motion stretches the subject's action while the camera may stay simple. Bullet time nearly freezes the action while the viewpoint travels around it.When should I use Slow Motion?When one second already contains the scene: a fall, a look, or an impact whose mechanics or grief need extra duration.How do I prompt Slow Motion for AI image or video?Write 120 to 240 fps playback, delayed fabric, hanging particles, and continuous anatomy. Forbid a frozen subject with an orbiting camera."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the fps feel and what the extra time reveals. Still: a physically plausible mid-action pose with hanging dust, delayed fabric, and readable contacts, not a statue.",
+      "Video: Slow-motion 6-second shot of [Subject], time stretched, particles hanging in light, 120fps feel, locked or simple camera, no frozen background orbit."
+    ],
+    "example": "A glass slips from a waiter’s hand and falls in elegant slow motion. Fingers release naturally, the glass rotates coherently and fabric moves with plausible inertia. Locked close shot, smooth temporal detail, no frozen background or bullet-time orbit."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ee243608364369834a17e6c426d9b49c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/slow-motion.jpg",
+      "alt": "Slow Motion frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/5830a4bde5d41dd3d555f54f4119dd65.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/speed-ramp-079-speed-ramp-mini.webp",
+      "alt": "Speed Ramp"
+    },
+    {
+      "kind": "video",
+      "path": "media/1055170f1851ae017a5ed0883f8c29d2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/079-speed-ramp-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ddf553d30941e6f3586104451a1b324f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/step-printing-083-step-printing-and-smeared-motion-mini.webp",
+      "alt": "Step Printing"
+    },
+    {
+      "kind": "video",
+      "path": "media/917e3ac6fea636f9034c88a2d59e5fcb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/083-step-printing-and-smeared-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+      "alt": "Fast Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e1dd2d0ab12625de06d234eaba41fc62.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slow-motion/famous/00-seven-samurai-1954.jpg",
+      "alt": "Seven Samurai 1954"
+    },
+    {
+      "kind": "image",
+      "path": "media/756fb73001ff6715efd674a8292a45b8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slow-motion/famous/01-the-wild-bunch-1969.jpg",
+      "alt": "The Wild Bunch 1969"
+    },
+    {
+      "kind": "image",
+      "path": "media/5319d5ae465fa8f1a324ed572e726504.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slow-motion/hero.jpg",
+      "alt": "Slow Motion",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "d19d3766fb98323b0e4c4c07173a12a2cbb02522ec981bfb0ced5109531dc8d7"
+}

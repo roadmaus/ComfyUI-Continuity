@@ -1,0 +1,387 @@
+{
+  "id": "camera-movement/rapid-zoom-in",
+  "slug": "rapid-zoom-in",
+  "title": "Rapid Zoom In",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/rapid-zoom-in",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rapid-zoom-in-rapid-zoom-in-mini.webp",
+  "detail": "details/camera-movement/rapid-zoom-in.json",
+  "aliases": [],
+  "description": "A rapid zoom in snaps focal length faster than a polite crash, almost a cut, the world tightening in a few frames, then a hold. The camera body does not travel.",
+  "thumbnail": "media/11648c0770204c3606538e755294b5f1.webp",
+  "video": "media/f5f476792979036df772df5c7ed201ef.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/rapid-zoom-in-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "No time for a dolly. Emphasis as a weapon: a face, a gun, a sign."
+        },
+        {
+          "type": "paragraph",
+          "text": "The snap is so short it can read as an axial cut with a trail of glass. A crash zoom is already fast; this is faster than a polite crash."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you can feel a leisurely enlarge, it is not rapid. If the body moved, you dollied."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function No time for a dolly. Emphasis as a weapon: a face, a gun, a sign.The snap is so short it can read as an axial cut with a trail of glass. A crash zoom is already fast; this is faster than a polite crash.If you can feel a leisurely enlarge, it is not rapid. If the body moved, you dollied."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Locked sticks or a locked handheld brace, zoom thrown to the end stop in a fraction of a second, then hold. Wide to tight."
+        },
+        {
+          "type": "paragraph",
+          "text": "No parallax. Prompt: Rapid zoom in on [Subject], faster than a polite crash, almost a cut, the world snapping tight."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Locked sticks or a locked handheld brace, zoom thrown to the end stop in a fraction of a second, then hold. Wide to tight.No parallax. Prompt: Rapid zoom in on [Subject], faster than a polite crash, almost a cut, the world snapping tight."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a fact must arrive as a snap, not a walk. Do not use it on every line."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a fact must arrive as a snap, not a walk. Do not use it on every line."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crash Zoom In is the punch that is still readable as a zoom. Rapid is nearer a cut.",
+          "links": [
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "YoYo Zoom comes back out. A true cut would have no optical trail.",
+          "links": [
+            {
+              "text": "YoYo Zoom",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/yoyo-zoom"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "displayText": "Crash Zoom In\nPunctuate a hit, a realization, or a comic sting.",
+          "links": [
+            {
+              "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "YoYo ZoomOne axis, two punches.",
+          "displayText": "YoYo Zoom\nOne axis, two punches.",
+          "links": [
+            {
+              "text": "YoYo ZoomOne axis, two punches.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/yoyo-zoom"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "YoYo Zoom",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/yoyo-zoom"
+        },
+        {
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "YoYo ZoomOne axis, two punches.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/yoyo-zoom"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+          "alt": "Crash Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/2c855344debebaf2bc9f4526170ab31c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/yoyo-zoom-yoyo-zoom-mini.webp",
+          "alt": "YoYo Zoom"
+        },
+        {
+          "kind": "video",
+          "path": "media/eaca3ae6adcdfee5e19076dd27a30b5f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/yoyo-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Crash Zoom In is the punch that is still readable as a zoom. Rapid is nearer a cut.YoYo Zoom comes back out. A true cut would have no optical trail.Crash Zoom InPunctuate a hit, a realization, or a comic sting.YoYo ZoomOne axis, two punches.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hot Fuzz weaponizes snap zooms as punctuation. Kill Bill uses snap zooms as comic and violent emphasis."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: almost a cut, then a hold."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Hot Fuzz weaponizes snap zooms as punctuation. Kill Bill uses snap zooms as comic and violent emphasis.Grammar: almost a cut, then a hold."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Faster than a crash, then hold. Still: Rapid zoom in on [Subject], faster than a polite crash, almost a cut, the world snapping tight."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Extremely fast zoom into [Subject], nearly a cut, then a hold. Body still."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid wheels."
+        },
+        {
+          "type": "quote",
+          "text": "Extremely fast zoom into [Subject], nearly a cut, then a hold."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Extremely+fast+zoom+into+[Subject],+nearly+a+cut,+then+a+hold."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Faster than a crash, then hold. Still: Rapid zoom in on [Subject], faster than a polite crash, almost a cut, the world snapping tight.Video: Extremely fast zoom into [Subject], nearly a cut, then a hold. Body still.Forbid wheels.Copy promptUse in Video GeneratorExtremely fast zoom into [Subject], nearly a cut, then a hold.Extremely fast zoom into [Subject], nearly a cut, then a hold."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a dolly-in or a slow crash. The tell: parallax, or a leisurely enlarge."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: locked body, snap to tight in a few frames, hold."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a dolly-in or a slow crash. The tell: parallax, or a leisurely enlarge.The fix: locked body, snap to tight in a few frames, hold."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Rapid Zoom In in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A rapid zoom in is an extremely fast optical snap into the subject, almost a cut, then a hold. The camera body stays put."
+        },
+        {
+          "type": "heading",
+          "text": "Rapid Zoom In vs Crash Zoom In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A crash zoom in is a fast but readable punch. Rapid zoom in is faster than a polite crash, nearer to a cut with a trail of glass."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Rapid Zoom In?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when there is no time for a dolly and the fact must snap tight. Do not use it on every line."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Rapid Zoom In for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write an extremely fast zoom, then a hold. Example: Rapid zoom in on [Subject], faster than a polite crash, almost a cut, the world snapping tight."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Rapid Zoom In in film?A rapid zoom in is an extremely fast optical snap into the subject, almost a cut, then a hold. The camera body stays put.Rapid Zoom In vs Crash Zoom InA crash zoom in is a fast but readable punch. Rapid zoom in is faster than a polite crash, nearer to a cut with a trail of glass.When should I use Rapid Zoom In?Use it when there is no time for a dolly and the fact must snap tight. Do not use it on every line.How do I prompt Rapid Zoom In for AI image or video?Write an extremely fast zoom, then a hold. Example: Rapid zoom in on [Subject], faster than a polite crash, almost a cut, the world snapping tight."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Faster than a crash, then hold. Still: Rapid zoom in on [Subject], faster than a polite crash, almost a cut, the world snapping tight.",
+      "Video: Extremely fast zoom into [Subject], nearly a cut, then a hold. Body still.",
+      "Forbid wheels."
+    ],
+    "example": "Extremely fast zoom into [Subject], nearly a cut, then a hold."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/f5f476792979036df772df5c7ed201ef.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/rapid-zoom-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/11648c0770204c3606538e755294b5f1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rapid-zoom-in-rapid-zoom-in-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e566a088a43b21723131447926b189f2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/rapid-zoom-in.jpg",
+      "alt": "Rapid Zoom In frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": "Crash Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2c855344debebaf2bc9f4526170ab31c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/yoyo-zoom-yoyo-zoom-mini.webp",
+      "alt": "YoYo Zoom"
+    },
+    {
+      "kind": "video",
+      "path": "media/eaca3ae6adcdfee5e19076dd27a30b5f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/yoyo-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6900557cdebb3914db67f797cdc325a0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/rapid-zoom-in/hero.jpg",
+      "alt": "Rapid Zoom In",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "f091a09e89cdc5f4568567ff3fe81ab93bee332cbafa4562f84448a5f178f9f9"
+}

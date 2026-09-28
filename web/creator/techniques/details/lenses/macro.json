@@ -1,0 +1,464 @@
+{
+  "id": "lenses/macro",
+  "slug": "macro",
+  "title": "Macro",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/macro",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/macro-058-macro-insert-mini.webp",
+  "detail": "details/lenses/macro.json",
+  "aliases": [
+    "Extreme-detail photography",
+    "Plan macro"
+  ],
+  "description": "Macro cinematography is close-focusing optics that let a small object or surface occupy the image at high reproduction scale, often near 1:1. An unusually close view turns texture, insects, eyes, or mechanisms into the entire shot.",
+  "thumbnail": "media/79fc44234e86f0ee60b85636698e0f64.webp",
+  "video": "media/48dce430df7bb8986d91dc405cf98e2c.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/058-macro-insert-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The plot becomes a centimeter. A pill, a watch gear, a drop, a pupil: the object is no longer an insert in a room, it is the room."
+        },
+        {
+          "type": "paragraph",
+          "text": "Depth of field collapses to a millimeter, so a breath or a rack is a traverse across a landscape of pores. It is the wrong tool when you only wanted a tight face."
+        },
+        {
+          "type": "paragraph",
+          "text": "An Extreme Close-Up of an eye can be a long lens from a foot away; that is a crop, not macro scale. A normal close-up enlarged in post does not automatically have convincing macro texture or depth of field.",
+          "links": [
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If you need to travel through a glass or a machine, that is a Probe Lens.",
+          "links": [
+            {
+              "text": "Probe Lens",
+              "url": "https://melies.co/cinematic-techniques/lenses/probe-lens"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Probe Lens",
+          "url": "https://melies.co/cinematic-techniques/lenses/probe-lens"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The plot becomes a centimeter. A pill, a watch gear, a drop, a pupil: the object is no longer an insert in a room, it is the room.Depth of field collapses to a millimeter, so a breath or a rack is a traverse across a landscape of pores. It is the wrong tool when you only wanted a tight face.An Extreme Close-Up of an eye can be a long lens from a foot away; that is a crop, not macro scale. A normal close-up enlarged in post does not automatically have convincing macro texture or depth of field.If you need to travel through a glass or a machine, that is a Probe Lens."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use a macro lens or close-focus setup, stabilize the object, and light for surface texture (small hard sources show relief; wrap shows translucency). Anticipate shallow depth of field and tiny focus changes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Working distance is short; watch your own shadow. Magnification is image size over object size, not the shot-size name."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Macro lens on a detail of [Subject], insects of texture, an eye, a watch, a drop of rain, a world in a centimeter."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Use a macro lens or close-focus setup, stabilize the object, and light for surface texture (small hard sources show relief; wrap shows translucency). Anticipate shallow depth of field and tiny focus changes.Working distance is short; watch your own shadow. Magnification is image size over object size, not the shot-size name.Prompt: Macro lens on a detail of [Subject], insects of texture, an eye, a watch, a drop of rain, a world in a centimeter."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the plot is microscopic: a ritual of pills, a bug, a lock mechanism. Do not use it as a synonym for close-up, and do not blow up a normal portrait and call it macro."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the plot is microscopic: a ritual of pills, a bug, a lock mechanism. Do not use it as a synonym for close-up, and do not blow up a normal portrait and call it macro."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Extreme Close-Up is a framing size; it may or may not use macro optics. Insert Shot is a story object in the cut, any size.",
+          "links": [
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            },
+            {
+              "text": "Insert Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Probe Lens is a long barrel that can enter tiny spaces with a wide-ish view. Magnification is the scale number; macro is one optical way to get it.",
+          "links": [
+            {
+              "text": "Probe Lens",
+              "url": "https://melies.co/cinematic-techniques/lenses/probe-lens"
+            },
+            {
+              "text": "Magnification",
+              "url": "https://melies.co/cinematic-techniques/lenses/magnification"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Insert ShotPoint at the thing that will matter later.",
+          "displayText": "Insert Shot\nPoint at the thing that will matter later.",
+          "links": [
+            {
+              "text": "Insert ShotPoint at the thing that will matter later.",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Insert Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "Probe Lens",
+          "url": "https://melies.co/cinematic-techniques/lenses/probe-lens"
+        },
+        {
+          "text": "Magnification",
+          "url": "https://melies.co/cinematic-techniques/lenses/magnification"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Insert ShotPoint at the thing that will matter later.",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/b5bb789f90144033b393ce87e620564d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/insert-095-narrative-insert-mini.webp",
+          "alt": "Insert Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/53a13c456f43ab42d2e3d1f277d87138.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/095-narrative-insert-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots Extreme Close-Up is a framing size; it may or may not use macro optics. Insert Shot is a story object in the cut, any size.Probe Lens is a long barrel that can enter tiny spaces with a wide-ish view. Magnification is the scale number; macro is one optical way to get it.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.Insert ShotPoint at the thing that will matter later.14mm Ultra-WidePut the audience inside a space that is too big or too close."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Requiem for a Dream repeats extreme-detail images so rituals compress into sensory fragments. Amélie turns ordinary objects into tactile small pleasures."
+        },
+        {
+          "type": "paragraph",
+          "text": "Microcosmos treats insects as full-scale drama. Grammar of close-focus scale, not a copied frame of a pupil."
+        },
+        {
+          "type": "list-item",
+          "text": "Requiem for a Dream 2000Repeated extreme-detail images compress rituals into sensory fragments.",
+          "displayText": "Requiem for a Dream 2000\nRepeated extreme-detail images compress rituals into sensory fragments."
+        },
+        {
+          "type": "list-item",
+          "text": "Amélie 2001Tactile details turn ordinary objects and actions into small pleasures.",
+          "displayText": "Amélie 2001\nTactile details turn ordinary objects and actions into small pleasures."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d9deb04767622e0ed24cb8a947dc857a.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/macro/famous/00-requiem-for-a-dream-2000.jpg",
+          "alt": "Requiem for a Dream 2000"
+        },
+        {
+          "kind": "image",
+          "path": "media/80fe567f5f77afc8aa365f49e69bf3c6.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/macro/famous/01-amelie-2001.jpg",
+          "alt": "Amélie 2001"
+        }
+      ],
+      "sourceText": "In film Requiem for a Dream repeats extreme-detail images so rituals compress into sensory fragments. Amélie turns ordinary objects into tactile small pleasures.Microcosmos treats insects as full-scale drama. Grammar of close-focus scale, not a copied frame of a pupil.Requiem for a Dream 2000Repeated extreme-detail images compress rituals into sensory fragments.Amélie 2001Tactile details turn ordinary objects and actions into small pleasures."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the optic and the centimeter. Macro lens on a detail of [Subject], insects of texture, an eye, a watch, a drop of rain, a world in a centimeter."
+        },
+        {
+          "type": "paragraph",
+          "text": "State 1:1 or similar scale, razor-thin focus, real surface texture. Do not write close-up of a face unless the face feature is truly macro-scaled."
+        },
+        {
+          "type": "quote",
+          "text": "Extreme macro shot of a watchmaker lowering one tiny screw into an old brass mechanism. The screw head and adjacent gear teeth are crisp; focus falls away rapidly. One slow precise movement, realistic metal scale, no oversized fingers or morphing gears."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Extreme+macro+shot+of+a+watchmaker+lowering+one+tiny+screw+into+an+old+brass+mechanism.+The+screw+head+and+adjacent+gear+teeth+are+crisp;+focus+falls+away+rapidly.+One+slow+precise+movement,+realistic+metal+scale,+no+oversized+fingers+or+morphing+gears."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the optic and the centimeter. Macro lens on a detail of [Subject], insects of texture, an eye, a watch, a drop of rain, a world in a centimeter.State 1:1 or similar scale, razor-thin focus, real surface texture. Do not write close-up of a face unless the face feature is truly macro-scaled.Copy promptUse in Video GeneratorExtreme macro shot of a watchmaker lowering one tiny screw into an old brass mechanism. The screw head and adjacent gear teeth are crisp; focus falls away rapidly. One slow precise movement, realistic metal scale, no oversized fingers or morphing gears.Extreme macro shot of a watchmaker lowering one tiny screw into an old brass mechanism. The screw head and adjacent gear teeth are crisp; focus falls away rapidly. One slow precise movement, realistic metal scale, no oversized fingers or morphing gears."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an Extreme Close-Up made with a portrait lens, or a zoomed crop. The tell is normal skin-pore size with deep-ish focus, or a whole face labeled macro.",
+          "links": [
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: small object filling the sensor, true close-focus falloff, texture lit as terrain."
+        }
+      ],
+      "links": [
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an Extreme Close-Up made with a portrait lens, or a zoomed crop. The tell is normal skin-pore size with deep-ish focus, or a whole face labeled macro.Fix: small object filling the sensor, true close-focus falloff, texture lit as terrain."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is macro in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is close-focusing photography that reproduces a small object at high scale, often around life-size on the sensor. Texture and tiny depth of field become the image."
+        },
+        {
+          "type": "heading",
+          "text": "Macro vs Extreme Close-Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An extreme close-up is a crop of a feature, possible with a long lens from a foot away. Macro is an optical scale: a small object occupies the frame at high magnification with true close-focus depth of field."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use macro?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a tiny object or surface is the scene. Skip it for ordinary portraits and for inserts that are merely tight, not close-focus."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt macro for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Macro lens on a detail of [Subject], a world in a centimeter, razor-thin focus, surface texture. Name the object. Forbid ordinary close-up and probe-through-a-tunnel unless you want those."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is macro in film?It is close-focusing photography that reproduces a small object at high scale, often around life-size on the sensor. Texture and tiny depth of field become the image.Macro vs Extreme Close-UpAn extreme close-up is a crop of a feature, possible with a long lens from a foot away. Macro is an optical scale: a small object occupies the frame at high magnification with true close-focus depth of field.When should I use macro?Use it when a tiny object or surface is the scene. Skip it for ordinary portraits and for inserts that are merely tight, not close-focus.How do I prompt macro for AI image or video?Write: Macro lens on a detail of [Subject], a world in a centimeter, razor-thin focus, surface texture. Name the object. Forbid ordinary close-up and probe-through-a-tunnel unless you want those."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the optic and the centimeter. Macro lens on a detail of [Subject], insects of texture, an eye, a watch, a drop of rain, a world in a centimeter.",
+      "State 1:1 or similar scale, razor-thin focus, real surface texture. Do not write close-up of a face unless the face feature is truly macro-scaled."
+    ],
+    "example": "Extreme macro shot of a watchmaker lowering one tiny screw into an old brass mechanism. The screw head and adjacent gear teeth are crisp; focus falls away rapidly. One slow precise movement, realistic metal scale, no oversized fingers or morphing gears."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/48dce430df7bb8986d91dc405cf98e2c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/058-macro-insert-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/79fc44234e86f0ee60b85636698e0f64.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/macro-058-macro-insert-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b77415e2bc7b17c9d76514b1d4ecc933.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/macro.jpg",
+      "alt": "Macro frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b5bb789f90144033b393ce87e620564d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/insert-095-narrative-insert-mini.webp",
+      "alt": "Insert Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/53a13c456f43ab42d2e3d1f277d87138.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/095-narrative-insert-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/d9deb04767622e0ed24cb8a947dc857a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/macro/famous/00-requiem-for-a-dream-2000.jpg",
+      "alt": "Requiem for a Dream 2000"
+    },
+    {
+      "kind": "image",
+      "path": "media/80fe567f5f77afc8aa365f49e69bf3c6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/macro/famous/01-amelie-2001.jpg",
+      "alt": "Amélie 2001"
+    },
+    {
+      "kind": "image",
+      "path": "media/e21d28243325814665f86d9922232679.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/macro/hero.jpg",
+      "alt": "Macro",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "29752d1fb93d6ed33f19f452d822393b631c7199ac434dc95d45b19088b2d5d7"
+}

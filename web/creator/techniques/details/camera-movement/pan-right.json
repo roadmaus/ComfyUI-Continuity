@@ -1,0 +1,409 @@
+{
+  "id": "camera-movement/pan-right",
+  "slug": "pan-right",
+  "title": "Pan Right",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/pan-right",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-right-008-pan-and-discovery-mini.webp",
+  "detail": "details/camera-movement/pan-right.json",
+  "aliases": [],
+  "description": "A pan right shot is a horizontal rotation of a locked-off camera toward the right. It connects two parts of the same geography in one continuous turn from a single station point.",
+  "thumbnail": "media/333aea1b396b4f8bb512847a5d486835.webp",
+  "video": "media/4939347f523db67283fabf104312adf7.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/008-pan-and-discovery-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "End on the story beat, not on a wall. The rightward turn can follow a look, a car, or a line of dialogue that points off-screen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Because the camera does not walk, the ethics of the shot stay those of a witness who can turn but cannot follow. It is the wrong tool for a chase that must match pace, and the wrong tool for a sting that needs motion blur as a cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function End on the story beat, not on a wall. The rightward turn can follow a look, a car, or a line of dialogue that points off-screen.Because the camera does not walk, the ethics of the shot stay those of a witness who can turn but cannot follow. It is the wrong tool for a chase that must match pace, and the wrong tool for a sting that needs motion blur as a cut."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fluid head, yaw only, horizon level, feathered stop on a composed end frame. Keep exposure in mind if you pan into a window."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a slow pan right from a locked tripod, fluid head rotation, level horizon, a continuous horizontal reveal."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Fluid head, yaw only, horizon level, feathered stop on a composed end frame. Keep exposure in mind if you pan into a window.Prompt a slow pan right from a locked tripod, fluid head rotation, level horizon, a continuous horizontal reveal."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Same job as pan left, other direction. End on the story beat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Concrete beat: a speaker finishes, the pan finds the listener who will decide. Do not overshoot and hunt."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Same job as pan left, other direction. End on the story beat.Concrete beat: a speaker finishes, the pan finds the listener who will decide. Do not overshoot and hunt."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pan Left is the mirrored yaw. A Dolly Right trucks the body.",
+          "links": [
+            {
+              "text": "Pan Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-left"
+            },
+            {
+              "text": "Dolly Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-right"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Whip Pan blurs this same axis on purpose. If the support slides, you left the pan family.",
+          "links": [
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pan LeftConnect two things in one geography without moving the support.",
+          "displayText": "Pan Left\nConnect two things in one geography without moving the support.",
+          "links": [
+            {
+              "text": "Pan LeftConnect two things in one geography without moving the support.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-left"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "displayText": "Whip Pan\nTransition, punchline, or sudden attention shift.",
+          "links": [
+            {
+              "text": "Whip PanTransition, punchline, or sudden attention shift.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Pan Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-left"
+        },
+        {
+          "text": "Dolly Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-right"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Pan LeftConnect two things in one geography without moving the support.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-left"
+        },
+        {
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e29cddf050f61f946c3cb766cfe71638.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-left-pan-left-mini.webp",
+          "alt": "Pan Left"
+        },
+        {
+          "kind": "video",
+          "path": "media/0cdf798de2f0032a1e8662a6e008a690.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pan-left-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+          "alt": "Whip Pan"
+        },
+        {
+          "kind": "video",
+          "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Pan Left is the mirrored yaw. A Dolly Right trucks the body.A Whip Pan blurs this same axis on purpose. If the support slides, you left the pan family.Pan LeftConnect two things in one geography without moving the support.Whip PanTransition, punchline, or sudden attention shift.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "There Will Be Blood turns across interiors and landscapes to bind oil, prayer, and land in one station. The Rules of the Game uses fluid pans through the chateau so class and hunting share deep space."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of the turn, not a layout to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film There Will Be Blood turns across interiors and landscapes to bind oil, prayer, and land in one station. The Rules of the Game uses fluid pans through the chateau so class and hunting share deep space.Grammar of the turn, not a layout to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Slow pan right from a locked tripod across [Subject], fluid head rotation, level horizon, a continuous horizontal reveal. For motion: the camera pans right from a fixed tripod across [Subject]."
+        },
+        {
+          "type": "paragraph",
+          "text": "Smooth horizontal rotation only."
+        },
+        {
+          "type": "quote",
+          "text": "The camera pans right from a fixed tripod across [Subject]. Smooth horizontal rotation only."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+pans+right+from+a+fixed+tripod+across+[Subject].+Smooth+horizontal+rotation+only."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Slow pan right from a locked tripod across [Subject], fluid head rotation, level horizon, a continuous horizontal reveal. For motion: the camera pans right from a fixed tripod across [Subject].Smooth horizontal rotation only.Copy promptUse in Video GeneratorThe camera pans right from a fixed tripod across [Subject]. Smooth horizontal rotation only.The camera pans right from a fixed tripod across [Subject]. Smooth horizontal rotation only."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Dolly Right or a Whip Pan that never resolves. The tell is parallax you did not want, or blur that never hard-stops.",
+          "links": [
+            {
+              "text": "Dolly Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-right"
+            },
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: locked sticks, yaw right, level horizon, clean settle."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-right"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Dolly Right or a Whip Pan that never resolves. The tell is parallax you did not want, or blur that never hard-stops.The fix: locked sticks, yaw right, level horizon, clean settle."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Pan Right in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a rightward yaw of the camera on a fixed tripod, sweeping the view horizontally without moving the support."
+        },
+        {
+          "type": "heading",
+          "text": "Pan Right vs Dolly Right",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly right relocates the camera on an X axis. Pan right only rotates, so you look at a new part of the same place from the same spot."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Pan Right?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the next fact is to the right and a turn is enough to connect it. Do not use it to fake a track along a street."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Pan Right for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write fixed tripod, pan right, horizontal rotation only, level horizon, no body travel. Name the landing frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Pan Right in film?It is a rightward yaw of the camera on a fixed tripod, sweeping the view horizontally without moving the support.Pan Right vs Dolly RightDolly right relocates the camera on an X axis. Pan right only rotates, so you look at a new part of the same place from the same spot.When should I use Pan Right?When the next fact is to the right and a turn is enough to connect it. Do not use it to fake a track along a street.How do I prompt Pan Right for AI image or video?Write fixed tripod, pan right, horizontal rotation only, level horizon, no body travel. Name the landing frame."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Slow pan right from a locked tripod across [Subject], fluid head rotation, level horizon, a continuous horizontal reveal. For motion: the camera pans right from a fixed tripod across [Subject].",
+      "Smooth horizontal rotation only."
+    ],
+    "example": "The camera pans right from a fixed tripod across [Subject]. Smooth horizontal rotation only."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/4939347f523db67283fabf104312adf7.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/008-pan-and-discovery-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/333aea1b396b4f8bb512847a5d486835.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-right-008-pan-and-discovery-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d8ae6b2aff431a841a20ed68e9b72eb6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/pan-right.jpg",
+      "alt": "Pan Right frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/e29cddf050f61f946c3cb766cfe71638.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pan-left-pan-left-mini.webp",
+      "alt": "Pan Left"
+    },
+    {
+      "kind": "video",
+      "path": "media/0cdf798de2f0032a1e8662a6e008a690.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pan-left-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+      "alt": "Whip Pan"
+    },
+    {
+      "kind": "video",
+      "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d041d45d453974edb17f70f964cdd0df.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pan-right/hero.jpg",
+      "alt": "Pan Right",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "4d1035191f94da46ff7f31a03c2779fa645a3638ff69f3601548604f7e6c3fa3"
+}

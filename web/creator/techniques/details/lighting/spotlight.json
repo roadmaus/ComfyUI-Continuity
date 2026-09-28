@@ -1,0 +1,398 @@
+{
+  "id": "lighting/spotlight",
+  "slug": "spotlight",
+  "title": "Spotlight",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/spotlight",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/spotlight.webp",
+  "detail": "details/lighting/spotlight.json",
+  "aliases": [],
+  "description": "A spotlight in spotlight cinematography is a focused, hard-edged pool from a theatrical or similar instrument, with darkness around the circle. The person is treated as an act inside that pool.",
+  "thumbnail": "media/df3e5eff7eaea1acab80a44eca617070.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The stage is a circle of light. A drummer, a speaker, a dancer: the instrument has a beam you can see the edge of, and stepping out of it is stepping out of the scene."
+        },
+        {
+          "type": "paragraph",
+          "text": "Theatre and concert coverage use it because the world really is that lamp. It is the wrong tool for a motivated apartment, or for a soft cameo with no circle."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the pool has no edge, you have a general key in a dark room. If the figure is isolated but the source is a large silk, that is cameo, not a spot.",
+          "links": [
+            {
+              "text": "cameo",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "cameo",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The stage is a circle of light. A drummer, a speaker, a dancer: the instrument has a beam you can see the edge of, and stepping out of it is stepping out of the scene.Theatre and concert coverage use it because the world really is that lamp. It is the wrong tool for a motivated apartment, or for a soft cameo with no circle.If the pool has no edge, you have a general key in a dark room. If the figure is isolated but the source is a large silk, that is cameo, not a spot."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use a focused fixture (ellipsoidal, follow spot, PAR with a tight lens) with shutters or an iris so the pool has a hard edge. Place it high and frontal or high and slightly front-side, the theatrical default."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness is hard; falloff at the circle is sudden. Color is often white or a theatrical gel."
+        },
+        {
+          "type": "paragraph",
+          "text": "The surround is unlit. Prompt: Spotlight on [Subject], a hard pool, theater darkness around, the person as an act."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Use a focused fixture (ellipsoidal, follow spot, PAR with a tight lens) with shutters or an iris so the pool has a hard edge. Place it high and frontal or high and slightly front-side, the theatrical default.Hardness is hard; falloff at the circle is sudden. Color is often white or a theatrical gel.The surround is unlit. Prompt: Spotlight on [Subject], a hard pool, theater darkness around, the person as an act."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the stage is a circle of light, a solo, a speech, a club act. Do not use it as the key in a kitchen that has no such instrument."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the stage is a circle of light, a solo, a speech, a club act. Do not use it as the key in a kitchen that has no such instrument."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cameo lighting is isolation; a spotlight is one hard instrument that can create that isolation with a visible circle. Hard light is the quality.",
+          "links": [
+            {
+              "text": "Cameo lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            },
+            {
+              "text": "Hard light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Top light may come from above without a circular shuttered pool. Cross lighting is two concert keys, not necessarily irised spots.",
+          "links": [
+            {
+              "text": "Top light",
+              "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+            },
+            {
+              "text": "Cross lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Epiphany is a story-timed change, which a spotlight snap can serve.",
+          "links": [
+            {
+              "text": "Epiphany",
+              "url": "https://melies.co/cinematic-techniques/lighting/epiphany"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cameo LightingErase the world. Keep the person.",
+          "displayText": "Cameo Lighting\nErase the world. Keep the person.",
+          "links": [
+            {
+              "text": "Cameo LightingErase the world. Keep the person.",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "displayText": "Hard Light\nGrit, noon sun, or interrogation.",
+          "links": [
+            {
+              "text": "Hard LightGrit, noon sun, or interrogation.",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cameo lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Hard light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Top light",
+          "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+        },
+        {
+          "text": "Cross lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+        },
+        {
+          "text": "Epiphany",
+          "url": "https://melies.co/cinematic-techniques/lighting/epiphany"
+        },
+        {
+          "text": "Cameo LightingErase the world. Keep the person.",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/eb2b22619f7f3f03ae5875d0cbf8986f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cameo-lighting.webp",
+          "alt": "Cameo Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+          "alt": "Hard Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Cameo lighting is isolation; a spotlight is one hard instrument that can create that isolation with a visible circle. Hard light is the quality.Top light may come from above without a circular shuttered pool. Cross lighting is two concert keys, not necessarily irised spots.Epiphany is a story-timed change, which a spotlight snap can serve.Cameo LightingErase the world. Keep the person.Hard LightGrit, noon sun, or interrogation.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Whiplash puts players in hard stage pools. Birdman's theatre scenes treat follow spots and stage lamps as the world of the act."
+        },
+        {
+          "type": "paragraph",
+          "text": "The edge of the circle is the set line."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Whiplash puts players in hard stage pools. Birdman's theatre scenes treat follow spots and stage lamps as the world of the act.The edge of the circle is the set line."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand a hard pool and a dark surround. \" Mention a visible circle or shuttered edge."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a large soft wrap."
+        },
+        {
+          "type": "quote",
+          "text": "Spotlight on [Subject], a hard pool, theater darkness around, the person as an act."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Spotlight+on+[Subject],+a+hard+pool,+theater+darkness+around,+the+person+as+an+act."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Demand a hard pool and a dark surround. \" Mention a visible circle or shuttered edge.Forbid a large soft wrap.Copy promptUse in Image GeneratorSpotlight on [Subject], a hard pool, theater darkness around, the person as an act.Spotlight on [Subject], a hard pool, theater darkness around, the person as an act."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a soft cameo or a general hard key. The tell is no circle, or wrap that lights the floor evenly.",
+          "links": [
+            {
+              "text": "cameo",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            },
+            {
+              "text": "hard",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by irising a focused fixture and letting the edge of the pool be visible."
+        }
+      ],
+      "links": [
+        {
+          "text": "cameo",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "hard",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a soft cameo or a general hard key. The tell is no circle, or wrap that lights the floor evenly.Fix it by irising a focused fixture and letting the edge of the pool be visible."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a spotlight in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A focused, hard-edged pool from a theatrical or similar instrument, with darkness around. The subject stands in a circle of light."
+        },
+        {
+          "type": "heading",
+          "text": "Spotlight vs cameo lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A spotlight is the instrument and its hard pool. Cameo is the result of isolating a modeled figure on black, which can also be done with a softer key and no visible circle."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a spotlight?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for stage, concert, and any beat where stepping out of the circle leaves the scene. Skip it in ordinary rooms with no such lamp."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a spotlight for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify a hard pool, theater darkness around, a visible circular or shuttered edge. The person is an act. No soft wrap on the floor."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a spotlight in film?A focused, hard-edged pool from a theatrical or similar instrument, with darkness around. The subject stands in a circle of light.Spotlight vs cameo lightingA spotlight is the instrument and its hard pool. Cameo is the result of isolating a modeled figure on black, which can also be done with a softer key and no visible circle.When should I use a spotlight?Use it for stage, concert, and any beat where stepping out of the circle leaves the scene. Skip it in ordinary rooms with no such lamp.How do I prompt a spotlight for AI image or video?Specify a hard pool, theater darkness around, a visible circular or shuttered edge. The person is an act. No soft wrap on the floor."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Demand a hard pool and a dark surround. \" Mention a visible circle or shuttered edge.",
+      "Forbid a large soft wrap."
+    ],
+    "example": "Spotlight on [Subject], a hard pool, theater darkness around, the person as an act."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/df3e5eff7eaea1acab80a44eca617070.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/spotlight.webp",
+      "alt": "Spotlight example"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb2b22619f7f3f03ae5875d0cbf8986f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cameo-lighting.webp",
+      "alt": "Cameo Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+      "alt": "Hard Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/af3c0d7152b7e8c5b31b94ae9ff56173.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/spotlight/hero.jpg",
+      "alt": "Spotlight",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "914895ea4326d58d3f254fb866ca793605c301192a34202ecf829c3f5f7a25c6"
+}

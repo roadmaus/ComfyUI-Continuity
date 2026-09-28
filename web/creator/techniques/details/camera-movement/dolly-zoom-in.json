@@ -1,0 +1,399 @@
+{
+  "id": "camera-movement/dolly-zoom-in",
+  "slug": "dolly-zoom-in",
+  "title": "Dolly Zoom In",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom-in",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-zoom-in-dolly-zoom-in-mini.webp",
+  "detail": "details/camera-movement/dolly-zoom-in.json",
+  "aliases": [],
+  "description": "A dolly zoom in approaches on wheels while the lens zooms out, so the figure holds or grows as the background warps inward. Counter-zoom is the point: size and space disagree.",
+  "thumbnail": "media/f0968f981885efb32c174b7c57dd47a5.webp",
+  "video": "media/4028a87d0c620f2d882451c906452948.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolly-zoom-in-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Approach that makes the world sick. The person stays large or grows while the room or street stretches and recedes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Vertigo as getting closer. A plain push-in keeps perspective honest."
+        },
+        {
+          "type": "paragraph",
+          "text": "A plain zoom-out shrinks the person. The compound is the disagreement."
+        },
+        {
+          "type": "paragraph",
+          "text": "If either half is missing, you do not have the warp."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Approach that makes the world sick. The person stays large or grows while the room or street stretches and recedes.Vertigo as getting closer. A plain push-in keeps perspective honest.A plain zoom-out shrinks the person. The compound is the disagreement.If either half is missing, you do not have the warp."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dolly in along the lens axis while zooming toward a wider focal length, timed so subject size holds or grows. Background perspective opens (more wide-angle) as you near, which reads as the world warping inward or falling away."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Dolly zoom in on [Subject], counter-zoom so the figure grows while the background warps inward, vertigo as approach."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Dolly in along the lens axis while zooming toward a wider focal length, timed so subject size holds or grows. Background perspective opens (more wide-angle) as you near, which reads as the world warping inward or falling away.Prompt: Dolly zoom in on [Subject], counter-zoom so the figure grows while the background warps inward, vertigo as approach."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a realization that arrives as nausea while you approach. Do not use it on a walk that only needs a dolly."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a realization that arrives as nausea while you approach. Do not use it on a walk that only needs a dolly."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dolly Zoom is the parent compound. Push In translates without the opposite zoom.",
+          "links": [
+            {
+              "text": "Dolly Zoom",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom"
+            },
+            {
+              "text": "Push In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly Zoom Out reverses the pair: retreat while zooming in, space yawning the other way.",
+          "links": [
+            {
+              "text": "Dolly Zoom Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly ZoomA realization that the ground is not stable. Use once.",
+          "displayText": "Dolly Zoom\nA realization that the ground is not stable. Use once.",
+          "links": [
+            {
+              "text": "Dolly ZoomA realization that the ground is not stable. Use once.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Push InA thought lands. Do not rush it.",
+          "displayText": "Push In\nA thought lands. Do not rush it.",
+          "links": [
+            {
+              "text": "Push InA thought lands. Do not rush it.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Zoom",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom"
+        },
+        {
+          "text": "Push In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+        },
+        {
+          "text": "Dolly Zoom Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom-out"
+        },
+        {
+          "text": "Dolly ZoomA realization that the ground is not stable. Use once.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom"
+        },
+        {
+          "text": "Push InA thought lands. Do not rush it.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9bfde942aacd6bd3cf29bdf633c0744b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-zoom-001-dolly-zoom-mini.webp",
+          "alt": "Dolly Zoom"
+        },
+        {
+          "kind": "video",
+          "path": "media/2443c10f4fa2c3ab2067b035732d8843.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/001-dolly-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/47c873ce3b75c118eebcc03f9ebba030.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/push-in-push-in-mini.webp",
+          "alt": "Push In"
+        },
+        {
+          "kind": "video",
+          "path": "media/ff1d0cd1ffd7716264b1bf880a5b857a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/push-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Dolly Zoom is the parent compound. Push In translates without the opposite zoom.Dolly Zoom Out reverses the pair: retreat while zooming in, space yawning the other way.Dolly ZoomA realization that the ground is not stable. Use once.Push InA thought lands. Do not rush it.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Jaws uses the beach shock as an approach that makes the world recede around a still-large face. Vertigo names the warp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Goodfellas uses a diner compound as the ground dropping under a thought. Grammar: size and space at odds."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Jaws uses the beach shock as an approach that makes the world recede around a still-large face. Vertigo names the warp.Goodfellas uses a diner compound as the ground dropping under a thought. Grammar: size and space at odds."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write both halves. Still: Dolly zoom in on [Subject], counter-zoom so the figure grows while the background warps inward, vertigo as approach."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Dolly in while zooming out on [Subject] so size holds or grows as space warps. Name both moves."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a plain push."
+        },
+        {
+          "type": "quote",
+          "text": "Dolly in while zooming out on [Subject] so size holds or grows as space warps."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Dolly+in+while+zooming+out+on+[Subject]+so+size+holds+or+grows+as+space+warps."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write both halves. Still: Dolly zoom in on [Subject], counter-zoom so the figure grows while the background warps inward, vertigo as approach.Video: Dolly in while zooming out on [Subject] so size holds or grows as space warps. Name both moves.Forbid a plain push.Copy promptUse in Video GeneratorDolly in while zooming out on [Subject] so size holds or grows as space warps.Dolly in while zooming out on [Subject] so size holds or grows as space warps."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a push-in or a zoom. The tell: the person grows and the background grows with them, or the person shrinks."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: dolly in plus zoom out, subject size held or growing, background perspective warping."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a push-in or a zoom. The tell: the person grows and the background grows with them, or the person shrinks.The fix: dolly in plus zoom out, subject size held or growing, background perspective warping."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dolly Zoom In in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dolly zoom in dollies toward the subject while zooming out, so the figure holds or grows as the background warps. Size and space disagree."
+        },
+        {
+          "type": "heading",
+          "text": "Dolly Zoom In vs Push In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A push-in approaches with honest perspective. Dolly zoom in adds an opposite zoom so the world warps while the person stays large or grows."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dolly Zoom In?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for an approach that should feel sick: a realization, a threat arriving. Do not use it as default coverage."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dolly Zoom In for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write dolly in plus zoom out. Example: Dolly zoom in on [Subject], counter-zoom so the figure grows while the background warps inward."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dolly Zoom In in film?A dolly zoom in dollies toward the subject while zooming out, so the figure holds or grows as the background warps. Size and space disagree.Dolly Zoom In vs Push InA push-in approaches with honest perspective. Dolly zoom in adds an opposite zoom so the world warps while the person stays large or grows.When should I use Dolly Zoom In?Use it for an approach that should feel sick: a realization, a threat arriving. Do not use it as default coverage.How do I prompt Dolly Zoom In for AI image or video?Write dolly in plus zoom out. Example: Dolly zoom in on [Subject], counter-zoom so the figure grows while the background warps inward."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write both halves. Still: Dolly zoom in on [Subject], counter-zoom so the figure grows while the background warps inward, vertigo as approach.",
+      "Video: Dolly in while zooming out on [Subject] so size holds or grows as space warps. Name both moves.",
+      "Forbid a plain push."
+    ],
+    "example": "Dolly in while zooming out on [Subject] so size holds or grows as space warps."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/4028a87d0c620f2d882451c906452948.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolly-zoom-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f0968f981885efb32c174b7c57dd47a5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-zoom-in-dolly-zoom-in-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/77039dd771373649eae964f7fd08a343.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/dolly-zoom-in.jpg",
+      "alt": "Dolly Zoom In frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/9bfde942aacd6bd3cf29bdf633c0744b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-zoom-001-dolly-zoom-mini.webp",
+      "alt": "Dolly Zoom"
+    },
+    {
+      "kind": "video",
+      "path": "media/2443c10f4fa2c3ab2067b035732d8843.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/001-dolly-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47c873ce3b75c118eebcc03f9ebba030.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/push-in-push-in-mini.webp",
+      "alt": "Push In"
+    },
+    {
+      "kind": "video",
+      "path": "media/ff1d0cd1ffd7716264b1bf880a5b857a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/push-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4ff0645e355e100bbd21e27ddf3934d9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-zoom-in/hero.jpg",
+      "alt": "Dolly Zoom In",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "fe6e5ef0e3b33e1747b51168c665d3b8a3537ff36045817279466e66085fb260"
+}

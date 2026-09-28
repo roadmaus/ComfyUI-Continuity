@@ -1,0 +1,385 @@
+{
+  "id": "effects/anamorphic-flare",
+  "slug": "anamorphic-flare",
+  "title": "Anamorphic Flare",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/anamorphic-flare",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+  "detail": "details/effects/anamorphic-flare.json",
+  "aliases": [],
+  "description": "An anamorphic flare is a horizontal streak produced when a bright point hits the cylindrical elements of an anamorphic lens. It is a subset of lens flare, not a general haze, and it usually arrives with oval bokeh from the same squeeze.",
+  "thumbnail": "media/dd60ac3e349447877925814c6440f811.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Night lamps and headlights write a bar across the frame because the front optic stretches one axis. The streak is cyan, blue, or magenta depending on coatings, and it stays level with the squeezed world."
+        },
+        {
+          "type": "paragraph",
+          "text": "Oval highlights in the background confirm the same glass. Use it when the night should be written on the taking lens: wet streets, neon, a car coming toward camera."
+        },
+        {
+          "type": "paragraph",
+          "text": "The streak is evidence of scope optics, not of brightness alone. It is the wrong tool in spherical coverage, or when you want a circular ghost of the iris."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the bokeh is round and the streak is a random rainbow, you have mixed two lens families."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Night lamps and headlights write a bar across the frame because the front optic stretches one axis. The streak is cyan, blue, or magenta depending on coatings, and it stays level with the squeezed world.Oval highlights in the background confirm the same glass. Use it when the night should be written on the taking lens: wet streets, neon, a car coming toward camera.The streak is evidence of scope optics, not of brightness alone. It is the wrong tool in spherical coverage, or when you want a circular ghost of the iris.If the bokeh is round and the streak is a random rainbow, you have mixed two lens families."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shoot anamorphic (typically 2x squeeze). Put a hard point source in or near frame: headlight, practical, sun."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the cylindrical axis consistent so streaks stay horizontal. Coatings and the front element decide color and length."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stop down and ovals become more polygonal. In a prompt, say horizontal anamorphic streak, name the hue, and demand oval bokeh, not round discs."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Shoot anamorphic (typically 2x squeeze). Put a hard point source in or near frame: headlight, practical, sun.Keep the cylindrical axis consistent so streaks stay horizontal. Coatings and the front element decide color and length.Stop down and ovals become more polygonal. In a prompt, say horizontal anamorphic streak, name the hue, and demand oval bokeh, not round discs."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A car cresting a wet overpass at night, headlights drawing cyan bars through a figure in a raincoat. Do not add horizontal streaks to a spherical 50mm close-up with round bokeh."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A car cresting a wet overpass at night, headlights drawing cyan bars through a figure in a raincoat. Do not add horizontal streaks to a spherical 50mm close-up with round bokeh."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lens Flare covers ghosts, veiling, and spherical scatter. Anamorphic flare is the horizontal bar from cylindrical glass.",
+          "links": [
+            {
+              "text": "Lens Flare",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Anamorphic is the lens format itself: squeeze, oval bokeh, and the flare are consequences. Bokeh is the out-of-focus disc shape.",
+          "links": [
+            {
+              "text": "Anamorphic",
+              "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+            },
+            {
+              "text": "Bokeh",
+              "url": "https://melies.co/cinematic-techniques/effects/bokeh"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Oval discs support the claim. Round discs contradict it."
+        },
+        {
+          "type": "list-item",
+          "text": "AnamorphicYou want the frame to announce it is a movie.",
+          "displayText": "Anamorphic\nYou want the frame to announce it is a movie.",
+          "links": [
+            {
+              "text": "AnamorphicYou want the frame to announce it is a movie.",
+              "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "displayText": "Halation\nHighlights should bleed like film, not clip like video.",
+          "links": [
+            {
+              "text": "HalationHighlights should bleed like film, not clip like video.",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Lens Flare",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "Anamorphic",
+          "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+        },
+        {
+          "text": "Bokeh",
+          "url": "https://melies.co/cinematic-techniques/effects/bokeh"
+        },
+        {
+          "text": "AnamorphicYou want the frame to announce it is a movie.",
+          "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b11a08fb15e0ac7dcd89ec2184cb65da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-057-anamorphic-optical-character-mini.webp",
+          "alt": "Anamorphic"
+        },
+        {
+          "kind": "video",
+          "path": "media/df5fddd2498117a9636a23f7270ff4b4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/057-anamorphic-optical-character-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+          "alt": "Halation"
+        },
+        {
+          "kind": "video",
+          "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Lens Flare covers ghosts, veiling, and spherical scatter. Anamorphic flare is the horizontal bar from cylindrical glass.Anamorphic is the lens format itself: squeeze, oval bokeh, and the flare are consequences. Bokeh is the out-of-focus disc shape.Oval discs support the claim. Round discs contradict it.AnamorphicYou want the frame to announce it is a movie.Lens FlareLight is too strong to be polite.HalationHighlights should bleed like film, not clip like video."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blade Runner lets neon and headlights write on anamorphic glass. J."
+        },
+        {
+          "type": "paragraph",
+          "text": "Abrams films push the horizontal streak until it becomes a signature. Super 8 (2011) uses the same family of bars as period scope language."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Blade Runner lets neon and headlights write on anamorphic glass. J.Abrams films push the horizontal streak until it becomes a signature. Super 8 (2011) uses the same family of bars as period scope language."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "State squeeze and streak axis. Example: Horizontal anamorphic flares streaking through [Subject], cyan or magenta bars from headlights or neon, oval bokeh, 2x squeeze, not round spherical ghosts."
+        },
+        {
+          "type": "quote",
+          "text": "Horizontal anamorphic flares streaking through [Subject], cyan or magenta bars, oval bokeh, scope cinema signature."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Horizontal+anamorphic+flares+streaking+through+[Subject],+cyan+or+magenta+bars,+oval+bokeh,+scope+cinema+signature."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it State squeeze and streak axis. Example: Horizontal anamorphic flares streaking through [Subject], cyan or magenta bars from headlights or neon, oval bokeh, 2x squeeze, not round spherical ghosts.Copy promptUse in Image GeneratorHorizontal anamorphic flares streaking through [Subject], cyan or magenta bars, oval bokeh, scope cinema signature.Horizontal anamorphic flares streaking through [Subject], cyan or magenta bars, oval bokeh, scope cinema signature."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: generic lens flare or a spherical rainbow. Tell: round bokeh with a pasted horizontal bar that ignores source position."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: match oval highlights, keep streaks horizontal, and lock them to a pictured point source."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: generic lens flare or a spherical rainbow. Tell: round bokeh with a pasted horizontal bar that ignores source position.Fix: match oval highlights, keep streaks horizontal, and lock them to a pictured point source."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is anamorphic flare in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A horizontal streak from light hitting cylindrical anamorphic elements. It is optical, usually paired with oval bokeh from the same squeeze."
+        },
+        {
+          "type": "heading",
+          "text": "Anamorphic flare vs lens flare",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Lens flare is any scatter in the optic. Anamorphic flare is specifically the long horizontal bar of squeezed glass, not circular ghosts or a general veil."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use anamorphic flare?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When night points (headlights, neon, practicals) should write on scope glass. Do not use it on spherical lenses with round bokeh."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt anamorphic flare for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for horizontal streaks, a named hue, oval bokeh, and a point source in or near frame. Ban round discs and floating rainbows."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is anamorphic flare in film?A horizontal streak from light hitting cylindrical anamorphic elements. It is optical, usually paired with oval bokeh from the same squeeze.Anamorphic flare vs lens flareLens flare is any scatter in the optic. Anamorphic flare is specifically the long horizontal bar of squeezed glass, not circular ghosts or a general veil.When should I use anamorphic flare?When night points (headlights, neon, practicals) should write on scope glass. Do not use it on spherical lenses with round bokeh.How do I prompt anamorphic flare for AI image or video?Ask for horizontal streaks, a named hue, oval bokeh, and a point source in or near frame. Ban round discs and floating rainbows."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "State squeeze and streak axis. Example: Horizontal anamorphic flares streaking through [Subject], cyan or magenta bars from headlights or neon, oval bokeh, 2x squeeze, not round spherical ghosts."
+    ],
+    "example": "Horizontal anamorphic flares streaking through [Subject], cyan or magenta bars, oval bokeh, scope cinema signature."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/dd60ac3e349447877925814c6440f811.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+      "alt": "Anamorphic Flare example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b11a08fb15e0ac7dcd89ec2184cb65da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-057-anamorphic-optical-character-mini.webp",
+      "alt": "Anamorphic"
+    },
+    {
+      "kind": "video",
+      "path": "media/df5fddd2498117a9636a23f7270ff4b4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/057-anamorphic-optical-character-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+      "alt": "Halation"
+    },
+    {
+      "kind": "video",
+      "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bc8cb113e5008c5f6c4cd66f8d6428ac.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/anamorphic-flare/hero.jpg",
+      "alt": "Anamorphic Flare",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "08c49a1f6908fdcccf626b6177e1fd20432953791748a5ddeefc2e910ffef4ea"
+}

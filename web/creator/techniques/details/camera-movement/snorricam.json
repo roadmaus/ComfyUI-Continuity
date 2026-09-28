@@ -1,0 +1,453 @@
+{
+  "id": "camera-movement/snorricam",
+  "slug": "snorricam",
+  "title": "SnorriCam",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/snorricam",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snorricam-018-body-mounted-face-camera-mini.webp",
+  "detail": "details/camera-movement/snorricam.json",
+  "aliases": [
+    "body cam mount",
+    "chest rig",
+    "body rig",
+    "Body-cam facing the actor"
+  ],
+  "description": "A SnorriCam fixes the camera to the performer's body so the body remains stable relative to frame while the world moves. A rig points back at the wearer: the face stays pinned, the environment pitches around it.",
+  "thumbnail": "media/a377ca603c759f0f3e573588303d2336.webp",
+  "video": "media/03868d02fedb015bdcc173c26c4c7b3e.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/018-body-mounted-face-camera-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Trap the audience in a body that cannot get out. Panic, intoxication, or dissociation becomes spatial because the person is locked to the image and the street will not sit still."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a first-person view of what they see. A SnorriCam faces the wearer."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not a body-cam showing the world, and it is not a follow from behind."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Trap the audience in a body that cannot get out. Panic, intoxication, or dissociation becomes spatial because the person is locked to the image and the street will not sit still.It is the wrong tool for a first-person view of what they see. A SnorriCam faces the wearer.It is not a body-cam showing the world, and it is not a follow from behind."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use a safely fitted lightweight body rig, or reproduce the relative motion in a virtual scene. Preserve tiny bodily movements without letting the face float independently of the torso."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a SnorriCam body-mounted on the subject, camera locked to the torso, face pinned, world sloshing behind."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Use a safely fitted lightweight body rig, or reproduce the relative motion in a virtual scene. Preserve tiny bodily movements without letting the face float independently of the torso.Prompt a SnorriCam body-mounted on the subject, camera locked to the torso, face pinned, world sloshing behind."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to trap the audience in a body that cannot get out. Concrete beat: a panicked walk down a sidewalk, pupils steady in frame, storefronts shearing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it as POV of the sidewalk."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to trap the audience in a body that cannot get out. Concrete beat: a panicked walk down a sidewalk, pupils steady in frame, storefronts shearing.Do not use it as POV of the sidewalk."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Point of View shows what they look at, from beside or as them. Handheld is an operator nearby, not bolted to the chest.",
+          "links": [
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            },
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Locked-On glues the camera to a subject that may not be the wearer, often from outside a vehicle or a fall. SnorriCam is body-mounted and facing the actor.",
+          "links": [
+            {
+              "text": "Locked-On",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Point of ViewForce identification. The audience is the character.",
+          "displayText": "Point of View\nForce identification. The audience is the character.",
+          "links": [
+            {
+              "text": "Point of ViewForce identification. The audience is the character.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "displayText": "Handheld\nUrgency, documentary truth, or a mind that cannot sit still.",
+          "links": [
+            {
+              "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Locked-On",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+        },
+        {
+          "text": "Point of ViewForce identification. The audience is the character.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/33e364cb93ac77f7bba981d6a44b2dad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pov-090-subjective-optical-pov-mini.webp",
+          "alt": "Point of View"
+        },
+        {
+          "kind": "video",
+          "path": "media/ad782c8d50b2a756b366df24f8816406.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/090-subjective-optical-pov-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+          "alt": "Handheld"
+        },
+        {
+          "kind": "video",
+          "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Point of View shows what they look at, from beside or as them. Handheld is an operator nearby, not bolted to the chest.Locked-On glues the camera to a subject that may not be the wearer, often from outside a vehicle or a fall. SnorriCam is body-mounted and facing the actor.Point of ViewForce identification. The audience is the character.HandheldUrgency, documentary truth, or a mind that cannot sit still.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Requiem for a Dream uses body-mounted shots during panic and disorientation. Pi destabilizes Max's movement through the city with a pinned face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mean Streets is part of the same body-rig family. Face stable, world not: that is the grammar."
+        },
+        {
+          "type": "list-item",
+          "text": "Requiem for a Dream 2000Body-mounted shots during panic and disorientation.",
+          "displayText": "Requiem for a Dream 2000\nBody-mounted shots during panic and disorientation."
+        },
+        {
+          "type": "list-item",
+          "text": "Pi 1998Max’s destabilized movement through the city.",
+          "displayText": "Pi 1998\nMax’s destabilized movement through the city."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/62cbbe05791c432d640d5c9e8df2df63.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/snorricam/famous/00-requiem-for-a-dream-2000.jpg",
+          "alt": "Requiem for a Dream 2000"
+        },
+        {
+          "kind": "image",
+          "path": "media/3bffe3e43c4118bb53c0a2abceaab53e.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/snorricam/famous/01-pi-1998.jpg",
+          "alt": "Pi 1998"
+        }
+      ],
+      "sourceText": "In film Requiem for a Dream uses body-mounted shots during panic and disorientation. Pi destabilizes Max's movement through the city with a pinned face.Mean Streets is part of the same body-rig family. Face stable, world not: that is the grammar.Requiem for a Dream 2000Body-mounted shots during panic and disorientation.Pi 1998Max’s destabilized movement through the city."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "SnorriCam body-mounted on [Subject], camera locked to the torso so the face stays pinned while the world sloshes behind, subjective intoxication or panic. For motion: body-mounted camera locked to [Subject]'s torso."
+        },
+        {
+          "type": "paragraph",
+          "text": "The face stays centered while the background slides wildly."
+        },
+        {
+          "type": "quote",
+          "text": "A frightened commuter walks quickly through a tiled tunnel. Body-mounted camera facing him: face and shoulders stay locked in the center while the corridor tilts and bobs with every step. Wide-angle proximity, natural strain, no free camera orbit and no normal handheld tracking."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+frightened+commuter+walks+quickly+through+a+tiled+tunnel.+Body-mounted+camera+facing+him:+face+and+shoulders+stay+locked+in+the+center+while+the+corridor+tilts+and+bobs+with+every+step.+Wide-angle+proximity,+natural+strain,+no+free+camera+orbit+and+no+normal+handheld+tracking."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it SnorriCam body-mounted on [Subject], camera locked to the torso so the face stays pinned while the world sloshes behind, subjective intoxication or panic. For motion: body-mounted camera locked to [Subject]'s torso.The face stays centered while the background slides wildly.Copy promptUse in Video GeneratorA frightened commuter walks quickly through a tiled tunnel. Body-mounted camera facing him: face and shoulders stay locked in the center while the corridor tilts and bobs with every step. Wide-angle proximity, natural strain, no free camera orbit and no normal handheld tracking.A frightened commuter walks quickly through a tiled tunnel. Body-mounted camera facing him: face and shoulders stay locked in the center while the corridor tilts and bobs with every step. Wide-angle proximity, natural strain, no free camera orbit and no normal handheld tracking."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Point of View or a Follow Shot from behind. The tell is seeing the street as the actor would, or seeing their back.",
+          "links": [
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            },
+            {
+              "text": "Follow Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: camera on the body, pointed at the face, background shearing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Follow Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Point of View or a Follow Shot from behind. The tell is seeing the street as the actor would, or seeing their back.The fix: camera on the body, pointed at the face, background shearing."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is SnorriCam in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a camera rigged to the performer and aimed at them, so their face stays oddly stable while the environment moves around it."
+        },
+        {
+          "type": "heading",
+          "text": "SnorriCam vs Point of View",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "POV shows what the person sees. SnorriCam shows the person, locked to their torso, with the world unmoored behind them."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use SnorriCam?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When panic, drugs, or dissociation should trap us in a body. Do not use it as a helmet-cam of the street."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt SnorriCam for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write body-mounted camera locked to the torso, face centered and pinned, background sliding wildly. Ban POV of the environment."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is SnorriCam in film?It is a camera rigged to the performer and aimed at them, so their face stays oddly stable while the environment moves around it.SnorriCam vs Point of ViewPOV shows what the person sees. SnorriCam shows the person, locked to their torso, with the world unmoored behind them.When should I use SnorriCam?When panic, drugs, or dissociation should trap us in a body. Do not use it as a helmet-cam of the street.How do I prompt SnorriCam for AI image or video?Write body-mounted camera locked to the torso, face centered and pinned, background sliding wildly. Ban POV of the environment."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "SnorriCam body-mounted on [Subject], camera locked to the torso so the face stays pinned while the world sloshes behind, subjective intoxication or panic. For motion: body-mounted camera locked to [Subject]'s torso.",
+      "The face stays centered while the background slides wildly."
+    ],
+    "example": "A frightened commuter walks quickly through a tiled tunnel. Body-mounted camera facing him: face and shoulders stay locked in the center while the corridor tilts and bobs with every step. Wide-angle proximity, natural strain, no free camera orbit and no normal handheld tracking."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/03868d02fedb015bdcc173c26c4c7b3e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/018-body-mounted-face-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a377ca603c759f0f3e573588303d2336.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snorricam-018-body-mounted-face-camera-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dfcbd172a8af63630437b44d356fa214.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/snorricam.jpg",
+      "alt": "SnorriCam frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/33e364cb93ac77f7bba981d6a44b2dad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pov-090-subjective-optical-pov-mini.webp",
+      "alt": "Point of View"
+    },
+    {
+      "kind": "video",
+      "path": "media/ad782c8d50b2a756b366df24f8816406.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/090-subjective-optical-pov-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+      "alt": "Handheld"
+    },
+    {
+      "kind": "video",
+      "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/62cbbe05791c432d640d5c9e8df2df63.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/snorricam/famous/00-requiem-for-a-dream-2000.jpg",
+      "alt": "Requiem for a Dream 2000"
+    },
+    {
+      "kind": "image",
+      "path": "media/3bffe3e43c4118bb53c0a2abceaab53e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/snorricam/famous/01-pi-1998.jpg",
+      "alt": "Pi 1998"
+    },
+    {
+      "kind": "image",
+      "path": "media/386c3b4a439c0db6230d07befbedf8b4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/snorricam/hero.jpg",
+      "alt": "SnorriCam",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "8e75ae638380fb267805bc9ca172f0f40bb51414627515ca274ca5128221dcd9"
+}

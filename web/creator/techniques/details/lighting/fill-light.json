@@ -1,0 +1,377 @@
+{
+  "id": "lighting/fill-light",
+  "slug": "fill-light",
+  "title": "Fill Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/fill-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fill-light.webp",
+  "detail": "details/lighting/fill-light.json",
+  "aliases": [],
+  "description": "Fill light reduces contrast or adds detail in areas the key does not reach, usually from the opposite side and at a lower level. It is a ratio tool, not a second sun.",
+  "thumbnail": "media/bf5c953c02683c6a73c9786a0e1cebe6.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In a scene fill decides how much of the dark you can still read: the far eye, the wall, a hand in a lap. A high fill ratio (close to the key) feels open and public."
+        },
+        {
+          "type": "paragraph",
+          "text": "A low fill ratio keeps mystery without crushing the face to a cut-out. It is the wrong tool when you want graphic black, or when bounce from the room already does the job."
+        },
+        {
+          "type": "paragraph",
+          "text": "Adding a frontal fill because a monitor looks noisy just flattens the key you spent an hour placing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function In a scene fill decides how much of the dark you can still read: the far eye, the wall, a hand in a lap. A high fill ratio (close to the key) feels open and public.A low fill ratio keeps mystery without crushing the face to a cut-out. It is the wrong tool when you want graphic black, or when bounce from the room already does the job.Adding a frontal fill because a monitor looks noisy just flattens the key you spent an hour placing."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put fill opposite the key, larger and softer than the key so it does not cast a competing nose shadow. Control it with distance, scrim, or dimmer; common portrait ratios run from about 2:1 (gentle) to 8:1 (lean)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is often a touch cooler or neutral versus a warm key so the shadow side does not go orange. Bounce off a wall can be the fill with no extra lamp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Soft fill light opening the shadow side of [Subject] without flattening, a low ratio that keeps eyes alive."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put fill opposite the key, larger and softer than the key so it does not cast a competing nose shadow. Control it with distance, scrim, or dimmer; common portrait ratios run from about 2:1 (gentle) to 8:1 (lean).Color is often a touch cooler or neutral versus a warm key so the shadow side does not go orange. Bounce off a wall can be the fill with no extra lamp.Prompt: Soft fill light opening the shadow side of [Subject] without flattening, a low ratio that keeps eyes alive."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a keyed close-up still needs the far iris and cheek pore, for example an interview after a hard window key. Do not pour fill in until both cheeks match."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a keyed close-up still needs the far iris and cheek pore, for example an interview after a hard window key. Do not pour fill in until both cheeks match."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The key light sets direction; fill only answers it. Bounce light is a method that often becomes fill.",
+          "links": [
+            {
+              "text": "key light",
+              "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+            },
+            {
+              "text": "Bounce light",
+              "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "High-key lighting uses a lot of fill across the whole frame, not a single cheek opener. Eye light is smaller still: a catchlight, not a shadow-side wash.",
+          "links": [
+            {
+              "text": "High-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            },
+            {
+              "text": "Eye light",
+              "url": "https://melies.co/cinematic-techniques/lighting/eye-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Key LightDecide where the world is lit from. Everything else follows.",
+          "displayText": "Key Light\nDecide where the world is lit from. Everything else follows.",
+          "links": [
+            {
+              "text": "Key LightDecide where the world is lit from. Everything else follows.",
+              "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+          "displayText": "High-Key Lighting\nComedy, heaven, hospital, or candy.",
+          "links": [
+            {
+              "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "key light",
+          "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+        },
+        {
+          "text": "Bounce light",
+          "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+        },
+        {
+          "text": "High-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Eye light",
+          "url": "https://melies.co/cinematic-techniques/lighting/eye-light"
+        },
+        {
+          "text": "Key LightDecide where the world is lit from. Everything else follows.",
+          "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+        },
+        {
+          "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/060335b879d527a7f44190f4b1d160cf.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/key-light.webp",
+          "alt": "Key Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/633961526d0799af2b516a1929d04ff7.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-key-064-high-key-brightness-mini.webp",
+          "alt": "High-Key Lighting"
+        },
+        {
+          "kind": "video",
+          "path": "media/501404f06979d708f24c98a578ccaf9a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/064-high-key-brightness-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots The key light sets direction; fill only answers it. Bounce light is a method that often becomes fill.High-key lighting uses a lot of fill across the whole frame, not a single cheek opener. Eye light is smaller still: a catchlight, not a shadow-side wash.Key LightDecide where the world is lit from. Everything else follows.High-Key LightingComedy, heaven, hospital, or candy.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Classical portrait cinematography, including close-ups in Casablanca, keeps enough fill for both eyes without erasing the key. The Age of Innocence uses soft interior fill so period rooms stay readable while lamps still feel like the source."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the ratio, not the wallpaper."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Classical portrait cinematography, including close-ups in Casablanca, keeps enough fill for both eyes without erasing the key. The Age of Innocence uses soft interior fill so period rooms stay readable while lamps still feel like the source.Borrow the ratio, not the wallpaper."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say which cheek opens and how little. \" Add 2:1 or 4:1 if you need a number."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not ask for bright even light if you still want a key."
+        },
+        {
+          "type": "quote",
+          "text": "Soft fill light opening the shadow side of [Subject] without flattening, a low ratio that keeps eyes alive."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Soft+fill+light+opening+the+shadow+side+of+[Subject]+without+flattening,+a+low+ratio+that+keeps+eyes+alive."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say which cheek opens and how little. \" Add 2:1 or 4:1 if you need a number.Do not ask for bright even light if you still want a key.Copy promptUse in Image GeneratorSoft fill light opening the shadow side of [Subject] without flattening, a low ratio that keeps eyes alive.Soft fill light opening the shadow side of [Subject] without flattening, a low ratio that keeps eyes alive."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a second key from camera right. The tell is a second nose shadow or a shadowless face.",
+          "links": [
+            {
+              "text": "key",
+              "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by making fill larger, dimmer, and shadowless, or by bouncing it."
+        }
+      ],
+      "links": [
+        {
+          "text": "key",
+          "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a second key from camera right. The tell is a second nose shadow or a shadowless face.Fix it by making fill larger, dimmer, and shadowless, or by bouncing it."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is fill light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Light that reduces contrast or adds detail where the key does not reach. It is dimmer and usually softer than the key."
+        },
+        {
+          "type": "heading",
+          "text": "Fill light vs bounce light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fill is the job (open the shadows). Bounce is a method (reflect the key off a surface) that often performs that job."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use fill light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the keyed shadow side must stay readable. Skip it when the story wants deep, clean shadow."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt fill light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the shadow side and a low ratio. Example: soft fill on camera right, two stops under the key, eyes still visible, cheeks not even."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is fill light in film?Light that reduces contrast or adds detail where the key does not reach. It is dimmer and usually softer than the key.Fill light vs bounce lightFill is the job (open the shadows). Bounce is a method (reflect the key off a surface) that often performs that job.When should I use fill light?Use it when the keyed shadow side must stay readable. Skip it when the story wants deep, clean shadow.How do I prompt fill light for AI image or video?Name the shadow side and a low ratio. Example: soft fill on camera right, two stops under the key, eyes still visible, cheeks not even."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say which cheek opens and how little. \" Add 2:1 or 4:1 if you need a number.",
+      "Do not ask for bright even light if you still want a key."
+    ],
+    "example": "Soft fill light opening the shadow side of [Subject] without flattening, a low ratio that keeps eyes alive."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/bf5c953c02683c6a73c9786a0e1cebe6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fill-light.webp",
+      "alt": "Fill Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/060335b879d527a7f44190f4b1d160cf.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/key-light.webp",
+      "alt": "Key Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/633961526d0799af2b516a1929d04ff7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-key-064-high-key-brightness-mini.webp",
+      "alt": "High-Key Lighting"
+    },
+    {
+      "kind": "video",
+      "path": "media/501404f06979d708f24c98a578ccaf9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/064-high-key-brightness-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/98fbe50d13e4a67ba54801f69c6a46e7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fill-light/hero.jpg",
+      "alt": "Fill Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "6630d6dfea22234b99fd2e43957944fe3ba2164bb4797419cc39fcc6c43f0324"
+}

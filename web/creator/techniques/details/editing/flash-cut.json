@@ -1,0 +1,477 @@
+{
+  "id": "editing/flash-cut",
+  "slug": "flash-cut",
+  "title": "Flash Cut",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/flash-cut",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/flash-cut-03-flash-cut-mini.webp",
+  "detail": "details/editing/flash-cut.json",
+  "aliases": [
+    "Future presented as memory"
+  ],
+  "description": "A flash cut interrupts the present image with a few frames of another picture, then returns or races on before the insert can be studied. One side of the join is the ongoing scene; the other is lightning: a thought, a future, a wound, lasting a blink.",
+  "thumbnail": "media/0466a9cd31ca195d7074a1f111fed0fb.webp",
+  "video": "media/3f8d190b8a2f9ff5c53e4150c8ccaccd.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-flash-cut-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face in a room. Three frames of a well, a tape, a child."
+        },
+        {
+          "type": "paragraph",
+          "text": "The room again. You cannot inventory what you saw, but it has already happened to you."
+        },
+        {
+          "type": "paragraph",
+          "text": "A thought that lasts three frames. Use it for intrusion: prophecy wearing the clothes of memory, a trauma tic, a subliminal threat."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the other image should become the scene. That committed landing is a Crash Cut or Smash Cut.",
+          "links": [
+            {
+              "text": "Crash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+            },
+            {
+              "text": "Smash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A white frame that is only exposure is a Light Flash, not another picture. Keep the insert temporally honest enough that a later anchor can fix it.",
+          "links": [
+            {
+              "text": "Light Flash",
+              "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Mystery is not the same as no clue."
+        }
+      ],
+      "links": [
+        {
+          "text": "Crash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+        },
+        {
+          "text": "Smash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Light Flash",
+          "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A face in a room. Three frames of a well, a tape, a child.The room again. You cannot inventory what you saw, but it has already happened to you.A thought that lasts three frames. Use it for intrusion: prophecy wearing the clothes of memory, a trauma tic, a subliminal threat.It is the wrong tool when the other image should become the scene. That committed landing is a Crash Cut or Smash Cut.A white frame that is only exposure is a Light Flash, not another picture. Keep the insert temporally honest enough that a later anchor can fix it.Mystery is not the same as no clue."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hold the present shot. Insert 1 to 8 frames of a different image (often high contrast, closer, or from another time)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Return to the present, or chain flashes. Do not dissolve; the brevity is the grammar."
+        },
+        {
+          "type": "paragraph",
+          "text": "Picture may be silent or carry a tick of sound. Prompt: flash cut through [Subject], a few frames of another image interrupting, lightning in the edit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Hold the present shot. Insert 1 to 8 frames of a different image (often high contrast, closer, or from another time).Return to the present, or chain flashes. Do not dissolve; the brevity is the grammar.Picture may be silent or carry a tick of sound. Prompt: flash cut through [Subject], a few frames of another image interrupting, lightning in the edit."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a mind is leaking another time, or when a threat should be unreadable but present. Do not use it as decoration on a trailer."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the audience must read the insert, give it a shot, not a flash."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a mind is leaking another time, or when a threat should be unreadable but present. Do not use it as decoration on a trailer.If the audience must read the insert, give it a shot, not a flash."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Crash Cut stays with the new image. A Light Flash is a burst of light, not a second diegesis.",
+          "links": [
+            {
+              "text": "Crash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+            },
+            {
+              "text": "Light Flash",
+              "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Jump Cut skips time in a similar frame without inserting a foreign picture. Smash Cut commits to contrast as the new present.",
+          "links": [
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            },
+            {
+              "text": "Smash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Flash cut is an interrupt."
+        },
+        {
+          "type": "list-item",
+          "text": "Crash CutThe next image must hurt.",
+          "displayText": "Crash Cut\nThe next image must hurt.",
+          "links": [
+            {
+              "text": "Crash CutThe next image must hurt.",
+              "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Light FlashA cut that is also a wound of light.",
+          "displayText": "Light Flash\nA cut that is also a wound of light.",
+          "links": [
+            {
+              "text": "Light FlashA cut that is also a wound of light.",
+              "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+        },
+        {
+          "text": "Light Flash",
+          "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+        },
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Smash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Crash CutThe next image must hurt.",
+          "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+        },
+        {
+          "text": "Light FlashA cut that is also a wound of light.",
+          "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/48db69b77d2fa3ebe58e56551a9e40ee.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-cut-02-crash-cut-mini.webp",
+          "alt": "Crash Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/3c68828a0b24b8eb8e6cd3614839346b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-crash-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4e6870e12c661aa6c0dbde12bf048a17.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/light-flash-light-flash-mini.webp",
+          "alt": "Light Flash"
+        },
+        {
+          "kind": "video",
+          "path": "media/9b644dfc7d7f6c439b9a9252f52a613f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/light-flash-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Crash Cut stays with the new image. A Light Flash is a burst of light, not a second diegesis.A Jump Cut skips time in a similar frame without inserting a foreign picture. Smash Cut commits to contrast as the new present.Flash cut is an interrupt.Crash CutThe next image must hurt.Light FlashA cut that is also a wound of light.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Ring uses stolen frames as contamination. Natural Born Killers sprays interruptive images as a nervous system."
+        },
+        {
+          "type": "paragraph",
+          "text": "Arrival presents images that first read as memory and are later re-placed in time. Use the brevity and the later anchor, not a copied well."
+        },
+        {
+          "type": "list-item",
+          "text": "Arrival 2016Images initially read as memories are later understood in a different temporal relation.",
+          "displayText": "Arrival 2016\nImages initially read as memories are later understood in a different temporal relation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Ring uses stolen frames as contamination. Natural Born Killers sprays interruptive images as a nervous system.Arrival presents images that first read as memory and are later re-placed in time. Use the brevity and the later anchor, not a copied well.Arrival 2016Images initially read as memories are later understood in a different temporal relation."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Flash cut through [Subject], a few frames of another image interrupting, lightning in the edit. Name the present scene, the insert (and its duration in frames), and the return."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, no dissolve, no long hold on the insert. If the insert is only white, you asked for a light flash."
+        },
+        {
+          "type": "quote",
+          "text": "Show brief intimate images of a woman teaching a child to repair a radio, initially without dates or age labels. In the present, she has never met the child. A later encounter reveals these are future moments. Generate stable radio and room details that make the temporal recognition precise."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Show+brief+intimate+images+of+a+woman+teaching+a+child+to+repair+a+radio,+initially+without+dates+or+age+labels.+In+the+present,+she+has+never+met+the+child.+A+later+encounter+reveals+these+are+future+moments.+Generate+stable+radio+and+room+details+that+make+the+temporal+recognition+precise."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Flash cut through [Subject], a few frames of another image interrupting, lightning in the edit. Name the present scene, the insert (and its duration in frames), and the return.For video, no dissolve, no long hold on the insert. If the insert is only white, you asked for a light flash.Copy promptUse in Video GeneratorShow brief intimate images of a woman teaching a child to repair a radio, initially without dates or age labels. In the present, she has never met the child. A later encounter reveals these are future moments. Generate stable radio and room details that make the temporal recognition precise.Show brief intimate images of a woman teaching a child to repair a radio, initially without dates or age labels. In the present, she has never met the child. A later encounter reveals these are future moments. Generate stable radio and room details that make the temporal recognition precise."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Light Flash (no second image) or Crash Cut (the insert stays). The tell: a white blink, or a new scene that never returns to the present.",
+          "links": [
+            {
+              "text": "Light Flash",
+              "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+            },
+            {
+              "text": "Crash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: a countable handful of frames of a different picture, then the original scene, hard cuts."
+        }
+      ],
+      "links": [
+        {
+          "text": "Light Flash",
+          "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+        },
+        {
+          "text": "Crash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/crash-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Light Flash (no second image) or Crash Cut (the insert stays). The tell: a white blink, or a new scene that never returns to the present.The fix: a countable handful of frames of a different picture, then the original scene, hard cuts."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Flash Cut in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A flash cut inserts a few frames of another image into an ongoing shot. One side is the present; the other is a blink of a different picture, too short to become the scene."
+        },
+        {
+          "type": "heading",
+          "text": "Flash Cut vs Crash Cut",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A crash cut lands in a new committed image. A flash cut interrupts and (usually) returns. Duration is the difference: a scene versus a handful of frames."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Flash Cut?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for a thought, a leak of another time, or a threat too brief to inventory. Do not use it when the other image needs to be read as the new present."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Flash Cut for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the present shot, the insert, and the frame count. Example: Flash cut through [Subject], a few frames of another image interrupting. Hard cuts, no dissolve, then return."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Flash Cut in film?A flash cut inserts a few frames of another image into an ongoing shot. One side is the present; the other is a blink of a different picture, too short to become the scene.Flash Cut vs Crash CutA crash cut lands in a new committed image. A flash cut interrupts and (usually) returns. Duration is the difference: a scene versus a handful of frames.When should I use Flash Cut?Use it for a thought, a leak of another time, or a threat too brief to inventory. Do not use it when the other image needs to be read as the new present.How do I prompt Flash Cut for AI image or video?Name the present shot, the insert, and the frame count. Example: Flash cut through [Subject], a few frames of another image interrupting. Hard cuts, no dissolve, then return."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Flash cut through [Subject], a few frames of another image interrupting, lightning in the edit. Name the present scene, the insert (and its duration in frames), and the return.",
+      "For video, no dissolve, no long hold on the insert. If the insert is only white, you asked for a light flash."
+    ],
+    "example": "Show brief intimate images of a woman teaching a child to repair a radio, initially without dates or age labels. In the present, she has never met the child. A later encounter reveals these are future moments. Generate stable radio and room details that make the temporal recognition precise."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/3f8d190b8a2f9ff5c53e4150c8ccaccd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-flash-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0466a9cd31ca195d7074a1f111fed0fb.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/flash-cut-03-flash-cut-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3343a48af2c6465eefd27bd5b4056414.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/flash-cut.jpg",
+      "alt": "Flash Cut frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/48db69b77d2fa3ebe58e56551a9e40ee.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-cut-02-crash-cut-mini.webp",
+      "alt": "Crash Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/3c68828a0b24b8eb8e6cd3614839346b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-crash-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4e6870e12c661aa6c0dbde12bf048a17.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/light-flash-light-flash-mini.webp",
+      "alt": "Light Flash"
+    },
+    {
+      "kind": "video",
+      "path": "media/9b644dfc7d7f6c439b9a9252f52a613f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/light-flash-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6751988ce38ce70b5471749119462d2c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/flash-cut/hero.jpg",
+      "alt": "Flash Cut",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "1b4e60e998c438862cb26c22ba4a5d5ada276480578946e5cca15f5fdc9afe1a"
+}

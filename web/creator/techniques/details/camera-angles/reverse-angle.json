@@ -1,0 +1,473 @@
+{
+  "id": "camera-angles/reverse-angle",
+  "slug": "reverse-angle",
+  "title": "Reverse Angle",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/reverse-angle",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reverse-angle-098-withheld-reverse-angle-mini.webp",
+  "detail": "details/camera-angles/reverse-angle.json",
+  "aliases": [
+    "Delayed object of the look",
+    "Restricted coverage"
+  ],
+  "description": "A reverse-angle shot views the same spatial relationship from the opposing side, completing the axis of a look, a dialogue, or a standoff. Geography flips; the 180-degree line is respected so screen direction still matches.",
+  "thumbnail": "media/12de92176fe5cd34e134d0b37c8c3337.webp",
+  "video": "media/8f9f196ff123f0535cc3c4981da99c6a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/098-withheld-reverse-angle-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Someone looks. The reverse is who or what occupies the other pole."
+        },
+        {
+          "type": "paragraph",
+          "text": "In a diner, it is the other booth. In a gunfight, it is the other holster."
+        },
+        {
+          "type": "paragraph",
+          "text": "Matching size and height keeps the cut from feeling like a new scene. The reverse can be a clean Single or an Over-the-Shoulder Coverage; the name is the axis, not the foreground shoulder.",
+          "links": [
+            {
+              "text": "Single",
+              "url": "https://melies.co/cinematic-techniques/framing/single"
+            },
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Withholding the reverse is a different editorial choice: a look, a reaction, and no answering view. The Blair Witch Project and Rosemary's Baby live on that denial."
+        },
+        {
+          "type": "paragraph",
+          "text": "The reverse-angle shot itself is the answering camera, not the refusal of it."
+        }
+      ],
+      "links": [
+        {
+          "text": "Single",
+          "url": "https://melies.co/cinematic-techniques/framing/single"
+        },
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Someone looks. The reverse is who or what occupies the other pole.In a diner, it is the other booth. In a gunfight, it is the other holster.Matching size and height keeps the cut from feeling like a new scene. The reverse can be a clean Single or an Over-the-Shoulder Coverage; the name is the axis, not the foreground shoulder.Withholding the reverse is a different editorial choice: a look, a reaction, and no answering view. The Blair Witch Project and Rosemary's Baby live on that denial.The reverse-angle shot itself is the answering camera, not the refusal of it."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hold the 180-line. Move the camera to the opposite side of the axis, still on the same side of the line, and match lens height to the new subject (sit versus stand, adult versus child)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Match shot size to the outgoing picture unless the cut is meant to punch. Eyelines must cross the same empty air."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: reverse angle, opposing view of the dialogue or standoff, 180-line respected, geography flipping."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Hold the 180-line. Move the camera to the opposite side of the axis, still on the same side of the line, and match lens height to the new subject (sit versus stand, adult versus child).Match shot size to the outgoing picture unless the cut is meant to punch. Eyelines must cross the same empty air.Prompt: reverse angle, opposing view of the dialogue or standoff, 180-line respected, geography flipping."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to complete the axis: show who they were looking at. Concrete beat: after a look across a table, the matching-size single of the other person, eyeline opposing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not fire the reverse when the scene's power is the withheld object of the look."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to complete the axis: show who they were looking at. Concrete beat: after a look across a table, the matching-size single of the other person, eyeline opposing.Do not fire the reverse when the scene's power is the withheld object of the look."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Over-the-Shoulder Coverage is a composition often used as the reverse, with a near shoulder; a reverse can also be a clean Single. Point of View shows what they see, which may not be a face.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            },
+            {
+              "text": "Single",
+              "url": "https://melies.co/cinematic-techniques/framing/single"
+            },
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Eye Level may match on both sides, but the reverse is the opposing camera, not a height. Profile two-shots can reverse into opposing profiles.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            },
+            {
+              "text": "Profile",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Over-the-Shoulder CoverageDefault dialogue coverage with spatial glue.",
+          "displayText": "Over-the-Shoulder Coverage\nDefault dialogue coverage with spatial glue.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder CoverageDefault dialogue coverage with spatial glue.",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "displayText": "High Angle\nVulnerability, surveillance, or a map of a room.",
+          "links": [
+            {
+              "text": "High AngleVulnerability, surveillance, or a map of a room.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Single",
+          "url": "https://melies.co/cinematic-techniques/framing/single"
+        },
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Profile",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+        },
+        {
+          "text": "Over-the-Shoulder CoverageDefault dialogue coverage with spatial glue.",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d65f275fff8e870e92c86c8d7270a51e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/over-the-shoulder-frame-088-over-the-shoulder-coverage-mini.webp",
+          "alt": "Over-the-Shoulder Coverage"
+        },
+        {
+          "kind": "video",
+          "path": "media/f20fdb7d226138aaf5dd59721e8bcc91.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/088-over-the-shoulder-coverage-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        },
+        {
+          "kind": "image",
+          "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+          "alt": "High Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Over-the-Shoulder Coverage is a composition often used as the reverse, with a near shoulder; a reverse can also be a clean Single. Point of View shows what they see, which may not be a face.Eye Level may match on both sides, but the reverse is the opposing camera, not a height. Profile two-shots can reverse into opposing profiles.Over-the-Shoulder CoverageDefault dialogue coverage with spatial glue.Eye LevelDefault honesty. Do not look down or up unless you mean it.High AngleVulnerability, surveillance, or a map of a room."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Heat's diner keeps clear opposing screen directions on two three-quarter singles. The Good, the Bad and the Ugly builds the cemetery standoff from answering views along one axis."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Shining's red-bathroom talk uses startling opposing spatial views. Neighbors (1920) is an early lesson in preserving orientation across reverses."
+        },
+        {
+          "type": "list-item",
+          "text": "The Blair Witch Project 1999Characters’ reactions and restricted recorded views withhold much of the threat.",
+          "displayText": "The Blair Witch Project 1999\nCharacters’ reactions and restricted recorded views withhold much of the threat."
+        },
+        {
+          "type": "list-item",
+          "text": "Rosemary’s Baby 1968Partial views and delayed information keep the spectator outside complete knowledge.",
+          "displayText": "Rosemary’s Baby 1968\nPartial views and delayed information keep the spectator outside complete knowledge."
+        },
+        {
+          "type": "list-item",
+          "text": "Heat 1995The diner encounter maintains clear opposing screen directions.",
+          "displayText": "Heat 1995\nThe diner encounter maintains clear opposing screen directions."
+        },
+        {
+          "type": "list-item",
+          "text": "Neighbors 1920Editing preserves the action’s spatial orientation.",
+          "displayText": "Neighbors 1920\nEditing preserves the action’s spatial orientation."
+        },
+        {
+          "type": "list-item",
+          "text": "The Shining 1980The red-bathroom conversation with Grady uses startling opposing spatial views.",
+          "displayText": "The Shining 1980\nThe red-bathroom conversation with Grady uses startling opposing spatial views."
+        },
+        {
+          "type": "list-item",
+          "text": "Tokyo Story 1953Conversation coverage follows a spatial system different from conventional Hollywood axis continuity.",
+          "displayText": "Tokyo Story 1953\nConversation coverage follows a spatial system different from conventional Hollywood axis continuity."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Heat's diner keeps clear opposing screen directions on two three-quarter singles. The Good, the Bad and the Ugly builds the cemetery standoff from answering views along one axis.The Shining's red-bathroom talk uses startling opposing spatial views. Neighbors (1920) is an early lesson in preserving orientation across reverses.The Blair Witch Project 1999Characters’ reactions and restricted recorded views withhold much of the threat.Rosemary’s Baby 1968Partial views and delayed information keep the spectator outside complete knowledge.Heat 1995The diner encounter maintains clear opposing screen directions.Neighbors 1920Editing preserves the action’s spatial orientation.The Shining 1980The red-bathroom conversation with Grady uses startling opposing spatial views.Tokyo Story 1953Conversation coverage follows a spatial system different from conventional Hollywood axis continuity."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Describe both poles even if you generate one still. Quote: Reverse angle on [Subject], the opposing view of a dialogue or standoff, 180-line respected, geography flipping."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: matching size to the first angle, opposing eyeline, same room, camera on the other side of the axis. For a pair, specify who was in the outgoing shot."
+        },
+        {
+          "type": "quote",
+          "text": "Close-up of a caretaker opening a basement door just outside frame. Her expression changes as she sees something below, but hold on her face and the dark edge of the doorway. A quiet mechanical clicking comes from downstairs. Never cut to what she sees during this shot."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Close-up+of+a+caretaker+opening+a+basement+door+just+outside+frame.+Her+expression+changes+as+she+sees+something+below,+but+hold+on+her+face+and+the+dark+edge+of+the+doorway.+A+quiet+mechanical+clicking+comes+from+downstairs.+Never+cut+to+what+she+sees+during+this+shot."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Describe both poles even if you generate one still. Quote: Reverse angle on [Subject], the opposing view of a dialogue or standoff, 180-line respected, geography flipping.Add: matching size to the first angle, opposing eyeline, same room, camera on the other side of the axis. For a pair, specify who was in the outgoing shot.Copy promptUse in Video GeneratorClose-up of a caretaker opening a basement door just outside frame. Her expression changes as she sees something below, but hold on her face and the dark edge of the doorway. A quiet mechanical clicking comes from downstairs. Never cut to what she sees during this shot.Close-up of a caretaker opening a basement door just outside frame. Her expression changes as she sees something below, but hold on her face and the dark edge of the doorway. A quiet mechanical clicking comes from downstairs. Never cut to what she sees during this shot."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a new setup that crosses the line or changes size for no reason. Tell: both faces look camera-right, or a wide answering a choker."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: opposing eyelines, matched height and size, 180-line held. The other mix-up is Point of View: an empty doorway they were watching is a POV, not a reverse on the other person.",
+          "links": [
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a new setup that crosses the line or changes size for no reason. Tell: both faces look camera-right, or a wide answering a choker.Fix: opposing eyelines, matched height and size, 180-line held. The other mix-up is Point of View: an empty doorway they were watching is a POV, not a reverse on the other person."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a reverse angle in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A reverse angle shows the same spatial relationship from the opposing side. It completes a look or a dialogue axis while keeping the 180-degree line."
+        },
+        {
+          "type": "heading",
+          "text": "Reverse angle vs over-the-shoulder",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A reverse is the opposing camera on the axis. Over-the-shoulder is a framing that often serves as that reverse, with a near shoulder in the foreground. The reverse can also be a clean single."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a reverse angle?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the audience must see the other pole of a look, a talk, or a standoff. Do not use it when withholding the object of the look is the point."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a reverse angle for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Reverse angle on [Subject], opposing view of the dialogue or standoff, 180-line respected, matching size, eyeline opposite the first shot. Name the geography that should flip."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a reverse angle in film?A reverse angle shows the same spatial relationship from the opposing side. It completes a look or a dialogue axis while keeping the 180-degree line.Reverse angle vs over-the-shoulderA reverse is the opposing camera on the axis. Over-the-shoulder is a framing that often serves as that reverse, with a near shoulder in the foreground. The reverse can also be a clean single.When should I use a reverse angle?Use it when the audience must see the other pole of a look, a talk, or a standoff. Do not use it when withholding the object of the look is the point.How do I prompt a reverse angle for AI image or video?Write: Reverse angle on [Subject], opposing view of the dialogue or standoff, 180-line respected, matching size, eyeline opposite the first shot. Name the geography that should flip."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Describe both poles even if you generate one still. Quote: Reverse angle on [Subject], the opposing view of a dialogue or standoff, 180-line respected, geography flipping.",
+      "Add: matching size to the first angle, opposing eyeline, same room, camera on the other side of the axis. For a pair, specify who was in the outgoing shot."
+    ],
+    "example": "Close-up of a caretaker opening a basement door just outside frame. Her expression changes as she sees something below, but hold on her face and the dark edge of the doorway. A quiet mechanical clicking comes from downstairs. Never cut to what she sees during this shot."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/8f9f196ff123f0535cc3c4981da99c6a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/098-withheld-reverse-angle-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12de92176fe5cd34e134d0b37c8c3337.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reverse-angle-098-withheld-reverse-angle-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6142dbd0576fe535ed57a8b739b811a5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/reverse-angle.jpg",
+      "alt": "Reverse Angle frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/d65f275fff8e870e92c86c8d7270a51e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/over-the-shoulder-frame-088-over-the-shoulder-coverage-mini.webp",
+      "alt": "Over-the-Shoulder Coverage"
+    },
+    {
+      "kind": "video",
+      "path": "media/f20fdb7d226138aaf5dd59721e8bcc91.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/088-over-the-shoulder-coverage-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+      "alt": "High Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8779ac8c2318d04a9ca08460e1df56b5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/reverse-angle/hero.jpg",
+      "alt": "Reverse Angle",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "d95ba7e722cbc117f1c00a985ba7caa7441f327860b57b4720deb28a187b3231"
+}

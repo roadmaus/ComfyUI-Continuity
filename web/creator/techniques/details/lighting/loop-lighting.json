@@ -1,0 +1,399 @@
+{
+  "id": "lighting/loop-lighting",
+  "slug": "loop-lighting",
+  "title": "Loop Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/loop-lighting",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/loop-lighting.webp",
+  "detail": "details/lighting/loop-lighting.json",
+  "aliases": [],
+  "description": "Loop lighting creates a small nose shadow that loops toward the corner of the mouth and does not connect to the cheek shadow. The key sits slightly off axis and a little high, a middle step between butterfly and Rembrandt.",
+  "thumbnail": "media/71bb1f150be1ca6edd65b3043aaab886.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The face is shaped but still friendly: interviews, earnest close-ups, people we are supposed to trust. You get a hint of cheek shadow and a definite nose, without the painterly triangle or the glamour butterfly."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you need a mask of light and dark, or a fashion-symmetric face. If that loop grows until it joins the cheek, you have crossed into Rembrandt.",
+          "links": [
+            {
+              "text": "Rembrandt",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If you center the key, you are back at butterfly.",
+          "links": [
+            {
+              "text": "butterfly",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Rembrandt",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "butterfly",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The face is shaped but still friendly: interviews, earnest close-ups, people we are supposed to trust. You get a hint of cheek shadow and a definite nose, without the painterly triangle or the glamour butterfly.It is the wrong tool when you need a mask of light and dark, or a fashion-symmetric face. If that loop grows until it joins the cheek, you have crossed into Rembrandt.If you center the key, you are back at butterfly."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Offset the key about 30 to 45 degrees from the nose, slightly above eye line, softness medium so the loop is a clean comma, not a smear. Fill can sit opposite at a gentle ratio (2:1 to 4:1)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is usually the room: window daylight or soft tungsten. The shadow-side cheek still receives some light; that is the difference from Rembrandt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Loop lighting on [Subject], key slightly off-axis, a small loop shadow from the nose toward the corner of the mouth."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Offset the key about 30 to 45 degrees from the nose, slightly above eye line, softness medium so the loop is a clean comma, not a smear. Fill can sit opposite at a gentle ratio (2:1 to 4:1).Color is usually the room: window daylight or soft tungsten. The shadow-side cheek still receives some light; that is the difference from Rembrandt.Prompt: Loop lighting on [Subject], key slightly off-axis, a small loop shadow from the nose toward the corner of the mouth."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a natural portrait that is still shaped, an interview, a two-shot that should not look lit. Do not use it when you want a cheek triangle or a half-face cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a natural portrait that is still shaped, an interview, a two-shot that should not look lit. Do not use it when you want a cheek triangle or a half-face cut."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rembrandt lighting connects nose shadow to cheek shadow and leaves a triangle. Butterfly lighting is on axis with a philtrum butterfly.",
+          "links": [
+            {
+              "text": "Rembrandt lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            },
+            {
+              "text": "Butterfly lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Split lighting goes to 90 degrees and drops the far cheek. Bounce will wrap the loop away if the source gets too large.",
+          "links": [
+            {
+              "text": "Split lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+            },
+            {
+              "text": "Bounce",
+              "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Motivated lighting may produce a loop from a slightly off window, but the pattern is the geometry, not the justification.",
+          "links": [
+            {
+              "text": "Motivated lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rembrandt LightingClassic dramatic portrait.",
+          "displayText": "Rembrandt Lighting\nClassic dramatic portrait.",
+          "links": [
+            {
+              "text": "Rembrandt LightingClassic dramatic portrait.",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Butterfly LightingBeauty lighting with structure.",
+          "displayText": "Butterfly Lighting\nBeauty lighting with structure.",
+          "links": [
+            {
+              "text": "Butterfly LightingBeauty lighting with structure.",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Rembrandt lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "Butterfly lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        },
+        {
+          "text": "Split lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+        },
+        {
+          "text": "Bounce",
+          "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+        },
+        {
+          "text": "Motivated lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Rembrandt LightingClassic dramatic portrait.",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "Butterfly LightingBeauty lighting with structure.",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/0731eeefead98e8a64c8429a412becb9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rembrandt.webp",
+          "alt": "Rembrandt Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/a0bc77407f831c1eb1760bbae139236c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/butterfly-lighting.webp",
+          "alt": "Butterfly Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Rembrandt lighting connects nose shadow to cheek shadow and leaves a triangle. Butterfly lighting is on axis with a philtrum butterfly.Split lighting goes to 90 degrees and drops the far cheek. Bounce will wrap the loop away if the source gets too large.Motivated lighting may produce a loop from a slightly off window, but the pattern is the geometry, not the justification.Rembrandt LightingClassic dramatic portrait.Butterfly LightingBeauty lighting with structure.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Interview cinematography and news-adjacent films such as Frost/Nixon live on loop because both eyes stay open and the face still has a side. The Social Network's talking-head grammar often sits here: slightly off keys, not painterly triangles."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Interview cinematography and news-adjacent films such as Frost/Nixon live on loop because both eyes stay open and the face still has a side. The Social Network's talking-head grammar often sits here: slightly off keys, not painterly triangles."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the loop and forbid the triangle. Use: \"Loop lighting on [Subject], key slightly off-axis, a small loop shadow from the nose toward the corner of the mouth.\" Add that the loop does not touch the cheek shadow."
+        },
+        {
+          "type": "quote",
+          "text": "Loop lighting on [Subject], key slightly off-axis, a small loop shadow from the nose toward the corner of the mouth."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Loop+lighting+on+[Subject],+key+slightly+off-axis,+a+small+loop+shadow+from+the+nose+toward+the+corner+of+the+mouth."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the loop and forbid the triangle. Use: \"Loop lighting on [Subject], key slightly off-axis, a small loop shadow from the nose toward the corner of the mouth.\" Add that the loop does not touch the cheek shadow.Copy promptUse in Image GeneratorLoop lighting on [Subject], key slightly off-axis, a small loop shadow from the nose toward the corner of the mouth.Loop lighting on [Subject], key slightly off-axis, a small loop shadow from the nose toward the corner of the mouth."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Rembrandt or butterfly. The tell is a connected cheek triangle, or a perfectly centered under-nose butterfly.",
+          "links": [
+            {
+              "text": "Rembrandt",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            },
+            {
+              "text": "butterfly",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by offsetting the key a little and stopping before the shadows merge."
+        }
+      ],
+      "links": [
+        {
+          "text": "Rembrandt",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "butterfly",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Rembrandt or butterfly. The tell is a connected cheek triangle, or a perfectly centered under-nose butterfly.Fix it by offsetting the key a little and stopping before the shadows merge."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is loop lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A slightly off-axis key that throws a small loop-shaped nose shadow toward the mouth corner. That shadow does not join the cheek shadow."
+        },
+        {
+          "type": "heading",
+          "text": "Loop lighting vs Rembrandt lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Loop leaves a gap between nose shadow and cheek shadow. Rembrandt joins them, creating a triangle of light on the far cheek."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use loop lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for a natural, still-shaped portrait or interview. Skip it when you want glamour symmetry or a dramatic cheek triangle."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt loop lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Put the key slightly off axis. Specify a small loop shadow from the nose toward the mouth that does not connect to the cheek shadow."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is loop lighting in film?A slightly off-axis key that throws a small loop-shaped nose shadow toward the mouth corner. That shadow does not join the cheek shadow.Loop lighting vs Rembrandt lightingLoop leaves a gap between nose shadow and cheek shadow. Rembrandt joins them, creating a triangle of light on the far cheek.When should I use loop lighting?Use it for a natural, still-shaped portrait or interview. Skip it when you want glamour symmetry or a dramatic cheek triangle.How do I prompt loop lighting for AI image or video?Put the key slightly off axis. Specify a small loop shadow from the nose toward the mouth that does not connect to the cheek shadow."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the loop and forbid the triangle. Use: \"Loop lighting on [Subject], key slightly off-axis, a small loop shadow from the nose toward the corner of the mouth.\" Add that the loop does not touch the cheek shadow."
+    ],
+    "example": "Loop lighting on [Subject], key slightly off-axis, a small loop shadow from the nose toward the corner of the mouth."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/71bb1f150be1ca6edd65b3043aaab886.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/loop-lighting.webp",
+      "alt": "Loop Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/0731eeefead98e8a64c8429a412becb9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rembrandt.webp",
+      "alt": "Rembrandt Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/a0bc77407f831c1eb1760bbae139236c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/butterfly-lighting.webp",
+      "alt": "Butterfly Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/538373be5140ae96ea96f8883b6aa097.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/loop-lighting/hero.jpg",
+      "alt": "Loop Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "8f39b4444252247f8d3747a86f85e547d8a5c08fd114e3ca98f6d6bcca51d2a1"
+}

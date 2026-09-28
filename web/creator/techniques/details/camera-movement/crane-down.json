@@ -1,0 +1,489 @@
+{
+  "id": "camera-movement/crane-down",
+  "slug": "crane-down",
+  "title": "Crane Down",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/crane-down",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-down-011-crane-down-detail-reveal-mini.webp",
+  "detail": "details/camera-movement/crane-down.json",
+  "aliases": [
+    "jib down",
+    "Seamless change of camera support"
+  ],
+  "description": "A crane down shot lowers the camera on an arm from a high wide view into a human-scale frame. The world collapses from map to face because the lens occupies new heights, not because it merely nods.",
+  "thumbnail": "media/aa53863e7f0a44b5d017fc87459915f3.webp",
+  "video": "media/8a7719557669858db37b76f7c7c1f596.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/011-crane-down-detail-reveal-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Arrive from a god-view into a person without resetting attention. What begins as an overview can become an intimate encounter in one path."
+        },
+        {
+          "type": "paragraph",
+          "text": "Some famous descents even hand off from crane to ground support and keep walking. It is the wrong tool when you only need to look down from a locked roof, or when a cut from aerial to close-up would be cleaner."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not assume every continuous-looking descent was achieved without a join."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Arrive from a god-view into a person without resetting attention. What begins as an overview can become an intimate encounter in one path.Some famous descents even hand off from crane to ground support and keep walking. It is the wrong tool when you only need to look down from a locked roof, or when a cut from aerial to close-up would be cleaner.Do not assume every continuous-looking descent was achieved without a join."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Plan the high composition and the human landing. The arm descends, often moving forward as well, with a remote head keeping the subject framed."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you add a support handoff, match direction, speed, height, and horizon at the transfer. Prompt a crane down from a high wide view into a closer frame, map collapsing to face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Plan the high composition and the human landing. The arm descends, often moving forward as well, with a remote head keeping the subject framed.If you add a support handoff, match direction, speed, height, and horizon at the transfer. Prompt a crane down from a high wide view into a closer frame, map collapsing to face."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to arrive from god-view into a person. Concrete beat: a valley of tents, then one volunteer with a bag."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not tour on the way down."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to arrive from god-view into a person. Concrete beat: a valley of tents, then one volunteer with a bag.Do not tour on the way down."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Crane Up leaves the person for the map. A Tilt Down only pitches from one height.",
+          "links": [
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            },
+            {
+              "text": "Tilt Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Pedestal Down drops on a column with tilt locked and little or no boom. An Aerial Push In starts higher still, from helicopter or drone altitude.",
+          "links": [
+            {
+              "text": "Pedestal Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-down"
+            },
+            {
+              "text": "Aerial Push In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-push"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+          "displayText": "Crane Up\nEnd a scene, reveal a city, or turn a person into landscape.",
+          "links": [
+            {
+              "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tilt DownLand on a person or object after establishing scale above.",
+          "displayText": "Tilt Down\nLand on a person or object after establishing scale above.",
+          "links": [
+            {
+              "text": "Tilt DownLand on a person or object after establishing scale above.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Tilt Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+        },
+        {
+          "text": "Pedestal Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-down"
+        },
+        {
+          "text": "Aerial Push In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-push"
+        },
+        {
+          "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Tilt DownLand on a person or object after establishing scale above.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+          "alt": "Crane Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4aee5a86e2d08a2ccb263a4424f91a54.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-down-tilt-down-mini.webp",
+          "alt": "Tilt Down"
+        },
+        {
+          "kind": "video",
+          "path": "media/2a05dc613a864383ff7096c6fe1fee8a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/tilt-down-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Crane Up leaves the person for the map. A Tilt Down only pitches from one height.A Pedestal Down drops on a column with tilt locked and little or no boom. An Aerial Push In starts higher still, from helicopter or drone altitude.Crane UpEnd a scene, reveal a city, or turn a person into landscape.Tilt DownLand on a person or object after establishing scale above.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bound for Glory descends from a crane in the migrant camp and continues at ground level. Contact's VLA shot descends and continues with Ellie toward a building."
+        },
+        {
+          "type": "paragraph",
+          "text": "I Am Cuba traverses spaces with extraordinary continuous-looking movement. The Shining and Magnolia also use descending arms as arrival."
+        },
+        {
+          "type": "paragraph",
+          "text": "Check each shot's joins before claiming a single rig."
+        },
+        {
+          "type": "list-item",
+          "text": "Bound for Glory 1976The migrant-camp shot descends from a crane and continues at ground level.",
+          "displayText": "Bound for Glory 1976\nThe migrant-camp shot descends from a crane and continues at ground level."
+        },
+        {
+          "type": "list-item",
+          "text": "Contact 1997The VLA shot descends and continues with Ellie toward a building.",
+          "displayText": "Contact 1997\nThe VLA shot descends and continues with Ellie toward a building."
+        },
+        {
+          "type": "list-item",
+          "text": "I Am Cuba 1964The hotel and funeral passages traverse spaces with extraordinary continuous-looking movement.",
+          "displayText": "I Am Cuba 1964\nThe hotel and funeral passages traverse spaces with extraordinary continuous-looking movement."
+        },
+        {
+          "type": "list-item",
+          "text": "Notorious 1946The party shot descends from the room’s social scale toward the key in Alicia’s hand.",
+          "displayText": "Notorious 1946\nThe party shot descends from the room’s social scale toward the key in Alicia’s hand."
+        },
+        {
+          "type": "list-item",
+          "text": "Contact 1997The VLA move descends and joins Ellie’s walk.",
+          "displayText": "Contact 1997\nThe VLA move descends and joins Ellie’s walk."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/168558b7a8881e05d53b5054975e13c9.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-down/famous/00-bound-for-glory-1976.jpg",
+          "alt": "Bound for Glory 1976"
+        },
+        {
+          "kind": "image",
+          "path": "media/2a48fb0e4fe132f6e69b7a819df2b116.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-down/famous/01-contact-1997.jpg",
+          "alt": "Contact 1997"
+        },
+        {
+          "kind": "image",
+          "path": "media/616678f8d1fadd3ee6e235afac6547da.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-down/famous/02-i-am-cuba-1964.jpg",
+          "alt": "I Am Cuba 1964"
+        },
+        {
+          "kind": "image",
+          "path": "media/2fbf8d522295794dd29b6f4a969f155a.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-down/famous/00-notorious-1946.jpg",
+          "alt": "Notorious 1946"
+        }
+      ],
+      "sourceText": "In film Bound for Glory descends from a crane in the migrant camp and continues at ground level. Contact's VLA shot descends and continues with Ellie toward a building.I Am Cuba traverses spaces with extraordinary continuous-looking movement. The Shining and Magnolia also use descending arms as arrival.Check each shot's joins before claiming a single rig.Bound for Glory 1976The migrant-camp shot descends from a crane and continues at ground level.Contact 1997The VLA shot descends and continues with Ellie toward a building.I Am Cuba 1964The hotel and funeral passages traverse spaces with extraordinary continuous-looking movement.Notorious 1946The party shot descends from the room’s social scale toward the key in Alicia’s hand.Contact 1997The VLA move descends and joins Ellie’s walk."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crane down onto [Subject], starting high and descending into a human-scale frame, the world collapsing from map to face. For motion: the camera cranes down from a high wide view into a closer frame on [Subject]."
+        },
+        {
+          "type": "quote",
+          "text": "Begin high over a lively harbor market. Descend beside a woman unloading oranges, then continue at her shoulder as she walks between stalls. The high-to-ground movement feels continuous with no sudden speed or horizon change. Plan separate crane and walking sections joined at a foreground canopy if needed."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Begin+high+over+a+lively+harbor+market.+Descend+beside+a+woman+unloading+oranges,+then+continue+at+her+shoulder+as+she+walks+between+stalls.+The+high-to-ground+movement+feels+continuous+with+no+sudden+speed+or+horizon+change.+Plan+separate+crane+and+walking+sections+joined+at+a+foreground+canopy+if+needed."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Crane down onto [Subject], starting high and descending into a human-scale frame, the world collapsing from map to face. For motion: the camera cranes down from a high wide view into a closer frame on [Subject].Copy promptUse in Video GeneratorBegin high over a lively harbor market. Descend beside a woman unloading oranges, then continue at her shoulder as she walks between stalls. The high-to-ground movement feels continuous with no sudden speed or horizon change. Plan separate crane and walking sections joined at a foreground canopy if needed.Begin high over a lively harbor market. Descend beside a woman unloading oranges, then continue at her shoulder as she walks between stalls. The high-to-ground movement feels continuous with no sudden speed or horizon change. Plan separate crane and walking sections joined at a foreground canopy if needed."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Tilt Down or a cut from aerial to close-up. The tell is a nodding camera that never loses altitude, or a scale jump.",
+          "links": [
+            {
+              "text": "Tilt Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: continuous descent of the station point, matched horizon, a readable human landing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Tilt Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Tilt Down or a cut from aerial to close-up. The tell is a nodding camera that never loses altitude, or a scale jump.The fix: continuous descent of the station point, matched horizon, a readable human landing."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Crane Down in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a physical descent of the camera on a crane or jib from a high view into a closer, human-scale composition."
+        },
+        {
+          "type": "heading",
+          "text": "Crane Down vs Tilt Down",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Tilt down looks down from a fixed height. Crane down moves the camera through height, so you actually arrive at the person."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Crane Down?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When an overview should become an encounter without a cut. Do not use it if you only needed to glance at the floor."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Crane Down for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write crane down from a high wide view into a closer frame on [Subject], continuous descent, no cut to aerial. Name the landing size."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Crane Down in film?It is a physical descent of the camera on a crane or jib from a high view into a closer, human-scale composition.Crane Down vs Tilt DownTilt down looks down from a fixed height. Crane down moves the camera through height, so you actually arrive at the person.When should I use Crane Down?When an overview should become an encounter without a cut. Do not use it if you only needed to glance at the floor.How do I prompt Crane Down for AI image or video?Write crane down from a high wide view into a closer frame on [Subject], continuous descent, no cut to aerial. Name the landing size."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Crane down onto [Subject], starting high and descending into a human-scale frame, the world collapsing from map to face. For motion: the camera cranes down from a high wide view into a closer frame on [Subject]."
+    ],
+    "example": "Begin high over a lively harbor market. Descend beside a woman unloading oranges, then continue at her shoulder as she walks between stalls. The high-to-ground movement feels continuous with no sudden speed or horizon change. Plan separate crane and walking sections joined at a foreground canopy if needed."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/8a7719557669858db37b76f7c7c1f596.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/011-crane-down-detail-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aa53863e7f0a44b5d017fc87459915f3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-down-011-crane-down-detail-reveal-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cacb63a517f9b89e68e5b5a343bc4db0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/crane-down.jpg",
+      "alt": "Crane Down frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+      "alt": "Crane Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4aee5a86e2d08a2ccb263a4424f91a54.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-down-tilt-down-mini.webp",
+      "alt": "Tilt Down"
+    },
+    {
+      "kind": "video",
+      "path": "media/2a05dc613a864383ff7096c6fe1fee8a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/tilt-down-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/168558b7a8881e05d53b5054975e13c9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-down/famous/00-bound-for-glory-1976.jpg",
+      "alt": "Bound for Glory 1976"
+    },
+    {
+      "kind": "image",
+      "path": "media/2a48fb0e4fe132f6e69b7a819df2b116.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-down/famous/01-contact-1997.jpg",
+      "alt": "Contact 1997"
+    },
+    {
+      "kind": "image",
+      "path": "media/616678f8d1fadd3ee6e235afac6547da.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-down/famous/02-i-am-cuba-1964.jpg",
+      "alt": "I Am Cuba 1964"
+    },
+    {
+      "kind": "image",
+      "path": "media/2fbf8d522295794dd29b6f4a969f155a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-down/famous/00-notorious-1946.jpg",
+      "alt": "Notorious 1946"
+    },
+    {
+      "kind": "image",
+      "path": "media/2f49a991d6da9e6a98da1667680a1300.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-down/hero.jpg",
+      "alt": "Crane Down",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "6886a48d9142915d44d8d7d49ec24a74dc59bff01b370c957aeab67a023a7517"
+}

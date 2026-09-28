@@ -1,0 +1,417 @@
+{
+  "id": "atmosphere/fog",
+  "slug": "fog",
+  "title": "Fog",
+  "categoryId": "atmosphere",
+  "categoryTitle": "Atmosphere and Weather",
+  "sourceUrl": "https://melies.co/cinematic-techniques/atmosphere/fog",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fog.webp",
+  "detail": "details/atmosphere/fog.json",
+  "aliases": [
+    "haze",
+    "smoke",
+    "dust",
+    "rain",
+    "snow",
+    "steam"
+  ],
+  "description": "Fog is a dense local suspension of water droplets that collapses depth, turns lamps into globes, and delays the reveal of figures. The air is matter close to camera; geography hides until someone walks into the last few meters.",
+  "thumbnail": "media/a8973955095d2a7214fd549c40d15a8a.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A sodium lamp becomes a ball. A platform ends in nothing."
+        },
+        {
+          "type": "paragraph",
+          "text": "A coat arrives late, as if the world were only as large as a flashlight. Hide geography."
+        },
+        {
+          "type": "paragraph",
+          "text": "Delay the reveal. Use it for horror, docks, London streets, any beat that should withhold the next plane."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you still want kilometers of readable landscape: that is Atmospheric Haze. It is the wrong tool when the veil is thin and lyrical: that is Mist.",
+          "links": [
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            },
+            {
+              "text": "Mist",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Combustion with a source is Smoke. If faces at three meters are crisp and only the grade is grey, you do not have fog.",
+          "links": [
+            {
+              "text": "Smoke",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "You have a LUT."
+        }
+      ],
+      "links": [
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Mist",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+        },
+        {
+          "text": "Smoke",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A sodium lamp becomes a ball. A platform ends in nothing.A coat arrives late, as if the world were only as large as a flashlight. Hide geography.Delay the reveal. Use it for horror, docks, London streets, any beat that should withhold the next plane.It is the wrong tool when you still want kilometers of readable landscape: that is Atmospheric Haze. It is the wrong tool when the veil is thin and lyrical: that is Mist.Combustion with a source is Smoke. If faces at three meters are crisp and only the grade is grey, you do not have fog.You have a LUT."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fill a volume with dense droplets (machines or weather) so contrast falls with distance on a short scale. Backlight or sidelight the fog to make globes around practicals; front light flattens it to milk."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep practicals inside the soup, not only a filter on the lens. Prompt: dense fog around [Subject], depth collapsing, lamps becoming globes, figures appearing late, horror or London grammar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Fill a volume with dense droplets (machines or weather) so contrast falls with distance on a short scale. Backlight or sidelight the fog to make globes around practicals; front light flattens it to milk.Keep practicals inside the soup, not only a filter on the lens. Prompt: dense fog around [Subject], depth collapsing, lamps becoming globes, figures appearing late, horror or London grammar."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a figure should appear late, a road should end in white, a house should have no yard. Do not use it on a vista you still need to read."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the far ridge must stay a ridge, use haze or mist."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a figure should appear late, a road should end in white, a house should have no yard. Do not use it on a vista you still need to read.If the far ridge must stay a ridge, use haze or mist."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mist is thinner: layered, see-through, lyric. Atmospheric Haze stacks paler planes over kilometers, not a wall at ten meters.",
+          "links": [
+            {
+              "text": "Mist",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+            },
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Smoke has a source and a direction and is not weather. Steam rises from heat and thins as it cools.",
+          "links": [
+            {
+              "text": "Smoke",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+            },
+            {
+              "text": "Steam",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/steam"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fog is a local, dense water veil."
+        },
+        {
+          "type": "list-item",
+          "text": "MistSofter mystery than fog. Lyric, not monster.",
+          "displayText": "Mist\nSofter mystery than fog. Lyric, not monster.",
+          "links": [
+            {
+              "text": "MistSofter mystery than fog. Lyric, not monster.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "displayText": "Atmospheric Haze\nShow kilometers, not just meters.",
+          "links": [
+            {
+              "text": "Atmospheric HazeShow kilometers, not just meters.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "RainMake the air visible and the ground reflective.",
+          "displayText": "Rain\nMake the air visible and the ground reflective.",
+          "links": [
+            {
+              "text": "RainMake the air visible and the ground reflective.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Mist",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+        },
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Smoke",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+        },
+        {
+          "text": "Steam",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/steam"
+        },
+        {
+          "text": "MistSofter mystery than fog. Lyric, not monster.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+        },
+        {
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "RainMake the air visible and the ground reflective.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/011706e10e626fcdf7bc8085edc5d79c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mist.webp",
+          "alt": "Mist"
+        },
+        {
+          "kind": "image",
+          "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+          "alt": "Atmospheric Haze"
+        },
+        {
+          "kind": "image",
+          "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+          "alt": "Rain"
+        }
+      ],
+      "sourceText": "Compared with similar shots Mist is thinner: layered, see-through, lyric. Atmospheric Haze stacks paler planes over kilometers, not a wall at ten meters.Smoke has a source and a direction and is not weather. Steam rises from heat and thins as it cools.Fog is a local, dense water veil.MistSofter mystery than fog. Lyric, not monster.Atmospheric HazeShow kilometers, not just meters.RainMake the air visible and the ground reflective."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Exorcist and The Others use fog to withhold houses, lamps, and bodies. Sicario lets dust and fog-like veils erase desert edges (a cousin in opacity)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use delayed reveal and globes around lamps, not a copied graveyard."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Exorcist and The Others use fog to withhold houses, lamps, and bodies. Sicario lets dust and fog-like veils erase desert edges (a cousin in opacity).Use delayed reveal and globes around lamps, not a copied graveyard."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dense fog around [Subject], depth collapsing, lamps becoming globes, figures appearing late. Name density (visibility in meters), the practicals blooming, and what is hidden."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, figures emerging from soup, no crisp far architecture. Do not describe a grey grade on a clear street."
+        },
+        {
+          "type": "quote",
+          "text": "Dense fog around [Subject], depth collapsing, lamps becoming globes, figures appearing late, horror or London grammar."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Dense+fog+around+[Subject],+depth+collapsing,+lamps+becoming+globes,+figures+appearing+late,+horror+or+London+grammar."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Dense fog around [Subject], depth collapsing, lamps becoming globes, figures appearing late. Name density (visibility in meters), the practicals blooming, and what is hidden.For video, figures emerging from soup, no crisp far architecture. Do not describe a grey grade on a clear street.Copy promptUse in Image GeneratorDense fog around [Subject], depth collapsing, lamps becoming globes, figures appearing late, horror or London grammar.Dense fog around [Subject], depth collapsing, lamps becoming globes, figures appearing late, horror or London grammar."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Atmospheric Haze (distance) or a desaturated grade. The tell: sharp buildings a block away, lamps with no globes, faces fully lit at thirty meters.",
+          "links": [
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: short visibility, backlit bloom on lights, late arrivals."
+        }
+      ],
+      "links": [
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Atmospheric Haze (distance) or a desaturated grade. The tell: sharp buildings a block away, lamps with no globes, faces fully lit at thirty meters.The fix: short visibility, backlit bloom on lights, late arrivals."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Fog in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fog is a dense local cloud of water droplets that hides depth. Lamps bloom into globes and figures appear only when they enter the near ground."
+        },
+        {
+          "type": "heading",
+          "text": "Fog vs Mist",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fog is opaque enough to collapse geography at short range. Mist is thinner, layered, and still lets you read the next plane. Fog withholds; mist veils."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Fog?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to hide geography and delay a reveal. Do not use it when you need a long, readable landscape, and do not fake it with a grey LUT."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Fog for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the soup and the bloom. Example: dense fog around [Subject], lamps becoming globes, figures appearing late. Give a short visibility distance and forbid crisp far detail."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Fog in film?Fog is a dense local cloud of water droplets that hides depth. Lamps bloom into globes and figures appear only when they enter the near ground.Fog vs MistFog is opaque enough to collapse geography at short range. Mist is thinner, layered, and still lets you read the next plane. Fog withholds; mist veils.When should I use Fog?Use it to hide geography and delay a reveal. Do not use it when you need a long, readable landscape, and do not fake it with a grey LUT.How do I prompt Fog for AI image or video?Name the soup and the bloom. Example: dense fog around [Subject], lamps becoming globes, figures appearing late. Give a short visibility distance and forbid crisp far detail."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Dense fog around [Subject], depth collapsing, lamps becoming globes, figures appearing late. Name density (visibility in meters), the practicals blooming, and what is hidden.",
+      "For video, figures emerging from soup, no crisp far architecture. Do not describe a grey grade on a clear street."
+    ],
+    "example": "Dense fog around [Subject], depth collapsing, lamps becoming globes, figures appearing late, horror or London grammar."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/a8973955095d2a7214fd549c40d15a8a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fog.webp",
+      "alt": "Fog example"
+    },
+    {
+      "kind": "image",
+      "path": "media/011706e10e626fcdf7bc8085edc5d79c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mist.webp",
+      "alt": "Mist"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+      "alt": "Atmospheric Haze"
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+      "alt": "Rain"
+    },
+    {
+      "kind": "image",
+      "path": "media/4a3b19b7fc3141589bd80fb483653634.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fog/hero.jpg",
+      "alt": "Fog",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "94dc4c3ffe8b4e4f2087982bfd96d861f59d09f444a952f4bf39c3d5a5026ec8"
+}

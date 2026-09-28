@@ -1,0 +1,428 @@
+{
+  "id": "genre-looks/german-expressionism",
+  "slug": "german-expressionism",
+  "title": "German Expressionism",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/german-expressionism",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/german-expressionism.webp",
+  "detail": "details/genre-looks/german-expressionism.json",
+  "aliases": [],
+  "description": "German Expressionism cinematography treats the set as a mind: forced-perspective corridors, painted shadows, and jagged hard light replace natural architecture. The camera is often locked and slightly dutch, so the actor walks a geometry that already looks illegal.",
+  "thumbnail": "media/fc626bbb0b98b7c1c23143011bcea666.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Psychology is built, not implied. A staircase leans."
+        },
+        {
+          "type": "paragraph",
+          "text": "A shadow is bigger than the body that casts it, and sometimes the shadow is paint. The face is lit like a mask because the room is already a diagnosis."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a real wet street or a fashion interior. Noir keeps plausible cities and lets Hard Light do the violence.",
+          "links": [
+            {
+              "text": "Hard Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Giallo bends color, not carpentry. If the walls are square and only the grade is moody, you do not have expressionism.",
+          "links": [
+            {
+              "text": "Giallo",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Hard Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Giallo",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Psychology is built, not implied. A staircase leans.A shadow is bigger than the body that casts it, and sometimes the shadow is paint. The face is lit like a mask because the room is already a diagnosis.It is the wrong tool for a real wet street or a fashion interior. Noir keeps plausible cities and lets Hard Light do the violence.Giallo bends color, not carpentry. If the walls are square and only the grade is moody, you do not have expressionism."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Build or paint impossible architecture: converging walls, oversized windows, stairs that refuse the horizon. Light with hard, unfilled sources so shadows are graphic edges, not soft falloff."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dutch the camera a few degrees as a default, not a sting. Orthochromatic or high-contrast black-and-white, 35mm spherical, theatrical blocking, often locked-off."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt painted shadows, impossible architecture, jagged light, and Caligari psychology as set."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Build or paint impossible architecture: converging walls, oversized windows, stairs that refuse the horizon. Light with hard, unfilled sources so shadows are graphic edges, not soft falloff.Dutch the camera a few degrees as a default, not a sting. Orthochromatic or high-contrast black-and-white, 35mm spherical, theatrical blocking, often locked-off.Prompt painted shadows, impossible architecture, jagged light, and Caligari psychology as set."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the location must be a mental state, not a real address. Do not use it as a dutch-angle garnish on a square contemporary room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the location must be a mental state, not a real address. Do not use it as a dutch-angle garnish on a square contemporary room."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "German Expressionism distorts carpentry. Film Noir distorts with light on real streets.",
+          "links": [
+            {
+              "text": "German Expressionism",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/german-expressionism"
+            },
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dutch Angle is one tilted horizon; expressionism is the whole set. Hard Light is the source quality.",
+          "links": [
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            },
+            {
+              "text": "Hard Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Chiaroscuro is the ratio. You need the bent architecture, not only the contrast.",
+          "links": [
+            {
+              "text": "Chiaroscuro",
+              "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+          "displayText": "Dutch Angle\nThe world is off its axis. Do not use as decoration.",
+          "links": [
+            {
+              "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "displayText": "Hard Light\nGrit, noon sun, or interrogation.",
+          "links": [
+            {
+              "text": "Hard LightGrit, noon sun, or interrogation.",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "German Expressionism",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/german-expressionism"
+        },
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "Hard Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Chiaroscuro",
+          "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+        },
+        {
+          "text": "Dutch AngleThe world is off its axis. Do not use as decoration.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        },
+        {
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b87a1699cd3cd68781b68c037559849a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-angle-161-dutch-angle-mini.webp",
+          "alt": "Dutch Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/705061adfd657c913629f2fb72bc9a79.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/161-dutch-angle-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+          "alt": "Hard Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots German Expressionism distorts carpentry. Film Noir distorts with light on real streets.Dutch Angle is one tilted horizon; expressionism is the whole set. Hard Light is the source quality.Chiaroscuro is the ratio. You need the bent architecture, not only the contrast.Dutch AngleThe world is off its axis. Do not use as decoration.Hard LightGrit, noon sun, or interrogation.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Cabinet of Dr. Caligari (painted shadows, canted town as a mind)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Metropolis (shafts, scale, and machine geometry as social diagram). Nosferatu (a body that is also a shadow on a wall)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Cabinet of Dr. Caligari (painted shadows, canted town as a mind).Metropolis (shafts, scale, and machine geometry as social diagram). Nosferatu (a body that is also a shadow on a wall).Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "German expressionist treatment of [Subject], painted shadows, impossible architecture, jagged hard light, dutch horizon, theatrical blocking. Name which wall or stair is illegally angled."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not ask for a normal street with a moody grade."
+        },
+        {
+          "type": "quote",
+          "text": "German expressionist treatment of [Subject], painted shadows, impossible architecture, jagged light, Caligari psychology as set."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=German+expressionist+treatment+of+[Subject],+painted+shadows,+impossible+architecture,+jagged+light,+Caligari+psychology+as+set."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it German expressionist treatment of [Subject], painted shadows, impossible architecture, jagged hard light, dutch horizon, theatrical blocking. Name which wall or stair is illegally angled.Do not ask for a normal street with a moody grade.Copy promptUse in Image GeneratorGerman expressionist treatment of [Subject], painted shadows, impossible architecture, jagged light, Caligari psychology as set.German expressionist treatment of [Subject], painted shadows, impossible architecture, jagged light, Caligari psychology as set."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Film Noir or a lone Dutch Angle: a wet alley, or a tilted camera in an ordinary room. The tell is square architecture with only contrast added.",
+          "links": [
+            {
+              "text": "Film Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            },
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: cant the set or the perspective, paint or project graphic shadows, and lock the camera on that geometry."
+        }
+      ],
+      "links": [
+        {
+          "text": "Film Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        },
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Film Noir or a lone Dutch Angle: a wet alley, or a tilted camera in an ordinary room. The tell is square architecture with only contrast added.Fix: cant the set or the perspective, paint or project graphic shadows, and lock the camera on that geometry."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is German Expressionism in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A look in which distorted sets, painted or graphic shadows, hard unfilled light, and stylized blocking make the location a psychological diagram rather than a real street."
+        },
+        {
+          "type": "heading",
+          "text": "German Expressionism vs Film Noir",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Noir keeps plausible cities and cuts them with gobos. Expressionism rebuilds the city as a bent mind. Both love hard light. Only one makes the staircase illegal."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use German Expressionism?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a character's inner state has to be walked through as architecture. Skip it for crime on real wet streets, for gelled fashion-horror, or for a dutch angle with nothing else changed."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt German Expressionism for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: German expressionist treatment of [Subject], painted shadows, impossible architecture, jagged hard light, dutch horizon. Specify the illegal wall or stair. Do not prompt a normal room plus contrast."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is German Expressionism in film?A look in which distorted sets, painted or graphic shadows, hard unfilled light, and stylized blocking make the location a psychological diagram rather than a real street.German Expressionism vs Film NoirNoir keeps plausible cities and cuts them with gobos. Expressionism rebuilds the city as a bent mind. Both love hard light. Only one makes the staircase illegal.When should I use German Expressionism?When a character's inner state has to be walked through as architecture. Skip it for crime on real wet streets, for gelled fashion-horror, or for a dutch angle with nothing else changed.How do I prompt German Expressionism for AI image or video?Write: German expressionist treatment of [Subject], painted shadows, impossible architecture, jagged hard light, dutch horizon. Specify the illegal wall or stair. Do not prompt a normal room plus contrast."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "German expressionist treatment of [Subject], painted shadows, impossible architecture, jagged hard light, dutch horizon, theatrical blocking. Name which wall or stair is illegally angled.",
+      "Do not ask for a normal street with a moody grade."
+    ],
+    "example": "German expressionist treatment of [Subject], painted shadows, impossible architecture, jagged light, Caligari psychology as set."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/fc626bbb0b98b7c1c23143011bcea666.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/german-expressionism.webp",
+      "alt": "German Expressionism example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b87a1699cd3cd68781b68c037559849a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dutch-angle-161-dutch-angle-mini.webp",
+      "alt": "Dutch Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/705061adfd657c913629f2fb72bc9a79.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/161-dutch-angle-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+      "alt": "Hard Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/0dfdd05598bebaee0f06ceabc713bebf.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/german-expressionism/hero.jpg",
+      "alt": "German Expressionism",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "4cc62ab1e1e4f5e829e4b7f71c9161d0eb604c881305e36eb9c72f00465607f6"
+}

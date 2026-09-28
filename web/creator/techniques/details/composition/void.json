@@ -1,0 +1,411 @@
+{
+  "id": "composition/void",
+  "slug": "void",
+  "title": "Void",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/void",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/void.webp",
+  "detail": "details/composition/void.json",
+  "aliases": [],
+  "description": "A void in void cinematography erases the set: darkness, white, or a blank field eating the world until a figure stands against nothing. Negative space still belongs to a place, while a void deletes place, leaving almost no landlord but the body or the darkness that might eat it.",
+  "thumbnail": "media/591074ed53fd520eba717ce6422dc0ac.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Erase the set and the social world goes with it. A woman in a black room, a man in white nowhere, a beam with no walls: there is no furniture to own space, only the figure and the absence."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when geography matters. A void cannot show a door, a class, or a weather."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you still need the kitchen, you wanted negative space or cameo light in a real room. Cameo lighting can create a void by refusing to fill."
+        },
+        {
+          "type": "paragraph",
+          "text": "The void is the compositional result: no readable world, not merely a moody key."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Erase the set and the social world goes with it. A woman in a black room, a man in white nowhere, a beam with no walls: there is no furniture to own space, only the figure and the absence.It is the wrong tool when geography matters. A void cannot show a door, a class, or a weather.If you still need the kitchen, you wanted negative space or cameo light in a real room. Cameo lighting can create a void by refusing to fill.The void is the compositional result: no readable world, not merely a moody key."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Kill the surround. Black velvet, an unlit stage, fogged white, a clipped sky."
+        },
+        {
+          "type": "paragraph",
+          "text": "Light only the figure, or let them fall to Silhouette on nothing. Watch for stray stand legs and floor bounce.",
+          "links": [
+            {
+              "text": "Silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A longer lens helps exclude leftover set. Prompt: Void around [Subject], darkness or blank field eating the world, a figure against nothing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Kill the surround. Black velvet, an unlit stage, fogged white, a clipped sky.Light only the figure, or let them fall to Silhouette on nothing. Watch for stray stand legs and floor bounce.A longer lens helps exclude leftover set. Prompt: Void around [Subject], darkness or blank field eating the world, a figure against nothing."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for existential isolation, alien rooms, interrogation nowhere, a mind. Do not use it as a cheap way to hide a location you did not dress."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for existential isolation, alien rooms, interrogation nowhere, a mind. Do not use it as a cheap way to hide a location you did not dress."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Negative Space keeps a world (sky, wall, sea) as the empty mass. Void removes the world.",
+          "links": [
+            {
+              "text": "Negative Space",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cameo Lighting is the lighting method that often produces a dark void: a pool on a figure, no environment. Clean Frame still allows a tidy place.",
+          "links": [
+            {
+              "text": "Cameo Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            },
+            {
+              "text": "Clean Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/clean-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Silhouette is outline against a brighter field, which can be a void if that field is featureless. Low-Key Lighting may still show a room in the shadows.",
+          "links": [
+            {
+              "text": "Silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            },
+            {
+              "text": "Low-Key Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Negative SpaceLoneliness needs room.",
+          "displayText": "Negative Space\nLoneliness needs room.",
+          "links": [
+            {
+              "text": "Negative SpaceLoneliness needs room.",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cameo LightingErase the world. Keep the person.",
+          "displayText": "Cameo Lighting\nErase the world. Keep the person.",
+          "links": [
+            {
+              "text": "Cameo LightingErase the world. Keep the person.",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Negative Space",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Cameo Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Clean Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/clean-frame"
+        },
+        {
+          "text": "Silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Low-Key Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Negative SpaceLoneliness needs room.",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        },
+        {
+          "text": "Cameo LightingErase the world. Keep the person.",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+          "alt": "Negative Space"
+        },
+        {
+          "kind": "video",
+          "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/eb2b22619f7f3f03ae5875d0cbf8986f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cameo-lighting.webp",
+          "alt": "Cameo Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Negative Space keeps a world (sky, wall, sea) as the empty mass. Void removes the world.Cameo Lighting is the lighting method that often produces a dark void: a pool on a figure, no environment. Clean Frame still allows a tidy place.Silhouette is outline against a brighter field, which can be a void if that field is featureless. Low-Key Lighting may still show a room in the shadows.Negative SpaceLoneliness needs room.Cameo LightingErase the world. Keep the person.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Under the Skin uses black, featureless space as a place that is not a place, bodies without social furniture. The Lighthouse isolates men in weather and dark until the world feels eaten, more void than village."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of deletion, not a crushed exposure accident."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Under the Skin uses black, featureless space as a place that is not a place, bodies without social furniture. The Lighthouse isolates men in weather and dark until the world feels eaten, more void than village.Grammar of deletion, not a crushed exposure accident."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Delete the place. Void around [Subject], darkness or blank field eating the world, a figure against nothing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say black void, no set, no floor detail, or white featureless field. Light only the figure."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid furniture and windows."
+        },
+        {
+          "type": "quote",
+          "text": "Void around [Subject], darkness or blank field eating the world, a figure against nothing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Void+around+[Subject],+darkness+or+blank+field+eating+the+world,+a+figure+against+nothing."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Delete the place. Void around [Subject], darkness or blank field eating the world, a figure against nothing.Say black void, no set, no floor detail, or white featureless field. Light only the figure.Forbid furniture and windows.Copy promptUse in Image GeneratorVoid around [Subject], darkness or blank field eating the world, a figure against nothing.Void around [Subject], darkness or blank field eating the world, a figure against nothing."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an underexposed room, or Negative Space with a visible wall. The tell is a baseboard, a plant, or grainy wallpaper in the dark.",
+          "links": [
+            {
+              "text": "Negative Space",
+              "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to actually kill the surround (velvet, distance, flags), or to own the wall as designed emptiness."
+        }
+      ],
+      "links": [
+        {
+          "text": "Negative Space",
+          "url": "https://melies.co/cinematic-techniques/composition/negative-space"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an underexposed room, or Negative Space with a visible wall. The tell is a baseboard, a plant, or grainy wallpaper in the dark.The fix is to actually kill the surround (velvet, distance, flags), or to own the wall as designed emptiness."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is void in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a composition that erases the set. The figure stands against darkness, white, or a blank field. There is no readable place. Absence is not a sky or a wall. It is nothing."
+        },
+        {
+          "type": "heading",
+          "text": "Void vs Negative Space",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Negative space is empty area inside a world: desert, ceiling, sea. Void deletes the world. A nun under a pale church wall is negative space. A body in featureless black is a void. Both isolate. Only one still has geography."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use void?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when place should vanish: alien interior, mind, interrogation nowhere, existential isolation. Do not use it to hide an undressed set that still needs to be a room."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt void for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid the set. Example: Void around [Subject], darkness or blank field eating the world, a figure against nothing. Add no environment, no furniture. Specify black or white. Models love to invent rooms. Ban them."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is void in film?It is a composition that erases the set. The figure stands against darkness, white, or a blank field. There is no readable place. Absence is not a sky or a wall. It is nothing.Void vs Negative SpaceNegative space is empty area inside a world: desert, ceiling, sea. Void deletes the world. A nun under a pale church wall is negative space. A body in featureless black is a void. Both isolate. Only one still has geography.When should I use void?Use it when place should vanish: alien interior, mind, interrogation nowhere, existential isolation. Do not use it to hide an undressed set that still needs to be a room.How do I prompt void for AI image or video?Forbid the set. Example: Void around [Subject], darkness or blank field eating the world, a figure against nothing. Add no environment, no furniture. Specify black or white. Models love to invent rooms. Ban them."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Delete the place. Void around [Subject], darkness or blank field eating the world, a figure against nothing.",
+      "Say black void, no set, no floor detail, or white featureless field. Light only the figure.",
+      "Forbid furniture and windows."
+    ],
+    "example": "Void around [Subject], darkness or blank field eating the world, a figure against nothing."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/591074ed53fd520eba717ce6422dc0ac.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/void.webp",
+      "alt": "Void example"
+    },
+    {
+      "kind": "image",
+      "path": "media/9c9e93f6c586bb2eb905fa854c31851f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/negative-space-042-negative-space-v2-mini.webp",
+      "alt": "Negative Space"
+    },
+    {
+      "kind": "video",
+      "path": "media/9e3c89967c804c6dd9045a1330e99bc9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/042-negative-space-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/eb2b22619f7f3f03ae5875d0cbf8986f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cameo-lighting.webp",
+      "alt": "Cameo Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/c7c910478af6a10403887414bd748f08.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/void/hero.jpg",
+      "alt": "Void",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "988a410edfbe834f73c30006c51cc63099d7edc647ac7ed0e6bc31d04808cabd"
+}

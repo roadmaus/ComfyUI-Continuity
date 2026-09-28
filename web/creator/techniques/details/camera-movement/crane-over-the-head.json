@@ -1,0 +1,390 @@
+{
+  "id": "camera-movement/crane-over-the-head",
+  "slug": "crane-over-the-head",
+  "title": "Crane Over The Head",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/crane-over-the-head",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-over-the-head-crane-over-the-head-mini.webp",
+  "detail": "details/camera-movement/crane-over-the-head.json",
+  "aliases": [],
+  "description": "A crane over the head rises on the arm until the camera looks nearly straight down, a person becoming a map. The end state is overhead, not a high three-quarter.",
+  "thumbnail": "media/3618f7093fd88ddbad2973f1d0ac61f2.webp",
+  "video": "media/801e05830a3e9afbabdcf501f626816a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/crane-over-the-head-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Finish by looking down. A body on a floor, a crime, a dance, a figure lost in pattern: the arm climbs and continues until the lens is almost nadir."
+        },
+        {
+          "type": "paragraph",
+          "text": "A crane-up that eases back into a skyline is a different end: the person becomes geography from an oblique height. Overhead and bird's-eye can be locked."
+        },
+        {
+          "type": "paragraph",
+          "text": "This shot is the travel that arrives there."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Finish by looking down. A body on a floor, a crime, a dance, a figure lost in pattern: the arm climbs and continues until the lens is almost nadir.A crane-up that eases back into a skyline is a different end: the person becomes geography from an oblique height. Overhead and bird's-eye can be locked.This shot is the travel that arrives there."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Jib or Technocrane, start at human height or a three-quarter, boom up and over until tilt is nearly 90 degrees down. A little boom-out keeps the subject from sliding off."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Crane over the head of [Subject], the arm rising until the camera looks nearly straight down, a person becoming a map."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Jib or Technocrane, start at human height or a three-quarter, boom up and over until tilt is nearly 90 degrees down. A little boom-out keeps the subject from sliding off.Prompt: Crane over the head of [Subject], the arm rising until the camera looks nearly straight down, a person becoming a map."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to end on a downward map of a person. Do not stop at a high three-quarter and call it over the head."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to end on a downward map of a person. Do not stop at a high three-quarter and call it over the head."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crane Over travels the arm over an obstacle or crowd without requiring nadir. Overhead Top-Down is the locked top-down frame.",
+          "links": [
+            {
+              "text": "Crane Over",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-over"
+            },
+            {
+              "text": "Overhead Top-Down",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Bird's-Eye View is the high downward view as a size. Crane-over-the-head is the boom that becomes those views.",
+          "links": [
+            {
+              "text": "Bird's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane OverTurn a scene into a map without cutting.",
+          "displayText": "Crane Over\nTurn a scene into a map without cutting.",
+          "links": [
+            {
+              "text": "Crane OverTurn a scene into a map without cutting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-over"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Overhead Top-DownTable, crime scene, or dance formation.",
+          "displayText": "Overhead Top-Down\nTable, crime scene, or dance formation.",
+          "links": [
+            {
+              "text": "Overhead Top-DownTable, crime scene, or dance formation.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+          "displayText": "Bird's-Eye View\nTurn life into a board game or a ritual.",
+          "links": [
+            {
+              "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Over",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-over"
+        },
+        {
+          "text": "Overhead Top-Down",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        },
+        {
+          "text": "Bird's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        },
+        {
+          "text": "Crane OverTurn a scene into a map without cutting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-over"
+        },
+        {
+          "text": "Overhead Top-DownTable, crime scene, or dance formation.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        },
+        {
+          "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ce1f07177722d7e2a2ae3c53ed7cac09.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-over-crane-over-mini.webp",
+          "alt": "Crane Over"
+        },
+        {
+          "kind": "video",
+          "path": "media/e25d0aafa12cf5207b084f402b53ef09.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/crane-over-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/e38c926247e6d32a842471e279499092.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/overhead-overhead-mini.webp",
+          "alt": "Overhead Top-Down"
+        },
+        {
+          "kind": "video",
+          "path": "media/26a0d54296bd8cd0d0f7613e6420795a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/overhead-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+          "alt": "Bird's-Eye View"
+        },
+        {
+          "kind": "video",
+          "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Crane Over travels the arm over an obstacle or crowd without requiring nadir. Overhead Top-Down is the locked top-down frame.Bird's-Eye View is the high downward view as a size. Crane-over-the-head is the boom that becomes those views.Crane OverTurn a scene into a map without cutting.Overhead Top-DownTable, crime scene, or dance formation.Bird's-Eye ViewTurn life into a board game or a ritual."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Untouchables uses high downward cranes (the station, the pram, the floor as a map). Birdman booms over theater space until people become pattern."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: rise until you look down."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Untouchables uses high downward cranes (the station, the pram, the floor as a map). Birdman booms over theater space until people become pattern.Grammar: rise until you look down."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "End almost overhead. Still: Crane over the head of [Subject], the arm rising until the camera looks nearly straight down, a person becoming a map."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera cranes up and over [Subject] until the view is almost overhead. Do not stop at a high three-quarter."
+        },
+        {
+          "type": "quote",
+          "text": "The camera cranes up and over [Subject] until the view is almost overhead."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+cranes+up+and+over+[Subject]+until+the+view+is+almost+overhead."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it End almost overhead. Still: Crane over the head of [Subject], the arm rising until the camera looks nearly straight down, a person becoming a map.Video: The camera cranes up and over [Subject] until the view is almost overhead. Do not stop at a high three-quarter.Copy promptUse in Video GeneratorThe camera cranes up and over [Subject] until the view is almost overhead.The camera cranes up and over [Subject] until the view is almost overhead."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a crane-up that stays oblique, or a locked overhead with no travel. The tell: we never look down, or we were already down."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: boom up and over until the lens is nearly straight down."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a crane-up that stays oblique, or a locked overhead with no travel. The tell: we never look down, or we were already down.The fix: boom up and over until the lens is nearly straight down."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Crane Over The Head in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A crane over the head booms up and over a person until the camera looks nearly straight down. The person becomes a map."
+        },
+        {
+          "type": "heading",
+          "text": "Crane Over The Head vs Overhead Top-Down",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Overhead is the locked top-down frame. Crane over the head is the travel that arrives there from a human starting height."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Crane Over The Head?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to finish by looking down on a person. Do not stop at a high three-quarter."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Crane Over The Head for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a boom that ends almost straight down. Example: Crane over the head of [Subject], the arm rising until the camera looks nearly straight down, a person becoming a map."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Crane Over The Head in film?A crane over the head booms up and over a person until the camera looks nearly straight down. The person becomes a map.Crane Over The Head vs Overhead Top-DownOverhead is the locked top-down frame. Crane over the head is the travel that arrives there from a human starting height.When should I use Crane Over The Head?Use it to finish by looking down on a person. Do not stop at a high three-quarter.How do I prompt Crane Over The Head for AI image or video?Write a boom that ends almost straight down. Example: Crane over the head of [Subject], the arm rising until the camera looks nearly straight down, a person becoming a map."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "End almost overhead. Still: Crane over the head of [Subject], the arm rising until the camera looks nearly straight down, a person becoming a map.",
+      "Video: The camera cranes up and over [Subject] until the view is almost overhead. Do not stop at a high three-quarter."
+    ],
+    "example": "The camera cranes up and over [Subject] until the view is almost overhead."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/801e05830a3e9afbabdcf501f626816a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/crane-over-the-head-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3618f7093fd88ddbad2973f1d0ac61f2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-over-the-head-crane-over-the-head-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/89aa86b9efaa84af05fa5bc5de7d4887.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/crane-over-the-head.jpg",
+      "alt": "Crane Over The Head frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/ce1f07177722d7e2a2ae3c53ed7cac09.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-over-crane-over-mini.webp",
+      "alt": "Crane Over"
+    },
+    {
+      "kind": "video",
+      "path": "media/e25d0aafa12cf5207b084f402b53ef09.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/crane-over-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e38c926247e6d32a842471e279499092.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/overhead-overhead-mini.webp",
+      "alt": "Overhead Top-Down"
+    },
+    {
+      "kind": "video",
+      "path": "media/26a0d54296bd8cd0d0f7613e6420795a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/overhead-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+      "alt": "Bird's-Eye View"
+    },
+    {
+      "kind": "video",
+      "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9009e415f9f66bff76f34a5a61134e79.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-over-the-head/hero.jpg",
+      "alt": "Crane Over The Head",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "b5c44daaf53715900ce5abe50f525dd1400e81a8708e1742465d22f5b9406564"
+}

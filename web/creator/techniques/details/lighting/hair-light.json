@@ -1,0 +1,408 @@
+{
+  "id": "lighting/hair-light",
+  "slug": "hair-light",
+  "title": "Hair Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/hair-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hair-light.webp",
+  "detail": "details/lighting/hair-light.json",
+  "aliases": [],
+  "description": "A hair light is a small source behind and above the subject that lights only the top of the hair as a rim so texture separates from the background. The face stays on the key or in cooler shadow.",
+  "thumbnail": "media/7b43fba8f9ee92360dc05277bccafc56.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Black hair, black wardrobe, black set: without a hair light the head becomes a hole. The unit is a separation tool, not a beauty wash."
+        },
+        {
+          "type": "paragraph",
+          "text": "Studio portraits and classical close-ups use it so a bun, a wave, or a wet scalp has a specular edge. It is the wrong tool when the story is a hat brim or a bald scalp you do not want to grease, or when a full backlight should wrap shoulders as well.",
+          "links": [
+            {
+              "text": "backlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the lamp drops to cheek height it becomes a kicker.",
+          "links": [
+            {
+              "text": "kicker",
+              "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "backlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "kicker",
+          "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Black hair, black wardrobe, black set: without a hair light the head becomes a hole. The unit is a separation tool, not a beauty wash.Studio portraits and classical close-ups use it so a bun, a wave, or a wet scalp has a specular edge. It is the wrong tool when the story is a hat brim or a bald scalp you do not want to grease, or when a full backlight should wrap shoulders as well.If the lamp drops to cheek height it becomes a kicker."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mount a small lamp high and behind, slightly opposite the key, snooted or barred so it hits hair and maybe the top of the shoulders only. Hardness is usually harder than the key so strands sparkle."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is often a bit warmer than the face, or matching the key. Keep it out of the eyes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: A small lamp behind and above [Subject], lighting only the top of the hair as a rim. The face stays in cooler shadow."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Mount a small lamp high and behind, slightly opposite the key, snooted or barred so it hits hair and maybe the top of the shoulders only. Hardness is usually harder than the key so strands sparkle.Color is often a bit warmer than the face, or matching the key. Keep it out of the eyes.Prompt: A small lamp behind and above [Subject], lighting only the top of the hair as a rim. The face stays in cooler shadow."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when dark hair would vanish into a dark wall, for example a brunette in a black interior. Do not use it as a ceiling wash that skims the forehead and noses."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when dark hair would vanish into a dark wall, for example a brunette in a black interior. Do not use it as a ceiling wash that skims the forehead and noses."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Backlight can include hair but also shoulders and veil. Rim light runs the whole outline.",
+          "links": [
+            {
+              "text": "Backlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            },
+            {
+              "text": "Rim light",
+              "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Kicker kisses jaw, not the crown. Three-point lighting often uses a hair light as its back point.",
+          "links": [
+            {
+              "text": "Kicker",
+              "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+            },
+            {
+              "text": "Three-point lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Glam may include a hair edge, but glam is a frontal beauty package.",
+          "links": [
+            {
+              "text": "Glam",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "BacklightSeparate a dark figure from a dark world.",
+          "displayText": "Backlight\nSeparate a dark figure from a dark world.",
+          "links": [
+            {
+              "text": "BacklightSeparate a dark figure from a dark world.",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Key LightDecide where the world is lit from. Everything else follows.",
+          "displayText": "Key Light\nDecide where the world is lit from. Everything else follows.",
+          "links": [
+            {
+              "text": "Key LightDecide where the world is lit from. Everything else follows.",
+              "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Backlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "Rim light",
+          "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+        },
+        {
+          "text": "Kicker",
+          "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+        },
+        {
+          "text": "Three-point lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        },
+        {
+          "text": "Glam",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "BacklightSeparate a dark figure from a dark world.",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        },
+        {
+          "text": "Key LightDecide where the world is lit from. Everything else follows.",
+          "url": "https://melies.co/cinematic-techniques/lighting/key-light"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+          "alt": "Backlight"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/060335b879d527a7f44190f4b1d160cf.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/key-light.webp",
+          "alt": "Key Light"
+        }
+      ],
+      "sourceText": "Compared with similar shots Backlight can include hair but also shoulders and veil. Rim light runs the whole outline.Kicker kisses jaw, not the crown. Three-point lighting often uses a hair light as its back point.Glam may include a hair edge, but glam is a frontal beauty package.BacklightSeparate a dark figure from a dark world.Three-Point LightingTeachable portrait. Start here, then break it.Key LightDecide where the world is lit from. Everything else follows."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Studio portraiture and classical close-ups, including blonde and brunette work in Gentlemen Prefer Blondes and the constructed hair edges in Vertigo, keep a small rear-top unit on the hair. The face still belongs to the key."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Studio portraiture and classical close-ups, including blonde and brunette work in Gentlemen Prefer Blondes and the constructed hair edges in Vertigo, keep a small rear-top unit on the hair. The face still belongs to the key."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aim at the crown, not the nose. Use: \"A small lamp behind and above [Subject], lighting only the top of the hair as a rim."
+        },
+        {
+          "type": "paragraph",
+          "text": "\" Name hair color so the model does not bleach the scalp."
+        },
+        {
+          "type": "quote",
+          "text": "A small lamp behind and above [Subject], lighting only the top of the hair as a rim. The face stays in cooler shadow."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=A+small+lamp+behind+and+above+[Subject],+lighting+only+the+top+of+the+hair+as+a+rim.+The+face+stays+in+cooler+shadow."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Aim at the crown, not the nose. Use: \"A small lamp behind and above [Subject], lighting only the top of the hair as a rim.\" Name hair color so the model does not bleach the scalp.Copy promptUse in Image GeneratorA small lamp behind and above [Subject], lighting only the top of the hair as a rim. The face stays in cooler shadow.A small lamp behind and above [Subject], lighting only the top of the hair as a rim. The face stays in cooler shadow."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a full backlight or a halo. The tell is a glowing oval around the head, or forehead shine from above.",
+          "links": [
+            {
+              "text": "backlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by snooting the unit onto hair only and keeping the face on the key."
+        }
+      ],
+      "links": [
+        {
+          "text": "backlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a full backlight or a halo. The tell is a glowing oval around the head, or forehead shine from above.Fix it by snooting the unit onto hair only and keeping the face on the key."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a hair light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A small lamp behind and above the subject that lights hair texture as a rim. It separates dark hair from a dark background without relighting the face."
+        },
+        {
+          "type": "heading",
+          "text": "Hair light vs backlight",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A hair light is a restricted backlight aimed at the crown. Backlight may wrap the whole rear edge, including shoulders and atmosphere."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a hair light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when black or dark hair would merge with the set. Skip it on hats, bald heads you want matte, or when a full rear rim is the point."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a hair light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Place a small lamp behind and above, lighting only the top of the hair. Keep the face in the key or in cooler shadow."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a hair light in film?A small lamp behind and above the subject that lights hair texture as a rim. It separates dark hair from a dark background without relighting the face.Hair light vs backlightA hair light is a restricted backlight aimed at the crown. Backlight may wrap the whole rear edge, including shoulders and atmosphere.When should I use a hair light?Use it when black or dark hair would merge with the set. Skip it on hats, bald heads you want matte, or when a full rear rim is the point.How do I prompt a hair light for AI image or video?Place a small lamp behind and above, lighting only the top of the hair. Keep the face in the key or in cooler shadow."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Aim at the crown, not the nose. Use: \"A small lamp behind and above [Subject], lighting only the top of the hair as a rim.",
+      "\" Name hair color so the model does not bleach the scalp."
+    ],
+    "example": "A small lamp behind and above [Subject], lighting only the top of the hair as a rim. The face stays in cooler shadow."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/7b43fba8f9ee92360dc05277bccafc56.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hair-light.webp",
+      "alt": "Hair Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+      "alt": "Backlight"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/060335b879d527a7f44190f4b1d160cf.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/key-light.webp",
+      "alt": "Key Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/899e2391a37c12ca429639d3164becb9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/hair-light/hero.jpg",
+      "alt": "Hair Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "11b440944b622808b4f988517247168049823c7de7662e4d70c74948bd1fcd22"
+}

@@ -1,0 +1,392 @@
+{
+  "id": "camera-movement/omnidirectional",
+  "slug": "omnidirectional",
+  "title": "Omnidirectional",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/omnidirectional",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/omnidirectional-omnidirectional-mini.webp",
+  "detail": "details/camera-movement/omnidirectional.json",
+  "aliases": [
+    "360 video"
+  ],
+  "description": "Omnidirectional capture uses a 360 camera to record spherical space, so the viewer can look any way and there is no behind the camera. Off-screen ceases to exist as a hiding place.",
+  "thumbnail": "media/035b85653d18ab22b633ffd380327486.webp",
+  "video": "media/14f53e559be1beb7ef57e756bdb2f6b4.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/omnidirectional-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "There is no behind the camera. Staging has to work in a sphere: crew, lights, and unfinished walls cannot hide at the operator's back."
+        },
+        {
+          "type": "paragraph",
+          "text": "The rectangle of cinema is a later crop, or the piece is truly VR. It is the wrong tool for classical coverage."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you need off-screen as a threat, you need a directed frame with edges. A 360 file that is only ever viewed as a locked wide is a waste of the sphere."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function There is no behind the camera. Staging has to work in a sphere: crew, lights, and unfinished walls cannot hide at the operator's back.The rectangle of cinema is a later crop, or the piece is truly VR. It is the wrong tool for classical coverage.If you need off-screen as a threat, you need a directed frame with edges. A 360 file that is only ever viewed as a locked wide is a waste of the sphere."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A spherical rig or a pair of fisheyes stitched into an equirectangular world. Nodal point is a point in the room, not a rectangle."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hide stands above or in set dressing; light has to live in the space. Prompt: Omnidirectional capture of [Subject], a world that can look every way, spherical space, no off-screen."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works A spherical rig or a pair of fisheyes stitched into an equirectangular world. Nodal point is a point in the room, not a rectangle.Hide stands above or in set dressing; light has to live in the space. Prompt: Omnidirectional capture of [Subject], a world that can look every way, spherical space, no off-screen."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the audience must be able to look anywhere: VR cinema, a room that is a trap in every direction. Do not use it as a fancy synonym for an orbit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the audience must be able to look anywhere: VR cinema, a room that is a trap in every direction. Do not use it as a fancy synonym for an orbit."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "360-Degree Orbit is a directed camera walking a circle; there is still off-screen. First-Person is a character's bodily view, usually a rectangle with hands.",
+          "links": [
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            },
+            {
+              "text": "First-Person",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Omnidirectional is a sphere. A Pan only yaws a limited angle from sticks.",
+          "links": [
+            {
+              "text": "Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "displayText": "360-Degree Orbit\nTime collapses around one person: kiss, threat, or product hero.",
+          "links": [
+            {
+              "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "First-PersonThe audience is the character.",
+          "displayText": "First-Person\nThe audience is the character.",
+          "links": [
+            {
+              "text": "First-PersonThe audience is the character.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "First-Person",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        },
+        {
+          "text": "Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan"
+        },
+        {
+          "text": "360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        },
+        {
+          "text": "First-PersonThe audience is the character.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+          "alt": "360-Degree Orbit"
+        },
+        {
+          "kind": "video",
+          "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/01790c06b52c445f162adaebc0032d9c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/first-person-first-person-mini.webp",
+          "alt": "First-Person"
+        },
+        {
+          "kind": "video",
+          "path": "media/fa9972874be9b02e031873b419f520ab.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/first-person-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots 360-Degree Orbit is a directed camera walking a circle; there is still off-screen. First-Person is a character's bodily view, usually a rectangle with hands.Omnidirectional is a sphere. A Pan only yaws a limited angle from sticks.360-Degree OrbitTime collapses around one person: kiss, threat, or product hero.First-PersonThe audience is the character.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "VR cinema is the native grammar. Hardcore Henry is first-person, a cousin in subjectivity, not a sphere."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not cite it as 360 capture."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film VR cinema is the native grammar. Hardcore Henry is first-person, a cousin in subjectivity, not a sphere.Do not cite it as 360 capture."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the sphere and the lack of off-screen. Still: Omnidirectional capture of [Subject], a world that can look every way, spherical space, no off-screen."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: A 360-degree world around [Subject], camera able to look anywhere. Forbid a single directed pan as the whole idea."
+        },
+        {
+          "type": "quote",
+          "text": "A 360-degree world around [Subject], camera able to look anywhere."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+360-degree+world+around+[Subject],+camera+able+to+look+anywhere."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the sphere and the lack of off-screen. Still: Omnidirectional capture of [Subject], a world that can look every way, spherical space, no off-screen.Video: A 360-degree world around [Subject], camera able to look anywhere. Forbid a single directed pan as the whole idea.Copy promptUse in Video GeneratorA 360-degree world around [Subject], camera able to look anywhere.A 360-degree world around [Subject], camera able to look anywhere."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an orbit-360. The tell: a framed shot that travels around a person with a clear behind-camera."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: spherical space, look-anywhere, no hidden crew, no off-screen."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an orbit-360. The tell: a framed shot that travels around a person with a clear behind-camera.The fix: spherical space, look-anywhere, no hidden crew, no off-screen."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Omnidirectional in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Omnidirectional capture records a sphere with a 360 camera, so the viewer can look any direction and nothing hides behind the operator."
+        },
+        {
+          "type": "heading",
+          "text": "Omnidirectional vs 360-Degree Orbit",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An orbit-360 is a normal framed camera walking a circle. Omnidirectional is spherical capture with no off-screen."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Omnidirectional?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for VR or any scene that must work in every direction. Do not use it when off-screen threat is the point."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Omnidirectional for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write spherical space and look-anywhere. Example: Omnidirectional capture of [Subject], a world that can look every way, spherical space, no off-screen."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Omnidirectional in film?Omnidirectional capture records a sphere with a 360 camera, so the viewer can look any direction and nothing hides behind the operator.Omnidirectional vs 360-Degree OrbitAn orbit-360 is a normal framed camera walking a circle. Omnidirectional is spherical capture with no off-screen.When should I use Omnidirectional?Use it for VR or any scene that must work in every direction. Do not use it when off-screen threat is the point.How do I prompt Omnidirectional for AI image or video?Write spherical space and look-anywhere. Example: Omnidirectional capture of [Subject], a world that can look every way, spherical space, no off-screen."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the sphere and the lack of off-screen. Still: Omnidirectional capture of [Subject], a world that can look every way, spherical space, no off-screen.",
+      "Video: A 360-degree world around [Subject], camera able to look anywhere. Forbid a single directed pan as the whole idea."
+    ],
+    "example": "A 360-degree world around [Subject], camera able to look anywhere."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/14f53e559be1beb7ef57e756bdb2f6b4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/omnidirectional-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/035b85653d18ab22b633ffd380327486.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/omnidirectional-omnidirectional-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7d89c56b03b4139bd20244a1b34a4655.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/omnidirectional.jpg",
+      "alt": "Omnidirectional frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/47bc776685220df85d188b6f61fd0d1f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbit-360-007-orbit-around-a-subject-mini.webp",
+      "alt": "360-Degree Orbit"
+    },
+    {
+      "kind": "video",
+      "path": "media/4fd9134a22e9cca3150a40e538663878.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/007-orbit-around-a-subject-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/01790c06b52c445f162adaebc0032d9c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/first-person-first-person-mini.webp",
+      "alt": "First-Person"
+    },
+    {
+      "kind": "video",
+      "path": "media/fa9972874be9b02e031873b419f520ab.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/first-person-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/217c9780ab56b7f8767c0ced0e342e09.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/omnidirectional/hero.jpg",
+      "alt": "Omnidirectional",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "6d0ef67bc44702345887eb1c682ecb40b9512622a8e25146b8965a5efd7cd8a0"
+}

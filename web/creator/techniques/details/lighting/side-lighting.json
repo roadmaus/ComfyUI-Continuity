@@ -1,0 +1,396 @@
+{
+  "id": "lighting/side-lighting",
+  "slug": "side-lighting",
+  "title": "Side Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/side-lighting",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/side-lighting.webp",
+  "detail": "details/lighting/side-lighting.json",
+  "aliases": [],
+  "description": "Side lighting keys primarily from one side, around 90 degrees to the camera-subject line, so shape and texture are emphasized. Half the form goes toward light, half toward shadow.",
+  "thumbnail": "media/bda597b29ccb89145f1d542420d70b43.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face or a landscape becomes sculpture. Sweat, wood grain, and cheekbones show because the light rakes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Action and crime use it so bodies have planes; portraits use it when character should look carved. It is the wrong tool for a passport-readable hero or a beauty wrap."
+        },
+        {
+          "type": "paragraph",
+          "text": "Side lighting a room is not automatically split lighting. Split is the facial center-line cut with almost no wrap.",
+          "links": [
+            {
+              "text": "split lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Side can still graze a shoulder, a horse, a wall."
+        }
+      ],
+      "links": [
+        {
+          "text": "split lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A face or a landscape becomes sculpture. Sweat, wood grain, and cheekbones show because the light rakes.Action and crime use it so bodies have planes; portraits use it when character should look carved. It is the wrong tool for a passport-readable hero or a beauty wrap.Side lighting a room is not automatically split lighting. Split is the facial center-line cut with almost no wrap.Side can still graze a shoulder, a horse, a wall."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place the key at about 90 degrees, at a height that fits the story (eye height for a face, raking low sun for ground texture). Hardness is often hard so texture reads; soft side light exists as a large window in a side wall."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color follows that source. Control wrap with flags if you need a truer split."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Pure side light at 90 degrees on [Subject], half the face brilliant, half gone, texture and duality."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place the key at about 90 degrees, at a height that fits the story (eye height for a face, raking low sun for ground texture). Hardness is often hard so texture reads; soft side light exists as a large window in a side wall.Color follows that source. Control wrap with flags if you need a truer split.Prompt: Pure side light at 90 degrees on [Subject], half the face brilliant, half gone, texture and duality."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to carve a face or a body like sculpture, a raking desert, a sweat-lit fight. Do not use it as default coverage on a two-shot that needs both people open."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to carve a face or a body like sculpture, a raking desert, a sweat-lit fight. Do not use it as default coverage on a two-shot that needs both people open."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Split lighting is the hard facial version of this direction. Cross lighting uses two opposing side keys.",
+          "links": [
+            {
+              "text": "Split lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+            },
+            {
+              "text": "Cross lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Kicker is a side-back accent, not a key. Short lighting and broad lighting depend on head turn relative to camera, not on 90 degrees as such.",
+          "links": [
+            {
+              "text": "Kicker",
+              "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+            },
+            {
+              "text": "Short lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/short-lighting"
+            },
+            {
+              "text": "broad lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/broad-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Split LightingDuality made literal.",
+          "displayText": "Split Lighting\nDuality made literal.",
+          "links": [
+            {
+              "text": "Split LightingDuality made literal.",
+              "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cross LightingStage, sweat, or two moral sources.",
+          "displayText": "Cross Lighting\nStage, sweat, or two moral sources.",
+          "links": [
+            {
+              "text": "Cross LightingStage, sweat, or two moral sources.",
+              "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Split lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+        },
+        {
+          "text": "Cross lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+        },
+        {
+          "text": "Kicker",
+          "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+        },
+        {
+          "text": "Short lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/short-lighting"
+        },
+        {
+          "text": "broad lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/broad-lighting"
+        },
+        {
+          "text": "Split LightingDuality made literal.",
+          "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+        },
+        {
+          "text": "Cross LightingStage, sweat, or two moral sources.",
+          "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/46e71519bf7430c3e5e9d1358765e110.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-lighting.webp",
+          "alt": "Split Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/f9879d2046e2a2863241db72e563d020.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-lighting.webp",
+          "alt": "Cross Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Split lighting is the hard facial version of this direction. Cross lighting uses two opposing side keys.Kicker is a side-back accent, not a key. Short lighting and broad lighting depend on head turn relative to camera, not on 90 degrees as such.Split LightingDuality made literal.Cross LightingStage, sweat, or two moral sources.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Apocalypse Now rakes faces with hard side sources in the dark. Sicario uses raking sun and side keys so landscape and faces have grain."
+        },
+        {
+          "type": "paragraph",
+          "text": "The job is the 90-degree rake, not a mood."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Apocalypse Now rakes faces with hard side sources in the dark. Sicario uses raking sun and side keys so landscape and faces have grain.The job is the 90-degree rake, not a mood."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the lamp at 90 degrees. \" Name hardness."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say whether the body or only the face is raked."
+        },
+        {
+          "type": "quote",
+          "text": "Pure side light at 90 degrees on [Subject], half the face brilliant, half gone, texture and duality."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Pure+side+light+at+90+degrees+on+[Subject],+half+the+face+brilliant,+half+gone,+texture+and+duality."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Put the lamp at 90 degrees. \" Name hardness.Say whether the body or only the face is raked.Copy promptUse in Image GeneratorPure side light at 90 degrees on [Subject], half the face brilliant, half gone, texture and duality.Pure side light at 90 degrees on [Subject], half the face brilliant, half gone, texture and duality."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Rembrandt (too frontal) or cross lighting (a second key). The tell is a cheek triangle, or rims on both sides.",
+          "links": [
+            {
+              "text": "Rembrandt",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            },
+            {
+              "text": "cross lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by parking one key at 90 and killing the opposite unit."
+        }
+      ],
+      "links": [
+        {
+          "text": "Rembrandt",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "cross lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cross-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Rembrandt (too frontal) or cross lighting (a second key). The tell is a cheek triangle, or rims on both sides.Fix it by parking one key at 90 and killing the opposite unit."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is side lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Light from about 90 degrees that emphasizes shape and texture. One side of the subject is bright; the other falls away."
+        },
+        {
+          "type": "heading",
+          "text": "Side lighting vs split lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Side lighting is the direction, usable on faces, bodies, and rooms. Split lighting is a facial pattern with a hard vertical cut and almost no wrap."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use side lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to carve texture and duality. Skip it when both eyes must be openly keyed for a public conversation."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt side lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Place a single key at 90 degrees. State half the form brilliant, half gone, and name hard or soft. No second key on the far side."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is side lighting in film?Light from about 90 degrees that emphasizes shape and texture. One side of the subject is bright; the other falls away.Side lighting vs split lightingSide lighting is the direction, usable on faces, bodies, and rooms. Split lighting is a facial pattern with a hard vertical cut and almost no wrap.When should I use side lighting?Use it to carve texture and duality. Skip it when both eyes must be openly keyed for a public conversation.How do I prompt side lighting for AI image or video?Place a single key at 90 degrees. State half the form brilliant, half gone, and name hard or soft. No second key on the far side."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Put the lamp at 90 degrees. \" Name hardness.",
+      "Say whether the body or only the face is raked."
+    ],
+    "example": "Pure side light at 90 degrees on [Subject], half the face brilliant, half gone, texture and duality."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/bda597b29ccb89145f1d542420d70b43.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/side-lighting.webp",
+      "alt": "Side Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/46e71519bf7430c3e5e9d1358765e110.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-lighting.webp",
+      "alt": "Split Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/f9879d2046e2a2863241db72e563d020.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-lighting.webp",
+      "alt": "Cross Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/81f0b0427960e020643b3c3459230a26.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/side-lighting/hero.jpg",
+      "alt": "Side Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "b0b153e9872c689b5a2c9ebe44c6f2a2a14b2cffdc1064515d96c5e7ab8a0121"
+}

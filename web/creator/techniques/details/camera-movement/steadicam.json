@@ -1,0 +1,424 @@
+{
+  "id": "camera-movement/steadicam",
+  "slug": "steadicam",
+  "title": "Steadicam",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/steadicam",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+  "detail": "details/camera-movement/steadicam.json",
+  "aliases": [],
+  "description": "Steadicam is a mechanical stabilizing system using a sled, arm, and vest, so an operator can walk while the camera floats. The path can connect rooms with a smoothness that is neither handheld tremor nor dolly traction.",
+  "thumbnail": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+  "video": "media/5119e79be51fd2c538540ccba65043be.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Long connecting moves through architecture. Light temperatures shift as rooms change."
+        },
+        {
+          "type": "paragraph",
+          "text": "The operator is walking, so the camera can turn corners, climb stairs, and arrive in a new social weather without laying track through every door. It is the wrong tool when you want documentary shake, or when a straight corridor would be cleaner and cheaper on track."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also not a gimbal: the isolation comes from a mechanical arm and the operator's trained gait, not from motors alone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Long connecting moves through architecture. Light temperatures shift as rooms change.The operator is walking, so the camera can turn corners, climb stairs, and arrive in a new social weather without laying track through every door. It is the wrong tool when you want documentary shake, or when a straight corridor would be cleaner and cheaper on track.It is also not a gimbal: the isolation comes from a mechanical arm and the operator's trained gait, not from motors alone."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vest, spring arm, sled, and a balanced camera. The operator walks a rehearsed line; the camera is isolated from footfall."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can still boom slightly with the arm. Prompt Steadicam floating with the subject through connected spaces, preternatural smoothness, operator walking, no footfall shake."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Vest, spring arm, sled, and a balanced camera. The operator walks a rehearsed line; the camera is isolated from footfall.You can still boom slightly with the arm. Prompt Steadicam floating with the subject through connected spaces, preternatural smoothness, operator walking, no footfall shake."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for long connecting moves through architecture, neither handheld nor dolly. Concrete beat: through a kitchen, down a stair, into a club, one path."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not Steadicam a lock-off that only needed sticks."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for long connecting moves through architecture, neither handheld nor dolly. Concrete beat: through a kitchen, down a stair, into a club, one path.Do not Steadicam a lock-off that only needed sticks."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Gimbal Shot uses motorized electronic stabilization and is often run without a vest. Handheld keeps the operator's mass in the image as micro-tremor.",
+          "links": [
+            {
+              "text": "Gimbal Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+            },
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tracking Shot is the job; Steadicam is a support that can execute tracks, follows, and Walk and Talk coverage. A Oner may be shot on Steadicam, but length of take is not the stabilizer.",
+          "links": [
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            },
+            {
+              "text": "Walk and Talk",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/walk-and-talk"
+            },
+            {
+              "text": "Oner",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Gimbal ShotRun-and-gun smoothness without a Steadicam vest.",
+          "displayText": "Gimbal Shot\nRun-and-gun smoothness without a Steadicam vest.",
+          "links": [
+            {
+              "text": "Gimbal ShotRun-and-gun smoothness without a Steadicam vest.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "displayText": "Tracking Shot\nAccompany a walker. The shot is a journey, not a picture.",
+          "links": [
+            {
+              "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "OnerThe scene is a ride.",
+          "displayText": "Oner\nThe scene is a ride.",
+          "links": [
+            {
+              "text": "OnerThe scene is a ride.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Gimbal Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+        },
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Walk and Talk",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/walk-and-talk"
+        },
+        {
+          "text": "Oner",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+        },
+        {
+          "text": "Gimbal ShotRun-and-gun smoothness without a Steadicam vest.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+        },
+        {
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "OnerThe scene is a ride.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/3070be4364be0a73e6306a1e7dfc594b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gimbal-gimbal-mini.webp",
+          "alt": "Gimbal Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/f1caa36e2a9a5509ff6632687fe93d2d.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/gimbal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+          "alt": "Tracking Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/5a298b3eb3b678926135a630f52fe6da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-er-026-social-access-tracking-oner-mini.webp",
+          "alt": "Oner"
+        },
+        {
+          "kind": "video",
+          "path": "media/60e5248f694fc74656ed80d4e908fe31.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/026-social-access-tracking-oner-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Gimbal Shot uses motorized electronic stabilization and is often run without a vest. Handheld keeps the operator's mass in the image as micro-tremor.Tracking Shot is the job; Steadicam is a support that can execute tracks, follows, and Walk and Talk coverage. A Oner may be shot on Steadicam, but length of take is not the stabilizer.Gimbal ShotRun-and-gun smoothness without a Steadicam vest.Tracking ShotAccompany a walker. The shot is a journey, not a picture.OnerThe scene is a ride."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Shining's corridor work is the textbook Steadicam walk. Goodfellas' Copa is a vest-and-arm descent through service spaces into a table."
+        },
+        {
+          "type": "paragraph",
+          "text": "Boogie Nights connects rooms as social circuits. Smooth path, human scale: that is the grammar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Shining's corridor work is the textbook Steadicam walk. Goodfellas' Copa is a vest-and-arm descent through service spaces into a table.Boogie Nights connects rooms as social circuits. Smooth path, human scale: that is the grammar."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Steadicam floating with [Subject] through connected spaces, preternatural smoothness, operator walking, light temperatures shifting as rooms change. For motion: smooth Steadicam move floating with [Subject] through the environment, no footfall shake."
+        },
+        {
+          "type": "quote",
+          "text": "Smooth Steadicam move floating with [Subject] through the environment, no footfall shake."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Smooth+Steadicam+move+floating+with+[Subject]+through+the+environment,+no+footfall+shake."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Steadicam floating with [Subject] through connected spaces, preternatural smoothness, operator walking, light temperatures shifting as rooms change. For motion: smooth Steadicam move floating with [Subject] through the environment, no footfall shake.Copy promptUse in Video GeneratorSmooth Steadicam move floating with [Subject] through the environment, no footfall shake.Smooth Steadicam move floating with [Subject] through the environment, no footfall shake."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Handheld shake added as a preset, or a Gimbal Shot clip that never feels like a vest. The tell is tremor, or a weightless electronic drift with no human gait.",
+          "links": [
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            },
+            {
+              "text": "Gimbal Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: name Steadicam, operator walking, isolated footfall, connected architecture."
+        }
+      ],
+      "links": [
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Gimbal Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Handheld shake added as a preset, or a Gimbal Shot clip that never feels like a vest. The tell is tremor, or a weightless electronic drift with no human gait.The fix: name Steadicam, operator walking, isolated footfall, connected architecture."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Steadicam in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a mechanical stabilizer worn by an operator (vest, arm, sled) that lets the camera walk smoothly through spaces that track cannot easily enter."
+        },
+        {
+          "type": "heading",
+          "text": "Steadicam vs Gimbal Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Gimbal stabilization is motorized and often handheld without a vest. Steadicam isolates movement mechanically through an arm and trained operator gait."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Steadicam?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When you need a long, smooth walk through doorways and rooms. Do not use it as a synonym for any moving shot."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Steadicam for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Steadicam, operator walking, floating smoothness, no footfall shake, through connected rooms. Name the path and the end room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Steadicam in film?It is a mechanical stabilizer worn by an operator (vest, arm, sled) that lets the camera walk smoothly through spaces that track cannot easily enter.Steadicam vs Gimbal ShotGimbal stabilization is motorized and often handheld without a vest. Steadicam isolates movement mechanically through an arm and trained operator gait.When should I use Steadicam?When you need a long, smooth walk through doorways and rooms. Do not use it as a synonym for any moving shot.How do I prompt Steadicam for AI image or video?Write Steadicam, operator walking, floating smoothness, no footfall shake, through connected rooms. Name the path and the end room."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Steadicam floating with [Subject] through connected spaces, preternatural smoothness, operator walking, light temperatures shifting as rooms change. For motion: smooth Steadicam move floating with [Subject] through the environment, no footfall shake."
+    ],
+    "example": "Smooth Steadicam move floating with [Subject] through the environment, no footfall shake."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/afe388d772b89653cece54e7b3da9168.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/steadicam-steadicam.jpg",
+      "alt": "Steadicam frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/3070be4364be0a73e6306a1e7dfc594b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gimbal-gimbal-mini.webp",
+      "alt": "Gimbal Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/f1caa36e2a9a5509ff6632687fe93d2d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/gimbal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+      "alt": "Tracking Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5a298b3eb3b678926135a630f52fe6da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-er-026-social-access-tracking-oner-mini.webp",
+      "alt": "Oner"
+    },
+    {
+      "kind": "video",
+      "path": "media/60e5248f694fc74656ed80d4e908fe31.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/026-social-access-tracking-oner-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2d2e603cbba0235c94475c75fe53572a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/steadicam/hero.jpg",
+      "alt": "Steadicam",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "fd3516e1d0727589f1e701c67578bc43c7f2bcebdd699247b37215db2b17b81f"
+}

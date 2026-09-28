@@ -1,0 +1,435 @@
+{
+  "id": "time-and-motion/timelapse-human",
+  "slug": "timelapse-human",
+  "title": "Timelapse Human",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-human",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/timelapse-human-05-timelapse-human-mini.webp",
+  "detail": "details/time-and-motion/timelapse-human.json",
+  "aliases": [],
+  "description": "Timelapse human holds one person in living time while the crowd is interval-sampled into smoke, so one still will stands in a rushing system. It is the opposite clock of a frozen world with a moving hero.",
+  "thumbnail": "media/bfe0fcf5a94e05cb0e7826ed1dd2a6bd.webp",
+  "video": "media/898414b7bb0e4f6da57663d0a05c72a4.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/05-timelapse-human-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when isolation is a rate difference: the subject decides, waits, or grieves at 24 fps while the city is hours. Commuters become flow."
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera is usually locked so the contrast stays readable. A tiny sway in the hero is allowed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Walking at full speed through a lapse crowd breaks the contract. It is the wrong tool when the world should freeze and the hero should walk (frozen in motion), or when weather is the subject (timelapse landscape)."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Matrix lobby is often misfiled here. That lobby is bullet time: an orbit around a crushed instant, not interval crowds around a statue."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when isolation is a rate difference: the subject decides, waits, or grieves at 24 fps while the city is hours. Commuters become flow.The camera is usually locked so the contrast stays readable. A tiny sway in the hero is allowed.Walking at full speed through a lapse crowd breaks the contract. It is the wrong tool when the world should freeze and the hero should walk (frozen in motion), or when weather is the subject (timelapse landscape).The Matrix lobby is often misfiled here. That lobby is bullet time: an orbit around a crushed instant, not interval crowds around a statue."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock the hero's mark and the camera. Sample passersby at long intervals, or composite a held performance over a crowd lapse."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shadows on the hero should not travel like a full day unless that is the story. Prompt: Timelapse human of [Subject] frozen in a rushing crowd, people as smoke, one still will."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock the hero's mark and the camera. Sample passersby at long intervals, or composite a held performance over a crowd lapse.Shadows on the hero should not travel like a full day unless that is the story. Prompt: Timelapse human of [Subject] frozen in a rushing crowd, people as smoke, one still will."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when one person should hold a station or a square while the crowd becomes smoke. Do not use it when that person must walk through a stopped city."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when one person should hold a station or a square while the crowd becomes smoke. Do not use it when that person must walk through a stopped city."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This is Time-Lapse applied to extras around a held lead. Frozen in Motion freezes the crowd and lets the lead (or camera) move.",
+          "links": [
+            {
+              "text": "Time-Lapse",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            },
+            {
+              "text": "Frozen in Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Bullet Time orbits a near-frozen event. Timelapse Landscape races weather, not pedestrians.",
+          "links": [
+            {
+              "text": "Bullet Time",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+            },
+            {
+              "text": "Timelapse Landscape",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-landscape"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fast Motion would accelerate the hero too.",
+          "links": [
+            {
+              "text": "Fast Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+          "displayText": "Time-Lapse\nShow weather, construction, or a night becoming morning.",
+          "links": [
+            {
+              "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Frozen in MotionStop the world, keep the pose.",
+          "displayText": "Frozen in Motion\nStop the world, keep the pose.",
+          "links": [
+            {
+              "text": "Frozen in MotionStop the world, keep the pose.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Time-Lapse",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "Frozen in Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion"
+        },
+        {
+          "text": "Bullet Time",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+        },
+        {
+          "text": "Timelapse Landscape",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-landscape"
+        },
+        {
+          "text": "Fast Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+        },
+        {
+          "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "Frozen in MotionStop the world, keep the pose.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/59f00cc372fa5e18d3dc936d0959e111.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/time-lapse-084-time-lapse-and-accelerated-systems-mini.webp",
+          "alt": "Time-Lapse"
+        },
+        {
+          "kind": "video",
+          "path": "media/98976fbe19bbaefa951c514246128a5b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/084-time-lapse-and-accelerated-systems-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/c702fc0092e9c05be32409ffa5919126.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frozen-in-motion-081-frozen-world-with-a-moving-viewpoint-mini.webp",
+          "alt": "Frozen in Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/a4181faece96e67bdb95dad79830a24f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/081-frozen-world-with-a-moving-viewpoint-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots This is Time-Lapse applied to extras around a held lead. Frozen in Motion freezes the crowd and lets the lead (or camera) move.Bullet Time orbits a near-frozen event. Timelapse Landscape races weather, not pedestrians.Fast Motion would accelerate the hero too.Time-LapseShow weather, construction, or a night becoming morning.Frozen in MotionStop the world, keep the pose.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Koyaanisqatsi turns crowds into systems. The still-person-in-racing-crowd recipe is a commercial and music-video cousin of that grammar."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Matrix lobby stills are a frequent false reference. They belong with bullet time."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Koyaanisqatsi turns crowds into systems. The still-person-in-racing-crowd recipe is a commercial and music-video cousin of that grammar.The Matrix lobby stills are a frequent false reference. They belong with bullet time."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hold the person, lapse the crowd. Still: one sharp figure, pedestrians as flow, stable sun unless you want a day."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Crowds time-lapse around a still [Subject], the city racing, the person holding. No frozen pigeons, no orbit, no hero sprinting through stopped extras."
+        },
+        {
+          "type": "quote",
+          "text": "Crowds time-lapse around a still [Subject], the city racing, the person holding."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Crowds+time-lapse+around+a+still+[Subject],+the+city+racing,+the+person+holding."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Hold the person, lapse the crowd. Still: one sharp figure, pedestrians as flow, stable sun unless you want a day.Video: Crowds time-lapse around a still [Subject], the city racing, the person holding. No frozen pigeons, no orbit, no hero sprinting through stopped extras.Copy promptUse in Video GeneratorCrowds time-lapse around a still [Subject], the city racing, the person holding.Crowds time-lapse around a still [Subject], the city racing, the person holding."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Frozen in Motion or Bullet Time. The tell is stopped extras and a walking hero, or a camera orbit around hanging brass.",
+          "links": [
+            {
+              "text": "Frozen in Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion"
+            },
+            {
+              "text": "Bullet Time",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: subject holds, crowd races, camera locked, people as smoke."
+        }
+      ],
+      "links": [
+        {
+          "text": "Frozen in Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/frozen-in-motion"
+        },
+        {
+          "text": "Bullet Time",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Frozen in Motion or Bullet Time. The tell is stopped extras and a walking hero, or a camera orbit around hanging brass.Fix: subject holds, crowd races, camera locked, people as smoke."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Timelapse Human in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Timelapse human keeps one person nearly still while interval-sampled crowds race around them, so isolation reads as a difference in clocks."
+        },
+        {
+          "type": "heading",
+          "text": "Timelapse Human vs Frozen in Motion",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Timelapse human races the world around a held person. Frozen in motion stops the world so a chosen person or the camera can still move."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Timelapse Human?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When one will should stand while a station, lobby, or street becomes flow. The hero is the still axis."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Timelapse Human for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write crowds time-lapsing around a still [Subject], people as smoke, camera locked. Forbid a walking hero in a frozen crowd and bullet-time orbits."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Timelapse Human in film?Timelapse human keeps one person nearly still while interval-sampled crowds race around them, so isolation reads as a difference in clocks.Timelapse Human vs Frozen in MotionTimelapse human races the world around a held person. Frozen in motion stops the world so a chosen person or the camera can still move.When should I use Timelapse Human?When one will should stand while a station, lobby, or street becomes flow. The hero is the still axis.How do I prompt Timelapse Human for AI image or video?Write crowds time-lapsing around a still [Subject], people as smoke, camera locked. Forbid a walking hero in a frozen crowd and bullet-time orbits."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Hold the person, lapse the crowd. Still: one sharp figure, pedestrians as flow, stable sun unless you want a day.",
+      "Video: Crowds time-lapse around a still [Subject], the city racing, the person holding. No frozen pigeons, no orbit, no hero sprinting through stopped extras."
+    ],
+    "example": "Crowds time-lapse around a still [Subject], the city racing, the person holding."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/898414b7bb0e4f6da57663d0a05c72a4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/05-timelapse-human-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe0fcf5a94e05cb0e7826ed1dd2a6bd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/timelapse-human-05-timelapse-human-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c8cda97c636fcdcb411fb3a2103af7ca.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/timelapse-human.jpg",
+      "alt": "Timelapse Human frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/59f00cc372fa5e18d3dc936d0959e111.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/time-lapse-084-time-lapse-and-accelerated-systems-mini.webp",
+      "alt": "Time-Lapse"
+    },
+    {
+      "kind": "video",
+      "path": "media/98976fbe19bbaefa951c514246128a5b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/084-time-lapse-and-accelerated-systems-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c702fc0092e9c05be32409ffa5919126.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frozen-in-motion-081-frozen-world-with-a-moving-viewpoint-mini.webp",
+      "alt": "Frozen in Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/a4181faece96e67bdb95dad79830a24f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/081-frozen-world-with-a-moving-viewpoint-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/65f6d25f505b05d61fd2eee93af01985.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/timelapse-human/hero.jpg",
+      "alt": "Timelapse Human",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "f2573a99ac45b72c30cddc460155c058c2b63df656be5949147ca8ac268bb911"
+}

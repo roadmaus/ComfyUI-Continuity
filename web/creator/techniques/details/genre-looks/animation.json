@@ -1,0 +1,412 @@
+{
+  "id": "genre-looks/animation",
+  "slug": "animation",
+  "title": "Animation",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/animation",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/animation.webp",
+  "detail": "details/genre-looks/animation.json",
+  "aliases": [],
+  "description": "Animation cinematography constructs light and motion instead of capturing them: graphic volume, designed keys, and movement as drawing, paint, or stepped CG, not as a photographed exposure. The world is built. Lens physics appear only if you choose them.",
+  "thumbnail": "media/f57edf0bd31cd8fedb8a8cc5427f2511.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A drawing can hold a smear. A painted film can ignore a 180-degree shutter."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spider-Verse can step the action and print halftone. Kaguya can let charcoal dissolve."
+        },
+        {
+          "type": "paragraph",
+          "text": "The 'camera' is a viewpoint in a constructed space. It is not Pixel Art (discrete sampling and a locked palette) and not Stop Motion (physical puppets moved a frame at a time).",
+          "links": [
+            {
+              "text": "Pixel Art",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+            },
+            {
+              "text": "Stop Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/stop-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Those are specific construction methods. Animation as a look means designed light and graphic motion, in 2D, 3D, or hybrid."
+        }
+      ],
+      "links": [
+        {
+          "text": "Pixel Art",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+        },
+        {
+          "text": "Stop Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/stop-motion"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A drawing can hold a smear. A painted film can ignore a 180-degree shutter.Spider-Verse can step the action and print halftone. Kaguya can let charcoal dissolve.The 'camera' is a viewpoint in a constructed space. It is not Pixel Art (discrete sampling and a locked palette) and not Stop Motion (physical puppets moved a frame at a time).Those are specific construction methods. Animation as a look means designed light and graphic motion, in 2D, 3D, or hybrid."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Decide the construction: 2D volumes, CG with graphic shaders, or mixed. Light is keyed in the design, not motivated only by a set practical unless you invent one."
+        },
+        {
+          "type": "paragraph",
+          "text": "Motion: smears, holds, stepped frame rates, or full 24fps. Do not default to photoreal ray-traced blur unless that is the film."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt graphic volume, designed light, motion as drawing rather than photography."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Decide the construction: 2D volumes, CG with graphic shaders, or mixed. Light is keyed in the design, not motivated only by a set practical unless you invent one.Motion: smears, holds, stepped frame rates, or full 24fps. Do not default to photoreal ray-traced blur unless that is the film.Prompt graphic volume, designed light, motion as drawing rather than photography."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the world must be constructed, not captured. Do not use it as a filter on live action that still wants real lens physics, and do not collapse it into pixel tiles or puppet stop-motion unless that is the method."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the world must be constructed, not captured. Do not use it as a filter on live action that still wants real lens physics, and do not collapse it into pixel tiles or puppet stop-motion unless that is the method."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Animation is constructed motion and light. Pixel Art is tiled, paletted sampling.",
+          "links": [
+            {
+              "text": "Animation",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            },
+            {
+              "text": "Pixel Art",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Stop Motion is physical increment. Video Game is playable camera logic (follow cam, HUD, collision), which may be animated or live-action dressed as a game.",
+          "links": [
+            {
+              "text": "Stop Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/stop-motion"
+            },
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A photoreal CG shot that imitates a 50mm still is animation as production, not this graphic look."
+        },
+        {
+          "type": "list-item",
+          "text": "Pixel ArtThe world is tiles.",
+          "displayText": "Pixel Art\nThe world is tiles.",
+          "links": [
+            {
+              "text": "Pixel ArtThe world is tiles.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Stop MotionMotion should feel made.",
+          "displayText": "Stop Motion\nMotion should feel made.",
+          "links": [
+            {
+              "text": "Stop MotionMotion should feel made.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/stop-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Animation",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        },
+        {
+          "text": "Pixel Art",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+        },
+        {
+          "text": "Stop Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/stop-motion"
+        },
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "Pixel ArtThe world is tiles.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+        },
+        {
+          "text": "Stop MotionMotion should feel made.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/stop-motion"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/adf6b729f06ea45773c8a8d952f4eaf4.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pixel-art.webp",
+          "alt": "Pixel Art"
+        },
+        {
+          "kind": "image",
+          "path": "media/d04b4ce391fdef45e21cc39bc134ce2c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/stop-motion-150-stop-motion-animation-mini.webp",
+          "alt": "Stop Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/caeeda8a94eba7dc76f037c54f23b46a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/150-stop-motion-animation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Animation is constructed motion and light. Pixel Art is tiled, paletted sampling.Stop Motion is physical increment. Video Game is playable camera logic (follow cam, HUD, collision), which may be animated or live-action dressed as a game.A photoreal CG shot that imitates a 50mm still is animation as production, not this graphic look.Pixel ArtThe world is tiles.Stop MotionMotion should feel made.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Spider-Man: Into the Spider-Verse (stepped motion, graphic halftone, designed light). The Tale of the Princess Kaguya (charcoal and watercolor as cinematography)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Spider-Man: Into the Spider-Verse (stepped motion, graphic halftone, designed light). The Tale of the Princess Kaguya (charcoal and watercolor as cinematography).Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Animated treatment of [Subject], graphic volume, designed light, motion as drawing rather than photography. Name the medium (halftone, charcoal, cel, graphic CG)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not ask for photoreal lens bokeh unless that is the construction."
+        },
+        {
+          "type": "quote",
+          "text": "Animated cinematic treatment of [Subject], graphic volume, designed light, motion as drawing rather than photography."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Animated+cinematic+treatment+of+[Subject],+graphic+volume,+designed+light,+motion+as+drawing+rather+than+photography."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Animated treatment of [Subject], graphic volume, designed light, motion as drawing rather than photography. Name the medium (halftone, charcoal, cel, graphic CG).Do not ask for photoreal lens bokeh unless that is the construction.Copy promptUse in Image GeneratorAnimated cinematic treatment of [Subject], graphic volume, designed light, motion as drawing rather than photography.Animated cinematic treatment of [Subject], graphic volume, designed light, motion as drawing rather than photography."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is photoreal live action, Pixel Art, or Stop Motion. The tell is a 50mm bokeh plate, chunky sprites, or puppet seams you did not want.",
+          "links": [
+            {
+              "text": "Pixel Art",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+            },
+            {
+              "text": "Stop Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/stop-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: specify the graphic medium, design the key as paint or shader, and choose smear or stepped motion."
+        }
+      ],
+      "links": [
+        {
+          "text": "Pixel Art",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/pixel-art"
+        },
+        {
+          "text": "Stop Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/stop-motion"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is photoreal live action, Pixel Art, or Stop Motion. The tell is a 50mm bokeh plate, chunky sprites, or puppet seams you did not want.Fix: specify the graphic medium, design the key as paint or shader, and choose smear or stepped motion."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Animation in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A constructed look: light and motion are designed (drawn, painted, or shaded), not captured through a lens, unless you deliberately simulate a lens. Graphic volume replaces photographic exposure."
+        },
+        {
+          "type": "heading",
+          "text": "Animation vs Pixel Art",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Pixel art locks sampling and palette into visible tiles. Animation may be fluid charcoal, cel, or graphic 3D. Both are constructed. Only pixel art makes the pixel the unit of the world."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Animation?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the world cannot or should not be a photographed place. Skip it if you want a real lens, if you want visible tiles, or if you want puppet stop-motion specifically."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Animation for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Animated treatment of [Subject], graphic volume, designed light, motion as drawing rather than photography. Name charcoal, cel, or halftone. Do not request photoreal bokeh by default."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Animation in film?A constructed look: light and motion are designed (drawn, painted, or shaded), not captured through a lens, unless you deliberately simulate a lens. Graphic volume replaces photographic exposure.Animation vs Pixel ArtPixel art locks sampling and palette into visible tiles. Animation may be fluid charcoal, cel, or graphic 3D. Both are constructed. Only pixel art makes the pixel the unit of the world.When should I use Animation?When the world cannot or should not be a photographed place. Skip it if you want a real lens, if you want visible tiles, or if you want puppet stop-motion specifically.How do I prompt Animation for AI image or video?Write: Animated treatment of [Subject], graphic volume, designed light, motion as drawing rather than photography. Name charcoal, cel, or halftone. Do not request photoreal bokeh by default."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Animated treatment of [Subject], graphic volume, designed light, motion as drawing rather than photography. Name the medium (halftone, charcoal, cel, graphic CG).",
+      "Do not ask for photoreal lens bokeh unless that is the construction."
+    ],
+    "example": "Animated cinematic treatment of [Subject], graphic volume, designed light, motion as drawing rather than photography."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/f57edf0bd31cd8fedb8a8cc5427f2511.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/animation.webp",
+      "alt": "Animation example"
+    },
+    {
+      "kind": "image",
+      "path": "media/adf6b729f06ea45773c8a8d952f4eaf4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pixel-art.webp",
+      "alt": "Pixel Art"
+    },
+    {
+      "kind": "image",
+      "path": "media/d04b4ce391fdef45e21cc39bc134ce2c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/stop-motion-150-stop-motion-animation-mini.webp",
+      "alt": "Stop Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/caeeda8a94eba7dc76f037c54f23b46a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/150-stop-motion-animation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/00b7f76d00f8f6144f19ec2f2da5d34f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/animation/hero.jpg",
+      "alt": "Animation",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "e3bee05a363a04427817c69664c00fd8bcee720363479eb74d0d7245ed2e929e"
+}

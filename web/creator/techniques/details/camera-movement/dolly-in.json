@@ -1,0 +1,436 @@
+{
+  "id": "camera-movement/dolly-in",
+  "slug": "dolly-in",
+  "title": "Dolly In",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/dolly-in",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+  "detail": "details/camera-movement/dolly-in.json",
+  "aliases": [
+    "truck in",
+    "dolly forward",
+    "Dolly shot",
+    "dolly out",
+    "lateral dolly",
+    "diagonal dolly",
+    "Push-in",
+    "Travelling avant"
+  ],
+  "description": "A dolly in shot moves the entire camera through space on a wheeled or tracked support, advancing toward the subject at a measured pace. The nodal point walks, so foreground and background shift in parallax as the surroundings are progressively excluded.",
+  "thumbnail": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+  "video": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The camera enters a mind, a room, or a threat by occupying new air. Unlike a cut, the audience experiences the change of attention continuously."
+        },
+        {
+          "type": "paragraph",
+          "text": "A small travel can make a thought feel consequential because space itself has agreed to close. It is the wrong tool when you want optical compression without new geography, or when the beat is only a sting."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the track is longer than the thought, the move tours."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The camera enters a mind, a room, or a threat by occupying new air. Unlike a cut, the audience experiences the change of attention continuously.A small travel can make a thought feel consequential because space itself has agreed to close. It is the wrong tool when you want optical compression without new geography, or when the beat is only a sting.If the track is longer than the thought, the move tours."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lay track or roll a wheeled dolly on a known axis. Fix focal length, usually a moderate spherical such as 40mm."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep eye height constant unless the story changes rank. Tie the arrival at close-up to a change in the actor's thought."
+        },
+        {
+          "type": "paragraph",
+          "text": "Foreground objects will slide. Prompt a physical dolly in on track, camera body gliding forward, parallax shifting, no optical zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lay track or roll a wheeled dolly on a known axis. Fix focal length, usually a moderate spherical such as 40mm.Keep eye height constant unless the story changes rank. Tie the arrival at close-up to a change in the actor's thought.Foreground objects will slide. Prompt a physical dolly in on track, camera body gliding forward, parallax shifting, no optical zoom."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to enter a mind, a room, or a threat, because geography changes when the camera walks. Concrete beat: a medium two-shot that arrives on a lie forming in one face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use a digital zoom and call it a dolly."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to enter a mind, a room, or a threat, because geography changes when the camera walks. Concrete beat: a medium two-shot that arrives on a lie forming in one face.Do not use a digital zoom and call it a dolly."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Slow Zoom In keeps the station point and only changes focal length, so there is no walking parallax. A Push In is the pressure job that can be a short dolly, slider, or Steadicam; dolly in names the wheeled path and the traction.",
+          "links": [
+            {
+              "text": "Slow Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            },
+            {
+              "text": "Push In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tracking Shot matches a mover instead of closing on a still thought.",
+          "links": [
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Push InA thought lands. Do not rush it.",
+          "displayText": "Push In\nA thought lands. Do not rush it.",
+          "links": [
+            {
+              "text": "Push InA thought lands. Do not rush it.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "displayText": "Tracking Shot\nAccompany a walker. The shot is a journey, not a picture.",
+          "links": [
+            {
+              "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        },
+        {
+          "text": "Push In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+        },
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Push InA thought lands. Do not rush it.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        },
+        {
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/47c873ce3b75c118eebcc03f9ebba030.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/push-in-push-in-mini.webp",
+          "alt": "Push In"
+        },
+        {
+          "kind": "video",
+          "path": "media/ff1d0cd1ffd7716264b1bf880a5b857a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/push-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+          "alt": "Tracking Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Slow Zoom In keeps the station point and only changes focal length, so there is no walking parallax. A Push In is the pressure job that can be a short dolly, slider, or Steadicam; dolly in names the wheeled path and the traction.Tracking Shot matches a mover instead of closing on a still thought.Push InA thought lands. Do not rush it.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.Tracking ShotAccompany a walker. The shot is a journey, not a picture."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Shining uses measured forward travel through the hotel so rooms become traps. Goodfellas often walks the camera as social pressure, distinct from its Copa track."
+        },
+        {
+          "type": "paragraph",
+          "text": "Oldboy's corridor work is mostly lateral tracking; use it as a reminder that forward dolly and side track are different axes. Grammar for translation, not a shot to duplicate."
+        },
+        {
+          "type": "list-item",
+          "text": "Jaws 1975The gradual approach toward Quint during the Indianapolis monologue; shot boundaries and camera-versus-zoom mechanics require an edition check.",
+          "displayText": "Jaws 1975\nThe gradual approach toward Quint during the Indianapolis monologue; shot boundaries and camera-versus-zoom mechanics require an edition check."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1c139290f261d979c33b2fcbeae1026e.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-in/famous/00-jaws-1975.jpg",
+          "alt": "Jaws 1975"
+        }
+      ],
+      "sourceText": "In film The Shining uses measured forward travel through the hotel so rooms become traps. Goodfellas often walks the camera as social pressure, distinct from its Copa track.Oldboy's corridor work is mostly lateral tracking; use it as a reminder that forward dolly and side track are different axes. Grammar for translation, not a shot to duplicate.Jaws 1975The gradual approach toward Quint during the Indianapolis monologue; shot boundaries and camera-versus-zoom mechanics require an edition check."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Physical dolly in toward [Subject] on track, camera body gliding forward, parallax shifting foreground against background, 40mm spherical, buttery traction. For motion: the camera physically dollies forward toward [Subject] for 6 seconds."
+        },
+        {
+          "type": "paragraph",
+          "text": "Foreground parallax, no optical zoom."
+        },
+        {
+          "type": "quote",
+          "text": "An archivist sits at a desk and notices a familiar signature on an old letter. Begin in a medium-wide shot. Over eight seconds dolly slowly forward to a close-up, fixed lens, subtle foreground parallax, no zoom. Her eyes lift only at the end. Restrained daylight, no cut."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=An+archivist+sits+at+a+desk+and+notices+a+familiar+signature+on+an+old+letter.+Begin+in+a+medium-wide+shot.+Over+eight+seconds+dolly+slowly+forward+to+a+close-up,+fixed+lens,+subtle+foreground+parallax,+no+zoom.+Her+eyes+lift+only+at+the+end.+Restrained+daylight,+no+cut."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Physical dolly in toward [Subject] on track, camera body gliding forward, parallax shifting foreground against background, 40mm spherical, buttery traction. For motion: the camera physically dollies forward toward [Subject] for 6 seconds.Foreground parallax, no optical zoom.Copy promptUse in Video GeneratorAn archivist sits at a desk and notices a familiar signature on an old letter. Begin in a medium-wide shot. Over eight seconds dolly slowly forward to a close-up, fixed lens, subtle foreground parallax, no zoom. Her eyes lift only at the end. Restrained daylight, no cut.An archivist sits at a desk and notices a familiar signature on an old letter. Begin in a medium-wide shot. Over eight seconds dolly slowly forward to a close-up, fixed lens, subtle foreground parallax, no zoom. Her eyes lift only at the end. Restrained daylight, no cut."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Slow Zoom In or a crop. The tell is missing parallax: walls grow but never slide.",
+          "links": [
+            {
+              "text": "Slow Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is a real translation, fixed focal length, constant eye height, and an end frame tied to a thought, not to a clock."
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Slow Zoom In or a crop. The tell is missing parallax: walls grow but never slide.The fix is a real translation, fixed focal length, constant eye height, and an end frame tied to a thought, not to a clock."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dolly In in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a physical advance of the camera on wheels or track toward a subject, changing perspective and introducing parallax as the frame tightens."
+        },
+        {
+          "type": "heading",
+          "text": "Dolly In vs Slow Zoom In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Slow zoom in enlarges from a locked position and compresses space. Dolly in walks the camera, so near objects move faster than far ones and the room rearranges."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dolly In?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a thought, a threat, or a room must be entered in continuous space. Do not use it for a one-frame sting or for a lens-only squeeze."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dolly In for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Say physical dolly in on track, fixed lens, forward body travel, visible foreground parallax, no optical zoom. Name the start size and the arrival size."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dolly In in film?It is a physical advance of the camera on wheels or track toward a subject, changing perspective and introducing parallax as the frame tightens.Dolly In vs Slow Zoom InSlow zoom in enlarges from a locked position and compresses space. Dolly in walks the camera, so near objects move faster than far ones and the room rearranges.When should I use Dolly In?When a thought, a threat, or a room must be entered in continuous space. Do not use it for a one-frame sting or for a lens-only squeeze.How do I prompt Dolly In for AI image or video?Say physical dolly in on track, fixed lens, forward body travel, visible foreground parallax, no optical zoom. Name the start size and the arrival size."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Physical dolly in toward [Subject] on track, camera body gliding forward, parallax shifting foreground against background, 40mm spherical, buttery traction. For motion: the camera physically dollies forward toward [Subject] for 6 seconds.",
+      "Foreground parallax, no optical zoom."
+    ],
+    "example": "An archivist sits at a desk and notices a familiar signature on an old letter. Begin in a medium-wide shot. Over eight seconds dolly slowly forward to a close-up, fixed lens, subtle foreground parallax, no zoom. Her eyes lift only at the end. Restrained daylight, no cut."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6763849236f54edd3bb0a632e890aba4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/dolly-in.jpg",
+      "alt": "Dolly In frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/47c873ce3b75c118eebcc03f9ebba030.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/push-in-push-in-mini.webp",
+      "alt": "Push In"
+    },
+    {
+      "kind": "video",
+      "path": "media/ff1d0cd1ffd7716264b1bf880a5b857a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/push-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+      "alt": "Tracking Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1c139290f261d979c33b2fcbeae1026e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-in/famous/00-jaws-1975.jpg",
+      "alt": "Jaws 1975"
+    },
+    {
+      "kind": "image",
+      "path": "media/9f5c8f9c93af5c9d01bb054d19e7ba79.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-in/hero.jpg",
+      "alt": "Dolly In",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "c13c3615e32fcd7eb2dcd617de7a8193e33749e597831eb5b6e2ceda2b580960"
+}

@@ -1,0 +1,396 @@
+{
+  "id": "lighting/hard-light",
+  "slug": "hard-light",
+  "title": "Hard Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/hard-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+  "detail": "details/lighting/hard-light.json",
+  "aliases": [],
+  "description": "Hard light in hard light cinematography comes from a small apparent source and produces crisp shadow edges and specular definition on skin, metal, and walls. Texture is amplified; falloff can still be steep or long depending on distance.",
+  "thumbnail": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Noon sun, a bare bulb, an interrogation lamp: pores, sweat, and brick become graphic. Noir and westerns use it so a hat brim cuts a clean triangle on the face and a body throws a readable double on the wall."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for kindness, memory, or a beauty close-up that should wrap. Hard is not the same as bright, and not the same as low-key.",
+          "links": [
+            {
+              "text": "low-key",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "You can have a dim hard source in a black room, or a blazing hard sun in a high-key desert."
+        }
+      ],
+      "links": [
+        {
+          "text": "low-key",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Noon sun, a bare bulb, an interrogation lamp: pores, sweat, and brick become graphic. Noir and westerns use it so a hat brim cuts a clean triangle on the face and a body throws a readable double on the wall.It is the wrong tool for kindness, memory, or a beauty close-up that should wrap. Hard is not the same as bright, and not the same as low-key.You can have a dim hard source in a black room, or a blazing hard sun in a high-key desert."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use a small source relative to the subject: distant sun, bare tungsten, a focused Fresnel, a snooted LED. Distance makes it harder (smaller apparent size)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is often white daylight or tungsten; gels stay saturated because the source is specular. Pair with flags for gobo patterns.",
+          "links": [
+            {
+              "text": "gobo",
+              "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Hard light on [Subject] from a small distant source, razor shadow edges, texture amplified, noir graphic."
+        }
+      ],
+      "links": [
+        {
+          "text": "gobo",
+          "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Use a small source relative to the subject: distant sun, bare tungsten, a focused Fresnel, a snooted LED. Distance makes it harder (smaller apparent size).Color is often white daylight or tungsten; gels stay saturated because the source is specular. Pair with flags for gobo patterns.Prompt: Hard light on [Subject] from a small distant source, razor shadow edges, texture amplified, noir graphic."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for grit, noon sun, or interrogation, a street at midday, a bulb over a table. Do not use it as default beauty on a romantic close-up."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for grit, noon sun, or interrogation, a street at midday, a bulb over a table. Do not use it as default beauty on a romantic close-up."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Soft light is the opposite quality: large source, gradual edges. Gobo lighting needs hard light to throw a sharp pattern.",
+          "links": [
+            {
+              "text": "Soft light",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            },
+            {
+              "text": "Gobo lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Low-key lighting often uses hard sources but is a ratio. Split lighting often wants a hard 90-degree key.",
+          "links": [
+            {
+              "text": "Low-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            },
+            {
+              "text": "Split lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Bounce is how you destroy hardness.",
+          "links": [
+            {
+              "text": "Bounce",
+              "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Soft LightBeauty, memory, or kindness.",
+          "displayText": "Soft Light\nBeauty, memory, or kindness.",
+          "links": [
+            {
+              "text": "Soft LightBeauty, memory, or kindness.",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Gobo LightingThe room writes on the person.",
+          "displayText": "Gobo Lighting\nThe room writes on the person.",
+          "links": [
+            {
+              "text": "Gobo LightingThe room writes on the person.",
+              "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Soft light",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "Gobo lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+        },
+        {
+          "text": "Low-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Split lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+        },
+        {
+          "text": "Bounce",
+          "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+        },
+        {
+          "text": "Soft LightBeauty, memory, or kindness.",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "Gobo LightingThe room writes on the person.",
+          "url": "https://melies.co/cinematic-techniques/lighting/gobo-lighting"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+          "alt": "Soft Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/9d2fae3d817782fff1bed611023e5a33.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gobo-lighting.webp",
+          "alt": "Gobo Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Soft light is the opposite quality: large source, gradual edges. Gobo lighting needs hard light to throw a sharp pattern.Low-key lighting often uses hard sources but is a ratio. Split lighting often wants a hard 90-degree key.Bounce is how you destroy hardness.Soft LightBeauty, memory, or kindness.Gobo LightingThe room writes on the person.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Big Combo and Se7en cut faces and rooms with small, hard sources. Once Upon a Time in the West lets hard sun define hats, dust, and wood."
+        },
+        {
+          "type": "paragraph",
+          "text": "The edge of the shadow is the grammar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Big Combo and Se7en cut faces and rooms with small, hard sources. Once Upon a Time in the West lets hard sun define hats, dust, and wood.The edge of the shadow is the grammar."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name a small distant source and razor edges. Use: \"Hard light on [Subject] from a small distant source, razor shadow edges, texture amplified, noir graphic.\" Forbid silks, wrap, and cloudy softness unless weather is the point."
+        },
+        {
+          "type": "quote",
+          "text": "Hard light on [Subject] from a small distant source, razor shadow edges, texture amplified, noir graphic."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Hard+light+on+[Subject]+from+a+small+distant+source,+razor+shadow+edges,+texture+amplified,+noir+graphic."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name a small distant source and razor edges. Use: \"Hard light on [Subject] from a small distant source, razor shadow edges, texture amplified, noir graphic.\" Forbid silks, wrap, and cloudy softness unless weather is the point.Copy promptUse in Image GeneratorHard light on [Subject] from a small distant source, razor shadow edges, texture amplified, noir graphic.Hard light on [Subject] from a small distant source, razor shadow edges, texture amplified, noir graphic."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is soft light with high contrast. The tell is fuzzy shadow edges on the nose and table.",
+          "links": [
+            {
+              "text": "soft light",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by shrinking the apparent source (remove diffusion, move it farther, or switch to sun and a clear sky)."
+        }
+      ],
+      "links": [
+        {
+          "text": "soft light",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is soft light with high contrast. The tell is fuzzy shadow edges on the nose and table.Fix it by shrinking the apparent source (remove diffusion, move it farther, or switch to sun and a clear sky)."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is hard light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Light from a small apparent source that makes crisp shadows and specular texture. Noon sun and a bare bulb are typical."
+        },
+        {
+          "type": "heading",
+          "text": "Hard light vs soft light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard: small source, sharp shadow edge, more texture. Soft: large source, gradual shadow edge, more wrap."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use hard light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for grit, noon, interrogation, or graphic noir. Skip it when the face should be treated kindly."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt hard light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify a small distant source, razor shadow edges, amplified texture. No silk, no wrap, no cloudy softness."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is hard light in film?Light from a small apparent source that makes crisp shadows and specular texture. Noon sun and a bare bulb are typical.Hard light vs soft lightHard: small source, sharp shadow edge, more texture. Soft: large source, gradual shadow edge, more wrap.When should I use hard light?Use it for grit, noon, interrogation, or graphic noir. Skip it when the face should be treated kindly.How do I prompt hard light for AI image or video?Specify a small distant source, razor shadow edges, amplified texture. No silk, no wrap, no cloudy softness."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name a small distant source and razor edges. Use: \"Hard light on [Subject] from a small distant source, razor shadow edges, texture amplified, noir graphic.\" Forbid silks, wrap, and cloudy softness unless weather is the point."
+    ],
+    "example": "Hard light on [Subject] from a small distant source, razor shadow edges, texture amplified, noir graphic."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+      "alt": "Hard Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+      "alt": "Soft Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/9d2fae3d817782fff1bed611023e5a33.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gobo-lighting.webp",
+      "alt": "Gobo Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/43038d021129d42aefa615ddf504fd60.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/hard-light/hero.jpg",
+      "alt": "Hard Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "c5694fe6e86968983b1e8e51703119049c1c950317a268494ab3a96f4d8e25a5"
+}

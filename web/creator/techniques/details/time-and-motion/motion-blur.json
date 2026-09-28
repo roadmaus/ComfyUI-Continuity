@@ -1,0 +1,434 @@
+{
+  "id": "time-and-motion/motion-blur",
+  "slug": "motion-blur",
+  "title": "Motion Blur",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motion-blur-01-motion-blur-mini.webp",
+  "detail": "details/time-and-motion/motion-blur.json",
+  "aliases": [],
+  "description": "Motion blur cinematography is the streaking or softness caused by subject or camera movement during exposure. The longer the gate stays open relative to the motion, the more the image paints, so edges fail on purpose.",
+  "thumbnail": "media/45f47ac4b0f511f8963d348e2dc5703f.webp",
+  "video": "media/1d6ce568ecc4c211fd8227f75c32f3b3.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-motion-blur-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when speed or trauma should smear: headlights as ribbons, a body that cannot be counted, a whip that erases geography for a frame. Normal 180-degree film already has some blur."
+        },
+        {
+          "type": "paragraph",
+          "text": "This look commits further, so edges fail on purpose. It is the wrong tool for staccato combat that should feel like discrete fragments."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is short shutter, often misfiled under the same war films. Slow motion with dense samples can look sharper, not smearier."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a blur overlay on a sharp take and call it shutter."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when speed or trauma should smear: headlights as ribbons, a body that cannot be counted, a whip that erases geography for a frame. Normal 180-degree film already has some blur.This look commits further, so edges fail on purpose. It is the wrong tool for staccato combat that should feel like discrete fragments.That is short shutter, often misfiled under the same war films. Slow motion with dense samples can look sharper, not smearier.Do not add a blur overlay on a sharp take and call it shutter."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Expose long enough, or move fast enough, that edges streak within the frame. A Whip Pan is a burst of this.",
+          "links": [
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A locked camera with a racing subject is the other axis. Night lamps help because they write ribbons."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Long-shutter motion blur on [Subject] or the world, streaks of light, bodies smearing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Expose long enough, or move fast enough, that edges streak within the frame. A Whip Pan is a burst of this.A locked camera with a racing subject is the other axis. Night lamps help because they write ribbons.Prompt: Long-shutter motion blur on [Subject] or the world, streaks of light, bodies smearing."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a night street or a panicked camera move should smear, such as lamps dragging during a run. Do not use it when you want Saving Private Ryan's crisp, segmented droplets."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a night street or a panicked camera move should smear, such as lamps dragging during a run. Do not use it when you want Saving Private Ryan's crisp, segmented droplets."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Motion blur is smear from exposure. Low Shutter in this library is short shutter: reduced blur, staccato edges.",
+          "links": [
+            {
+              "text": "Low Shutter",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/low-shutter"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Whip Pan is camera rotation fast enough to erase the middle. Slow Motion often looks sharper because each high-fps frame is a shorter exposure.",
+          "links": [
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            },
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Step Printing smears and steps. Do not confuse photography's 'low shutter speed' with film's low shutter angle.",
+          "links": [
+            {
+              "text": "Step Printing",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "displayText": "Whip Pan\nTransition, punchline, or sudden attention shift.",
+          "links": [
+            {
+              "text": "Whip PanTransition, punchline, or sudden attention shift.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Fast MotionToo much life for real time.",
+          "displayText": "Fast Motion\nToo much life for real time.",
+          "links": [
+            {
+              "text": "Fast MotionToo much life for real time.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Shutter",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/low-shutter"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Step Printing",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/step-printing"
+        },
+        {
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "Fast MotionToo much life for real time.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+          "alt": "Whip Pan"
+        },
+        {
+          "kind": "video",
+          "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+          "alt": "Fast Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Motion blur is smear from exposure. Low Shutter in this library is short shutter: reduced blur, staccato edges.A Whip Pan is camera rotation fast enough to erase the middle. Slow Motion often looks sharper because each high-fps frame is a shorter exposure.Step Printing smears and steps. Do not confuse photography's 'low shutter speed' with film's low shutter angle.Whip PanTransition, punchline, or sudden attention shift.Slow MotionA second contains a scene.Fast MotionToo much life for real time."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cloverfield lets handheld panic smear the monster and the street. Whip-heavy action (the Bourne films among them) uses bursts of blur as geography fails."
+        },
+        {
+          "type": "paragraph",
+          "text": "Saving Private Ryan is often listed here, but Omaha Beach is largely short-shutter staccato, the cousin, not the smear."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Cloverfield lets handheld panic smear the monster and the street. Whip-heavy action (the Bourne films among them) uses bursts of blur as geography fails.Saving Private Ryan is often listed here, but Omaha Beach is largely short-shutter staccato, the cousin, not the smear."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Commit to streaks. Still: lamps as ribbons, bodies smearing, a subject sharp only if they held still."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Heavy motion blur as [Subject] or the camera moves, light streaking, shutter dragged. If every raindrop is crisp, the shutter was too short."
+        },
+        {
+          "type": "quote",
+          "text": "Heavy motion blur as [Subject] or the camera moves, light streaking, shutter dragged."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Heavy+motion+blur+as+[Subject]+or+the+camera+moves,+light+streaking,+shutter+dragged."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Commit to streaks. Still: lamps as ribbons, bodies smearing, a subject sharp only if they held still.Video: Heavy motion blur as [Subject] or the camera moves, light streaking, shutter dragged. If every raindrop is crisp, the shutter was too short.Copy promptUse in Video GeneratorHeavy motion blur as [Subject] or the camera moves, light streaking, shutter dragged.Heavy motion blur as [Subject] or the camera moves, light streaking, shutter dragged."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Low Shutter (short shutter angle). The tell is crispy rain and chopped limbs with no ribbons.",
+          "links": [
+            {
+              "text": "Low Shutter",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/low-shutter"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: drag the shutter or increase motion until lights streak. If you wanted SPR cadence, change technique rather than adding a blur filter."
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Shutter",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/low-shutter"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Low Shutter (short shutter angle). The tell is crispy rain and chopped limbs with no ribbons.Fix: drag the shutter or increase motion until lights streak. If you wanted SPR cadence, change technique rather than adding a blur filter."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Motion Blur in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Motion blur is streaking or softness from subject or camera movement while the shutter is open. It is exposure plus velocity, not a separate object."
+        },
+        {
+          "type": "heading",
+          "text": "Motion Blur vs Low Shutter",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Motion blur is smear from a longer exposure relative to movement. Low shutter here means a short shutter angle: sharper, staccato frames with less blur."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Motion Blur?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When speed or trauma should paint: night lamps as ribbons, a whip that erases the middle, a body that cannot be counted."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Motion Blur for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write long-shutter streaks, dragging lights, and smearing bodies. Demand that raindrops and limbs are not all crisp."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Motion Blur in film?Motion blur is streaking or softness from subject or camera movement while the shutter is open. It is exposure plus velocity, not a separate object.Motion Blur vs Low ShutterMotion blur is smear from a longer exposure relative to movement. Low shutter here means a short shutter angle: sharper, staccato frames with less blur.When should I use Motion Blur?When speed or trauma should paint: night lamps as ribbons, a whip that erases the middle, a body that cannot be counted.How do I prompt Motion Blur for AI image or video?Write long-shutter streaks, dragging lights, and smearing bodies. Demand that raindrops and limbs are not all crisp."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Commit to streaks. Still: lamps as ribbons, bodies smearing, a subject sharp only if they held still.",
+      "Video: Heavy motion blur as [Subject] or the camera moves, light streaking, shutter dragged. If every raindrop is crisp, the shutter was too short."
+    ],
+    "example": "Heavy motion blur as [Subject] or the camera moves, light streaking, shutter dragged."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/1d6ce568ecc4c211fd8227f75c32f3b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-motion-blur-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/45f47ac4b0f511f8963d348e2dc5703f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motion-blur-01-motion-blur-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/067f266fb48b1cedaddf0d307bbd7739.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/motion-blur.jpg",
+      "alt": "Motion Blur frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+      "alt": "Whip Pan"
+    },
+    {
+      "kind": "video",
+      "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/be060d6285bd4615f1f719ceb5ea771e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fast-motion-078-accelerated-action-mini.webp",
+      "alt": "Fast Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/130e2acf7b9854438912121a809533b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/078-accelerated-action-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/85468486f898a60459605401483ddd80.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/motion-blur/hero.jpg",
+      "alt": "Motion Blur",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "4c1c55886f5f038c5b14ef30ec071bb809947e30de1b0f74e7f762bc1348ff2d"
+}

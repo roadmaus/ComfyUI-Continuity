@@ -1,0 +1,359 @@
+{
+  "id": "viral-looks/ultraviolet",
+  "slug": "ultraviolet",
+  "title": "Ultraviolet",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/ultraviolet",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultraviolet-ultraviolet-mini.webp",
+  "detail": "details/viral-looks/ultraviolet.json",
+  "aliases": [],
+  "description": "Ultraviolet, the ultraviolet lighting look, is black-light cinema: a UV lamp as author, whites that scream, colors that only exist under that tube. The unseen made loud: a purple LUT on daylight is not a black light.",
+  "thumbnail": "media/b5f226d44fe7417f9a2bcf0e8f3fd41d.webp",
+  "video": "media/11fcc0b0a545d11658fed33a3e602f61.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ultraviolet-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Clubs, forensics, a dream of a poster: teeth and cotton go radioactive, surroundings fall toward void. Glam is beauty key."
+        },
+        {
+          "type": "paragraph",
+          "text": "Neon practicals are colored tubes you can see as signage. UV is a lamp whose effect is the palette."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool on a daylight exterior with a purple wash, and the wrong tool if cotton and teeth stay normal. If the whites are not blazing, the lamp is not UV."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Clubs, forensics, a dream of a poster: teeth and cotton go radioactive, surroundings fall toward void. Glam is beauty key.Neon practicals are colored tubes you can see as signage. UV is a lamp whose effect is the palette.It is the wrong tool on a daylight exterior with a purple wash, and the wrong tool if cotton and teeth stay normal. If the whites are not blazing, the lamp is not UV."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height, 35mm, lock-off. A black-light source in frame or implied as the only key."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fluorescent whites, tonic violets, face with teeth and cotton blazing. Surroundings void."
+        },
+        {
+          "type": "paragraph",
+          "text": "No neon-sign letters. Prompt: Ultraviolet light on [Subject], black-light cinema, whites that scream, colors that only exist under that lamp."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Eye height, 35mm, lock-off. A black-light source in frame or implied as the only key.Fluorescent whites, tonic violets, face with teeth and cotton blazing. Surroundings void.No neon-sign letters. Prompt: Ultraviolet light on [Subject], black-light cinema, whites that scream, colors that only exist under that lamp."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A club, a forensic still, a poster dream. Do not fake it with a purple wash on daylight."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A club, a forensic still, a poster dream. Do not fake it with a purple wash on daylight."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Glam is beauty key and catchlights. Neon Practicals is visible colored tubes.",
+          "links": [
+            {
+              "text": "Glam",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            },
+            {
+              "text": "Neon Practicals",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Ultraviolet is a black-light source whose fluorescence is the image. If cotton does not blaze, you have a purple grade, not UV."
+        },
+        {
+          "type": "list-item",
+          "text": "GlamSell the face.",
+          "displayText": "Glam\nSell the face.",
+          "links": [
+            {
+              "text": "GlamSell the face.",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "displayText": "Neon Practicals\nThe city is the lighting department.",
+          "links": [
+            {
+              "text": "Neon PracticalsThe city is the lighting department.",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Glam",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "Neon Practicals",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "GlamSell the face.",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d0c6118ba609a42d93a75e2dc10200d3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/glam.webp",
+          "alt": "Glam"
+        },
+        {
+          "kind": "image",
+          "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+          "alt": "Neon Practicals"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Glam is beauty key and catchlights. Neon Practicals is visible colored tubes.Ultraviolet is a black-light source whose fluorescence is the image. If cotton does not blaze, you have a purple grade, not UV.GlamSell the face.Neon PracticalsThe city is the lighting department.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Club cinema and forensic blacklight stills are the well-known uses: the lamp is the author. Spring Breakers-adjacent party blacks can share the fluorescence if you specify the tube."
+        },
+        {
+          "type": "paragraph",
+          "text": "Not a purple LUT. Not a title to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Club cinema and forensic blacklight stills are the well-known uses: the lamp is the author. Spring Breakers-adjacent party blacks can share the fluorescence if you specify the tube.Not a purple LUT. Not a title to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the black light, then the blazing whites. Ultraviolet light on [Subject], black-light cinema, whites that scream, colors that only exist under that lamp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add UV source, teeth and cotton radioactive, surroundings void, no daylight purple wash, no sign letters."
+        },
+        {
+          "type": "quote",
+          "text": "Ultraviolet light on [Subject], black-light cinema, whites that scream, colors that only exist under that lamp."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Ultraviolet+light+on+[Subject],+black-light+cinema,+whites+that+scream,+colors+that+only+exist+under+that+lamp."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the black light, then the blazing whites. Ultraviolet light on [Subject], black-light cinema, whites that scream, colors that only exist under that lamp.Add UV source, teeth and cotton radioactive, surroundings void, no daylight purple wash, no sign letters.Copy promptUse in Image GeneratorUltraviolet light on [Subject], black-light cinema, whites that scream, colors that only exist under that lamp.Ultraviolet light on [Subject], black-light cinema, whites that scream, colors that only exist under that lamp."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A purple LUT, or Neon Practicals signage. The tell is normal teeth and cotton.",
+          "links": [
+            {
+              "text": "Neon Practicals",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: black-light source, fluorescent whites, void around the body."
+        }
+      ],
+      "links": [
+        {
+          "text": "Neon Practicals",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A purple LUT, or Neon Practicals signage. The tell is normal teeth and cotton.Fix it: black-light source, fluorescent whites, void around the body."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Ultraviolet in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A lighting-device look: black-light cinema, whites that scream, colors that only exist under that lamp. Not a purple grade on daylight."
+        },
+        {
+          "type": "heading",
+          "text": "Ultraviolet vs Neon Practicals",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Neon practicals are visible colored tubes in the set. Ultraviolet is a black light whose fluorescence is the palette. If you can read a neon word, you wanted neon. If teeth blaze in a void, you wanted UV."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Ultraviolet?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Clubs, forensics, poster dreams. Skip daylight exteriors with a purple wash."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Ultraviolet for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name a black-light source, then: Ultraviolet light on [Subject], black-light cinema, whites that scream, colors that only exist under that lamp. Demand blazing cotton and teeth. Forbid a purple daylight LUT."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Ultraviolet in film?A lighting-device look: black-light cinema, whites that scream, colors that only exist under that lamp. Not a purple grade on daylight.Ultraviolet vs Neon PracticalsNeon practicals are visible colored tubes in the set. Ultraviolet is a black light whose fluorescence is the palette. If you can read a neon word, you wanted neon. If teeth blaze in a void, you wanted UV.When should I use Ultraviolet?Clubs, forensics, poster dreams. Skip daylight exteriors with a purple wash.How do I prompt Ultraviolet for AI image or video?Name a black-light source, then: Ultraviolet light on [Subject], black-light cinema, whites that scream, colors that only exist under that lamp. Demand blazing cotton and teeth. Forbid a purple daylight LUT."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the black light, then the blazing whites. Ultraviolet light on [Subject], black-light cinema, whites that scream, colors that only exist under that lamp.",
+      "Add UV source, teeth and cotton radioactive, surroundings void, no daylight purple wash, no sign letters."
+    ],
+    "example": "Ultraviolet light on [Subject], black-light cinema, whites that scream, colors that only exist under that lamp."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/11fcc0b0a545d11658fed33a3e602f61.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ultraviolet-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b5f226d44fe7417f9a2bcf0e8f3fd41d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultraviolet-ultraviolet-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7790e097779a875d37cb947da17fd7a1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/ultraviolet.jpg",
+      "alt": "Ultraviolet frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/d0c6118ba609a42d93a75e2dc10200d3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/glam.webp",
+      "alt": "Glam"
+    },
+    {
+      "kind": "image",
+      "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+      "alt": "Neon Practicals"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/7948f8bbb97e1bcdaa1dd2dfa2335637.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/ultraviolet/hero.jpg",
+      "alt": "Ultraviolet",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "9d900684cea4952ef7ecb876b6ee9376c909e717934021b6fe513addea637acf"
+}

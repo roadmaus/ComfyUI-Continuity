@@ -1,0 +1,486 @@
+{
+  "id": "camera-angles/object-pov",
+  "slug": "object-pov",
+  "title": "Object POV",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/object-pov",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/object-pov-object-pov-mini.webp",
+  "detail": "details/camera-angles/object-pov.json",
+  "aliases": [
+    "Vehicle-mounted perspective",
+    "Rigid object attachment"
+  ],
+  "description": "An object-POV shot is the viewpoint of a tool, a ball, a bullet, a phone, or a vehicle: the prop has eyes. The camera is parented to that object, so the object stays stable in the frame while the world moves relative to it.",
+  "thumbnail": "media/fc8020d5f352c3a5a84ef886097c0803.webp",
+  "video": "media/4a0ca317a754e223f9e0c594ed4c9b2d.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/object-pov-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Agency leaves the invisible observer and goes to a machine or a thing. A fork of a bicycle stays in the corner while cobbles rush."
+        },
+        {
+          "type": "paragraph",
+          "text": "A car body is fixed and the desert tears past. A phone slides across a table toward a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sports broadcasts have lived here for decades (puck, stump, helmet). The motion is tactile because the mount cannot independently decide to drift."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not First-Person, which is a human body with hands and breath. It is not a free drone that happens to start near a prop.",
+          "links": [
+            {
+              "text": "First-Person",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the anchor object wanders inside the frame, the parent is broken."
+        }
+      ],
+      "links": [
+        {
+          "text": "First-Person",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Agency leaves the invisible observer and goes to a machine or a thing. A fork of a bicycle stays in the corner while cobbles rush.A car body is fixed and the desert tears past. A phone slides across a table toward a face.Sports broadcasts have lived here for decades (puck, stump, helmet). The motion is tactile because the mount cannot independently decide to drift.It is not First-Person, which is a human body with hands and breath. It is not a free drone that happens to start near a prop.If the anchor object wanders inside the frame, the parent is broken."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use a professionally secured mount or a rigid virtual parent transform on the named object. Include a visible part of the anchor (barrel, rubber, chrome, glass edge)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Preserve vibration that belongs to the object; do not add a second operator path. Lens choice is often wide because the mount is close."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: object POV as if [Subject] were seen from a tool, a ball, a bullet, a phone: the thing looking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Use a professionally secured mount or a rigid virtual parent transform on the named object. Include a visible part of the anchor (barrel, rubber, chrome, glass edge).Preserve vibration that belongs to the object; do not add a second operator path. Lens choice is often wide because the mount is close.Prompt: object POV as if [Subject] were seen from a tool, a ball, a bullet, a phone: the thing looking."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the prop has eyes: a weapon, a vehicle, a thrown thing, a camera that is diegetic. Concrete beat: viewpoint from a phone sliding toward a face, the phone's bezel fixed at the frame edge."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it as a pretty fly-around that ignores the object."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the prop has eyes: a weapon, a vehicle, a thrown thing, a camera that is diegetic. Concrete beat: viewpoint from a phone sliding toward a face, the phone's bezel fixed at the frame edge.Do not use it as a pretty fly-around that ignores the object."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "First-Person is a human body owning the lens. Point of View is a character's optical insert, usually without a gadget rim.",
+          "links": [
+            {
+              "text": "First-Person",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            },
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Locked-On glues a subject in frame while the world streams; object-POV is looking from the object, often with the object as foreground. Trunk Shot is a pit people open, not a tool in flight.",
+          "links": [
+            {
+              "text": "Locked-On",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+            },
+            {
+              "text": "Trunk Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/trunk-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "FPV Drone is a flying body of its own.",
+          "links": [
+            {
+              "text": "FPV Drone",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "First-PersonThe audience is the character.",
+          "displayText": "First-Person\nThe audience is the character.",
+          "links": [
+            {
+              "text": "First-PersonThe audience is the character.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Point of ViewForce identification. The audience is the character.",
+          "displayText": "Point of View\nForce identification. The audience is the character.",
+          "links": [
+            {
+              "text": "Point of ViewForce identification. The audience is the character.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "First-Person",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        },
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Locked-On",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+        },
+        {
+          "text": "Trunk Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/trunk-shot"
+        },
+        {
+          "text": "FPV Drone",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "First-PersonThe audience is the character.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        },
+        {
+          "text": "Point of ViewForce identification. The audience is the character.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/01790c06b52c445f162adaebc0032d9c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/first-person-first-person-mini.webp",
+          "alt": "First-Person"
+        },
+        {
+          "kind": "video",
+          "path": "media/fa9972874be9b02e031873b419f520ab.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/first-person-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/33e364cb93ac77f7bba981d6a44b2dad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pov-090-subjective-optical-pov-mini.webp",
+          "alt": "Point of View"
+        },
+        {
+          "kind": "video",
+          "path": "media/ad782c8d50b2a756b366df24f8816406.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/090-subjective-optical-pov-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        }
+      ],
+      "sourceText": "Compared with similar shots First-Person is a human body owning the lens. Point of View is a character's optical insert, usually without a gadget rim.Locked-On glues a subject in frame while the world streams; object-POV is looking from the object, often with the object as foreground. Trunk Shot is a pit people open, not a tool in flight.FPV Drone is a flying body of its own.First-PersonThe audience is the character.Point of ViewForce identification. The audience is the character.Eye LevelDefault honesty. Do not look down or up unless you mean it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mad Max: Fury Road keeps parts of pursuing machines fixed while the desert tears past. Leviathan (2012) mounts cameras on fishing equipment and bodies at sea so the work, not an observer, sees."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sports broadcasts use puck and vehicle mounts as the same grammar. Hardcore Henry inserts gadget viewpoints inside an otherwise human first-person film."
+        },
+        {
+          "type": "list-item",
+          "text": "Mad Max: Fury Road 2015Vehicle-mounted views keep parts of the pursuing machines fixed while the desert tears past.",
+          "displayText": "Mad Max: Fury Road 2015\nVehicle-mounted views keep parts of the pursuing machines fixed while the desert tears past."
+        },
+        {
+          "type": "list-item",
+          "text": "Leviathan 2012Cameras move with fishing equipment and bodies at sea.",
+          "displayText": "Leviathan 2012\nCameras move with fishing equipment and bodies at sea."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/4c603ffc0833171f6f4725426b82b07e.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/object-pov/famous/00-mad-max-fury-road-2015.jpg",
+          "alt": "Mad Max: Fury Road 2015"
+        },
+        {
+          "kind": "image",
+          "path": "media/c4649322754d488fe31d91297b98e3c1.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/object-pov/famous/01-leviathan-2012.jpg",
+          "alt": "Leviathan 2012"
+        }
+      ],
+      "sourceText": "In film Mad Max: Fury Road keeps parts of pursuing machines fixed while the desert tears past. Leviathan (2012) mounts cameras on fishing equipment and bodies at sea so the work, not an observer, sees.Sports broadcasts use puck and vehicle mounts as the same grammar. Hardcore Henry inserts gadget viewpoints inside an otherwise human first-person film.Mad Max: Fury Road 2015Vehicle-mounted views keep parts of the pursuing machines fixed while the desert tears past.Leviathan 2012Cameras move with fishing equipment and bodies at sea."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the object and keep it fixed in frame. Quote: Object POV as if [Subject] were seen from a tool, a ball, a bullet, a phone: the thing looking."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Viewpoint of an object moving toward or around [Subject]. Add: a visible piece of the anchor object locked in the foreground, rigid mount, world moving, no detached drone path."
+        },
+        {
+          "type": "quote",
+          "text": "Camera rigidly attached beside the front fork of an old bicycle, looking ahead. The fork stays fixed in the lower-left frame while cobblestones rush beneath and street corners swing with the steering. Real wheel rotation and restrained mechanical vibration; no detached drone movement."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Camera+rigidly+attached+beside+the+front+fork+of+an+old+bicycle,+looking+ahead.+The+fork+stays+fixed+in+the+lower-left+frame+while+cobblestones+rush+beneath+and+street+corners+swing+with+the+steering.+Real+wheel+rotation+and+restrained+mechanical+vibration;+no+detached+drone+movement."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the object and keep it fixed in frame. Quote: Object POV as if [Subject] were seen from a tool, a ball, a bullet, a phone: the thing looking.Video: Viewpoint of an object moving toward or around [Subject]. Add: a visible piece of the anchor object locked in the foreground, rigid mount, world moving, no detached drone path.Copy promptUse in Video GeneratorCamera rigidly attached beside the front fork of an old bicycle, looking ahead. The fork stays fixed in the lower-left frame while cobblestones rush beneath and street corners swing with the steering. Real wheel rotation and restrained mechanical vibration; no detached drone movement.Camera rigidly attached beside the front fork of an old bicycle, looking ahead. The fork stays fixed in the lower-left frame while cobblestones rush beneath and street corners swing with the steering. Real wheel rotation and restrained mechanical vibration; no detached drone movement."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is First-Person (human hands) or a free-flying camera. Tell: breath and fingers, or the phone drifting around inside the shot.",
+          "links": [
+            {
+              "text": "First-Person",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: parent the camera to the named prop, show the prop's edge, keep that edge locked. If people open a lid and look in, you wanted Trunk Shot.",
+          "links": [
+            {
+              "text": "Trunk Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/trunk-shot"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "First-Person",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        },
+        {
+          "text": "Trunk Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/trunk-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is First-Person (human hands) or a free-flying camera. Tell: breath and fingers, or the phone drifting around inside the shot.Fix: parent the camera to the named prop, show the prop's edge, keep that edge locked. If people open a lid and look in, you wanted Trunk Shot."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is object POV in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Object POV is the viewpoint of a prop or vehicle. The camera is attached to that thing, so the thing stays put in the frame while the world moves."
+        },
+        {
+          "type": "heading",
+          "text": "Object POV vs first-person",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "First-person is a human body: hands, breath, eye height of a person. Object POV is a tool, ball, bullet, phone, or machine looking, with the object as the mount."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use object POV?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a prop should see: a vehicle chase from the machine, a thrown camera, a diegetic gadget. Do not use it for a person's glance; that is POV or first-person."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt object POV for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Object POV from [named prop], a piece of the object locked in the foreground, [Subject] seen from that mount, world moving around a rigid camera. For video, the object travels; the camera does not detach."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is object POV in film?Object POV is the viewpoint of a prop or vehicle. The camera is attached to that thing, so the thing stays put in the frame while the world moves.Object POV vs first-personFirst-person is a human body: hands, breath, eye height of a person. Object POV is a tool, ball, bullet, phone, or machine looking, with the object as the mount.When should I use object POV?Use it when a prop should see: a vehicle chase from the machine, a thrown camera, a diegetic gadget. Do not use it for a person's glance; that is POV or first-person.How do I prompt object POV for AI image or video?Write: Object POV from [named prop], a piece of the object locked in the foreground, [Subject] seen from that mount, world moving around a rigid camera. For video, the object travels; the camera does not detach."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the object and keep it fixed in frame. Quote: Object POV as if [Subject] were seen from a tool, a ball, a bullet, a phone: the thing looking.",
+      "Video: Viewpoint of an object moving toward or around [Subject]. Add: a visible piece of the anchor object locked in the foreground, rigid mount, world moving, no detached drone path."
+    ],
+    "example": "Camera rigidly attached beside the front fork of an old bicycle, looking ahead. The fork stays fixed in the lower-left frame while cobblestones rush beneath and street corners swing with the steering. Real wheel rotation and restrained mechanical vibration; no detached drone movement."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/4a0ca317a754e223f9e0c594ed4c9b2d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/object-pov-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fc8020d5f352c3a5a84ef886097c0803.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/object-pov-object-pov-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/90cf12298c5a8a77a12cab08a5b6b96e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/object-pov.jpg",
+      "alt": "Object POV frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/01790c06b52c445f162adaebc0032d9c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/first-person-first-person-mini.webp",
+      "alt": "First-Person"
+    },
+    {
+      "kind": "video",
+      "path": "media/fa9972874be9b02e031873b419f520ab.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/first-person-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/33e364cb93ac77f7bba981d6a44b2dad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pov-090-subjective-optical-pov-mini.webp",
+      "alt": "Point of View"
+    },
+    {
+      "kind": "video",
+      "path": "media/ad782c8d50b2a756b366df24f8816406.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/090-subjective-optical-pov-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/4c603ffc0833171f6f4725426b82b07e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/object-pov/famous/00-mad-max-fury-road-2015.jpg",
+      "alt": "Mad Max: Fury Road 2015"
+    },
+    {
+      "kind": "image",
+      "path": "media/c4649322754d488fe31d91297b98e3c1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/object-pov/famous/01-leviathan-2012.jpg",
+      "alt": "Leviathan 2012"
+    },
+    {
+      "kind": "image",
+      "path": "media/cc3b306a0cd607e7ff720cd41f3be3ce.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/object-pov/hero.jpg",
+      "alt": "Object POV",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "2eea5d8691ee3374dacfc953edf5fc107e8af115346d581b734baeb462cfbe00"
+}

@@ -1,0 +1,380 @@
+{
+  "id": "framing/medium-close-up",
+  "slug": "medium-close-up",
+  "title": "Medium Close-Up (MCU)",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/medium-close-up",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-close-up.webp",
+  "detail": "details/framing/medium-close-up.json",
+  "aliases": [
+    "MCU"
+  ],
+  "description": "A medium close-up, or medium close up, usually frames a person from chest or shoulders upward. Dialogue distance remains: face, shoulders, and often a hand at chest height stay readable.",
+  "thumbnail": "media/7df131a7bb3865fbb2b48a5c82d56f2b.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An MCU is how people talk when you still care about body language. You get the thought on the face and the small shrug, the glass raised, the cigarette, without dropping to the waist."
+        },
+        {
+          "type": "paragraph",
+          "text": "Most interview and table coverage lives here because the room is a slice, not a map. It is the wrong tool when the holster, the gait, or the architecture is the information."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool when the line needs a true close-up fact: an MCU will keep offering shoulders and wallpaper. Use it to talk; leave it when the scene stops being a conversation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function An MCU is how people talk when you still care about body language. You get the thought on the face and the small shrug, the glass raised, the cigarette, without dropping to the waist.Most interview and table coverage lives here because the room is a slice, not a map. It is the wrong tool when the holster, the gait, or the architecture is the information.It is also the wrong tool when the line needs a true close-up fact: an MCU will keep offering shoulders and wallpaper. Use it to talk; leave it when the scene stops being a conversation."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bottom frame at mid-chest or the sternum. Hands can enter if they rise."
+        },
+        {
+          "type": "paragraph",
+          "text": "50mm to 75mm at sit-down distance is typical; the catalog 65 to 75mm is a working band, not a brand. You should still see a strip of set behind the shoulders."
+        },
+        {
+          "type": "paragraph",
+          "text": "Headroom is normal, not crushed. Prompt: Medium close-up of [Subject] from chest up, shoulders and hands still readable.",
+          "links": [
+            {
+              "text": "Headroom",
+              "url": "https://melies.co/cinematic-techniques/composition/headroom"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Headroom",
+          "url": "https://melies.co/cinematic-techniques/composition/headroom"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Bottom frame at mid-chest or the sternum. Hands can enter if they rise.50mm to 75mm at sit-down distance is typical; the catalog 65 to 75mm is a working band, not a brand. You should still see a strip of set behind the shoulders.Headroom is normal, not crushed. Prompt: Medium close-up of [Subject] from chest up, shoulders and hands still readable."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for dialogue that must keep body language: two people at a table, a phone call with a free hand. Do not use it when you need a waist-up gesture, a gunbelt, or a face with no chest left in frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for dialogue that must keep body language: two people at a table, a phone call with a free hand. Do not use it when you need a waist-up gesture, a gunbelt, or a face with no chest left in frame."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Close-Up is head and upper shoulders, tighter than chest-up. A Medium Shot starts at the waist and balances gesture with face.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            },
+            {
+              "text": "Medium Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "MCU is the band between them: chest up, talk without losing the shoulders. Do not write MCU when you mean CU, and do not call a waist shot a medium close-up."
+        },
+        {
+          "type": "list-item",
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "displayText": "Close-Up\nRead micro-expression. Default for important dialogue.",
+          "links": [
+            {
+              "text": "Close-UpRead micro-expression. Default for important dialogue.",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Medium ShotWorkhorse coverage. Most scenes live here.",
+          "displayText": "Medium Shot\nWorkhorse coverage. Most scenes live here.",
+          "links": [
+            {
+              "text": "Medium ShotWorkhorse coverage. Most scenes live here.",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Medium Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-shot"
+        },
+        {
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Medium ShotWorkhorse coverage. Most scenes live here.",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-shot"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/95136909e657a1816141551e20893339.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+          "alt": "Close-Up"
+        },
+        {
+          "kind": "image",
+          "path": "media/b869235be06ac8ef80d61080013dc3b1.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-shot.webp",
+          "alt": "Medium Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Close-Up is head and upper shoulders, tighter than chest-up. A Medium Shot starts at the waist and balances gesture with face.MCU is the band between them: chest up, talk without losing the shoulders. Do not write MCU when you mean CU, and do not call a waist shot a medium close-up.Close-UpRead micro-expression. Default for important dialogue.Medium ShotWorkhorse coverage. Most scenes live here.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Heat uses this distance in the diner so two opponents can talk with shoulders and hands still in play before and between tighter singles. The Sopranos lives in MCU for talk that still needs a room sliver and a raised glass."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: conversation distance, not a beauty crop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Heat uses this distance in the diner so two opponents can talk with shoulders and hands still in play before and between tighter singles. The Sopranos lives in MCU for talk that still needs a room sliver and a raised glass.Grammar: conversation distance, not a beauty crop."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say chest up. Example: Medium close-up of [Subject] from chest up, dialogue distance, shoulders and hands still readable, 65 to 75mm."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not say head and shoulders only, and do not say waist. For video, keep the chest line; a zoom into the eyes has become a close-up."
+        },
+        {
+          "type": "quote",
+          "text": "Medium close-up of [Subject] from chest up, dialogue distance, shoulders and hands still readable, 65 to 75mm."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Medium+close-up+of+[Subject]+from+chest+up,+dialogue+distance,+shoulders+and+hands+still+readable,+65+to+75mm."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say chest up. Example: Medium close-up of [Subject] from chest up, dialogue distance, shoulders and hands still readable, 65 to 75mm.Do not say head and shoulders only, and do not say waist. For video, keep the chest line; a zoom into the eyes has become a close-up.Copy promptUse in Image GeneratorMedium close-up of [Subject] from chest up, dialogue distance, shoulders and hands still readable, 65 to 75mm.Medium close-up of [Subject] from chest up, dialogue distance, shoulders and hands still readable, 65 to 75mm."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Close-Up (torso gone) or a Medium Shot (waist in). The tell is either a floating head or a belt buckle.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            },
+            {
+              "text": "Medium Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: crop at the chest, keep a hand possible, keep a slice of room."
+        }
+      ],
+      "links": [
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Medium Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Close-Up (torso gone) or a Medium Shot (waist in). The tell is either a floating head or a belt buckle.Fix: crop at the chest, keep a hand possible, keep a slice of room."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Medium Close-Up in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A medium close-up frames a person from the chest or shoulders up, at dialogue distance. You can still read shoulders and often a hand, while the face remains the primary information."
+        },
+        {
+          "type": "heading",
+          "text": "Medium Close-Up vs Medium Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A medium shot starts around the waist, so rest-position hands, a table, and a belt line are in. An MCU starts at the chest, so it is tighter talk coverage. If the belt is in, you have left MCU."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Medium Close-Up?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when people talk and you still need body language without going waist-up. Do not use it for holster, gait, or a true facial fact that needs a close-up."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Medium Close-Up for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Medium close-up of [Subject] from chest up, dialogue distance, shoulders and hands still readable. Name 65 to 75mm if you want that working length. Keep the chest line in the shot."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Medium Close-Up in film?A medium close-up frames a person from the chest or shoulders up, at dialogue distance. You can still read shoulders and often a hand, while the face remains the primary information.Medium Close-Up vs Medium ShotA medium shot starts around the waist, so rest-position hands, a table, and a belt line are in. An MCU starts at the chest, so it is tighter talk coverage. If the belt is in, you have left MCU.When should I use Medium Close-Up?Use it when people talk and you still need body language without going waist-up. Do not use it for holster, gait, or a true facial fact that needs a close-up.How do I prompt Medium Close-Up for AI image or video?Write Medium close-up of [Subject] from chest up, dialogue distance, shoulders and hands still readable. Name 65 to 75mm if you want that working length. Keep the chest line in the shot."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say chest up. Example: Medium close-up of [Subject] from chest up, dialogue distance, shoulders and hands still readable, 65 to 75mm.",
+      "Do not say head and shoulders only, and do not say waist. For video, keep the chest line; a zoom into the eyes has become a close-up."
+    ],
+    "example": "Medium close-up of [Subject] from chest up, dialogue distance, shoulders and hands still readable, 65 to 75mm."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/7df131a7bb3865fbb2b48a5c82d56f2b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-close-up.webp",
+      "alt": "Medium Close-Up example"
+    },
+    {
+      "kind": "image",
+      "path": "media/95136909e657a1816141551e20893339.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+      "alt": "Close-Up"
+    },
+    {
+      "kind": "image",
+      "path": "media/b869235be06ac8ef80d61080013dc3b1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-shot.webp",
+      "alt": "Medium Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/763d269e02e2147f6da29b8026c1b7f9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/medium-close-up/hero.jpg",
+      "alt": "Medium Close-Up (MCU)",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "7089547ba36bf2762afd7ea3870e94be3620d250baa50f81b0557ec3311d0c5e"
+}

@@ -1,0 +1,359 @@
+{
+  "id": "effects/x-ray",
+  "slug": "x-ray",
+  "title": "X-Ray",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/x-ray",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/x-ray.webp",
+  "detail": "details/effects/x-ray.json",
+  "aliases": [],
+  "description": "X-ray cinematography images through a surface as if denser structure were visible: bones, wiring, a body as diagram. Transmission, not reflectance, is the physics.",
+  "thumbnail": "media/f32dc6c49edc57473ac497438886e0c6.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Skin becomes a veil. The interior is the subject."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the story needs to see through: a medical look, a machine's vision, a suitcase, a chest. It is the wrong tool for heat, and for foliage that glows in near-infrared."
+        },
+        {
+          "type": "paragraph",
+          "text": "If warmth is false color, you want thermal. If leaves go pale and skies go dark, you want infrared."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Skin becomes a veil. The interior is the subject.Use it when the story needs to see through: a medical look, a machine's vision, a suitcase, a chest. It is the wrong tool for heat, and for foliage that glows in near-infrared.If warmth is false color, you want thermal. If leaves go pale and skies go dark, you want infrared."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Render or photograph as transmission: denser parts (bone, metal) hold more of the beam and read as structure. Invert or not, but keep a graphic interior with little surface makeup."
+        },
+        {
+          "type": "paragraph",
+          "text": "A hard, even backlight through the subject helps. Keep one body readable as a diagram, not a smear of glow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt an x-ray view of the subject: interior structure, bones or wiring, a body as diagram."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Render or photograph as transmission: denser parts (bone, metal) hold more of the beam and read as structure. Invert or not, but keep a graphic interior with little surface makeup.A hard, even backlight through the subject helps. Keep one body readable as a diagram, not a smear of glow.Prompt an x-ray view of the subject: interior structure, bones or wiring, a body as diagram."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat of seeing through a person, a wall, or a device. Do not use it as a teal grade on ordinary skin."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat of seeing through a person, a wall, or a device. Do not use it as a teal grade on ordinary skin."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Thermal maps heat as false color. Infrared is near-IR reflectance, often odd foliage and skin, not a skeleton.",
+          "links": [
+            {
+              "text": "Thermal",
+              "url": "https://melies.co/cinematic-techniques/effects/thermal"
+            },
+            {
+              "text": "Infrared",
+              "url": "https://melies.co/cinematic-techniques/effects/infrared"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "X-ray is transmission through the object, structure as diagram."
+        },
+        {
+          "type": "list-item",
+          "text": "ThermalSee temperature, not light.",
+          "displayText": "Thermal\nSee temperature, not light.",
+          "links": [
+            {
+              "text": "ThermalSee temperature, not light.",
+              "url": "https://melies.co/cinematic-techniques/effects/thermal"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "InfraredThe world should look like another planet that is still Earth.",
+          "displayText": "Infrared\nThe world should look like another planet that is still Earth.",
+          "links": [
+            {
+              "text": "InfraredThe world should look like another planet that is still Earth.",
+              "url": "https://melies.co/cinematic-techniques/effects/infrared"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Thermal",
+          "url": "https://melies.co/cinematic-techniques/effects/thermal"
+        },
+        {
+          "text": "Infrared",
+          "url": "https://melies.co/cinematic-techniques/effects/infrared"
+        },
+        {
+          "text": "ThermalSee temperature, not light.",
+          "url": "https://melies.co/cinematic-techniques/effects/thermal"
+        },
+        {
+          "text": "InfraredThe world should look like another planet that is still Earth.",
+          "url": "https://melies.co/cinematic-techniques/effects/infrared"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/dfe75425132e409b7e17839e57127e62.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/thermal.webp",
+          "alt": "Thermal"
+        },
+        {
+          "kind": "image",
+          "path": "media/84366f6fb8fef72adc7fdae948e3cccd.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infrared.webp",
+          "alt": "Infrared"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Thermal maps heat as false color. Infrared is near-IR reflectance, often odd foliage and skin, not a skeleton.X-ray is transmission through the object, structure as diagram.ThermalSee temperature, not light.InfraredThe world should look like another planet that is still Earth.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Abyss HUD and science films treat seeing-through as a device overlay or a laboratory plate. Superhero x-ray vision is the pop grammar of the same diagram."
+        },
+        {
+          "type": "paragraph",
+          "text": "Uses of interior structure, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Abyss HUD and science films treat seeing-through as a device overlay or a laboratory plate. Superhero x-ray vision is the pop grammar of the same diagram.Uses of interior structure, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "X-ray view of [Subject], interior structure, bones or wiring, a body as diagram. Demand transmission, a readable skeleton or circuit, and no thermal palette."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban glowing skin that is only a grade."
+        },
+        {
+          "type": "quote",
+          "text": "X-ray view of [Subject], interior structure, bones or wiring, a body as diagram."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=X-ray+view+of+[Subject],+interior+structure,+bones+or+wiring,+a+body+as+diagram."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it X-ray view of [Subject], interior structure, bones or wiring, a body as diagram. Demand transmission, a readable skeleton or circuit, and no thermal palette.Ban glowing skin that is only a grade.Copy promptUse in Image GeneratorX-ray view of [Subject], interior structure, bones or wiring, a body as diagram.X-ray view of [Subject], interior structure, bones or wiring, a body as diagram."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousins are Thermal and a ghostly double exposure. The tell is heat colors, or a transparent person with a normal room and no structure.",
+          "links": [
+            {
+              "text": "Thermal",
+              "url": "https://melies.co/cinematic-techniques/effects/thermal"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is bones or wiring as the picture, graphic, transmitted."
+        }
+      ],
+      "links": [
+        {
+          "text": "Thermal",
+          "url": "https://melies.co/cinematic-techniques/effects/thermal"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousins are Thermal and a ghostly double exposure. The tell is heat colors, or a transparent person with a normal room and no structure.The fix is bones or wiring as the picture, graphic, transmitted."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is x-ray in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An x-ray look images through surfaces so interior structure, bones, or wiring become the picture. It is a diagram of density, not a photograph of skin."
+        },
+        {
+          "type": "heading",
+          "text": "X-ray vs thermal",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Thermal shows heat. X-ray shows transmission through matter. One is temperature as color. The other is structure as a plate."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use x-ray?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the story must see through a body, a wall, or a machine. Skip it for night hunts (thermal) or for IR foliage looks."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt x-ray for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write X-ray view of [Subject], interior structure, bones or wiring, a body as diagram. Specify transmission and a readable interior. Do not ask for heat colors."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is x-ray in film?An x-ray look images through surfaces so interior structure, bones, or wiring become the picture. It is a diagram of density, not a photograph of skin.X-ray vs thermalThermal shows heat. X-ray shows transmission through matter. One is temperature as color. The other is structure as a plate.When should I use x-ray?Use it when the story must see through a body, a wall, or a machine. Skip it for night hunts (thermal) or for IR foliage looks.How do I prompt x-ray for AI image or video?Write X-ray view of [Subject], interior structure, bones or wiring, a body as diagram. Specify transmission and a readable interior. Do not ask for heat colors."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "X-ray view of [Subject], interior structure, bones or wiring, a body as diagram. Demand transmission, a readable skeleton or circuit, and no thermal palette.",
+      "Ban glowing skin that is only a grade."
+    ],
+    "example": "X-ray view of [Subject], interior structure, bones or wiring, a body as diagram."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/f32dc6c49edc57473ac497438886e0c6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/x-ray.webp",
+      "alt": "X-Ray example"
+    },
+    {
+      "kind": "image",
+      "path": "media/dfe75425132e409b7e17839e57127e62.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/thermal.webp",
+      "alt": "Thermal"
+    },
+    {
+      "kind": "image",
+      "path": "media/84366f6fb8fef72adc7fdae948e3cccd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infrared.webp",
+      "alt": "Infrared"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/09c872861c9d85fd260a48a4621b56bf.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/x-ray/hero.jpg",
+      "alt": "X-Ray",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "3e415ab80e748d5c1e38fbd2294631ac519e7f35809e172184dfa5a83ba070e3"
+}

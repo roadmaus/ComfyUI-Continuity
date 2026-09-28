@@ -1,0 +1,418 @@
+{
+  "id": "lenses/magnification",
+  "slug": "magnification",
+  "title": "Magnification",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/magnification",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/magnification.webp",
+  "detail": "details/lenses/magnification.json",
+  "aliases": [],
+  "description": "Magnification in magnification cinematography is the ratio of the subject's image size on the sensor to its real size. High magnification makes a centimeter of the world fill the frame; it is a scale number, not a shot-size name and not automatically a macro lens.",
+  "thumbnail": "media/d98e16a4afac1b5ad62e0cb823ecc2e4.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Scale is lost on purpose. A tick, a spark, a cell of fabric becomes geography."
+        },
+        {
+          "type": "paragraph",
+          "text": "Powers of Ten is a ladder of magnification: each step changes what counts as a place. Going closer than a close-up is the beat, but closer optically, not only by cropping a 4K face."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you meant a Close-Up of an actor from a meter away. That face may fill the frame at low magnification.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool if the path through a tiny space is the point: Probe Lens delivers that path. Macro is the usual optic that reaches 1:1; magnification is the measurement you are after.",
+          "links": [
+            {
+              "text": "Probe Lens",
+              "url": "https://melies.co/cinematic-techniques/lenses/probe-lens"
+            },
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Probe Lens",
+          "url": "https://melies.co/cinematic-techniques/lenses/probe-lens"
+        },
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Scale is lost on purpose. A tick, a spark, a cell of fabric becomes geography.Powers of Ten is a ladder of magnification: each step changes what counts as a place. Going closer than a close-up is the beat, but closer optically, not only by cropping a 4K face.It is the wrong tool when you meant a Close-Up of an actor from a meter away. That face may fill the frame at low magnification.It is also the wrong tool if the path through a tiny space is the point: Probe Lens delivers that path. Macro is the usual optic that reaches 1:1; magnification is the measurement you are after."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Decide the reproduction ratio (1:2, 1:1, 2:1) and pick optics that can hold it: macro, bellows, probe, or microscope. Light for the new scale; apparent motion and camera shake scale up with magnification."
+        },
+        {
+          "type": "paragraph",
+          "text": "Depth of field collapses. Do not confuse digital punch-in with optical magnification: extra pixels are not extra scale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Extreme magnification of [Subject], a world inside a centimeter, scale lost on purpose."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Decide the reproduction ratio (1:2, 1:1, 2:1) and pick optics that can hold it: macro, bellows, probe, or microscope. Light for the new scale; apparent motion and camera shake scale up with magnification.Depth of field collapses. Do not confuse digital punch-in with optical magnification: extra pixels are not extra scale.Prompt: Extreme magnification of [Subject], a world inside a centimeter, scale lost on purpose."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when you must go closer than a close-up in true scale: a world inside a centimeter. Do not use it as a synonym for a tight portrait or a cropped still."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when you must go closer than a close-up in true scale: a world inside a centimeter. Do not use it as a synonym for a tight portrait or a cropped still."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Macro is close-focusing optics that commonly reach these ratios. Probe Lens adds a barrel that can enter the small world.",
+          "links": [
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            },
+            {
+              "text": "Probe Lens",
+              "url": "https://melies.co/cinematic-techniques/lenses/probe-lens"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Extreme Close-Up is a framing of a feature, which may be low magnification. Magnification is the scale, not the cutaway name Insert Shot.",
+          "links": [
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            },
+            {
+              "text": "Insert Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MacroThe plot is microscopic.",
+          "displayText": "Macro\nThe plot is microscopic.",
+          "links": [
+            {
+              "text": "MacroThe plot is microscopic.",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Probe LensGo where a camera body cannot.",
+          "displayText": "Probe Lens\nGo where a camera body cannot.",
+          "links": [
+            {
+              "text": "Probe LensGo where a camera body cannot.",
+              "url": "https://melies.co/cinematic-techniques/lenses/probe-lens"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "Probe Lens",
+          "url": "https://melies.co/cinematic-techniques/lenses/probe-lens"
+        },
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Insert Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "MacroThe plot is microscopic.",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "Probe LensGo where a camera body cannot.",
+          "url": "https://melies.co/cinematic-techniques/lenses/probe-lens"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/79fc44234e86f0ee60b85636698e0f64.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/macro-058-macro-insert-mini.webp",
+          "alt": "Macro"
+        },
+        {
+          "kind": "video",
+          "path": "media/48dce430df7bb8986d91dc405cf98e2c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/058-macro-insert-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/c20ff36a1824a2547f8b2a7255d8b85d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/probe-lens.webp",
+          "alt": "Probe Lens"
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots Macro is close-focusing optics that commonly reach these ratios. Probe Lens adds a barrel that can enter the small world.Extreme Close-Up is a framing of a feature, which may be low magnification. Magnification is the scale, not the cutaway name Insert Shot.MacroThe plot is microscopic.Probe LensGo where a camera body cannot.14mm Ultra-WidePut the audience inside a space that is too big or too close."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Microcosmos treats insect scale as full drama, true high magnification. Powers of Ten makes magnification itself the structure, stepping in and out of orders of size."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use those as grammar for scale, not as frames to duplicate."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Microcosmos treats insect scale as full drama, true high magnification. Powers of Ten makes magnification itself the structure, stepping in and out of orders of size.Use those as grammar for scale, not as frames to duplicate."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the lost scale. Extreme magnification of [Subject], a world inside a centimeter, scale lost on purpose."
+        },
+        {
+          "type": "paragraph",
+          "text": "State a ratio if you can (1:1). Forbid ordinary close-up of a face, and forbid a simple crop of a wider shot."
+        },
+        {
+          "type": "quote",
+          "text": "Extreme magnification of [Subject], a world inside a centimeter, scale lost on purpose."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Extreme+magnification+of+[Subject],+a+world+inside+a+centimeter,+scale+lost+on+purpose."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the lost scale. Extreme magnification of [Subject], a world inside a centimeter, scale lost on purpose.State a ratio if you can (1:1). Forbid ordinary close-up of a face, and forbid a simple crop of a wider shot.Copy promptUse in Image GeneratorExtreme magnification of [Subject], a world inside a centimeter, scale lost on purpose.Extreme magnification of [Subject], a world inside a centimeter, scale lost on purpose."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an Extreme Close-Up or a punched-in Close-Up. The tell is a whole eye from portrait distance with moderate depth of field.",
+          "links": [
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            },
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: object scale on the sensor near life-size or greater, razor focus, centimeter geography."
+        }
+      ],
+      "links": [
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an Extreme Close-Up or a punched-in Close-Up. The tell is a whole eye from portrait distance with moderate depth of field.Fix: object scale on the sensor near life-size or greater, razor focus, centimeter geography."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is magnification in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the ratio of image size on the sensor to the object's real size. High magnification fills the frame with a tiny piece of the world. Shot-size names like close-up do not guarantee that ratio."
+        },
+        {
+          "type": "heading",
+          "text": "Magnification vs Macro",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Macro is a class of close-focusing lens, often able to reach 1:1. Magnification is the number you get. A probe or a microscope can magnify too. A portrait close-up of a face is usually low magnification."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use magnification?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when true scale must collapse to a centimeter or less. Skip it when you only needed a tight crop of a person."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt magnification for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Extreme magnification of [Subject], a world inside a centimeter, scale lost on purpose. Name the object and, if possible, 1:1. Forbid ordinary close-ups and simple punch-ins."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is magnification in film?It is the ratio of image size on the sensor to the object's real size. High magnification fills the frame with a tiny piece of the world. Shot-size names like close-up do not guarantee that ratio.Magnification vs MacroMacro is a class of close-focusing lens, often able to reach 1:1. Magnification is the number you get. A probe or a microscope can magnify too. A portrait close-up of a face is usually low magnification.When should I use magnification?Use it when true scale must collapse to a centimeter or less. Skip it when you only needed a tight crop of a person.How do I prompt magnification for AI image or video?Write: Extreme magnification of [Subject], a world inside a centimeter, scale lost on purpose. Name the object and, if possible, 1:1. Forbid ordinary close-ups and simple punch-ins."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the lost scale. Extreme magnification of [Subject], a world inside a centimeter, scale lost on purpose.",
+      "State a ratio if you can (1:1). Forbid ordinary close-up of a face, and forbid a simple crop of a wider shot."
+    ],
+    "example": "Extreme magnification of [Subject], a world inside a centimeter, scale lost on purpose."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/d98e16a4afac1b5ad62e0cb823ecc2e4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/magnification.webp",
+      "alt": "Magnification example"
+    },
+    {
+      "kind": "image",
+      "path": "media/79fc44234e86f0ee60b85636698e0f64.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/macro-058-macro-insert-mini.webp",
+      "alt": "Macro"
+    },
+    {
+      "kind": "video",
+      "path": "media/48dce430df7bb8986d91dc405cf98e2c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/058-macro-insert-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c20ff36a1824a2547f8b2a7255d8b85d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/probe-lens.webp",
+      "alt": "Probe Lens"
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/49a3068d2c62fdd5dfb1a625ca563975.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/magnification/hero.jpg",
+      "alt": "Magnification",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "383f4ad67b70dd007203267ea5f6ffe0dd10b9c8b53d35b8c7ab9d060123acdb"
+}

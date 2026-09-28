@@ -1,0 +1,389 @@
+{
+  "id": "viral-looks/orbital-presence",
+  "slug": "orbital-presence",
+  "title": "Orbital Presence",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/orbital-presence",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbital-presence-orbital-presence-mini.webp",
+  "detail": "details/viral-looks/orbital-presence.json",
+  "aliases": [],
+  "description": "Orbital presence hangs a body in vacuum over a planet: hard unfiltered sun, no air fill, a sharp planetary limb, the person as a satellite. Put them in orbit: a studio globe behind an actor is not the recipe.",
+  "thumbnail": "media/b64aba3410ba9a04473d74061b15346c.webp",
+  "video": "media/4021b26bc95d09f574098bd035369021.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/orbital-presence-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Awe, exile, a god complex: the body is small on purpose, black air, planet occupying the lower or background third. Earth zoom arrives from space."
+        },
+        {
+          "type": "paragraph",
+          "text": "This one stays there. A street scene cannot fake it with a globe prop."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you need continents collapsing into a face, and the wrong tool when atmosphere wraps the body. Helmet is optional."
+        },
+        {
+          "type": "paragraph",
+          "text": "HUD text is not: letters garble."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Awe, exile, a god complex: the body is small on purpose, black air, planet occupying the lower or background third. Earth zoom arrives from space.This one stays there. A street scene cannot fake it with a globe prop.It is the wrong tool when you need continents collapsing into a face, and the wrong tool when atmosphere wraps the body. Helmet is optional.HUD text is not: letters garble."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wide enough to read the planet's limb, 24mm to 35mm, lock-off. Hard sun, deep black, no atmospheric wrap on the figure."
+        },
+        {
+          "type": "paragraph",
+          "text": "Planet sharp. Figure small."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Orbital presence of [Subject], a body hanging over a planet, scale of prayer or threat, the person as a satellite."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Wide enough to read the planet's limb, 24mm to 35mm, lock-off. Hard sun, deep black, no atmospheric wrap on the figure.Planet sharp. Figure small.Prompt: Orbital presence of [Subject], a body hanging over a planet, scale of prayer or threat, the person as a satellite."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Exile in vacuum, a god complex, a prayer over a world. Do not use it as a studio backdrop of Earth, and do not turn it into a zoom to the street."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Exile in vacuum, a god complex, a prayer over a world. Do not use it as a studio backdrop of Earth, and do not turn it into a zoom to the street."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Earth Zoom is the rush from orbit to a face. Orbital presence stays in orbit.",
+          "links": [
+            {
+              "text": "Earth Zoom",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/earth-zoom"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Aerial still has air and a ground under the camera. Here there is vacuum, a limb of planet, and a body that does not get a sky wrap.",
+          "links": [
+            {
+              "text": "Aerial",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Earth ZoomStart from the planet.",
+          "displayText": "Earth Zoom\nStart from the planet.",
+          "links": [
+            {
+              "text": "Earth ZoomStart from the planet.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/earth-zoom"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AerialOpen a world. Make the place bigger than the person.",
+          "displayText": "Aerial\nOpen a world. Make the place bigger than the person.",
+          "links": [
+            {
+              "text": "AerialOpen a world. Make the place bigger than the person.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Earth Zoom",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/earth-zoom"
+        },
+        {
+          "text": "Aerial",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial"
+        },
+        {
+          "text": "Earth ZoomStart from the planet.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/earth-zoom"
+        },
+        {
+          "text": "AerialOpen a world. Make the place bigger than the person.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/c918376e997c0aae13c11ad708571977.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/earth-zoom-earth-zoom-mini.webp",
+          "alt": "Earth Zoom"
+        },
+        {
+          "kind": "video",
+          "path": "media/2b79c1787147c42c13a4eb6d657bcf65.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/earth-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/e631fa60adcf0aaf1b2623848e330035.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-012-aerial-pursuit-and-landscape-mini.webp",
+          "alt": "Aerial"
+        },
+        {
+          "kind": "video",
+          "path": "media/5ddd869f4f3167cf9cb023e81b2b3b10.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/012-aerial-pursuit-and-landscape-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Earth Zoom is the rush from orbit to a face. Orbital presence stays in orbit.Aerial still has air and a ground under the camera. Here there is vacuum, a limb of planet, and a body that does not get a sky wrap.Earth ZoomStart from the planet.AerialOpen a world. Make the place bigger than the person.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Gravity puts bodies in hard sun against a planetary limb. Ad Astra hangs a person in black air over worlds."
+        },
+        {
+          "type": "paragraph",
+          "text": "The still should make the body small on purpose. Grammar, not a copied EVA."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Gravity puts bodies in hard sun against a planetary limb. Ad Astra hangs a person in black air over worlds.The still should make the body small on purpose. Grammar, not a copied EVA."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vacuum, limb, small body. Orbital presence of [Subject], a body hanging over a planet, scale of prayer or threat, the person as a satellite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add hard sun, no atmosphere on the figure, sharp planet, 24-35mm lock-off, no HUD text."
+        },
+        {
+          "type": "quote",
+          "text": "Orbital presence of [Subject], a body hanging over a planet, scale of prayer or threat, the person as a satellite."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Orbital+presence+of+[Subject],+a+body+hanging+over+a+planet,+scale+of+prayer+or+threat,+the+person+as+a+satellite."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Vacuum, limb, small body. Orbital presence of [Subject], a body hanging over a planet, scale of prayer or threat, the person as a satellite.Add hard sun, no atmosphere on the figure, sharp planet, 24-35mm lock-off, no HUD text.Copy promptUse in Image GeneratorOrbital presence of [Subject], a body hanging over a planet, scale of prayer or threat, the person as a satellite.Orbital presence of [Subject], a body hanging over a planet, scale of prayer or threat, the person as a satellite."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A person in a studio with an Earth backdrop, or a slide into Earth Zoom. The tell is air wrap and a large figure.",
+          "links": [
+            {
+              "text": "Earth Zoom",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/earth-zoom"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: vacuum, hard sun, small body, real limb of planet."
+        }
+      ],
+      "links": [
+        {
+          "text": "Earth Zoom",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/earth-zoom"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A person in a studio with an Earth backdrop, or a slide into Earth Zoom. The tell is air wrap and a large figure.Fix it: vacuum, hard sun, small body, real limb of planet."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Orbital Presence in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A vacuum recipe: a body hanging over a planet, hard sun, no air fill, the person as a satellite. It is scale and lighting, not a zoom."
+        },
+        {
+          "type": "heading",
+          "text": "Orbital Presence vs Earth Zoom",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Earth zoom collapses planet to street to face. Orbital presence stays in orbit. If continents rush toward the lens, you wanted the cousin."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Orbital Presence?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Awe, exile, a god complex. Skip street scenes and studio globes."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Orbital Presence for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Small [Subject], planetary limb, hard sun, then: Orbital presence of [Subject], a body hanging over a planet, scale of prayer or threat, the person as a satellite. No HUD. No air wrap."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Orbital Presence in film?A vacuum recipe: a body hanging over a planet, hard sun, no air fill, the person as a satellite. It is scale and lighting, not a zoom.Orbital Presence vs Earth ZoomEarth zoom collapses planet to street to face. Orbital presence stays in orbit. If continents rush toward the lens, you wanted the cousin.When should I use Orbital Presence?Awe, exile, a god complex. Skip street scenes and studio globes.How do I prompt Orbital Presence for AI image or video?Small [Subject], planetary limb, hard sun, then: Orbital presence of [Subject], a body hanging over a planet, scale of prayer or threat, the person as a satellite. No HUD. No air wrap."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Vacuum, limb, small body. Orbital presence of [Subject], a body hanging over a planet, scale of prayer or threat, the person as a satellite.",
+      "Add hard sun, no atmosphere on the figure, sharp planet, 24-35mm lock-off, no HUD text."
+    ],
+    "example": "Orbital presence of [Subject], a body hanging over a planet, scale of prayer or threat, the person as a satellite."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/4021b26bc95d09f574098bd035369021.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/orbital-presence-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b64aba3410ba9a04473d74061b15346c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/orbital-presence-orbital-presence-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d5d5c7a5709ea69bb375e2e333724635.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/orbital-presence.jpg",
+      "alt": "Orbital Presence frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/c918376e997c0aae13c11ad708571977.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/earth-zoom-earth-zoom-mini.webp",
+      "alt": "Earth Zoom"
+    },
+    {
+      "kind": "video",
+      "path": "media/2b79c1787147c42c13a4eb6d657bcf65.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/earth-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e631fa60adcf0aaf1b2623848e330035.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-012-aerial-pursuit-and-landscape-mini.webp",
+      "alt": "Aerial"
+    },
+    {
+      "kind": "video",
+      "path": "media/5ddd869f4f3167cf9cb023e81b2b3b10.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/012-aerial-pursuit-and-landscape-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/b4b95d52382dcb413f3b4cb1f2e57d44.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/orbital-presence/hero.jpg",
+      "alt": "Orbital Presence",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "5c5c10b5e12d4d9d8273135c078181e71cf3bb640b36e93ad7a1e17ead020048"
+}

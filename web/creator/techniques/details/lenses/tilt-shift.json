@@ -1,0 +1,434 @@
+{
+  "id": "lenses/tilt-shift",
+  "slug": "tilt-shift",
+  "title": "Tilt-Shift",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/tilt-shift",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-shift-062-miniature-look-selective-focus-mini.webp",
+  "detail": "details/lenses/tilt-shift.json",
+  "aliases": [
+    "Tilt-shift look",
+    "Diorama illusion"
+  ],
+  "description": "Tilt-shift cinematography tilts the lens relative to the sensor so the plane of focus rotates, and may also shift the lens to slide perspective. A narrow band or shaped region of sharpness, often from a high viewpoint, can make a real-scale scene resemble a small model.",
+  "thumbnail": "media/3967493b2757c4d18946c0b8560b8f38.webp",
+  "video": "media/8f4baa0ec1ccda8162e2507cc145822f.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/062-miniature-look-selective-focus-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tilt is not a blur sticker. The Scheimpflug relation puts a slice of the world in focus along a plane that is no longer parallel to the sensor: a street of rowers, a crowd, a tabletop of people who suddenly read as toys."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shift is a different job: it slides the image to keep verticals parallel or to look around a corner without rotating the camera. It is the wrong tool when you only wanted a face isolated from a wall."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is Shallow Focus on a normal plane. It is also the wrong tool if the miniature effect has no high viewpoint and no consistent focus band.",
+          "links": [
+            {
+              "text": "Shallow Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A horizontal blur strip that ignores perspective is a post fake, not this optic."
+        }
+      ],
+      "links": [
+        {
+          "text": "Shallow Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Tilt is not a blur sticker. The Scheimpflug relation puts a slice of the world in focus along a plane that is no longer parallel to the sensor: a street of rowers, a crowd, a tabletop of people who suddenly read as toys.Shift is a different job: it slides the image to keep verticals parallel or to look around a corner without rotating the camera. It is the wrong tool when you only wanted a face isolated from a wall.That is Shallow Focus on a normal plane. It is also the wrong tool if the miniature effect has no high viewpoint and no consistent focus band.A horizontal blur strip that ignores perspective is a post fake, not this optic."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tilt the lens so the focus plane cuts through the subject as a thin band or a wedge. A high angle helps the diorama reading because we look down on models."
+        },
+        {
+          "type": "paragraph",
+          "text": "Match blur to depth; as perspective changes, the band should follow the plane, not a 2D stripe. Shift independently if you need to correct converging buildings."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: A real-scale city or citadel with [Subject] human-sized. A thin band of focus across the subject, foreground and far ground softly blurred, no hard seam across the frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Tilt the lens so the focus plane cuts through the subject as a thin band or a wedge. A high angle helps the diorama reading because we look down on models.Match blur to depth; as perspective changes, the band should follow the plane, not a 2D stripe. Shift independently if you need to correct converging buildings.Prompt: A real-scale city or citadel with [Subject] human-sized. A thin band of focus across the subject, foreground and far ground softly blurred, no hard seam across the frame."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to make a city a model, or to slice focus through a crowd on a tilted plane. Do not use it as a synonym for shallow portrait focus, and do not lay a blur bar across a flat image."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to make a city a model, or to slice focus through a crowd on a tilted plane. Do not use it as a synonym for shallow portrait focus, and do not lay a blur bar across a flat image."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shallow Focus keeps the focus plane parallel to the sensor and isolates by distance. Tilt rotates that plane.",
+          "links": [
+            {
+              "text": "Shallow Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Macro is close-up scale, not a diorama of a city. Bird's-Eye View can supply the high viewpoint the miniature reading often needs, but a bird's-eye without a tilted focus plane is just a map.",
+          "links": [
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            },
+            {
+              "text": "Bird's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Shallow FocusNothing else is invited.",
+          "displayText": "Shallow Focus\nNothing else is invited.",
+          "links": [
+            {
+              "text": "Shallow FocusNothing else is invited.",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "24mm WidePerson plus place, neither winning.",
+          "displayText": "24mm Wide\nPerson plus place, neither winning.",
+          "links": [
+            {
+              "text": "24mm WidePerson plus place, neither winning.",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Shallow Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "Bird's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        },
+        {
+          "text": "Shallow FocusNothing else is invited.",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        },
+        {
+          "text": "24mm WidePerson plus place, neither winning.",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+          "alt": "Shallow Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        },
+        {
+          "kind": "image",
+          "path": "media/628b32ea127fbd2eb64660fbc452f455.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/24mm-wide-055-close-wide-angle-distortion-mini.webp",
+          "alt": "24mm Wide"
+        },
+        {
+          "kind": "video",
+          "path": "media/7426a29d0521c2e8cebe331ee900e38c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/055-close-wide-angle-distortion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Shallow Focus keeps the focus plane parallel to the sensor and isolates by distance. Tilt rotates that plane.Macro is close-up scale, not a diorama of a city. Bird's-Eye View can supply the high viewpoint the miniature reading often needs, but a bird's-eye without a tilted focus plane is just a map.Shallow FocusNothing else is invited.14mm Ultra-WidePut the audience inside a space that is too big or too close.24mm WidePerson plus place, neither winning."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Social Network's Henley rowing sequence gives real-scale action a miniature-like appearance through a thin, high, diorama focus. Miniature-city treatments in other films follow the same grammar: high view, shallow band, motion that reads like a toy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the plane, not a still of the race."
+        },
+        {
+          "type": "list-item",
+          "text": "The Social Network 2010The Henley rowing sequence gives real-scale action a miniature-like appearance.",
+          "displayText": "The Social Network 2010\nThe Henley rowing sequence gives real-scale action a miniature-like appearance."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/c92a458cb8f506fe0de7b3d260912c08.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tilt-shift/famous/00-the-social-network-2010.jpg",
+          "alt": "The Social Network 2010"
+        }
+      ],
+      "sourceText": "In film The Social Network's Henley rowing sequence gives real-scale action a miniature-like appearance through a thin, high, diorama focus. Miniature-city treatments in other films follow the same grammar: high view, shallow band, motion that reads like a toy.Borrow the plane, not a still of the race.The Social Network 2010The Henley rowing sequence gives real-scale action a miniature-like appearance."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name real scale, then the thin focus plane. A real-scale city or citadel with [Subject] human-sized."
+        },
+        {
+          "type": "paragraph",
+          "text": "A thin horizontal band of focus across the subject, foreground and far ground softly blurred, no hard seam across the frame. Add a high viewpoint if you want the diorama."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not write shallow bokeh portrait, and do not ask for a hard blur stripe."
+        },
+        {
+          "type": "quote",
+          "text": "High oblique view of two rowing teams moving along a river, with a narrow depth-aware focus region around the boats and smoothly increasing blur nearer and farther away. Slightly brisk motion and crisp miniature-like detail. No actual toy proportions, no arbitrary blurry stripe across faces."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=High+oblique+view+of+two+rowing+teams+moving+along+a+river,+with+a+narrow+depth-aware+focus+region+around+the+boats+and+smoothly+increasing+blur+nearer+and+farther+away.+Slightly+brisk+motion+and+crisp+miniature-like+detail.+No+actual+toy+proportions,+no+arbitrary+blurry+stripe+across+faces."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name real scale, then the thin focus plane. A real-scale city or citadel with [Subject] human-sized.A thin horizontal band of focus across the subject, foreground and far ground softly blurred, no hard seam across the frame. Add a high viewpoint if you want the diorama.Do not write shallow bokeh portrait, and do not ask for a hard blur stripe.Copy promptUse in Video GeneratorHigh oblique view of two rowing teams moving along a river, with a narrow depth-aware focus region around the boats and smoothly increasing blur nearer and farther away. Slightly brisk motion and crisp miniature-like detail. No actual toy proportions, no arbitrary blurry stripe across faces.High oblique view of two rowing teams moving along a river, with a narrow depth-aware focus region around the boats and smoothly increasing blur nearer and farther away. Slightly brisk motion and crisp miniature-like detail. No actual toy proportions, no arbitrary blurry stripe across faces."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Shallow Focus on a face, or a post miniature with a 2D blur strip. The tell is a portrait with creamy background, or a seam that ignores buildings' depth.",
+          "links": [
+            {
+              "text": "Shallow Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: high view, human-sized figures, focus as a plane through the scene, blur that follows depth."
+        }
+      ],
+      "links": [
+        {
+          "text": "Shallow Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Shallow Focus on a face, or a post miniature with a 2D blur strip. The tell is a portrait with creamy background, or a seam that ignores buildings' depth.Fix: high view, human-sized figures, focus as a plane through the scene, blur that follows depth."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is tilt-shift in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Tilt rotates the plane of focus relative to the sensor. Shift slides the lens to change perspective without tilting the camera. Together they can isolate a band of sharpness or make real scenes read as models."
+        },
+        {
+          "type": "heading",
+          "text": "Tilt-Shift vs Shallow Focus",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Shallow focus keeps the focus plane parallel to the sensor and falls off with distance. Tilt-shift can put a wedge or band of focus through a scene, including a high diorama view of a city. Blur shape is the difference."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use tilt-shift?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to slice focus through a crowd or to turn real-scale action into a model. Skip it for ordinary portraits that only need a fast 85mm."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt tilt-shift for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write that the subject is human-sized in a real city, with a thin band of focus and no hard seam. Add a high viewpoint for the diorama. Forbid a flat blur stripe and ordinary portrait bokeh."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is tilt-shift in film?Tilt rotates the plane of focus relative to the sensor. Shift slides the lens to change perspective without tilting the camera. Together they can isolate a band of sharpness or make real scenes read as models.Tilt-Shift vs Shallow FocusShallow focus keeps the focus plane parallel to the sensor and falls off with distance. Tilt-shift can put a wedge or band of focus through a scene, including a high diorama view of a city. Blur shape is the difference.When should I use tilt-shift?Use it to slice focus through a crowd or to turn real-scale action into a model. Skip it for ordinary portraits that only need a fast 85mm.How do I prompt tilt-shift for AI image or video?Write that the subject is human-sized in a real city, with a thin band of focus and no hard seam. Add a high viewpoint for the diorama. Forbid a flat blur stripe and ordinary portrait bokeh."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name real scale, then the thin focus plane. A real-scale city or citadel with [Subject] human-sized.",
+      "A thin horizontal band of focus across the subject, foreground and far ground softly blurred, no hard seam across the frame. Add a high viewpoint if you want the diorama.",
+      "Do not write shallow bokeh portrait, and do not ask for a hard blur stripe."
+    ],
+    "example": "High oblique view of two rowing teams moving along a river, with a narrow depth-aware focus region around the boats and smoothly increasing blur nearer and farther away. Slightly brisk motion and crisp miniature-like detail. No actual toy proportions, no arbitrary blurry stripe across faces."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/8f4baa0ec1ccda8162e2507cc145822f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/062-miniature-look-selective-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3967493b2757c4d18946c0b8560b8f38.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-shift-062-miniature-look-selective-focus-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/65c4bfe658ff65537b25e09241ddb906.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/tilt-shift.jpg",
+      "alt": "Tilt-Shift frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+      "alt": "Shallow Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/628b32ea127fbd2eb64660fbc452f455.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/24mm-wide-055-close-wide-angle-distortion-mini.webp",
+      "alt": "24mm Wide"
+    },
+    {
+      "kind": "video",
+      "path": "media/7426a29d0521c2e8cebe331ee900e38c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/055-close-wide-angle-distortion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c92a458cb8f506fe0de7b3d260912c08.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tilt-shift/famous/00-the-social-network-2010.jpg",
+      "alt": "The Social Network 2010"
+    },
+    {
+      "kind": "image",
+      "path": "media/490387836559c47a7111b974f7266575.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tilt-shift/hero.jpg",
+      "alt": "Tilt-Shift",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "5ac2bf48a6cbe9e683c14b54d615a33c95a0308afa1f7879f1d474524cf2ecb7"
+}

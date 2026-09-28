@@ -1,0 +1,430 @@
+{
+  "id": "framing/cut-ins",
+  "slug": "cut-ins",
+  "title": "Cut-ins",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/cut-ins",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cut-ins.webp",
+  "detail": "details/framing/cut-ins.json",
+  "aliases": [
+    "cut in"
+  ],
+  "description": "A cut-in, or cut in shot, moves from a wider view to a closer detail of something already present in that space, usually along the same axis. It proves a fact the wide cannot prove: the hands, the phone, the wound.",
+  "thumbnail": "media/56c7134c20b3bee3b44d02be3504b6cf.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The master already showed the table. The cut-in shows the text on the phone, the blood at the cuff, the grip on the glass."
+        },
+        {
+          "type": "paragraph",
+          "text": "Because the object was in the wider shot, the audience does not feel teleported. They feel informed."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the detail was never in the geography (a sudden letter from nowhere) or when you leave the action for a clock on another wall. Those are insert-as-new-object and cutaway."
+        },
+        {
+          "type": "paragraph",
+          "text": "A cut-in is tighter, same world, same beat, often the same lens axis."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The master already showed the table. The cut-in shows the text on the phone, the blood at the cuff, the grip on the glass.Because the object was in the wider shot, the audience does not feel teleported. They feel informed.It is the wrong tool when the detail was never in the geography (a sudden letter from nowhere) or when you leave the action for a clock on another wall. Those are insert-as-new-object and cutaway.A cut-in is tighter, same world, same beat, often the same lens axis."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "From the Master Shot or a wider size, punch in on a detail that was already visible, keeping screen direction and roughly the same camera axis. An Axial Cut is the hard version of this: a jump along the lens axis.",
+          "links": [
+            {
+              "text": "Master Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+            },
+            {
+              "text": "Axial Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Match key side. Prompt: Cut-in on a detail of [Subject] already in the master, tighter, the same axis, a fact the wide cannot prove."
+        }
+      ],
+      "links": [
+        {
+          "text": "Master Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+        },
+        {
+          "text": "Axial Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works From the Master Shot or a wider size, punch in on a detail that was already visible, keeping screen direction and roughly the same camera axis. An Axial Cut is the hard version of this: a jump along the lens axis.Match key side. Prompt: Cut-in on a detail of [Subject] already in the master, tighter, the same axis, a fact the wide cannot prove."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to show the hands, the phone, the wound that the wide already contained but could not prove. Do not change axis so violently that it reads as a new setup, and do not cut in on an object that was not there."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to show the hands, the phone, the wound that the wide already contained but could not prove. Do not change axis so violently that it reads as a new setup, and do not cut in on an object that was not there."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An Insert Shot may introduce a plot object in close view; a cut-in tightens on what the wide already had. A Cutaway leaves the primary action.",
+          "links": [
+            {
+              "text": "Insert Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            },
+            {
+              "text": "Cutaway",
+              "url": "https://melies.co/cinematic-techniques/framing/cutaway"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Axial Cut is the editorial jump along the axis; cut-ins are the tighter shots you land on. An Extreme Close-Up may be the size of the cut-in, but ECU is the crop, not the coverage move.",
+          "links": [
+            {
+              "text": "Axial Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+            },
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Insert ShotPoint at the thing that will matter later.",
+          "displayText": "Insert Shot\nPoint at the thing that will matter later.",
+          "links": [
+            {
+              "text": "Insert ShotPoint at the thing that will matter later.",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Axial CutChange shot size without changing angle.",
+          "displayText": "Axial Cut\nChange shot size without changing angle.",
+          "links": [
+            {
+              "text": "Axial CutChange shot size without changing angle.",
+              "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Insert Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "Cutaway",
+          "url": "https://melies.co/cinematic-techniques/framing/cutaway"
+        },
+        {
+          "text": "Axial Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+        },
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Insert ShotPoint at the thing that will matter later.",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "Axial CutChange shot size without changing angle.",
+          "url": "https://melies.co/cinematic-techniques/editing/axial-cut"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b5bb789f90144033b393ce87e620564d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/insert-095-narrative-insert-mini.webp",
+          "alt": "Insert Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/53a13c456f43ab42d2e3d1f277d87138.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/095-narrative-insert-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8e36f1dab06b9b4dadc032bc5bf1a00e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/axial-cut-177-axial-cut-and-punch-in-cut-mini.webp",
+          "alt": "Axial Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/9bcd543d80e94c3b9d9c68405e7a75d4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/177-axial-cut-and-punch-in-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots An Insert Shot may introduce a plot object in close view; a cut-in tightens on what the wide already had. A Cutaway leaves the primary action.An Axial Cut is the editorial jump along the axis; cut-ins are the tighter shots you land on. An Extreme Close-Up may be the size of the cut-in, but ECU is the crop, not the coverage move.Insert ShotPoint at the thing that will matter later.Axial CutChange shot size without changing angle.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Classical coverage is built on this grammar: master, then cut in to the business that the master only implied. You see it whenever a wide conversation yields a closer pair of hands without leaving the table."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use that as the rule, not as a specific poster frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Classical coverage is built on this grammar: master, then cut in to the business that the master only implied. You see it whenever a wide conversation yields a closer pair of hands without leaving the table.Use that as the rule, not as a specific poster frame."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say already in the master and same axis. Example: Cut-in on a detail of [Subject] already in the master, tighter, the same axis, a fact the wide cannot prove."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the detail (hands, phone, wound). For video, do not relocate the camera around the table; you are closer on the same line."
+        },
+        {
+          "type": "quote",
+          "text": "Cut-in on a detail of [Subject] already in the master, tighter, the same axis, a fact the wide cannot prove."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Cut-in+on+a+detail+of+[Subject]+already+in+the+master,+tighter,+the+same+axis,+a+fact+the+wide+cannot+prove."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say already in the master and same axis. Example: Cut-in on a detail of [Subject] already in the master, tighter, the same axis, a fact the wide cannot prove.Name the detail (hands, phone, wound). For video, do not relocate the camera around the table; you are closer on the same line.Copy promptUse in Image GeneratorCut-in on a detail of [Subject] already in the master, tighter, the same axis, a fact the wide cannot prove.Cut-in on a detail of [Subject] already in the master, tighter, the same axis, a fact the wide cannot prove."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Cutaway (you left) or an Insert Shot of a new object. The tell is a different wall, a new prop, or a reverse angle pretending to be a punch-in.",
+          "links": [
+            {
+              "text": "Cutaway",
+              "url": "https://melies.co/cinematic-techniques/framing/cutaway"
+            },
+            {
+              "text": "Insert Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: same space, same axis, tighter on a fact that was already there."
+        }
+      ],
+      "links": [
+        {
+          "text": "Cutaway",
+          "url": "https://melies.co/cinematic-techniques/framing/cutaway"
+        },
+        {
+          "text": "Insert Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Cutaway (you left) or an Insert Shot of a new object. The tell is a different wall, a new prop, or a reverse angle pretending to be a punch-in.Fix: same space, same axis, tighter on a fact that was already there."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Cut-ins in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A cut-in is a closer shot of a detail that already exists in a wider view of the same space, often on the same axis. It shows the hands, the phone, or the wound the wide could not prove."
+        },
+        {
+          "type": "heading",
+          "text": "Cut-ins vs Insert Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An insert is a designed close view of a story detail, which may or may not have been readable in the master. A cut-in specifically tightens on something already in that wider shot. If the object appears from nowhere, you are inserting, not cutting in."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Cut-ins?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the wide has the geography and you need the small fact. Do not use it to leave the scene, and do not use it to introduce a prop that was not there."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Cut-ins for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Cut-in on a detail of [Subject] already in the master, tighter, the same axis, and name the fact. Keep the same key and geography as the wide."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Cut-ins in film?A cut-in is a closer shot of a detail that already exists in a wider view of the same space, often on the same axis. It shows the hands, the phone, or the wound the wide could not prove.Cut-ins vs Insert ShotAn insert is a designed close view of a story detail, which may or may not have been readable in the master. A cut-in specifically tightens on something already in that wider shot. If the object appears from nowhere, you are inserting, not cutting in.When should I use Cut-ins?Use it when the wide has the geography and you need the small fact. Do not use it to leave the scene, and do not use it to introduce a prop that was not there.How do I prompt Cut-ins for AI image or video?Write Cut-in on a detail of [Subject] already in the master, tighter, the same axis, and name the fact. Keep the same key and geography as the wide."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say already in the master and same axis. Example: Cut-in on a detail of [Subject] already in the master, tighter, the same axis, a fact the wide cannot prove.",
+      "Name the detail (hands, phone, wound). For video, do not relocate the camera around the table; you are closer on the same line."
+    ],
+    "example": "Cut-in on a detail of [Subject] already in the master, tighter, the same axis, a fact the wide cannot prove."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/56c7134c20b3bee3b44d02be3504b6cf.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cut-ins.webp",
+      "alt": "Cut-ins example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b5bb789f90144033b393ce87e620564d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/insert-095-narrative-insert-mini.webp",
+      "alt": "Insert Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/53a13c456f43ab42d2e3d1f277d87138.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/095-narrative-insert-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8e36f1dab06b9b4dadc032bc5bf1a00e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/axial-cut-177-axial-cut-and-punch-in-cut-mini.webp",
+      "alt": "Axial Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/9bcd543d80e94c3b9d9c68405e7a75d4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/177-axial-cut-and-punch-in-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3875f899e63f156111023a3c2ed78157.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cut-ins/hero.jpg",
+      "alt": "Cut-ins",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "0d73cbd007bb4c354e75845f860fa16254d0e96cfc5b2df11de3e6b47b905407"
+}

@@ -1,0 +1,376 @@
+{
+  "id": "viral-looks/monet-muse",
+  "slug": "monet-muse",
+  "title": "Monet Muse",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/monet-muse",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monet-muse.webp",
+  "detail": "details/viral-looks/monet-muse.json",
+  "aliases": [],
+  "description": "Monet muse, the monet look, dissolves a photographic scene into broken color: garden dabs, water as strokes, optical mix in the eye. Light is the subject, and defocus is not the same thing.",
+  "thumbnail": "media/e90a13a862acf0f48f03214d4505577f.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Idylls, memory, a picnic that should feel painted: a high sun, a garden or a river, a face that can almost dissolve and still be a shot of someone. Canvas shows bristle and tooth."
+        },
+        {
+          "type": "paragraph",
+          "text": "This shows optical mix. Hard ink edges belong to comic."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool at night neon unless you want a fight, and the wrong tool if you only blur a photo. You need dabs, not a soft filter."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Idylls, memory, a picnic that should feel painted: a high sun, a garden or a river, a face that can almost dissolve and still be a shot of someone. Canvas shows bristle and tooth.This shows optical mix. Hard ink edges belong to comic.It is the wrong tool at night neon unless you want a fight, and the wrong tool if you only blur a photo. You need dabs, not a soft filter."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height in a garden or at water, 35mm to 85mm, lock-off. High sun or Golden Hour as the true subject.",
+          "links": [
+            {
+              "text": "Golden Hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for broken color, strokes that mix at viewing distance, enough drawing that it is still a person. Prompt: Monet-muse image of [Subject], broken color, garden light, water as dabs, impression as grade."
+        }
+      ],
+      "links": [
+        {
+          "text": "Golden Hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Eye height in a garden or at water, 35mm to 85mm, lock-off. High sun or Golden Hour as the true subject.Ask for broken color, strokes that mix at viewing distance, enough drawing that it is still a person. Prompt: Monet-muse image of [Subject], broken color, garden light, water as dabs, impression as grade."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A garden idyll, a memory in broken color, water as strokes. Do not use it as blur, and do not use it as night neon unless the fight is the point."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A garden idyll, a memory in broken color, water as strokes. Do not use it as blur, and do not use it as night neon unless the fight is the point."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Canvas is oil as object, weave and bristle. Monet muse is optical mix, light as subject.",
+          "links": [
+            {
+              "text": "Canvas",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Golden Hour is the sun without the dabs. Sketch is line.",
+          "links": [
+            {
+              "text": "Golden Hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+            },
+            {
+              "text": "Sketch",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/sketch"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "No hard ink (that is Comic).",
+          "links": [
+            {
+              "text": "Comic",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/comic"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CanvasThe stock is paint.",
+          "displayText": "Canvas\nThe stock is paint.",
+          "links": [
+            {
+              "text": "CanvasThe stock is paint.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Golden HourYou have twenty minutes of truth.",
+          "displayText": "Golden Hour\nYou have twenty minutes of truth.",
+          "links": [
+            {
+              "text": "Golden HourYou have twenty minutes of truth.",
+              "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Canvas",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+        },
+        {
+          "text": "Golden Hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+        },
+        {
+          "text": "Sketch",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/sketch"
+        },
+        {
+          "text": "Comic",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/comic"
+        },
+        {
+          "text": "CanvasThe stock is paint.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+        },
+        {
+          "text": "Golden HourYou have twenty minutes of truth.",
+          "url": "https://melies.co/cinematic-techniques/lighting/golden-hour"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1d3244991bc2e19cddb76634840966ac.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/canvas.webp",
+          "alt": "Canvas"
+        },
+        {
+          "kind": "image",
+          "path": "media/ed33713845cad9f645afdfb4eadcf62d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-hour.webp",
+          "alt": "Golden Hour"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Canvas is oil as object, weave and bristle. Monet muse is optical mix, light as subject.Golden Hour is the sun without the dabs. Sketch is line.No hard ink (that is Comic).CanvasThe stock is paint.Golden HourYou have twenty minutes of truth.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mr. Turner watches light as labor on water and sky."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Impressionists (as a well-known period recreation) treats broken color as the point of looking. Light, not varnish."
+        },
+        {
+          "type": "paragraph",
+          "text": "Not a painting to clone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Mr. Turner watches light as labor on water and sky.The Impressionists (as a well-known period recreation) treats broken color as the point of looking. Light, not varnish.Not a painting to clone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dabs, not blur. Monet-muse image of [Subject], broken color, garden light, water as dabs, impression as grade."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add garden or water, high sun, optical mix, enough drawing to keep a person. No hard ink edges."
+        },
+        {
+          "type": "paragraph",
+          "text": "No defocus-as-paint."
+        },
+        {
+          "type": "quote",
+          "text": "Monet-muse image of [Subject], broken color, garden light, water as dabs, impression as grade."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Monet-muse+image+of+[Subject],+broken+color,+garden+light,+water+as+dabs,+impression+as+grade."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Dabs, not blur. Monet-muse image of [Subject], broken color, garden light, water as dabs, impression as grade.Add garden or water, high sun, optical mix, enough drawing to keep a person. No hard ink edges.No defocus-as-paint.Copy promptUse in Image GeneratorMonet-muse image of [Subject], broken color, garden light, water as dabs, impression as grade.Monet-muse image of [Subject], broken color, garden light, water as dabs, impression as grade."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A blurry photo with a painterly slider, or hard comic ink. The tell is defocus with no dabs."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: broken color, garden or water, mix in the eye, drawing underneath."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong A blurry photo with a painterly slider, or hard comic ink. The tell is defocus with no dabs.Fix it: broken color, garden or water, mix in the eye, drawing underneath."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Monet Muse in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A broken-color recipe: garden or water as dabs, light as the subject, a photographic scene mixed in the eye. Blur is not enough."
+        },
+        {
+          "type": "heading",
+          "text": "Monet Muse vs Canvas",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Canvas shows bristle and tooth as the stock. Monet muse dissolves form into optical dabs. Weave versus mix."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Monet Muse?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Idylls, memory, painted picnics. Skip night neon and any blur-only filter."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Monet Muse for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Garden or water, high sun, then: Monet-muse image of [Subject], broken color, garden light, water as dabs, impression as grade. Demand dabs, not defocus."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Monet Muse in film?A broken-color recipe: garden or water as dabs, light as the subject, a photographic scene mixed in the eye. Blur is not enough.Monet Muse vs CanvasCanvas shows bristle and tooth as the stock. Monet muse dissolves form into optical dabs. Weave versus mix.When should I use Monet Muse?Idylls, memory, painted picnics. Skip night neon and any blur-only filter.How do I prompt Monet Muse for AI image or video?Garden or water, high sun, then: Monet-muse image of [Subject], broken color, garden light, water as dabs, impression as grade. Demand dabs, not defocus."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Dabs, not blur. Monet-muse image of [Subject], broken color, garden light, water as dabs, impression as grade.",
+      "Add garden or water, high sun, optical mix, enough drawing to keep a person. No hard ink edges.",
+      "No defocus-as-paint."
+    ],
+    "example": "Monet-muse image of [Subject], broken color, garden light, water as dabs, impression as grade."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/e90a13a862acf0f48f03214d4505577f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monet-muse.webp",
+      "alt": "Monet Muse example"
+    },
+    {
+      "kind": "image",
+      "path": "media/1d3244991bc2e19cddb76634840966ac.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/canvas.webp",
+      "alt": "Canvas"
+    },
+    {
+      "kind": "image",
+      "path": "media/ed33713845cad9f645afdfb4eadcf62d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-hour.webp",
+      "alt": "Golden Hour"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/48023cc490909f275c0a7da774fd13b4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/monet-muse/hero.jpg",
+      "alt": "Monet Muse",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "a7528877ede96ccbc03940bda8b40e21571ea67555e67b79b015fe55e8982b79"
+}

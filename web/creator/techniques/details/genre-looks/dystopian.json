@@ -1,0 +1,414 @@
+{
+  "id": "genre-looks/dystopian",
+  "slug": "dystopian",
+  "title": "Dystopian",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/dystopian",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dystopian.webp",
+  "detail": "details/genre-looks/dystopian.json",
+  "aliases": [],
+  "description": "Dystopian cinematography makes the civic system the antagonist: used architecture, haze, rank, and signage at a scale that already feels worn. The future is not shiny. It is bureaucratic, polluted, or monumental and cold, often in daylight as well as night.",
+  "thumbnail": "media/e335d51a735911a9a22ce5e373100a5a.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A checkpoint. A tower."
+        },
+        {
+          "type": "paragraph",
+          "text": "A crowd compressed by a long lens, or a handheld walk through trash and concrete. The sky is rarely clean."
+        },
+        {
+          "type": "paragraph",
+          "text": "The person is ranked by clothing, by queue, by a logo on a wall. It is not automatically Tech Noir.",
+          "links": [
+            {
+              "text": "Tech Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tech noir is wet guilty night and investigation, screens as keys. Dystopia can be a grey afternoon, a refugee camp, an orange industrial fog, with no detective."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bleach Bypass can drain the silver. It is a process, not the whole civic design.",
+          "links": [
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Tech Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+        },
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A checkpoint. A tower.A crowd compressed by a long lens, or a handheld walk through trash and concrete. The sky is rarely clean.The person is ranked by clothing, by queue, by a logo on a wall. It is not automatically Tech Noir.Tech noir is wet guilty night and investigation, screens as keys. Dystopia can be a grey afternoon, a refugee camp, an orange industrial fog, with no detective.Bleach Bypass can drain the silver. It is a process, not the whole civic design."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Two common modes: dirty handheld 35mm with available mixed light and lens dirt (civic collapse), or monumental wides with haze, fog, and controlled orange or grey (state scale). Keep surfaces used: stains, signage, rank."
+        },
+        {
+          "type": "paragraph",
+          "text": "Avoid heroic rims unless the regime would light itself that way. Prompt civic scale gone cold, haze, signage, and rank, a future that already feels used."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Two common modes: dirty handheld 35mm with available mixed light and lens dirt (civic collapse), or monumental wides with haze, fog, and controlled orange or grey (state scale). Keep surfaces used: stains, signage, rank.Avoid heroic rims unless the regime would light itself that way. Prompt civic scale gone cold, haze, signage, and rank, a future that already feels used."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the system, not a single villain, has to be visible in the streets. Do not use it as generic grey sci-fi, or as neon crime with no civic rank."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the system, not a single villain, has to be visible in the streets. Do not use it as generic grey sci-fi, or as neon crime with no civic rank."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dystopian is used civic future. Tech Noir is noir crime inside a machine night.",
+          "links": [
+            {
+              "text": "Dystopian",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dystopian"
+            },
+            {
+              "text": "Tech Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Bleach Bypass is a desaturated silver process. Blockbuster Gloss polishes adventure.",
+          "links": [
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            },
+            {
+              "text": "Blockbuster Gloss",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the city is wet, neon, and investigative, check whether you actually want tech noir. If the sky is clean and rim-lit, you have left dystopia."
+        },
+        {
+          "type": "list-item",
+          "text": "Tech NoirThe future is wet and guilty.",
+          "displayText": "Tech Noir\nThe future is wet and guilty.",
+          "links": [
+            {
+              "text": "Tech NoirThe future is wet and guilty.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "displayText": "Bleach Bypass\nWar, crime, or a world without mercy.",
+          "links": [
+            {
+              "text": "Bleach BypassWar, crime, or a world without mercy.",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dystopian",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dystopian"
+        },
+        {
+          "text": "Tech Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+        },
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Blockbuster Gloss",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+        },
+        {
+          "text": "Tech NoirThe future is wet and guilty.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+        },
+        {
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f204273b7002661d384f3e4d9eeb8c11.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tech-noir.webp",
+          "alt": "Tech Noir"
+        },
+        {
+          "kind": "image",
+          "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+          "alt": "Bleach Bypass"
+        },
+        {
+          "kind": "video",
+          "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Dystopian is used civic future. Tech Noir is noir crime inside a machine night.Bleach Bypass is a desaturated silver process. Blockbuster Gloss polishes adventure.If the city is wet, neon, and investigative, check whether you actually want tech noir. If the sky is clean and rim-lit, you have left dystopia.Tech NoirThe future is wet and guilty.Bleach BypassWar, crime, or a world without mercy.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Children of Men (handheld civic dirt, 35mm, long-take streets, a used near-future). Blade Runner 2049 (monumental fog, orange, rank, and scale)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Children of Men (handheld civic dirt, 35mm, long-take streets, a used near-future). Blade Runner 2049 (monumental fog, orange, rank, and scale).Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dystopian view of [Subject], civic scale gone cold, haze, signage, and rank, used surfaces, a future that already feels worn. Name the checkpoint, queue, or tower."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a clean heroic rim or a detective fedora unless the story has one."
+        },
+        {
+          "type": "quote",
+          "text": "Dystopian view of [Subject], civic scale gone cold, haze, signage, and rank, a future that already feels used."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Dystopian+view+of+[Subject],+civic+scale+gone+cold,+haze,+signage,+and+rank,+a+future+that+already+feels+used."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Dystopian view of [Subject], civic scale gone cold, haze, signage, and rank, used surfaces, a future that already feels worn. Name the checkpoint, queue, or tower.Do not add a clean heroic rim or a detective fedora unless the story has one.Copy promptUse in Image GeneratorDystopian view of [Subject], civic scale gone cold, haze, signage, and rank, a future that already feels used.Dystopian view of [Subject], civic scale gone cold, haze, signage, and rank, a future that already feels used."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Tech Noir or Blockbuster Gloss: neon rain investigation, or a poster-clean future. The tell is a hard noir cheek with no civic rank, or a rim-lit sky.",
+          "links": [
+            {
+              "text": "Tech Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+            },
+            {
+              "text": "Blockbuster Gloss",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: dirty the surfaces, add signage and haze, and decide handheld-civic versus monumental-fog."
+        }
+      ],
+      "links": [
+        {
+          "text": "Tech Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+        },
+        {
+          "text": "Blockbuster Gloss",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Tech Noir or Blockbuster Gloss: neon rain investigation, or a poster-clean future. The tell is a hard noir cheek with no civic rank, or a rim-lit sky.Fix: dirty the surfaces, add signage and haze, and decide handheld-civic versus monumental-fog."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dystopian in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A look in which civic scale, used surfaces, haze, signage, and rank make the system the antagonist. The future already looks worn. Daylight bureaucracy counts as much as night rain."
+        },
+        {
+          "type": "heading",
+          "text": "Dystopian vs Tech Noir",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Tech noir is crime grammar plus future screens at night. Dystopian is the used state: queues, towers, pollution, rank, often in day. Overlap exists. They are not the same lighting plot."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dystopian?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the system must be visible as the threat. Skip it for silver 1940s crime, for pastel vaporwave, for glossy adventure, or for a neon detective story with no civic rank."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dystopian for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Dystopian view of [Subject], civic scale gone cold, haze, signage, and rank, used surfaces. Name the queue or tower. Do not default to neon detective rain."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dystopian in film?A look in which civic scale, used surfaces, haze, signage, and rank make the system the antagonist. The future already looks worn. Daylight bureaucracy counts as much as night rain.Dystopian vs Tech NoirTech noir is crime grammar plus future screens at night. Dystopian is the used state: queues, towers, pollution, rank, often in day. Overlap exists. They are not the same lighting plot.When should I use Dystopian?When the system must be visible as the threat. Skip it for silver 1940s crime, for pastel vaporwave, for glossy adventure, or for a neon detective story with no civic rank.How do I prompt Dystopian for AI image or video?Write: Dystopian view of [Subject], civic scale gone cold, haze, signage, and rank, used surfaces. Name the queue or tower. Do not default to neon detective rain."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Dystopian view of [Subject], civic scale gone cold, haze, signage, and rank, used surfaces, a future that already feels worn. Name the checkpoint, queue, or tower.",
+      "Do not add a clean heroic rim or a detective fedora unless the story has one."
+    ],
+    "example": "Dystopian view of [Subject], civic scale gone cold, haze, signage, and rank, a future that already feels used."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/e335d51a735911a9a22ce5e373100a5a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dystopian.webp",
+      "alt": "Dystopian example"
+    },
+    {
+      "kind": "image",
+      "path": "media/f204273b7002661d384f3e4d9eeb8c11.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tech-noir.webp",
+      "alt": "Tech Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+      "alt": "Bleach Bypass"
+    },
+    {
+      "kind": "video",
+      "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/1a3bf8ce113d7ccc69ce2837632ebaa4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dystopian/hero.jpg",
+      "alt": "Dystopian",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "f6ebb8785396a9184e2d96d684338156b20f5c418de624daa453d30d433b3970"
+}

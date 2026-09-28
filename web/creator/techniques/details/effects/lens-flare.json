@@ -1,0 +1,427 @@
+{
+  "id": "effects/lens-flare",
+  "slug": "lens-flare",
+  "title": "Lens Flare",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/lens-flare",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+  "detail": "details/effects/lens-flare.json",
+  "aliases": [
+    "veiling flare",
+    "ghost flare",
+    "anamorphic streak",
+    "rainbow flare",
+    "Veiling glare",
+    "Light striking the lens"
+  ],
+  "description": "Lens flare in lens flare cinematography is stray light scattered by glass, coatings, and barrel walls, producing ghosts, streaks, or veiling glare instead of a clean image. The artifacts live in the taking optic, so they track the source angle and dim when a body occludes the lamp.",
+  "thumbnail": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+  "video": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "When a hard source sits near or inside the frame, the camera admits it cannot contain the light. Contrast falls."
+        },
+        {
+          "type": "paragraph",
+          "text": "A ghost of the iris repeats across the field. The sun, a hangar opening, or a bare practical becomes a force the glass is failing to image."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the observer is overwhelmed: encounter lights, headlights, a door onto daylight. The audience should feel the camera struggling to see, not a sticker riding the grade."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when no source can explain the artifact. If blocking the lamp does not change the flare, you have an overlay, not an optic."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function When a hard source sits near or inside the frame, the camera admits it cannot contain the light. Contrast falls.A ghost of the iris repeats across the field. The sun, a hangar opening, or a bare practical becomes a force the glass is failing to image.Use it when the observer is overwhelmed: encounter lights, headlights, a door onto daylight. The audience should feel the camera struggling to see, not a sticker riding the grade.It is the wrong tool when no source can explain the artifact. If blocking the lamp does not change the flare, you have an overlay, not an optic."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place a small, hard source (sun, HMI, bare bulb) just off axis or in frame. Uncoated or vintage glass scatters more."
+        },
+        {
+          "type": "paragraph",
+          "text": "A dirty or filtered front element veils the whole field. Spherical lenses print circular ghosts that take the iris shape when you stop down."
+        },
+        {
+          "type": "paragraph",
+          "text": "For composites, parent flare position and intensity to the source and cut it when something crosses the beam. Prompt the source, its angle to the glass, and whether the result is veiling, ghosts, or both."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place a small, hard source (sun, HMI, bare bulb) just off axis or in frame. Uncoated or vintage glass scatters more.A dirty or filtered front element veils the whole field. Spherical lenses print circular ghosts that take the iris shape when you stop down.For composites, parent flare position and intensity to the source and cut it when something crosses the beam. Prompt the source, its angle to the glass, and whether the result is veiling, ghosts, or both."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A rescue worker opens a hangar onto daylight. The frame whites and veils, then clears as her body blocks the sun."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not drop a rainbow streak on a night interior with no lamp in the lens."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A rescue worker opens a hangar onto daylight. The frame whites and veils, then clears as her body blocks the sun.Do not drop a rainbow streak on a night interior with no lamp in the lens."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Anamorphic Flare is a horizontal streak from cylindrical anamorphic elements, not general scatter. Halation is a warm bloom on the emulsion around a highlight, not light bouncing inside the lens.",
+          "links": [
+            {
+              "text": "Anamorphic Flare",
+              "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+            },
+            {
+              "text": "Halation",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Light Leak is unfiltered light hitting film or sensor from a body gap, usually from the frame edge, not from a pictured source.",
+          "links": [
+            {
+              "text": "Light Leak",
+              "url": "https://melies.co/cinematic-techniques/effects/light-leak"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "displayText": "Anamorphic Flare\nNight lights and headlights should write on the lens.",
+          "links": [
+            {
+              "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+              "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "displayText": "Halation\nHighlights should bleed like film, not clip like video.",
+          "links": [
+            {
+              "text": "HalationHighlights should bleed like film, not clip like video.",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film GrainThe image should feel developed, not rendered.",
+          "displayText": "Film Grain\nThe image should feel developed, not rendered.",
+          "links": [
+            {
+              "text": "Film GrainThe image should feel developed, not rendered.",
+              "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Anamorphic Flare",
+          "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+        },
+        {
+          "text": "Halation",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "Light Leak",
+          "url": "https://melies.co/cinematic-techniques/effects/light-leak"
+        },
+        {
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+        },
+        {
+          "text": "HalationHighlights should bleed like film, not clip like video.",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "Film GrainThe image should feel developed, not rendered.",
+          "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/dd60ac3e349447877925814c6440f811.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+          "alt": "Anamorphic Flare"
+        },
+        {
+          "kind": "image",
+          "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+          "alt": "Halation"
+        },
+        {
+          "kind": "video",
+          "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/5fca5d01511d1b273f967622f709e9a3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-grain-076-archival-or-damaged-medium-texture-mini.webp",
+          "alt": "Film Grain"
+        },
+        {
+          "kind": "video",
+          "path": "media/1d7683ea283deb5b71800203fb729749.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/076-archival-or-damaged-medium-texture-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Anamorphic Flare is a horizontal streak from cylindrical anamorphic elements, not general scatter. Halation is a warm bloom on the emulsion around a highlight, not light bouncing inside the lens.Light Leak is unfiltered light hitting film or sensor from a body gap, usually from the frame edge, not from a pictured source.Anamorphic FlareNight lights and headlights should write on the lens.HalationHighlights should bleed like film, not clip like video.Film GrainThe image should feel developed, not rendered."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Close Encounters of the Third Kind lets encounter lights overwhelm the viewing system. Star Trek (2009) lets bright practicals streak and veil the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Alien lets industrial sources dirty the glass. The Revenant lets the sun strike the lens as weather, not as a logo."
+        },
+        {
+          "type": "list-item",
+          "text": "Close Encounters of the Third Kind 1977Powerful encounter lights overwhelm the viewing system.",
+          "displayText": "Close Encounters of the Third Kind 1977\nPowerful encounter lights overwhelm the viewing system."
+        },
+        {
+          "type": "list-item",
+          "text": "Star Trek 2009Bright practical sources create conspicuous streaks and veiling light.",
+          "displayText": "Star Trek 2009\nBright practical sources create conspicuous streaks and veiling light."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/013471061cb2e8098b5a8d6a48224c54.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/lens-flare/famous/00-close-encounters-of-the-third-kind-1977.jpg",
+          "alt": "Close Encounters of the Third Kind 1977"
+        },
+        {
+          "kind": "image",
+          "path": "media/d7a4ef7b90e469ee53abc81de1c17b3c.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/lens-flare/famous/01-star-trek-2009.jpg",
+          "alt": "Star Trek 2009"
+        }
+      ],
+      "sourceText": "In film Close Encounters of the Third Kind lets encounter lights overwhelm the viewing system. Star Trek (2009) lets bright practicals streak and veil the frame.Alien lets industrial sources dirty the glass. The Revenant lets the sun strike the lens as weather, not as a logo.Close Encounters of the Third Kind 1977Powerful encounter lights overwhelm the viewing system.Star Trek 2009Bright practical sources create conspicuous streaks and veiling light."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the source and the glass, not a pack. Example: Lens flare across [Subject], the sun or a hard practical striking the front element, veiling contrast, ghost orbs tracking the source, source-linked not floating."
+        },
+        {
+          "type": "quote",
+          "text": "A rescue worker opens a hangar door onto dazzling daylight. As the source enters the lens angle, a restrained flare and brief veiling glare wash across the image, then clear as she blocks it. Realistic source-linked behavior, no floating decorative rainbow effects."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+rescue+worker+opens+a+hangar+door+onto+dazzling+daylight.+As+the+source+enters+the+lens+angle,+a+restrained+flare+and+brief+veiling+glare+wash+across+the+image,+then+clear+as+she+blocks+it.+Realistic+source-linked+behavior,+no+floating+decorative+rainbow+effects."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the source and the glass, not a pack. Example: Lens flare across [Subject], the sun or a hard practical striking the front element, veiling contrast, ghost orbs tracking the source, source-linked not floating.Copy promptUse in Video GeneratorA rescue worker opens a hangar door onto dazzling daylight. As the source enters the lens angle, a restrained flare and brief veiling glare wash across the image, then clear as she blocks it. Realistic source-linked behavior, no floating decorative rainbow effects.A rescue worker opens a hangar door onto dazzling daylight. As the source enters the lens angle, a restrained flare and brief veiling glare wash across the image, then clear as she blocks it. Realistic source-linked behavior, no floating decorative rainbow effects."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: a grade overlay or an anamorphic streak pack with no lamp. Tell: the flare does not move or dim when the source is blocked, and it ignores occlusions."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: put a real source in or near frame and parent the artifact to it."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: a grade overlay or an anamorphic streak pack with no lamp. Tell: the flare does not move or dim when the source is blocked, and it ignores occlusions.Fix: put a real source in or near frame and parent the artifact to it."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is lens flare in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Stray light scattered inside the lens as ghosts, streaks, or veiling glare. It is failed image-forming light, not a separate drawing on top of the picture."
+        },
+        {
+          "type": "heading",
+          "text": "Lens flare vs anamorphic flare",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Lens flare is any scatter in the optic. An anamorphic flare is a specific horizontal streak from cylindrical anamorphic elements, often with oval bokeh."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use lens flare?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a hard source is in or near the lens and the camera should struggle to see. Skip it when the lamp is absent and the streak would float."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt lens flare for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the source, its angle to the glass, and the artifact type (veil, ghosts, streaks). Require the flare to track and occlude with the source."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is lens flare in film?Stray light scattered inside the lens as ghosts, streaks, or veiling glare. It is failed image-forming light, not a separate drawing on top of the picture.Lens flare vs anamorphic flareLens flare is any scatter in the optic. An anamorphic flare is a specific horizontal streak from cylindrical anamorphic elements, often with oval bokeh.When should I use lens flare?When a hard source is in or near the lens and the camera should struggle to see. Skip it when the lamp is absent and the streak would float.How do I prompt lens flare for AI image or video?Name the source, its angle to the glass, and the artifact type (veil, ghosts, streaks). Require the flare to track and occlude with the source."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the source and the glass, not a pack. Example: Lens flare across [Subject], the sun or a hard practical striking the front element, veiling contrast, ghost orbs tracking the source, source-linked not floating."
+    ],
+    "example": "A rescue worker opens a hangar door onto dazzling daylight. As the source enters the lens angle, a restrained flare and brief veiling glare wash across the image, then clear as she blocks it. Realistic source-linked behavior, no floating decorative rainbow effects."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0144ca33a9d72536678396441adf8005.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/lens-flare.jpg",
+      "alt": "Lens Flare frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/dd60ac3e349447877925814c6440f811.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+      "alt": "Anamorphic Flare"
+    },
+    {
+      "kind": "image",
+      "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+      "alt": "Halation"
+    },
+    {
+      "kind": "video",
+      "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5fca5d01511d1b273f967622f709e9a3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-grain-076-archival-or-damaged-medium-texture-mini.webp",
+      "alt": "Film Grain"
+    },
+    {
+      "kind": "video",
+      "path": "media/1d7683ea283deb5b71800203fb729749.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/076-archival-or-damaged-medium-texture-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/013471061cb2e8098b5a8d6a48224c54.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/lens-flare/famous/00-close-encounters-of-the-third-kind-1977.jpg",
+      "alt": "Close Encounters of the Third Kind 1977"
+    },
+    {
+      "kind": "image",
+      "path": "media/d7a4ef7b90e469ee53abc81de1c17b3c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/lens-flare/famous/01-star-trek-2009.jpg",
+      "alt": "Star Trek 2009"
+    },
+    {
+      "kind": "image",
+      "path": "media/e427ea7e42b86598764dc2f46101d797.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/lens-flare/hero.jpg",
+      "alt": "Lens Flare",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "5b30d2e68f23b133acd31315b63fb8f75e8ddeb06b19aa9e868f1a072e84d7a0"
+}

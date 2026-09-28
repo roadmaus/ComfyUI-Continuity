@@ -1,0 +1,376 @@
+{
+  "id": "effects/sticker-peel",
+  "slug": "sticker-peel",
+  "title": "Sticker Peel",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/sticker-peel",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/sticker-peel-sticker-peel-mini.webp",
+  "detail": "details/effects/sticker-peel.json",
+  "aliases": [],
+  "description": "A sticker peel effect lifts the image from a backing: adhesive shine, a die-cut layer coming off the world. Thickness, curl, and glue are the physics, not a still collage of torn paper.",
+  "thumbnail": "media/959532bfff0e7a5e5c2a002fc871f5dc.webp",
+  "video": "media/c11a9b6d6c2b81b81251cda87aca23ef.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/sticker-peel-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A corner of the frame rolls. Underneath is another layer or the street."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when identity is something stuck on, and removing it is the beat: titles, a poster, a face as vinyl. It is the wrong tool for a fight, and for a collage that only layers stills without a peel event."
+        },
+        {
+          "type": "paragraph",
+          "text": "If media collide as equal sources, that is mixed media. If torn paper sits still, that is collage."
+        },
+        {
+          "type": "paragraph",
+          "text": "This one has a curl and a specular of adhesive."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A corner of the frame rolls. Underneath is another layer or the street.Use it when identity is something stuck on, and removing it is the beat: titles, a poster, a face as vinyl. It is the wrong tool for a fight, and for a collage that only layers stills without a peel event.If media collide as equal sources, that is mixed media. If torn paper sits still, that is collage.This one has a curl and a specular of adhesive."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Build a die-cut layer with paper tooth or vinyl gloss. Animate one peel direction."
+        },
+        {
+          "type": "paragraph",
+          "text": "Show the adhesive shine on the underside and the backing that is revealed. A hand is optional."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the face or object on the sticker readable. Light the curl with a small hard source so the edge has a tick."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a sticker peel on the subject: the image lifting from a backing, adhesive shine. For video, a sticker layer peels off, revealing another layer."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Build a die-cut layer with paper tooth or vinyl gloss. Animate one peel direction.Show the adhesive shine on the underside and the backing that is revealed. A hand is optional.Keep the face or object on the sticker readable. Light the curl with a small hard source so the edge has a tick.Prompt a sticker peel on the subject: the image lifting from a backing, adhesive shine. For video, a sticker layer peels off, revealing another layer."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for titles, identity jokes, a reveal of what was under the poster. Do not use it as a transition in a chase that still needs geography."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for titles, identity jokes, a reveal of what was under the poster. Do not use it as a transition in a chase that still needs geography."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Collage layers images without a peel. Mixed Media collides capture modes.",
+          "links": [
+            {
+              "text": "Collage",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            },
+            {
+              "text": "Mixed Media",
+              "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Sticker peel is a single graphic layer with thickness, curl, and glue, coming off a backing."
+        },
+        {
+          "type": "list-item",
+          "text": "CollageOne image is not enough; stack them.",
+          "displayText": "Collage\nOne image is not enough; stack them.",
+          "links": [
+            {
+              "text": "CollageOne image is not enough; stack them.",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Mixed MediaNo single medium owns the truth.",
+          "displayText": "Mixed Media\nNo single medium owns the truth.",
+          "links": [
+            {
+              "text": "Mixed MediaNo single medium owns the truth.",
+              "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Collage",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        },
+        {
+          "text": "Mixed Media",
+          "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+        },
+        {
+          "text": "CollageOne image is not enough; stack them.",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        },
+        {
+          "text": "Mixed MediaNo single medium owns the truth.",
+          "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+          "alt": "Collage"
+        },
+        {
+          "kind": "image",
+          "path": "media/83d2cb5611a01b24c14f80d7066eb566.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mixed-media-mixed-media-mini.webp",
+          "alt": "Mixed Media"
+        },
+        {
+          "kind": "video",
+          "path": "media/d444dde0403cf42d4c72951f133ce07c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mixed-media-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Collage layers images without a peel. Mixed Media collides capture modes.Sticker peel is a single graphic layer with thickness, curl, and glue, coming off a backing.CollageOne image is not enough; stack them.Mixed MediaNo single medium owns the truth.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Title design and motion graphics are the well-known uses: a credit that is a label, a street-art rip, a vinyl coming off a wall. Grammar of paper as matter, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Title design and motion graphics are the well-known uses: a credit that is a label, a street-art rip, a vinyl coming off a wall. Grammar of paper as matter, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sticker peel on [Subject], the image lifting from a backing, adhesive shine, a graphic coming off the world. Video: A sticker layer peels off [Subject] or the frame, revealing another layer."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the curl direction and the backing. Ban a person merely standing in front of a poster."
+        },
+        {
+          "type": "quote",
+          "text": "A sticker layer peels off [Subject] or the frame, revealing another layer."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+sticker+layer+peels+off+[Subject]+or+the+frame,+revealing+another+layer."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Sticker peel on [Subject], the image lifting from a backing, adhesive shine, a graphic coming off the world. Video: A sticker layer peels off [Subject] or the frame, revealing another layer.Name the curl direction and the backing. Ban a person merely standing in front of a poster.Copy promptUse in Video GeneratorA sticker layer peels off [Subject] or the frame, revealing another layer.A sticker layer peels off [Subject] or the frame, revealing another layer."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a poster in the set. The tell is no curl, no glue, no die-cut edge."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is a lifting layer, adhesive specular, and a reveal underneath."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a poster in the set. The tell is no curl, no glue, no die-cut edge.The fix is a lifting layer, adhesive specular, and a reveal underneath."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is sticker peel in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Sticker peel lifts the image from a backing like a label. You see thickness, curl, and adhesive shine. The picture comes off the world."
+        },
+        {
+          "type": "heading",
+          "text": "Sticker peel vs collage",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Collage stacks stills. Sticker peel is a peel event: one die-cut layer rolling off a backing. One is layers at rest. The other is glue and curl."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use sticker peel?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for titles, identity jokes, a reveal under a poster. Skip it in action that still needs a real room and a real camera path."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt sticker peel for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Sticker peel on [Subject], the image lifting from a backing, adhesive shine. For video, a layer peels off, revealing another. Name curl direction and backing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is sticker peel in film?Sticker peel lifts the image from a backing like a label. You see thickness, curl, and adhesive shine. The picture comes off the world.Sticker peel vs collageCollage stacks stills. Sticker peel is a peel event: one die-cut layer rolling off a backing. One is layers at rest. The other is glue and curl.When should I use sticker peel?Use it for titles, identity jokes, a reveal under a poster. Skip it in action that still needs a real room and a real camera path.How do I prompt sticker peel for AI image or video?Write Sticker peel on [Subject], the image lifting from a backing, adhesive shine. For video, a layer peels off, revealing another. Name curl direction and backing."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Sticker peel on [Subject], the image lifting from a backing, adhesive shine, a graphic coming off the world. Video: A sticker layer peels off [Subject] or the frame, revealing another layer.",
+      "Name the curl direction and the backing. Ban a person merely standing in front of a poster."
+    ],
+    "example": "A sticker layer peels off [Subject] or the frame, revealing another layer."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/c11a9b6d6c2b81b81251cda87aca23ef.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/sticker-peel-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/959532bfff0e7a5e5c2a002fc871f5dc.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/sticker-peel-sticker-peel-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/14e519a8de12459b53877919643292c7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/sticker-peel.jpg",
+      "alt": "Sticker Peel frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+      "alt": "Collage"
+    },
+    {
+      "kind": "image",
+      "path": "media/83d2cb5611a01b24c14f80d7066eb566.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mixed-media-mixed-media-mini.webp",
+      "alt": "Mixed Media"
+    },
+    {
+      "kind": "video",
+      "path": "media/d444dde0403cf42d4c72951f133ce07c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mixed-media-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4a111b548725128880535ffd7cdd2049.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/sticker-peel/hero.jpg",
+      "alt": "Sticker Peel",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "a964487b80882abfa6e739eca47fa43032d6446c916bf7bb93ac5e1b245c7280"
+}

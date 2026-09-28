@@ -1,0 +1,373 @@
+{
+  "id": "effects/collage",
+  "slug": "collage",
+  "title": "Collage",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/collage",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+  "detail": "details/effects/collage.json",
+  "aliases": [],
+  "description": "Collage cinematography builds a frame from torn, cut, or mixed pieces: different stocks, paper, print, and live action sharing one plane with visible joins. Edges are graphic, and the stack is a construction, not an optical blend.",
+  "thumbnail": "media/a726b8edf4c49125fec23e01978562a0.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A head from one still, a building from another, newsprint, a painted sky. You can see the scissors."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mixed grain, mixed contrast, maybe a bit of tape. One image was not enough, so the frame was assembled."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when sources should remain sources: titles, satire, memory as scrapbook, a graphic sequence that refuses photographic unity. It is the wrong tool when two photographs should fuse as density (double exposure) or when live action and animation share a photographed space without torn edges."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mixed media can do either. Collage insists on the cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A head from one still, a building from another, newsprint, a painted sky. You can see the scissors.Mixed grain, mixed contrast, maybe a bit of tape. One image was not enough, so the frame was assembled.Use it when sources should remain sources: titles, satire, memory as scrapbook, a graphic sequence that refuses photographic unity. It is the wrong tool when two photographs should fuse as density (double exposure) or when live action and animation share a photographed space without torn edges.Mixed media can do either. Collage insists on the cut."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shoot or collect plates. Cut them."
+        },
+        {
+          "type": "paragraph",
+          "text": "Leave borders, torn fiber, misregistered printing, different grain structures. Composite with hard or torn masks, not a screen blend."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: torn layers, mixed stocks, cut paper and live action sharing one plane, visible joins, not a smooth double exposure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Shoot or collect plates. Cut them.Leave borders, torn fiber, misregistered printing, different grain structures. Composite with hard or torn masks, not a screen blend.Prompt: torn layers, mixed stocks, cut paper and live action sharing one plane, visible joins, not a smooth double exposure."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A portrait built from a live face, a city fragment, and newsprint, joins visible. Do not dissolve the same elements into a ghosted overlay and call it collage."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A portrait built from a live face, a city fragment, and newsprint, joins visible. Do not dissolve the same elements into a ghosted overlay and call it collage."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Double Exposure is an optical or additive stack without scissors. Mixed Media is the broader family (animation plus live, print plus plate).",
+          "links": [
+            {
+              "text": "Double Exposure",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            },
+            {
+              "text": "Mixed Media",
+              "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Collage is the cut-and-paste grammar inside that family. Split Screen divides the frame into simultaneous pictures with a designed border, usually live.",
+          "links": [
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Collage can ignore a shared timebase."
+        },
+        {
+          "type": "list-item",
+          "text": "Mixed MediaNo single medium owns the truth.",
+          "displayText": "Mixed Media\nNo single medium owns the truth.",
+          "links": [
+            {
+              "text": "Mixed MediaNo single medium owns the truth.",
+              "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Double ExposureTwo times or two selves occupy one frame.",
+          "displayText": "Double Exposure\nTwo times or two selves occupy one frame.",
+          "links": [
+            {
+              "text": "Double ExposureTwo times or two selves occupy one frame.",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Double Exposure",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        },
+        {
+          "text": "Mixed Media",
+          "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+        },
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "Mixed MediaNo single medium owns the truth.",
+          "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+        },
+        {
+          "text": "Double ExposureTwo times or two selves occupy one frame.",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/83d2cb5611a01b24c14f80d7066eb566.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mixed-media-mixed-media-mini.webp",
+          "alt": "Mixed Media"
+        },
+        {
+          "kind": "video",
+          "path": "media/d444dde0403cf42d4c72951f133ce07c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mixed-media-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+          "alt": "Double Exposure"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Double Exposure is an optical or additive stack without scissors. Mixed Media is the broader family (animation plus live, print plus plate).Collage is the cut-and-paste grammar inside that family. Split Screen divides the frame into simultaneous pictures with a designed border, usually live.Collage can ignore a shared timebase.Mixed MediaNo single medium owns the truth.Double ExposureTwo times or two selves occupy one frame.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Terry Gilliam's Monty Python work is cut-out collage in motion. The Jinx titles treat documents and images as a stacked graphic plane."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bruce Conner's A Movie is found-footage collage as a film, which is grammar for the cut, not a look to clone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Terry Gilliam's Monty Python work is cut-out collage in motion. The Jinx titles treat documents and images as a stacked graphic plane.Bruce Conner's A Movie is found-footage collage as a film, which is grammar for the cut, not a look to clone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Show the joins. Example: Collage frame of [Subject], torn layers, mixed stocks, cut paper and live action sharing one plane, visible edges, not a smooth optical overlay."
+        },
+        {
+          "type": "quote",
+          "text": "Collage frame of [Subject], torn layers, mixed stocks, cut paper and live action sharing one plane."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Collage+frame+of+[Subject],+torn+layers,+mixed+stocks,+cut+paper+and+live+action+sharing+one+plane."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Show the joins. Example: Collage frame of [Subject], torn layers, mixed stocks, cut paper and live action sharing one plane, visible edges, not a smooth optical overlay.Copy promptUse in Image GeneratorCollage frame of [Subject], torn layers, mixed stocks, cut paper and live action sharing one plane.Collage frame of [Subject], torn layers, mixed stocks, cut paper and live action sharing one plane."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: double exposure or a clean split-screen. Tell: translucent blend, matching grain across pieces, or a hard live divider without paper or tear."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: mismatched stocks, torn or cut borders, graphic stacking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: double exposure or a clean split-screen. Tell: translucent blend, matching grain across pieces, or a hard live divider without paper or tear.Fix: mismatched stocks, torn or cut borders, graphic stacking."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is collage in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A frame assembled from cut or torn pieces of different images and materials, with joins meant to be seen. It is construction, not a seamless composite."
+        },
+        {
+          "type": "heading",
+          "text": "Collage vs double exposure",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Double exposure blends records as density. Collage keeps edges: scissors, paper, mixed stocks. One is optical stack. The other is cut and paste."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use collage?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When one photograph is not enough and the sources should stay visible. Do not use it for a ghosted memory overlay or a seamless twin shot."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt collage for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for torn layers, mixed film stocks or paper, live action plus cut pieces, and visible joins. Ban smooth double exposure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is collage in film?A frame assembled from cut or torn pieces of different images and materials, with joins meant to be seen. It is construction, not a seamless composite.Collage vs double exposureDouble exposure blends records as density. Collage keeps edges: scissors, paper, mixed stocks. One is optical stack. The other is cut and paste.When should I use collage?When one photograph is not enough and the sources should stay visible. Do not use it for a ghosted memory overlay or a seamless twin shot.How do I prompt collage for AI image or video?Ask for torn layers, mixed film stocks or paper, live action plus cut pieces, and visible joins. Ban smooth double exposure."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Show the joins. Example: Collage frame of [Subject], torn layers, mixed stocks, cut paper and live action sharing one plane, visible edges, not a smooth optical overlay."
+    ],
+    "example": "Collage frame of [Subject], torn layers, mixed stocks, cut paper and live action sharing one plane."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+      "alt": "Collage example"
+    },
+    {
+      "kind": "image",
+      "path": "media/83d2cb5611a01b24c14f80d7066eb566.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mixed-media-mixed-media-mini.webp",
+      "alt": "Mixed Media"
+    },
+    {
+      "kind": "video",
+      "path": "media/d444dde0403cf42d4c72951f133ce07c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mixed-media-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+      "alt": "Double Exposure"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bbefa29c8ac6adfe648887de21bb2508.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/collage/hero.jpg",
+      "alt": "Collage",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "e770ab0f81c38945b1b6b6cd0b2f1cb5891f70324ccd8613a6379903abd9ad38"
+}

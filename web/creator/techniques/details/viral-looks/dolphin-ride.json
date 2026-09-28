@@ -1,0 +1,387 @@
+{
+  "id": "viral-looks/dolphin-ride",
+  "slug": "dolphin-ride",
+  "title": "Dolphin Ride",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/dolphin-ride",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolphin-ride-dolphin-ride-mini.webp",
+  "detail": "details/viral-looks/dolphin-ride.json",
+  "aliases": [],
+  "description": "Dolphin ride, as a dolphin ride preset, is impossible tourism played straight: a body mounted on a sea creature, bright water, honest horizon, splash readable. The gag is the vehicle, and swimming near a dolphin is not the sentence.",
+  "thumbnail": "media/712cfdcdd4c1727734dcb641639f6b95.webp",
+  "video": "media/af8e388232811dc06457f90921274fb2.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolphin-ride-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vacation myths, dream logistics, a postcard that cannot be true: the face is serious or delighted but not winking. Wide enough to see the animal as the engine."
+        },
+        {
+          "type": "paragraph",
+          "text": "Documentary camera on a miracle nobody should file as nature. It is the wrong tool for a respectful wildlife film, and the wrong tool if the person is only nearby in the water."
+        },
+        {
+          "type": "paragraph",
+          "text": "Penguin ride is the ice version. Puffin ride leaves the water for cliffs."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Vacation myths, dream logistics, a postcard that cannot be true: the face is serious or delighted but not winking. Wide enough to see the animal as the engine.Documentary camera on a miracle nobody should file as nature. It is the wrong tool for a respectful wildlife film, and the wrong tool if the person is only nearby in the water.Penguin ride is the ice version. Puffin ride leaves the water for cliffs."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wide, horizon honest, camera at rider height or slightly off the water, 24mm to 35mm. Bright sun, speculars on water, splash as physical spray."
+        },
+        {
+          "type": "paragraph",
+          "text": "The person is mounted, moving, animal readable. No logos."
+        },
+        {
+          "type": "paragraph",
+          "text": "Still: Dolphin-ride of [Subject], a body carried by a sea creature, impossible tourism, joy as a gag. Video: [Subject] rides a dolphin through bright water, a tourist miracle."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Wide, horizon honest, camera at rider height or slightly off the water, 24mm to 35mm. Bright sun, speculars on water, splash as physical spray.The person is mounted, moving, animal readable. No logos.Still: Dolphin-ride of [Subject], a body carried by a sea creature, impossible tourism, joy as a gag. Video: [Subject] rides a dolphin through bright water, a tourist miracle."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A gag, a vacation myth, a dream commute across water. Do not use it in a nature documentary that wants respect, and do not stage a swim-beside."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A gag, a vacation myth, a dream commute across water. Do not use it in a nature documentary that wants respect, and do not stage a swim-beside."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Penguin Ride is ice and a flightless mount. Puffin Ride is cliffs and a flying seabird.",
+          "links": [
+            {
+              "text": "Penguin Ride",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/penguin-ride"
+            },
+            {
+              "text": "Puffin Ride",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/puffin-ride"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Underwater is the medium without the mounted gag. Dolphin ride is bright water and a cetacean as engine.",
+          "links": [
+            {
+              "text": "Underwater",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Penguin RideThe vehicle is the joke.",
+          "displayText": "Penguin Ride\nThe vehicle is the joke.",
+          "links": [
+            {
+              "text": "Penguin RideThe vehicle is the joke.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/penguin-ride"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "UnderwaterLeave air.",
+          "displayText": "Underwater\nLeave air.",
+          "links": [
+            {
+              "text": "UnderwaterLeave air.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Penguin Ride",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/penguin-ride"
+        },
+        {
+          "text": "Puffin Ride",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/puffin-ride"
+        },
+        {
+          "text": "Underwater",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+        },
+        {
+          "text": "Penguin RideThe vehicle is the joke.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/penguin-ride"
+        },
+        {
+          "text": "UnderwaterLeave air.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/63b1162883c67f3a759b3e3cae07df69.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/penguin-ride-penguin-ride-mini.webp",
+          "alt": "Penguin Ride"
+        },
+        {
+          "kind": "video",
+          "path": "media/a87a2591dbdbd3e5746b5a9aa99d52f8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/penguin-ride-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fd420b0e034c5e2ab01183f84983fe9c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/underwater-underwater-mini.webp",
+          "alt": "Underwater"
+        },
+        {
+          "kind": "video",
+          "path": "media/64ef0f8f2668206cb2692f2d00919c1e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/underwater-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Penguin Ride is ice and a flightless mount. Puffin Ride is cliffs and a flying seabird.Underwater is the medium without the mounted gag. Dolphin ride is bright water and a cetacean as engine.Penguin RideThe vehicle is the joke.UnderwaterLeave air.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Big Miracle and other rescue dramas give honest water and animal bodies. Viral AI rides are the well-known use of the mounted gag."
+        },
+        {
+          "type": "paragraph",
+          "text": "Play it as a postcard that cannot be true, not as a copied still."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Big Miracle and other rescue dramas give honest water and animal bodies. Viral AI rides are the well-known use of the mounted gag.Play it as a postcard that cannot be true, not as a copied still."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mounted, moving, horizon honest. Dolphin-ride of [Subject], a body carried by a sea creature, impossible tourism, joy as a gag."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add wide lens, bright water, splash, face committed. Video: [Subject] rides a dolphin through bright water, a tourist miracle."
+        },
+        {
+          "type": "paragraph",
+          "text": "No logos. Not swimming nearby."
+        },
+        {
+          "type": "quote",
+          "text": "[Subject] rides a dolphin through bright water, a tourist miracle."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=[Subject]+rides+a+dolphin+through+bright+water,+a+tourist+miracle."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Mounted, moving, horizon honest. Dolphin-ride of [Subject], a body carried by a sea creature, impossible tourism, joy as a gag.Add wide lens, bright water, splash, face committed. Video: [Subject] rides a dolphin through bright water, a tourist miracle.No logos. Not swimming nearby.Copy promptUse in Video Generator[Subject] rides a dolphin through bright water, a tourist miracle.[Subject] rides a dolphin through bright water, a tourist miracle."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A person swimming near a dolphin, or a wink to camera. The tell is no mount and no engine."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: they are on the animal, the animal is moving, spray in the air, face played straight."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong A person swimming near a dolphin, or a wink to camera. The tell is no mount and no engine.Fix it: they are on the animal, the animal is moving, spray in the air, face played straight."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dolphin Ride in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A straight-faced mount gag: a person riding a dolphin through bright water. Documentary camera, impossible tourism. Nearby swimming does not count."
+        },
+        {
+          "type": "heading",
+          "text": "Dolphin Ride vs Penguin Ride",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolphin ride is sea, splash, a cetacean engine. Penguin ride is ice or a wrong city, flightless mount. Same postcard law, different animal physics."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dolphin Ride?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Gags, vacation myths, dream travel. Skip respectful wildlife coverage."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dolphin Ride for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Wide water, mounted [Subject], then: Dolphin-ride of [Subject], a body carried by a sea creature, impossible tourism, joy as a gag. For video: [Subject] rides a dolphin through bright water. Face committed. No logos."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dolphin Ride in film?A straight-faced mount gag: a person riding a dolphin through bright water. Documentary camera, impossible tourism. Nearby swimming does not count.Dolphin Ride vs Penguin RideDolphin ride is sea, splash, a cetacean engine. Penguin ride is ice or a wrong city, flightless mount. Same postcard law, different animal physics.When should I use Dolphin Ride?Gags, vacation myths, dream travel. Skip respectful wildlife coverage.How do I prompt Dolphin Ride for AI image or video?Wide water, mounted [Subject], then: Dolphin-ride of [Subject], a body carried by a sea creature, impossible tourism, joy as a gag. For video: [Subject] rides a dolphin through bright water. Face committed. No logos."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Mounted, moving, horizon honest. Dolphin-ride of [Subject], a body carried by a sea creature, impossible tourism, joy as a gag.",
+      "Add wide lens, bright water, splash, face committed. Video: [Subject] rides a dolphin through bright water, a tourist miracle.",
+      "No logos. Not swimming nearby."
+    ],
+    "example": "[Subject] rides a dolphin through bright water, a tourist miracle."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/af8e388232811dc06457f90921274fb2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolphin-ride-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/712cfdcdd4c1727734dcb641639f6b95.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolphin-ride-dolphin-ride-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e3633e5da710c5c6b6eeaeb9444a18b2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/dolphin-ride.jpg",
+      "alt": "Dolphin Ride frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/63b1162883c67f3a759b3e3cae07df69.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/penguin-ride-penguin-ride-mini.webp",
+      "alt": "Penguin Ride"
+    },
+    {
+      "kind": "video",
+      "path": "media/a87a2591dbdbd3e5746b5a9aa99d52f8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/penguin-ride-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fd420b0e034c5e2ab01183f84983fe9c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/underwater-underwater-mini.webp",
+      "alt": "Underwater"
+    },
+    {
+      "kind": "video",
+      "path": "media/64ef0f8f2668206cb2692f2d00919c1e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/underwater-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/83a445a0be62ac54722eb566e829c0e7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolphin-ride/hero.jpg",
+      "alt": "Dolphin Ride",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "1cbd2ecb8fdbeeda2706598a6587e91863817776e931d4b15329933323018faa"
+}

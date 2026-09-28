@@ -19,6 +19,8 @@ import { css as cast } from "./styles/cast.js";
 import { css as refine } from "./styles/refine.js";
 import { css as prestage } from "./styles/prestage.js";
 import { css as presets } from "./styles/presets.js";
+import { css as techniques } from "./styles/techniques.js";
+import { css as techniqueControls } from "./styles/technique-controls.js";
 import { css as fullscreen } from "./styles/fullscreen.js";
 import { css as bench } from "./styles/bench.js";
 import { css as control } from "./styles/control.js";
@@ -48,6 +50,8 @@ const CSS = [
   // After the picker's: the library reuses its modal, tabs and shelves and
   // overrides the grid inside them.
   presets,
+  techniques,
+  techniqueControls,
   // After the picker's: a bench rides on the picker's overlay and undoes the
   // three things a centred modal wants that a whole room does not. The shared
   // sheet is the room; the two after it are what each bench has of its own, so

@@ -1,0 +1,344 @@
+{
+  "id": "viral-looks/pearl-earring",
+  "slug": "pearl-earring",
+  "title": "Pearl Earring",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/pearl-earring",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pearl-earring.webp",
+  "detail": "details/viral-looks/pearl-earring.json",
+  "aliases": [],
+  "description": "Pearl earring, the pearl earring look, is a Dutch interior as grade: one north window, dark earth ground, skin like painted light, a small specular on a jewel. One window, one jewel, one look, and it is not a replica of a copyrighted painting.",
+  "thumbnail": "media/66daa8caffb598e3b6e5fcb279ac9c54.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Portraits, hush, a character who should feel studied. The head turns."
+        },
+        {
+          "type": "paragraph",
+          "text": "Eyes go to camera or just off. The wrap is cloth, not a costume joke."
+        },
+        {
+          "type": "paragraph",
+          "text": "The pearl is a catchlight with a job. Action ruins it."
+        },
+        {
+          "type": "paragraph",
+          "text": "A second practical competing with the window ruins it. It is the wrong tool in a night club, a chase, or a beauty-dish studio."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the room is not the lamp, you missed Vermeer. Do not copy the original painting's exact pose and turban as a replica."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Portraits, hush, a character who should feel studied. The head turns.Eyes go to camera or just off. The wrap is cloth, not a costume joke.The pearl is a catchlight with a job. Action ruins it.A second practical competing with the window ruins it. It is the wrong tool in a night club, a chase, or a beauty-dish studio.If the room is not the lamp, you missed Vermeer. Do not copy the original painting's exact pose and turban as a replica."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "50mm to 85mm, eye height, lock-off. Single window camera-left, cool daylight, no beauty dish, no other practicals."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dark earth walls. Small specular on an earring or equivalent jewel."
+        },
+        {
+          "type": "paragraph",
+          "text": "Head turned. Prompt: Pearl-earring portrait of [Subject], Vermeer window, turban implied, a quiet Dutch interior as grade."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works 50mm to 85mm, eye height, lock-off. Single window camera-left, cool daylight, no beauty dish, no other practicals.Dark earth walls. Small specular on an earring or equivalent jewel.Head turned. Prompt: Pearl-earring portrait of [Subject], Vermeer window, turban implied, a quiet Dutch interior as grade."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A quiet portrait, a study, a face that should feel painted by daylight. Do not use it for action, and do not replica the famous painting's exact pose."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A quiet portrait, a study, a face that should feel painted by daylight. Do not use it for action, and do not replica the famous painting's exact pose."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Window Light is the source without the Dutch pigment law. Rembrandt Lighting is the triangle of cheek light from a higher, more sculpted key.",
+          "links": [
+            {
+              "text": "Window Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+            },
+            {
+              "text": "Rembrandt Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Pearl earring is cooler, quieter, jewel as a point, interior as grade."
+        },
+        {
+          "type": "list-item",
+          "text": "Window LightDay interiors without looking lit.",
+          "displayText": "Window Light\nDay interiors without looking lit.",
+          "links": [
+            {
+              "text": "Window LightDay interiors without looking lit.",
+              "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rembrandt LightingClassic dramatic portrait.",
+          "displayText": "Rembrandt Lighting\nClassic dramatic portrait.",
+          "links": [
+            {
+              "text": "Rembrandt LightingClassic dramatic portrait.",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Window Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+        },
+        {
+          "text": "Rembrandt Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "Window LightDay interiors without looking lit.",
+          "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+        },
+        {
+          "text": "Rembrandt LightingClassic dramatic portrait.",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b40f77c3fa856d3a1ad6b3c98e9753de.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/window-light.webp",
+          "alt": "Window Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/0731eeefead98e8a64c8429a412becb9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rembrandt.webp",
+          "alt": "Rembrandt Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Window Light is the source without the Dutch pigment law. Rembrandt Lighting is the triangle of cheek light from a higher, more sculpted key.Pearl earring is cooler, quieter, jewel as a point, interior as grade.Window LightDay interiors without looking lit.Rembrandt LightingClassic dramatic portrait.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Girl with a Pearl Earring (2003) restages the window-and-jewel grammar on a new performance. Use window, pigment, jewel on a new person."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not copy the painting as a fake."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Girl with a Pearl Earring (2003) restages the window-and-jewel grammar on a new performance. Use window, pigment, jewel on a new person.Do not copy the painting as a fake."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "One window, then the face. Pearl-earring portrait of [Subject], Vermeer window, turban implied, a quiet Dutch interior as grade."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add 85mm lock-off, cool daylight camera-left, dark earth ground, small specular on the jewel, no beauty dish. New person, not a replica pose."
+        },
+        {
+          "type": "quote",
+          "text": "Pearl-earring portrait of [Subject], Vermeer window, turban implied, a quiet Dutch interior as grade."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Pearl-earring+portrait+of+[Subject],+Vermeer+window,+turban+implied,+a+quiet+Dutch+interior+as+grade."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it One window, then the face. Pearl-earring portrait of [Subject], Vermeer window, turban implied, a quiet Dutch interior as grade.Add 85mm lock-off, cool daylight camera-left, dark earth ground, small specular on the jewel, no beauty dish. New person, not a replica pose.Copy promptUse in Image GeneratorPearl-earring portrait of [Subject], Vermeer window, turban implied, a quiet Dutch interior as grade.Pearl-earring portrait of [Subject], Vermeer window, turban implied, a quiet Dutch interior as grade."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A girl with a big earring in studio light, or a replica of the painting. The tell is a beauty dish and a costume turban as a joke."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: room as lamp, cool window, jewel as catchlight, new face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong A girl with a big earring in studio light, or a replica of the painting. The tell is a beauty dish and a costume turban as a joke.Fix it: room as lamp, cool window, jewel as catchlight, new face."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Pearl Earring in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A portrait recipe from Dutch interior grammar: one window, dark ground, painted skin, a jewel as a small specular. It is lighting and color, not a copy of a painting."
+        },
+        {
+          "type": "heading",
+          "text": "Pearl Earring vs Rembrandt Lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Rembrandt is a sculpted key that leaves a triangle on the shadow cheek. Pearl earring is cooler north-window light, quieter pigment, jewel as a point. Related lamps, different rooms."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Pearl Earring?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Hush portraits and studied faces. Skip action, clubs, and any replica of the famous pose."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Pearl Earring for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Single window camera-left, 85mm, then: Pearl-earring portrait of [Subject], Vermeer window, turban implied, a quiet Dutch interior as grade. Forbid extra practicals and replica posing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Pearl Earring in film?A portrait recipe from Dutch interior grammar: one window, dark ground, painted skin, a jewel as a small specular. It is lighting and color, not a copy of a painting.Pearl Earring vs Rembrandt LightingRembrandt is a sculpted key that leaves a triangle on the shadow cheek. Pearl earring is cooler north-window light, quieter pigment, jewel as a point. Related lamps, different rooms.When should I use Pearl Earring?Hush portraits and studied faces. Skip action, clubs, and any replica of the famous pose.How do I prompt Pearl Earring for AI image or video?Single window camera-left, 85mm, then: Pearl-earring portrait of [Subject], Vermeer window, turban implied, a quiet Dutch interior as grade. Forbid extra practicals and replica posing."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "One window, then the face. Pearl-earring portrait of [Subject], Vermeer window, turban implied, a quiet Dutch interior as grade.",
+      "Add 85mm lock-off, cool daylight camera-left, dark earth ground, small specular on the jewel, no beauty dish. New person, not a replica pose."
+    ],
+    "example": "Pearl-earring portrait of [Subject], Vermeer window, turban implied, a quiet Dutch interior as grade."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/66daa8caffb598e3b6e5fcb279ac9c54.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pearl-earring.webp",
+      "alt": "Pearl Earring example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b40f77c3fa856d3a1ad6b3c98e9753de.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/window-light.webp",
+      "alt": "Window Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/0731eeefead98e8a64c8429a412becb9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rembrandt.webp",
+      "alt": "Rembrandt Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/c6fbe5ad4fc8e4caf8751806afa0bf0e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pearl-earring/hero.jpg",
+      "alt": "Pearl Earring",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "1ecde58a5ac9771a416fa76daf777271d1045948c94984b00c98d00a6d8341ce"
+}

@@ -1,0 +1,451 @@
+{
+  "id": "framing/master-shot",
+  "slug": "master-shot",
+  "title": "Master Shot",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/master-shot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/master-shot.webp",
+  "detail": "details/framing/master-shot.json",
+  "aliases": [
+    "wide master",
+    "moving master",
+    "master scene"
+  ],
+  "description": "A master shot covers the complete dramatic action and the spatial geography of a scene in one setup. It is the skeleton you can play in full, then cut into.",
+  "thumbnail": "media/b25d5a381b507fb58a45e000e1880381.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A master protects the scene. If every close-up dies, you still have who sat where, who could reach the door, and how the argument moved through the room."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is usually wide enough for blocking, not so wide that faces and props stop meaning anything. It is the wrong tool when you only needed to name the building from outside: that is an establish."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool as a lifeless wide you never intend to use, parked for safety while all the acting happens in mismatched singles. A moving master can carry the whole beat if blocking and camera path are designed together."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A master protects the scene. If every close-up dies, you still have who sat where, who could reach the door, and how the argument moved through the room.It is usually wide enough for blocking, not so wide that faces and props stop meaning anything. It is the wrong tool when you only needed to name the building from outside: that is an establish.It is also the wrong tool as a lifeless wide you never intend to use, parked for safety while all the acting happens in mismatched singles. A moving master can carry the whole beat if blocking and camera path are designed together."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Set a camera that sees all essential blocking: seats, door, table, the path out. Size is often a Wide Shot or a loose Two-Shot, but the job is coverage of the action, not a particular crop.",
+          "links": [
+            {
+              "text": "Wide Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+            },
+            {
+              "text": "Two-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep faces and key props readable enough to cut. Mark the 180."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can later cut in or go to singles. Prompt: Wide master of [Subject] with all blocking visible, the skeleton of the scene in one continuous frame, coverage can cut in later.",
+          "links": [
+            {
+              "text": "cut in",
+              "url": "https://melies.co/cinematic-techniques/framing/cut-ins"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Wide Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+        },
+        {
+          "text": "Two-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        },
+        {
+          "text": "cut in",
+          "url": "https://melies.co/cinematic-techniques/framing/cut-ins"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Set a camera that sees all essential blocking: seats, door, table, the path out. Size is often a Wide Shot or a loose Two-Shot, but the job is coverage of the action, not a particular crop.Keep faces and key props readable enough to cut. Mark the 180.You can later cut in or go to singles. Prompt: Wide master of [Subject] with all blocking visible, the skeleton of the scene in one continuous frame, coverage can cut in later."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to protect the scene: a jury room argument that could play in one take, a party whose crossings you must understand. Do not skip it and hope singles will invent geography, and do not treat an exterior postcard as a master."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to protect the scene: a jury room argument that could play in one take, a party whose crossings you must understand. Do not skip it and hope singles will invent geography, and do not treat an exterior postcard as a master."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An Establishing Shot says where and when; a master says what happens in this space. A Wide Shot is a size.",
+          "links": [
+            {
+              "text": "Establishing Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+            },
+            {
+              "text": "Wide Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Two-Shot may be the master if two people and their blocking are the whole scene. A Group Shot shows an ensemble as a unit; it is a master only if the complete action plays inside it.",
+          "links": [
+            {
+              "text": "Two-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            },
+            {
+              "text": "Group Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/group-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "You can always go tighter. You cannot always invent a door that was never in the skeleton."
+        },
+        {
+          "type": "list-item",
+          "text": "Establishing ShotOpen a scene. Tell us where and when.",
+          "displayText": "Establishing Shot\nOpen a scene. Tell us where and when.",
+          "links": [
+            {
+              "text": "Establishing ShotOpen a scene. Tell us where and when.",
+              "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Two-ShotThe relationship is the shot.",
+          "displayText": "Two-Shot\nThe relationship is the shot.",
+          "links": [
+            {
+              "text": "Two-ShotThe relationship is the shot.",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Establishing Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+        },
+        {
+          "text": "Wide Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+        },
+        {
+          "text": "Two-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        },
+        {
+          "text": "Group Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/group-shot"
+        },
+        {
+          "text": "Establishing ShotOpen a scene. Tell us where and when.",
+          "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+        },
+        {
+          "text": "Two-ShotThe relationship is the shot.",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/36a71bb159fb3a26051fe83669a032ee.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/establishing-shot-096-establishing-and-reestablishing-shots-mini.webp",
+          "alt": "Establishing Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/3749142ffcb30b9332f50b8ac15c9fb6.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/096-establishing-and-reestablishing-shots-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ebc6a9329d13b0c650bddc57d3a8808d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/two-shot-048-profile-two-shot-mini.webp",
+          "alt": "Two-Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/c2b51a507b8e5b9e6dbb06fe2e90d474.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/048-profile-two-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots An Establishing Shot says where and when; a master says what happens in this space. A Wide Shot is a size.A Two-Shot may be the master if two people and their blocking are the whole scene. A Group Shot shows an ensemble as a unit; it is a master only if the complete action plays inside it.You can always go tighter. You cannot always invent a door that was never in the skeleton.Establishing ShotOpen a scene. Tell us where and when.Two-ShotThe relationship is the shot.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "12 Angry Men keeps returning to roomy views that clarify the changing jury arrangement so singles have a map. Nashville builds scenes whose wider coverage holds crossings and music as one geography."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: the scene could play here."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film 12 Angry Men keeps returning to roomy views that clarify the changing jury arrangement so singles have a map. Nashville builds scenes whose wider coverage holds crossings and music as one geography.Grammar: the scene could play here."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand all blocking. Example: Wide master of [Subject] with all blocking visible, the skeleton of the scene in one continuous frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the door, the table, and who stands where. For video, let the action play; do not punch in."
+        },
+        {
+          "type": "paragraph",
+          "text": "Coverage can be generated as later sizes from the same geography."
+        },
+        {
+          "type": "quote",
+          "text": "Wide master of [Subject] with all blocking visible, the skeleton of the scene in one continuous frame, coverage can cut in later."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Wide+master+of+[Subject]+with+all+blocking+visible,+the+skeleton+of+the+scene+in+one+continuous+frame,+coverage+can+cut+in+later."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Demand all blocking. Example: Wide master of [Subject] with all blocking visible, the skeleton of the scene in one continuous frame.Name the door, the table, and who stands where. For video, let the action play; do not punch in.Coverage can be generated as later sizes from the same geography.Copy promptUse in Image GeneratorWide master of [Subject] with all blocking visible, the skeleton of the scene in one continuous frame, coverage can cut in later.Wide master of [Subject] with all blocking visible, the skeleton of the scene in one continuous frame, coverage can cut in later."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an Establishing Shot (place, no action) or a Wide Shot that crops out the door you will need. The tell is a pretty exterior, or a wide so empty that the scene cannot play.",
+          "links": [
+            {
+              "text": "Establishing Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+            },
+            {
+              "text": "Wide Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: every important path and body must be in, and the take must be able to run the beat."
+        }
+      ],
+      "links": [
+        {
+          "text": "Establishing Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+        },
+        {
+          "text": "Wide Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an Establishing Shot (place, no action) or a Wide Shot that crops out the door you will need. The tell is a pretty exterior, or a wide so empty that the scene cannot play.Fix: every important path and body must be in, and the take must be able to run the beat."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Master Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A master shot is a setup that covers the complete dramatic action and spatial geography of a scene. It is the skeleton of the scene, often wide, and you can cut in tighter coverage later."
+        },
+        {
+          "type": "heading",
+          "text": "Master Shot vs Establishing Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An establishing shot introduces location and time. A master covers the action inside the scene: who moves where, who can reach whom. A skyline cannot be your master if the argument happens in a kitchen."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Master Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to protect the scene so geography and blocking remain true. Do not confuse it with an exterior establish, and do not shoot a lifeless wide you never intended to play."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Master Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Wide master of [Subject] with all blocking visible, the skeleton of the scene in one continuous frame. Name furniture, doors, and positions. For video, play the whole beat in that frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Master Shot in film?A master shot is a setup that covers the complete dramatic action and spatial geography of a scene. It is the skeleton of the scene, often wide, and you can cut in tighter coverage later.Master Shot vs Establishing ShotAn establishing shot introduces location and time. A master covers the action inside the scene: who moves where, who can reach whom. A skyline cannot be your master if the argument happens in a kitchen.When should I use Master Shot?Use it to protect the scene so geography and blocking remain true. Do not confuse it with an exterior establish, and do not shoot a lifeless wide you never intended to play.How do I prompt Master Shot for AI image or video?Write Wide master of [Subject] with all blocking visible, the skeleton of the scene in one continuous frame. Name furniture, doors, and positions. For video, play the whole beat in that frame."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Demand all blocking. Example: Wide master of [Subject] with all blocking visible, the skeleton of the scene in one continuous frame.",
+      "Name the door, the table, and who stands where. For video, let the action play; do not punch in.",
+      "Coverage can be generated as later sizes from the same geography."
+    ],
+    "example": "Wide master of [Subject] with all blocking visible, the skeleton of the scene in one continuous frame, coverage can cut in later."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/b25d5a381b507fb58a45e000e1880381.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/master-shot.webp",
+      "alt": "Master Shot example"
+    },
+    {
+      "kind": "image",
+      "path": "media/36a71bb159fb3a26051fe83669a032ee.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/establishing-shot-096-establishing-and-reestablishing-shots-mini.webp",
+      "alt": "Establishing Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/3749142ffcb30b9332f50b8ac15c9fb6.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/096-establishing-and-reestablishing-shots-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ebc6a9329d13b0c650bddc57d3a8808d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/two-shot-048-profile-two-shot-mini.webp",
+      "alt": "Two-Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/c2b51a507b8e5b9e6dbb06fe2e90d474.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/048-profile-two-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dc43b6e3590b4dbfb9230b4fc31a4d3d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/master-shot/hero.jpg",
+      "alt": "Master Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "522b4efa8bab108730608f57940f4eed7273f2dff44402ff24f3a3e3d23a2667"
+}

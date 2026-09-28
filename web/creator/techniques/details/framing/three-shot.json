@@ -1,0 +1,396 @@
+{
+  "id": "framing/three-shot",
+  "slug": "three-shot",
+  "title": "Three-Shot",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/three-shot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-shot.webp",
+  "detail": "details/framing/three-shot.json",
+  "aliases": [],
+  "description": "A three-shot, or three shot, frames three principal subjects together, usually so alliances and the odd one out are readable in the blocking. It is a group sentence of three, not three singles cut together.",
+  "thumbnail": "media/993aa813c3ad1027061cf473597be748.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A trio has politics. Two against one, a hinge person in the middle, a late arrival who splits a pair: the triangle is the story."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you only cover this as ping-pong singles, the audience never sees who is left out in real space. It is the wrong tool when there are four or more as a unit, or when the scene has collapsed to a pair."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool if you line three heads up with equal light and equal height and call that drama. Someone should own a peak of the triangle, or stand in the cold of it."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A trio has politics. Two against one, a hinge person in the middle, a late arrival who splits a pair: the triangle is the story.If you only cover this as ping-pong singles, the audience never sees who is left out in real space. It is the wrong tool when there are four or more as a unit, or when the scene has collapsed to a pair.It is also the wrong tool if you line three heads up with equal light and equal height and call that drama. Someone should own a peak of the triangle, or stand in the cold of it."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Arrange three bodies as a triangle in depth or across the frame, not a flat police lineup unless the story is a firing squad. Triangular Composition helps, but blocking comes first: seats, levels, who faces whom.",
+          "links": [
+            {
+              "text": "Triangular Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/triangular-composition"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep all three faces or postures readable enough to compare. Prompt: Three-shot of [Subject] in a triangular group, alliances and the odd one out readable in blocking."
+        }
+      ],
+      "links": [
+        {
+          "text": "Triangular Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/triangular-composition"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Arrange three bodies as a triangle in depth or across the frame, not a flat police lineup unless the story is a firing squad. Triangular Composition helps, but blocking comes first: seats, levels, who faces whom.Keep all three faces or postures readable enough to compare. Prompt: Three-shot of [Subject] in a triangular group, alliances and the odd one out readable in blocking."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a trio has politics: three gunmen, three people at a verdict, a couple plus the person who should not be there. Do not flatten them into equal portraits, and do not use a three-shot for a crowd."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a trio has politics: three gunmen, three people at a verdict, a couple plus the person who should not be there. Do not flatten them into equal portraits, and do not use a three-shot for a crowd."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Two-Shot is a pair; adding a third changes the grammar. A Group Shot holds a small ensemble larger than three as a relational unit.",
+          "links": [
+            {
+              "text": "Two-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            },
+            {
+              "text": "Group Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/group-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Master Shot may be a three-shot if the whole action is those three bodies. Do not treat three-shot as a synonym for any wide with extra extras.",
+          "links": [
+            {
+              "text": "Master Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Two-ShotThe relationship is the shot.",
+          "displayText": "Two-Shot\nThe relationship is the shot.",
+          "links": [
+            {
+              "text": "Two-ShotThe relationship is the shot.",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Group ShotA family, a crew, a jury.",
+          "displayText": "Group Shot\nA family, a crew, a jury.",
+          "links": [
+            {
+              "text": "Group ShotA family, a crew, a jury.",
+              "url": "https://melies.co/cinematic-techniques/framing/group-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Two-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        },
+        {
+          "text": "Group Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/group-shot"
+        },
+        {
+          "text": "Master Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+        },
+        {
+          "text": "Two-ShotThe relationship is the shot.",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        },
+        {
+          "text": "Group ShotA family, a crew, a jury.",
+          "url": "https://melies.co/cinematic-techniques/framing/group-shot"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ebc6a9329d13b0c650bddc57d3a8808d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/two-shot-048-profile-two-shot-mini.webp",
+          "alt": "Two-Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/c2b51a507b8e5b9e6dbb06fe2e90d474.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/048-profile-two-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8856451ac171821d93803a9aab56af80.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/group-shot.webp",
+          "alt": "Group Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Two-Shot is a pair; adding a third changes the grammar. A Group Shot holds a small ensemble larger than three as a relational unit.A Master Shot may be a three-shot if the whole action is those three bodies. Do not treat three-shot as a synonym for any wide with extra extras.Two-ShotThe relationship is the shot.Group ShotA family, a crew, a jury.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Good, the Bad and the Ugly is the textbook trio: three men, three distances, one cemetery geometry. The standoff only works because all three remain comparable in shared frames before the eyes take over."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: three principals, readable alliance."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Good, the Bad and the Ugly is the textbook trio: three men, three distances, one cemetery geometry. The standoff only works because all three remain comparable in shared frames before the eyes take over.Grammar: three principals, readable alliance."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name three and the triangle. Example: Three-shot of [Subject] in a triangular group, alliances and the odd one out readable in blocking."
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify who is isolated by height, light, or gap. For video, a small blocking shift (one step back) should change the politics without a cut."
+        },
+        {
+          "type": "quote",
+          "text": "Three-shot of [Subject] in a triangular group, alliances and the odd one out readable in blocking."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Three-shot+of+[Subject]+in+a+triangular+group,+alliances+and+the+odd+one+out+readable+in+blocking."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name three and the triangle. Example: Three-shot of [Subject] in a triangular group, alliances and the odd one out readable in blocking.Specify who is isolated by height, light, or gap. For video, a small blocking shift (one step back) should change the politics without a cut.Copy promptUse in Image GeneratorThree-shot of [Subject] in a triangular group, alliances and the odd one out readable in blocking.Three-shot of [Subject] in a triangular group, alliances and the odd one out readable in blocking."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Two-Shot that crops the third, or a Group Shot with extras filling the sides. The tell is two faces and a shoulder, or a crowd.",
+          "links": [
+            {
+              "text": "Two-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            },
+            {
+              "text": "Group Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/group-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: three principals, triangular blocking, one of them slightly out."
+        }
+      ],
+      "links": [
+        {
+          "text": "Two-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        },
+        {
+          "text": "Group Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/group-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Two-Shot that crops the third, or a Group Shot with extras filling the sides. The tell is two faces and a shoulder, or a crowd.Fix: three principals, triangular blocking, one of them slightly out."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Three-Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A three-shot frames three principal people in one composition so their alliances, blocking, and who is left out are readable. It is not three close-ups in a row."
+        },
+        {
+          "type": "heading",
+          "text": "Three-Shot vs Two-Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A two-shot is a pair and the space between them. A three-shot adds a third principal and a triangle of politics. If the third person is only an out-of-focus extra, you still have a two-shot."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Three-Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the scene's power is three-way: alliances, a hinge, an odd one out. Do not use it for a pair, and do not use it as a stand-in for a larger ensemble."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Three-Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Three-shot of [Subject] in a triangular group, alliances and the odd one out readable in blocking. Name who is isolated. Keep all three readable."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Three-Shot in film?A three-shot frames three principal people in one composition so their alliances, blocking, and who is left out are readable. It is not three close-ups in a row.Three-Shot vs Two-ShotA two-shot is a pair and the space between them. A three-shot adds a third principal and a triangle of politics. If the third person is only an out-of-focus extra, you still have a two-shot.When should I use Three-Shot?Use it when the scene's power is three-way: alliances, a hinge, an odd one out. Do not use it for a pair, and do not use it as a stand-in for a larger ensemble.How do I prompt Three-Shot for AI image or video?Write Three-shot of [Subject] in a triangular group, alliances and the odd one out readable in blocking. Name who is isolated. Keep all three readable."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name three and the triangle. Example: Three-shot of [Subject] in a triangular group, alliances and the odd one out readable in blocking.",
+      "Specify who is isolated by height, light, or gap. For video, a small blocking shift (one step back) should change the politics without a cut."
+    ],
+    "example": "Three-shot of [Subject] in a triangular group, alliances and the odd one out readable in blocking."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/993aa813c3ad1027061cf473597be748.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-shot.webp",
+      "alt": "Three-Shot example"
+    },
+    {
+      "kind": "image",
+      "path": "media/ebc6a9329d13b0c650bddc57d3a8808d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/two-shot-048-profile-two-shot-mini.webp",
+      "alt": "Two-Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/c2b51a507b8e5b9e6dbb06fe2e90d474.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/048-profile-two-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8856451ac171821d93803a9aab56af80.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/group-shot.webp",
+      "alt": "Group Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e300e79b728136ab4168bd0b8b82ebfe.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/three-shot/hero.jpg",
+      "alt": "Three-Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "5e75c9b5921fa703fbd97d23898be153687e4279affed39ffd6bb78c48243419"
+}

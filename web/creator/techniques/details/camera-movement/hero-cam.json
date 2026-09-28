@@ -1,0 +1,383 @@
+{
+  "id": "camera-movement/hero-cam",
+  "slug": "hero-cam",
+  "title": "Hero Cam",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/hero-cam",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hero-cam-hero-cam-mini.webp",
+  "detail": "details/camera-movement/hero-cam.json",
+  "aliases": [],
+  "description": "Hero cam is a low three-quarter tracking walk with rim light, a comic-book arrival at walking speed. The recipe is height plus travel plus a hard edge of light, not a static low angle.",
+  "thumbnail": "media/0dd245d03f18ea99326103dbc10a2f9f.webp",
+  "video": "media/90622d7b1461a02b9d57879e595aa569.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/hero-cam-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "They should look inevitable. Arrivals, title walks, a character who has already won in their head: the camera tracks at hip or knee, three-quarter, rim, slow walk."
+        },
+        {
+          "type": "paragraph",
+          "text": "Glam is beauty without the walk. A low-angle still of a standing person is not this shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "They should be walking. The camera should travel."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not crash-zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function They should look inevitable. Arrivals, title walks, a character who has already won in their head: the camera tracks at hip or knee, three-quarter, rim, slow walk.Glam is beauty without the walk. A low-angle still of a standing person is not this shot.They should be walking. The camera should travel.Do not crash-zoom."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Track at hip or knee height, three-quarter front, one direction. Rim or kicker separates the figure from dust or city."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pace is a walk, not a sprint unless you say so. Prompt: Hero-cam on [Subject], low three-quarter, rim light, a walk that sells myth, comic-book arrival."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Track at hip or knee height, three-quarter front, one direction. Rim or kicker separates the figure from dust or city.Pace is a walk, not a sprint unless you say so. Prompt: Hero-cam on [Subject], low three-quarter, rim light, a walk that sells myth, comic-book arrival."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for an arrival walk that should feel inevitable. Do not use it on a seated talk."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for an arrival walk that should feel inevitable. Do not use it on a seated talk."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Low Angle is a height and can be locked. Tracking Shot follows at any height without the rim-and-walk recipe.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Glam is a beauty key, not a path. Hero cam is the walk plus the low three-quarter plus the rim.",
+          "links": [
+            {
+              "text": "Glam",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low AnglePower, monument, or intimidation.",
+          "displayText": "Low Angle\nPower, monument, or intimidation.",
+          "links": [
+            {
+              "text": "Low AnglePower, monument, or intimidation.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "displayText": "Tracking Shot\nAccompany a walker. The shot is a journey, not a picture.",
+          "links": [
+            {
+              "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "GlamSell the face.",
+          "displayText": "Glam\nSell the face.",
+          "links": [
+            {
+              "text": "GlamSell the face.",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Glam",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "Low AnglePower, monument, or intimidation.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "GlamSell the face.",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+          "alt": "Low Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+          "alt": "Tracking Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d0c6118ba609a42d93a75e2dc10200d3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/glam.webp",
+          "alt": "Glam"
+        }
+      ],
+      "sourceText": "Compared with similar shots Low Angle is a height and can be locked. Tracking Shot follows at any height without the rim-and-walk recipe.Glam is a beauty key, not a path. Hero cam is the walk plus the low three-quarter plus the rim.Low AnglePower, monument, or intimidation.Tracking ShotAccompany a walker. The shot is a journey, not a picture.GlamSell the face."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Dark Knight and Black Panther title walks are the grammar: myth at walking speed, low three-quarter, an edge of light. Use them as a recipe, not as frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Dark Knight and Black Panther title walks are the grammar: myth at walking speed, low three-quarter, an edge of light. Use them as a recipe, not as frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Walk, low, rim. Still: Hero-cam on [Subject], low three-quarter, rim light, a walk that sells myth, comic-book arrival."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Low heroic tracking on [Subject] walking, rim light, mythic pace. They must be walking."
+        },
+        {
+          "type": "paragraph",
+          "text": "One direction. No crash zoom."
+        },
+        {
+          "type": "quote",
+          "text": "Low heroic tracking on [Subject] walking, rim light, mythic pace."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Low+heroic+tracking+on+[Subject]+walking,+rim+light,+mythic+pace."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Walk, low, rim. Still: Hero-cam on [Subject], low three-quarter, rim light, a walk that sells myth, comic-book arrival.Video: Low heroic tracking on [Subject] walking, rim light, mythic pace. They must be walking.One direction. No crash zoom.Copy promptUse in Video GeneratorLow heroic tracking on [Subject] walking, rim light, mythic pace.Low heroic tracking on [Subject] walking, rim light, mythic pace."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a static low-angle portrait. The tell: standing, no travel, no walk."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: track at hip or knee, three-quarter, rim, walking pace."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a static low-angle portrait. The tell: standing, no travel, no walk.The fix: track at hip or knee, three-quarter, rim, walking pace."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Hero Cam in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Hero cam is a low three-quarter tracking walk with rim light. It is an arrival recipe: height, travel, and an edge of light at walking speed."
+        },
+        {
+          "type": "heading",
+          "text": "Hero Cam vs Low Angle",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A low angle can be a locked still. Hero cam requires a walk, a tracking camera, and usually a rim. The person should look inevitable because they are moving."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Hero Cam?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for arrivals and title walks. Do not use it on a seated conversation."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Hero Cam for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a low three-quarter tracking walk with rim light. Example: Hero-cam on [Subject], low three-quarter, rim light, a walk that sells myth, comic-book arrival."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Hero Cam in film?Hero cam is a low three-quarter tracking walk with rim light. It is an arrival recipe: height, travel, and an edge of light at walking speed.Hero Cam vs Low AngleA low angle can be a locked still. Hero cam requires a walk, a tracking camera, and usually a rim. The person should look inevitable because they are moving.When should I use Hero Cam?Use it for arrivals and title walks. Do not use it on a seated conversation.How do I prompt Hero Cam for AI image or video?Write a low three-quarter tracking walk with rim light. Example: Hero-cam on [Subject], low three-quarter, rim light, a walk that sells myth, comic-book arrival."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Walk, low, rim. Still: Hero-cam on [Subject], low three-quarter, rim light, a walk that sells myth, comic-book arrival.",
+      "Video: Low heroic tracking on [Subject] walking, rim light, mythic pace. They must be walking.",
+      "One direction. No crash zoom."
+    ],
+    "example": "Low heroic tracking on [Subject] walking, rim light, mythic pace."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/90622d7b1461a02b9d57879e595aa569.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/hero-cam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0dd245d03f18ea99326103dbc10a2f9f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hero-cam-hero-cam-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b5df50766ff93a5ad8d7c76d6434e973.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/hero-cam.jpg",
+      "alt": "Hero Cam frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+      "alt": "Low Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+      "alt": "Tracking Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d0c6118ba609a42d93a75e2dc10200d3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/glam.webp",
+      "alt": "Glam"
+    },
+    {
+      "kind": "image",
+      "path": "media/0845d902e9f9014b9ce35a96f5f170cd.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/hero-cam/hero.jpg",
+      "alt": "Hero Cam",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "9524c53c7e4fae1ca774e21ac4d33dd562b7708a1f595de41fafe81e13b9a3f2"
+}

@@ -1,0 +1,441 @@
+{
+  "id": "atmosphere/dust-motes",
+  "slug": "dust-motes",
+  "title": "Dust Motes",
+  "categoryId": "atmosphere",
+  "categoryTitle": "Atmosphere and Weather",
+  "sourceUrl": "https://melies.co/cinematic-techniques/atmosphere/dust-motes",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dust-motes.webp",
+  "detail": "details/atmosphere/dust-motes.json",
+  "aliases": [],
+  "description": "Dust motes are discrete particles hanging in a shaft of light, slow enough to read as time in still air. They are matter you can almost count; they live in the beam, not as a veil across the whole room.",
+  "thumbnail": "media/5b89d5741ff5b3c872b3d55861e1221b.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A window cuts a wedge through a closed parlor. Specks drift, rise, fall."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stillness that is still alive. The room has been shut; time is visible because the air has a population."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when quiet should not be empty: a church, a bedroom, a barn in late sun. It is the wrong tool when the air is a ribbon from a cigarette (Smoke) or a soup that hides the far wall (Fog).",
+          "links": [
+            {
+              "text": "Smoke",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+            },
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the particles are on fire (Sparks and Embers). If the whole room is milky, you filled it.",
+          "links": [
+            {
+              "text": "Sparks and Embers",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/sparks"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Motes need a dark surround and a hard beam."
+        }
+      ],
+      "links": [
+        {
+          "text": "Smoke",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+        },
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Sparks and Embers",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/sparks"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A window cuts a wedge through a closed parlor. Specks drift, rise, fall.Stillness that is still alive. The room has been shut; time is visible because the air has a population.Use it when quiet should not be empty: a church, a bedroom, a barn in late sun. It is the wrong tool when the air is a ribbon from a cigarette (Smoke) or a soup that hides the far wall (Fog).It is the wrong tool when the particles are on fire (Sparks and Embers). If the whole room is milky, you filled it.Motes need a dark surround and a hard beam."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Create a shaft (window, slats, a cut HMI) and keep off-beam air darker. Introduce fine particles (real dust, atmosphere in small amounts)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Backlight or sidelight the beam; motes are seen by scatter toward camera. Slow movement: convection, not wind."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: dust motes hanging in a shaft of light around [Subject], slow particles, a room that has been closed, time made visible."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Create a shaft (window, slats, a cut HMI) and keep off-beam air darker. Introduce fine particles (real dust, atmosphere in small amounts).Backlight or sidelight the beam; motes are seen by scatter toward camera. Slow movement: convection, not wind.Prompt: dust motes hanging in a shaft of light around [Subject], slow particles, a room that has been closed, time made visible."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a pause, a prayer, a house that remembers. Do not use it in a gale or a nightclub wash."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera is racing, motes become streaks or noise. Pair with Slow Motion only if you want to inventory the specks.",
+          "links": [
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it for a pause, a prayer, a house that remembers. Do not use it in a gale or a nightclub wash.If the camera is racing, motes become streaks or noise. Pair with Slow Motion only if you want to inventory the specks."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Volumetric Light is the shaft; dust motes are the countable inhabitants of that shaft. Smoke is a continuous volume.",
+          "links": [
+            {
+              "text": "Volumetric Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            },
+            {
+              "text": "Smoke",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Sparks and Embers are incandescent and short-lived. Atmospheric Haze pales the far plane.",
+          "links": [
+            {
+              "text": "Sparks and Embers",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/sparks"
+            },
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Motes are slow, discrete, and local to the beam."
+        },
+        {
+          "type": "list-item",
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "displayText": "Volumetric Light\nAir has to be photographed, not just the subject.",
+          "links": [
+            {
+              "text": "Volumetric LightAir has to be photographed, not just the subject.",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "RainMake the air visible and the ground reflective.",
+          "displayText": "Rain\nMake the air visible and the ground reflective.",
+          "links": [
+            {
+              "text": "RainMake the air visible and the ground reflective.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Volumetric Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "Smoke",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+        },
+        {
+          "text": "Sparks and Embers",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/sparks"
+        },
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "RainMake the air visible and the ground reflective.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+          "alt": "Volumetric Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+          "alt": "Rain"
+        }
+      ],
+      "sourceText": "Compared with similar shots Volumetric Light is the shaft; dust motes are the countable inhabitants of that shaft. Smoke is a continuous volume.Sparks and Embers are incandescent and short-lived. Atmospheric Haze pales the far plane.Motes are slow, discrete, and local to the beam.Volumetric LightAir has to be photographed, not just the subject.Slow MotionA second contains a scene.RainMake the air visible and the ground reflective."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Assassination of Jesse James by the Coward Robert Ford lets window light populate air so interiors feel timed. The Tree of Life hangs specks in domestic and cosmic shafts."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use beam plus specks, not a dusty grade on a flatly lit room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Assassination of Jesse James by the Coward Robert Ford lets window light populate air so interiors feel timed. The Tree of Life hangs specks in domestic and cosmic shafts.Use beam plus specks, not a dusty grade on a flatly lit room."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dust motes hanging in a shaft of light around [Subject], slow particles, a room that has been closed, time made visible. Name the window or slat, the dark surround, and that particles are discrete, not a fog fill."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, slow drift inside the beam only."
+        },
+        {
+          "type": "quote",
+          "text": "Dust motes hanging in a shaft of light around [Subject], slow particles, a room that has been closed, time made visible."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Dust+motes+hanging+in+a+shaft+of+light+around+[Subject],+slow+particles,+a+room+that+has+been+closed,+time+made+visible."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Dust motes hanging in a shaft of light around [Subject], slow particles, a room that has been closed, time made visible. Name the window or slat, the dark surround, and that particles are discrete, not a fog fill.For video, slow drift inside the beam only.Copy promptUse in Image GeneratorDust motes hanging in a shaft of light around [Subject], slow particles, a room that has been closed, time made visible.Dust motes hanging in a shaft of light around [Subject], slow particles, a room that has been closed, time made visible."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Smoke fill or Volumetric Light with no specks. The tell: milky room, no shaft, or sparks.",
+          "links": [
+            {
+              "text": "Smoke",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+            },
+            {
+              "text": "Volumetric Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: a hard beam, dark off-beam, countable slow particles, backlight."
+        }
+      ],
+      "links": [
+        {
+          "text": "Smoke",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+        },
+        {
+          "text": "Volumetric Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Smoke fill or Volumetric Light with no specks. The tell: milky room, no shaft, or sparks.The fix: a hard beam, dark off-beam, countable slow particles, backlight."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dust Motes in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dust motes are individual particles visible in a shaft of light. They make still air readable as matter and time, without turning the whole room into fog."
+        },
+        {
+          "type": "heading",
+          "text": "Dust Motes vs Volumetric Light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Volumetric light is the visible beam. Dust motes are the specks inside it. You can have a shaft with smooth haze, or a shaft with countable motes; the mote look insists on the specks."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dust Motes?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use them when stillness should still be alive: closed rooms, late sun, churches. Do not fill the entire volume, and do not substitute fire sparks."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dust Motes for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Put specks in a shaft, not soup in a room. Example: dust motes hanging in a shaft of light around [Subject], slow particles, a room that has been closed. Dark surround, backlight, no fog fill."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dust Motes in film?Dust motes are individual particles visible in a shaft of light. They make still air readable as matter and time, without turning the whole room into fog.Dust Motes vs Volumetric LightVolumetric light is the visible beam. Dust motes are the specks inside it. You can have a shaft with smooth haze, or a shaft with countable motes; the mote look insists on the specks.When should I use Dust Motes?Use them when stillness should still be alive: closed rooms, late sun, churches. Do not fill the entire volume, and do not substitute fire sparks.How do I prompt Dust Motes for AI image or video?Put specks in a shaft, not soup in a room. Example: dust motes hanging in a shaft of light around [Subject], slow particles, a room that has been closed. Dark surround, backlight, no fog fill."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Dust motes hanging in a shaft of light around [Subject], slow particles, a room that has been closed, time made visible. Name the window or slat, the dark surround, and that particles are discrete, not a fog fill.",
+      "For video, slow drift inside the beam only."
+    ],
+    "example": "Dust motes hanging in a shaft of light around [Subject], slow particles, a room that has been closed, time made visible."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/5b89d5741ff5b3c872b3d55861e1221b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dust-motes.webp",
+      "alt": "Dust Motes example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+      "alt": "Volumetric Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+      "alt": "Rain"
+    },
+    {
+      "kind": "image",
+      "path": "media/55638688ecf7b841c4fe6f7e9da8ddd2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dust-motes/hero.jpg",
+      "alt": "Dust Motes",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "498aff2404d65a726697a5b46a6eba8eb875a11ef182f3bd3eb98c0599a630d2"
+}

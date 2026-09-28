@@ -1,0 +1,355 @@
+{
+  "id": "viral-looks/lava",
+  "slug": "lava",
+  "title": "Lava",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/lava",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lava-lava-mini.webp",
+  "detail": "details/viral-looks/lava.json",
+  "aliases": [],
+  "description": "Lava, in lava look cinematography, is molten light: black crust, orange wounds, heat as the key from below, air that shimmers. The ground is still deciding, and an orange grade on a normal street is not geology.",
+  "thumbnail": "media/15b94ed6f24d16069b6eedc7f9991060.webp",
+  "video": "media/6c79966f9587a05326836f80a63ccecc.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lava-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ends of worlds, rage, a love that burns the set: night helps, a small figure, incandescent cracks. Under-light without crust is a campfire."
+        },
+        {
+          "type": "paragraph",
+          "text": "A kitchen argument is not lava unless you are joking. It is the wrong tool as a warm LUT, and the wrong tool if there is no heat warp in the air."
+        },
+        {
+          "type": "paragraph",
+          "text": "Show crust and flow. No volcano-park signs."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Ends of worlds, rage, a love that burns the set: night helps, a small figure, incandescent cracks. Under-light without crust is a campfire.A kitchen argument is not lava unless you are joking. It is the wrong tool as a warm LUT, and the wrong tool if there is no heat warp in the air.Show crust and flow. No volcano-park signs."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Slightly high or eye height, figure small, 24mm to 35mm, lock-off. Key from below: incandescent cracks, black rock, heat shimmer."
+        },
+        {
+          "type": "paragraph",
+          "text": "Night. Prompt: Lava light on [Subject], black crust, orange wounds, heat as the key from below."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Slightly high or eye height, figure small, 24mm to 35mm, lock-off. Key from below: incandescent cracks, black rock, heat shimmer.Night. Prompt: Lava light on [Subject], black crust, orange wounds, heat as the key from below."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An ending of a world, rage, a set that is still molten. Do not use it as orange grade on a street, and do not use it on a kitchen argument unless the joke is geology."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it An ending of a world, rage, a set that is still molten. Do not use it as orange grade on a street, and do not use it on a kitchen argument unless the joke is geology."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hard Light is the sharpness. Underlighting is the axis without magma.",
+          "links": [
+            {
+              "text": "Hard Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            },
+            {
+              "text": "Underlighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Lava is geology as lamp: crust, flow, heat shimmer, key from below. If the ground is asphalt with an orange LUT, you missed it."
+        },
+        {
+          "type": "list-item",
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "displayText": "Hard Light\nGrit, noon sun, or interrogation.",
+          "links": [
+            {
+              "text": "Hard LightGrit, noon sun, or interrogation.",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "UnderlightingThe source is fire, a screen on the floor, or a monster.",
+          "displayText": "Underlighting\nThe source is fire, a screen on the floor, or a monster.",
+          "links": [
+            {
+              "text": "UnderlightingThe source is fire, a screen on the floor, or a monster.",
+              "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Hard Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Underlighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+        },
+        {
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "UnderlightingThe source is fire, a screen on the floor, or a monster.",
+          "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+          "alt": "Hard Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/37fd93cf4962f10e77869ecfc8008a95.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/under-light.webp",
+          "alt": "Underlighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Hard Light is the sharpness. Underlighting is the axis without magma.Lava is geology as lamp: crust, flow, heat shimmer, key from below. If the ground is asphalt with an orange LUT, you missed it.Hard LightGrit, noon sun, or interrogation.UnderlightingThe source is fire, a screen on the floor, or a monster.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blade Runner 2049 furnaces throw orange from below onto bodies. Volcano cinema and The Lord of the Rings: The Return of the King treat flow as both location and key."
+        },
+        {
+          "type": "paragraph",
+          "text": "Light from below. Grammar, not a copied crater."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Blade Runner 2049 furnaces throw orange from below onto bodies. Volcano cinema and The Lord of the Rings: The Return of the King treat flow as both location and key.Light from below. Grammar, not a copied crater."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Key from below, crust, shimmer. Lava light on [Subject], black crust, orange wounds, heat as the key from below."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add night, small figure, heat warp, black rock, no park signs. Not an orange street LUT."
+        },
+        {
+          "type": "quote",
+          "text": "Lava light on [Subject], black crust, orange wounds, heat as the key from below."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Lava+light+on+[Subject],+black+crust,+orange+wounds,+heat+as+the+key+from+below."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Key from below, crust, shimmer. Lava light on [Subject], black crust, orange wounds, heat as the key from below.Add night, small figure, heat warp, black rock, no park signs. Not an orange street LUT.Copy promptUse in Image GeneratorLava light on [Subject], black crust, orange wounds, heat as the key from below.Lava light on [Subject], black crust, orange wounds, heat as the key from below."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Orange grade on a normal street, or Underlighting without geology. The tell is no crust and no shimmer.",
+          "links": [
+            {
+              "text": "Underlighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: black rock, incandescent cracks, heat as key from below."
+        }
+      ],
+      "links": [
+        {
+          "text": "Underlighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/under-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong Orange grade on a normal street, or Underlighting without geology. The tell is no crust and no shimmer.Fix it: black rock, incandescent cracks, heat as key from below."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Lava in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Molten light as both set and key: black crust, orange wounds, heat from below, shimmer in the air. Not an orange LUT."
+        },
+        {
+          "type": "heading",
+          "text": "Lava vs Underlighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Underlighting is any key from below. Lava is that axis plus magma: crust, flow, heat warp. A campfire is under-light. This is geology."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Lava?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "World-endings, rage, a molten set. Skip orange streets and kitchen arguments unless the joke is lava."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Lava for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Night, small [Subject], then: Lava light on [Subject], black crust, orange wounds, heat as the key from below. Demand shimmer and crust."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Lava in film?Molten light as both set and key: black crust, orange wounds, heat from below, shimmer in the air. Not an orange LUT.Lava vs UnderlightingUnderlighting is any key from below. Lava is that axis plus magma: crust, flow, heat warp. A campfire is under-light. This is geology.When should I use Lava?World-endings, rage, a molten set. Skip orange streets and kitchen arguments unless the joke is lava.How do I prompt Lava for AI image or video?Night, small [Subject], then: Lava light on [Subject], black crust, orange wounds, heat as the key from below. Demand shimmer and crust."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Key from below, crust, shimmer. Lava light on [Subject], black crust, orange wounds, heat as the key from below.",
+      "Add night, small figure, heat warp, black rock, no park signs. Not an orange street LUT."
+    ],
+    "example": "Lava light on [Subject], black crust, orange wounds, heat as the key from below."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/6c79966f9587a05326836f80a63ccecc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lava-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/15b94ed6f24d16069b6eedc7f9991060.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lava-lava-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bec8c7b3f7950c7e3ac2964036a3df06.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/lava.jpg",
+      "alt": "Lava frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+      "alt": "Hard Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/37fd93cf4962f10e77869ecfc8008a95.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/under-light.webp",
+      "alt": "Underlighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/51aaa5f5d3afaa7d79ddc1aa461e1f49.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/lava/hero.jpg",
+      "alt": "Lava",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "0777af9b77e32bf631cb91218be5114932450d844c23b8dc9c380adebe57226f"
+}

@@ -1,0 +1,444 @@
+{
+  "id": "time-and-motion/timelapse-landscape",
+  "slug": "timelapse-landscape",
+  "title": "Timelapse Landscape",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-landscape",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/timelapse-landscape-06-timelapse-landscape-mini.webp",
+  "detail": "details/time-and-motion/timelapse-landscape.json",
+  "aliases": [],
+  "description": "Timelapse landscape interval-samples light and weather over a place so hours play in seconds as clouds and shadows sweep. Geography is the actor, and a person, if present, is a scale mark rather than a racing extra.",
+  "thumbnail": "media/926389d118dd771cedfe882c5fe22e95.webp",
+  "video": "media/0c3a462a834df4c5920e110ee3d88f6e.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/06-timelapse-landscape-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the story is a sky, a desert, a city grid as climate, a ridge that must survive several suns. The camera is locked or on a slow, even move that does not fight the sun's path."
+        },
+        {
+          "type": "paragraph",
+          "text": "Buildings and rock stay solid. Clouds are the motion."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for wardrobe process, a still hero in a smoking crowd, or undercranked acting. If the camera walks the avenue in steps, you wanted a hyperlapse."
+        },
+        {
+          "type": "paragraph",
+          "text": "If only headlights streak under a stuck sun, you have not shown a landscape day."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when the story is a sky, a desert, a city grid as climate, a ridge that must survive several suns. The camera is locked or on a slow, even move that does not fight the sun's path.Buildings and rock stay solid. Clouds are the motion.It is the wrong tool for wardrobe process, a still hero in a smoking crowd, or undercranked acting. If the camera walks the avenue in steps, you wanted a hyperlapse.If only headlights streak under a stuck sun, you have not shown a landscape day."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose interval from the process (clouds faster than a shadow-day, stars slower). Lock off or use a motion-control pan."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ramp exposure for day-to-night. Keep the sun's arc continuous."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Timelapse landscape around [Subject] or their place, clouds and shadows sweeping, hours in seconds."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Choose interval from the process (clouds faster than a shadow-day, stars slower). Lock off or use a motion-control pan.Ramp exposure for day-to-night. Keep the sun's arc continuous.Prompt: Timelapse landscape around [Subject] or their place, clouds and shadows sweeping, hours in seconds."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to show the day turning over a ridge, a square, or a citadel. Do not use it as a crowd recipe with a motionless sky."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to show the day turning over a ridge, a square, or a citadel. Do not use it as a crowd recipe with a motionless sky."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This is Time-Lapse aimed at weather and terrain. Aerial may carry it if the viewpoint is high, but height is not the interval.",
+          "links": [
+            {
+              "text": "Time-Lapse",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            },
+            {
+              "text": "Aerial",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hyperlapse moves the camera through space in steps. Timelapse Human races people.",
+          "links": [
+            {
+              "text": "Hyperlapse",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/hyperlapse"
+            },
+            {
+              "text": "Timelapse Human",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-human"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fast Motion speeds a continuous take.",
+          "links": [
+            {
+              "text": "Fast Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+          "displayText": "Time-Lapse\nShow weather, construction, or a night becoming morning.",
+          "links": [
+            {
+              "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AerialOpen a world. Make the place bigger than the person.",
+          "displayText": "Aerial\nOpen a world. Make the place bigger than the person.",
+          "links": [
+            {
+              "text": "AerialOpen a world. Make the place bigger than the person.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Time-Lapse",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "Aerial",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial"
+        },
+        {
+          "text": "Hyperlapse",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/hyperlapse"
+        },
+        {
+          "text": "Timelapse Human",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-human"
+        },
+        {
+          "text": "Fast Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+        },
+        {
+          "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "AerialOpen a world. Make the place bigger than the person.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/59f00cc372fa5e18d3dc936d0959e111.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/time-lapse-084-time-lapse-and-accelerated-systems-mini.webp",
+          "alt": "Time-Lapse"
+        },
+        {
+          "kind": "video",
+          "path": "media/98976fbe19bbaefa951c514246128a5b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/084-time-lapse-and-accelerated-systems-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/e631fa60adcf0aaf1b2623848e330035.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-012-aerial-pursuit-and-landscape-mini.webp",
+          "alt": "Aerial"
+        },
+        {
+          "kind": "video",
+          "path": "media/5ddd869f4f3167cf9cb023e81b2b3b10.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/012-aerial-pursuit-and-landscape-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots This is Time-Lapse aimed at weather and terrain. Aerial may carry it if the viewpoint is high, but height is not the interval.Hyperlapse moves the camera through space in steps. Timelapse Human races people.Fast Motion speeds a continuous take.Time-LapseShow weather, construction, or a night becoming morning.AerialOpen a world. Make the place bigger than the person.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Baraka and Koyaanisqatsi are the landscape-and-city interval grammar: clouds, shadows, and human systems at non-human rates. Later nature films inherit the same sun-and-cloud contract."
+        },
+        {
+          "type": "paragraph",
+          "text": "The still should imply a phase of day, not a morphing mountain."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Baraka and Koyaanisqatsi are the landscape-and-city interval grammar: clouds, shadows, and human systems at non-human rates. Later nature films inherit the same sun-and-cloud contract.The still should imply a phase of day, not a morphing mountain."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write light and weather as the motion. Still: one honest sun angle on stable geology."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Time-lapse of light and weather over the landscape of [Subject]. Shadows sweep, clouds race, architecture holds."
+        },
+        {
+          "type": "paragraph",
+          "text": "No morphing cliffs, no crowd-only acceleration."
+        },
+        {
+          "type": "quote",
+          "text": "Time-lapse of light and weather over the landscape of [Subject]."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Time-lapse+of+light+and+weather+over+the+landscape+of+[Subject]."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write light and weather as the motion. Still: one honest sun angle on stable geology.Video: Time-lapse of light and weather over the landscape of [Subject]. Shadows sweep, clouds race, architecture holds.No morphing cliffs, no crowd-only acceleration.Copy promptUse in Video GeneratorTime-lapse of light and weather over the landscape of [Subject].Time-lapse of light and weather over the landscape of [Subject]."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Fast Motion or Timelapse Human. The tell is racing people under a stuck sun, or mountains that melt.",
+          "links": [
+            {
+              "text": "Fast Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+            },
+            {
+              "text": "Timelapse Human",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-human"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: hours in seconds, traveling shadows, solid ground, camera stable or slowly authored."
+        }
+      ],
+      "links": [
+        {
+          "text": "Fast Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/fast-motion"
+        },
+        {
+          "text": "Timelapse Human",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-human"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Fast Motion or Timelapse Human. The tell is racing people under a stuck sun, or mountains that melt.Fix: hours in seconds, traveling shadows, solid ground, camera stable or slowly authored."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Timelapse Landscape in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Timelapse landscape is interval photography of a place so weather, shadows, and sun travel occupy a short passage."
+        },
+        {
+          "type": "heading",
+          "text": "Timelapse Landscape vs Time-Lapse",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Time-lapse is the method. Timelapse landscape restricts the subject to geography and climate, not wardrobe or a held pedestrian."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Timelapse Landscape?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the day turning is the beat: clouds, shadows, night becoming morning over a stable place."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Timelapse Landscape for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write hours in seconds, sweeping clouds and shadows, and solid geography. Require the sun to move. Do not only speed a crowd."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Timelapse Landscape in film?Timelapse landscape is interval photography of a place so weather, shadows, and sun travel occupy a short passage.Timelapse Landscape vs Time-LapseTime-lapse is the method. Timelapse landscape restricts the subject to geography and climate, not wardrobe or a held pedestrian.When should I use Timelapse Landscape?When the day turning is the beat: clouds, shadows, night becoming morning over a stable place.How do I prompt Timelapse Landscape for AI image or video?Write hours in seconds, sweeping clouds and shadows, and solid geography. Require the sun to move. Do not only speed a crowd."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write light and weather as the motion. Still: one honest sun angle on stable geology.",
+      "Video: Time-lapse of light and weather over the landscape of [Subject]. Shadows sweep, clouds race, architecture holds.",
+      "No morphing cliffs, no crowd-only acceleration."
+    ],
+    "example": "Time-lapse of light and weather over the landscape of [Subject]."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/0c3a462a834df4c5920e110ee3d88f6e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/06-timelapse-landscape-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/926389d118dd771cedfe882c5fe22e95.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/timelapse-landscape-06-timelapse-landscape-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/856934103a76d8f3f9a12389764b41c2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/timelapse-landscape.jpg",
+      "alt": "Timelapse Landscape frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/59f00cc372fa5e18d3dc936d0959e111.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/time-lapse-084-time-lapse-and-accelerated-systems-mini.webp",
+      "alt": "Time-Lapse"
+    },
+    {
+      "kind": "video",
+      "path": "media/98976fbe19bbaefa951c514246128a5b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/084-time-lapse-and-accelerated-systems-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e631fa60adcf0aaf1b2623848e330035.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-012-aerial-pursuit-and-landscape-mini.webp",
+      "alt": "Aerial"
+    },
+    {
+      "kind": "video",
+      "path": "media/5ddd869f4f3167cf9cb023e81b2b3b10.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/012-aerial-pursuit-and-landscape-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b006fd29369155583e1054017fd8ff74.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/timelapse-landscape/hero.jpg",
+      "alt": "Timelapse Landscape",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "7996b51855bb34f58ec154d4173ea1dfdca43ca75f48fa707df6e491c126e9bd"
+}

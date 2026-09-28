@@ -1,0 +1,475 @@
+{
+  "id": "camera-angles/fourth-wall",
+  "slug": "fourth-wall",
+  "title": "Fourth Wall",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fourth-wall-135-direct-address-and-fourth-wall-break-mini.webp",
+  "detail": "details/camera-angles/fourth-wall.json",
+  "aliases": [
+    "Narration",
+    "Subjective verbal commentary"
+  ],
+  "description": "A fourth-wall look aims the subject's eyes into the taking lens, so the scene admits an audience. The camera is no longer an invisible observer; it is a person in the room, or the spectator the character has decided to include.",
+  "thumbnail": "media/f1e659f7b9c51032b10cb70730b107e2.webp",
+  "video": "media/e7745889d0b408c463f5fcfa8b64006a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/135-direct-address-and-fourth-wall-break-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Theatre named the fourth wall; film breaks it when a Ferris explains the day to us, when a killer in Funny Games checks whether we are still complicit, when Alvy steps out of Annie Hall to argue. The eyeline is the mechanism."
+        },
+        {
+          "type": "paragraph",
+          "text": "Everything else in the shot can stay naturalistic. The turn is the look into glass."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Point of View (we see what they see). It is not a diary voiceover laid over a face that never finds the lens (Taxi Driver's narration can run without a break).",
+          "links": [
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is close to Interview, except interview eyeline is usually just off-lens, to a listener, while fourth-wall treats us as the partner.",
+          "links": [
+            {
+              "text": "Interview",
+              "url": "https://melies.co/cinematic-techniques/framing/interview"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Interview",
+          "url": "https://melies.co/cinematic-techniques/framing/interview"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Theatre named the fourth wall; film breaks it when a Ferris explains the day to us, when a killer in Funny Games checks whether we are still complicit, when Alvy steps out of Annie Hall to argue. The eyeline is the mechanism.Everything else in the shot can stay naturalistic. The turn is the look into glass.It is not Point of View (we see what they see). It is not a diary voiceover laid over a face that never finds the lens (Taxi Driver's narration can run without a break).It is close to Interview, except interview eyeline is usually just off-lens, to a listener, while fourth-wall treats us as the partner."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place the camera at the subject's eye height and put their eyeline in the center of the taking lens (or a marked pupil on the matte box). Keep the rest of the blocking honest so the look is the only rupture."
+        },
+        {
+          "type": "paragraph",
+          "text": "A slight Eye Level three-quarter that then turns into the glass can stage the break as a decision. Prompt: fourth-wall look, eyes into the lens, the scene admitting an audience.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Place the camera at the subject's eye height and put their eyeline in the center of the taking lens (or a marked pupil on the matte box). Keep the rest of the blocking honest so the look is the only rupture.A slight Eye Level three-quarter that then turns into the glass can stage the break as a decision. Prompt: fourth-wall look, eyes into the lens, the scene admitting an audience."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when they know we are here: a plan explained to us, a dare, a confession that includes the spectator. Concrete beat: a character pauses in a room, finds the lens, and continues the line to us."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not sprinkle random winks; the break has to change the contract of the scene."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when they know we are here: a plan explained to us, a dare, a confession that includes the spectator. Concrete beat: a character pauses in a room, finds the lens, and continues the line to us.Do not sprinkle random winks; the break has to change the contract of the scene."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Point of View inhabits their look into the world. First-Person is their body seeing; other people may look at camera as if at that body, which is diegetic address, not a break.",
+          "links": [
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            },
+            {
+              "text": "First-Person",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Interview aims just off-lens to an offscreen questioner. Profile looks away.",
+          "links": [
+            {
+              "text": "Interview",
+              "url": "https://melies.co/cinematic-techniques/framing/interview"
+            },
+            {
+              "text": "Profile",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Reverse Angle answers another character, not us.",
+          "links": [
+            {
+              "text": "Reverse Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/reverse-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Point of ViewForce identification. The audience is the character.",
+          "displayText": "Point of View\nForce identification. The audience is the character.",
+          "links": [
+            {
+              "text": "Point of ViewForce identification. The audience is the character.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "InterviewSomeone is answering a question we did not hear.",
+          "displayText": "Interview\nSomeone is answering a question we did not hear.",
+          "links": [
+            {
+              "text": "InterviewSomeone is answering a question we did not hear.",
+              "url": "https://melies.co/cinematic-techniques/framing/interview"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "First-Person",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        },
+        {
+          "text": "Interview",
+          "url": "https://melies.co/cinematic-techniques/framing/interview"
+        },
+        {
+          "text": "Profile",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+        },
+        {
+          "text": "Reverse Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/reverse-angle"
+        },
+        {
+          "text": "Point of ViewForce identification. The audience is the character.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "InterviewSomeone is answering a question we did not hear.",
+          "url": "https://melies.co/cinematic-techniques/framing/interview"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/33e364cb93ac77f7bba981d6a44b2dad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pov-090-subjective-optical-pov-mini.webp",
+          "alt": "Point of View"
+        },
+        {
+          "kind": "video",
+          "path": "media/ad782c8d50b2a756b366df24f8816406.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/090-subjective-optical-pov-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/da395574cb94b3fc9f5a9b56398abbab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/interview.webp",
+          "alt": "Interview"
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        }
+      ],
+      "sourceText": "Compared with similar shots Point of View inhabits their look into the world. First-Person is their body seeing; other people may look at camera as if at that body, which is diegetic address, not a break.Interview aims just off-lens to an offscreen questioner. Profile looks away.Reverse Angle answers another character, not us.Point of ViewForce identification. The audience is the character.InterviewSomeone is answering a question we did not hear.Eye LevelDefault honesty. Do not look down or up unless you mean it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ferris Bueller's Day Off lets Ferris comment on his own behavior directly to viewers. Funny Games uses looks (and more) to implicate the spectator."
+        },
+        {
+          "type": "paragraph",
+          "text": "Annie Hall lets Alvy address the audience and step outside ordinary scene realism. The Office glances at the lens as documentary embarrassment, a softer cousin of the same eyeline."
+        },
+        {
+          "type": "list-item",
+          "text": "Taxi Driver 1976Travis’s diary-like narration frames his view of the city.",
+          "displayText": "Taxi Driver 1976\nTravis’s diary-like narration frames his view of the city."
+        },
+        {
+          "type": "list-item",
+          "text": "Badlands 1973Holly’s narration creates distance from the events being shown.",
+          "displayText": "Badlands 1973\nHolly’s narration creates distance from the events being shown."
+        },
+        {
+          "type": "list-item",
+          "text": "Ferris Bueller’s Day Off 1986Ferris explains and comments on his behavior directly to viewers.",
+          "displayText": "Ferris Bueller’s Day Off 1986\nFerris explains and comments on his behavior directly to viewers."
+        },
+        {
+          "type": "list-item",
+          "text": "Annie Hall 1977Alvy addresses the audience and steps outside ordinary scene realism.",
+          "displayText": "Annie Hall 1977\nAlvy addresses the audience and steps outside ordinary scene realism."
+        },
+        {
+          "type": "list-item",
+          "text": "Funny Games 1997Direct looks and overt manipulation implicate the spectator.",
+          "displayText": "Funny Games 1997\nDirect looks and overt manipulation implicate the spectator."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Ferris Bueller's Day Off lets Ferris comment on his own behavior directly to viewers. Funny Games uses looks (and more) to implicate the spectator.Annie Hall lets Alvy address the audience and step outside ordinary scene realism. The Office glances at the lens as documentary embarrassment, a softer cousin of the same eyeline.Taxi Driver 1976Travis’s diary-like narration frames his view of the city.Badlands 1973Holly’s narration creates distance from the events being shown.Ferris Bueller’s Day Off 1986Ferris explains and comments on his behavior directly to viewers.Annie Hall 1977Alvy addresses the audience and steps outside ordinary scene realism.Funny Games 1997Direct looks and overt manipulation implicate the spectator."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The eyeline is the law. Quote: Fourth-wall look from [Subject], eyes into the lens, the scene admitting an audience."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: both eyes to camera, eye-level, not a profile, not looking just off-lens as in an interview. If they were in a scene with others, say the others do not look at camera unless that is the joke."
+        },
+        {
+          "type": "quote",
+          "text": "A meticulous traveler narrates how carefully she plans every journey while the images show her repeatedly improvising: borrowing a map, following a stranger’s gesture and boarding at the last moment. Write restrained original narration that reveals self-image through contradiction rather than explaining visible actions."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+meticulous+traveler+narrates+how+carefully+she+plans+every+journey+while+the+images+show+her+repeatedly+improvising:+borrowing+a+map,+following+a+stranger%E2%80%99s+gesture+and+boarding+at+the+last+moment.+Write+restrained+original+narration+that+reveals+self-image+through+contradiction+rather+than+explaining+visible+actions."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it The eyeline is the law. Quote: Fourth-wall look from [Subject], eyes into the lens, the scene admitting an audience.Add: both eyes to camera, eye-level, not a profile, not looking just off-lens as in an interview. If they were in a scene with others, say the others do not look at camera unless that is the joke.Copy promptUse in Video GeneratorA meticulous traveler narrates how carefully she plans every journey while the images show her repeatedly improvising: borrowing a map, following a stranger’s gesture and boarding at the last moment. Write restrained original narration that reveals self-image through contradiction rather than explaining visible actions.A meticulous traveler narrates how carefully she plans every journey while the images show her repeatedly improvising: borrowing a map, following a stranger’s gesture and boarding at the last moment. Write restrained original narration that reveals self-image through contradiction rather than explaining visible actions."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Interview (eyeline off-lens) or a Point of View of another character (someone looking at the first-person body). Tell: they look past the camera, or we see what they see instead of their eyes.",
+          "links": [
+            {
+              "text": "Interview",
+              "url": "https://melies.co/cinematic-techniques/framing/interview"
+            },
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: pupils on the lens, address to the audience. Voiceover without a look is narration, not this shot."
+        }
+      ],
+      "links": [
+        {
+          "text": "Interview",
+          "url": "https://melies.co/cinematic-techniques/framing/interview"
+        },
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Interview (eyeline off-lens) or a Point of View of another character (someone looking at the first-person body). Tell: they look past the camera, or we see what they see instead of their eyes.Fix: pupils on the lens, address to the audience. Voiceover without a look is narration, not this shot."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is fourth wall in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Breaking the fourth wall means a character looks into the taking lens and admits the audience. The eyeline into the camera is the break."
+        },
+        {
+          "type": "heading",
+          "text": "Fourth wall vs POV",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fourth wall looks at us. A POV shot is what the character sees in their world. One admits a spectator; the other inhabits a looker."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use fourth wall?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the contract of the scene should include the audience: explanation, dare, complicity. Do not use it as a random wink with no change in address."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt fourth wall for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Fourth-wall look from [Subject], eyes into the lens, eye-level, the scene admitting an audience. Not an interview off-lens look, not a POV of the scenery."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is fourth wall in film?Breaking the fourth wall means a character looks into the taking lens and admits the audience. The eyeline into the camera is the break.Fourth wall vs POVFourth wall looks at us. A POV shot is what the character sees in their world. One admits a spectator; the other inhabits a looker.When should I use fourth wall?Use it when the contract of the scene should include the audience: explanation, dare, complicity. Do not use it as a random wink with no change in address.How do I prompt fourth wall for AI image or video?Write: Fourth-wall look from [Subject], eyes into the lens, eye-level, the scene admitting an audience. Not an interview off-lens look, not a POV of the scenery."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "The eyeline is the law. Quote: Fourth-wall look from [Subject], eyes into the lens, the scene admitting an audience.",
+      "Add: both eyes to camera, eye-level, not a profile, not looking just off-lens as in an interview. If they were in a scene with others, say the others do not look at camera unless that is the joke."
+    ],
+    "example": "A meticulous traveler narrates how carefully she plans every journey while the images show her repeatedly improvising: borrowing a map, following a stranger’s gesture and boarding at the last moment. Write restrained original narration that reveals self-image through contradiction rather than explaining visible actions."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/e7745889d0b408c463f5fcfa8b64006a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/135-direct-address-and-fourth-wall-break-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f1e659f7b9c51032b10cb70730b107e2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fourth-wall-135-direct-address-and-fourth-wall-break-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9aa2295a9fcb14d721aa264b3666549a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/fourth-wall.jpg",
+      "alt": "Fourth Wall frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/33e364cb93ac77f7bba981d6a44b2dad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pov-090-subjective-optical-pov-mini.webp",
+      "alt": "Point of View"
+    },
+    {
+      "kind": "video",
+      "path": "media/ad782c8d50b2a756b366df24f8816406.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/090-subjective-optical-pov-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/da395574cb94b3fc9f5a9b56398abbab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/interview.webp",
+      "alt": "Interview"
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/f837b96898b6ac5f5c9e61de28ebec19.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fourth-wall/hero.jpg",
+      "alt": "Fourth Wall",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "b3665fb015d9a6f202070b6a72944d8537a5c11d8b8b01bd3a7eb9a15a0b55b8"
+}

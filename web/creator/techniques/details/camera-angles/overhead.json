@@ -1,0 +1,462 @@
+{
+  "id": "camera-angles/overhead",
+  "slug": "overhead",
+  "title": "Overhead Top-Down",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/overhead",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/overhead-overhead-mini.webp",
+  "detail": "details/camera-angles/overhead.json",
+  "aliases": [
+    "Bird’s-eye tableau",
+    "Plan zénithal"
+  ],
+  "description": "An overhead top-down shot looks nearly straight down at 90 degrees, flattening bodies and spaces into a graphic arrangement. Faces are scarce; silhouette, props, and the plan of the table or room do the talking.",
+  "thumbnail": "media/e38c926247e6d32a842471e279499092.webp",
+  "video": "media/26a0d54296bd8cd0d0f7613e6420795a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/overhead-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This is the crime scene, the place setting, the dance formation, the town drawn as a floor plan. People become pieces in a system."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shadows draw on the surface because the camera is the ceiling. It can make an ordinary ritual strange by removing the social face."
+        },
+        {
+          "type": "paragraph",
+          "text": "A steep High Angle still has walls in perspective. A Bird's-Eye View still has altitude and drop.",
+          "links": [
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            },
+            {
+              "text": "Bird's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Overhead wants the tabletop's geometry to match a plan: rectangles stay rectangles. If you still need the eyes, you are in the wrong viewpoint."
+        }
+      ],
+      "links": [
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Bird's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function This is the crime scene, the place setting, the dance formation, the town drawn as a floor plan. People become pieces in a system.Shadows draw on the surface because the camera is the ceiling. It can make an ordinary ritual strange by removing the social face.A steep High Angle still has walls in perspective. A Bird's-Eye View still has altitude and drop.Overhead wants the tabletop's geometry to match a plan: rectangles stay rectangles. If you still need the eyes, you are in the wrong viewpoint."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mount the camera on an overhead rig, a high grid, or a virtual parent looking down the world Z-axis. Pitch at 90 degrees, roll chosen so the set's long axis sits square."
+        },
+        {
+          "type": "paragraph",
+          "text": "Arrange performers for silhouette: heads, hands, plates, chalk outlines. Because faces are less available, costume color and contrast have to carry identity."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: overhead top-down at 90 degrees, flat-lay or room plan, shadows as drawing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Mount the camera on an overhead rig, a high grid, or a virtual parent looking down the world Z-axis. Pitch at 90 degrees, roll chosen so the set's long axis sits square.Arrange performers for silhouette: heads, hands, plates, chalk outlines. Because faces are less available, costume color and contrast have to carry identity.Prompt: overhead top-down at 90 degrees, flat-lay or room plan, shadows as drawing."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a table, a crime scene, or a dance formation that should read as a diagram. Concrete beat: four pairs of hands setting a long table, plates passing, the rectangle of the wood filling the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it when the line is on a face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a table, a crime scene, or a dance formation that should read as a diagram. Concrete beat: four pairs of hands setting a long table, plates passing, the rectangle of the wood filling the frame.Do not use it when the line is on a face."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bird's-Eye View is a steep look from a great height; overhead is the 90-degree plan, often closer. High Angle is oblique and keeps a readable face.",
+          "links": [
+            {
+              "text": "Bird's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            },
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Crane Over is the move that can finish as this viewpoint. A product flat-lay is the still-life cousin; film overhead usually still includes a body as a piece in the plan.",
+          "links": [
+            {
+              "text": "Crane Over",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-over"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+          "displayText": "Bird's-Eye View\nTurn life into a board game or a ritual.",
+          "links": [
+            {
+              "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane OverTurn a scene into a map without cutting.",
+          "displayText": "Crane Over\nTurn a scene into a map without cutting.",
+          "links": [
+            {
+              "text": "Crane OverTurn a scene into a map without cutting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-over"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Bird's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        },
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Crane Over",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-over"
+        },
+        {
+          "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        },
+        {
+          "text": "Crane OverTurn a scene into a map without cutting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-over"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+          "alt": "Bird's-Eye View"
+        },
+        {
+          "kind": "video",
+          "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ce1f07177722d7e2a2ae3c53ed7cac09.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-over-crane-over-mini.webp",
+          "alt": "Crane Over"
+        },
+        {
+          "kind": "video",
+          "path": "media/e25d0aafa12cf5207b084f402b53ef09.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/crane-over-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        }
+      ],
+      "sourceText": "Compared with similar shots Bird's-Eye View is a steep look from a great height; overhead is the 90-degree plan, often closer. High Angle is oblique and keeps a readable face.Crane Over is the move that can finish as this viewpoint. A product flat-lay is the still-life cousin; film overhead usually still includes a body as a piece in the plan.Bird's-Eye ViewTurn life into a board game or a ritual.Crane OverTurn a scene into a map without cutting.Eye LevelDefault honesty. Do not look down or up unless you mean it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dogville exposes the town as a floor-plan layout from above. The Grand Budapest Hotel uses top-down desks, pastries, and objects as graphic systems."
+        },
+        {
+          "type": "paragraph",
+          "text": "Oldboy's corridor coverage from above turns bodies into a moving diagram. Borrow the plan view, not the wallpaper."
+        },
+        {
+          "type": "list-item",
+          "text": "Dogville 2003Overhead views expose the town’s floor-plan-like layout.",
+          "displayText": "Dogville 2003\nOverhead views expose the town’s floor-plan-like layout."
+        },
+        {
+          "type": "list-item",
+          "text": "The Grand Budapest Hotel 2014Top-down object and desk compositions.",
+          "displayText": "The Grand Budapest Hotel 2014\nTop-down object and desk compositions."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/08f25dcd8dab8f3a0893c2c16ad3f32f.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/overhead/famous/00-dogville-2003.jpg",
+          "alt": "Dogville 2003"
+        },
+        {
+          "kind": "image",
+          "path": "media/a8e32bffd57ef75177517420bc18bd4e.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/overhead/famous/01-the-grand-budapest-hotel-2014.jpg",
+          "alt": "The Grand Budapest Hotel 2014"
+        }
+      ],
+      "sourceText": "In film Dogville exposes the town as a floor-plan layout from above. The Grand Budapest Hotel uses top-down desks, pastries, and objects as graphic systems.Oldboy's corridor coverage from above turns bodies into a moving diagram. Borrow the plan view, not the wallpaper.Dogville 2003Overhead views expose the town’s floor-plan-like layout.The Grand Budapest Hotel 2014Top-down object and desk compositions."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock 90 degrees and the rectangle. Quote: Overhead top-down shot of [Subject] at 90 degrees, flat-lay or room plan, shadows as drawing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: camera straight down, tabletop or floor as a true rectangle, tops of heads, no three-quarter face. If the model tilts, say no perspective wedge on the table."
+        },
+        {
+          "type": "quote",
+          "text": "Strict top-down locked shot of four people setting a long table, their hands passing plates in a coordinated pattern. The tabletop forms a clean rectangle, no perspective tilt, no camera rotation. One person stops and the system loses its rhythm."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Strict+top-down+locked+shot+of+four+people+setting+a+long+table,+their+hands+passing+plates+in+a+coordinated+pattern.+The+tabletop+forms+a+clean+rectangle,+no+perspective+tilt,+no+camera+rotation.+One+person+stops+and+the+system+loses+its+rhythm."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lock 90 degrees and the rectangle. Quote: Overhead top-down shot of [Subject] at 90 degrees, flat-lay or room plan, shadows as drawing.Add: camera straight down, tabletop or floor as a true rectangle, tops of heads, no three-quarter face. If the model tilts, say no perspective wedge on the table.Copy promptUse in Video GeneratorStrict top-down locked shot of four people setting a long table, their hands passing plates in a coordinated pattern. The tabletop forms a clean rectangle, no perspective tilt, no camera rotation. One person stops and the system loses its rhythm.Strict top-down locked shot of four people setting a long table, their hands passing plates in a coordinated pattern. The tabletop forms a clean rectangle, no perspective tilt, no camera rotation. One person stops and the system loses its rhythm."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a steep High Angle that still shows a wall and a face. Tell: trapezoid table, eyeline into camera, room in perspective.",
+          "links": [
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: 90 degrees, plan geometry, silhouette clarity. The other failure is a bird's-eye city when you asked for a kitchen table: wrong scale."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the surface (table, bed, street as plan) and the distance."
+        }
+      ],
+      "links": [
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a steep High Angle that still shows a wall and a face. Tell: trapezoid table, eyeline into camera, room in perspective.Fix: 90 degrees, plan geometry, silhouette clarity. The other failure is a bird's-eye city when you asked for a kitchen table: wrong scale.Name the surface (table, bed, street as plan) and the distance."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is overhead top-down in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An overhead shot looks nearly straight down at 90 degrees. Bodies and rooms flatten into a graphic plan; faces give way to silhouette and arrangement."
+        },
+        {
+          "type": "heading",
+          "text": "Overhead vs bird's-eye view",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Overhead is a straight-down plan, often over a table, a body, or a marked floor. Bird's-eye view is from a great height, a map of a place with a sense of drop."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use overhead top-down?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when systems, evidence, or choreography should be legible as a diagram. Do not use it for a talking face."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt overhead for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Overhead top-down shot of [Subject] at 90 degrees, flat-lay or room plan, table or floor as a rectangle, shadows as drawing. Forbid an oblique high angle."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is overhead top-down in film?An overhead shot looks nearly straight down at 90 degrees. Bodies and rooms flatten into a graphic plan; faces give way to silhouette and arrangement.Overhead vs bird's-eye viewOverhead is a straight-down plan, often over a table, a body, or a marked floor. Bird's-eye view is from a great height, a map of a place with a sense of drop.When should I use overhead top-down?Use it when systems, evidence, or choreography should be legible as a diagram. Do not use it for a talking face.How do I prompt overhead for AI image or video?Write: Overhead top-down shot of [Subject] at 90 degrees, flat-lay or room plan, table or floor as a rectangle, shadows as drawing. Forbid an oblique high angle."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lock 90 degrees and the rectangle. Quote: Overhead top-down shot of [Subject] at 90 degrees, flat-lay or room plan, shadows as drawing.",
+      "Add: camera straight down, tabletop or floor as a true rectangle, tops of heads, no three-quarter face. If the model tilts, say no perspective wedge on the table."
+    ],
+    "example": "Strict top-down locked shot of four people setting a long table, their hands passing plates in a coordinated pattern. The tabletop forms a clean rectangle, no perspective tilt, no camera rotation. One person stops and the system loses its rhythm."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/26a0d54296bd8cd0d0f7613e6420795a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/overhead-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e38c926247e6d32a842471e279499092.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/overhead-overhead-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/16874c7850a184cfdc2047059a62b4ac.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/overhead.jpg",
+      "alt": "Overhead Top-Down frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+      "alt": "Bird's-Eye View"
+    },
+    {
+      "kind": "video",
+      "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ce1f07177722d7e2a2ae3c53ed7cac09.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-over-crane-over-mini.webp",
+      "alt": "Crane Over"
+    },
+    {
+      "kind": "video",
+      "path": "media/e25d0aafa12cf5207b084f402b53ef09.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/crane-over-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/08f25dcd8dab8f3a0893c2c16ad3f32f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/overhead/famous/00-dogville-2003.jpg",
+      "alt": "Dogville 2003"
+    },
+    {
+      "kind": "image",
+      "path": "media/a8e32bffd57ef75177517420bc18bd4e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/overhead/famous/01-the-grand-budapest-hotel-2014.jpg",
+      "alt": "The Grand Budapest Hotel 2014"
+    },
+    {
+      "kind": "image",
+      "path": "media/7dbafc92f038e710e00c20fb867bfa01.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/overhead/hero.jpg",
+      "alt": "Overhead Top-Down",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "e7f860c9c911aeea064d3485a75e9ae6ddbe68a7b6d7e6641ae0cc20bf3e1375"
+}

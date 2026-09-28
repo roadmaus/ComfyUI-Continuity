@@ -1,0 +1,400 @@
+{
+  "id": "viral-looks/mighty-fighter",
+  "slug": "mighty-fighter",
+  "title": "Mighty Fighter",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mighty-fighter-mighty-fighter-mini.webp",
+  "detail": "details/viral-looks/mighty-fighter.json",
+  "aliases": [],
+  "description": "Mighty fighter, the mighty fighter look, is a living champion posed like cabinet art: oversized stance, hard rim, toy-box color, the city small behind them. It is a lock-off win pose, not a camera move and not motion blur.",
+  "thumbnail": "media/046b608906416624c9d8433b3b4e890d.webp",
+  "video": "media/0d7921ffd701093cbc0e915976e8824f.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mighty-fighter-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Title cards, arrivals, comic action: one figure, three-quarter low, stance wider than polite, background as a stage. Clothes may be stylized or street, but the body is a fighting-game select screen."
+        },
+        {
+          "type": "paragraph",
+          "text": "A whispering drama does not need a sprite. It is the wrong tool when the person should look tired and real, or when you wanted plastic merchandise."
+        },
+        {
+          "type": "paragraph",
+          "text": "If they look documentary, you missed the toy-box. If they look like a doll, you wandered into action-figure."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Title cards, arrivals, comic action: one figure, three-quarter low, stance wider than polite, background as a stage. Clothes may be stylized or street, but the body is a fighting-game select screen.A whispering drama does not need a sprite. It is the wrong tool when the person should look tired and real, or when you wanted plastic merchandise.If they look documentary, you missed the toy-box. If they look like a doll, you wandered into action-figure."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Three-quarter Low Angle, 24mm to 35mm, lock-off. Hard Rim Light opposite a saturated but sharp key.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "Rim Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "One figure. Background graphic, not a documentary street."
+        },
+        {
+          "type": "paragraph",
+          "text": "No motion blur. Prompt: Mighty-fighter frame of [Subject], toy-box combat, oversized stance, a champion posed for a cabinet art."
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Rim Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Three-quarter Low Angle, 24mm to 35mm, lock-off. Hard Rim Light opposite a saturated but sharp key.One figure. Background graphic, not a documentary street.No motion blur. Prompt: Mighty-fighter frame of [Subject], toy-box combat, oversized stance, a champion posed for a cabinet art."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A title card, an arrival, a comic-action beat where they should look like a sprite that won. Do not use it on a quiet confession."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A title card, an arrival, a comic-action beat where they should look like a sprite that won. Do not use it on a quiet confession."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hero Cam is the low heroic axis without the cabinet-art color. Action Figure is polymer joints and blister-card lighting.",
+          "links": [
+            {
+              "text": "Hero Cam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/hero-cam"
+            },
+            {
+              "text": "Action Figure",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/action-figure"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Casual Monster Slayer is the grocery-store cousin. Mighty fighter is the living win pose.",
+          "links": [
+            {
+              "text": "Casual Monster Slayer",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/casual-monster-slayer"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hero CamThey should look inevitable.",
+          "displayText": "Hero Cam\nThey should look inevitable.",
+          "links": [
+            {
+              "text": "Hero CamThey should look inevitable.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/hero-cam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Action FigureSell them in a box.",
+          "displayText": "Action Figure\nSell them in a box.",
+          "links": [
+            {
+              "text": "Action FigureSell them in a box.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/action-figure"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Hero Cam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/hero-cam"
+        },
+        {
+          "text": "Action Figure",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/action-figure"
+        },
+        {
+          "text": "Casual Monster Slayer",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/casual-monster-slayer"
+        },
+        {
+          "text": "Hero CamThey should look inevitable.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/hero-cam"
+        },
+        {
+          "text": "Action FigureSell them in a box.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/action-figure"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/0dd245d03f18ea99326103dbc10a2f9f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hero-cam-hero-cam-mini.webp",
+          "alt": "Hero Cam"
+        },
+        {
+          "kind": "video",
+          "path": "media/90622d7b1461a02b9d57879e595aa569.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/hero-cam-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/efa643ba0f5c274305422d171b69ae57.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/action-figure.webp",
+          "alt": "Action Figure"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Hero Cam is the low heroic axis without the cabinet-art color. Action Figure is polymer joints and blister-card lighting.Casual Monster Slayer is the grocery-store cousin. Mighty fighter is the living win pose.Hero CamThey should look inevitable.Action FigureSell them in a box.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Street Fighter openings pose champions as cabinet art. Kung Fury does the same with a straight face and a hard rim."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow stance and rim, not a sprite sheet."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Street Fighter openings pose champions as cabinet art. Kung Fury does the same with a straight face and a hard rim.Borrow stance and rim, not a sprite sheet."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock a low three-quarter, then the pose. Mighty-fighter frame of [Subject], toy-box combat, oversized stance, a champion posed for a cabinet art."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add hard rim, saturated sharp color, one figure, stage background, no motion blur."
+        },
+        {
+          "type": "quote",
+          "text": "Mighty-fighter frame of [Subject], toy-box combat, oversized stance, a champion posed for a cabinet art."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Mighty-fighter+frame+of+[Subject],+toy-box+combat,+oversized+stance,+a+champion+posed+for+a+cabinet+art."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lock a low three-quarter, then the pose. Mighty-fighter frame of [Subject], toy-box combat, oversized stance, a champion posed for a cabinet art.Add hard rim, saturated sharp color, one figure, stage background, no motion blur.Copy promptUse in Image GeneratorMighty-fighter frame of [Subject], toy-box combat, oversized stance, a champion posed for a cabinet art.Mighty-fighter frame of [Subject], toy-box combat, oversized stance, a champion posed for a cabinet art."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A generic low-angle with no toy-box color, or a slide into Action Figure plastic. The tell is tired real skin, or visible doll joints.",
+          "links": [
+            {
+              "text": "Action Figure",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/action-figure"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: stance, rim, cabinet clarity, living body."
+        }
+      ],
+      "links": [
+        {
+          "text": "Action Figure",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/action-figure"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A generic low-angle with no toy-box color, or a slide into Action Figure plastic. The tell is tired real skin, or visible doll joints.Fix it: stance, rim, cabinet clarity, living body."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Mighty Fighter in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A posed champion look: low three-quarter, oversized stance, hard rim, toy-box color. It is cabinet art of a living body, not a camera move and not a plastic toy."
+        },
+        {
+          "type": "heading",
+          "text": "Mighty Fighter vs Action Figure",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Action figure is merchandise: joints, polymer, blister-card light. Mighty fighter is a living sprite in a win pose. If you can see rivets, you crossed."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Mighty Fighter?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Title cards, arrivals, comic action. Skip whispering drama and documentary tiredness."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Mighty Fighter for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Low three-quarter lock-off, hard rim, one figure, then: Mighty-fighter frame of [Subject], toy-box combat, oversized stance, a champion posed for a cabinet art. No motion blur."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Mighty Fighter in film?A posed champion look: low three-quarter, oversized stance, hard rim, toy-box color. It is cabinet art of a living body, not a camera move and not a plastic toy.Mighty Fighter vs Action FigureAction figure is merchandise: joints, polymer, blister-card light. Mighty fighter is a living sprite in a win pose. If you can see rivets, you crossed.When should I use Mighty Fighter?Title cards, arrivals, comic action. Skip whispering drama and documentary tiredness.How do I prompt Mighty Fighter for AI image or video?Low three-quarter lock-off, hard rim, one figure, then: Mighty-fighter frame of [Subject], toy-box combat, oversized stance, a champion posed for a cabinet art. No motion blur."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lock a low three-quarter, then the pose. Mighty-fighter frame of [Subject], toy-box combat, oversized stance, a champion posed for a cabinet art.",
+      "Add hard rim, saturated sharp color, one figure, stage background, no motion blur."
+    ],
+    "example": "Mighty-fighter frame of [Subject], toy-box combat, oversized stance, a champion posed for a cabinet art."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/0d7921ffd701093cbc0e915976e8824f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mighty-fighter-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/046b608906416624c9d8433b3b4e890d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mighty-fighter-mighty-fighter-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/af283571814b4c5a8d3b74d12fcbca58.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/mighty-fighter.jpg",
+      "alt": "Mighty Fighter frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/0dd245d03f18ea99326103dbc10a2f9f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hero-cam-hero-cam-mini.webp",
+      "alt": "Hero Cam"
+    },
+    {
+      "kind": "video",
+      "path": "media/90622d7b1461a02b9d57879e595aa569.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/hero-cam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/efa643ba0f5c274305422d171b69ae57.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/action-figure.webp",
+      "alt": "Action Figure"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/bcedc0b5076d680487db504c785fd2d7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/mighty-fighter/hero.jpg",
+      "alt": "Mighty Fighter",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "4552f81bea2f5fde8828330b67616d37d2e21d98b830fbb52641216c59c36c97"
+}

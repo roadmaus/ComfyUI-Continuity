@@ -1,0 +1,373 @@
+{
+  "id": "lenses/50mm-normal",
+  "slug": "50mm-normal",
+  "title": "50mm Normal",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/50mm-normal",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/50mm-normal.webp",
+  "detail": "details/lenses/50mm-normal.json",
+  "aliases": [],
+  "description": "A 50mm normal in 50mm cinematography is the conventional normal prime: from a typical stand it neither stretches near space nor stacks distant planes. The glass refuses to editorialize perspective; camera position still does all of that work.",
+  "thumbnail": "media/e9bae839781c16a528f25d7fa4dbf0bc.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A 50mm is the length you pick when the sentence should sound like looking, not like a lens. Faces keep proportion."
+        },
+        {
+          "type": "paragraph",
+          "text": "Rooms neither rush forward nor crowd in. Conversations, over-the-shoulders, and plain singles live here because the audience is not asked to notice the optic."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when space itself must argue. A 24mm will make the room a partner."
+        },
+        {
+          "type": "paragraph",
+          "text": "An 85mm will make the person a landscape. From the same tripod, switching to 50mm only crops; if you wanted compression you still have to walk back, then use longer glass."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A 50mm is the length you pick when the sentence should sound like looking, not like a lens. Faces keep proportion.Rooms neither rush forward nor crowd in. Conversations, over-the-shoulders, and plain singles live here because the audience is not asked to notice the optic.It is the wrong tool when space itself must argue. A 24mm will make the room a partner.An 85mm will make the person a landscape. From the same tripod, switching to 50mm only crops; if you wanted compression you still have to walk back, then use longer glass."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stand first at a human talking distance. On a roughly 35mm-wide sensor, 50mm is a mild tele-normal; on full frame it is the classic still-camera normal."
+        },
+        {
+          "type": "paragraph",
+          "text": "Either way, keep the nodal point where a person would stand, and let the field fall out. Depth of field at 50mm is moderate unless you open very wide or get close."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: 50mm normal lens on [Subject], human-scale perspective, neither compressed nor stretched, conversational truth."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Stand first at a human talking distance. On a roughly 35mm-wide sensor, 50mm is a mild tele-normal; on full frame it is the classic still-camera normal.Either way, keep the nodal point where a person would stand, and let the field fall out. Depth of field at 50mm is moderate unless you open very wide or get close.Prompt: 50mm normal lens on [Subject], human-scale perspective, neither compressed nor stretched, conversational truth."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when you do not want the glass to editorialize: a talk across a table, a single that should feel observed rather than styled. Do not use it to fake telephoto isolation or wide environmental stretch from a fixed stand."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when you do not want the glass to editorialize: a talk across a table, a single that should feel observed rather than styled. Do not use it to fake telephoto isolation or wide environmental stretch from a fixed stand."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "35mm Moderate Wide shows a little more world from the same stand. 85mm Portrait requires a farther stand and starts to compress the background.",
+          "links": [
+            {
+              "text": "35mm Moderate Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+            },
+            {
+              "text": "85mm Portrait",
+              "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Spherical is the lens construction; a 50mm is usually spherical, but spherical is not a focal length. 24mm Wide from close is a different sentence about space.",
+          "links": [
+            {
+              "text": "Spherical",
+              "url": "https://melies.co/cinematic-techniques/lenses/spherical"
+            },
+            {
+              "text": "24mm Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "35mm Moderate WideMost narrative coverage. Human but not telephoto.",
+          "displayText": "35mm Moderate Wide\nMost narrative coverage. Human but not telephoto.",
+          "links": [
+            {
+              "text": "35mm Moderate WideMost narrative coverage. Human but not telephoto.",
+              "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "85mm PortraitA person is the landscape.",
+          "displayText": "85mm Portrait\nA person is the landscape.",
+          "links": [
+            {
+              "text": "85mm PortraitA person is the landscape.",
+              "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "35mm Moderate Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+        },
+        {
+          "text": "85mm Portrait",
+          "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+        },
+        {
+          "text": "Spherical",
+          "url": "https://melies.co/cinematic-techniques/lenses/spherical"
+        },
+        {
+          "text": "24mm Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        },
+        {
+          "text": "35mm Moderate WideMost narrative coverage. Human but not telephoto.",
+          "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+        },
+        {
+          "text": "85mm PortraitA person is the landscape.",
+          "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/192baaa553dac5fb337404d41c596029.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/35mm-moderate.webp",
+          "alt": "35mm Moderate Wide"
+        },
+        {
+          "kind": "image",
+          "path": "media/f0701a4a46018686692cc73d442a80ae.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/85mm-portrait.webp",
+          "alt": "85mm Portrait"
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots 35mm Moderate Wide shows a little more world from the same stand. 85mm Portrait requires a farther stand and starts to compress the background.Spherical is the lens construction; a 50mm is usually spherical, but spherical is not a focal length. 24mm Wide from close is a different sentence about space.35mm Moderate WideMost narrative coverage. Human but not telephoto.85mm PortraitA person is the landscape.14mm Ultra-WidePut the audience inside a space that is too big or too close."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Classical coverage often parks the 50mm on singles and over-the-shoulders so the optic disappears and performance plus blocking carry the scene. Use that as grammar: conversational distance, honest proportion, no stacked city and no looming furniture."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Classical coverage often parks the 50mm on singles and over-the-shoulders so the optic disappears and performance plus blocking carry the scene. Use that as grammar: conversational distance, honest proportion, no stacked city and no looming furniture."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the refusal to stretch or stack. 50mm normal lens on [Subject], human-scale perspective, neither compressed nor stretched, conversational truth."
+        },
+        {
+          "type": "paragraph",
+          "text": "State camera distance (across a table, a few paces). Do not add oval bokeh, barrel distortion, or heat-haze compression."
+        },
+        {
+          "type": "quote",
+          "text": "50mm normal lens on [Subject], human-eye perspective, neither compressed nor stretched, conversational truth."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=50mm+normal+lens+on+[Subject],+human-eye+perspective,+neither+compressed+nor+stretched,+conversational+truth."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the refusal to stretch or stack. 50mm normal lens on [Subject], human-scale perspective, neither compressed nor stretched, conversational truth.State camera distance (across a table, a few paces). Do not add oval bokeh, barrel distortion, or heat-haze compression.Copy promptUse in Image Generator50mm normal lens on [Subject], human-eye perspective, neither compressed nor stretched, conversational truth.50mm normal lens on [Subject], human-eye perspective, neither compressed nor stretched, conversational truth."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is 35mm Moderate Wide labeled as normal, or 85mm Portrait because generators treat every face as a portrait length. The tell is extra room (35) or a washed, stacked background (85).",
+          "links": [
+            {
+              "text": "35mm Moderate Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+            },
+            {
+              "text": "85mm Portrait",
+              "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: talking-distance stand, full-face proportion, background present but not crowding."
+        }
+      ],
+      "links": [
+        {
+          "text": "35mm Moderate Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+        },
+        {
+          "text": "85mm Portrait",
+          "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is 35mm Moderate Wide labeled as normal, or 85mm Portrait because generators treat every face as a portrait length. The tell is extra room (35) or a washed, stacked background (85).Fix: talking-distance stand, full-face proportion, background present but not crowding."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is 50mm normal in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the conventional normal focal length: a field that neither stretches near objects nor compresses distant planes from a typical stand. Perspective still comes from where you put the camera."
+        },
+        {
+          "type": "heading",
+          "text": "50mm Normal vs 85mm Portrait",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "50mm at talking distance keeps the room honest and the face unstacked. 85mm from farther back enlarges the background, thins depth of field, and isolates. 50mm is conversation. 85mm is the face as landscape."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use 50mm normal?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the optic should disappear: talk, witness, plain coverage. Skip it when space must stretch, stack, or isolate."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt 50mm normal for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: 50mm normal lens on [Subject], human-scale perspective, neither compressed nor stretched, conversational truth. Name a talking distance. Forbid ultra-wide stretch and telephoto stack."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is 50mm normal in film?It is the conventional normal focal length: a field that neither stretches near objects nor compresses distant planes from a typical stand. Perspective still comes from where you put the camera.50mm Normal vs 85mm Portrait50mm at talking distance keeps the room honest and the face unstacked. 85mm from farther back enlarges the background, thins depth of field, and isolates. 50mm is conversation. 85mm is the face as landscape.When should I use 50mm normal?Use it when the optic should disappear: talk, witness, plain coverage. Skip it when space must stretch, stack, or isolate.How do I prompt 50mm normal for AI image or video?Write: 50mm normal lens on [Subject], human-scale perspective, neither compressed nor stretched, conversational truth. Name a talking distance. Forbid ultra-wide stretch and telephoto stack."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the refusal to stretch or stack. 50mm normal lens on [Subject], human-scale perspective, neither compressed nor stretched, conversational truth.",
+      "State camera distance (across a table, a few paces). Do not add oval bokeh, barrel distortion, or heat-haze compression."
+    ],
+    "example": "50mm normal lens on [Subject], human-eye perspective, neither compressed nor stretched, conversational truth."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/e9bae839781c16a528f25d7fa4dbf0bc.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/50mm-normal.webp",
+      "alt": "50mm Normal example"
+    },
+    {
+      "kind": "image",
+      "path": "media/192baaa553dac5fb337404d41c596029.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/35mm-moderate.webp",
+      "alt": "35mm Moderate Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/f0701a4a46018686692cc73d442a80ae.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/85mm-portrait.webp",
+      "alt": "85mm Portrait"
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/2b03265437d804add5026d5cdb70eff4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/50mm-normal/hero.jpg",
+      "alt": "50mm Normal",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "7abfdb3d46cac91a8f8ef030c8c587aea7bf38b62847552cfd83d443c8770536"
+}

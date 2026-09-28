@@ -1,0 +1,378 @@
+{
+  "id": "viral-looks/broken-mirror",
+  "slug": "broken-mirror",
+  "title": "Broken Mirror",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/broken-mirror",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/broken-mirror-broken-mirror-mini.webp",
+  "detail": "details/viral-looks/broken-mirror.json",
+  "aliases": [],
+  "description": "Broken mirror, the broken mirror look, shards a person across cracked silver: one face that does not agree with itself, each shard a slightly different angle or time. Identity as a pile of cuts, and a crack overlay on a single face is not enough.",
+  "thumbnail": "media/e4e70454cfb6bac534c7afb2c6ec3e16.webp",
+  "video": "media/3310d36876d8add703924f6092b194fb.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/broken-mirror-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Breakdowns, vanity, a lie: bathroom or dressing-room practical, silver in the near plane, pieces of room in the glass. Argus is many eyes."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is one face in pieces. A team photo does not want this."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the shards do not hold different bits of the room, and the wrong tool if you wanted intact Reflections. Glass as a cut.",
+          "links": [
+            {
+              "text": "Reflections",
+              "url": "https://melies.co/cinematic-techniques/composition/reflections"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Reflections",
+          "url": "https://melies.co/cinematic-techniques/composition/reflections"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Breakdowns, vanity, a lie: bathroom or dressing-room practical, silver in the near plane, pieces of room in the glass. Argus is many eyes.This is one face in pieces. A team photo does not want this.It is the wrong tool when the shards do not hold different bits of the room, and the wrong tool if you wanted intact Reflections. Glass as a cut."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock off through the glass, 35mm to 50mm, bathroom practical. Cracked silver, multiple slices of the same person, shards as glass not as a kaleidoscope filter."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Broken-mirror of [Subject], silver shards, one face that does not agree with itself."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock off through the glass, 35mm to 50mm, bathroom practical. Cracked silver, multiple slices of the same person, shards as glass not as a kaleidoscope filter.Prompt: Broken-mirror of [Subject], silver shards, one face that does not agree with itself."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A breakdown at a mirror, vanity that splits, a lie. Do not use it as a crack sticker on a single portrait, and do not use it for a team photo."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A breakdown at a mirror, vanity that splits, a lie. Do not use it as a crack sticker on a single portrait, and do not use it for a team photo."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fragments is editing as shards of coverage. Reflections is intact glass.",
+          "links": [
+            {
+              "text": "Fragments",
+              "url": "https://melies.co/cinematic-techniques/editing/fragments"
+            },
+            {
+              "text": "Reflections",
+              "url": "https://melies.co/cinematic-techniques/composition/reflections"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Broken mirror is cracked silver in camera, different bits of face and room per shard. If every piece matches, you have a filter."
+        },
+        {
+          "type": "list-item",
+          "text": "FragmentsDo not give the whole.",
+          "displayText": "Fragments\nDo not give the whole.",
+          "links": [
+            {
+              "text": "FragmentsDo not give the whole.",
+              "url": "https://melies.co/cinematic-techniques/editing/fragments"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "ReflectionsShow looking and the looked-at together.",
+          "displayText": "Reflections\nShow looking and the looked-at together.",
+          "links": [
+            {
+              "text": "ReflectionsShow looking and the looked-at together.",
+              "url": "https://melies.co/cinematic-techniques/composition/reflections"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Fragments",
+          "url": "https://melies.co/cinematic-techniques/editing/fragments"
+        },
+        {
+          "text": "Reflections",
+          "url": "https://melies.co/cinematic-techniques/composition/reflections"
+        },
+        {
+          "text": "FragmentsDo not give the whole.",
+          "url": "https://melies.co/cinematic-techniques/editing/fragments"
+        },
+        {
+          "text": "ReflectionsShow looking and the looked-at together.",
+          "url": "https://melies.co/cinematic-techniques/composition/reflections"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/20890dc313ed63661f2f17b25d292fb5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fragments-176-fragmented-action-and-implied-impact-mini.webp",
+          "alt": "Fragments"
+        },
+        {
+          "kind": "video",
+          "path": "media/33ee70abaccb6a73892f6d2b1a4db683.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/176-fragmented-action-and-implied-impact-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/251078d8f4037d4032497d15261ced49.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reflections.webp",
+          "alt": "Reflections"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Fragments is editing as shards of coverage. Reflections is intact glass.Broken mirror is cracked silver in camera, different bits of face and room per shard. If every piece matches, you have a filter.FragmentsDo not give the whole.ReflectionsShow looking and the looked-at together.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Black Swan dressing rooms split a dancer across glass. Film-noir bathrooms use mirrors as moral cuts."
+        },
+        {
+          "type": "paragraph",
+          "text": "Glass as a cut. Grammar, not a copied bathroom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Black Swan dressing rooms split a dancer across glass. Film-noir bathrooms use mirrors as moral cuts.Glass as a cut. Grammar, not a copied bathroom."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cracked silver, different slices. Broken-mirror of [Subject], silver shards, one face that does not agree with itself."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add bathroom practical, shards holding different bits of room, same person, no kaleidoscope pack."
+        },
+        {
+          "type": "quote",
+          "text": "Broken-mirror of [Subject], silver shards, one face that does not agree with itself."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Broken-mirror+of+[Subject],+silver+shards,+one+face+that+does+not+agree+with+itself."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Cracked silver, different slices. Broken-mirror of [Subject], silver shards, one face that does not agree with itself.Add bathroom practical, shards holding different bits of room, same person, no kaleidoscope pack.Copy promptUse in Image GeneratorBroken-mirror of [Subject], silver shards, one face that does not agree with itself.Broken-mirror of [Subject], silver shards, one face that does not agree with itself."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face with a crack overlay, or intact Reflections. The tell is one angle in every shard.",
+          "links": [
+            {
+              "text": "Reflections",
+              "url": "https://melies.co/cinematic-techniques/composition/reflections"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: glass pieces, different bits of room, face that does not agree with itself."
+        }
+      ],
+      "links": [
+        {
+          "text": "Reflections",
+          "url": "https://melies.co/cinematic-techniques/composition/reflections"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A face with a crack overlay, or intact Reflections. The tell is one angle in every shard.Fix it: glass pieces, different bits of room, face that does not agree with itself."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Broken Mirror in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Cracked silver as a split of identity: shards of one face that do not agree, each piece a slightly different angle or time. Not a crack sticker."
+        },
+        {
+          "type": "heading",
+          "text": "Broken Mirror vs Reflections",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Reflections uses intact glass. Broken mirror uses shards that disagree. If the mirror is whole, you wanted reflections."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Broken Mirror?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Breakdowns, vanity, a lie. Skip team photos and overlay cracks."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Broken Mirror for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Bathroom practical, then: Broken-mirror of [Subject], silver shards, one face that does not agree with itself. Each shard must hold a different bit of room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Broken Mirror in film?Cracked silver as a split of identity: shards of one face that do not agree, each piece a slightly different angle or time. Not a crack sticker.Broken Mirror vs ReflectionsReflections uses intact glass. Broken mirror uses shards that disagree. If the mirror is whole, you wanted reflections.When should I use Broken Mirror?Breakdowns, vanity, a lie. Skip team photos and overlay cracks.How do I prompt Broken Mirror for AI image or video?Bathroom practical, then: Broken-mirror of [Subject], silver shards, one face that does not agree with itself. Each shard must hold a different bit of room."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Cracked silver, different slices. Broken-mirror of [Subject], silver shards, one face that does not agree with itself.",
+      "Add bathroom practical, shards holding different bits of room, same person, no kaleidoscope pack."
+    ],
+    "example": "Broken-mirror of [Subject], silver shards, one face that does not agree with itself."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/3310d36876d8add703924f6092b194fb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/broken-mirror-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e4e70454cfb6bac534c7afb2c6ec3e16.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/broken-mirror-broken-mirror-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/30618a3bf2bce3597f585ce18aa37bb3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/broken-mirror.jpg",
+      "alt": "Broken Mirror frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/20890dc313ed63661f2f17b25d292fb5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fragments-176-fragmented-action-and-implied-impact-mini.webp",
+      "alt": "Fragments"
+    },
+    {
+      "kind": "video",
+      "path": "media/33ee70abaccb6a73892f6d2b1a4db683.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/176-fragmented-action-and-implied-impact-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/251078d8f4037d4032497d15261ced49.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/reflections.webp",
+      "alt": "Reflections"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/4be569d05111f58303cda09680fcaf3a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/broken-mirror/hero.jpg",
+      "alt": "Broken Mirror",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "fda6b093edb7d2cf300e1264532d93eb5fb689b60be1167bf2d257ab4474464f"
+}

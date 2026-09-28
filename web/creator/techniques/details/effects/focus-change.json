@@ -1,0 +1,409 @@
+{
+  "id": "effects/focus-change",
+  "slug": "focus-change",
+  "title": "Focus Change",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/focus-change",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/focus-change-focus-change-mini.webp",
+  "detail": "details/effects/focus-change.json",
+  "aliases": [],
+  "description": "Focus change cinematography jumps or slides the plane of sharpness to a new fact, a rack without apology. The mid-blur is short, and the new plane owns the shot as soon as it lands.",
+  "thumbnail": "media/bae494cf0dd36aa9bf422d43c60e4282.webp",
+  "video": "media/1139bcf97f8cafa2cb14ba18cbd16ce1.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/focus-change-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A glass goes soft. A face snaps true."
+        },
+        {
+          "type": "paragraph",
+          "text": "Attention relocates. Use it when the point is the new owner of the frame, not the poetry of traveling blur."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool if you need to watch the plane walk slowly through a room, or if both planes must stay sharp. A lyric travel is a focal shift."
+        },
+        {
+          "type": "paragraph",
+          "text": "A two-mark textbook pull is a rack focus. This is the discrete change."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A glass goes soft. A face snaps true.Attention relocates. Use it when the point is the new owner of the frame, not the poetry of traveling blur.It is the wrong tool if you need to watch the plane walk slowly through a room, or if both planes must stay sharp. A lyric travel is a focal shift.A two-mark textbook pull is a rack focus. This is the discrete change."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the camera locked or nearly so. Depth of field is shallow."
+        },
+        {
+          "type": "paragraph",
+          "text": "The follow-focus snaps or hard-slides from distance A to B. Do not linger in the mush."
+        },
+        {
+          "type": "paragraph",
+          "text": "End sharp on the new subject. A 75mm to 100mm makes the jump brutal."
+        },
+        {
+          "type": "paragraph",
+          "text": "A wider lens makes it weaker. Prompt a focus change on the subject: the plane of sharpness jumping or sliding to a new fact."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, focus changes from one plane onto the subject or away."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Keep the camera locked or nearly so. Depth of field is shallow.The follow-focus snaps or hard-slides from distance A to B. Do not linger in the mush.End sharp on the new subject. A 75mm to 100mm makes the jump brutal.A wider lens makes it weaker. Prompt a focus change on the subject: the plane of sharpness jumping or sliding to a new fact.For video, focus changes from one plane onto the subject or away."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when a clue, a gun, or an eavesdropper must steal the shot at once. Do not use it as a slow search through several planes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when a clue, a gun, or an eavesdropper must steal the shot at once. Do not use it as a slow search through several planes."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Focal Shift is the traveling plane as the event, including slow and multiple racks. Focus change is the relocate, jump or hard slide.",
+          "links": [
+            {
+              "text": "Focal Shift",
+              "url": "https://melies.co/cinematic-techniques/effects/focal-shift"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Rack Focus is the measured two-mark procedure. This one does not apologize for the snap.",
+          "links": [
+            {
+              "text": "Rack Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Focal ShiftChange who owns the shot without cutting.",
+          "displayText": "Focal Shift\nChange who owns the shot without cutting.",
+          "links": [
+            {
+              "text": "Focal ShiftChange who owns the shot without cutting.",
+              "url": "https://melies.co/cinematic-techniques/effects/focal-shift"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rack FocusChange who owns the shot without cutting.",
+          "displayText": "Rack Focus\nChange who owns the shot without cutting.",
+          "links": [
+            {
+              "text": "Rack FocusChange who owns the shot without cutting.",
+              "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Focal Shift",
+          "url": "https://melies.co/cinematic-techniques/effects/focal-shift"
+        },
+        {
+          "text": "Rack Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+        },
+        {
+          "text": "Focal ShiftChange who owns the shot without cutting.",
+          "url": "https://melies.co/cinematic-techniques/effects/focal-shift"
+        },
+        {
+          "text": "Rack FocusChange who owns the shot without cutting.",
+          "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/2893db1938efb47c2a14302f8450d8f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/focal-shift-focal-shift-mini.webp",
+          "alt": "Focal Shift"
+        },
+        {
+          "kind": "video",
+          "path": "media/06525c190cd29462bf708beedcf2dd86.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/focal-shift-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d8621e52db925c8d69c6da997747f829.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rack-focus-053-rack-focus-mini.webp",
+          "alt": "Rack Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/396e12ac75a8a03a4ec4597dc1dbcafd.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/053-rack-focus-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Focal Shift is the traveling plane as the event, including slow and multiple racks. Focus change is the relocate, jump or hard slide.Rack Focus is the measured two-mark procedure. This one does not apologize for the snap.Focal ShiftChange who owns the shot without cutting.Rack FocusChange who owns the shot without cutting.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Graduate still supplies the grammar of attention changing by focus, here read as a harder hand-off. There Will Be Blood's interiors let sharpness relocate inside a held composition."
+        },
+        {
+          "type": "paragraph",
+          "text": "Same films as the cousin pulls, different timing. Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Graduate still supplies the grammar of attention changing by focus, here read as a harder hand-off. There Will Be Blood's interiors let sharpness relocate inside a held composition.Same films as the cousin pulls, different timing. Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Focus change on [Subject], the plane of sharpness jumping or sliding to a new fact, a rack without apology. Video: Focus changes from one plane onto [Subject] or away from them."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name both planes and that the mid-blur is brief."
+        },
+        {
+          "type": "quote",
+          "text": "Focus changes from one plane onto [Subject] or away from them."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Focus+changes+from+one+plane+onto+[Subject]+or+away+from+them."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Focus change on [Subject], the plane of sharpness jumping or sliding to a new fact, a rack without apology. Video: Focus changes from one plane onto [Subject] or away from them.Name both planes and that the mid-blur is brief.Copy promptUse in Video GeneratorFocus changes from one plane onto [Subject] or away from them.Focus changes from one plane onto [Subject] or away from them."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a slow Focal Shift or a cut. The tell is a long mushy travel, or a hard cut that never pulled.",
+          "links": [
+            {
+              "text": "Focal Shift",
+              "url": "https://melies.co/cinematic-techniques/effects/focal-shift"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is one shallow field, a snap or hard slide, a new sharp owner."
+        }
+      ],
+      "links": [
+        {
+          "text": "Focal Shift",
+          "url": "https://melies.co/cinematic-techniques/effects/focal-shift"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a slow Focal Shift or a cut. The tell is a long mushy travel, or a hard cut that never pulled.The fix is one shallow field, a snap or hard slide, a new sharp owner."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is focus change in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A focus change jumps or slides the plane of sharpness to a new fact during the shot. Attention relocates without a cut, and the mid-blur does not linger."
+        },
+        {
+          "type": "heading",
+          "text": "Focus change vs focal shift",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A focal shift treats the travel of the plane as the sentence, slow or chained. A focus change is the discrete relocate: jump or hard slide, new fact in charge."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use focus change?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a new plane must steal the shot at once. Skip it when you want to watch blur walk, or when both subjects must stay sharp."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt focus change for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Focus change on [Subject], the plane of sharpness jumping or sliding to a new fact. Name the two planes. For video, change focus onto the subject or away, mid-blur short."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is focus change in film?A focus change jumps or slides the plane of sharpness to a new fact during the shot. Attention relocates without a cut, and the mid-blur does not linger.Focus change vs focal shiftA focal shift treats the travel of the plane as the sentence, slow or chained. A focus change is the discrete relocate: jump or hard slide, new fact in charge.When should I use focus change?Use it when a new plane must steal the shot at once. Skip it when you want to watch blur walk, or when both subjects must stay sharp.How do I prompt focus change for AI image or video?Write Focus change on [Subject], the plane of sharpness jumping or sliding to a new fact. Name the two planes. For video, change focus onto the subject or away, mid-blur short."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Focus change on [Subject], the plane of sharpness jumping or sliding to a new fact, a rack without apology. Video: Focus changes from one plane onto [Subject] or away from them.",
+      "Name both planes and that the mid-blur is brief."
+    ],
+    "example": "Focus changes from one plane onto [Subject] or away from them."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/1139bcf97f8cafa2cb14ba18cbd16ce1.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/focus-change-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bae494cf0dd36aa9bf422d43c60e4282.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/focus-change-focus-change-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/60839e7a18b583c50ab43a4046ee4015.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/focus-change.jpg",
+      "alt": "Focus Change frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/2893db1938efb47c2a14302f8450d8f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/focal-shift-focal-shift-mini.webp",
+      "alt": "Focal Shift"
+    },
+    {
+      "kind": "video",
+      "path": "media/06525c190cd29462bf708beedcf2dd86.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/focal-shift-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d8621e52db925c8d69c6da997747f829.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rack-focus-053-rack-focus-mini.webp",
+      "alt": "Rack Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/396e12ac75a8a03a4ec4597dc1dbcafd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/053-rack-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/981b5a1b101b132c26d5122fc8a71f06.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/focus-change/hero.jpg",
+      "alt": "Focus Change",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "4b714d1f6296df60f8163ca4636516364f023772ae11bc107e3f7241601dcf10"
+}

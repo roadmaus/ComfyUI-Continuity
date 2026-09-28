@@ -1,0 +1,546 @@
+{
+  "id": "camera-angles/low-angle",
+  "slug": "low-angle",
+  "title": "Low Angle",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/low-angle",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+  "detail": "details/camera-angles/low-angle.json",
+  "aliases": [
+    "Low angle shot",
+    "Tatami-level composition",
+    "Ozu-style low camera"
+  ],
+  "description": "A low-angle shot looks upward at the subject from below eye level, so verticals converge and ceilings or sky take weight. The camera is not merely low; it is pitched up, and that pitch is what assigns monument or intimidation.",
+  "thumbnail": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+  "video": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Looking up makes a body into architecture. Door frames, ceiling beams, and the underside of a chin enter the picture."
+        },
+        {
+          "type": "paragraph",
+          "text": "A boss in a doorway, a statue, a threat: the subject occupies the top of the frame and we occupy the floor. Citizen Kane built ceilings (and sometimes dug a pit) so the look-up had a real lid."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not confuse this with a low camera that stays level. A tatami or seated-height camera with a horizontal sightline is a height choice, close to seated Eye Level, not a low angle.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Ozu's rooms sit low without turning the family into towers. If you pitch up on that setup, you have changed the sentence."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a peer conversation and for a true worm's view of a skyscraper. Moderate look-up is a portrait with rank."
+        },
+        {
+          "type": "paragraph",
+          "text": "Extreme look-up is Worm's-Eye View.",
+          "links": [
+            {
+              "text": "Worm's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Worm's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Looking up makes a body into architecture. Door frames, ceiling beams, and the underside of a chin enter the picture.A boss in a doorway, a statue, a threat: the subject occupies the top of the frame and we occupy the floor. Citizen Kane built ceilings (and sometimes dug a pit) so the look-up had a real lid.Do not confuse this with a low camera that stays level. A tatami or seated-height camera with a horizontal sightline is a height choice, close to seated Eye Level, not a low angle.Ozu's rooms sit low without turning the family into towers. If you pitch up on that setup, you have changed the sentence.It is the wrong tool for a peer conversation and for a true worm's view of a skyscraper. Moderate look-up is a portrait with rank.Extreme look-up is Worm's-Eye View."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Drop the camera below the subject's eyes (chest, waist, or a hole in the floor) and tilt up until verticals converge toward the top of the frame. A wider lens exaggerates the convergence; a longer lens from the same height still looks up but with less stretch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Practicals on the ceiling become motivated keys. Keep roll level unless you are also doing a Dutch Angle.",
+          "links": [
+            {
+              "text": "Dutch Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: low-angle looking up, converging verticals, ceiling or sky in frame, not camera on the dirt looking straight up."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dutch Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/dutch-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Drop the camera below the subject's eyes (chest, waist, or a hole in the floor) and tilt up until verticals converge toward the top of the frame. A wider lens exaggerates the convergence; a longer lens from the same height still looks up but with less stretch.Practicals on the ceiling become motivated keys. Keep roll level unless you are also doing a Dutch Angle.Prompt: low-angle looking up, converging verticals, ceiling or sky in frame, not camera on the dirt looking straight up."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for power, monument, or intimidation: someone who should fill the doorway. Concrete beat: a standing figure shot from a seated listener, ceiling beams closing over the head."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not pitch up on every protagonist as a default poster."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for power, monument, or intimidation: someone who should fill the doorway. Concrete beat: a standing figure shot from a seated listener, ceiling beams closing over the head.Do not pitch up on every protagonist as a default poster."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye Level keeps the sightline horizontal. Worm's-Eye View looks sharply up from ground or below until the subject is a tower and verticals collapse inward.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            },
+            {
+              "text": "Worm's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Ground Level is a floor-height camera; it may look along the dirt instead of up. High Angle is the opposing pitch.",
+          "links": [
+            {
+              "text": "Ground Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            },
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Trunk Shot looks up from inside a container, which is a location, not only a tilt.",
+          "links": [
+            {
+              "text": "Trunk Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/trunk-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Worm's-Eye ViewThe subject is a tower. You are dust.",
+          "displayText": "Worm's-Eye View\nThe subject is a tower. You are dust.",
+          "links": [
+            {
+              "text": "Worm's-Eye ViewThe subject is a tower. You are dust.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "displayText": "High Angle\nVulnerability, surveillance, or a map of a room.",
+          "links": [
+            {
+              "text": "High AngleVulnerability, surveillance, or a map of a room.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Worm's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+        },
+        {
+          "text": "Ground Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        },
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Trunk Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/trunk-shot"
+        },
+        {
+          "text": "Worm's-Eye ViewThe subject is a tower. You are dust.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+        },
+        {
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/887c6cd61bc4f3b795172ec2c50b6c45.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/worms-eye.webp",
+          "alt": "Worm's-Eye View"
+        },
+        {
+          "kind": "image",
+          "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+          "alt": "High Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        }
+      ],
+      "sourceText": "Compared with similar shots Eye Level keeps the sightline horizontal. Worm's-Eye View looks sharply up from ground or below until the subject is a tower and verticals collapse inward.Ground Level is a floor-height camera; it may look along the dirt instead of up. High Angle is the opposing pitch.Trunk Shot looks up from inside a container, which is a location, not only a tilt.Worm's-Eye ViewThe subject is a tower. You are dust.High AngleVulnerability, surveillance, or a map of a room.Eye LevelDefault honesty. Do not look down or up unless you mean it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Citizen Kane puts ceilings and looming bodies into confrontations by looking up from a lowered camera. Touch of Evil uses the same grammar on Quinlan so bulk becomes the image."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Dark Knight often pitches up on costume and architecture so the figure reads as a structure. Tokyo Story and Late Spring are the usual mix-up: low seated cameras, mostly level, not this tilt."
+        },
+        {
+          "type": "list-item",
+          "text": "Tokyo Story 1953Domestic conversations filmed from a low, stable viewpoint.",
+          "displayText": "Tokyo Story 1953\nDomestic conversations filmed from a low, stable viewpoint."
+        },
+        {
+          "type": "list-item",
+          "text": "Late Spring 1949Seated interiors and carefully arranged domestic exchanges.",
+          "displayText": "Late Spring 1949\nSeated interiors and carefully arranged domestic exchanges."
+        },
+        {
+          "type": "list-item",
+          "text": "Citizen Kane 1941Low-angle confrontations make ceilings and looming bodies part of the image.",
+          "displayText": "Citizen Kane 1941\nLow-angle confrontations make ceilings and looming bodies part of the image."
+        },
+        {
+          "type": "list-item",
+          "text": "Touch of Evil 1958Quinlan’s imposing low-angle appearances.",
+          "displayText": "Touch of Evil 1958\nQuinlan’s imposing low-angle appearances."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/930af65c060828a494ee369bac51cdff.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-angle/famous/00-tokyo-story-1953.jpg",
+          "alt": "Tokyo Story 1953"
+        },
+        {
+          "kind": "image",
+          "path": "media/e0316b1dbe416582ae400093322ea854.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-angle/famous/01-late-spring-1949.jpg",
+          "alt": "Late Spring 1949"
+        },
+        {
+          "kind": "image",
+          "path": "media/96668f5f801dbfda11f9c766370007c3.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-angle/famous/00-citizen-kane-1941.jpg",
+          "alt": "Citizen Kane 1941"
+        },
+        {
+          "kind": "image",
+          "path": "media/603b6e85dd34eeeca2cc15790341cb61.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-angle/famous/01-touch-of-evil-1958.jpg",
+          "alt": "Touch of Evil 1958"
+        }
+      ],
+      "sourceText": "In film Citizen Kane puts ceilings and looming bodies into confrontations by looking up from a lowered camera. Touch of Evil uses the same grammar on Quinlan so bulk becomes the image.The Dark Knight often pitches up on costume and architecture so the figure reads as a structure. Tokyo Story and Late Spring are the usual mix-up: low seated cameras, mostly level, not this tilt.Tokyo Story 1953Domestic conversations filmed from a low, stable viewpoint.Late Spring 1949Seated interiors and carefully arranged domestic exchanges.Citizen Kane 1941Low-angle confrontations make ceilings and looming bodies part of the image.Touch of Evil 1958Quinlan’s imposing low-angle appearances."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the look-up and the ceiling. Quote: Low-angle shot looking up at [Subject], converging verticals, heroic or oppressive height, Citizen Kane floor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: camera below their eyes, horizon low, ceiling or sky in frame, face still a portrait. Ban from the ground looking straight up unless you want Worm's-Eye View.",
+          "links": [
+            {
+              "text": "Worm's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+            }
+          ]
+        },
+        {
+          "type": "quote",
+          "text": "A quiet family conversation in a modest room, filmed from a low seated height with the camera level. Two adults sit beside a low table, doorways carefully balanced, no dramatic upward angle. Locked shot, small natural gestures, patient pauses."
+        }
+      ],
+      "links": [
+        {
+          "text": "Worm's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+        },
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+quiet+family+conversation+in+a+modest+room,+filmed+from+a+low+seated+height+with+the+camera+level.+Two+adults+sit+beside+a+low+table,+doorways+carefully+balanced,+no+dramatic+upward+angle.+Locked+shot,+small+natural+gestures,+patient+pauses."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the look-up and the ceiling. Quote: Low-angle shot looking up at [Subject], converging verticals, heroic or oppressive height, Citizen Kane floor.Add: camera below their eyes, horizon low, ceiling or sky in frame, face still a portrait. Ban from the ground looking straight up unless you want Worm's-Eye View.Copy promptUse in Video GeneratorA quiet family conversation in a modest room, filmed from a low seated height with the camera level. Two adults sit beside a low table, doorways carefully balanced, no dramatic upward angle. Locked shot, small natural gestures, patient pauses.A quiet family conversation in a modest room, filmed from a low seated height with the camera level. Two adults sit beside a low table, doorways carefully balanced, no dramatic upward angle. Locked shot, small natural gestures, patient pauses."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Worm's-Eye View or a generic Ground Level boot shot. Tell: only nostrils and a vanishing point in the sky, or only shoes.",
+          "links": [
+            {
+              "text": "Worm's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+            },
+            {
+              "text": "Ground Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: below eye height, tilted up, eyes and mouth still readable, ceiling in. The other mix-up is Ozu: low height, level camera."
+        },
+        {
+          "type": "paragraph",
+          "text": "If doorways and floor lines stay orthogonal, you never pitched up."
+        }
+      ],
+      "links": [
+        {
+          "text": "Worm's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+        },
+        {
+          "text": "Ground Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Worm's-Eye View or a generic Ground Level boot shot. Tell: only nostrils and a vanishing point in the sky, or only shoes.Fix: below eye height, tilted up, eyes and mouth still readable, ceiling in. The other mix-up is Ozu: low height, level camera.If doorways and floor lines stay orthogonal, you never pitched up."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a low angle in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A low-angle shot looks up at the subject from below eye level. Verticals converge, ceilings or sky gain area, and the figure reads larger than an eye-level portrait."
+        },
+        {
+          "type": "heading",
+          "text": "Low angle vs worm's-eye view",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A low angle is a moderate look-up that still functions as a face. A worm's-eye view is extreme: lens at or below ground, looking sharply up, verticals collapsing inward, the subject as a tower."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a low angle?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when power, monument, or intimidation should be in the geometry: a standing threat over a seated listener, a figure in a doorway. Do not use it as default flattery."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a low angle for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Low-angle shot looking up at [Subject], camera below their eyes, converging verticals, ceiling in frame. Say it is not a worm's-eye or floor-only boot shot."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a low angle in film?A low-angle shot looks up at the subject from below eye level. Verticals converge, ceilings or sky gain area, and the figure reads larger than an eye-level portrait.Low angle vs worm's-eye viewA low angle is a moderate look-up that still functions as a face. A worm's-eye view is extreme: lens at or below ground, looking sharply up, verticals collapsing inward, the subject as a tower.When should I use a low angle?Use it when power, monument, or intimidation should be in the geometry: a standing threat over a seated listener, a figure in a doorway. Do not use it as default flattery.How do I prompt a low angle for AI image or video?Write: Low-angle shot looking up at [Subject], camera below their eyes, converging verticals, ceiling in frame. Say it is not a worm's-eye or floor-only boot shot."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the look-up and the ceiling. Quote: Low-angle shot looking up at [Subject], converging verticals, heroic or oppressive height, Citizen Kane floor.",
+      "Add: camera below their eyes, horizon low, ceiling or sky in frame, face still a portrait. Ban from the ground looking straight up unless you want Worm's-Eye View."
+    ],
+    "example": "A quiet family conversation in a modest room, filmed from a low seated height with the camera level. Two adults sit beside a low table, doorways carefully balanced, no dramatic upward angle. Locked shot, small natural gestures, patient pauses."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b69312f1e9da200b5c8e7a82ad59baf3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/low-angle.jpg",
+      "alt": "Low Angle frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/887c6cd61bc4f3b795172ec2c50b6c45.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/worms-eye.webp",
+      "alt": "Worm's-Eye View"
+    },
+    {
+      "kind": "image",
+      "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+      "alt": "High Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/930af65c060828a494ee369bac51cdff.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-angle/famous/00-tokyo-story-1953.jpg",
+      "alt": "Tokyo Story 1953"
+    },
+    {
+      "kind": "image",
+      "path": "media/e0316b1dbe416582ae400093322ea854.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-angle/famous/01-late-spring-1949.jpg",
+      "alt": "Late Spring 1949"
+    },
+    {
+      "kind": "image",
+      "path": "media/96668f5f801dbfda11f9c766370007c3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-angle/famous/00-citizen-kane-1941.jpg",
+      "alt": "Citizen Kane 1941"
+    },
+    {
+      "kind": "image",
+      "path": "media/603b6e85dd34eeeca2cc15790341cb61.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-angle/famous/01-touch-of-evil-1958.jpg",
+      "alt": "Touch of Evil 1958"
+    },
+    {
+      "kind": "image",
+      "path": "media/a7975b985de64028ddbc185b315d6b6d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/low-angle/hero.jpg",
+      "alt": "Low Angle",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "f052622d7546dcaaf43c00db52c6ffc904e5cd6a62b213f3becc508c3b863e15"
+}

@@ -1,0 +1,389 @@
+{
+  "id": "camera-movement/super-dolly-in",
+  "slug": "super-dolly-in",
+  "title": "Super Dolly In",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/super-dolly-in",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/super-dolly-in-super-dolly-in-mini.webp",
+  "detail": "details/camera-movement/super-dolly-in.json",
+  "aliases": [],
+  "description": "A super dolly in is a long aggressive travel that eats the room, parallax violent, the face arriving too fast. It is a dolly in stretched until geography collapses into a close-up in one move.",
+  "thumbnail": "media/211c93f1a4d8ce4fc5a8d44e46d80925.webp",
+  "video": "media/c010b4b3bba2b3201e5c4e5e5d02a882.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/super-dolly-in-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A normal dolly is not enough. The room is consumed: lamps, furniture, and walls shear hard, and the face is suddenly too close."
+        },
+        {
+          "type": "paragraph",
+          "text": "Threat, obsession, a corridor that becomes a portrait. A crash zoom does this optically with no shear."
+        },
+        {
+          "type": "paragraph",
+          "text": "A polite dolly-in keeps manners. Super is length plus speed plus violent parallax."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the path is short, you only had a push."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A normal dolly is not enough. The room is consumed: lamps, furniture, and walls shear hard, and the face is suddenly too close.Threat, obsession, a corridor that becomes a portrait. A crash zoom does this optically with no shear.A polite dolly-in keeps manners. Super is length plus speed plus violent parallax.If the path is short, you only had a push."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Long track or a long steadicam drive on the lens axis, often wide at the start so the room can be eaten. Speed is high; the end is a close-up."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Super dolly in on [Subject], a long aggressive travel that eats the room, parallax violent, the face arriving too fast."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Long track or a long steadicam drive on the lens axis, often wide at the start so the room can be eaten. Speed is high; the end is a close-up.Prompt: Super dolly in on [Subject], a long aggressive travel that eats the room, parallax violent, the face arriving too fast."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when approach must feel too much: a threat, a corridor, a face that arrives early. Do not use it for a gentle thought."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when approach must feel too much: a threat, a corridor, a face that arrives early. Do not use it for a gentle thought."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dolly In is the polite wheel-in, same axis, human speed. Crash Zoom In snaps glass from a locked body.",
+          "links": [
+            {
+              "text": "Dolly In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            },
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Super-dolly-in translates far and fast until the room is gone."
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "displayText": "Dolly In\nEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "links": [
+            {
+              "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "displayText": "Crash Zoom In\nPunctuate a hit, a realization, or a comic sting.",
+          "links": [
+            {
+              "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+          "alt": "Dolly In"
+        },
+        {
+          "kind": "video",
+          "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+          "alt": "Crash Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Dolly In is the polite wheel-in, same axis, human speed. Crash Zoom In snaps glass from a locked body.Super-dolly-in translates far and fast until the room is gone.Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.Crash Zoom InPunctuate a hit, a realization, or a comic sting.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Shining's long hotel approaches eat space toward a person, whether on wheels or a vest. Oldboy's corridor drive-in is the grammar of a long aggressive travel that becomes a fight and a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use them as space-eating approach, not as frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Shining's long hotel approaches eat space toward a person, whether on wheels or a vest. Oldboy's corridor drive-in is the grammar of a long aggressive travel that becomes a fight and a face.Use them as space-eating approach, not as frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Long, fast, parallax. Still: Super dolly in on [Subject], a long aggressive travel that eats the room, parallax violent, the face arriving too fast."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: A long, fast dolly in toward [Subject], the room collapsing into a close-up. Forbid a zoom."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the length of the path."
+        },
+        {
+          "type": "quote",
+          "text": "A long, fast dolly in toward [Subject], the room collapsing into a close-up."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+long,+fast+dolly+in+toward+[Subject],+the+room+collapsing+into+a+close-up."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Long, fast, parallax. Still: Super dolly in on [Subject], a long aggressive travel that eats the room, parallax violent, the face arriving too fast.Video: A long, fast dolly in toward [Subject], the room collapsing into a close-up. Forbid a zoom.Name the length of the path.Copy promptUse in Video GeneratorA long, fast dolly in toward [Subject], the room collapsing into a close-up.A long, fast dolly in toward [Subject], the room collapsing into a close-up."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a crash zoom or a short push. The tell: no long shear of the room, or the whole picture simply enlarges."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: a long physical path, violent parallax, face arriving too fast."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a crash zoom or a short push. The tell: no long shear of the room, or the whole picture simply enlarges.The fix: a long physical path, violent parallax, face arriving too fast."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Super Dolly In in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A super dolly in is a long, fast physical approach that eats the room with violent parallax until the face is suddenly close."
+        },
+        {
+          "type": "heading",
+          "text": "Super Dolly In vs Dolly In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dolly in is a controlled approach. Super dolly in is the same axis stretched in length and speed until geography collapses into a close-up."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Super Dolly In?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a polite approach is not enough: threat, corridor, obsession. Do not use it for a gentle thought."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Super Dolly In for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a long fast travel with violent parallax. Example: Super dolly in on [Subject], a long aggressive travel that eats the room, the face arriving too fast."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Super Dolly In in film?A super dolly in is a long, fast physical approach that eats the room with violent parallax until the face is suddenly close.Super Dolly In vs Dolly InA dolly in is a controlled approach. Super dolly in is the same axis stretched in length and speed until geography collapses into a close-up.When should I use Super Dolly In?Use it when a polite approach is not enough: threat, corridor, obsession. Do not use it for a gentle thought.How do I prompt Super Dolly In for AI image or video?Write a long fast travel with violent parallax. Example: Super dolly in on [Subject], a long aggressive travel that eats the room, the face arriving too fast."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Long, fast, parallax. Still: Super dolly in on [Subject], a long aggressive travel that eats the room, parallax violent, the face arriving too fast.",
+      "Video: A long, fast dolly in toward [Subject], the room collapsing into a close-up. Forbid a zoom.",
+      "Name the length of the path."
+    ],
+    "example": "A long, fast dolly in toward [Subject], the room collapsing into a close-up."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/c010b4b3bba2b3201e5c4e5e5d02a882.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/super-dolly-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/211c93f1a4d8ce4fc5a8d44e46d80925.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/super-dolly-in-super-dolly-in-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6706bd088a4388fe82f3522e50b6ec7d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/super-dolly-in.jpg",
+      "alt": "Super Dolly In frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+      "alt": "Dolly In"
+    },
+    {
+      "kind": "video",
+      "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": "Crash Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0fabffb483a5f0d47f4367847e14e198.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/super-dolly-in/hero.jpg",
+      "alt": "Super Dolly In",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "7770d98c82145d0b36cc2cabaeb57c289b292578bb7411e09c2b51e104f07e30"
+}

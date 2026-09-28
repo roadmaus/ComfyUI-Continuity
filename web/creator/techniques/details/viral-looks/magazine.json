@@ -1,0 +1,373 @@
+{
+  "id": "viral-looks/magazine",
+  "slug": "magazine",
+  "title": "Magazine",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/magazine",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/magazine.webp",
+  "detail": "details/viral-looks/magazine.json",
+  "aliases": [],
+  "description": "Magazine, in magazine cover cinematography, is a designed portrait with air for a masthead you will not render: fashion lighting, thumbnail-readable wardrobe, a page that knows it will be sold. Layout first, person second, and fake headlines will garble.",
+  "thumbnail": "media/62f5bd9523dda81f3bfb6a28fe304aa0.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Arrivals, identity as product, fashion: beauty key, clean edges, negative space at top or side. Superstar is the fame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Magazine is the geometry of the cover. A war still does not want this unless the joke is a cover."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the frame is dirty, flash-stolen, or packed to the edges. If it cannot survive a masthead, it is a pretty portrait, not this look."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not draw type."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Arrivals, identity as product, fashion: beauty key, clean edges, negative space at top or side. Superstar is the fame.Magazine is the geometry of the cover. A war still does not want this unless the joke is a cover.It is the wrong tool when the frame is dirty, flash-stolen, or packed to the edges. If it cannot survive a masthead, it is a pretty portrait, not this look.Do not draw type."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height, 85mm, lock-off. Beauty key, clean background, designed negative space."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wardrobe that reads at thumbnail size. Leave air."
+        },
+        {
+          "type": "paragraph",
+          "text": "No paparazzi flash unless the magazine is slumming. Prompt: Magazine cover of [Subject], masthead space, fashion lighting, a page that knows it will be sold."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Eye height, 85mm, lock-off. Beauty key, clean background, designed negative space.Wardrobe that reads at thumbnail size. Leave air.No paparazzi flash unless the magazine is slumming. Prompt: Magazine cover of [Subject], masthead space, fashion lighting, a page that knows it will be sold."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A cover still, identity as product, fashion arrival. Do not use it on a war beat, and do not render fake headlines."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A cover still, identity as product, fashion arrival. Do not use it on a war beat, and do not render fake headlines."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Glam is the lamp. Superstar is the social fact of being watched.",
+          "links": [
+            {
+              "text": "Glam",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            },
+            {
+              "text": "Superstar",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/superstar"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Magazine is layout: masthead space, thumbnail law, a page. 2000s Paparazzi is the opposite, stolen and ugly.",
+          "links": [
+            {
+              "text": "2000s Paparazzi",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "GlamSell the face.",
+          "displayText": "Glam\nSell the face.",
+          "links": [
+            {
+              "text": "GlamSell the face.",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SuperstarThey are already famous in the frame.",
+          "displayText": "Superstar\nThey are already famous in the frame.",
+          "links": [
+            {
+              "text": "SuperstarThey are already famous in the frame.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/superstar"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Glam",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "Superstar",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/superstar"
+        },
+        {
+          "text": "2000s Paparazzi",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi"
+        },
+        {
+          "text": "GlamSell the face.",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "SuperstarThey are already famous in the frame.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/superstar"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d0c6118ba609a42d93a75e2dc10200d3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/glam.webp",
+          "alt": "Glam"
+        },
+        {
+          "kind": "image",
+          "path": "media/31002824b52ca76758c3e755e8b6f0d6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/superstar-superstar-mini.webp",
+          "alt": "Superstar"
+        },
+        {
+          "kind": "video",
+          "path": "media/776b8f7833f86445f2ce4541b61aee89.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/superstar-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Glam is the lamp. Superstar is the social fact of being watched.Magazine is layout: masthead space, thumbnail law, a page. 2000s Paparazzi is the opposite, stolen and ugly.GlamSell the face.SuperstarThey are already famous in the frame.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Devil Wears Prada treats covers as labor and geometry. Fashion films hold the same clean key and empty air."
+        },
+        {
+          "type": "paragraph",
+          "text": "The still is the cover without type. Grammar, not a masthead to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Devil Wears Prada treats covers as labor and geometry. Fashion films hold the same clean key and empty air.The still is the cover without type. Grammar, not a masthead to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Design the air, then the face. Magazine cover of [Subject], masthead space, fashion lighting, a page that knows it will be sold."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add 85mm, beauty key, negative space at top or side, thumbnail wardrobe, no letters, no sidewalk flash."
+        },
+        {
+          "type": "quote",
+          "text": "Magazine cover of [Subject], masthead space, fashion lighting, a page that knows it will be sold."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Magazine+cover+of+[Subject],+masthead+space,+fashion+lighting,+a+page+that+knows+it+will+be+sold."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Design the air, then the face. Magazine cover of [Subject], masthead space, fashion lighting, a page that knows it will be sold.Add 85mm, beauty key, negative space at top or side, thumbnail wardrobe, no letters, no sidewalk flash.Copy promptUse in Image GeneratorMagazine cover of [Subject], masthead space, fashion lighting, a page that knows it will be sold.Magazine cover of [Subject], masthead space, fashion lighting, a page that knows it will be sold."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A pretty portrait with no space, or fake headlines, or a slide into Superstar without layout. The tell is a packed frame.",
+          "links": [
+            {
+              "text": "Superstar",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/superstar"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: masthead air, clean key, no type."
+        }
+      ],
+      "links": [
+        {
+          "text": "Superstar",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/superstar"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A pretty portrait with no space, or fake headlines, or a slide into Superstar without layout. The tell is a packed frame.Fix it: masthead air, clean key, no type."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Magazine in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A cover recipe: fashion lighting, designed negative space, wardrobe that reads small. You do not render the masthead. The page is the shot."
+        },
+        {
+          "type": "heading",
+          "text": "Magazine vs Superstar",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Superstar is fame in the light. Magazine is fame as layout. If there is no air for a title, you wanted superstar, or you failed the cover."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Magazine?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fashion, identity as product, arrivals. Skip war stills and any frame that cannot spare a masthead."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Magazine for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "85mm, beauty key, empty air, then: Magazine cover of [Subject], masthead space, fashion lighting, a page that knows it will be sold. Forbid letters."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Magazine in film?A cover recipe: fashion lighting, designed negative space, wardrobe that reads small. You do not render the masthead. The page is the shot.Magazine vs SuperstarSuperstar is fame in the light. Magazine is fame as layout. If there is no air for a title, you wanted superstar, or you failed the cover.When should I use Magazine?Fashion, identity as product, arrivals. Skip war stills and any frame that cannot spare a masthead.How do I prompt Magazine for AI image or video?85mm, beauty key, empty air, then: Magazine cover of [Subject], masthead space, fashion lighting, a page that knows it will be sold. Forbid letters."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Design the air, then the face. Magazine cover of [Subject], masthead space, fashion lighting, a page that knows it will be sold.",
+      "Add 85mm, beauty key, negative space at top or side, thumbnail wardrobe, no letters, no sidewalk flash."
+    ],
+    "example": "Magazine cover of [Subject], masthead space, fashion lighting, a page that knows it will be sold."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/62f5bd9523dda81f3bfb6a28fe304aa0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/magazine.webp",
+      "alt": "Magazine example"
+    },
+    {
+      "kind": "image",
+      "path": "media/d0c6118ba609a42d93a75e2dc10200d3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/glam.webp",
+      "alt": "Glam"
+    },
+    {
+      "kind": "image",
+      "path": "media/31002824b52ca76758c3e755e8b6f0d6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/superstar-superstar-mini.webp",
+      "alt": "Superstar"
+    },
+    {
+      "kind": "video",
+      "path": "media/776b8f7833f86445f2ce4541b61aee89.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/superstar-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/789aa607e2dc28f38d4f9edf107a2665.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/magazine/hero.jpg",
+      "alt": "Magazine",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "de0a9fc2d661b9e8e0da6e38ef35d40830096a16bc97e5ccab22a9790d68238b"
+}

@@ -1,0 +1,381 @@
+{
+  "id": "composition/vanishing-point",
+  "slug": "vanishing-point",
+  "title": "Vanishing Point",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/vanishing-point",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vanishing-point.webp",
+  "detail": "details/composition/vanishing-point.json",
+  "aliases": [],
+  "description": "A vanishing point in vanishing point composition is the apparent meeting place of parallel lines in perspective, a destination for rails, a road, or a colonnade. The person often stands as a gate in front of that meeting, or occupies it as the target of the architecture.",
+  "thumbnail": "media/46c7ac518d22d09212194c30e44b4234.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "There is a long way still to go when the point sits beyond the figure. Space owns the future."
+        },
+        {
+          "type": "paragraph",
+          "text": "The body is a threshold, not the altar. If the point sits on the face, the architecture aims at them like a weapon or a blessing."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool in a flat elevation with no receding parallels. A painted backdrop that does not converge cannot offer a vanishing point."
+        },
+        {
+          "type": "paragraph",
+          "text": "You would be naming a ghost. One-point, two-point, and three-point perspective all have vanishing points."
+        },
+        {
+          "type": "paragraph",
+          "text": "The compositional choice is where you put them, and whether the subject blocks, occupies, or is ignored by that meeting."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function There is a long way still to go when the point sits beyond the figure. Space owns the future.The body is a threshold, not the altar. If the point sits on the face, the architecture aims at them like a weapon or a blessing.It is the wrong tool in a flat elevation with no receding parallels. A painted backdrop that does not converge cannot offer a vanishing point.You would be naming a ghost. One-point, two-point, and three-point perspective all have vanishing points.The compositional choice is where you put them, and whether the subject blocks, occupies, or is ignored by that meeting."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stand where real parallels recede: tracks, a highway, a colonnade. Choose height (eye-level keeps the point near the horizon; a low camera lifts it)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Place the subject on the point, in front of it, or off it. A wider lens makes the suck toward infinity more violent."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Deep vanishing point beyond [Subject], rails or road sucking the eye to infinity, the person as a gate."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Stand where real parallels recede: tracks, a highway, a colonnade. Choose height (eye-level keeps the point near the horizon; a low camera lifts it).Place the subject on the point, in front of it, or off it. A wider lens makes the suck toward infinity more violent.Prompt: Deep vanishing point beyond [Subject], rails or road sucking the eye to infinity, the person as a gate."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when distance is the meaning: a road, a station, a landing site, a life still unwalked. Do not claim a vanishing point in a flat, shallow room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when distance is the meaning: a road, a station, a landing site, a life still unwalked. Do not claim a vanishing point in a flat, shallow room."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "One-Point Perspective is the special case of a single, often axial, vanishing point with the camera squared. Vanishing-point composition can be a two-point street corner with the meeting off to the side.",
+          "links": [
+            {
+              "text": "One-Point Perspective",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Leading Lines steer the eye but may never meet in frame. Extreme Long Shot often includes a distant point.",
+          "links": [
+            {
+              "text": "Leading Lines",
+              "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+            },
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The point is a location in the diagram, not a shot size."
+        },
+        {
+          "type": "list-item",
+          "text": "One-Point PerspectiveDestiny has a vanishing point.",
+          "displayText": "One-Point Perspective\nDestiny has a vanishing point.",
+          "links": [
+            {
+              "text": "One-Point PerspectiveDestiny has a vanishing point.",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Leading LinesArchitecture should point.",
+          "displayText": "Leading Lines\nArchitecture should point.",
+          "links": [
+            {
+              "text": "Leading LinesArchitecture should point.",
+              "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "One-Point Perspective",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Leading Lines",
+          "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+        },
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "One-Point PerspectiveDestiny has a vanishing point.",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Leading LinesArchitecture should point.",
+          "url": "https://melies.co/cinematic-techniques/composition/leading-lines"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/fd42e6b828b510faf2cf566bcbd2d93b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-point-perspective-037-symmetry-and-one-point-perspective-mini.webp",
+          "alt": "One-Point Perspective"
+        },
+        {
+          "kind": "video",
+          "path": "media/6a0595c4b52cce7843ef5c4ab8eb4adf.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/037-symmetry-and-one-point-perspective-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/13ec67852b1960715c9beedb1ebfdf5b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/leading-lines.webp",
+          "alt": "Leading Lines"
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots One-Point Perspective is the special case of a single, often axial, vanishing point with the camera squared. Vanishing-point composition can be a two-point street corner with the meeting off to the side.Leading Lines steer the eye but may never meet in frame. Extreme Long Shot often includes a distant point.The point is a location in the diagram, not a shot size.One-Point PerspectiveDestiny has a vanishing point.Leading LinesArchitecture should point.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Paris, Texas aims roads and rails at a horizon that keeps going after the man stops. Close Encounters builds landing-site perspective as a meeting with something that arrives from the point."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stations, docks, and desert highways are the same grammar: infinity as a character."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Paris, Texas aims roads and rails at a horizon that keeps going after the man stops. Close Encounters builds landing-site perspective as a meeting with something that arrives from the point.Stations, docks, and desert highways are the same grammar: infinity as a character."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place the point and the person. Deep vanishing point beyond [Subject], rails or road sucking the eye to infinity, the person as a gate."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the parallels (rails, highway, colonnade). Say the point is on the horizon beyond them, or on their chest if they are the target."
+        },
+        {
+          "type": "quote",
+          "text": "Deep vanishing point beyond [Subject], rails or road sucking the eye to infinity, the person as a gate."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Deep+vanishing+point+beyond+[Subject],+rails+or+road+sucking+the+eye+to+infinity,+the+person+as+a+gate."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Place the point and the person. Deep vanishing point beyond [Subject], rails or road sucking the eye to infinity, the person as a gate.Name the parallels (rails, highway, colonnade). Say the point is on the horizon beyond them, or on their chest if they are the target.Copy promptUse in Image GeneratorDeep vanishing point beyond [Subject], rails or road sucking the eye to infinity, the person as a gate.Deep vanishing point beyond [Subject], rails or road sucking the eye to infinity, the person as a gate."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a centered figure with no converging lines. The tell is a person in the middle of a flat field and a prompt that only says vanishing."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to include actual receding parallels, or to switch to Centered Composition and stop claiming perspective.",
+          "links": [
+            {
+              "text": "Centered Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Centered Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a centered figure with no converging lines. The tell is a person in the middle of a flat field and a prompt that only says vanishing.The fix is to include actual receding parallels, or to switch to Centered Composition and stop claiming perspective."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a vanishing point in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is where parallel lines appear to meet in the picture. Roads, rails, and halls aim there. Compositionally it is a destination: beyond the figure, on the figure, or off to one side."
+        },
+        {
+          "type": "heading",
+          "text": "Vanishing Point vs One-Point Perspective",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "One-point perspective uses a single vanishing point and a camera squared to a plane, often on axis. A vanishing point also exists in two-point views of a building corner. One-point is a construction. The vanishing point is the meeting itself."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use vanishing point?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when distance should act: roads, tracks, naves, anything that still has a long way to go. Skip it in shallow, flat rooms with no receding edges."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt vanishing point for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the parallels and where they meet. Example: Deep vanishing point beyond [Subject], rails or road sucking the eye to infinity, the person as a gate. If the point should sit on the body, say vanishing point on the chest, architecture aiming at them."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a vanishing point in film?It is where parallel lines appear to meet in the picture. Roads, rails, and halls aim there. Compositionally it is a destination: beyond the figure, on the figure, or off to one side.Vanishing Point vs One-Point PerspectiveOne-point perspective uses a single vanishing point and a camera squared to a plane, often on axis. A vanishing point also exists in two-point views of a building corner. One-point is a construction. The vanishing point is the meeting itself.When should I use vanishing point?Use it when distance should act: roads, tracks, naves, anything that still has a long way to go. Skip it in shallow, flat rooms with no receding edges.How do I prompt vanishing point for AI image or video?Name the parallels and where they meet. Example: Deep vanishing point beyond [Subject], rails or road sucking the eye to infinity, the person as a gate. If the point should sit on the body, say vanishing point on the chest, architecture aiming at them."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Place the point and the person. Deep vanishing point beyond [Subject], rails or road sucking the eye to infinity, the person as a gate.",
+      "Name the parallels (rails, highway, colonnade). Say the point is on the horizon beyond them, or on their chest if they are the target."
+    ],
+    "example": "Deep vanishing point beyond [Subject], rails or road sucking the eye to infinity, the person as a gate."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/46c7ac518d22d09212194c30e44b4234.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vanishing-point.webp",
+      "alt": "Vanishing Point example"
+    },
+    {
+      "kind": "image",
+      "path": "media/fd42e6b828b510faf2cf566bcbd2d93b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-point-perspective-037-symmetry-and-one-point-perspective-mini.webp",
+      "alt": "One-Point Perspective"
+    },
+    {
+      "kind": "video",
+      "path": "media/6a0595c4b52cce7843ef5c4ab8eb4adf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/037-symmetry-and-one-point-perspective-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/13ec67852b1960715c9beedb1ebfdf5b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/leading-lines.webp",
+      "alt": "Leading Lines"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/816a29da9bdfbf7c58050aba8d33476e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/vanishing-point/hero.jpg",
+      "alt": "Vanishing Point",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "81da6dc3173098b2a54c4becb9517302f9b608c37a5bd98e7d6ef59beb74c793"
+}

@@ -1,0 +1,430 @@
+{
+  "id": "camera-movement/whip-pan",
+  "slug": "whip-pan",
+  "title": "Whip Pan",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/whip-pan",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+  "detail": "details/camera-movement/whip-pan.json",
+  "aliases": [
+    "swish pan",
+    "flash pan",
+    "Swish-cut join"
+  ],
+  "description": "A whip pan pans so quickly that the image blurs into horizontal streaks, then snaps to a new composition. Two shots can be joined inside compatible directional motion blur, creating the impression of one fast reorientation.",
+  "thumbnail": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+  "video": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The move is a transition, a punchline, or a sudden shift of attention. Energy transfers between spaces that may not even be adjacent."
+        },
+        {
+          "type": "paragraph",
+          "text": "An ordinary change of location can feel like a comic snap if the blur matches. It is the wrong tool for a readable pan across a mural, and the wrong tool if you need to see the travel."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the landing is not sharp, the whip is only a smear."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The move is a transition, a punchline, or a sudden shift of attention. Energy transfers between spaces that may not even be adjacent.An ordinary change of location can feel like a comic snap if the blur matches. It is the wrong tool for a readable pan across a mural, and the wrong tool if you need to see the travel.If the landing is not sharp, the whip is only a smear."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Match blur direction, luminance, duration, and acceleration if you cut inside the blur. Design the sharp landing before generating the two sides."
+        },
+        {
+          "type": "paragraph",
+          "text": "Opposite pan directions or mismatched brightness expose the seam. Prompt a violent whip pan off the subject, horizontal motion blur streaking the world, then a snap resolve on the next beat."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Match blur direction, luminance, duration, and acceleration if you cut inside the blur. Design the sharp landing before generating the two sides.Opposite pan directions or mismatched brightness expose the seam. Prompt a violent whip pan off the subject, horizontal motion blur streaking the world, then a snap resolve on the next beat."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it as a transition, punchline, or sudden attention shift. Concrete beat: a look off, a blur, a new room already in progress."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not whip across information the audience must read."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it as a transition, punchline, or sudden attention shift. Concrete beat: a look off, a blur, a new room already in progress.Do not whip across information the audience must read."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Pan Left or Pan Right stays readable. A Whip Tilt is the same idea on the pitch axis.",
+          "links": [
+            {
+              "text": "Pan Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-left"
+            },
+            {
+              "text": "Pan Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+            },
+            {
+              "text": "Whip Tilt",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-tilt"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Crash Zoom In blurs radially by changing focal length, not by yaw. Whip pan is horizontal speed past recognition, then a hard stop.",
+          "links": [
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Whip TiltVertical shock instead of a horizontal whip.",
+          "displayText": "Whip Tilt\nVertical shock instead of a horizontal whip.",
+          "links": [
+            {
+              "text": "Whip TiltVertical shock instead of a horizontal whip.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-tilt"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "displayText": "Crash Zoom In\nPunctuate a hit, a realization, or a comic sting.",
+          "links": [
+            {
+              "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Pan Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-left"
+        },
+        {
+          "text": "Pan Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+        },
+        {
+          "text": "Whip Tilt",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-tilt"
+        },
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Whip TiltVertical shock instead of a horizontal whip.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-tilt"
+        },
+        {
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/83da5dc172795cc9dc5c821a5cd30a8c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-tilt-whip-tilt-mini.webp",
+          "alt": "Whip Tilt"
+        },
+        {
+          "kind": "video",
+          "path": "media/50d58e90cae2d6f4247f1fc7841d1d8d.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/whip-tilt-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+          "alt": "Crash Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Pan Left or Pan Right stays readable. A Whip Tilt is the same idea on the pitch axis.A Crash Zoom In blurs radially by changing focal length, not by yaw. Whip pan is horizontal speed past recognition, then a hard stop.Whip TiltVertical shock instead of a horizontal whip.Crash Zoom InPunctuate a hit, a realization, or a comic sting.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shaun of the Dead compresses routine and travel with fast visual joins. Hot Fuzz accelerates exposition with whip-like moves."
+        },
+        {
+          "type": "paragraph",
+          "text": "Baby Driver and Whiplash time the blur to music and hits. Use the matched smear and the landing, not the playlist."
+        },
+        {
+          "type": "list-item",
+          "text": "Shaun of the Dead 2004Fast visual transitions compress routine and travel.",
+          "displayText": "Shaun of the Dead 2004\nFast visual transitions compress routine and travel."
+        },
+        {
+          "type": "list-item",
+          "text": "Hot Fuzz 2007Whip-like moves and abrupt visual joins accelerate exposition.",
+          "displayText": "Hot Fuzz 2007\nWhip-like moves and abrupt visual joins accelerate exposition."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Shaun of the Dead compresses routine and travel with fast visual joins. Hot Fuzz accelerates exposition with whip-like moves.Baby Driver and Whiplash time the blur to music and hits. Use the matched smear and the landing, not the playlist.Shaun of the Dead 2004Fast visual transitions compress routine and travel.Hot Fuzz 2007Whip-like moves and abrupt visual joins accelerate exposition."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Violent whip pan off [Subject], horizontal motion blur streaking the world into ribbons, then a snap resolve on the next beat. For motion: extremely fast whip pan away from [Subject], heavy horizontal motion blur, then a sharp stop."
+        },
+        {
+          "type": "quote",
+          "text": "Generate A: a baker turns toward a ringing telephone and the camera whip-pans right into horizontal blur. Generate B: begin with the same rightward blur and land on a flour-covered delivery driver outside. Join at maximum blur. Keep motion direction and brightness compatible; no dissolve."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Generate+A:+a+baker+turns+toward+a+ringing+telephone+and+the+camera+whip-pans+right+into+horizontal+blur.+Generate+B:+begin+with+the+same+rightward+blur+and+land+on+a+flour-covered+delivery+driver+outside.+Join+at+maximum+blur.+Keep+motion+direction+and+brightness+compatible;+no+dissolve."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Violent whip pan off [Subject], horizontal motion blur streaking the world into ribbons, then a snap resolve on the next beat. For motion: extremely fast whip pan away from [Subject], heavy horizontal motion blur, then a sharp stop.Copy promptUse in Video GeneratorGenerate A: a baker turns toward a ringing telephone and the camera whip-pans right into horizontal blur. Generate B: begin with the same rightward blur and land on a flour-covered delivery driver outside. Join at maximum blur. Keep motion direction and brightness compatible; no dissolve.Generate A: a baker turns toward a ringing telephone and the camera whip-pans right into horizontal blur. Generate B: begin with the same rightward blur and land on a flour-covered delivery driver outside. Join at maximum blur. Keep motion direction and brightness compatible; no dissolve."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a fast Pan Right that never blurs, or a Crash Zoom In. The tell is readable detail in the middle, radial zoom blur, or a seam where blur directions disagree.",
+          "links": [
+            {
+              "text": "Pan Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+            },
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: commit to unreadability in the middle, match the join, stop sharp."
+        }
+      ],
+      "links": [
+        {
+          "text": "Pan Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+        },
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a fast Pan Right that never blurs, or a Crash Zoom In. The tell is readable detail in the middle, radial zoom blur, or a seam where blur directions disagree.The fix: commit to unreadability in the middle, match the join, stop sharp."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Whip Pan in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a pan so fast that the frame becomes horizontal motion blur, often used to hide a cut or to sting a new composition."
+        },
+        {
+          "type": "heading",
+          "text": "Whip Pan vs Crash Zoom In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Crash zoom in changes focal length and blurs radially. Whip pan rotates the camera on yaw and blurs sideways, then resolves on a new aim."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Whip Pan?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When you need a snap of attention or an invisible join between two setups. Do not use it to show a landscape."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Whip Pan for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Demand extremely fast horizontal pan, heavy motion blur, then a sharp stop on a named landing. If used as a cut, match blur direction on both sides."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Whip Pan in film?It is a pan so fast that the frame becomes horizontal motion blur, often used to hide a cut or to sting a new composition.Whip Pan vs Crash Zoom InCrash zoom in changes focal length and blurs radially. Whip pan rotates the camera on yaw and blurs sideways, then resolves on a new aim.When should I use Whip Pan?When you need a snap of attention or an invisible join between two setups. Do not use it to show a landscape.How do I prompt Whip Pan for AI image or video?Demand extremely fast horizontal pan, heavy motion blur, then a sharp stop on a named landing. If used as a cut, match blur direction on both sides."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Violent whip pan off [Subject], horizontal motion blur streaking the world into ribbons, then a snap resolve on the next beat. For motion: extremely fast whip pan away from [Subject], heavy horizontal motion blur, then a sharp stop."
+    ],
+    "example": "Generate A: a baker turns toward a ringing telephone and the camera whip-pans right into horizontal blur. Generate B: begin with the same rightward blur and land on a flour-covered delivery driver outside. Join at maximum blur. Keep motion direction and brightness compatible; no dissolve."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/190449d371d73445b9b3aed302d673de.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/whip-pan.jpg",
+      "alt": "Whip Pan frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/83da5dc172795cc9dc5c821a5cd30a8c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-tilt-whip-tilt-mini.webp",
+      "alt": "Whip Tilt"
+    },
+    {
+      "kind": "video",
+      "path": "media/50d58e90cae2d6f4247f1fc7841d1d8d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/whip-tilt-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": "Crash Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9c4a3981a88c28e699a761349c59d2b4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/whip-pan/hero.jpg",
+      "alt": "Whip Pan",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "d3c8eb6b5d46c536acc3de29d02c1f85f2a363aa4681f032e1e8403d9fb33564"
+}

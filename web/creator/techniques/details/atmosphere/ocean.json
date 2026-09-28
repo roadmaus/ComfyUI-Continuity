@@ -1,0 +1,427 @@
+{
+  "id": "atmosphere/ocean",
+  "slug": "ocean",
+  "title": "Ocean",
+  "categoryId": "atmosphere",
+  "categoryTitle": "Atmosphere and Weather",
+  "sourceUrl": "https://melies.co/cinematic-techniques/atmosphere/ocean",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ocean-ocean-mini.webp",
+  "detail": "details/atmosphere/ocean.json",
+  "aliases": [],
+  "description": "Ocean cinematography treats the sea as the other actor: swell, a horizon, salt light, a person against water that does not care. The atmosphere is spray, haze over distance, and a moving floor; the camera is in air, on a hull, or on rocks, not yet in the lung of the sea.",
+  "thumbnail": "media/79fb6cf3767dba4a03838ee410886254.webp",
+  "video": "media/b81846f37ff32209c41cd8fd3ac31b3e.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ocean-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A mole, a boat, a body: small. The horizon is a line that can kill you."
+        },
+        {
+          "type": "paragraph",
+          "text": "Swell has a period. Salt in backlight is weather."
+        },
+        {
+          "type": "paragraph",
+          "text": "The sea is the other actor. Use it for exile, work, awe, war at the rail."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you have left the surface (Underwater). It is the wrong tool when the water is a still lake used as silk behind a posed figure.",
+          "links": [
+            {
+              "text": "Underwater",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If there is no swell and no scale, it is not ocean. A bathtub, a pool, a harbor with no fetch: different jobs."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the swell."
+        }
+      ],
+      "links": [
+        {
+          "text": "Underwater",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A mole, a boat, a body: small. The horizon is a line that can kill you.Swell has a period. Salt in backlight is weather.The sea is the other actor. Use it for exile, work, awe, war at the rail.It is the wrong tool when you have left the surface (Underwater). It is the wrong tool when the water is a still lake used as silk behind a posed figure.If there is no swell and no scale, it is not ocean. A bathtub, a pool, a harbor with no fetch: different jobs.Name the swell."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shoot wide enough for scale. Put real swell in the frame (period, whitecaps or long rollers)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Backlight spray. Let far water go paler with Atmospheric Haze.",
+          "links": [
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the human or boat small unless the story is a face against a rail. Practical water on lens is allowed; fake silk water is not."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: ocean world of [Subject], swell, horizon, salt light, a person against water that does not care."
+        }
+      ],
+      "links": [
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Shoot wide enough for scale. Put real swell in the frame (period, whitecaps or long rollers).Backlight spray. Let far water go paler with Atmospheric Haze.Keep the human or boat small unless the story is a face against a rail. Practical water on lens is allowed; fake silk water is not.Prompt: ocean world of [Subject], swell, horizon, salt light, a person against water that does not care."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the sea must act: a crossing, a lighthouse rock, a mole under fire, a diver's surface world. Do not use it as a backdrop for fashion on calm glass."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera goes under, switch techniques."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the sea must act: a crossing, a lighthouse rock, a mole under fire, a diver's surface world. Do not use it as a backdrop for fashion on calm glass.If the camera goes under, switch techniques."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Underwater submerges the lens. Atmospheric Haze is the aerial perspective over the water, a modifier, not the whole job.",
+          "links": [
+            {
+              "text": "Underwater",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+            },
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Rain can lash a surface but is not swell. Ocean is surface gravity, horizon, and scale.",
+          "links": [
+            {
+              "text": "Rain",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A wet street is not an ocean."
+        },
+        {
+          "type": "list-item",
+          "text": "UnderwaterLeave air.",
+          "displayText": "Underwater\nLeave air.",
+          "links": [
+            {
+              "text": "UnderwaterLeave air.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "displayText": "Atmospheric Haze\nShow kilometers, not just meters.",
+          "links": [
+            {
+              "text": "Atmospheric HazeShow kilometers, not just meters.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "RainMake the air visible and the ground reflective.",
+          "displayText": "Rain\nMake the air visible and the ground reflective.",
+          "links": [
+            {
+              "text": "RainMake the air visible and the ground reflective.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Underwater",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+        },
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Rain",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        },
+        {
+          "text": "UnderwaterLeave air.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+        },
+        {
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "RainMake the air visible and the ground reflective.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/fd420b0e034c5e2ab01183f84983fe9c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/underwater-underwater-mini.webp",
+          "alt": "Underwater"
+        },
+        {
+          "kind": "video",
+          "path": "media/64ef0f8f2668206cb2692f2d00919c1e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/underwater-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+          "alt": "Atmospheric Haze"
+        },
+        {
+          "kind": "image",
+          "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+          "alt": "Rain"
+        }
+      ],
+      "sourceText": "Compared with similar shots Underwater submerges the lens. Atmospheric Haze is the aerial perspective over the water, a modifier, not the whole job.Rain can lash a surface but is not swell. Ocean is surface gravity, horizon, and scale.A wet street is not an ocean.UnderwaterLeave air.Atmospheric HazeShow kilometers, not just meters.RainMake the air visible and the ground reflective."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Big Blue treats the surface as a workplace and a temptation. The Lighthouse puts two men against water and rock with no kindness in the horizon."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dunkirk uses mole, hull, and swell as hostile architecture. Show weight and weather, not a stock seascape."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Big Blue treats the surface as a workplace and a temptation. The Lighthouse puts two men against water and rock with no kindness in the horizon.Dunkirk uses mole, hull, and swell as hostile architecture. Show weight and weather, not a stock seascape."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ocean world of [Subject], swell, horizon, salt light, a person against water that does not care. Name sea state, scale (small figure or small boat), backlight on spray, and a hard horizon."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, real period in the swell, not a looping texture. Do not make the water a silk backdrop."
+        },
+        {
+          "type": "quote",
+          "text": "Ocean world of [Subject], swell, horizon, salt light, a person against water that does not care."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Ocean+world+of+[Subject],+swell,+horizon,+salt+light,+a+person+against+water+that+does+not+care."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Ocean world of [Subject], swell, horizon, salt light, a person against water that does not care. Name sea state, scale (small figure or small boat), backlight on spray, and a hard horizon.For video, real period in the swell, not a looping texture. Do not make the water a silk backdrop.Copy promptUse in Image GeneratorOcean world of [Subject], swell, horizon, salt light, a person against water that does not care.Ocean world of [Subject], swell, horizon, salt light, a person against water that does not care."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a calm stock seascape or Underwater caustics on a dry beach. The tell: no swell, a posed model large in frame, glass-smooth water, no spray.",
+          "links": [
+            {
+              "text": "Underwater",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: scale the human down, give the sea a period, backlight salt, keep the horizon honest."
+        }
+      ],
+      "links": [
+        {
+          "text": "Underwater",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/underwater"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a calm stock seascape or Underwater caustics on a dry beach. The tell: no swell, a posed model large in frame, glass-smooth water, no spray.The fix: scale the human down, give the sea a period, backlight salt, keep the horizon honest."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Ocean in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ocean work puts a person or boat against real swell and a horizon, with salt light and spray in the air. The sea is an actor, not a backdrop."
+        },
+        {
+          "type": "heading",
+          "text": "Ocean vs Underwater",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ocean is the surface world: sky, swell, horizon. Underwater submerges the camera and loses that horizon. One is weather and scale; the other is a different medium."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Ocean?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the sea must act on a body, a boat, or a rock. Do not use a still lake or a pool, and do not stay in ocean grammar once the lens has left the air."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Ocean for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name swell, horizon, and scale. Example: ocean world of [Subject], swell, horizon, salt light, a person against water that does not care. Demand period in the waves and backlight on spray."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Ocean in film?Ocean work puts a person or boat against real swell and a horizon, with salt light and spray in the air. The sea is an actor, not a backdrop.Ocean vs UnderwaterOcean is the surface world: sky, swell, horizon. Underwater submerges the camera and loses that horizon. One is weather and scale; the other is a different medium.When should I use Ocean?Use it when the sea must act on a body, a boat, or a rock. Do not use a still lake or a pool, and do not stay in ocean grammar once the lens has left the air.How do I prompt Ocean for AI image or video?Name swell, horizon, and scale. Example: ocean world of [Subject], swell, horizon, salt light, a person against water that does not care. Demand period in the waves and backlight on spray."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Ocean world of [Subject], swell, horizon, salt light, a person against water that does not care. Name sea state, scale (small figure or small boat), backlight on spray, and a hard horizon.",
+      "For video, real period in the swell, not a looping texture. Do not make the water a silk backdrop."
+    ],
+    "example": "Ocean world of [Subject], swell, horizon, salt light, a person against water that does not care."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/b81846f37ff32209c41cd8fd3ac31b3e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ocean-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/79fb6cf3767dba4a03838ee410886254.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ocean-ocean-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12e939abed11d5f6e7ffb148039333e2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/ocean.jpg",
+      "alt": "Ocean frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/fd420b0e034c5e2ab01183f84983fe9c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/underwater-underwater-mini.webp",
+      "alt": "Underwater"
+    },
+    {
+      "kind": "video",
+      "path": "media/64ef0f8f2668206cb2692f2d00919c1e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/underwater-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+      "alt": "Atmospheric Haze"
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+      "alt": "Rain"
+    },
+    {
+      "kind": "image",
+      "path": "media/0c64cb22ec7cd7217b7c8a2a251223c7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/ocean/hero.jpg",
+      "alt": "Ocean",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "52e5e51ed23ef3ced0b764412ca1b1c40b6db007141c09b1d5ebc0d0207dd18b"
+}

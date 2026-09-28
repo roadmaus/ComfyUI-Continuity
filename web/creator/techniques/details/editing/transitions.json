@@ -1,0 +1,498 @@
+{
+  "id": "editing/transitions",
+  "slug": "transitions",
+  "title": "Transitions",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/transitions",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/transitions-08-transitions-mini.webp",
+  "detail": "details/editing/transitions.json",
+  "aliases": [],
+  "description": "Film transitions are designed joins: the splice treated as a visible gesture rather than as continuity glue. One side of the join and the other are planned as a pair, and the audience is meant to notice how we left A and entered B.",
+  "thumbnail": "media/7cded01d83955dbe51991f02f456eb58.webp",
+  "video": "media/4c044cabf3998c415573e4d00bc1fa11.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/08-transitions-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A wipe turns a page. A match claims an idea."
+        },
+        {
+          "type": "paragraph",
+          "text": "A dissolve remembers. A whip throws you."
+        },
+        {
+          "type": "paragraph",
+          "text": "The cut should be seen. This is the parent of those gestures, not a substitute for choosing one."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when invisible continuity would lie, or when the join is the joke, the thesis, or the chapter mark. It is the wrong tool when the scene should feel found and unedited."
+        },
+        {
+          "type": "paragraph",
+          "text": "Then hide the cut, or do not cut. Pick a species."
+        },
+        {
+          "type": "paragraph",
+          "text": "'A cool transition' is not a shot list. Name wipe, match, mix, light, or whip."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A wipe turns a page. A match claims an idea.A dissolve remembers. A whip throws you.The cut should be seen. This is the parent of those gestures, not a substitute for choosing one.Use it when invisible continuity would lie, or when the join is the joke, the thesis, or the chapter mark. It is the wrong tool when the scene should feel found and unedited.Then hide the cut, or do not cut. Pick a species.'A cool transition' is not a shot list. Name wipe, match, mix, light, or whip."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Decide what the join must do: rhyme (Match Cut), mix (Dissolve), empty (Fade In / Fade Out), travel an edge (Wipe), point (Iris), blur (Whip Pan), or rewrite space (Set Transition). Design A and B together so the chosen gesture has material to work with.",
+          "links": [
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            },
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            },
+            {
+              "text": "Fade In / Fade Out",
+              "url": "https://melies.co/cinematic-techniques/editing/fade"
+            },
+            {
+              "text": "Wipe",
+              "url": "https://melies.co/cinematic-techniques/editing/wipe"
+            },
+            {
+              "text": "Iris",
+              "url": "https://melies.co/cinematic-techniques/editing/iris"
+            },
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            },
+            {
+              "text": "Set Transition",
+              "url": "https://melies.co/cinematic-techniques/editing/set-transition"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: a designed transition around [Subject], the join as a gesture: wipe, morph, match, or light."
+        }
+      ],
+      "links": [
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        },
+        {
+          "text": "Fade In / Fade Out",
+          "url": "https://melies.co/cinematic-techniques/editing/fade"
+        },
+        {
+          "text": "Wipe",
+          "url": "https://melies.co/cinematic-techniques/editing/wipe"
+        },
+        {
+          "text": "Iris",
+          "url": "https://melies.co/cinematic-techniques/editing/iris"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Set Transition",
+          "url": "https://melies.co/cinematic-techniques/editing/set-transition"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Decide what the join must do: rhyme (Match Cut), mix (Dissolve), empty (Fade In / Fade Out), travel an edge (Wipe), point (Iris), blur (Whip Pan), or rewrite space (Set Transition). Design A and B together so the chosen gesture has material to work with.Prompt: a designed transition around [Subject], the join as a gesture: wipe, morph, match, or light."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it at act breaks, world leaps, jokes about cinema, or any time the how of leaving matters. Do not use a designed transition on every reverse in a talk scene."
+        },
+        {
+          "type": "paragraph",
+          "text": "If nothing in the story changes at the splice except the camera, a straight cut is the design."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it at act breaks, world leaps, jokes about cinema, or any time the how of leaving matters. Do not use a designed transition on every reverse in a talk scene.If nothing in the story changes at the splice except the camera, a straight cut is the design."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Match Cut is a correspondence across a hard cut. A Dissolve is a mix.",
+          "links": [
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            },
+            {
+              "text": "Dissolve",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Whip Pan can hide or announce a join through blur. A Wipe shows a traveling edge.",
+          "links": [
+            {
+              "text": "Whip Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            },
+            {
+              "text": "Wipe",
+              "url": "https://melies.co/cinematic-techniques/editing/wipe"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "This page is the choice to make the join a gesture; those pages are the species. Invisible Cut is the opposing doctrine.",
+          "links": [
+            {
+              "text": "Invisible Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "displayText": "Whip Pan\nTransition, punchline, or sudden attention shift.",
+          "links": [
+            {
+              "text": "Whip PanTransition, punchline, or sudden attention shift.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DissolveMemory, passage, or a gentle death of a scene.",
+          "displayText": "Dissolve\nMemory, passage, or a gentle death of a scene.",
+          "links": [
+            {
+              "text": "DissolveMemory, passage, or a gentle death of a scene.",
+              "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Dissolve",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        },
+        {
+          "text": "Whip Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "Wipe",
+          "url": "https://melies.co/cinematic-techniques/editing/wipe"
+        },
+        {
+          "text": "Invisible Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Whip PanTransition, punchline, or sudden attention shift.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/whip-pan"
+        },
+        {
+          "text": "DissolveMemory, passage, or a gentle death of a scene.",
+          "url": "https://melies.co/cinematic-techniques/editing/dissolve"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+          "alt": "Whip Pan"
+        },
+        {
+          "kind": "video",
+          "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1332a951776aaa53a01036439d1680be.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dissolve-102-dissolve-and-temporal-layering-mini.webp",
+          "alt": "Dissolve"
+        },
+        {
+          "kind": "video",
+          "path": "media/1ec6c76a16b746e9cd93c6c2b5299211.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/102-dissolve-and-temporal-layering-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Match Cut is a correspondence across a hard cut. A Dissolve is a mix.A Whip Pan can hide or announce a join through blur. A Wipe shows a traveling edge.This page is the choice to make the join a gesture; those pages are the species. Invisible Cut is the opposing doctrine.Match CutTwo images are the same idea.Whip PanTransition, punchline, or sudden attention shift.DissolveMemory, passage, or a gentle death of a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Star Wars makes scene changes into directional wipes, a serial grammar. 2001: A Space Odyssey makes a hard match the largest leap in the film."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use them as proof that a visible join can carry story, not as a kit to paste on every cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Star Wars makes scene changes into directional wipes, a serial grammar. 2001: A Space Odyssey makes a hard match the largest leap in the film.Use them as proof that a visible join can carry story, not as a kit to paste on every cut."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A designed transition around [Subject], the join as a gesture: wipe, morph, match, or light. Name both sides and the species of join."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, generate A and B as complete shots, then specify the gesture (hard match, mix, traveling edge, whip). Do not write 'cool transition' or 'seamless' if you want the join seen."
+        },
+        {
+          "type": "quote",
+          "text": "A designed transition around [Subject], the join as a gesture: wipe, morph, match, or light."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=A+designed+transition+around+[Subject],+the+join+as+a+gesture:+wipe,+morph,+match,+or+light."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it A designed transition around [Subject], the join as a gesture: wipe, morph, match, or light. Name both sides and the species of join.For video, generate A and B as complete shots, then specify the gesture (hard match, mix, traveling edge, whip). Do not write 'cool transition' or 'seamless' if you want the join seen.Copy promptUse in Image GeneratorA designed transition around [Subject], the join as a gesture: wipe, morph, match, or light.A designed transition around [Subject], the join as a gesture: wipe, morph, match, or light."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an Invisible Cut you accidentally made visible, or a morph used because no join was chosen. The tell: A and B have no designed relationship, and a filter slurries them.",
+          "links": [
+            {
+              "text": "Invisible Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: pick a species, give both sides a job, execute that physics only."
+        }
+      ],
+      "links": [
+        {
+          "text": "Invisible Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an Invisible Cut you accidentally made visible, or a morph used because no join was chosen. The tell: A and B have no designed relationship, and a filter slurries them.The fix: pick a species, give both sides a job, execute that physics only."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Transitions in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Transitions in this sense are designed joins, splices the audience is meant to notice. Both sides of the join are planned as a pair, and the gesture (wipe, match, mix, light) is part of the sentence."
+        },
+        {
+          "type": "heading",
+          "text": "Transitions vs Match Cut",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A match cut is one species of designed join: correspondence across a hard cut. Transitions as a heading means choosing a visible gesture at all, which might be a match, a wipe, a dissolve, or a whip."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Transitions?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use a designed transition when the how of leaving A is story. Do not decorate every reverse. If the join should vanish, do not design it as a gesture."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Transitions for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name A, B, and the species of join. Example: a designed transition around [Subject], the join as a gesture: wipe, morph, match, or light. Forbid vague words like seamless or cool."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Transitions in film?Transitions in this sense are designed joins, splices the audience is meant to notice. Both sides of the join are planned as a pair, and the gesture (wipe, match, mix, light) is part of the sentence.Transitions vs Match CutA match cut is one species of designed join: correspondence across a hard cut. Transitions as a heading means choosing a visible gesture at all, which might be a match, a wipe, a dissolve, or a whip.When should I use Transitions?Use a designed transition when the how of leaving A is story. Do not decorate every reverse. If the join should vanish, do not design it as a gesture.How do I prompt Transitions for AI image or video?Name A, B, and the species of join. Example: a designed transition around [Subject], the join as a gesture: wipe, morph, match, or light. Forbid vague words like seamless or cool."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "A designed transition around [Subject], the join as a gesture: wipe, morph, match, or light. Name both sides and the species of join.",
+      "For video, generate A and B as complete shots, then specify the gesture (hard match, mix, traveling edge, whip). Do not write 'cool transition' or 'seamless' if you want the join seen."
+    ],
+    "example": "A designed transition around [Subject], the join as a gesture: wipe, morph, match, or light."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/4c044cabf3998c415573e4d00bc1fa11.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/08-transitions-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7cded01d83955dbe51991f02f456eb58.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/transitions-08-transitions-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e2f55f63aeea4f82e77b9bb1fd725010.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/transitions.jpg",
+      "alt": "Transitions frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f82ce0f9adca6bc9eb6af5f77ef57280.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/whip-pan-013-whip-pan-mini.webp",
+      "alt": "Whip Pan"
+    },
+    {
+      "kind": "video",
+      "path": "media/1f5e41517a6dd91641bd1e2e9684b5bc.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/013-whip-pan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1332a951776aaa53a01036439d1680be.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dissolve-102-dissolve-and-temporal-layering-mini.webp",
+      "alt": "Dissolve"
+    },
+    {
+      "kind": "video",
+      "path": "media/1ec6c76a16b746e9cd93c6c2b5299211.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/102-dissolve-and-temporal-layering-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/61da6baa13762c46b1c6f141822d5310.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/transitions/hero.jpg",
+      "alt": "Transitions",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "67b85009ee3baab2044efc4111fc1e4827e621c37dc93f8dfa04e714067fa86a"
+}

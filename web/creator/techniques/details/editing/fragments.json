@@ -1,0 +1,460 @@
+{
+  "id": "editing/fragments",
+  "slug": "fragments",
+  "title": "Fragments",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/fragments",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fragments-176-fragmented-action-and-implied-impact-mini.webp",
+  "detail": "details/editing/fragments.json",
+  "aliases": [
+    "Constructed action",
+    "Montage implication"
+  ],
+  "description": "Fragments, or fragmented editing, build an event from partial views, so the audience infers an action more complete than anything shown in one shot. Each side of a join is a shard: a blade, a mouth, a drain, a hand too late; the whole lives in the gaps.",
+  "thumbnail": "media/20890dc313ed63661f2f17b25d292fb5.webp",
+  "video": "media/33ee70abaccb6a73892f6d2b1a4db683.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/176-fragmented-action-and-implied-impact-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You never get the master. You get a sleeve, a missed catch, a face, ceramic already on the floor, and one offscreen crash."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not give the whole. The viewer assembles the blow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to make an impact intense while withholding explicit depiction, or to show a night that will not assemble. It is the wrong tool when the audience must see a legal, continuous action."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also not just speed: Quick Cuts can show complete blows rapidly. Fragments hide the complete blow.",
+          "links": [
+            {
+              "text": "Quick Cuts",
+              "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fast shards alone do not guarantee clarity. Direction, causal order, and sound have to let the viewer reconstruct the event."
+        }
+      ],
+      "links": [
+        {
+          "text": "Quick Cuts",
+          "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function You never get the master. You get a sleeve, a missed catch, a face, ceramic already on the floor, and one offscreen crash.Do not give the whole. The viewer assembles the blow.Use it to make an impact intense while withholding explicit depiction, or to show a night that will not assemble. It is the wrong tool when the audience must see a legal, continuous action.It is also not just speed: Quick Cuts can show complete blows rapidly. Fragments hide the complete blow.Fast shards alone do not guarantee clarity. Direction, causal order, and sound have to let the viewer reconstruct the event."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Break the event into distinct visual elements that can be shot safely: the approaching object, a body part, a reaction, the aftermath. Preserve screen direction and order."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bind with timing and sound; do not require the dangerous contact on camera. Prompt: fragments of [Subject], shattered coverage, pieces of a moment, the scene as shards."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name what is missing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Break the event into distinct visual elements that can be shot safely: the approaching object, a body part, a reaction, the aftermath. Preserve screen direction and order.Bind with timing and sound; do not require the dangerous contact on camera. Prompt: fragments of [Subject], shattered coverage, pieces of a moment, the scene as shards.Name what is missing."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a shower, a staircase massacre built from details, a panic, a memory. Do not use it for a demonstration that must be readable as one take."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the pieces cannot be ordered into a cause, you have a Collage, not an event.",
+          "links": [
+            {
+              "text": "Collage",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Collage",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it for a shower, a staircase massacre built from details, a panic, a memory. Do not use it for a demonstration that must be readable as one take.If the pieces cannot be ordered into a cause, you have a Collage, not an event."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Quick Cuts are a rate pattern and may show complete actions. Montage collides complete images for an idea or a month.",
+          "links": [
+            {
+              "text": "Quick Cuts",
+              "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+            },
+            {
+              "text": "Montage",
+              "url": "https://melies.co/cinematic-techniques/editing/montage"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Collage is a paper or composite of pieces as a surface. Jump Cut holes one setup.",
+          "links": [
+            {
+              "text": "Collage",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            },
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fragments are incomplete views of one action whose whole is inferred."
+        },
+        {
+          "type": "list-item",
+          "text": "Quick CutsPace is the meaning.",
+          "displayText": "Quick Cuts\nPace is the meaning.",
+          "links": [
+            {
+              "text": "Quick CutsPace is the meaning.",
+              "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CollageOne image is not enough; stack them.",
+          "displayText": "Collage\nOne image is not enough; stack them.",
+          "links": [
+            {
+              "text": "CollageOne image is not enough; stack them.",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Quick Cuts",
+          "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+        },
+        {
+          "text": "Montage",
+          "url": "https://melies.co/cinematic-techniques/editing/montage"
+        },
+        {
+          "text": "Collage",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        },
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Quick CutsPace is the meaning.",
+          "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+        },
+        {
+          "text": "CollageOne image is not enough; stack them.",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/827000a51dd7ef6ee0d76f3174fb083a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/quick-cuts-06-quick-cuts-mini.webp",
+          "alt": "Quick Cuts"
+        },
+        {
+          "kind": "video",
+          "path": "media/59fc33993a7c64ccfb5f4a6ef15a5d67.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/06-quick-cuts-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+          "alt": "Collage"
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Quick Cuts are a rate pattern and may show complete actions. Montage collides complete images for an idea or a month.Collage is a paper or composite of pieces as a surface. Jump Cut holes one setup.Fragments are incomplete views of one action whose whole is inferred.Quick CutsPace is the meaning.CollageOne image is not enough; stack them.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Psycho constructs the shower from brief fragments, reactions, and sound rather than one continuous explicit view. Battleship Potemkin builds the Odessa Steps from details and reactions."
+        },
+        {
+          "type": "paragraph",
+          "text": "Requiem for a Dream and Memento use shards as a nervous or backward structure. Use inference, not a copied stab."
+        },
+        {
+          "type": "list-item",
+          "text": "Psycho 1960The shower murder is constructed from brief fragments, reactions and sound rather than one continuous explicit view.",
+          "displayText": "Psycho 1960\nThe shower murder is constructed from brief fragments, reactions and sound rather than one continuous explicit view."
+        },
+        {
+          "type": "list-item",
+          "text": "Battleship Potemkin 1925The Odessa Steps sequence builds violence through details and reactions.",
+          "displayText": "Battleship Potemkin 1925\nThe Odessa Steps sequence builds violence through details and reactions."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Psycho constructs the shower from brief fragments, reactions, and sound rather than one continuous explicit view. Battleship Potemkin builds the Odessa Steps from details and reactions.Requiem for a Dream and Memento use shards as a nervous or backward structure. Use inference, not a copied stab.Psycho 1960The shower murder is constructed from brief fragments, reactions and sound rather than one continuous explicit view.Battleship Potemkin 1925The Odessa Steps sequence builds violence through details and reactions."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fragments of [Subject], shattered coverage, pieces of a moment, the scene as shards. List the shards in causal order and name the missing master."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, separate partial shots plus a binding sound; no single wide that completes the event, no incoherent duplication of the object."
+        },
+        {
+          "type": "quote",
+          "text": "Imply a valuable vase being accidentally knocked over without showing the full break. Generate separate shots of a sleeve brushing its base, a hand reaching too late, a startled face and ceramic pieces already on the floor. Join with one offscreen crash. No real hazardous stunt or incoherent object duplication."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Imply+a+valuable+vase+being+accidentally+knocked+over+without+showing+the+full+break.+Generate+separate+shots+of+a+sleeve+brushing+its+base,+a+hand+reaching+too+late,+a+startled+face+and+ceramic+pieces+already+on+the+floor.+Join+with+one+offscreen+crash.+No+real+hazardous+stunt+or+incoherent+object+duplication."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Fragments of [Subject], shattered coverage, pieces of a moment, the scene as shards. List the shards in causal order and name the missing master.For video, separate partial shots plus a binding sound; no single wide that completes the event, no incoherent duplication of the object.Copy promptUse in Video GeneratorImply a valuable vase being accidentally knocked over without showing the full break. Generate separate shots of a sleeve brushing its base, a hand reaching too late, a startled face and ceramic pieces already on the floor. Join with one offscreen crash. No real hazardous stunt or incoherent object duplication.Imply a valuable vase being accidentally knocked over without showing the full break. Generate separate shots of a sleeve brushing its base, a hand reaching too late, a startled face and ceramic pieces already on the floor. Join with one offscreen crash. No real hazardous stunt or incoherent object duplication."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Quick Cuts of the same complete wide, or a Collage texture. The tell: a master already shows the whole, or the pieces have no direction.",
+          "links": [
+            {
+              "text": "Quick Cuts",
+              "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+            },
+            {
+              "text": "Collage",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: withhold the complete contact, keep a causal line, let sound and order finish the blow in the viewer's head."
+        }
+      ],
+      "links": [
+        {
+          "text": "Quick Cuts",
+          "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+        },
+        {
+          "text": "Collage",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Quick Cuts of the same complete wide, or a Collage texture. The tell: a master already shows the whole, or the pieces have no direction.The fix: withhold the complete contact, keep a causal line, let sound and order finish the blow in the viewer's head."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Fragments in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fragmented editing constructs an event from partial views. Each side of a join is a shard; the audience infers an action more complete than any single shot."
+        },
+        {
+          "type": "heading",
+          "text": "Fragments vs Quick Cuts",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Quick cuts are short complete views in a rhythm. Fragments are incomplete views of one event. Speed is not the definition; withholding the whole is."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Fragments?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the blow should be inferred: violence, panic, a night that will not assemble. Do not use it when a continuous demonstration is required."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Fragments for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "List the shards and what is missing. Example: Fragments of [Subject], shattered coverage, pieces of a moment. Keep causal order and a binding sound; forbid a complete master of the contact."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Fragments in film?Fragmented editing constructs an event from partial views. Each side of a join is a shard; the audience infers an action more complete than any single shot.Fragments vs Quick CutsQuick cuts are short complete views in a rhythm. Fragments are incomplete views of one event. Speed is not the definition; withholding the whole is.When should I use Fragments?Use it when the blow should be inferred: violence, panic, a night that will not assemble. Do not use it when a continuous demonstration is required.How do I prompt Fragments for AI image or video?List the shards and what is missing. Example: Fragments of [Subject], shattered coverage, pieces of a moment. Keep causal order and a binding sound; forbid a complete master of the contact."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Fragments of [Subject], shattered coverage, pieces of a moment, the scene as shards. List the shards in causal order and name the missing master.",
+      "For video, separate partial shots plus a binding sound; no single wide that completes the event, no incoherent duplication of the object."
+    ],
+    "example": "Imply a valuable vase being accidentally knocked over without showing the full break. Generate separate shots of a sleeve brushing its base, a hand reaching too late, a startled face and ceramic pieces already on the floor. Join with one offscreen crash. No real hazardous stunt or incoherent object duplication."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/33ee70abaccb6a73892f6d2b1a4db683.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/176-fragmented-action-and-implied-impact-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/20890dc313ed63661f2f17b25d292fb5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fragments-176-fragmented-action-and-implied-impact-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d6ad336f45e8ab27f007c4cd30aa62df.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/fragments.jpg",
+      "alt": "Fragments frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/827000a51dd7ef6ee0d76f3174fb083a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/quick-cuts-06-quick-cuts-mini.webp",
+      "alt": "Quick Cuts"
+    },
+    {
+      "kind": "video",
+      "path": "media/59fc33993a7c64ccfb5f4a6ef15a5d67.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/06-quick-cuts-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+      "alt": "Collage"
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5bf68666553ec13ea0d89da7f1a72f87.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fragments/hero.jpg",
+      "alt": "Fragments",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "a33922611512b1f0a94da5139333e4bdb65bc0c74dbc0091a4ee5a25a0e07184"
+}

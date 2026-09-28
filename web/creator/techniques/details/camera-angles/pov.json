@@ -1,0 +1,503 @@
+{
+  "id": "camera-angles/pov",
+  "slug": "pov",
+  "title": "Point of View",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/pov",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pov-090-subjective-optical-pov-mini.webp",
+  "detail": "details/camera-angles/pov.json",
+  "aliases": [
+    "subjective camera",
+    "Muffled perspective",
+    "Tinnitus effect"
+  ],
+  "description": "A POV shot makes the camera function as a character's optical viewpoint: what they see at their eye height. The looker's head and shoulder stay out of the frame; we inhabit the look, not a seat behind it.",
+  "thumbnail": "media/33e364cb93ac77f7bba981d6a44b2dad.webp",
+  "video": "media/ad782c8d50b2a756b366df24f8816406.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/090-subjective-optical-pov-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Classical coverage builds a POV as a sentence: a person looks, we cut to the seen, we often cut back to a reaction. Rear Window lives on that grammar."
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera sits at their eyes, aims where they aim, and refuses the back of their head. Identification is forced because the audience is briefly the character."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not Over-the-Shoulder Coverage, which keeps the looker's shoulder as a claim of with, not as. It is not First-Person, which lets a body own the lens for a long ride: hands, breath, locomotion.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            },
+            {
+              "text": "First-Person",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A POV can be a single still insert. First-person is a body that keeps seeing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Subjective sound (a ringing ear, a mute beach) can ride with a POV or sit on an objective picture. Do not confuse a hearing filter with this optical setup."
+        }
+      ],
+      "links": [
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "First-Person",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Classical coverage builds a POV as a sentence: a person looks, we cut to the seen, we often cut back to a reaction. Rear Window lives on that grammar.The camera sits at their eyes, aims where they aim, and refuses the back of their head. Identification is forced because the audience is briefly the character.It is not Over-the-Shoulder Coverage, which keeps the looker's shoulder as a claim of with, not as. It is not First-Person, which lets a body own the lens for a long ride: hands, breath, locomotion.A POV can be a single still insert. First-person is a body that keeps seeing.Subjective sound (a ringing ear, a mute beach) can ride with a POV or sit on an objective picture. Do not confuse a hearing filter with this optical setup."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the camera at the named character's eye height and point it along their eyeline. Match lens choice to their attention: a longer glass for binocular looking, a wider field for a panicked scan."
+        },
+        {
+          "type": "paragraph",
+          "text": "No owner body in frame unless a diegetic visor or mask is the optical device (Halloween). If you include a shoulder, you have left POV for OTS."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: what [Subject] sees, world at their eye height, no back of a head, no shoulder of the looker."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put the camera at the named character's eye height and point it along their eyeline. Match lens choice to their attention: a longer glass for binocular looking, a wider field for a panicked scan.No owner body in frame unless a diegetic visor or mask is the optical device (Halloween). If you include a shoulder, you have left POV for OTS.Prompt: what [Subject] sees, world at their eye height, no back of a head, no shoulder of the looker."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to force identification: the audience is the character for the length of the look. Concrete beat: a look offscreen, then empty tracks, steam, and lamps at their eye height."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it when you still need the looker's face in the same shot; shoot the look, then the POV, or use OTS."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to force identification: the audience is the character for the length of the look. Concrete beat: a look offscreen, then empty tracks, steam, and lamps at their eye height.Do not use it when you still need the looker's face in the same shot; shoot the look, then the POV, or use OTS."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Over-the-Shoulder Coverage shows the near shoulder and the far face; we stand with the looker. First-Person adds hands, breath, and a body that owns the lens over time.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            },
+            {
+              "text": "First-Person",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Object POV is a tool or vehicle seeing, not a person. Fourth Wall is the opposite look: eyes into our lens.",
+          "links": [
+            {
+              "text": "Object POV",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+            },
+            {
+              "text": "Fourth Wall",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "SnorriCam straps the camera to the body and looks at their face.",
+          "links": [
+            {
+              "text": "SnorriCam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SnorriCamTrap the audience in a body that cannot get out.",
+          "displayText": "SnorriCam\nTrap the audience in a body that cannot get out.",
+          "links": [
+            {
+              "text": "SnorriCamTrap the audience in a body that cannot get out.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "displayText": "High Angle\nVulnerability, surveillance, or a map of a room.",
+          "links": [
+            {
+              "text": "High AngleVulnerability, surveillance, or a map of a room.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "First-Person",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        },
+        {
+          "text": "Object POV",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+        },
+        {
+          "text": "Fourth Wall",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall"
+        },
+        {
+          "text": "SnorriCam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        },
+        {
+          "text": "SnorriCamTrap the audience in a body that cannot get out.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a377ca603c759f0f3e573588303d2336.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snorricam-018-body-mounted-face-camera-mini.webp",
+          "alt": "SnorriCam"
+        },
+        {
+          "kind": "video",
+          "path": "media/03868d02fedb015bdcc173c26c4c7b3e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/018-body-mounted-face-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        },
+        {
+          "kind": "image",
+          "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+          "alt": "High Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Over-the-Shoulder Coverage shows the near shoulder and the far face; we stand with the looker. First-Person adds hands, breath, and a body that owns the lens over time.Object POV is a tool or vehicle seeing, not a person. Fourth Wall is the opposite look: eyes into our lens.SnorriCam straps the camera to the body and looks at their face.SnorriCamTrap the audience in a body that cannot get out.Eye LevelDefault honesty. Do not look down or up unless you mean it.High AngleVulnerability, surveillance, or a map of a room."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rear Window cuts from Jeff to binocular-aligned views of the courtyard. Halloween's opening adopts the observer's optical viewpoint through the mask."
+        },
+        {
+          "type": "paragraph",
+          "text": "Gravity moves into helmet-level seeing. Saving Private Ryan pairs optical shock with Miller's muted hearing; the sound is a cousin, not the definition of the shot."
+        },
+        {
+          "type": "list-item",
+          "text": "Saving Private Ryan 1998Miller’s perception becomes muted during the Omaha Beach assault.",
+          "displayText": "Saving Private Ryan 1998\nMiller’s perception becomes muted during the Omaha Beach assault."
+        },
+        {
+          "type": "list-item",
+          "text": "Sound of Metal 2019The soundtrack repeatedly shifts into Ruben’s changing hearing experience.",
+          "displayText": "Sound of Metal 2019\nThe soundtrack repeatedly shifts into Ruben’s changing hearing experience."
+        },
+        {
+          "type": "list-item",
+          "text": "Gravity 2013Continuous-looking passages move between the astronaut, surrounding space and helmet-level subjectivity.",
+          "displayText": "Gravity 2013\nContinuous-looking passages move between the astronaut, surrounding space and helmet-level subjectivity."
+        },
+        {
+          "type": "list-item",
+          "text": "Halloween 1978The opening adopts the killer’s optical viewpoint before revealing the observer.",
+          "displayText": "Halloween 1978\nThe opening adopts the killer’s optical viewpoint before revealing the observer."
+        },
+        {
+          "type": "list-item",
+          "text": "Lady in the Lake 1947Extended first-person detective storytelling.",
+          "displayText": "Lady in the Lake 1947\nExtended first-person detective storytelling."
+        },
+        {
+          "type": "list-item",
+          "text": "Rear Window 1954Binocular and telephoto-looking views align with Jeff’s observation.",
+          "displayText": "Rear Window 1954\nBinocular and telephoto-looking views align with Jeff’s observation."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a01e5345679b82787a13083396d0eae7.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pov/famous/00-gravity-2013.jpg",
+          "alt": "Gravity 2013"
+        }
+      ],
+      "sourceText": "In film Rear Window cuts from Jeff to binocular-aligned views of the courtyard. Halloween's opening adopts the observer's optical viewpoint through the mask.Gravity moves into helmet-level seeing. Saving Private Ryan pairs optical shock with Miller's muted hearing; the sound is a cousin, not the definition of the shot.Saving Private Ryan 1998Miller’s perception becomes muted during the Omaha Beach assault.Sound of Metal 2019The soundtrack repeatedly shifts into Ruben’s changing hearing experience.Gravity 2013Continuous-looking passages move between the astronaut, surrounding space and helmet-level subjectivity.Halloween 1978The opening adopts the killer’s optical viewpoint before revealing the observer.Lady in the Lake 1947Extended first-person detective storytelling.Rear Window 1954Binocular and telephoto-looking views align with Jeff’s observation."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Describe the seen world, not the seer. Quote: What [Subject] sees: the world at their eye height, no back of a head, no shoulder of the looker in frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name whose eyes, the height, and the object of the look. For video, one motivated pan or walk as that person, still without their shoulder."
+        },
+        {
+          "type": "quote",
+          "text": "At a crowded celebration, a character becomes overwhelmed. Keep the image continuous while voices lose clarity, room detail recedes and a small nearby glass movement becomes unusually prominent. Return gradually to the room when a friend touches her shoulder. Build the perceptual transition in sound post-production."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=At+a+crowded+celebration,+a+character+becomes+overwhelmed.+Keep+the+image+continuous+while+voices+lose+clarity,+room+detail+recedes+and+a+small+nearby+glass+movement+becomes+unusually+prominent.+Return+gradually+to+the+room+when+a+friend+touches+her+shoulder.+Build+the+perceptual+transition+in+sound+post-production."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Describe the seen world, not the seer. Quote: What [Subject] sees: the world at their eye height, no back of a head, no shoulder of the looker in frame.Name whose eyes, the height, and the object of the look. For video, one motivated pan or walk as that person, still without their shoulder.Copy promptUse in Video GeneratorAt a crowded celebration, a character becomes overwhelmed. Keep the image continuous while voices lose clarity, room detail recedes and a small nearby glass movement becomes unusually prominent. Return gradually to the room when a friend touches her shoulder. Build the perceptual transition in sound post-production.At a crowded celebration, a character becomes overwhelmed. Keep the image continuous while voices lose clarity, room detail recedes and a small nearby glass movement becomes unusually prominent. Return gradually to the room when a friend touches her shoulder. Build the perceptual transition in sound post-production."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Over-the-Shoulder Coverage or a face looking toward camera. Tell: a blurry shoulder, the back of a head, or the looker staring at us.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: empty of the owner, eyeline into the scene, height matched to the character you just showed looking. If hands and a gun enter and stay, you drifted into First-Person.",
+          "links": [
+            {
+              "text": "First-Person",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "First-Person",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Over-the-Shoulder Coverage or a face looking toward camera. Tell: a blurry shoulder, the back of a head, or the looker staring at us.Fix: empty of the owner, eyeline into the scene, height matched to the character you just showed looking. If hands and a gun enter and stay, you drifted into First-Person."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a POV shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A POV shot shows what a character sees from their eye height. The camera stands in for their eyes; the looker's head and shoulder are not in frame."
+        },
+        {
+          "type": "heading",
+          "text": "POV vs over-the-shoulder",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "POV is as the character: no owner body, only the seen world. Over-the-shoulder keeps a near shoulder in the foreground and the far face sharp; we are with them, not inside the look."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a POV shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it after a look, when identification with what they see is the beat: a courtyard, a threat, a visor. Do not use it as the only coverage of a conversation."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a POV shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: What [Subject] sees at their eye height, no back of head, no looker shoulder, [object of the look] filling the frame. Name whose viewpoint."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a POV shot in film?A POV shot shows what a character sees from their eye height. The camera stands in for their eyes; the looker's head and shoulder are not in frame.POV vs over-the-shoulderPOV is as the character: no owner body, only the seen world. Over-the-shoulder keeps a near shoulder in the foreground and the far face sharp; we are with them, not inside the look.When should I use a POV shot?Use it after a look, when identification with what they see is the beat: a courtyard, a threat, a visor. Do not use it as the only coverage of a conversation.How do I prompt a POV shot for AI image or video?Write: What [Subject] sees at their eye height, no back of head, no looker shoulder, [object of the look] filling the frame. Name whose viewpoint."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Describe the seen world, not the seer. Quote: What [Subject] sees: the world at their eye height, no back of a head, no shoulder of the looker in frame.",
+      "Name whose eyes, the height, and the object of the look. For video, one motivated pan or walk as that person, still without their shoulder."
+    ],
+    "example": "At a crowded celebration, a character becomes overwhelmed. Keep the image continuous while voices lose clarity, room detail recedes and a small nearby glass movement becomes unusually prominent. Return gradually to the room when a friend touches her shoulder. Build the perceptual transition in sound post-production."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/ad782c8d50b2a756b366df24f8816406.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/090-subjective-optical-pov-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/33e364cb93ac77f7bba981d6a44b2dad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pov-090-subjective-optical-pov-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bbc0df076ab59191c3c76ab07a7f231b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/pov.jpg",
+      "alt": "Point of View frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/a377ca603c759f0f3e573588303d2336.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snorricam-018-body-mounted-face-camera-mini.webp",
+      "alt": "SnorriCam"
+    },
+    {
+      "kind": "video",
+      "path": "media/03868d02fedb015bdcc173c26c4c7b3e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/018-body-mounted-face-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+      "alt": "High Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a01e5345679b82787a13083396d0eae7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pov/famous/00-gravity-2013.jpg",
+      "alt": "Gravity 2013"
+    },
+    {
+      "kind": "image",
+      "path": "media/72c0e9d753779ae9dac3946fdbce7e0a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pov/hero.jpg",
+      "alt": "Point of View",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "280ebf54d00b259c5dc8252c75cfe73669a85bed06fd360c5cbe04696bbfd20d"
+}

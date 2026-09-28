@@ -1,0 +1,369 @@
+{
+  "id": "effects/thermal",
+  "slug": "thermal",
+  "title": "Thermal",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/thermal",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/thermal.webp",
+  "detail": "details/effects/thermal.json",
+  "aliases": [],
+  "description": "Thermal imaging cinematography maps emitted long-wave infrared (heat), not reflected light. A microbolometer or similar sensor assigns a palette (white-hot, black-hot, ironbow) to temperature, so faces, engines, and blood read warm while cold metal and night air do not.",
+  "thumbnail": "media/dfe75425132e409b7e17839e57127e62.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You are not lighting the scene. You are reading temperature."
+        },
+        {
+          "type": "paragraph",
+          "text": "A body is a mask. A recently used gun is a bright shape."
+        },
+        {
+          "type": "paragraph",
+          "text": "Walls may be dark. Visible lamps do not necessarily dominate."
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera is forensic or predatory. Use it when the story is heat: a hunter's vision, search and rescue, a border raid, an alien targeting system."
+        },
+        {
+          "type": "paragraph",
+          "text": "The palette is a legend, not a grade. It is the wrong tool for green goggle work or for pale-leaf IR photography."
+        },
+        {
+          "type": "paragraph",
+          "text": "If lamps bloom and the room is grainy green, that is night vision. If foliage is white under a black sky, that is near-IR stills."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function You are not lighting the scene. You are reading temperature.A body is a mask. A recently used gun is a bright shape.Walls may be dark. Visible lamps do not necessarily dominate.The camera is forensic or predatory. Use it when the story is heat: a hunter's vision, search and rescue, a border raid, an alien targeting system.The palette is a legend, not a grade. It is the wrong tool for green goggle work or for pale-leaf IR photography.If lamps bloom and the room is grainy green, that is night vision. If foliage is white under a black sky, that is near-IR stills."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "No key light in the usual sense. Contrast is delta-T."
+        },
+        {
+          "type": "paragraph",
+          "text": "Choose a palette and keep it consistent. Warm cores, cooler edges, possible bloom on the hottest spots."
+        },
+        {
+          "type": "paragraph",
+          "text": "Glass windows can block LWIR, so a face behind glass may fail. Prompt: thermal palette, heat as color, faces as warm masks, not green phosphor, not near-IR foliage."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works No key light in the usual sense. Contrast is delta-T.Choose a palette and keep it consistent. Warm cores, cooler edges, possible bloom on the hottest spots.Glass windows can block LWIR, so a face behind glass may fail. Prompt: thermal palette, heat as color, faces as warm masks, not green phosphor, not near-IR foliage."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A rider and horse as warm shapes on a cold ridge, ironbow or white-hot, breath as a plume, stone dark. Do not render it as a green night-vision feed or as daylight IR woods."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A rider and horse as warm shapes on a cold ridge, ironbow or white-hot, breath as a plume, stone dark. Do not render it as a green night-vision feed or as daylight IR woods."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Night Vision intensifies residual light on a phosphor. Infrared photographs near-IR reflectance (white leaves, dark sky).",
+          "links": [
+            {
+              "text": "Night Vision",
+              "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+            },
+            {
+              "text": "Infrared",
+              "url": "https://melies.co/cinematic-techniques/effects/infrared"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Thermal is emitted LWIR. Monochrome is visible-light grey.",
+          "links": [
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A thermal image can look mono in white-hot, but its tones follow heat, not albedo."
+        },
+        {
+          "type": "list-item",
+          "text": "Night VisionSomeone is hunting in the dark.",
+          "displayText": "Night Vision\nSomeone is hunting in the dark.",
+          "links": [
+            {
+              "text": "Night VisionSomeone is hunting in the dark.",
+              "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "InfraredThe world should look like another planet that is still Earth.",
+          "displayText": "Infrared\nThe world should look like another planet that is still Earth.",
+          "links": [
+            {
+              "text": "InfraredThe world should look like another planet that is still Earth.",
+              "url": "https://melies.co/cinematic-techniques/effects/infrared"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Night Vision",
+          "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+        },
+        {
+          "text": "Infrared",
+          "url": "https://melies.co/cinematic-techniques/effects/infrared"
+        },
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Night VisionSomeone is hunting in the dark.",
+          "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+        },
+        {
+          "text": "InfraredThe world should look like another planet that is still Earth.",
+          "url": "https://melies.co/cinematic-techniques/effects/infrared"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/57004862851c5391970cbe491d31bfae.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/night-vision.webp",
+          "alt": "Night Vision"
+        },
+        {
+          "kind": "image",
+          "path": "media/84366f6fb8fef72adc7fdae948e3cccd.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infrared.webp",
+          "alt": "Infrared"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Night Vision intensifies residual light on a phosphor. Infrared photographs near-IR reflectance (white leaves, dark sky).Thermal is emitted LWIR. Monochrome is visible-light grey.A thermal image can look mono in white-hot, but its tones follow heat, not albedo.Night VisionSomeone is hunting in the dark.InfraredThe world should look like another planet that is still Earth.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Predator makes heat the alien's sight: bodies as warm figures in a cool jungle. Sicario uses thermal and related electro-optical views as raid and border seeing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those are device palettes, not looks to photocopy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Predator makes heat the alien's sight: bodies as warm figures in a cool jungle. Sicario uses thermal and related electro-optical views as raid and border seeing.Those are device palettes, not looks to photocopy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Map temperature, not lamps. Example: Thermal palette of [Subject], heat as color, faces as warm masks, ironbow or white-hot, search-and-rescue or predator vision, not night-vision green, not pale infrared foliage."
+        },
+        {
+          "type": "quote",
+          "text": "Thermal palette of [Subject], heat as color, faces as warm masks, Predator vision or search-and-rescue."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Thermal+palette+of+[Subject],+heat+as+color,+faces+as+warm+masks,+Predator+vision+or+search-and-rescue."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Map temperature, not lamps. Example: Thermal palette of [Subject], heat as color, faces as warm masks, ironbow or white-hot, search-and-rescue or predator vision, not night-vision green, not pale infrared foliage.Copy promptUse in Image GeneratorThermal palette of [Subject], heat as color, faces as warm masks, Predator vision or search-and-rescue.Thermal palette of [Subject], heat as color, faces as warm masks, Predator vision or search-and-rescue."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: night vision or near-IR photography. Tell: green grain with blooming streetlights, or white trees and black sky, or normal modeling from a key light."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: temperature-based tones, warm bodies, cold surroundings, a named palette."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: night vision or near-IR photography. Tell: green grain with blooming streetlights, or white trees and black sky, or normal modeling from a key light.Fix: temperature-based tones, warm bodies, cold surroundings, a named palette."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is thermal in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An image of emitted heat mapped to a false-color or white-hot palette. It records temperature, not the light a normal camera would see."
+        },
+        {
+          "type": "heading",
+          "text": "Thermal vs night vision",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Night vision amplifies light and usually looks green and grainy. Thermal paints heat. A cold dark room can still show a warm body on thermal."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use thermal?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the beat is temperature: hunting, rescue, targeting. Do not use it as a sci-fi grade on a normally lit scene."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt thermal for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the palette (ironbow, white-hot), say heat as color, warm faces, cool environment. Forbid green phosphor and near-IR foliage looks."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is thermal in film?An image of emitted heat mapped to a false-color or white-hot palette. It records temperature, not the light a normal camera would see.Thermal vs night visionNight vision amplifies light and usually looks green and grainy. Thermal paints heat. A cold dark room can still show a warm body on thermal.When should I use thermal?When the beat is temperature: hunting, rescue, targeting. Do not use it as a sci-fi grade on a normally lit scene.How do I prompt thermal for AI image or video?Name the palette (ironbow, white-hot), say heat as color, warm faces, cool environment. Forbid green phosphor and near-IR foliage looks."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Map temperature, not lamps. Example: Thermal palette of [Subject], heat as color, faces as warm masks, ironbow or white-hot, search-and-rescue or predator vision, not night-vision green, not pale infrared foliage."
+    ],
+    "example": "Thermal palette of [Subject], heat as color, faces as warm masks, Predator vision or search-and-rescue."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/dfe75425132e409b7e17839e57127e62.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/thermal.webp",
+      "alt": "Thermal example"
+    },
+    {
+      "kind": "image",
+      "path": "media/57004862851c5391970cbe491d31bfae.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/night-vision.webp",
+      "alt": "Night Vision"
+    },
+    {
+      "kind": "image",
+      "path": "media/84366f6fb8fef72adc7fdae948e3cccd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/infrared.webp",
+      "alt": "Infrared"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8f308a12e70b3cc2292ec653bde6a164.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/thermal/hero.jpg",
+      "alt": "Thermal",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "c14117cd56306e36240b3c8f620ff6e0070d9a50663f2361f56f7fd15af0e2db"
+}

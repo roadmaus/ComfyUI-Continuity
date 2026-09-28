@@ -1,0 +1,469 @@
+{
+  "id": "camera-angles/eye-level",
+  "slug": "eye-level",
+  "title": "Eye Level",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/eye-level",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+  "detail": "details/camera-angles/eye-level.json",
+  "aliases": [],
+  "description": "An eye-level shot places the camera at the subject's eye height with a horizontal sightline and a level horizon. It is the default equal relationship: height and tilt assign no rank until you leave this setup.",
+  "thumbnail": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rank in a frame comes from where the lens sits and how it is pitched. Eye-level refuses that assignment."
+        },
+        {
+          "type": "paragraph",
+          "text": "Two people at matching eye height read as peers; the room does not look down on them, and they do not loom. Sit when they sit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stand when they stand. The judgment, if any, has to come from performance, costume, or light, not from geometry."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the beat is surveillance, monument, or a map. A few degrees of pitch and you have already cut to a High Angle or a Low Angle.",
+          "links": [
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            },
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A few inches down and you are in Shoulder Level, which is a companion, not a peer.",
+          "links": [
+            {
+              "text": "Shoulder Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/shoulder-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Shoulder Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/shoulder-level"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Rank in a frame comes from where the lens sits and how it is pitched. Eye-level refuses that assignment.Two people at matching eye height read as peers; the room does not look down on them, and they do not loom. Sit when they sit.Stand when they stand. The judgment, if any, has to come from performance, costume, or light, not from geometry.It is the wrong tool when the beat is surveillance, monument, or a map. A few degrees of pitch and you have already cut to a High Angle or a Low Angle.A few inches down and you are in Shoulder Level, which is a companion, not a peer."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Match the nodal point to the subject's eyes. Keep roll at zero so verticals stay vertical."
+        },
+        {
+          "type": "paragraph",
+          "text": "A 35mm to 50mm keeps perspective close to human vision; a wide from the same height will still stretch the room without changing rank. Height and tilt are independent: a camera at eye height that looks down is no longer an eye-level shot, it is a high angle from eye height."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt it as camera at their eye height, horizon level, no tilt up or down."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Match the nodal point to the subject's eyes. Keep roll at zero so verticals stay vertical.A 35mm to 50mm keeps perspective close to human vision; a wide from the same height will still stretch the room without changing rank. Height and tilt are independent: a camera at eye height that looks down is no longer an eye-level shot, it is a high angle from eye height.Prompt it as camera at their eye height, horizon level, no tilt up or down."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a conversation that should not take sides, or for a face you want believed without the camera lobbying. Concrete beat: two adults at a kitchen table, seated eyes matched, no ceiling grab."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not look down or up unless you mean it."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a conversation that should not take sides, or for a face you want believed without the camera lobbying. Concrete beat: two adults at a kitchen table, seated eyes matched, no ceiling grab.Do not look down or up unless you mean it."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "High Angle pitches down and shrinks the figure. Low Angle pitches up and grows it.",
+          "links": [
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            },
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Shoulder Level sits a few inches below the eyes, like a walking companion. Point of View is what the character sees, not a camera beside them at the same height.",
+          "links": [
+            {
+              "text": "Shoulder Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/shoulder-level"
+            },
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Over-the-Shoulder Coverage keeps a near body in the foreground; eye-level can be a clean Single.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            },
+            {
+              "text": "Single",
+              "url": "https://melies.co/cinematic-techniques/framing/single"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "displayText": "High Angle\nVulnerability, surveillance, or a map of a room.",
+          "links": [
+            {
+              "text": "High AngleVulnerability, surveillance, or a map of a room.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low AnglePower, monument, or intimidation.",
+          "displayText": "Low Angle\nPower, monument, or intimidation.",
+          "links": [
+            {
+              "text": "Low AnglePower, monument, or intimidation.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+          "displayText": "Bird's-Eye View\nTurn life into a board game or a ritual.",
+          "links": [
+            {
+              "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Shoulder Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/shoulder-level"
+        },
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Single",
+          "url": "https://melies.co/cinematic-techniques/framing/single"
+        },
+        {
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Low AnglePower, monument, or intimidation.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+          "alt": "High Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+          "alt": "Low Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+          "alt": "Bird's-Eye View"
+        },
+        {
+          "kind": "video",
+          "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots High Angle pitches down and shrinks the figure. Low Angle pitches up and grows it.Shoulder Level sits a few inches below the eyes, like a walking companion. Point of View is what the character sees, not a camera beside them at the same height.Over-the-Shoulder Coverage keeps a near body in the foreground; eye-level can be a clean Single.High AngleVulnerability, surveillance, or a map of a room.Low AnglePower, monument, or intimidation.Bird's-Eye ViewTurn life into a board game or a ritual."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tokyo Story holds domestic talk at human height so posture, not a power tilt, does the judging. Rosetta stays with her at her own eye line as she moves, refusing a look down."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use those as grammar: match height to the person in the scene, keep the horizon honest."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Tokyo Story holds domestic talk at human height so posture, not a power tilt, does the judging. Rosetta stays with her at her own eye line as she moves, refusing a look down.Use those as grammar: match height to the person in the scene, keep the horizon honest."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lead with height and pitch. Quote: Eye-level shot of [Subject], camera at their eye height, horizontal sightline, equal relationship, no power tilt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name that the horizon is level. Add a 35mm or 50mm if you want human perspective."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not write mood words in place of the height."
+        },
+        {
+          "type": "quote",
+          "text": "Eye-level shot of [Subject], camera at their eye height, horizontal sightline, equal relationship, no power tilt."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Eye-level+shot+of+[Subject],+camera+at+their+eye+height,+horizontal+sightline,+equal+relationship,+no+power+tilt."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lead with height and pitch. Quote: Eye-level shot of [Subject], camera at their eye height, horizontal sightline, equal relationship, no power tilt.Name that the horizon is level. Add a 35mm or 50mm if you want human perspective.Do not write mood words in place of the height.Copy promptUse in Image GeneratorEye-level shot of [Subject], camera at their eye height, horizontal sightline, equal relationship, no power tilt.Eye-level shot of [Subject], camera at their eye height, horizontal sightline, equal relationship, no power tilt."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a mild Low Angle, because generators treat a portrait as a poster. Tell: ceiling in frame, chin from below, verticals converging.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: camera at eye height, horizon level, no tilt. If the subject is seated, sit the camera; standing eye-level on a seated person is already looking down."
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a mild Low Angle, because generators treat a portrait as a poster. Tell: ceiling in frame, chin from below, verticals converging.Fix: camera at eye height, horizon level, no tilt. If the subject is seated, sit the camera; standing eye-level on a seated person is already looking down."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is eye level in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An eye-level shot places the camera at the subject's eye height with a level horizon. The sightline is horizontal, so the frame does not assign power by looking up or down."
+        },
+        {
+          "type": "heading",
+          "text": "Eye level vs high angle",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Eye level matches the subject's eyes and stays level. A high-angle shot raises the camera and pitches it down, so more floor enters and the figure occupies less of the rectangle."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use eye level?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the relationship should read as equal: talk, witness, default coverage. Skip it when the beat needs vulnerability from above or monument from below."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt eye level for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Eye-level shot of [Subject], camera at their eye height, horizon level, no tilt up or down. Name sit versus stand so the model does not look down on a seated body."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is eye level in film?An eye-level shot places the camera at the subject's eye height with a level horizon. The sightline is horizontal, so the frame does not assign power by looking up or down.Eye level vs high angleEye level matches the subject's eyes and stays level. A high-angle shot raises the camera and pitches it down, so more floor enters and the figure occupies less of the rectangle.When should I use eye level?Use it when the relationship should read as equal: talk, witness, default coverage. Skip it when the beat needs vulnerability from above or monument from below.How do I prompt eye level for AI image or video?Write: Eye-level shot of [Subject], camera at their eye height, horizon level, no tilt up or down. Name sit versus stand so the model does not look down on a seated body."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lead with height and pitch. Quote: Eye-level shot of [Subject], camera at their eye height, horizontal sightline, equal relationship, no power tilt.",
+      "Name that the horizon is level. Add a 35mm or 50mm if you want human perspective.",
+      "Do not write mood words in place of the height."
+    ],
+    "example": "Eye-level shot of [Subject], camera at their eye height, horizontal sightline, equal relationship, no power tilt."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+      "alt": "High Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+      "alt": "Low Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+      "alt": "Bird's-Eye View"
+    },
+    {
+      "kind": "video",
+      "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2aa2549c70a07b06d70d1e870f936495.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/eye-level/hero.jpg",
+      "alt": "Eye Level",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "6788d0d753222e9fd1aefea453ee4fbe1e540db68448bd3aa9a0f9264d2e03b7"
+}

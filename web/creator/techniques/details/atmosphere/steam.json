@@ -1,0 +1,407 @@
+{
+  "id": "atmosphere/steam",
+  "slug": "steam",
+  "title": "Steam",
+  "categoryId": "atmosphere",
+  "categoryTitle": "Atmosphere and Weather",
+  "sourceUrl": "https://melies.co/cinematic-techniques/atmosphere/steam",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steam.webp",
+  "detail": "details/atmosphere/steam.json",
+  "aliases": [
+    "haze",
+    "fog",
+    "smoke",
+    "dust",
+    "rain",
+    "snow"
+  ],
+  "description": "Steam is water vapor released where heat meets colder air: trains, manholes, showers, a white veil that rises and thins. It is wet matter, not combustion; it billows, condenses on lens and wool, and has a thermal source.",
+  "thumbnail": "media/ec455dac875141a605ffd36c183b8029.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A locomotive writes a column that the platform wind tears. A manhole breathes."
+        },
+        {
+          "type": "paragraph",
+          "text": "A shower erases a body in white. Heat meeting cold air."
+        },
+        {
+          "type": "paragraph",
+          "text": "Industrial or intimate, the physics are the same. Use it when the source is hot water or hot metal in cold space."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the cloud is burning (Smoke) or hanging as weather (Fog). Smoke can sink and stain; steam wants to rise and vanish.",
+          "links": [
+            {
+              "text": "Smoke",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+            },
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the white cloud has no grate, kettle, train, or shower, you have fog in a trench coat."
+        }
+      ],
+      "links": [
+        {
+          "text": "Smoke",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+        },
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A locomotive writes a column that the platform wind tears. A manhole breathes.A shower erases a body in white. Heat meeting cold air.Industrial or intimate, the physics are the same. Use it when the source is hot water or hot metal in cold space.It is the wrong tool when the cloud is burning (Smoke) or hanging as weather (Fog). Smoke can sink and stain; steam wants to rise and vanish.If the white cloud has no grate, kettle, train, or shower, you have fog in a trench coat."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Show the source (stack, manhole, shower head, kettle). Let the vapor rise and shear in wind."
+        },
+        {
+          "type": "paragraph",
+          "text": "Backlight for a white, translucent volume; it should feel wetter and brighter than smoke. Condensation on glass and wool helps."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: steam billowing around [Subject], trains, manholes, showers, a white veil, industrial or intimate heat."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Show the source (stack, manhole, shower head, kettle). Let the vapor rise and shear in wind.Backlight for a white, translucent volume; it should feel wetter and brighter than smoke. Condensation on glass and wool helps.Prompt: steam billowing around [Subject], trains, manholes, showers, a white veil, industrial or intimate heat."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it on a winter platform, a night street grate, a bathroom, a factory press. Do not use it as generic alley 'atmosphere' with no heat."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the alley is burning, use smoke. If the alley is only wet and cold, use fog or rain."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it on a winter platform, a night street grate, a bathroom, a factory press. Do not use it as generic alley 'atmosphere' with no heat.If the alley is burning, use smoke. If the alley is only wet and cold, use fog or rain."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Smoke is combustion, often grey or colored, with a fire source. Fog is ambient water droplets without a hot origin.",
+          "links": [
+            {
+              "text": "Smoke",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+            },
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Atmospheric Haze is distant scatter. Steam is a thermal event: white, rising, local to a grate, stack, or shower.",
+          "links": [
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SmokePhotograph the air of a room.",
+          "displayText": "Smoke\nPhotograph the air of a room.",
+          "links": [
+            {
+              "text": "SmokePhotograph the air of a room.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "FogHide geography. Delay the reveal.",
+          "displayText": "Fog\nHide geography. Delay the reveal.",
+          "links": [
+            {
+              "text": "FogHide geography. Delay the reveal.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "RainMake the air visible and the ground reflective.",
+          "displayText": "Rain\nMake the air visible and the ground reflective.",
+          "links": [
+            {
+              "text": "RainMake the air visible and the ground reflective.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Smoke",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+        },
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "SmokePhotograph the air of a room.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+        },
+        {
+          "text": "FogHide geography. Delay the reveal.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "RainMake the air visible and the ground reflective.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1a9bf825c36f7b7389de907847683752.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smoke.webp",
+          "alt": "Smoke"
+        },
+        {
+          "kind": "image",
+          "path": "media/a8973955095d2a7214fd549c40d15a8a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fog.webp",
+          "alt": "Fog"
+        },
+        {
+          "kind": "image",
+          "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+          "alt": "Rain"
+        }
+      ],
+      "sourceText": "Compared with similar shots Smoke is combustion, often grey or colored, with a fire source. Fog is ambient water droplets without a hot origin.Atmospheric Haze is distant scatter. Steam is a thermal event: white, rising, local to a grate, stack, or shower.SmokePhotograph the air of a room.FogHide geography. Delay the reveal.RainMake the air visible and the ground reflective."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Winter station grammar in thrillers leans on locomotive steam as moving architecture. The Untouchables uses train steam as a white, violent veil."
+        },
+        {
+          "type": "paragraph",
+          "text": "Drive lets night streets breathe from grates. Spirited Away treats bathhouse steam as a wet interior weather."
+        },
+        {
+          "type": "paragraph",
+          "text": "Show the heat, not a smoke bomb."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Winter station grammar in thrillers leans on locomotive steam as moving architecture. The Untouchables uses train steam as a white, violent veil.Drive lets night streets breathe from grates. Spirited Away treats bathhouse steam as a wet interior weather.Show the heat, not a smoke bomb."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Steam billowing around [Subject], trains, manholes, showers, a white veil, industrial or intimate heat. Name the hot source, the cold air, backlight, and rise."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, billows that shear and thin, condensation, no grey cigarette ribbons unless you also have smoke."
+        },
+        {
+          "type": "quote",
+          "text": "Steam billowing around [Subject], trains, manholes, showers, a white veil, industrial or intimate heat."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Steam+billowing+around+[Subject],+trains,+manholes,+showers,+a+white+veil,+industrial+or+intimate+heat."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Steam billowing around [Subject], trains, manholes, showers, a white veil, industrial or intimate heat. Name the hot source, the cold air, backlight, and rise.For video, billows that shear and thin, condensation, no grey cigarette ribbons unless you also have smoke.Copy promptUse in Image GeneratorSteam billowing around [Subject], trains, manholes, showers, a white veil, industrial or intimate heat.Steam billowing around [Subject], trains, manholes, showers, a white veil, industrial or intimate heat."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Smoke (wrong color, wrong source) or Fog (no rise from heat). The tell: a grey cloud sitting still with no grate or stack.",
+          "links": [
+            {
+              "text": "Smoke",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+            },
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: a thermal source, white translucent rise, backlight, wind shear."
+        }
+      ],
+      "links": [
+        {
+          "text": "Smoke",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+        },
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Smoke (wrong color, wrong source) or Fog (no rise from heat). The tell: a grey cloud sitting still with no grate or stack.The fix: a thermal source, white translucent rise, backlight, wind shear."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Steam in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Steam is water vapor from heat meeting colder air. It billows from trains, manholes, showers, and kettles: a white, wet, rising veil with a thermal source."
+        },
+        {
+          "type": "heading",
+          "text": "Steam vs Smoke",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Smoke is combustion particles and can hang, stain, and go grey. Steam is wet vapor, brighter, rising, tied to heat and cold air. One burns; the other boils."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Steam?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when heat and cold air are in the scene: platforms, grates, baths, presses. Do not use it as a generic alley cloud with no source."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Steam for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the hot source and the white rise. Example: steam billowing around [Subject], trains, manholes, showers, a white veil. Backlight it and keep it wetter than smoke."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Steam in film?Steam is water vapor from heat meeting colder air. It billows from trains, manholes, showers, and kettles: a white, wet, rising veil with a thermal source.Steam vs SmokeSmoke is combustion particles and can hang, stain, and go grey. Steam is wet vapor, brighter, rising, tied to heat and cold air. One burns; the other boils.When should I use Steam?Use it when heat and cold air are in the scene: platforms, grates, baths, presses. Do not use it as a generic alley cloud with no source.How do I prompt Steam for AI image or video?Name the hot source and the white rise. Example: steam billowing around [Subject], trains, manholes, showers, a white veil. Backlight it and keep it wetter than smoke."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Steam billowing around [Subject], trains, manholes, showers, a white veil, industrial or intimate heat. Name the hot source, the cold air, backlight, and rise.",
+      "For video, billows that shear and thin, condensation, no grey cigarette ribbons unless you also have smoke."
+    ],
+    "example": "Steam billowing around [Subject], trains, manholes, showers, a white veil, industrial or intimate heat."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/ec455dac875141a605ffd36c183b8029.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steam.webp",
+      "alt": "Steam example"
+    },
+    {
+      "kind": "image",
+      "path": "media/1a9bf825c36f7b7389de907847683752.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smoke.webp",
+      "alt": "Smoke"
+    },
+    {
+      "kind": "image",
+      "path": "media/a8973955095d2a7214fd549c40d15a8a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fog.webp",
+      "alt": "Fog"
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+      "alt": "Rain"
+    },
+    {
+      "kind": "image",
+      "path": "media/5017040e5f890ab6e6bbf2d84e921db8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/steam/hero.jpg",
+      "alt": "Steam",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "6e373905d7107024be07904b1b4a32755bc966e6f46e78198f9b58cfa68122d6"
+}

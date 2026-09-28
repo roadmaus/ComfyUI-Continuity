@@ -1,0 +1,428 @@
+{
+  "id": "effects/forced-perspective",
+  "slug": "forced-perspective",
+  "title": "Forced Perspective",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/forced-perspective",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/forced-perspective-143-forced-perspective-and-scale-illusion-mini.webp",
+  "detail": "details/effects/forced-perspective.json",
+  "aliases": [
+    "Apparent size manipulation",
+    "Perspective trick"
+  ],
+  "description": "Forced perspective uses camera position, subject distance, and set geometry to alter apparent size or distance, and the lie exists only from the taking viewpoint. Bodies, furniture, and eyelines must agree or the scale collapses.",
+  "thumbnail": "media/47eb6933699b353186630c52b97cede8.webp",
+  "video": "media/df55c234331c9b2aefb91e526852904a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/143-forced-perspective-and-scale-illusion-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A small adult sits at a table with a full-sized host. The table is built in two scales."
+        },
+        {
+          "type": "paragraph",
+          "text": "From one locked lens they share a meal. Move off the axis and the join shows."
+        },
+        {
+          "type": "paragraph",
+          "text": "The photograph looks ordinary. The measurements are not."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to change size without a digital shrink: a hobbit beside a man, a grown actor in a giant childhood kitchen, a miniature city aligned with a live foreground. Fantasy stays inside a photograph."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a free-moving camera unless the geometry is motion-controlled to match. It is also the wrong tool when you actually built a miniature of the whole world (that is diorama) or when you faked miniature scale with a tilted plane of focus (that is tilt-shift)."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A small adult sits at a table with a full-sized host. The table is built in two scales.From one locked lens they share a meal. Move off the axis and the join shows.The photograph looks ordinary. The measurements are not.Use it to change size without a digital shrink: a hobbit beside a man, a grown actor in a giant childhood kitchen, a miniature city aligned with a live foreground. Fantasy stays inside a photograph.It is the wrong tool for a free-moving camera unless the geometry is motion-controlled to match. It is also the wrong tool when you actually built a miniature of the whole world (that is diorama) or when you faked miniature scale with a tilted plane of focus (that is tilt-shift)."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose the viewing position first. Place the small performer farther from camera, or the large one nearer, and scale the set pieces they touch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Match eyelines and ground contact. Light both distances as one space."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lock the camera, or move only on a path that preserves alignment. Prompt: in-camera scale by placement, shared table or floor, coherent eyelines, not a digital resize."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Choose the viewing position first. Place the small performer farther from camera, or the large one nearer, and scale the set pieces they touch.Match eyelines and ground contact. Light both distances as one space.Lock the camera, or move only on a path that preserves alignment. Prompt: in-camera scale by placement, shared table or floor, coherent eyelines, not a digital resize."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A tiny adult guest and a normal host at one rustic table, locked camera, feet and hands sharing scaled furniture. Do not orbit the pair."
+        },
+        {
+          "type": "paragraph",
+          "text": "A new angle will break the alignment."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A tiny adult guest and a normal host at one rustic table, locked camera, feet and hands sharing scaled furniture. Do not orbit the pair.A new angle will break the alignment."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Diorama photographs a physical model standing in for a large world. Forced perspective usually uses real people at different distances.",
+          "links": [
+            {
+              "text": "Diorama",
+              "url": "https://melies.co/cinematic-techniques/effects/diorama"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tilt-Shift fakes toy scale with a thin focus plane on a real landscape. Deep Focus often supports forced perspective so both scales stay sharp.",
+          "links": [
+            {
+              "text": "Tilt-Shift",
+              "url": "https://melies.co/cinematic-techniques/lenses/tilt-shift"
+            },
+            {
+              "text": "Deep Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Duplication copies a person. Forced perspective copies a size relationship.",
+          "links": [
+            {
+              "text": "Duplication",
+              "url": "https://melies.co/cinematic-techniques/effects/duplication"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tilt-ShiftMake a city a model, or slice focus through a crowd.",
+          "displayText": "Tilt-Shift\nMake a city a model, or slice focus through a crowd.",
+          "links": [
+            {
+              "text": "Tilt-ShiftMake a city a model, or slice focus through a crowd.",
+              "url": "https://melies.co/cinematic-techniques/lenses/tilt-shift"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Deep FocusLet the audience find the story in the whole room.",
+          "displayText": "Deep Focus\nLet the audience find the story in the whole room.",
+          "links": [
+            {
+              "text": "Deep FocusLet the audience find the story in the whole room.",
+              "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Diorama",
+          "url": "https://melies.co/cinematic-techniques/effects/diorama"
+        },
+        {
+          "text": "Tilt-Shift",
+          "url": "https://melies.co/cinematic-techniques/lenses/tilt-shift"
+        },
+        {
+          "text": "Deep Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+        },
+        {
+          "text": "Duplication",
+          "url": "https://melies.co/cinematic-techniques/effects/duplication"
+        },
+        {
+          "text": "Tilt-ShiftMake a city a model, or slice focus through a crowd.",
+          "url": "https://melies.co/cinematic-techniques/lenses/tilt-shift"
+        },
+        {
+          "text": "Deep FocusLet the audience find the story in the whole room.",
+          "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/3967493b2757c4d18946c0b8560b8f38.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-shift-062-miniature-look-selective-focus-mini.webp",
+          "alt": "Tilt-Shift"
+        },
+        {
+          "kind": "video",
+          "path": "media/8f4baa0ec1ccda8162e2507cc145822f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/062-miniature-look-selective-focus-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/2085760298012aaa946dc04506a877fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/deep-focus-051-deep-focus-mini.webp",
+          "alt": "Deep Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/3b7ec49068c390bdc3af6487abab0eaf.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/051-deep-focus-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Diorama photographs a physical model standing in for a large world. Forced perspective usually uses real people at different distances.Tilt-Shift fakes toy scale with a thin focus plane on a real landscape. Deep Focus often supports forced perspective so both scales stay sharp.Duplication copies a person. Forced perspective copies a size relationship.Tilt-ShiftMake a city a model, or slice focus through a crowd.Deep FocusLet the audience find the story in the whole room.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Lord of the Rings: The Fellowship of the Ring seats humans and hobbits in shared compositions by distance and scaled props. Eternal Sunshine of the Spotless Mind puts Joel child-sized inside enlarged rooms."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those are viewpoint constructions, not frames to duplicate."
+        },
+        {
+          "type": "list-item",
+          "text": "The Lord of the Rings: The Fellowship of the Ring 2001Human and hobbit scale relationships in shared compositions.",
+          "displayText": "The Lord of the Rings: The Fellowship of the Ring 2001\nHuman and hobbit scale relationships in shared compositions."
+        },
+        {
+          "type": "list-item",
+          "text": "Eternal Sunshine of the Spotless Mind 2004Joel appears child-sized inside enlarged childhood environments.",
+          "displayText": "Eternal Sunshine of the Spotless Mind 2004\nJoel appears child-sized inside enlarged childhood environments."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Lord of the Rings: The Fellowship of the Ring seats humans and hobbits in shared compositions by distance and scaled props. Eternal Sunshine of the Spotless Mind puts Joel child-sized inside enlarged rooms.Those are viewpoint constructions, not frames to duplicate.The Lord of the Rings: The Fellowship of the Ring 2001Human and hobbit scale relationships in shared compositions.Eternal Sunshine of the Spotless Mind 2004Joel appears child-sized inside enlarged childhood environments."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Describe the viewpoint lie, not a shrink filter. Example: Forced perspective with [Subject], scale altered by camera placement and scaled furniture, giant or miniature in camera, locked viewpoint, matching eyelines, not a digital resize."
+        },
+        {
+          "type": "quote",
+          "text": "From one locked camera, a tiny adult guest sits beside a normal-sized host at a rustic table. Design the table and seating in separate scaled sections so their eyelines meet correctly. Stable hands, feet and contact shadows; no shrinking animation or distorted anatomy."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=From+one+locked+camera,+a+tiny+adult+guest+sits+beside+a+normal-sized+host+at+a+rustic+table.+Design+the+table+and+seating+in+separate+scaled+sections+so+their+eyelines+meet+correctly.+Stable+hands,+feet+and+contact+shadows;+no+shrinking+animation+or+distorted+anatomy."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Describe the viewpoint lie, not a shrink filter. Example: Forced perspective with [Subject], scale altered by camera placement and scaled furniture, giant or miniature in camera, locked viewpoint, matching eyelines, not a digital resize.Copy promptUse in Video GeneratorFrom one locked camera, a tiny adult guest sits beside a normal-sized host at a rustic table. Design the table and seating in separate scaled sections so their eyelines meet correctly. Stable hands, feet and contact shadows; no shrinking animation or distorted anatomy.From one locked camera, a tiny adult guest sits beside a normal-sized host at a rustic table. Design the table and seating in separate scaled sections so their eyelines meet correctly. Stable hands, feet and contact shadows; no shrinking animation or distorted anatomy."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: tilt-shift miniature look, or a person digitally scaled with wrong contact shadows. Tell: feet hover, eyelines miss, blur betrays true distance, or the camera freely orbits."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: one axis, scaled contact, matched light, deep enough focus to sell both sizes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: tilt-shift miniature look, or a person digitally scaled with wrong contact shadows. Tell: feet hover, eyelines miss, blur betrays true distance, or the camera freely orbits.Fix: one axis, scaled contact, matched light, deep enough focus to sell both sizes."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is forced perspective in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A viewpoint trick: distance, staging, and set scale make people or objects look larger or smaller than they are. It holds from the taking camera, not from every angle."
+        },
+        {
+          "type": "heading",
+          "text": "Forced perspective vs tilt-shift",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Forced perspective changes apparent size with geometry. Tilt-shift tilts the focus plane so a real scene looks like a toy. One lies about scale with placement. The other lies with focus."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use forced perspective?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When two scales must share one photograph without a digital shrink. Do not use it if the camera must roam off the designed axis."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt forced perspective for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify locked camera, two scales, shared furniture or ground, matching eyelines and contact shadows. Forbid free camera moves and simple resize."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is forced perspective in film?A viewpoint trick: distance, staging, and set scale make people or objects look larger or smaller than they are. It holds from the taking camera, not from every angle.Forced perspective vs tilt-shiftForced perspective changes apparent size with geometry. Tilt-shift tilts the focus plane so a real scene looks like a toy. One lies about scale with placement. The other lies with focus.When should I use forced perspective?When two scales must share one photograph without a digital shrink. Do not use it if the camera must roam off the designed axis.How do I prompt forced perspective for AI image or video?Specify locked camera, two scales, shared furniture or ground, matching eyelines and contact shadows. Forbid free camera moves and simple resize."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Describe the viewpoint lie, not a shrink filter. Example: Forced perspective with [Subject], scale altered by camera placement and scaled furniture, giant or miniature in camera, locked viewpoint, matching eyelines, not a digital resize."
+    ],
+    "example": "From one locked camera, a tiny adult guest sits beside a normal-sized host at a rustic table. Design the table and seating in separate scaled sections so their eyelines meet correctly. Stable hands, feet and contact shadows; no shrinking animation or distorted anatomy."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/df55c234331c9b2aefb91e526852904a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/143-forced-perspective-and-scale-illusion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47eb6933699b353186630c52b97cede8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/forced-perspective-143-forced-perspective-and-scale-illusion-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f5c25dd4d6bba453787c8ed12fa67e40.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/forced-perspective.jpg",
+      "alt": "Forced Perspective frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/3967493b2757c4d18946c0b8560b8f38.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-shift-062-miniature-look-selective-focus-mini.webp",
+      "alt": "Tilt-Shift"
+    },
+    {
+      "kind": "video",
+      "path": "media/8f4baa0ec1ccda8162e2507cc145822f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/062-miniature-look-selective-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2085760298012aaa946dc04506a877fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/deep-focus-051-deep-focus-mini.webp",
+      "alt": "Deep Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/3b7ec49068c390bdc3af6487abab0eaf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/051-deep-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a0cf990d8b5d04e4ff5d3d469723ab18.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/forced-perspective/hero.jpg",
+      "alt": "Forced Perspective",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "75b37fe928a41bb83b4a395ef99dc9e18510e0214fd447eb4503b5a9e4a1abeb"
+}

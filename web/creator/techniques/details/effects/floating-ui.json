@@ -1,0 +1,389 @@
+{
+  "id": "effects/floating-ui",
+  "slug": "floating-ui",
+  "title": "Floating UI",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/floating-ui",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/floating-ui-floating-ui-mini.webp",
+  "detail": "details/effects/floating-ui.json",
+  "aliases": [],
+  "description": "Floating UI, or HUD overlay cinematography, places readable interface, callouts, and data planes in the air of the scene so information lives in space, not only on a physical screen. The cockpit is the room.",
+  "thumbnail": "media/af2043d07f9a8f97020b339b98014cab.webp",
+  "video": "media/496f9154a49ffa591d967b4a288ec2ad.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/floating-ui-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A hand reaches into a diagram. Callouts hang beside a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera can dolly and the panels should parallax against the walls. Use it when the character is working with data as if it were furniture."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when type is glued to the frame like a broadcast bug. If the graphics do not occupy 3D space, you made a lower-third, not a HUD in the air."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A hand reaches into a diagram. Callouts hang beside a face.The camera can dolly and the panels should parallax against the walls. Use it when the character is working with data as if it were furniture.It is the wrong tool when type is glued to the frame like a broadcast bug. If the graphics do not occupy 3D space, you made a lower-third, not a HUD in the air."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Photograph the subject with a real key in the room. Composite interface planes with their own vanishing points, a few centimeters to a few meters in front of the face."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera moves, the panels must parallax. Type stays sharp enough to read."
+        },
+        {
+          "type": "paragraph",
+          "text": "A faint self-illumination on the planes is allowed. It should not replace the key on the skin."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt floating UI over the subject: HUD, callouts, and interface planes in 3D space, the screen as a cockpit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Photograph the subject with a real key in the room. Composite interface planes with their own vanishing points, a few centimeters to a few meters in front of the face.If the camera moves, the panels must parallax. Type stays sharp enough to read.A faint self-illumination on the planes is allowed. It should not replace the key on the skin.Prompt floating UI over the subject: HUD, callouts, and interface planes in 3D space, the screen as a cockpit."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when a pilot, surgeon, or detective is reading the air. Do not use it as decorative chrome on a portrait that has no data to parse."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when a pilot, surgeon, or detective is reading the air. Do not use it as decorative chrome on a portrait that has no data to parse."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Projections throw pictures onto walls and bodies. Floating UI hangs panels in space.",
+          "links": [
+            {
+              "text": "Projections",
+              "url": "https://melies.co/cinematic-techniques/effects/projection-mapping"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Video Game borrows playable camera grammar and HUD as game UI. Floating UI can live in live-action space without becoming a navigable engine.",
+          "links": [
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Video GameThe world is playable.",
+          "displayText": "Video Game\nThe world is playable.",
+          "links": [
+            {
+              "text": "Video GameThe world is playable.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "displayText": "Anamorphic Flare\nNight lights and headlights should write on the lens.",
+          "links": [
+            {
+              "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+              "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Projections",
+          "url": "https://melies.co/cinematic-techniques/effects/projection-mapping"
+        },
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "Video GameThe world is playable.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "Anamorphic FlareNight lights and headlights should write on the lens.",
+          "url": "https://melies.co/cinematic-techniques/effects/anamorphic-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/cc466960f60cd3e61df21437f741fe05.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/video-game-video-game-mini.webp",
+          "alt": "Video Game"
+        },
+        {
+          "kind": "video",
+          "path": "media/095bd1cd39fbd09d3f9223ba9e781bfd.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/video-game-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/dd60ac3e349447877925814c6440f811.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+          "alt": "Anamorphic Flare"
+        }
+      ],
+      "sourceText": "Compared with similar shots Projections throw pictures onto walls and bodies. Floating UI hangs panels in space.Video Game borrows playable camera grammar and HUD as game UI. Floating UI can live in live-action space without becoming a navigable engine.Video GameThe world is playable.Lens FlareLight is too strong to be polite.Anamorphic FlareNight lights and headlights should write on the lens."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Minority Report treats data as planes a body can shove. Iron Man puts callouts in the helmet's air."
+        },
+        {
+          "type": "paragraph",
+          "text": "Both are grammar for readable interface in 3D, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Minority Report treats data as planes a body can shove. Iron Man puts callouts in the helmet's air.Both are grammar for readable interface in 3D, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Floating UI over [Subject], HUD, callouts, and interface planes in 3D space, the screen as a cockpit. Name what the panels say in plain language, keep type sharp, and say the planes parallax if the camera moves."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban unreadable scribble."
+        },
+        {
+          "type": "quote",
+          "text": "Floating UI over [Subject], HUD, callouts, and interface planes in 3D space, the screen as a cockpit."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Floating+UI+over+[Subject],+HUD,+callouts,+and+interface+planes+in+3D+space,+the+screen+as+a+cockpit."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Floating UI over [Subject], HUD, callouts, and interface planes in 3D space, the screen as a cockpit. Name what the panels say in plain language, keep type sharp, and say the planes parallax if the camera moves.Ban unreadable scribble.Copy promptUse in Image GeneratorFloating UI over [Subject], HUD, callouts, and interface planes in 3D space, the screen as a cockpit.Floating UI over [Subject], HUD, callouts, and interface planes in 3D space, the screen as a cockpit."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a 2D overlay or projections on a wall. The tell is type stuck to the frame edge, or light crawling on brick with no hanging planes.",
+          "links": [
+            {
+              "text": "projections",
+              "url": "https://melies.co/cinematic-techniques/effects/projection-mapping"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is interface with depth and parallax, still keyed like a room."
+        }
+      ],
+      "links": [
+        {
+          "text": "projections",
+          "url": "https://melies.co/cinematic-techniques/effects/projection-mapping"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a 2D overlay or projections on a wall. The tell is type stuck to the frame edge, or light crawling on brick with no hanging planes.The fix is interface with depth and parallax, still keyed like a room."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is floating UI in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Floating UI places HUD, callouts, and interface planes in 3D space around the subject. Data lives in the air, as if the room were a cockpit."
+        },
+        {
+          "type": "heading",
+          "text": "Floating UI vs projections",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Projections are light thrown onto surfaces. Floating UI hangs readable panels in space with their own depth. One is a wall that becomes a screen. The other is a diagram you can stand inside."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use floating UI?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a character must read or move data in the air. Skip it when you only need a caption or a wall of signage."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt floating UI for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Floating UI over [Subject], HUD, callouts, and interface planes in 3D space. Demand readable type and parallax if the camera moves. Do not glue graphics to the frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is floating UI in film?Floating UI places HUD, callouts, and interface planes in 3D space around the subject. Data lives in the air, as if the room were a cockpit.Floating UI vs projectionsProjections are light thrown onto surfaces. Floating UI hangs readable panels in space with their own depth. One is a wall that becomes a screen. The other is a diagram you can stand inside.When should I use floating UI?Use it when a character must read or move data in the air. Skip it when you only need a caption or a wall of signage.How do I prompt floating UI for AI image or video?Write Floating UI over [Subject], HUD, callouts, and interface planes in 3D space. Demand readable type and parallax if the camera moves. Do not glue graphics to the frame."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Floating UI over [Subject], HUD, callouts, and interface planes in 3D space, the screen as a cockpit. Name what the panels say in plain language, keep type sharp, and say the planes parallax if the camera moves.",
+      "Ban unreadable scribble."
+    ],
+    "example": "Floating UI over [Subject], HUD, callouts, and interface planes in 3D space, the screen as a cockpit."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/496f9154a49ffa591d967b4a288ec2ad.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/floating-ui-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/af2043d07f9a8f97020b339b98014cab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/floating-ui-floating-ui-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/692a4ede0d3ae248e3f2cb0a460efb17.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/floating-ui.jpg",
+      "alt": "Floating UI frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/cc466960f60cd3e61df21437f741fe05.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/video-game-video-game-mini.webp",
+      "alt": "Video Game"
+    },
+    {
+      "kind": "video",
+      "path": "media/095bd1cd39fbd09d3f9223ba9e781bfd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/video-game-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dd60ac3e349447877925814c6440f811.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-flare.webp",
+      "alt": "Anamorphic Flare"
+    },
+    {
+      "kind": "image",
+      "path": "media/78c4ed10547a7fc4751e67cd346ff5a2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/floating-ui/hero.jpg",
+      "alt": "Floating UI",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "e2eefc5c118a057247c77de762fa3dcbd9ca52265f3a33f8e0d7541d31472da6"
+}

@@ -1,0 +1,372 @@
+{
+  "id": "viral-looks/race-track",
+  "slug": "race-track",
+  "title": "Race Track",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/race-track",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/race-track-race-track-mini.webp",
+  "detail": "details/viral-looks/race-track.json",
+  "aliases": [],
+  "description": "Race track, the race track look, pins a body or a machine to circuit geometry: oval, painted curbs, catch fencing, grandstands, speed as a closed loop. The oval is the set, and a car on a generic highway is not the recipe.",
+  "thumbnail": "media/f3a36f3755c3043b674b20d1ed2a8104.webp",
+  "video": "media/e846ae7e78ed0c792b550313ef7cbde2.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/race-track-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sport, pursuit, a character who only feels alive on a lap: the camera is wide enough or high enough to read the loop, or telephoto-compressed on the back straight with the paint still proving it is a circuit. Road-rush is tarmac POV."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the stadium of speed. It is the wrong tool on an open road with no barriers, and the wrong tool if sponsor type becomes readable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Letters garble. Show the paint that only a track has."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Sport, pursuit, a character who only feels alive on a lap: the camera is wide enough or high enough to read the loop, or telephoto-compressed on the back straight with the paint still proving it is a circuit. Road-rush is tarmac POV.This is the stadium of speed. It is the wrong tool on an open road with no barriers, and the wrong tool if sponsor type becomes readable.Letters garble. Show the paint that only a track has."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "High enough or wide enough to read the oval, 24mm from the infield, or 135mm compressed on the straight. Painted curbs, catch fence, grandstand."
+        },
+        {
+          "type": "paragraph",
+          "text": "Heat haze or motion on the cars. No readable sponsor type."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Race-track world of [Subject], oval geometry, painted curbs, grandstands, speed as a closed loop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works High enough or wide enough to read the oval, 24mm from the infield, or 135mm compressed on the straight. Painted curbs, catch fence, grandstand.Heat haze or motion on the cars. No readable sponsor type.Prompt: Race-track world of [Subject], oval geometry, painted curbs, grandstands, speed as a closed loop."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A lap, a pursuit that is also sport, a character stranded in the infield. Do not use it on a generic highway."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A lap, a pursuit that is also sport, a character stranded in the infield. Do not use it on a generic highway."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Road Rush is the rushing tarmac POV. Car Chasing is pursuit coverage.",
+          "links": [
+            {
+              "text": "Road Rush",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/road-rush"
+            },
+            {
+              "text": "Car Chasing",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/car-chasing"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Race track is the closed loop as production design: oval, paint, stands. If you cannot see the circuit, you are on a road, not a track."
+        },
+        {
+          "type": "list-item",
+          "text": "Road RushThe road is the subject.",
+          "displayText": "Road Rush\nThe road is the subject.",
+          "links": [
+            {
+              "text": "Road RushThe road is the subject.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/road-rush"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Car ChasingTwo machines, one argument.",
+          "displayText": "Car Chasing\nTwo machines, one argument.",
+          "links": [
+            {
+              "text": "Car ChasingTwo machines, one argument.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/car-chasing"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Road Rush",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/road-rush"
+        },
+        {
+          "text": "Car Chasing",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/car-chasing"
+        },
+        {
+          "text": "Road RushThe road is the subject.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/road-rush"
+        },
+        {
+          "text": "Car ChasingTwo machines, one argument.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/car-chasing"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/daa51a0826c38fc809d7e5bab0bbaf87.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/road-rush-road-rush-mini.webp",
+          "alt": "Road Rush"
+        },
+        {
+          "kind": "video",
+          "path": "media/cb213c03417486dcc41ff8bef4c379a1.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/road-rush-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d9ac3f5b30f4718d20808488d4833e07.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/car-chasing-car-chasing-mini.webp",
+          "alt": "Car Chasing"
+        },
+        {
+          "kind": "video",
+          "path": "media/6de27d6baed5a0493cee3d2610833366.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/car-chasing-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Road Rush is the rushing tarmac POV. Car Chasing is pursuit coverage.Race track is the closed loop as production design: oval, paint, stands. If you cannot see the circuit, you are on a road, not a track.Road RushThe road is the subject.Car ChasingTwo machines, one argument.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Grand Prix (1966) treats the circuit as architecture. Ford v Ferrari puts bodies and machines inside that paint and those stands."
+        },
+        {
+          "type": "paragraph",
+          "text": "A closed loop of speed. Grammar, not a copied corner."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Grand Prix (1966) treats the circuit as architecture. Ford v Ferrari puts bodies and machines inside that paint and those stands.A closed loop of speed. Grammar, not a copied corner."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Show the oval, then the person or car. Race-track world of [Subject], oval geometry, painted curbs, grandstands, speed as a closed loop."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add curbs, catch fence, stands, heat haze, no sponsor letters. Highway is illegal."
+        },
+        {
+          "type": "quote",
+          "text": "Race-track world of [Subject], oval geometry, painted curbs, grandstands, speed as a closed loop."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Race-track+world+of+[Subject],+oval+geometry,+painted+curbs,+grandstands,+speed+as+a+closed+loop."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Show the oval, then the person or car. Race-track world of [Subject], oval geometry, painted curbs, grandstands, speed as a closed loop.Add curbs, catch fence, stands, heat haze, no sponsor letters. Highway is illegal.Copy promptUse in Image GeneratorRace-track world of [Subject], oval geometry, painted curbs, grandstands, speed as a closed loop.Race-track world of [Subject], oval geometry, painted curbs, grandstands, speed as a closed loop."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A car on a generic highway, or readable logos. The tell is no oval and no paint."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: curbs, fencing, grandstands, closed loop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong A car on a generic highway, or readable logos. The tell is no oval and no paint.Fix it: curbs, fencing, grandstands, closed loop."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Race Track in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A location look: circuit geometry, painted curbs, grandstands, speed as a closed loop. The oval is the set, not a highway."
+        },
+        {
+          "type": "heading",
+          "text": "Race Track vs Road Rush",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Road rush is POV speed on tarmac. Race track is the stadium of that speed: oval, paint, stands. If you cannot read the loop, you wanted road rush or a chase."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Race Track?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Sport, pursuit, a lap that is the world. Skip generic highways."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Race Track for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name oval, curbs, stands, then: Race-track world of [Subject], oval geometry, painted curbs, grandstands, speed as a closed loop. Forbid sponsor type."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Race Track in film?A location look: circuit geometry, painted curbs, grandstands, speed as a closed loop. The oval is the set, not a highway.Race Track vs Road RushRoad rush is POV speed on tarmac. Race track is the stadium of that speed: oval, paint, stands. If you cannot read the loop, you wanted road rush or a chase.When should I use Race Track?Sport, pursuit, a lap that is the world. Skip generic highways.How do I prompt Race Track for AI image or video?Name oval, curbs, stands, then: Race-track world of [Subject], oval geometry, painted curbs, grandstands, speed as a closed loop. Forbid sponsor type."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Show the oval, then the person or car. Race-track world of [Subject], oval geometry, painted curbs, grandstands, speed as a closed loop.",
+      "Add curbs, catch fence, stands, heat haze, no sponsor letters. Highway is illegal."
+    ],
+    "example": "Race-track world of [Subject], oval geometry, painted curbs, grandstands, speed as a closed loop."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/e846ae7e78ed0c792b550313ef7cbde2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/race-track-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f3a36f3755c3043b674b20d1ed2a8104.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/race-track-race-track-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6ac517618ae7569d219ef6c40cc52d6c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/race-track.jpg",
+      "alt": "Race Track frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/daa51a0826c38fc809d7e5bab0bbaf87.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/road-rush-road-rush-mini.webp",
+      "alt": "Road Rush"
+    },
+    {
+      "kind": "video",
+      "path": "media/cb213c03417486dcc41ff8bef4c379a1.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/road-rush-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d9ac3f5b30f4718d20808488d4833e07.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/car-chasing-car-chasing-mini.webp",
+      "alt": "Car Chasing"
+    },
+    {
+      "kind": "video",
+      "path": "media/6de27d6baed5a0493cee3d2610833366.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/car-chasing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/f6d2fd1a0002e80cc93b6e20afeef04c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/race-track/hero.jpg",
+      "alt": "Race Track",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "07ff32feb2649d1091717b71cb3f0eec8a6fbd4ba2751138488c2ad6f5e74bcd"
+}

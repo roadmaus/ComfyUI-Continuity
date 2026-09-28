@@ -1,0 +1,408 @@
+{
+  "id": "camera-movement/crane-over",
+  "slug": "crane-over",
+  "title": "Crane Over",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/crane-over",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-over-crane-over-mini.webp",
+  "detail": "details/camera-movement/crane-over.json",
+  "aliases": [],
+  "description": "A crane-over lifts and arcs the camera on a jib or crane until it looks down on the scene from above. Height and angle change together in one move, turning the floor into a map.",
+  "thumbnail": "media/ce1f07177722d7e2a2ae3c53ed7cac09.webp",
+  "video": "media/e25d0aafa12cf5207b084f402b53ef09.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/crane-over-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The shot turns a scene into a diagram without cutting. Bodies, tables, and streets become plan view because the arm has climbed and pitched over them."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not a still overhead: the audience rides the change of rank. It is the wrong tool when you already want a locked top-down, or when a simple crane-up should keep looking forward at a skyline."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you never reach a downward angle, you only craned up."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The shot turns a scene into a diagram without cutting. Bodies, tables, and streets become plan view because the arm has climbed and pitched over them.It is not a still overhead: the audience rides the change of rank. It is the wrong tool when you already want a locked top-down, or when a simple crane-up should keep looking forward at a skyline.If you never reach a downward angle, you only craned up."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Boom up and arc forward, remote head tilting down as the arm passes over the subject. End nearly nadir or at a steep high angle."
+        },
+        {
+          "type": "paragraph",
+          "text": "Watch for the subject being covered by the arm's shadow and for changing key as you face new windows. Prompt a crane over, arm rising and arcing forward until the camera looks nearly straight down."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Boom up and arc forward, remote head tilting down as the arm passes over the subject. End nearly nadir or at a steep high angle.Watch for the subject being covered by the arm's shadow and for changing key as you face new windows. Prompt a crane over, arm rising and arcing forward until the camera looks nearly straight down."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to turn a scene into a map without cutting. Concrete beat: a dinner argument, then the table as a chessboard."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not crane over if the last frame is still a forward wide."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to turn a scene into a map without cutting. Concrete beat: a dinner argument, then the table as a chessboard.Do not crane over if the last frame is still a forward wide."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Crane Up typically keeps a forward look as it rises and eases back. An Overhead Top-Down can be a locked top-down with no ride.",
+          "links": [
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            },
+            {
+              "text": "Overhead Top-Down",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Jib Shot can do a small version of this arc over a table. Crane over is the continuous climb into downward view.",
+          "links": [
+            {
+              "text": "Jib Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/jib"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Overhead Top-DownTable, crime scene, or dance formation.",
+          "displayText": "Overhead Top-Down\nTable, crime scene, or dance formation.",
+          "links": [
+            {
+              "text": "Overhead Top-DownTable, crime scene, or dance formation.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+          "displayText": "Crane Up\nEnd a scene, reveal a city, or turn a person into landscape.",
+          "links": [
+            {
+              "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Overhead Top-Down",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        },
+        {
+          "text": "Jib Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/jib"
+        },
+        {
+          "text": "Overhead Top-DownTable, crime scene, or dance formation.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        },
+        {
+          "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e38c926247e6d32a842471e279499092.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/overhead-overhead-mini.webp",
+          "alt": "Overhead Top-Down"
+        },
+        {
+          "kind": "video",
+          "path": "media/26a0d54296bd8cd0d0f7613e6420795a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/overhead-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+          "alt": "Crane Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Crane Up typically keeps a forward look as it rises and eases back. An Overhead Top-Down can be a locked top-down with no ride.A Jib Shot can do a small version of this arc over a table. Crane over is the continuous climb into downward view.Overhead Top-DownTable, crime scene, or dance formation.Crane UpEnd a scene, reveal a city, or turn a person into landscape.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Untouchables uses crane height over the Union Station staircase so the action becomes a diagram of steps and bodies. Birdman rides theater space until floor plans and faces share one path."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the arc-into-down, not the period costumes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Untouchables uses crane height over the Union Station staircase so the action becomes a diagram of steps and bodies. Birdman rides theater space until floor plans and faces share one path.Use the arc-into-down, not the period costumes."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crane over [Subject], the arm rising and arcing forward until the camera looks nearly straight down, a continuous climb into overhead. For motion: the camera cranes up and over [Subject], finishing in a high downward angle."
+        },
+        {
+          "type": "quote",
+          "text": "The camera cranes up and over [Subject], finishing in a high downward angle."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+cranes+up+and+over+[Subject],+finishing+in+a+high+downward+angle."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Crane over [Subject], the arm rising and arcing forward until the camera looks nearly straight down, a continuous climb into overhead. For motion: the camera cranes up and over [Subject], finishing in a high downward angle.Copy promptUse in Video GeneratorThe camera cranes up and over [Subject], finishing in a high downward angle.The camera cranes up and over [Subject], finishing in a high downward angle."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Crane Up that never looks down, or a cut to Overhead Top-Down. The tell is a forward skyline at the end, or a jump to top-down.",
+          "links": [
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            },
+            {
+              "text": "Overhead Top-Down",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: one arm path that finishes steeply downward, subject still readable as a map."
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Overhead Top-Down",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Crane Up that never looks down, or a cut to Overhead Top-Down. The tell is a forward skyline at the end, or a jump to top-down.The fix: one arm path that finishes steeply downward, subject still readable as a map."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Crane Over in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a crane move that rises and arcs until the camera looks down, combining a height change with a change of angle in one path."
+        },
+        {
+          "type": "heading",
+          "text": "Crane Over vs Crane Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Crane up usually eases back while still looking across the world. Crane over continues until the view is downward and the floor becomes the picture."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Crane Over?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When blocking should become a map without a cut. Do not use it if you wanted a skyline or a still overhead lock-off."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Crane Over for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write crane up and over [Subject], finishing nearly straight down. One continuous arm move. Ban a cut to top-down."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Crane Over in film?It is a crane move that rises and arcs until the camera looks down, combining a height change with a change of angle in one path.Crane Over vs Crane UpCrane up usually eases back while still looking across the world. Crane over continues until the view is downward and the floor becomes the picture.When should I use Crane Over?When blocking should become a map without a cut. Do not use it if you wanted a skyline or a still overhead lock-off.How do I prompt Crane Over for AI image or video?Write crane up and over [Subject], finishing nearly straight down. One continuous arm move. Ban a cut to top-down."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Crane over [Subject], the arm rising and arcing forward until the camera looks nearly straight down, a continuous climb into overhead. For motion: the camera cranes up and over [Subject], finishing in a high downward angle."
+    ],
+    "example": "The camera cranes up and over [Subject], finishing in a high downward angle."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/e25d0aafa12cf5207b084f402b53ef09.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/crane-over-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ce1f07177722d7e2a2ae3c53ed7cac09.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-over-crane-over-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3e07b1fd7772a54e65d1c0c7200e319c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/crane-over.jpg",
+      "alt": "Crane Over frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/e38c926247e6d32a842471e279499092.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/overhead-overhead-mini.webp",
+      "alt": "Overhead Top-Down"
+    },
+    {
+      "kind": "video",
+      "path": "media/26a0d54296bd8cd0d0f7613e6420795a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/overhead-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+      "alt": "Crane Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/519c85389fb7eed4fafeea611ecac4a2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crane-over/hero.jpg",
+      "alt": "Crane Over",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "8a5a7394ab75cee9d12b828ca1af6439b48ffa610ff35351825a674c205abf31"
+}

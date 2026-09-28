@@ -1,0 +1,398 @@
+{
+  "id": "camera-movement/locked-on",
+  "slug": "locked-on",
+  "title": "Locked-On",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/locked-on",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/locked-on-020-object-locked-moving-camera-mini.webp",
+  "detail": "details/camera-movement/locked-on.json",
+  "aliases": [],
+  "description": "A locked-on shot keeps one object or face glued in frame while the world streams past, as if the camera were bolted to a vehicle, a fall, or a spinning set. The subject is the only stable point.",
+  "thumbnail": "media/4790b7e023e1de9ff71cdf19b2f02238.webp",
+  "video": "media/f1e2073d98c065752bc9f43a7462a2aa.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/020-object-locked-moving-camera-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "One thing is the only law in a moving world. A steering wheel, a spinning astronaut, a driver's eyes: everything else is weather."
+        },
+        {
+          "type": "paragraph",
+          "text": "The constraint is rigidity to the subject, not a vest walking nearby. It is the wrong tool when you wanted a body-mounted face rig, and the wrong tool when a normal track should keep a walking distance."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bolted is not following."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function One thing is the only law in a moving world. A steering wheel, a spinning astronaut, a driver's eyes: everything else is weather.The constraint is rigidity to the subject, not a vest walking nearby. It is the wrong tool when you wanted a body-mounted face rig, and the wrong tool when a normal track should keep a walking distance.Bolted is not following."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mount to the subject, the vehicle, or match-move as if bolted. Distance and angle to the chosen object stay nearly constant; background parallax and rotation can be extreme."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a locked-on move, camera glued to one object or face, environment streaming past, as if bolted to a vehicle or a falling body."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Mount to the subject, the vehicle, or match-move as if bolted. Distance and angle to the chosen object stay nearly constant; background parallax and rotation can be extreme.Prompt a locked-on move, camera glued to one object or face, environment streaming past, as if bolted to a vehicle or a falling body."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when one thing is the only stable point in a moving world. Concrete beat: a close steering wheel and dash while the city smears the windows."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it for a sidewalk follow."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when one thing is the only stable point in a moving world. Concrete beat: a close steering wheel and dash while the city smears the windows.Do not use it for a sidewalk follow."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A SnorriCam is a specific body-mount facing the actor. Tracking Shot holds distance to a mover but is not bolted; the relationship can breathe.",
+          "links": [
+            {
+              "text": "SnorriCam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            },
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Locked-on is a rigid constraint: the camera and the chosen subject share a mount or a match-move as if they did."
+        },
+        {
+          "type": "list-item",
+          "text": "SnorriCamTrap the audience in a body that cannot get out.",
+          "displayText": "SnorriCam\nTrap the audience in a body that cannot get out.",
+          "links": [
+            {
+              "text": "SnorriCamTrap the audience in a body that cannot get out.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "displayText": "Tracking Shot\nAccompany a walker. The shot is a journey, not a picture.",
+          "links": [
+            {
+              "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "SnorriCam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        },
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "SnorriCamTrap the audience in a body that cannot get out.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        },
+        {
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a377ca603c759f0f3e573588303d2336.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snorricam-018-body-mounted-face-camera-mini.webp",
+          "alt": "SnorriCam"
+        },
+        {
+          "kind": "video",
+          "path": "media/03868d02fedb015bdcc173c26c4c7b3e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/018-body-mounted-face-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+          "alt": "Tracking Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A SnorriCam is a specific body-mount facing the actor. Tracking Shot holds distance to a mover but is not bolted; the relationship can breathe.Locked-on is a rigid constraint: the camera and the chosen subject share a mount or a match-move as if they did.SnorriCamTrap the audience in a body that cannot get out.Tracking ShotAccompany a walker. The shot is a journey, not a picture.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Gravity treats falling bodies and visors as the stable mount while Earth streams. Baby Driver bolts attention to drivers, wheels, and the car's interior while streets smear."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the rigid glue, not the soundtrack."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Gravity treats falling bodies and visors as the stable mount while Earth streams. Baby Driver bolts attention to drivers, wheels, and the car's interior while streets smear.Use the rigid glue, not the soundtrack."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Locked-on move with [Subject], camera glued to one object or face while the environment streams past, as if bolted to a vehicle or a falling body. For motion: the camera stays locked on [Subject] while the environment streams past them."
+        },
+        {
+          "type": "quote",
+          "text": "The camera stays locked on [Subject] while the environment streams past them."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+stays+locked+on+[Subject]+while+the+environment+streams+past+them."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Locked-on move with [Subject], camera glued to one object or face while the environment streams past, as if bolted to a vehicle or a falling body. For motion: the camera stays locked on [Subject] while the environment streams past them.Copy promptUse in Video GeneratorThe camera stays locked on [Subject] while the environment streams past them.The camera stays locked on [Subject] while the environment streams past them."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Follow Shot or SnorriCam. The tell is a walking offset behind a person, or a chest rig whose job is the face as tripod for a sidewalk.",
+          "links": [
+            {
+              "text": "Follow Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+            },
+            {
+              "text": "SnorriCam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: name the mount, keep subject scale and angle constant, let only the world stream."
+        }
+      ],
+      "links": [
+        {
+          "text": "Follow Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+        },
+        {
+          "text": "SnorriCam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Follow Shot or SnorriCam. The tell is a walking offset behind a person, or a chest rig whose job is the face as tripod for a sidewalk.The fix: name the mount, keep subject scale and angle constant, let only the world stream."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Locked-On in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a camera rigidly tied to one subject so that object stays glued in frame while the environment moves around it."
+        },
+        {
+          "type": "heading",
+          "text": "Locked-On vs SnorriCam",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "SnorriCam is a body-mount facing the wearer. Locked-on is the broader bolt: a car, a helmet, a falling body, any subject as the only stable point."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Locked-On?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a vehicle, a fall, or an object should be the still law. Do not use it as a synonym for following someone down a hall."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Locked-On for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write camera glued to [Subject], as if bolted, environment streaming past, subject size and angle constant. Name the mount."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Locked-On in film?It is a camera rigidly tied to one subject so that object stays glued in frame while the environment moves around it.Locked-On vs SnorriCamSnorriCam is a body-mount facing the wearer. Locked-on is the broader bolt: a car, a helmet, a falling body, any subject as the only stable point.When should I use Locked-On?When a vehicle, a fall, or an object should be the still law. Do not use it as a synonym for following someone down a hall.How do I prompt Locked-On for AI image or video?Write camera glued to [Subject], as if bolted, environment streaming past, subject size and angle constant. Name the mount."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Locked-on move with [Subject], camera glued to one object or face while the environment streams past, as if bolted to a vehicle or a falling body. For motion: the camera stays locked on [Subject] while the environment streams past them."
+    ],
+    "example": "The camera stays locked on [Subject] while the environment streams past them."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/f1e2073d98c065752bc9f43a7462a2aa.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/020-object-locked-moving-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4790b7e023e1de9ff71cdf19b2f02238.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/locked-on-020-object-locked-moving-camera-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8a1606cc5d9073325335c96bf6ed6d47.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/locked-on.jpg",
+      "alt": "Locked-On frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/a377ca603c759f0f3e573588303d2336.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snorricam-018-body-mounted-face-camera-mini.webp",
+      "alt": "SnorriCam"
+    },
+    {
+      "kind": "video",
+      "path": "media/03868d02fedb015bdcc173c26c4c7b3e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/018-body-mounted-face-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+      "alt": "Tracking Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/91e2ade8605098963dfe737e27dc56c5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/locked-on/hero.jpg",
+      "alt": "Locked-On",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "15b98ec6d31837b68a7ad93a1b9567ffa3d864b2ce334206a7b9b8ba16f14f80"
+}

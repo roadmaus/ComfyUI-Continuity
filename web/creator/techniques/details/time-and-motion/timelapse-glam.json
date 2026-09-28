@@ -1,0 +1,409 @@
+{
+  "id": "time-and-motion/timelapse-glam",
+  "slug": "timelapse-glam",
+  "title": "Timelapse Glam",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-glam",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/timelapse-glam-04-timelapse-glam-mini.webp",
+  "detail": "details/time-and-motion/timelapse-glam.json",
+  "aliases": [],
+  "description": "Timelapse glam is interval photography of a styling process in which clothes, hair, and makeup change at high speed while the face holds. The person is a still axis and wardrobe is the changing weather.",
+  "thumbnail": "media/c01084e5303a0bbec80e3ba892290f8e.webp",
+  "video": "media/a3c2b7d232c08028141ef4e5b8794c43.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/04-timelapse-glam-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to show transformation as labor rather than as a cut to a new costume. Stylists swarm."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hangers fly. Identity must survive the swarm or the face becomes a morph."
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera is usually locked. The clock is the dressing room's, not the street's."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for landscape days, racing crowds, or a freeze of the world. If the city is the process, you wanted time-lapse or timelapse landscape."
+        },
+        {
+          "type": "paragraph",
+          "text": "If only the person is a statue in traffic, you wanted timelapse human. Do not let the skull drift."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it to show transformation as labor rather than as a cut to a new costume. Stylists swarm.Hangers fly. Identity must survive the swarm or the face becomes a morph.The camera is usually locked. The clock is the dressing room's, not the street's.It is the wrong tool for landscape days, racing crowds, or a freeze of the world. If the city is the process, you wanted time-lapse or timelapse landscape.If only the person is a statue in traffic, you wanted timelapse human. Do not let the skull drift."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock identity, eyeline, and camera. Interval-sample while wardrobe and hair change in discrete, readable steps."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hands of stylists may smear. The face should not."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Timelapse glam of [Subject], styling swarm, clothes and hair changing while the face holds."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock identity, eyeline, and camera. Interval-sample while wardrobe and hair change in discrete, readable steps.Hands of stylists may smear. The face should not.Prompt: Timelapse glam of [Subject], styling swarm, clothes and hair changing while the face holds."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a look is assembled in public, such as a held face while stylists swap dresses at interval speed. Do not use it to time-lapse a skyline."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a look is assembled in public, such as a held face while stylists swap dresses at interval speed. Do not use it to time-lapse a skyline."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This is a specialty of Time-Lapse, not a Glam lighting pattern alone. Timelapse Human holds a person while a crowd races.",
+          "links": [
+            {
+              "text": "Time-Lapse",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            },
+            {
+              "text": "Glam",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            },
+            {
+              "text": "Timelapse Human",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-human"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Timelapse Landscape holds geography while weather races. A montage of costume changes with cuts is editing, not interval sampling.",
+          "links": [
+            {
+              "text": "Timelapse Landscape",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-landscape"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+          "displayText": "Time-Lapse\nShow weather, construction, or a night becoming morning.",
+          "links": [
+            {
+              "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "GlamSell the face.",
+          "displayText": "Glam\nSell the face.",
+          "links": [
+            {
+              "text": "GlamSell the face.",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Time-Lapse",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "Glam",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "Timelapse Human",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-human"
+        },
+        {
+          "text": "Timelapse Landscape",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/timelapse-landscape"
+        },
+        {
+          "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "GlamSell the face.",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/59f00cc372fa5e18d3dc936d0959e111.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/time-lapse-084-time-lapse-and-accelerated-systems-mini.webp",
+          "alt": "Time-Lapse"
+        },
+        {
+          "kind": "video",
+          "path": "media/98976fbe19bbaefa951c514246128a5b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/084-time-lapse-and-accelerated-systems-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d0c6118ba609a42d93a75e2dc10200d3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/glam.webp",
+          "alt": "Glam"
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots This is a specialty of Time-Lapse, not a Glam lighting pattern alone. Timelapse Human holds a person while a crowd races.Timelapse Landscape holds geography while weather races. A montage of costume changes with cuts is editing, not interval sampling.Time-LapseShow weather, construction, or a night becoming morning.GlamSell the face.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vogue transformation films and fashion-week process pieces are the native grammar. Music videos use interval wardrobe bursts on a held star."
+        },
+        {
+          "type": "paragraph",
+          "text": "Feature films more often cut montages. If you need a narrative cousin, think process, not a copied title sequence."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Vogue transformation films and fashion-week process pieces are the native grammar. Music videos use interval wardrobe bursts on a held star.Feature films more often cut montages. If you need a narrative cousin, think process, not a copied title sequence."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock the face, accelerate the styling. Still: one held identity with evidence of process (hands, garments in mid-swap)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Time-lapse around a still [Subject] as stylists and wardrobe change at high speed. Same skull, same eyeline, clothes as weather, no identity morph."
+        },
+        {
+          "type": "quote",
+          "text": "Time-lapse around a still [Subject] as stylists and wardrobe change at high speed."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Time-lapse+around+a+still+[Subject]+as+stylists+and+wardrobe+change+at+high+speed."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lock the face, accelerate the styling. Still: one held identity with evidence of process (hands, garments in mid-swap).Video: Time-lapse around a still [Subject] as stylists and wardrobe change at high speed. Same skull, same eyeline, clothes as weather, no identity morph.Copy promptUse in Video GeneratorTime-lapse around a still [Subject] as stylists and wardrobe change at high speed.Time-lapse around a still [Subject] as stylists and wardrobe change at high speed."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a costume Montage or a face morph. The tell is a changing skull, or a city time-lapse with no styling work.",
+          "links": [
+            {
+              "text": "Montage",
+              "url": "https://melies.co/cinematic-techniques/editing/montage"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: hold identity and camera, interval the wardrobe, keep stylist hands as the swarm."
+        }
+      ],
+      "links": [
+        {
+          "text": "Montage",
+          "url": "https://melies.co/cinematic-techniques/editing/montage"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a costume Montage or a face morph. The tell is a changing skull, or a city time-lapse with no styling work.Fix: hold identity and camera, interval the wardrobe, keep stylist hands as the swarm."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Timelapse Glam in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Timelapse glam interval-samples a styling session so clothes and hair change quickly while the face remains a stable identity."
+        },
+        {
+          "type": "heading",
+          "text": "Timelapse Glam vs Time-Lapse",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Time-lapse is the parent interval method. Timelapse glam restricts it to a held person whose wardrobe and hair are the changing weather."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Timelapse Glam?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When transformation is the beat and should be seen as process: a look assembled, not a cut to a new costume."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Timelapse Glam for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a still face, a styling swarm, and clothes changing at high speed. Lock identity. Forbid morphing skulls and city-only lapses."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Timelapse Glam in film?Timelapse glam interval-samples a styling session so clothes and hair change quickly while the face remains a stable identity.Timelapse Glam vs Time-LapseTime-lapse is the parent interval method. Timelapse glam restricts it to a held person whose wardrobe and hair are the changing weather.When should I use Timelapse Glam?When transformation is the beat and should be seen as process: a look assembled, not a cut to a new costume.How do I prompt Timelapse Glam for AI image or video?Write a still face, a styling swarm, and clothes changing at high speed. Lock identity. Forbid morphing skulls and city-only lapses."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lock the face, accelerate the styling. Still: one held identity with evidence of process (hands, garments in mid-swap).",
+      "Video: Time-lapse around a still [Subject] as stylists and wardrobe change at high speed. Same skull, same eyeline, clothes as weather, no identity morph."
+    ],
+    "example": "Time-lapse around a still [Subject] as stylists and wardrobe change at high speed."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/a3c2b7d232c08028141ef4e5b8794c43.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/04-timelapse-glam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c01084e5303a0bbec80e3ba892290f8e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/timelapse-glam-04-timelapse-glam-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/57a4c4255f64a7f6df7457753d234221.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/timelapse-glam.jpg",
+      "alt": "Timelapse Glam frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/59f00cc372fa5e18d3dc936d0959e111.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/time-lapse-084-time-lapse-and-accelerated-systems-mini.webp",
+      "alt": "Time-Lapse"
+    },
+    {
+      "kind": "video",
+      "path": "media/98976fbe19bbaefa951c514246128a5b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/084-time-lapse-and-accelerated-systems-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d0c6118ba609a42d93a75e2dc10200d3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/glam.webp",
+      "alt": "Glam"
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2268899e4ed582dcc07438c186539271.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/timelapse-glam/hero.jpg",
+      "alt": "Timelapse Glam",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "32ba75e5bc79b8b31c8688ddc432e219aaa485f4ffa67919af0e21d56f8ab8c0"
+}

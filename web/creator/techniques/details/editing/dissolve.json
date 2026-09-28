@@ -1,0 +1,496 @@
+{
+  "id": "editing/dissolve",
+  "slug": "dissolve",
+  "title": "Dissolve",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/dissolve",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dissolve-102-dissolve-and-temporal-layering-mini.webp",
+  "detail": "details/editing/dissolve.json",
+  "aliases": [
+    "cross-dissolve",
+    "Audio match transition",
+    "Sonic metamorphosis"
+  ],
+  "description": "A dissolve gradually overlaps the outgoing shot with the incoming shot so both images occupy the frame for a measurable duration. Opacity of A falls as opacity of B rises; at the midpoint you are looking at two ghosts.",
+  "thumbnail": "media/1332a951776aaa53a01036439d1680be.webp",
+  "video": "media/1ec6c76a16b746e9cd93c6c2b5299211.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/102-dissolve-and-temporal-layering-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A face thins. A landscape thickens through it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Time has passed, or memory has, and the cut did not want to be a door slam. Dissolves are for passage, recollection, or the gentle death of a scene."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the next image should hurt, or when the correspondence should snap. Hurt is a Smash Cut.",
+          "links": [
+            {
+              "text": "Smash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Snap-rhyme is a Match Cut or Graphic Match. If you hold the overlap as a meaning in itself, you are in Double Exposure territory, not a transition.",
+          "links": [
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            },
+            {
+              "text": "Graphic Match",
+              "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+            },
+            {
+              "text": "Double Exposure",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A dissolve does not automatically mean years have passed. Duration, sound, and context do that work."
+        },
+        {
+          "type": "paragraph",
+          "text": "A two-frame dissolve is just a soft cut."
+        }
+      ],
+      "links": [
+        {
+          "text": "Smash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Graphic Match",
+          "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+        },
+        {
+          "text": "Double Exposure",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A face thins. A landscape thickens through it.Time has passed, or memory has, and the cut did not want to be a door slam. Dissolves are for passage, recollection, or the gentle death of a scene.It is the wrong tool when the next image should hurt, or when the correspondence should snap. Hurt is a Smash Cut.Snap-rhyme is a Match Cut or Graphic Match. If you hold the overlap as a meaning in itself, you are in Double Exposure territory, not a transition.A dissolve does not automatically mean years have passed. Duration, sound, and context do that work.A two-frame dissolve is just a soft cut."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mix A and B over time: typically a dozen frames to a few seconds. Keep a shared compositional hook if you want the overlap to read (a fan through a rotor, a face through a ceiling)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Decide whether sound dissolves with picture or bridges first. This is an optical or digital mix, not a camera move."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: dissolve from [Subject] into another time or place, overlapping ghosts, longer than a cut admits."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Mix A and B over time: typically a dozen frames to a few seconds. Keep a shared compositional hook if you want the overlap to read (a fan through a rotor, a face through a ceiling).Decide whether sound dissolves with picture or bridges first. This is an optical or digital mix, not a camera move.Prompt: dissolve from [Subject] into another time or place, overlapping ghosts, longer than a cut admits."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for memory, montage-like passage, or a scene that should die instead of stop. Do not use it to hide a bad match on action."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the two sides should collide, cut hard."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for memory, montage-like passage, or a scene that should die instead of stop. Do not use it to hide a bad match on action.If the two sides should collide, cut hard."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Fade In / Fade Out goes to a uniform field (black or color) so there is a moment with no scene. A dissolve never empties the frame; B is already there.",
+          "links": [
+            {
+              "text": "Fade In / Fade Out",
+              "url": "https://melies.co/cinematic-techniques/editing/fade"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Double Exposure holds two images as a stacked meaning, not as a handoff. Morph warps contours; dissolve only changes opacity.",
+          "links": [
+            {
+              "text": "Double Exposure",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            },
+            {
+              "text": "Morph",
+              "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Wipe uses a traveling boundary instead of a mix.",
+          "links": [
+            {
+              "text": "Wipe",
+              "url": "https://melies.co/cinematic-techniques/editing/wipe"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Fade In / Fade OutA scene is a book chapter.",
+          "displayText": "Fade In / Fade Out\nA scene is a book chapter.",
+          "links": [
+            {
+              "text": "Fade In / Fade OutA scene is a book chapter.",
+              "url": "https://melies.co/cinematic-techniques/editing/fade"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Double ExposureTwo times or two selves occupy one frame.",
+          "displayText": "Double Exposure\nTwo times or two selves occupy one frame.",
+          "links": [
+            {
+              "text": "Double ExposureTwo times or two selves occupy one frame.",
+              "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Fade In / Fade Out",
+          "url": "https://melies.co/cinematic-techniques/editing/fade"
+        },
+        {
+          "text": "Double Exposure",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        },
+        {
+          "text": "Morph",
+          "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+        },
+        {
+          "text": "Wipe",
+          "url": "https://melies.co/cinematic-techniques/editing/wipe"
+        },
+        {
+          "text": "Fade In / Fade OutA scene is a book chapter.",
+          "url": "https://melies.co/cinematic-techniques/editing/fade"
+        },
+        {
+          "text": "Double ExposureTwo times or two selves occupy one frame.",
+          "url": "https://melies.co/cinematic-techniques/effects/double-exposure"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/eb3012a31c74b1950233bd05e60d3644.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fade-103-fade-to-a-field-of-black-or-color-mini.webp",
+          "alt": "Fade In / Fade Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/8012073caede219e3dd4f356b367853d.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/103-fade-to-a-field-of-black-or-color-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+          "alt": "Double Exposure"
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Fade In / Fade Out goes to a uniform field (black or color) so there is a moment with no scene. A dissolve never empties the frame; B is already there.Double Exposure holds two images as a stacked meaning, not as a handoff. Morph warps contours; dissolve only changes opacity.Wipe uses a traveling boundary instead of a mix.Fade In / Fade OutA scene is a book chapter.Double ExposureTwo times or two selves occupy one frame.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Citizen Kane uses dissolves as time's grammar through a life. The Godfather lets faces and rooms bleed across turns of power."
+        },
+        {
+          "type": "paragraph",
+          "text": "Apocalypse Now layers hotel fan, jungle, and helicopter so picture and sound dissolve together. The 39 Steps bridges a scream into a train whistle, a sonic cousin of the mix."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of overlap, not a look to steal."
+        },
+        {
+          "type": "list-item",
+          "text": "Apocalypse Now 1979Helicopter imagery and hotel-fan perception are linked through sound and image.",
+          "displayText": "Apocalypse Now 1979\nHelicopter imagery and hotel-fan perception are linked through sound and image."
+        },
+        {
+          "type": "list-item",
+          "text": "The 39 Steps 1935A scream is bridged into a train whistle.",
+          "displayText": "The 39 Steps 1935\nA scream is bridged into a train whistle."
+        },
+        {
+          "type": "list-item",
+          "text": "The Stendhal Syndrome 1996The painting and subjective immersion are linked through overlapping images.",
+          "displayText": "The Stendhal Syndrome 1996\nThe painting and subjective immersion are linked through overlapping images."
+        },
+        {
+          "type": "list-item",
+          "text": "Apocalypse Now 1979The opening layers landscape, face and interior imagery.",
+          "displayText": "Apocalypse Now 1979\nThe opening layers landscape, face and interior imagery."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Citizen Kane uses dissolves as time's grammar through a life. The Godfather lets faces and rooms bleed across turns of power.Apocalypse Now layers hotel fan, jungle, and helicopter so picture and sound dissolve together. The 39 Steps bridges a scream into a train whistle, a sonic cousin of the mix.Grammar of overlap, not a look to steal.Apocalypse Now 1979Helicopter imagery and hotel-fan perception are linked through sound and image.The 39 Steps 1935A scream is bridged into a train whistle.The Stendhal Syndrome 1996The painting and subjective immersion are linked through overlapping images.Apocalypse Now 1979The opening layers landscape, face and interior imagery."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dissolve from [Subject] into another time or place, overlapping ghosts, a longer time than a cut admits. Name both images, a shared hook if any (shape, motion, sound), and the mix duration."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, two full shots plus an opacity crossfade; do not morph bodies or melt sets."
+        },
+        {
+          "type": "quote",
+          "text": "End on an old projector turning in a dark room. Let its rhythmic mechanical chatter continue across a cut to a sewing workshop, then resolve naturally into the sewing machine now on screen. Generate both pictures separately and match the two sound rhythms without a decorative visual dissolve."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=End+on+an+old+projector+turning+in+a+dark+room.+Let+its+rhythmic+mechanical+chatter+continue+across+a+cut+to+a+sewing+workshop,+then+resolve+naturally+into+the+sewing+machine+now+on+screen.+Generate+both+pictures+separately+and+match+the+two+sound+rhythms+without+a+decorative+visual+dissolve."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Dissolve from [Subject] into another time or place, overlapping ghosts, a longer time than a cut admits. Name both images, a shared hook if any (shape, motion, sound), and the mix duration.For video, two full shots plus an opacity crossfade; do not morph bodies or melt sets.Copy promptUse in Video GeneratorEnd on an old projector turning in a dark room. Let its rhythmic mechanical chatter continue across a cut to a sewing workshop, then resolve naturally into the sewing machine now on screen. Generate both pictures separately and match the two sound rhythms without a decorative visual dissolve.End on an old projector turning in a dark room. Let its rhythmic mechanical chatter continue across a cut to a sewing workshop, then resolve naturally into the sewing machine now on screen. Generate both pictures separately and match the two sound rhythms without a decorative visual dissolve."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Fade In / Fade Out (empty field in the middle) or a morph. The tell: the frame goes to black, or A warps into B.",
+          "links": [
+            {
+              "text": "Fade In / Fade Out",
+              "url": "https://melies.co/cinematic-techniques/editing/fade"
+            },
+            {
+              "text": "morph",
+              "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: keep both pictures intact, change only opacity, let the midpoint show two readable images."
+        }
+      ],
+      "links": [
+        {
+          "text": "Fade In / Fade Out",
+          "url": "https://melies.co/cinematic-techniques/editing/fade"
+        },
+        {
+          "text": "morph",
+          "url": "https://melies.co/cinematic-techniques/effects/match-morph"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Fade In / Fade Out (empty field in the middle) or a morph. The tell: the frame goes to black, or A warps into B.The fix: keep both pictures intact, change only opacity, let the midpoint show two readable images."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dissolve in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dissolve overlaps the outgoing shot with the incoming shot so both are visible for a duration. One side fades in presence while the other takes over; there is no empty field in between."
+        },
+        {
+          "type": "heading",
+          "text": "Dissolve vs Fade In / Fade Out",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A fade goes to or from a uniform black or color field, a pause with no scene. A dissolve hands one picture to another through a mix. Fade punctuates; dissolve bleeds."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dissolve?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for memory, elapsed time, or a scene that should die softly. Do not use it when the next image should smash or when a hard graphic rhyme is the point."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dissolve for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name both shots and the overlap. Example: Dissolve from [Subject] into another time or place, overlapping ghosts. Specify a mix, not a morph, and how long the ghosts share the frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dissolve in film?A dissolve overlaps the outgoing shot with the incoming shot so both are visible for a duration. One side fades in presence while the other takes over; there is no empty field in between.Dissolve vs Fade In / Fade OutA fade goes to or from a uniform black or color field, a pause with no scene. A dissolve hands one picture to another through a mix. Fade punctuates; dissolve bleeds.When should I use Dissolve?Use it for memory, elapsed time, or a scene that should die softly. Do not use it when the next image should smash or when a hard graphic rhyme is the point.How do I prompt Dissolve for AI image or video?Name both shots and the overlap. Example: Dissolve from [Subject] into another time or place, overlapping ghosts. Specify a mix, not a morph, and how long the ghosts share the frame."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Dissolve from [Subject] into another time or place, overlapping ghosts, a longer time than a cut admits. Name both images, a shared hook if any (shape, motion, sound), and the mix duration.",
+      "For video, two full shots plus an opacity crossfade; do not morph bodies or melt sets."
+    ],
+    "example": "End on an old projector turning in a dark room. Let its rhythmic mechanical chatter continue across a cut to a sewing workshop, then resolve naturally into the sewing machine now on screen. Generate both pictures separately and match the two sound rhythms without a decorative visual dissolve."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/1ec6c76a16b746e9cd93c6c2b5299211.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/102-dissolve-and-temporal-layering-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1332a951776aaa53a01036439d1680be.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dissolve-102-dissolve-and-temporal-layering-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c0960cece095e06553e8f429d3202acc.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/dissolve.jpg",
+      "alt": "Dissolve frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb3012a31c74b1950233bd05e60d3644.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fade-103-fade-to-a-field-of-black-or-color-mini.webp",
+      "alt": "Fade In / Fade Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/8012073caede219e3dd4f356b367853d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/103-fade-to-a-field-of-black-or-color-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aa6dfa9c6b54e1a7e5312b9e105acbc9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/double-exposure.webp",
+      "alt": "Double Exposure"
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a9de5c81c153b9dccef64c6827158230.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dissolve/hero.jpg",
+      "alt": "Dissolve",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "805ce6040be6a4d918d9de462fd13e3e9480217573d7c93b7cdcbe4254049f18"
+}

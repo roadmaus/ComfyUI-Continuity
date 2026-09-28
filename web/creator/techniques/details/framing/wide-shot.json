@@ -1,0 +1,409 @@
+{
+  "id": "framing/wide-shot",
+  "slug": "wide-shot",
+  "title": "Wide Shot (WS)",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/wide-shot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wide-shot.webp",
+  "detail": "details/framing/wide-shot.json",
+  "aliases": [
+    "wide",
+    "WS",
+    "long shot",
+    "LS"
+  ],
+  "description": "A wide shot shows the subject in full environment, with bodies small enough that place still speaks. It is environment-forward coverage: do not isolate yet.",
+  "thumbnail": "media/d40f44faa39b7ca4d29706438c303e51.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Size is a sentence. A wide shot maps who can reach the door, where the street goes, what weather is doing."
+        },
+        {
+          "type": "paragraph",
+          "text": "People are in the picture so we know the scale of the place, but the place is still talking. If you isolate too early, the scene loses its map."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the beat is a face, a holster, or a head-to-toe costume portrait. It is also the wrong tool if the human has become an unreadable speck (extreme long shot) or if you only needed to declare the building before the scene (establishing as a job)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use wide to keep geography in play, then change size when a new fact requires a tighter sentence."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Size is a sentence. A wide shot maps who can reach the door, where the street goes, what weather is doing.People are in the picture so we know the scale of the place, but the place is still talking. If you isolate too early, the scene loses its map.It is the wrong tool when the beat is a face, a holster, or a head-to-toe costume portrait. It is also the wrong tool if the human has become an unreadable speck (extreme long shot) or if you only needed to declare the building before the scene (establishing as a job).Use wide to keep geography in play, then change size when a new fact requires a tighter sentence."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep enough architecture, street, or weather that doors, paths, and weather remain readable. Bodies should not fill the height the way they do in a full-body portrait."
+        },
+        {
+          "type": "paragraph",
+          "text": "A 24mm in a room or a longer lens across a square can both be wide; the crop is whether place still speaks. Prompt: Wide shot of [Subject] in full environment, bodies small enough that place still speaks."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Keep enough architecture, street, or weather that doors, paths, and weather remain readable. Bodies should not fill the height the way they do in a full-body portrait.A 24mm in a room or a longer lens across a square can both be wide; the crop is whether place still speaks. Prompt: Wide shot of [Subject] in full environment, bodies small enough that place still speaks."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when you must not isolate yet: who can reach the door, how far the platform runs, whether two groups can see each other. Do not crop into a full-body fashion frame and call it wide, and do not use it as a blank postcard with no relation to the scene's paths."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when you must not isolate yet: who can reach the door, how far the platform runs, whether two groups can see each other. Do not crop into a full-body fashion frame and call it wide, and do not use it as a blank postcard with no relation to the scene's paths."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Full Body makes the complete figure the subject, head to toe, place as a border. A Long Shot is the person-in-world size: full figure plus geography, still a locatable human.",
+          "links": [
+            {
+              "text": "Full Body",
+              "url": "https://melies.co/cinematic-techniques/framing/full-body"
+            },
+            {
+              "text": "Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Extreme Long Shot is speck-scale land. An Establishing Shot is a where-and-when job that often uses a wide.",
+          "links": [
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            },
+            {
+              "text": "Establishing Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Master Shot is the action skeleton, which may be wide if blocking needs it. Wide is the environment-forward coverage attitude, not a synonym for those four.",
+          "links": [
+            {
+              "text": "Master Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Long ShotPlace a human in a world that could ignore them.",
+          "displayText": "Long Shot\nPlace a human in a world that could ignore them.",
+          "links": [
+            {
+              "text": "Long ShotPlace a human in a world that could ignore them.",
+              "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Establishing ShotOpen a scene. Tell us where and when.",
+          "displayText": "Establishing Shot\nOpen a scene. Tell us where and when.",
+          "links": [
+            {
+              "text": "Establishing ShotOpen a scene. Tell us where and when.",
+              "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Long ShotScale is the emotion.",
+          "displayText": "Extreme Long Shot\nScale is the emotion.",
+          "links": [
+            {
+              "text": "Extreme Long ShotScale is the emotion.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Full Body",
+          "url": "https://melies.co/cinematic-techniques/framing/full-body"
+        },
+        {
+          "text": "Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+        },
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Establishing Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+        },
+        {
+          "text": "Master Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+        },
+        {
+          "text": "Long ShotPlace a human in a world that could ignore them.",
+          "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+        },
+        {
+          "text": "Establishing ShotOpen a scene. Tell us where and when.",
+          "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+        },
+        {
+          "text": "Extreme Long ShotScale is the emotion.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ebfd2f3da0e7c019989512b68773f278.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/long-shot.webp",
+          "alt": "Long Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/36a71bb159fb3a26051fe83669a032ee.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/establishing-shot-096-establishing-and-reestablishing-shots-mini.webp",
+          "alt": "Establishing Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/3749142ffcb30b9332f50b8ac15c9fb6.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/096-establishing-and-reestablishing-shots-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+          "alt": "Extreme Long Shot"
+        }
+      ],
+      "sourceText": "Compared with similar shots A Full Body makes the complete figure the subject, head to toe, place as a border. A Long Shot is the person-in-world size: full figure plus geography, still a locatable human.An Extreme Long Shot is speck-scale land. An Establishing Shot is a where-and-when job that often uses a wide.A Master Shot is the action skeleton, which may be wide if blocking needs it. Wide is the environment-forward coverage attitude, not a synonym for those four.Long ShotPlace a human in a world that could ignore them.Establishing ShotOpen a scene. Tell us where and when.Extreme Long ShotScale is the emotion."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Once Upon a Time in the West lets station and desert speak while bodies remain small enough that place is the sentence. Lawrence of Arabia can sit in this band when geography is still coverage, not yet a speck-scale subject."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: keep the map; do not portrait."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Once Upon a Time in the West lets station and desert speak while bodies remain small enough that place is the sentence. Lawrence of Arabia can sit in this band when geography is still coverage, not yet a speck-scale subject.Grammar: keep the map; do not portrait."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say full environment and small bodies. Example: Wide shot of [Subject] in full environment, bodies small enough that place still speaks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the door, the street, the weather. Do not write head to toe hero, mid-thigh cowboy, or speck."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, hold the geography; a tiny figure motion is enough."
+        },
+        {
+          "type": "quote",
+          "text": "Wide shot of [Subject] in full environment, bodies small enough that place still speaks."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Wide+shot+of+[Subject]+in+full+environment,+bodies+small+enough+that+place+still+speaks."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say full environment and small bodies. Example: Wide shot of [Subject] in full environment, bodies small enough that place still speaks.Name the door, the street, the weather. Do not write head to toe hero, mid-thigh cowboy, or speck.For video, hold the geography; a tiny figure motion is enough.Copy promptUse in Image GeneratorWide shot of [Subject] in full environment, bodies small enough that place still speaks.Wide shot of [Subject] in full environment, bodies small enough that place still speaks."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Full Body (person fills the height) or a Long Shot labeled wide with no coverage job. The tell is a costume portrait, or a speck landscape with no scene paths.",
+          "links": [
+            {
+              "text": "Full Body",
+              "url": "https://melies.co/cinematic-techniques/framing/full-body"
+            },
+            {
+              "text": "Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: place still speaks, bodies small enough to keep the map, geography that the next cut can use."
+        }
+      ],
+      "links": [
+        {
+          "text": "Full Body",
+          "url": "https://melies.co/cinematic-techniques/framing/full-body"
+        },
+        {
+          "text": "Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Full Body (person fills the height) or a Long Shot labeled wide with no coverage job. The tell is a costume portrait, or a speck landscape with no scene paths.Fix: place still speaks, bodies small enough to keep the map, geography that the next cut can use."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Wide Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A wide shot shows the subject in a full environment, with bodies small enough that place still speaks. It is environment-forward coverage, not a synonym for full body, long shot, or establishing shot."
+        },
+        {
+          "type": "heading",
+          "text": "Wide Shot vs Full Body",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Full body is a complete figure as the subject, head to toe, with environment as a readable border. A wide shot keeps place in charge: doors, streets, and weather remain the sentence, and people are small enough not to isolate yet. If the person fills the frame height, you are in full body, not wide."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Wide Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when geography must stay in play and you should not isolate yet. Do not use it as a head-to-toe portrait, and do not use it when scale should go to a speck."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Wide Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Wide shot of [Subject] in full environment, bodies small enough that place still speaks. Name architecture and weather. Keep people from filling the height of the frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Wide Shot in film?A wide shot shows the subject in a full environment, with bodies small enough that place still speaks. It is environment-forward coverage, not a synonym for full body, long shot, or establishing shot.Wide Shot vs Full BodyFull body is a complete figure as the subject, head to toe, with environment as a readable border. A wide shot keeps place in charge: doors, streets, and weather remain the sentence, and people are small enough not to isolate yet. If the person fills the frame height, you are in full body, not wide.When should I use Wide Shot?Use it when geography must stay in play and you should not isolate yet. Do not use it as a head-to-toe portrait, and do not use it when scale should go to a speck.How do I prompt Wide Shot for AI image or video?Write Wide shot of [Subject] in full environment, bodies small enough that place still speaks. Name architecture and weather. Keep people from filling the height of the frame."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say full environment and small bodies. Example: Wide shot of [Subject] in full environment, bodies small enough that place still speaks.",
+      "Name the door, the street, the weather. Do not write head to toe hero, mid-thigh cowboy, or speck.",
+      "For video, hold the geography; a tiny figure motion is enough."
+    ],
+    "example": "Wide shot of [Subject] in full environment, bodies small enough that place still speaks."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/d40f44faa39b7ca4d29706438c303e51.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wide-shot.webp",
+      "alt": "Wide Shot example"
+    },
+    {
+      "kind": "image",
+      "path": "media/ebfd2f3da0e7c019989512b68773f278.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/long-shot.webp",
+      "alt": "Long Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/36a71bb159fb3a26051fe83669a032ee.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/establishing-shot-096-establishing-and-reestablishing-shots-mini.webp",
+      "alt": "Establishing Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/3749142ffcb30b9332f50b8ac15c9fb6.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/096-establishing-and-reestablishing-shots-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+      "alt": "Extreme Long Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/bf3b936fd50eae816945fdfdd7cc9d2e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/wide-shot/hero.jpg",
+      "alt": "Wide Shot (WS)",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "556efee82951383b6dfb7e0631711ecb41af80287111e988872c7b2f72cdfb55"
+}

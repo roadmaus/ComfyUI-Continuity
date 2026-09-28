@@ -1,0 +1,397 @@
+{
+  "id": "viral-looks/3d-render",
+  "slug": "3d-render",
+  "title": "3D Render",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/3d-render",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/3d-render.webp",
+  "detail": "details/viral-looks/3d-render.json",
+  "aliases": [
+    "Motion capture",
+    "Digitally embodied performance"
+  ],
+  "description": "3D render, the 3d render look, is a person as product visualization: clean global illumination, shader skin slightly too perfect, infinite cyc, contact shadows that never dirty. They should look computed, and photochemical grain is a joke if you add it.",
+  "thumbnail": "media/f0b5523be34f9676e72ab7564462ffaa.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fashion that wants to be a toy, ads, a character who is not quite flesh: studio HDRI, turntable still, no film grain unless you are hybridizing on purpose. A period drama usually dies here."
+        },
+        {
+          "type": "paragraph",
+          "text": "The library cousin is motion capture into an invented body, where attention and hesitation matter more than spectacle. The named look on the page is the computed surface."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not confuse a photograph labeled CGI with this. If pores and grain survive, you still shot a camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Fashion that wants to be a toy, ads, a character who is not quite flesh: studio HDRI, turntable still, no film grain unless you are hybridizing on purpose. A period drama usually dies here.The library cousin is motion capture into an invented body, where attention and hesitation matter more than spectacle. The named look on the page is the computed surface.Do not confuse a photograph labeled CGI with this. If pores and grain survive, you still shot a camera."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock a studio camera, 50mm to 85mm, eye height or a slight turntable three-quarter. HDRI wrap, subsurface that is slightly too even, infinite cyc, perfect contacts."
+        },
+        {
+          "type": "paragraph",
+          "text": "No grain, no dirty anamorphic. Prompt: 3D-render look of [Subject], CG shader, clean GI, a person as a product visualization."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock a studio camera, 50mm to 85mm, eye height or a slight turntable three-quarter. HDRI wrap, subsurface that is slightly too even, infinite cyc, perfect contacts.No grain, no dirty anamorphic. Prompt: 3D-render look of [Subject], CG shader, clean GI, a person as a product visualization."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A product-person still, an ad, a character who should not quite be flesh. Do not use it on a period drama unless the point is that they are computed."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A product-person still, an ad, a character who should not quite be flesh. Do not use it on a period drama unless the point is that they are computed."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Photogrammetry is a scan of real surfaces, dirt and all. Product is the lighting and turntable discipline for objects.",
+          "links": [
+            {
+              "text": "Photogrammetry",
+              "url": "https://melies.co/cinematic-techniques/effects/photogrammetry"
+            },
+            {
+              "text": "Product",
+              "url": "https://melies.co/cinematic-techniques/framing/product"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "3D render applies that computed wrap to a person. Action Figure is polymer toy matter, not shader skin.",
+          "links": [
+            {
+              "text": "Action Figure",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/action-figure"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Marble is geology, not GI.",
+          "links": [
+            {
+              "text": "Marble",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/marble"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "PhotogrammetryReality, captured as geometry.",
+          "displayText": "Photogrammetry\nReality, captured as geometry.",
+          "links": [
+            {
+              "text": "PhotogrammetryReality, captured as geometry.",
+              "url": "https://melies.co/cinematic-techniques/effects/photogrammetry"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "ProductSell the thing by lighting it like a face.",
+          "displayText": "Product\nSell the thing by lighting it like a face.",
+          "links": [
+            {
+              "text": "ProductSell the thing by lighting it like a face.",
+              "url": "https://melies.co/cinematic-techniques/framing/product"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Photogrammetry",
+          "url": "https://melies.co/cinematic-techniques/effects/photogrammetry"
+        },
+        {
+          "text": "Product",
+          "url": "https://melies.co/cinematic-techniques/framing/product"
+        },
+        {
+          "text": "Action Figure",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/action-figure"
+        },
+        {
+          "text": "Marble",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/marble"
+        },
+        {
+          "text": "PhotogrammetryReality, captured as geometry.",
+          "url": "https://melies.co/cinematic-techniques/effects/photogrammetry"
+        },
+        {
+          "text": "ProductSell the thing by lighting it like a face.",
+          "url": "https://melies.co/cinematic-techniques/framing/product"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/957a017589c7b51a4d5760fff297fe41.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/photogrammetry-photogrammetry-mini.webp",
+          "alt": "Photogrammetry"
+        },
+        {
+          "kind": "video",
+          "path": "media/49e95e6615363ed1518e87b33735818a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/photogrammetry-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/cbd86d3e590f457efed89999b67bb6d4.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/product.webp",
+          "alt": "Product"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Photogrammetry is a scan of real surfaces, dirt and all. Product is the lighting and turntable discipline for objects.3D render applies that computed wrap to a person. Action Figure is polymer toy matter, not shader skin.Marble is geology, not GI.PhotogrammetryReality, captured as geometry.ProductSell the thing by lighting it like a face.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "TRON: Legacy's clean CG bodies, The Congress, and the invented-body work in The Lord of the Rings: The Two Towers, Rise of the Planet of the Apes, and Avatar. Borrow computed light and a stable model, not a still."
+        },
+        {
+          "type": "paragraph",
+          "text": "Capture is not a finished performance if you are doing the mocap cousin."
+        },
+        {
+          "type": "list-item",
+          "text": "The Lord of the Rings: The Two Towers 2002Gollum’s expressive interactions with Frodo and Sam.",
+          "displayText": "The Lord of the Rings: The Two Towers 2002\nGollum’s expressive interactions with Frodo and Sam."
+        },
+        {
+          "type": "list-item",
+          "text": "Rise of the Planet of the Apes 2011Caesar’s changing social and emotional behavior.",
+          "displayText": "Rise of the Planet of the Apes 2011\nCaesar’s changing social and emotional behavior."
+        },
+        {
+          "type": "list-item",
+          "text": "Avatar 2009Live-action and virtual character imagery share a coherent visual world.",
+          "displayText": "Avatar 2009\nLive-action and virtual character imagery share a coherent visual world."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film TRON: Legacy's clean CG bodies, The Congress, and the invented-body work in The Lord of the Rings: The Two Towers, Rise of the Planet of the Apes, and Avatar. Borrow computed light and a stable model, not a still.Capture is not a finished performance if you are doing the mocap cousin.The Lord of the Rings: The Two Towers 2002Gollum’s expressive interactions with Frodo and Sam.Rise of the Planet of the Apes 2011Caesar’s changing social and emotional behavior.Avatar 2009Live-action and virtual character imagery share a coherent visual world."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Kill the grain, wrap the light. 3D-render look of [Subject], CG shader, clean GI, a person as a product visualization."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add studio HDRI, infinite cyc, too-perfect subsurface, turntable still, no film grain, no dirty flare."
+        },
+        {
+          "type": "quote",
+          "text": "A small fictional creature receives a repaired toy from a human friend. Preserve a specific performance: guarded gaze, delayed recognition, relaxed shoulders and a tentative reach. Stable character model, precise finger contact and matched eye level. Use performance reference and animation rather than relying on a generic happy expression."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+small+fictional+creature+receives+a+repaired+toy+from+a+human+friend.+Preserve+a+specific+performance:+guarded+gaze,+delayed+recognition,+relaxed+shoulders+and+a+tentative+reach.+Stable+character+model,+precise+finger+contact+and+matched+eye+level.+Use+performance+reference+and+animation+rather+than+relying+on+a+generic+happy+expression."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Kill the grain, wrap the light. 3D-render look of [Subject], CG shader, clean GI, a person as a product visualization.Add studio HDRI, infinite cyc, too-perfect subsurface, turntable still, no film grain, no dirty flare.Copy promptUse in Video GeneratorA small fictional creature receives a repaired toy from a human friend. Preserve a specific performance: guarded gaze, delayed recognition, relaxed shoulders and a tentative reach. Stable character model, precise finger contact and matched eye level. Use performance reference and animation rather than relying on a generic happy expression.A small fictional creature receives a repaired toy from a human friend. Preserve a specific performance: guarded gaze, delayed recognition, relaxed shoulders and a tentative reach. Stable character model, precise finger contact and matched eye level. Use performance reference and animation rather than relying on a generic happy expression."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A photograph with CGI in the prompt that still has pores and grain, or a slide into Photogrammetry dirt. The tell is photochemical noise.",
+          "links": [
+            {
+              "text": "Photogrammetry",
+              "url": "https://melies.co/cinematic-techniques/effects/photogrammetry"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: shader wrap, clean GI, cyc, computed skin."
+        }
+      ],
+      "links": [
+        {
+          "text": "Photogrammetry",
+          "url": "https://melies.co/cinematic-techniques/effects/photogrammetry"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A photograph with CGI in the prompt that still has pores and grain, or a slide into Photogrammetry dirt. The tell is photochemical noise.Fix it: shader wrap, clean GI, cyc, computed skin."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is 3D Render in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A computed-surface look: clean GI, shader skin, product-visualization light on a person. Related pipelines include motion capture into an invented body, which still needs animation judgment."
+        },
+        {
+          "type": "heading",
+          "text": "3D Render vs Photogrammetry",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Photogrammetry captures real surfaces, including dirt. 3D render is shader and GI, too clean on purpose. If you can see scanned grime, you wanted photogrammetry."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use 3D Render?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ads, toy-fashion, a character who is not quite flesh. Skip period realism unless the computation is the point."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt 3D Render for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Studio HDRI, no grain, then: 3D-render look of [Subject], CG shader, clean GI, a person as a product visualization. Demand infinite cyc and too-perfect skin."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is 3D Render in film?A computed-surface look: clean GI, shader skin, product-visualization light on a person. Related pipelines include motion capture into an invented body, which still needs animation judgment.3D Render vs PhotogrammetryPhotogrammetry captures real surfaces, including dirt. 3D render is shader and GI, too clean on purpose. If you can see scanned grime, you wanted photogrammetry.When should I use 3D Render?Ads, toy-fashion, a character who is not quite flesh. Skip period realism unless the computation is the point.How do I prompt 3D Render for AI image or video?Studio HDRI, no grain, then: 3D-render look of [Subject], CG shader, clean GI, a person as a product visualization. Demand infinite cyc and too-perfect skin."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Kill the grain, wrap the light. 3D-render look of [Subject], CG shader, clean GI, a person as a product visualization.",
+      "Add studio HDRI, infinite cyc, too-perfect subsurface, turntable still, no film grain, no dirty flare."
+    ],
+    "example": "A small fictional creature receives a repaired toy from a human friend. Preserve a specific performance: guarded gaze, delayed recognition, relaxed shoulders and a tentative reach. Stable character model, precise finger contact and matched eye level. Use performance reference and animation rather than relying on a generic happy expression."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/f0b5523be34f9676e72ab7564462ffaa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/3d-render.webp",
+      "alt": "3D Render example"
+    },
+    {
+      "kind": "image",
+      "path": "media/957a017589c7b51a4d5760fff297fe41.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/photogrammetry-photogrammetry-mini.webp",
+      "alt": "Photogrammetry"
+    },
+    {
+      "kind": "video",
+      "path": "media/49e95e6615363ed1518e87b33735818a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/photogrammetry-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cbd86d3e590f457efed89999b67bb6d4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/product.webp",
+      "alt": "Product"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/877d40eded901b1b414090fd1c7f5656.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/3d-render/hero.jpg",
+      "alt": "3D Render",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "e1150f3e02f5ba892682ba8c497707cd115537a0e071f49006d81415d27cf805"
+}

@@ -1,0 +1,412 @@
+{
+  "id": "composition/windows",
+  "slug": "windows",
+  "title": "Windows",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/windows",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/windows.webp",
+  "detail": "details/composition/windows.json",
+  "aliases": [],
+  "description": "Windows cinematography treats panes as the true subject: stacked apertures, lives in rectangles, a building of frames. The diagram is a grid of possible pictures, not one doorway around one face.",
+  "thumbnail": "media/c1fdcb0d7bcff270bd60fab33ce9937a.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A facade at night is a contact sheet of other people's rooms. A courtyard is a theater of windows."
+        },
+        {
+          "type": "paragraph",
+          "text": "Who owns space changes per rectangle: a cook, a sleeper, a fighter, an empty kitchen. The building is a montage that does not cut."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you only need one inner frame around one encounter. That is a single frame-within-frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the other panes do no work, you photographed a house. Windows can be looked through from inside (rain on glass, a face and a street) or looked at from outside (Rear Window grammar)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Decide which side of the glass we occupy, and whether reflections will stack a second world."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A facade at night is a contact sheet of other people's rooms. A courtyard is a theater of windows.Who owns space changes per rectangle: a cook, a sleeper, a fighter, an empty kitchen. The building is a montage that does not cut.It is the wrong tool when you only need one inner frame around one encounter. That is a single frame-within-frame.If the other panes do no work, you photographed a house. Windows can be looked through from inside (rain on glass, a face and a street) or looked at from outside (Rear Window grammar).Decide which side of the glass we occupy, and whether reflections will stack a second world."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Find a true grid: a courtyard, a block of apartments, an office elevation. Use a longer lens to flatten panes into a sheet of rectangles, or a wider lens if we are inside one room looking at many across a court."
+        },
+        {
+          "type": "paragraph",
+          "text": "Expose so more than one interior reads, or so most go dark except the one that matters. Prompt: Windows as the true subject around [Subject], stacked apertures, lives in rectangles, a building of frames."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Find a true grid: a courtyard, a block of apartments, an office elevation. Use a longer lens to flatten panes into a sheet of rectangles, or a wider lens if we are inside one room looking at many across a court.Expose so more than one interior reads, or so most go dark except the one that matters. Prompt: Windows as the true subject around [Subject], stacked apertures, lives in rectangles, a building of frames."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when many lives share a building, or when a single life is one pane among others. Do not use it as a pretty rain window on a portrait that never acknowledges other rooms."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when many lives share a building, or when a single life is one pane among others. Do not use it as a pretty rain window on a portrait that never acknowledges other rooms."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Frame within Frame is usually one inner rectangle. Windows multiplies them.",
+          "links": [
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Screen in Screen nests electronic pictures. These are architectural pictures.",
+          "links": [
+            {
+              "text": "Screen in Screen",
+              "url": "https://melies.co/cinematic-techniques/composition/screen-in-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Voyeur may watch one pane from concealment. Windows can also be a public elevation, a city showing itself.",
+          "links": [
+            {
+              "text": "Voyeur",
+              "url": "https://melies.co/cinematic-techniques/composition/voyeur"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Repetition and Pattern counts the grid. Here the content of each cell matters.",
+          "links": [
+            {
+              "text": "Repetition and Pattern",
+              "url": "https://melies.co/cinematic-techniques/composition/repetition-pattern"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Reflections may write the street onto the same glass.",
+          "links": [
+            {
+              "text": "Reflections",
+              "url": "https://melies.co/cinematic-techniques/composition/reflections"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+          "displayText": "Frame within Frame\nSomeone is watched, trapped, or pictured.",
+          "links": [
+            {
+              "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Screen in ScreenSomeone is watching a picture of someone.",
+          "displayText": "Screen in Screen\nSomeone is watching a picture of someone.",
+          "links": [
+            {
+              "text": "Screen in ScreenSomeone is watching a picture of someone.",
+              "url": "https://melies.co/cinematic-techniques/composition/screen-in-screen"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Screen in Screen",
+          "url": "https://melies.co/cinematic-techniques/composition/screen-in-screen"
+        },
+        {
+          "text": "Voyeur",
+          "url": "https://melies.co/cinematic-techniques/composition/voyeur"
+        },
+        {
+          "text": "Repetition and Pattern",
+          "url": "https://melies.co/cinematic-techniques/composition/repetition-pattern"
+        },
+        {
+          "text": "Reflections",
+          "url": "https://melies.co/cinematic-techniques/composition/reflections"
+        },
+        {
+          "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Screen in ScreenSomeone is watching a picture of someone.",
+          "url": "https://melies.co/cinematic-techniques/composition/screen-in-screen"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+          "alt": "Frame within Frame"
+        },
+        {
+          "kind": "video",
+          "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/e3a8a12ac5326c54e2ebfc4188f52da5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/screen-in-screen.webp",
+          "alt": "Screen in Screen"
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Frame within Frame is usually one inner rectangle. Windows multiplies them.Screen in Screen nests electronic pictures. These are architectural pictures.Voyeur may watch one pane from concealment. Windows can also be a public elevation, a city showing itself.Repetition and Pattern counts the grid. Here the content of each cell matters.Reflections may write the street onto the same glass.Frame within FrameSomeone is watched, trapped, or pictured.Screen in ScreenSomeone is watching a picture of someone.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rear Window turns a courtyard of windows into a set of simultaneous shorts. The Hours uses windows as thresholds between interior lives and the weather of a city."
+        },
+        {
+          "type": "paragraph",
+          "text": "A building becomes an editing machine you can hold. Grammar of panes, not a single pretty rain glass."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Rear Window turns a courtyard of windows into a set of simultaneous shorts. The Hours uses windows as thresholds between interior lives and the weather of a city.A building becomes an editing machine you can hold. Grammar of panes, not a single pretty rain glass."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Make the panes the subject. Windows as the true subject around [Subject], stacked apertures, lives in rectangles, a building of frames."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say courtyard facade at night, multiple lit interiors, or a wall of office panes. Place the subject in one rectangle among others."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name at least two other lives or empty rooms."
+        },
+        {
+          "type": "quote",
+          "text": "Windows as the true subject around [Subject], stacked apertures, lives in rectangles, a building of frames."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Windows+as+the+true+subject+around+[Subject],+stacked+apertures,+lives+in+rectangles,+a+building+of+frames."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Make the panes the subject. Windows as the true subject around [Subject], stacked apertures, lives in rectangles, a building of frames.Say courtyard facade at night, multiple lit interiors, or a wall of office panes. Place the subject in one rectangle among others.Name at least two other lives or empty rooms.Copy promptUse in Image GeneratorWindows as the true subject around [Subject], stacked apertures, lives in rectangles, a building of frames.Windows as the true subject around [Subject], stacked apertures, lives in rectangles, a building of frames."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a single rain-streaked portrait, or a Frame within Frame doorway. The tell is one face and one glass with no other cells.",
+          "links": [
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to show a grid of apertures and to give at least one other pane a life, even if it is only a lamp and an empty chair."
+        }
+      ],
+      "links": [
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a single rain-streaked portrait, or a Frame within Frame doorway. The tell is one face and one glass with no other cells.The fix is to show a grid of apertures and to give at least one other pane a life, even if it is only a lamp and an empty chair."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is windows in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Panes become the subject: stacked apertures, lives in rectangles, a building of frames. The composition is a grid of possible shots. One person may occupy one cell. The other cells still work."
+        },
+        {
+          "type": "heading",
+          "text": "Windows vs Frame within Frame",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Frame within a frame is typically one inner border around the action, a door or arch. Windows multiplies apertures until the building is a sheet of pictures. A single window around a couple is doorway grammar. A courtyard of ten lit rooms is windows."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use windows?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when many lives share glass: apartments, offices, a courtyard at night, a city block. Skip it when you only need one threshold around one encounter."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt windows for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for stacked panes and multiple lives. Example: Windows as the true subject around [Subject], stacked apertures, lives in rectangles, a building of frames. Specify a facade or courtyard and more than one lit interior. Place the subject in one cell."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is windows in film?Panes become the subject: stacked apertures, lives in rectangles, a building of frames. The composition is a grid of possible shots. One person may occupy one cell. The other cells still work.Windows vs Frame within FrameFrame within a frame is typically one inner border around the action, a door or arch. Windows multiplies apertures until the building is a sheet of pictures. A single window around a couple is doorway grammar. A courtyard of ten lit rooms is windows.When should I use windows?Use it when many lives share glass: apartments, offices, a courtyard at night, a city block. Skip it when you only need one threshold around one encounter.How do I prompt windows for AI image or video?Ask for stacked panes and multiple lives. Example: Windows as the true subject around [Subject], stacked apertures, lives in rectangles, a building of frames. Specify a facade or courtyard and more than one lit interior. Place the subject in one cell."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Make the panes the subject. Windows as the true subject around [Subject], stacked apertures, lives in rectangles, a building of frames.",
+      "Say courtyard facade at night, multiple lit interiors, or a wall of office panes. Place the subject in one rectangle among others.",
+      "Name at least two other lives or empty rooms."
+    ],
+    "example": "Windows as the true subject around [Subject], stacked apertures, lives in rectangles, a building of frames."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/c1fdcb0d7bcff270bd60fab33ce9937a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/windows.webp",
+      "alt": "Windows example"
+    },
+    {
+      "kind": "image",
+      "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+      "alt": "Frame within Frame"
+    },
+    {
+      "kind": "video",
+      "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e3a8a12ac5326c54e2ebfc4188f52da5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/screen-in-screen.webp",
+      "alt": "Screen in Screen"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/dd90eb2fa73e59351a9ed0b8e236e011.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/windows/hero.jpg",
+      "alt": "Windows",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "92e1cd6345c31f3726294762fe1a18e1f4943e16a317cb4e59048a5e78f06732"
+}

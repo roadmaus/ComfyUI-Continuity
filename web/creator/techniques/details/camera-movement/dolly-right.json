@@ -1,0 +1,418 @@
+{
+  "id": "camera-movement/dolly-right",
+  "slug": "dolly-right",
+  "title": "Dolly Right",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/dolly-right",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-right-004-lateral-tracking-shot-mini.webp",
+  "detail": "details/camera-movement/dolly-right.json",
+  "aliases": [
+    "truck right"
+  ],
+  "description": "A dolly right, or truck right, moves the camera body sideways to the right without panning. New space enters from one side of the frame while the other side exits, and layered parallax proves the translation.",
+  "thumbnail": "media/6962e7efe607d3ff5370837896d8ab71.webp",
+  "video": "media/1e2b630cf6ffc341970a058ad0e2199c.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/004-lateral-tracking-shot-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Direction is a reveal order. Trucking right can disclose a listener, a door, or a threat that was legally off-screen to camera right."
+        },
+        {
+          "type": "paragraph",
+          "text": "The horizon stays level; only the world slides. It is the wrong tool when the camera should yaw to glance, or when a few centimeters of slider would be enough."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pick the side that produces information, not a decorative glide."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Direction is a reveal order. Trucking right can disclose a listener, a door, or a threat that was legally off-screen to camera right.The horizon stays level; only the world slides. It is the wrong tool when the camera should yaw to glance, or when a few centimeters of slider would be enough.Pick the side that produces information, not a decorative glide."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Track parallel, height and tilt constant, no compensatory pan unless you are combining moves on purpose. Keep the horizon locked."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a lateral dolly right, smooth sideways travel, layered parallax, locked horizon."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Track parallel, height and tilt constant, no compensatory pan unless you are combining moves on purpose. Keep the horizon locked.Prompt a lateral dolly right, smooth sideways travel, layered parallax, locked horizon."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use the opposite of dolly left: pick the direction that reveals new information. Concrete beat: sliding right along a car's profile until a second passenger appears."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not truck both ways in one clip without a reason."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use the opposite of dolly left: pick the direction that reveals new information. Concrete beat: sliding right along a car's profile until a second passenger appears.Do not truck both ways in one clip without a reason."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dolly Left is the same physics mirrored. A Pan Right only rotates.",
+          "links": [
+            {
+              "text": "Dolly Left",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+            },
+            {
+              "text": "Pan Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tracking Shot uses this lateral axis when the subject is also moving; dolly right can scan a still lineup. A Slider Shot is a short version of the same linear idea.",
+          "links": [
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            },
+            {
+              "text": "Slider Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slider"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly LeftSurvey a space or stay with a walker without turning the camera.",
+          "displayText": "Dolly Left\nSurvey a space or stay with a walker without turning the camera.",
+          "links": [
+            {
+              "text": "Dolly LeftSurvey a space or stay with a walker without turning the camera.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "displayText": "Tracking Shot\nAccompany a walker. The shot is a journey, not a picture.",
+          "links": [
+            {
+              "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Left",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+        },
+        {
+          "text": "Pan Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+        },
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Slider Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slider"
+        },
+        {
+          "text": "Dolly LeftSurvey a space or stay with a walker without turning the camera.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-left"
+        },
+        {
+          "text": "Tracking ShotAccompany a walker. The shot is a journey, not a picture.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e2e77ae4ea56a45d3c76c9e60a24b34d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-left-05-dolly-left-v2-mini.webp",
+          "alt": "Dolly Left"
+        },
+        {
+          "kind": "video",
+          "path": "media/f8eff4182735e9f303660c4a932ac13b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/05-dolly-left-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+          "alt": "Tracking Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Dolly Left is the same physics mirrored. A Pan Right only rotates.Tracking Shot uses this lateral axis when the subject is also moving; dolly right can scan a still lineup. A Slider Shot is a short version of the same linear idea.Dolly LeftSurvey a space or stay with a walker without turning the camera.Tracking ShotAccompany a walker. The shot is a journey, not a picture.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Children of Men often relocates the camera through real streets rather than glancing from a locked head. The Player's studio-lot sentence includes lateral travel as part of a longer choreography."
+        },
+        {
+          "type": "paragraph",
+          "text": "Take the side-slip as grammar, not the whole oner."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Children of Men often relocates the camera through real streets rather than glancing from a locked head. The Player's studio-lot sentence includes lateral travel as part of a longer choreography.Take the side-slip as grammar, not the whole oner."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lateral dolly right across [Subject], smooth sideways travel, layered parallax, locked horizon. For motion: the camera slides right on a dolly, keeping [Subject] framed, smooth lateral parallax."
+        },
+        {
+          "type": "quote",
+          "text": "The camera slides right on a dolly, keeping [Subject] framed, smooth lateral parallax."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+slides+right+on+a+dolly,+keeping+[Subject]+framed,+smooth+lateral+parallax."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lateral dolly right across [Subject], smooth sideways travel, layered parallax, locked horizon. For motion: the camera slides right on a dolly, keeping [Subject] framed, smooth lateral parallax.Copy promptUse in Video GeneratorThe camera slides right on a dolly, keeping [Subject] framed, smooth lateral parallax.The camera slides right on a dolly, keeping [Subject] framed, smooth lateral parallax."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Pan Right or an 360-Degree Orbit that starts to curve. The tell is yaw, a dipping horizon, or a changing camera-to-subject distance.",
+          "links": [
+            {
+              "text": "Pan Right",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+            },
+            {
+              "text": "360-Degree Orbit",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: straight track, rightward translation, constant radius to the subject if you are holding them."
+        }
+      ],
+      "links": [
+        {
+          "text": "Pan Right",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan-right"
+        },
+        {
+          "text": "360-Degree Orbit",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/orbit-360"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Pan Right or an 360-Degree Orbit that starts to curve. The tell is yaw, a dipping horizon, or a changing camera-to-subject distance.The fix: straight track, rightward translation, constant radius to the subject if you are holding them."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dolly Right in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a sideways translation of the camera to the right on wheels or track, with the lens holding its aim and the background peeling in parallax."
+        },
+        {
+          "type": "heading",
+          "text": "Dolly Right vs Pan Right",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Pan right is rotation from a fixed support. Dolly right relocates the support, so near objects pass faster than distant ones."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dolly Right?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the story fact you need is to camera right and should be reached by travel. Do not use it as a default polish on a lock-off."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dolly Right for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write dolly right on track, no pan, locked horizon, layered parallax, subject kept in frame. State what enters from the right."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dolly Right in film?It is a sideways translation of the camera to the right on wheels or track, with the lens holding its aim and the background peeling in parallax.Dolly Right vs Pan RightPan right is rotation from a fixed support. Dolly right relocates the support, so near objects pass faster than distant ones.When should I use Dolly Right?When the story fact you need is to camera right and should be reached by travel. Do not use it as a default polish on a lock-off.How do I prompt Dolly Right for AI image or video?Write dolly right on track, no pan, locked horizon, layered parallax, subject kept in frame. State what enters from the right."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lateral dolly right across [Subject], smooth sideways travel, layered parallax, locked horizon. For motion: the camera slides right on a dolly, keeping [Subject] framed, smooth lateral parallax."
+    ],
+    "example": "The camera slides right on a dolly, keeping [Subject] framed, smooth lateral parallax."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/1e2b630cf6ffc341970a058ad0e2199c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/004-lateral-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6962e7efe607d3ff5370837896d8ab71.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-right-004-lateral-tracking-shot-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/19d767c6bee6d20d190fba7b27dd9ecf.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/dolly-right.jpg",
+      "alt": "Dolly Right frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/e2e77ae4ea56a45d3c76c9e60a24b34d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-left-05-dolly-left-v2-mini.webp",
+      "alt": "Dolly Left"
+    },
+    {
+      "kind": "video",
+      "path": "media/f8eff4182735e9f303660c4a932ac13b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/05-dolly-left-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/065d39cf991449c347d44a3a00964ae3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tracking-006-leading-tracking-shot-mini.webp",
+      "alt": "Tracking Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/a5615c95641341aff399cf4555fda29a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/006-leading-tracking-shot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/18443284497478167204089effd3e2f8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-right/hero.jpg",
+      "alt": "Dolly Right",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "f68fdbed28a0455b7d3393e1f9121aaae87abb4d7964247acad2bfec634249d5"
+}

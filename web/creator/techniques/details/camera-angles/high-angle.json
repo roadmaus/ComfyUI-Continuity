@@ -1,0 +1,509 @@
+{
+  "id": "camera-angles/high-angle",
+  "slug": "high-angle",
+  "title": "High Angle",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/high-angle",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+  "detail": "details/camera-angles/high-angle.json",
+  "aliases": [
+    "High angle shot",
+    "Plongée",
+    "Elevated observation"
+  ],
+  "description": "A high-angle shot looks downward at the subject from above eye level, an oblique pitch rather than a straight drop. More floor enters the frame, the figure occupies less of the rectangle, and the viewpoint reads as observation from above.",
+  "thumbnail": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+  "video": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Height plus downward tilt is what assigns the smaller rank. A high angle can be pity, surveillance, or a clinical map of who can reach the door."
+        },
+        {
+          "type": "paragraph",
+          "text": "The face should still be a face: you see the crown and the shoulders, not only a scalp. Paths and distances that Eye Level would hide become readable because the floor is a diagram with walls still receding.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you need a true plan view. If the tabletop must be a rectangle and bodies become pieces, you wanted Overhead Top-Down or a steep Bird's-Eye View.",
+          "links": [
+            {
+              "text": "Overhead Top-Down",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            },
+            {
+              "text": "Bird's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool for a power confrontation; looking down on the boss fights the line."
+        }
+      ],
+      "links": [
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Overhead Top-Down",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        },
+        {
+          "text": "Bird's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Height plus downward tilt is what assigns the smaller rank. A high angle can be pity, surveillance, or a clinical map of who can reach the door.The face should still be a face: you see the crown and the shoulders, not only a scalp. Paths and distances that Eye Level would hide become readable because the floor is a diagram with walls still receding.It is the wrong tool when you need a true plan view. If the tabletop must be a rectangle and bodies become pieces, you wanted Overhead Top-Down or a steep Bird's-Eye View.It is also the wrong tool for a power confrontation; looking down on the boss fights the line."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Raise the camera above the subject's eyes and pitch it down. Typical working range is a step-stool to a short ladder, 20 to 45 degrees of tilt, subject still recognizable through costume and contrast."
+        },
+        {
+          "type": "paragraph",
+          "text": "Top-light and ceiling practicals become the key more often, because you are now closer to the lights that hang. Keep roll level; a canted high angle is two techniques at once."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: high-angle shot looking down, figure diminished, more floor than sky, not top-down."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Raise the camera above the subject's eyes and pitch it down. Typical working range is a step-stool to a short ladder, 20 to 45 degrees of tilt, subject still recognizable through costume and contrast.Top-light and ceiling practicals become the key more often, because you are now closer to the lights that hang. Keep roll level; a canted high angle is two techniques at once.Prompt: high-angle shot looking down, figure diminished, more floor than sky, not top-down."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for vulnerability, surveillance, or a map of a room that eye-level cannot draw. Concrete beat: a lone figure on a station platform, camera above the lamps, suitcase readable on the boards."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use a high oblique when the shot must be strictly top-down."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for vulnerability, surveillance, or a map of a room that eye-level cannot draw. Concrete beat: a lone figure on a station platform, camera above the lamps, suitcase readable on the boards.Do not use a high oblique when the shot must be strictly top-down."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye Level stays on the sightline and assigns no rank. Bird's-Eye View looks steeply or straight down from a great height until people are a map.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            },
+            {
+              "text": "Bird's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Overhead Top-Down is 90 degrees, a flat-lay or room plan. Low Angle is the opposing pitch.",
+          "links": [
+            {
+              "text": "Overhead Top-Down",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            },
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Crane Over is the move that can arrive at a high or overhead view.",
+          "links": [
+            {
+              "text": "Crane Over",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-over"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+          "displayText": "Bird's-Eye View\nTurn life into a board game or a ritual.",
+          "links": [
+            {
+              "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low AnglePower, monument, or intimidation.",
+          "displayText": "Low Angle\nPower, monument, or intimidation.",
+          "links": [
+            {
+              "text": "Low AnglePower, monument, or intimidation.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Bird's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        },
+        {
+          "text": "Overhead Top-Down",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Crane Over",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-over"
+        },
+        {
+          "text": "Bird's-Eye ViewTurn life into a board game or a ritual.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        },
+        {
+          "text": "Low AnglePower, monument, or intimidation.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+          "alt": "Bird's-Eye View"
+        },
+        {
+          "kind": "video",
+          "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+          "alt": "Low Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        }
+      ],
+      "sourceText": "Compared with similar shots Eye Level stays on the sightline and assigns no rank. Bird's-Eye View looks steeply or straight down from a great height until people are a map.Overhead Top-Down is 90 degrees, a flat-lay or room plan. Low Angle is the opposing pitch.Crane Over is the move that can arrive at a high or overhead view.Bird's-Eye ViewTurn life into a board game or a ritual.Low AnglePower, monument, or intimidation.Eye LevelDefault honesty. Do not look down or up unless you mean it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Psycho uses a steep high view on the stairway so Arbogast is placed inside the house's geometry before the attack. The Shawshank Redemption uses high views of the prison so human scale sits inside the walls."
+        },
+        {
+          "type": "paragraph",
+          "text": "Citizen Kane and Prisoners both look down when a person should feel watched or reduced. Borrow the downward pitch and the readable floor, not a poster."
+        },
+        {
+          "type": "list-item",
+          "text": "Psycho 1960The overhead view during Arbogast’s stairway encounter.",
+          "displayText": "Psycho 1960\nThe overhead view during Arbogast’s stairway encounter."
+        },
+        {
+          "type": "list-item",
+          "text": "The Shawshank Redemption 1994High views establish the prison and its constrained human scale.",
+          "displayText": "The Shawshank Redemption 1994\nHigh views establish the prison and its constrained human scale."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/73a54ae6a30c8563a55138eab345d2e7.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/high-angle/famous/00-psycho-1960.jpg",
+          "alt": "Psycho 1960"
+        },
+        {
+          "kind": "image",
+          "path": "media/3b32252e251c5888762d661b036b8466.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/high-angle/famous/01-the-shawshank-redemption-1994.jpg",
+          "alt": "The Shawshank Redemption 1994"
+        }
+      ],
+      "sourceText": "In film Psycho uses a steep high view on the stairway so Arbogast is placed inside the house's geometry before the attack. The Shawshank Redemption uses high views of the prison so human scale sits inside the walls.Citizen Kane and Prisoners both look down when a person should feel watched or reduced. Borrow the downward pitch and the readable floor, not a poster.Psycho 1960The overhead view during Arbogast’s stairway encounter.The Shawshank Redemption 1994High views establish the prison and its constrained human scale."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the look-down, not only camera up high. Quote: High-angle shot looking down on [Subject], the figure diminished, architecture or sky weighing on them."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: oblique angle, face still readable, more floor than ceiling, horizon not level to the eyes. Forbid 90-degree top-down unless you actually want Overhead Top-Down.",
+          "links": [
+            {
+              "text": "Overhead Top-Down",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            }
+          ]
+        },
+        {
+          "type": "quote",
+          "text": "High oblique view of a lone cleaner crossing a vast empty railway hall after midnight. The architecture and floor pattern dominate. The cleaner pauses at a distant sound. Fixed elevated viewpoint, no drone swoop or zoom."
+        }
+      ],
+      "links": [
+        {
+          "text": "Overhead Top-Down",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        },
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=High+oblique+view+of+a+lone+cleaner+crossing+a+vast+empty+railway+hall+after+midnight.+The+architecture+and+floor+pattern+dominate.+The+cleaner+pauses+at+a+distant+sound.+Fixed+elevated+viewpoint,+no+drone+swoop+or+zoom."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the look-down, not only camera up high. Quote: High-angle shot looking down on [Subject], the figure diminished, architecture or sky weighing on them.Add: oblique angle, face still readable, more floor than ceiling, horizon not level to the eyes. Forbid 90-degree top-down unless you actually want Overhead Top-Down.Copy promptUse in Video GeneratorHigh oblique view of a lone cleaner crossing a vast empty railway hall after midnight. The architecture and floor pattern dominate. The cleaner pauses at a distant sound. Fixed elevated viewpoint, no drone swoop or zoom.High oblique view of a lone cleaner crossing a vast empty railway hall after midnight. The architecture and floor pattern dominate. The cleaner pauses at a distant sound. Fixed elevated viewpoint, no drone swoop or zoom."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Bird's-Eye View or Overhead Top-Down: the model snaps to a drone plan. Tell: tops of heads only, table as a perfect rectangle, no face.",
+          "links": [
+            {
+              "text": "Bird's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            },
+            {
+              "text": "Overhead Top-Down",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: looking down 30 degrees, eyes and mouth still readable, walls receding. The other failure is a raised camera that stays level, which is a high vantage, not a high angle."
+        }
+      ],
+      "links": [
+        {
+          "text": "Bird's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        },
+        {
+          "text": "Overhead Top-Down",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Bird's-Eye View or Overhead Top-Down: the model snaps to a drone plan. Tell: tops of heads only, table as a perfect rectangle, no face.Fix: looking down 30 degrees, eyes and mouth still readable, walls receding. The other failure is a raised camera that stays level, which is a high vantage, not a high angle."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a high angle in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A high-angle shot looks down at the subject from above eye level. The pitch is oblique, so you still read a person, only smaller in their space."
+        },
+        {
+          "type": "heading",
+          "text": "High angle vs bird's-eye view",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A high angle is a downward look that keeps the face and the room in perspective. A bird's-eye view is much higher and steeper, often nearly straight down, until life reads as a map."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a high angle?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when someone is vulnerable, watched, or when the floor plan of a room matters more than a power face. Do not use it as a default dramatic portrait."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a high angle for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: High-angle shot looking down on [Subject], figure diminished, more floor than ceiling, face still readable, not top-down. Name an approximate tilt if the model keeps flattening the room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a high angle in film?A high-angle shot looks down at the subject from above eye level. The pitch is oblique, so you still read a person, only smaller in their space.High angle vs bird's-eye viewA high angle is a downward look that keeps the face and the room in perspective. A bird's-eye view is much higher and steeper, often nearly straight down, until life reads as a map.When should I use a high angle?Use it when someone is vulnerable, watched, or when the floor plan of a room matters more than a power face. Do not use it as a default dramatic portrait.How do I prompt a high angle for AI image or video?Write: High-angle shot looking down on [Subject], figure diminished, more floor than ceiling, face still readable, not top-down. Name an approximate tilt if the model keeps flattening the room."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the look-down, not only camera up high. Quote: High-angle shot looking down on [Subject], the figure diminished, architecture or sky weighing on them.",
+      "Add: oblique angle, face still readable, more floor than ceiling, horizon not level to the eyes. Forbid 90-degree top-down unless you actually want Overhead Top-Down."
+    ],
+    "example": "High oblique view of a lone cleaner crossing a vast empty railway hall after midnight. The architecture and floor pattern dominate. The cleaner pauses at a distant sound. Fixed elevated viewpoint, no drone swoop or zoom."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b40e6c26abfe2758ed685e6a2fb709f6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/high-angle.jpg",
+      "alt": "High Angle frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/307d06a0cb6918aa8c02483edd7604c2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/birds-eye-045-top-down-diagrammatic-view-mini.webp",
+      "alt": "Bird's-Eye View"
+    },
+    {
+      "kind": "video",
+      "path": "media/a70fcff4c27b696665426f4b946c2a9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/045-top-down-diagrammatic-view-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+      "alt": "Low Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/73a54ae6a30c8563a55138eab345d2e7.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/high-angle/famous/00-psycho-1960.jpg",
+      "alt": "Psycho 1960"
+    },
+    {
+      "kind": "image",
+      "path": "media/3b32252e251c5888762d661b036b8466.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/high-angle/famous/01-the-shawshank-redemption-1994.jpg",
+      "alt": "The Shawshank Redemption 1994"
+    },
+    {
+      "kind": "image",
+      "path": "media/e509f3fa2c6743a4d8c0dcc3221f63d0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/high-angle/hero.jpg",
+      "alt": "High Angle",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "dd915c7e999f96402f321a1cc0196758e7bb4211336a7ee31deadeb763191b53"
+}

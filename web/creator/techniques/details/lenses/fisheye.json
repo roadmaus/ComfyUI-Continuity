@@ -1,0 +1,439 @@
+{
+  "id": "lenses/fisheye",
+  "slug": "fisheye",
+  "title": "Fisheye",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/fisheye",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fisheye-059-fisheye-space-distortion-mini.webp",
+  "detail": "details/lenses/fisheye.json",
+  "aliases": [
+    "Curvilinear ultra-wide view"
+  ],
+  "description": "A fisheye in fisheye cinematography is a very wide curvilinear projection that bends straight lines, especially away from the center. The world wraps around the lens; architecture becomes a bowl rather than a rectilinear box.",
+  "thumbnail": "media/b4071aa0661c71f8a9389dce80bf833c.webp",
+  "video": "media/3c8bcf6380e4b2040179ecc443e9bdf3.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/059-fisheye-space-distortion-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put a face in the middle and the room circles them. Put them off-center and their skull stretches along the barrel."
+        },
+        {
+          "type": "paragraph",
+          "text": "The mapping can be circular (a round image in a black frame) or diagonal (the circle fills the rectangle). Either way, the mind of the shot is warped, or the space is a dome."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you wanted extreme width with straight walls. That is a rectilinear 14mm Ultra-Wide.",
+          "links": [
+            {
+              "text": "14mm Ultra-Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Random wobbly architecture is a model failure, not fisheye projection. If the beat is only a mildly wide room, 24mm Wide already does it without the wrap.",
+          "links": [
+            {
+              "text": "24mm Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "14mm Ultra-Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        },
+        {
+          "text": "24mm Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Put a face in the middle and the room circles them. Put them off-center and their skull stretches along the barrel.The mapping can be circular (a round image in a black frame) or diagonal (the circle fills the rectangle). Either way, the mind of the shot is warped, or the space is a dome.It is the wrong tool when you wanted extreme width with straight walls. That is a rectilinear 14mm Ultra-Wide.Random wobbly architecture is a model failure, not fisheye projection. If the beat is only a mildly wide room, 24mm Wide already does it without the wrap."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose circular or full-frame fisheye and stage faces near the center unless edge stretching is deliberate. Keep the distortion systematic: lines bow around a stable center, they do not ripple."
+        },
+        {
+          "type": "paragraph",
+          "text": "A zenith or dome shot will map the room as a globe. Prompt: Fisheye on [Subject], circular or extreme barrel distortion, a world wrapping around a face, subjective unreality."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Choose circular or full-frame fisheye and stage faces near the center unless edge stretching is deliberate. Keep the distortion systematic: lines bow around a stable center, they do not ripple.A zenith or dome shot will map the room as a globe. Prompt: Fisheye on [Subject], circular or extreme barrel distortion, a world wrapping around a face, subjective unreality."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the mind is warped, or the space is a dome: a palace that should feel wrong, a subjective spiral, a helmet-cam joke. Do not use it as a synonym for 14mm, and do not apply random warping."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the mind is warped, or the space is a dome: a palace that should feel wrong, a subjective spiral, a helmet-cam joke. Do not use it as a synonym for 14mm, and do not apply random warping."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "14mm Ultra-Wide is rectilinear: huge field, straight-ish lines, stretch from a close stand. Fisheye is curvilinear by design.",
+          "links": [
+            {
+              "text": "14mm Ultra-Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "24mm Wide is moderate and polite. Kaleidoscope multiplies fragments; fisheye is one continuous wrap.",
+          "links": [
+            {
+              "text": "24mm Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            },
+            {
+              "text": "Kaleidoscope",
+              "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "24mm WidePerson plus place, neither winning.",
+          "displayText": "24mm Wide\nPerson plus place, neither winning.",
+          "links": [
+            {
+              "text": "24mm WidePerson plus place, neither winning.",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "35mm Moderate WideMost narrative coverage. Human but not telephoto.",
+          "displayText": "35mm Moderate Wide\nMost narrative coverage. Human but not telephoto.",
+          "links": [
+            {
+              "text": "35mm Moderate WideMost narrative coverage. Human but not telephoto.",
+              "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "14mm Ultra-Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        },
+        {
+          "text": "24mm Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        },
+        {
+          "text": "Kaleidoscope",
+          "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        },
+        {
+          "text": "24mm WidePerson plus place, neither winning.",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        },
+        {
+          "text": "35mm Moderate WideMost narrative coverage. Human but not telephoto.",
+          "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        },
+        {
+          "kind": "image",
+          "path": "media/628b32ea127fbd2eb64660fbc452f455.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/24mm-wide-055-close-wide-angle-distortion-mini.webp",
+          "alt": "24mm Wide"
+        },
+        {
+          "kind": "video",
+          "path": "media/7426a29d0521c2e8cebe331ee900e38c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/055-close-wide-angle-distortion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/192baaa553dac5fb337404d41c596029.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/35mm-moderate.webp",
+          "alt": "35mm Moderate Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots 14mm Ultra-Wide is rectilinear: huge field, straight-ish lines, stretch from a close stand. Fisheye is curvilinear by design.24mm Wide is moderate and polite. Kaleidoscope multiplies fragments; fisheye is one continuous wrap.14mm Ultra-WidePut the audience inside a space that is too big or too close.24mm WidePerson plus place, neither winning.35mm Moderate WideMost narrative coverage. Human but not telephoto."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Favourite bends palace interiors under conspicuously wide, curvilinear views. Poor Things uses highly distorted wide-angle views so the world stays unfamiliar."
+        },
+        {
+          "type": "paragraph",
+          "text": "A Clockwork Orange and Being John Malkovich have used extreme wide wrap as subjective pressure. Grammar of bowing space, not a filter preset."
+        },
+        {
+          "type": "list-item",
+          "text": "The Favourite 2018Palace interiors bend under conspicuously wide, curvilinear views.",
+          "displayText": "The Favourite 2018\nPalace interiors bend under conspicuously wide, curvilinear views."
+        },
+        {
+          "type": "list-item",
+          "text": "Poor Things 2023Highly distorted wide-angle views contribute to an unfamiliar world.",
+          "displayText": "Poor Things 2023\nHighly distorted wide-angle views contribute to an unfamiliar world."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7d62106c6f777d90d8f1f9a66446ad84.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fisheye/famous/00-the-favourite-2018.jpg",
+          "alt": "The Favourite 2018"
+        },
+        {
+          "kind": "image",
+          "path": "media/7b70143581bd36503d8c7a6306f600b5.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fisheye/famous/01-poor-things-2023.jpg",
+          "alt": "Poor Things 2023"
+        }
+      ],
+      "sourceText": "In film The Favourite bends palace interiors under conspicuously wide, curvilinear views. Poor Things uses highly distorted wide-angle views so the world stays unfamiliar.A Clockwork Orange and Being John Malkovich have used extreme wide wrap as subjective pressure. Grammar of bowing space, not a filter preset.The Favourite 2018Palace interiors bend under conspicuously wide, curvilinear views.Poor Things 2023Highly distorted wide-angle views contribute to an unfamiliar world."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the projection. Fisheye on [Subject], circular or extreme barrel distortion, a world wrapping around a face, subjective unreality."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say whether the image is a circle or fills the frame, and keep the face near center unless stretch is the point. Do not write 14mm rectilinear, and do not ask for random wobble."
+        },
+        {
+          "type": "quote",
+          "text": "A palace official stands small at the center of an enormous ornate chamber, filmed with a frame-filling fisheye look. Walls bow smoothly toward the edges, ceiling and floor remain structurally coherent. Slow restrained action, locked camera, no circular black border."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+palace+official+stands+small+at+the+center+of+an+enormous+ornate+chamber,+filmed+with+a+frame-filling+fisheye+look.+Walls+bow+smoothly+toward+the+edges,+ceiling+and+floor+remain+structurally+coherent.+Slow+restrained+action,+locked+camera,+no+circular+black+border."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the projection. Fisheye on [Subject], circular or extreme barrel distortion, a world wrapping around a face, subjective unreality.Say whether the image is a circle or fills the frame, and keep the face near center unless stretch is the point. Do not write 14mm rectilinear, and do not ask for random wobble.Copy promptUse in Video GeneratorA palace official stands small at the center of an enormous ornate chamber, filmed with a frame-filling fisheye look. Walls bow smoothly toward the edges, ceiling and floor remain structurally coherent. Slow restrained action, locked camera, no circular black border.A palace official stands small at the center of an enormous ornate chamber, filmed with a frame-filling fisheye look. Walls bow smoothly toward the edges, ceiling and floor remain structurally coherent. Slow restrained action, locked camera, no circular black border."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is 14mm Ultra-Wide with extra warp, or a wavy hallucination. The tell is straight walls that should bow, or unstable rippling.",
+          "links": [
+            {
+              "text": "14mm Ultra-Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: systematic barrel around a clear center, horizon curved, face protected unless you mean the stretch."
+        }
+      ],
+      "links": [
+        {
+          "text": "14mm Ultra-Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is 14mm Ultra-Wide with extra warp, or a wavy hallucination. The tell is straight walls that should bow, or unstable rippling.Fix: systematic barrel around a clear center, horizon curved, face protected unless you mean the stretch."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is fisheye in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a curvilinear ultra-wide projection that bends straight lines away from the center. The field wraps around the lens instead of drawing a rectilinear box."
+        },
+        {
+          "type": "heading",
+          "text": "Fisheye vs 14mm Ultra-Wide",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A 14mm rectilinear ultra-wide keeps lines mostly straight and exaggerates size from a close stand. A fisheye bows those lines on purpose. Width is not the same as wrap."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use fisheye?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when unreality, comedy, or a dome of space is the point. Skip it for ordinary wides and for rectilinear 14mm intrusion."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt fisheye for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Fisheye on [Subject], circular or extreme barrel distortion, a world wrapping around a face, subjective unreality. Specify circular versus full-frame fill. Forbid random wobble and rectilinear 14mm."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is fisheye in film?It is a curvilinear ultra-wide projection that bends straight lines away from the center. The field wraps around the lens instead of drawing a rectilinear box.Fisheye vs 14mm Ultra-WideA 14mm rectilinear ultra-wide keeps lines mostly straight and exaggerates size from a close stand. A fisheye bows those lines on purpose. Width is not the same as wrap.When should I use fisheye?Use it when unreality, comedy, or a dome of space is the point. Skip it for ordinary wides and for rectilinear 14mm intrusion.How do I prompt fisheye for AI image or video?Write: Fisheye on [Subject], circular or extreme barrel distortion, a world wrapping around a face, subjective unreality. Specify circular versus full-frame fill. Forbid random wobble and rectilinear 14mm."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the projection. Fisheye on [Subject], circular or extreme barrel distortion, a world wrapping around a face, subjective unreality.",
+      "Say whether the image is a circle or fills the frame, and keep the face near center unless stretch is the point. Do not write 14mm rectilinear, and do not ask for random wobble."
+    ],
+    "example": "A palace official stands small at the center of an enormous ornate chamber, filmed with a frame-filling fisheye look. Walls bow smoothly toward the edges, ceiling and floor remain structurally coherent. Slow restrained action, locked camera, no circular black border."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/3c8bcf6380e4b2040179ecc443e9bdf3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/059-fisheye-space-distortion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b4071aa0661c71f8a9389dce80bf833c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fisheye-059-fisheye-space-distortion-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/08948f1fb4b6f26adad4112c86eaa49c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/fisheye.jpg",
+      "alt": "Fisheye frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/628b32ea127fbd2eb64660fbc452f455.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/24mm-wide-055-close-wide-angle-distortion-mini.webp",
+      "alt": "24mm Wide"
+    },
+    {
+      "kind": "video",
+      "path": "media/7426a29d0521c2e8cebe331ee900e38c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/055-close-wide-angle-distortion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/192baaa553dac5fb337404d41c596029.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/35mm-moderate.webp",
+      "alt": "35mm Moderate Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/7d62106c6f777d90d8f1f9a66446ad84.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fisheye/famous/00-the-favourite-2018.jpg",
+      "alt": "The Favourite 2018"
+    },
+    {
+      "kind": "image",
+      "path": "media/7b70143581bd36503d8c7a6306f600b5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fisheye/famous/01-poor-things-2023.jpg",
+      "alt": "Poor Things 2023"
+    },
+    {
+      "kind": "image",
+      "path": "media/9b4c6795514d43349637e8d816a03262.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fisheye/hero.jpg",
+      "alt": "Fisheye",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "4807779b1711bcd17a03aadda40e45bfedb32e99f67249556e0afab72326f86f"
+}

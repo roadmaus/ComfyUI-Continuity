@@ -1,0 +1,394 @@
+{
+  "id": "effects/cyclope",
+  "slug": "cyclope",
+  "title": "Cyclope",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/cyclope",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cyclope-cyclope-mini.webp",
+  "detail": "details/effects/cyclope.json",
+  "aliases": [],
+  "description": "A cyclope camera is one giant iris looking: fisheye as a monster eye, a single hole, too close. The lens is the creature.",
+  "thumbnail": "media/cdfbaec8db435119ec70d8cce9ec690c.webp",
+  "video": "media/54e435744dd1e93467088818364411ff.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/cyclope-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A machine stares. A lighthouse stares."
+        },
+        {
+          "type": "paragraph",
+          "text": "A god stares. Distortion is the character."
+        },
+        {
+          "type": "paragraph",
+          "text": "The subject looms, edges fall away, a catchlight keeps the hole an organ. It is the wrong tool for a beauty close-up, and for a human point of view with hands in frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you only want extreme wide geometry, use a fisheye as a lens. If a body owns the camera, that is first-person."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A machine stares. A lighthouse stares.A god stares. Distortion is the character.The subject looms, edges fall away, a catchlight keeps the hole an organ. It is the wrong tool for a beauty close-up, and for a human point of view with hands in frame.If you only want extreme wide geometry, use a fisheye as a lens. If a body owns the camera, that is first-person."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write an extreme fisheye or a circular iris mask. Place the subject near the glass so the nose or the machine fills the hole."
+        },
+        {
+          "type": "paragraph",
+          "text": "Edges barrel. Keep one catchlight."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a Dutch unless the creature is off its axis. The camera is the eye."
+        },
+        {
+          "type": "paragraph",
+          "text": "Height is the creature's height, often slightly high or dead-on. Prompt a cyclope view: a single giant iris, fisheye as a monster eye, one hole looking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Write an extreme fisheye or a circular iris mask. Place the subject near the glass so the nose or the machine fills the hole.Edges barrel. Keep one catchlight.Do not add a Dutch unless the creature is off its axis. The camera is the eye.Height is the creature's height, often slightly high or dead-on. Prompt a cyclope view: a single giant iris, fisheye as a monster eye, one hole looking."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for surveillance, monsters, HAL-like machines, a stare that is not human. Do not use it on a portrait that still needs courtesy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for surveillance, monsters, HAL-like machines, a stare that is not human. Do not use it on a portrait that still needs courtesy."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fisheye is the optic without the monster-eye mask: a wide, barrelled world. Cyclope is that optic as one organ.",
+          "links": [
+            {
+              "text": "Fisheye",
+              "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "First-Person implies a human body, hands, breath. Cyclope is a single hole that looks.",
+          "links": [
+            {
+              "text": "First-Person",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "FisheyeThe mind is warped, or the space is a dome.",
+          "displayText": "Fisheye\nThe mind is warped, or the space is a dome.",
+          "links": [
+            {
+              "text": "FisheyeThe mind is warped, or the space is a dome.",
+              "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "First-PersonThe audience is the character.",
+          "displayText": "First-Person\nThe audience is the character.",
+          "links": [
+            {
+              "text": "First-PersonThe audience is the character.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Fisheye",
+          "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+        },
+        {
+          "text": "First-Person",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        },
+        {
+          "text": "FisheyeThe mind is warped, or the space is a dome.",
+          "url": "https://melies.co/cinematic-techniques/lenses/fisheye"
+        },
+        {
+          "text": "First-PersonThe audience is the character.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/first-person"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b4071aa0661c71f8a9389dce80bf833c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fisheye-059-fisheye-space-distortion-mini.webp",
+          "alt": "Fisheye"
+        },
+        {
+          "kind": "video",
+          "path": "media/3c8bcf6380e4b2040179ecc443e9bdf3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/059-fisheye-space-distortion-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/01790c06b52c445f162adaebc0032d9c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/first-person-first-person-mini.webp",
+          "alt": "First-Person"
+        },
+        {
+          "kind": "video",
+          "path": "media/fa9972874be9b02e031873b419f520ab.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/first-person-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Fisheye is the optic without the monster-eye mask: a wide, barrelled world. Cyclope is that optic as one organ.First-Person implies a human body, hands, breath. Cyclope is a single hole that looks.FisheyeThe mind is warped, or the space is a dome.First-PersonThe audience is the character.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "2001's HAL is a red iris that watches. The Lighthouse turns a stare into a blinding organ."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of one eye, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film 2001's HAL is a red iris that watches. The Lighthouse turns a stare into a blinding organ.Grammar of one eye, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cyclope view of [Subject], a single giant iris, fisheye as a monster eye, one hole looking. Demand barrel distortion, a catchlight, and a circular hole."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban a mildly wide face and ban extra human hands unless they are the prey."
+        },
+        {
+          "type": "quote",
+          "text": "Cyclope view of [Subject], a single giant iris, fisheye as a monster eye, one hole looking."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Cyclope+view+of+[Subject],+a+single+giant+iris,+fisheye+as+a+monster+eye,+one+hole+looking."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Cyclope view of [Subject], a single giant iris, fisheye as a monster eye, one hole looking. Demand barrel distortion, a catchlight, and a circular hole.Ban a mildly wide face and ban extra human hands unless they are the prey.Copy promptUse in Image GeneratorCyclope view of [Subject], a single giant iris, fisheye as a monster eye, one hole looking.Cyclope view of [Subject], a single giant iris, fisheye as a monster eye, one hole looking."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a mildly wide close-up. The tell is a normal nose and a rectangular room."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is a mountain of a near feature, a globe of a room, one iris."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a mildly wide close-up. The tell is a normal nose and a rectangular room.The fix is a mountain of a near feature, a globe of a room, one iris."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is cyclope in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Cyclope is a single giant iris looking, fisheye as a monster eye. The camera is one hole, too close, and distortion is the character."
+        },
+        {
+          "type": "heading",
+          "text": "Cyclope vs fisheye",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Fisheye is a lens choice that barrels the world. Cyclope uses that distortion as a creature or machine eye, often with a circular hole and a catchlight."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use cyclope?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for a nonhuman stare: surveillance, monsters, a machine. Skip it for a flattering close-up or a human POV with hands."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt cyclope for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Cyclope view of [Subject], a single giant iris, fisheye as a monster eye, one hole looking. Demand barrel distortion and a catchlight. Keep one eye."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is cyclope in film?Cyclope is a single giant iris looking, fisheye as a monster eye. The camera is one hole, too close, and distortion is the character.Cyclope vs fisheyeFisheye is a lens choice that barrels the world. Cyclope uses that distortion as a creature or machine eye, often with a circular hole and a catchlight.When should I use cyclope?Use it for a nonhuman stare: surveillance, monsters, a machine. Skip it for a flattering close-up or a human POV with hands.How do I prompt cyclope for AI image or video?Write Cyclope view of [Subject], a single giant iris, fisheye as a monster eye, one hole looking. Demand barrel distortion and a catchlight. Keep one eye."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Cyclope view of [Subject], a single giant iris, fisheye as a monster eye, one hole looking. Demand barrel distortion, a catchlight, and a circular hole.",
+      "Ban a mildly wide face and ban extra human hands unless they are the prey."
+    ],
+    "example": "Cyclope view of [Subject], a single giant iris, fisheye as a monster eye, one hole looking."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/54e435744dd1e93467088818364411ff.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/cyclope-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cdfbaec8db435119ec70d8cce9ec690c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cyclope-cyclope-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5eb1a4d462c6415cde76d225bc2a04a6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/cyclope.jpg",
+      "alt": "Cyclope frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/b4071aa0661c71f8a9389dce80bf833c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fisheye-059-fisheye-space-distortion-mini.webp",
+      "alt": "Fisheye"
+    },
+    {
+      "kind": "video",
+      "path": "media/3c8bcf6380e4b2040179ecc443e9bdf3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/059-fisheye-space-distortion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/01790c06b52c445f162adaebc0032d9c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/first-person-first-person-mini.webp",
+      "alt": "First-Person"
+    },
+    {
+      "kind": "video",
+      "path": "media/fa9972874be9b02e031873b419f520ab.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/first-person-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5badda146921f8c2349a85f1d1700652.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cyclope/hero.jpg",
+      "alt": "Cyclope",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "056ff7cb471bf7933fbe1dc007811b9ba92cec5c0d0aab67e5690a7b775d826d"
+}

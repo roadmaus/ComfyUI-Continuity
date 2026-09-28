@@ -1,0 +1,427 @@
+{
+  "id": "color/overexposed",
+  "slug": "overexposed",
+  "title": "Overexposed",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/overexposed",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/overexposed.webp",
+  "detail": "details/color/overexposed.json",
+  "aliases": [],
+  "description": "Overexposed cinematography lets values clip or bloom toward white on purpose so information in the highlights is burned. It is a choice to lose the top of the scale, not the same as high-key lighting, which can stay bright while still holding detail.",
+  "thumbnail": "media/11c7d57f8c599276186a2c343fecb38c.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blow the whites as a choice. A window becomes heaven or fluorescent hell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Faces can go toward erasure. The image says there is more light than the medium will hold: revelation, amnesia, a club, a death, a childhood sun that cannot be looked at."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the scene is simply bright and even with detail in the shirts (High-Key Lighting). It is the wrong tool for a white flash as an edit event (Light Flash) if the shot itself is normally exposed.",
+          "links": [
+            {
+              "text": "High-Key Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            },
+            {
+              "text": "Light Flash",
+              "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not underexpose and crush, then call it the opposite. Clipping is directional: you are throwing away the top, not the bottom."
+        }
+      ],
+      "links": [
+        {
+          "text": "High-Key Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Light Flash",
+          "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Blow the whites as a choice. A window becomes heaven or fluorescent hell.Faces can go toward erasure. The image says there is more light than the medium will hold: revelation, amnesia, a club, a death, a childhood sun that cannot be looked at.It is the wrong tool when the scene is simply bright and even with detail in the shirts (High-Key Lighting). It is the wrong tool for a white flash as an edit event (Light Flash) if the shot itself is normally exposed.Do not underexpose and crush, then call it the opposite. Clipping is directional: you are throwing away the top, not the bottom."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Expose until the shoulder clips or the highlights bloom beyond recovery. Decide what must survive (eyes, a silhouette) and let the rest go."
+        },
+        {
+          "type": "paragraph",
+          "text": "A blooming lens and Halation can soften the burn; a digital clip is harder-edged unless you diffuse. Prompt: Overexposed [Subject], values clipping toward heaven or fluorescent hell, information burned on purpose.",
+          "links": [
+            {
+              "text": "Halation",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Halation",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Expose until the shoulder clips or the highlights bloom beyond recovery. Decide what must survive (eyes, a silhouette) and let the rest go.A blooming lens and Halation can soften the burn; a digital clip is harder-edged unless you diffuse. Prompt: Overexposed [Subject], values clipping toward heaven or fluorescent hell, information burned on purpose."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when blowing the whites is the sentence: a door onto blinding sun, a memory that erases, a club strobe that stays. Do not use it as a synonym for high-key beauty, and do not clip by accident and keep the take."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when blowing the whites is the sentence: a door onto blinding sun, a memory that erases, a club strobe that stays. Do not use it as a synonym for high-key beauty, and do not clip by accident and keep the take."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "High-Key Lighting is low-contrast bright lighting that usually still holds detail. Light Flash is a transient white event, often an edit.",
+          "links": [
+            {
+              "text": "High-Key Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            },
+            {
+              "text": "Light Flash",
+              "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Filmic Faded rolls highlights instead of clipping them. Halation blooms bright points without necessarily destroying the whole shoulder.",
+          "links": [
+            {
+              "text": "Filmic Faded",
+              "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+            },
+            {
+              "text": "Halation",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+          "displayText": "High-Key Lighting\nComedy, heaven, hospital, or candy.",
+          "links": [
+            {
+              "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Light FlashA cut that is also a wound of light.",
+          "displayText": "Light Flash\nA cut that is also a wound of light.",
+          "links": [
+            {
+              "text": "Light FlashA cut that is also a wound of light.",
+              "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "High-Key Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Light Flash",
+          "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+        },
+        {
+          "text": "Filmic Faded",
+          "url": "https://melies.co/cinematic-techniques/color/filmic-faded"
+        },
+        {
+          "text": "Halation",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "High-Key LightingComedy, heaven, hospital, or candy.",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Light FlashA cut that is also a wound of light.",
+          "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/633961526d0799af2b516a1929d04ff7.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-key-064-high-key-brightness-mini.webp",
+          "alt": "High-Key Lighting"
+        },
+        {
+          "kind": "video",
+          "path": "media/501404f06979d708f24c98a578ccaf9a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/064-high-key-brightness-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4e6870e12c661aa6c0dbde12bf048a17.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/light-flash-light-flash-mini.webp",
+          "alt": "Light Flash"
+        },
+        {
+          "kind": "video",
+          "path": "media/9b644dfc7d7f6c439b9a9252f52a613f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/light-flash-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots High-Key Lighting is low-contrast bright lighting that usually still holds detail. Light Flash is a transient white event, often an edit.Filmic Faded rolls highlights instead of clipping them. Halation blooms bright points without necessarily destroying the whole shoulder.High-Key LightingComedy, heaven, hospital, or candy.Light FlashA cut that is also a wound of light.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Tree of Life lets sun and windows blow so childhood light exceeds the medium. Enter the Void uses overbright interiors and flashes as sensory overload."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of burned information, not a copied still of a child."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Tree of Life lets sun and windows blow so childhood light exceeds the medium. Enter the Void uses overbright interiors and flashes as sensory overload.Grammar of burned information, not a copied still of a child."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the burn. Overexposed [Subject], values clipping toward heaven or fluorescent hell, information burned on purpose."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say what still holds (eyes, a doorway silhouette). Do not write high-key with detail in the whites, and do not crush the blacks as a substitute."
+        },
+        {
+          "type": "quote",
+          "text": "Overexposed [Subject], values clipping toward heaven or fluorescent hell, information burned on purpose."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Overexposed+[Subject],+values+clipping+toward+heaven+or+fluorescent+hell,+information+burned+on+purpose."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the burn. Overexposed [Subject], values clipping toward heaven or fluorescent hell, information burned on purpose.Say what still holds (eyes, a doorway silhouette). Do not write high-key with detail in the whites, and do not crush the blacks as a substitute.Copy promptUse in Image GeneratorOverexposed [Subject], values clipping toward heaven or fluorescent hell, information burned on purpose.Overexposed [Subject], values clipping toward heaven or fluorescent hell, information burned on purpose."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is High-Key Lighting (bright, detailed, low contrast) or a Light Flash cut. The tell is a bright image with texture in the shirts, or a single frame of white in an otherwise normal shot.",
+          "links": [
+            {
+              "text": "High-Key Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+            },
+            {
+              "text": "Light Flash",
+              "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: clipped or blooming highlights, lost highlight information, the burn as the point."
+        }
+      ],
+      "links": [
+        {
+          "text": "High-Key Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/high-key"
+        },
+        {
+          "text": "Light Flash",
+          "url": "https://melies.co/cinematic-techniques/effects/light-flash"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is High-Key Lighting (bright, detailed, low contrast) or a Light Flash cut. The tell is a bright image with texture in the shirts, or a single frame of white in an otherwise normal shot.Fix: clipped or blooming highlights, lost highlight information, the burn as the point."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is overexposed in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is an image whose highlights are allowed to clip or bloom so information at the top of the scale is burned on purpose. Brightness plus lost detail is the fact."
+        },
+        {
+          "type": "heading",
+          "text": "Overexposed vs High-Key Lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "High-key lighting is bright and low in contrast, but it can still hold detail in whites. Overexposure throws highlight information away. A white shirt with buttons still visible is not overexposed; it is just bright."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use overexposed?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when losing the top of the scale is the meaning: blinding sun, erasure, overload. Skip it when you wanted a bright, detailed, high-key scene."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt overexposed for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Overexposed [Subject], values clipping toward heaven or fluorescent hell, information burned on purpose. Say what still survives. Forbid detailed high-key whites."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is overexposed in film?It is an image whose highlights are allowed to clip or bloom so information at the top of the scale is burned on purpose. Brightness plus lost detail is the fact.Overexposed vs High-Key LightingHigh-key lighting is bright and low in contrast, but it can still hold detail in whites. Overexposure throws highlight information away. A white shirt with buttons still visible is not overexposed; it is just bright.When should I use overexposed?Use it when losing the top of the scale is the meaning: blinding sun, erasure, overload. Skip it when you wanted a bright, detailed, high-key scene.How do I prompt overexposed for AI image or video?Write: Overexposed [Subject], values clipping toward heaven or fluorescent hell, information burned on purpose. Say what still survives. Forbid detailed high-key whites."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the burn. Overexposed [Subject], values clipping toward heaven or fluorescent hell, information burned on purpose.",
+      "Say what still holds (eyes, a doorway silhouette). Do not write high-key with detail in the whites, and do not crush the blacks as a substitute."
+    ],
+    "example": "Overexposed [Subject], values clipping toward heaven or fluorescent hell, information burned on purpose."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/11c7d57f8c599276186a2c343fecb38c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/overexposed.webp",
+      "alt": "Overexposed example"
+    },
+    {
+      "kind": "image",
+      "path": "media/633961526d0799af2b516a1929d04ff7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-key-064-high-key-brightness-mini.webp",
+      "alt": "High-Key Lighting"
+    },
+    {
+      "kind": "video",
+      "path": "media/501404f06979d708f24c98a578ccaf9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/064-high-key-brightness-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4e6870e12c661aa6c0dbde12bf048a17.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/light-flash-light-flash-mini.webp",
+      "alt": "Light Flash"
+    },
+    {
+      "kind": "video",
+      "path": "media/9b644dfc7d7f6c439b9a9252f52a613f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/light-flash-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/14b18a620d0aa46ffa59e30e61ea5370.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/overexposed/hero.jpg",
+      "alt": "Overexposed",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "d282f55a628abd86f7e00d5e5cdc651c1629d3ba980ff3f04eaaf47c502e376a"
+}

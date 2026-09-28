@@ -1,0 +1,446 @@
+{
+  "id": "color/moonlight-gel",
+  "slug": "moonlight-gel",
+  "title": "Moonlight Gel",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/moonlight-gel",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/moonlight-gel.webp",
+  "detail": "details/color/moonlight-gel.json",
+  "aliases": [
+    "Gel-color world",
+    "Unmotivated expressive color"
+  ],
+  "description": "Moonlight gel in moonlight lighting gel work is a cool, often cyan or steel-green key standing in for the moon, usually a large source from above or through trees. Night stays sculpted: there is a direction, a rim, and deep underexposure, not only a blue grade.",
+  "thumbnail": "media/5288bad199c8f7efb9dfd01bbbe17c93.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A single cool key as the moon, silver edges, ground barely held. Fire, a cabin window, or a lantern can oppose it as a warm hearth."
+        },
+        {
+          "type": "paragraph",
+          "text": "The audience should feel a source in the sky even when the moon disc is out of frame. It is the wrong tool when you are faking night with underexposed noon (Day for Night).",
+          "links": [
+            {
+              "text": "Day for Night",
+              "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the whole file is merely cooled in the timeline (Cool Blue) with no sculpted key. Strongly colored, unmotivated gels (academy reds and greens in Suspiria, nightmare color in Mandy) are cousins in expressive gel work; if the beat is psychological color rather than a moon, say so, and do not call every gelled nightmare moonlight.",
+          "links": [
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Day for Night",
+          "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+        },
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A single cool key as the moon, silver edges, ground barely held. Fire, a cabin window, or a lantern can oppose it as a warm hearth.The audience should feel a source in the sky even when the moon disc is out of frame. It is the wrong tool when you are faking night with underexposed noon (Day for Night).It is the wrong tool when the whole file is merely cooled in the timeline (Cool Blue) with no sculpted key. Strongly colored, unmotivated gels (academy reds and greens in Suspiria, nightmare color in Mandy) are cousins in expressive gel work; if the beat is psychological color rather than a moon, say so, and do not call every gelled nightmare moonlight."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hang a large cool source high, gel toward cyan, steel blue, or pale green, and underexpose the fill so night remains night. Edge the figure with that key; keep faces just inside readability."
+        },
+        {
+          "type": "paragraph",
+          "text": "A warm practical can sit in the frame as opposition. Control spill so the moon stays one direction."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Moonlight gel on [Subject], cyan-green night, a single cool key as the moon, deep underexposure, silver edges."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Hang a large cool source high, gel toward cyan, steel blue, or pale green, and underexpose the fill so night remains night. Edge the figure with that key; keep faces just inside readability.A warm practical can sit in the frame as opposition. Control spill so the moon stays one direction.Prompt: Moonlight gel on [Subject], cyan-green night, a single cool key as the moon, deep underexposure, silver edges."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for night that is still sculpted: a forest approach, a snow field, a cabin under a false moon. Do not use it as a blue LUT on day, and do not flatten night into even cool fill."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for night that is still sculpted: a forest approach, a snow field, a cabin under a false moon. Do not use it as a blue LUT on day, and do not flatten night into even cool fill."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cool Blue is a grade. Day for Night is daylight sold as night.",
+          "links": [
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            },
+            {
+              "text": "Day for Night",
+              "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Blue Hour is real dusk. Tungsten Balance will make a cool gel even colder if the camera is set to 3200K.",
+          "links": [
+            {
+              "text": "Blue Hour",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            },
+            {
+              "text": "Tungsten Balance",
+              "url": "https://melies.co/cinematic-techniques/color/tungsten-balance"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hyper-Saturation plus gels becomes expressive color (Suspiria, Mandy), which is related gel language but not a moon key.",
+          "links": [
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Blue HourDay is gone but the sky still works.",
+          "displayText": "Blue Hour\nDay is gone but the sky still works.",
+          "links": [
+            {
+              "text": "Blue HourDay is gone but the sky still works.",
+              "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cool BlueCold institutions, night, or alienation.",
+          "displayText": "Cool Blue\nCold institutions, night, or alienation.",
+          "links": [
+            {
+              "text": "Cool BlueCold institutions, night, or alienation.",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "Day for Night",
+          "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+        },
+        {
+          "text": "Blue Hour",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        },
+        {
+          "text": "Tungsten Balance",
+          "url": "https://melies.co/cinematic-techniques/color/tungsten-balance"
+        },
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        },
+        {
+          "text": "Blue HourDay is gone but the sky still works.",
+          "url": "https://melies.co/cinematic-techniques/lighting/blue-hour"
+        },
+        {
+          "text": "Cool BlueCold institutions, night, or alienation.",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/afeaf073c169bf136864eccfa0d68e92.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blue-hour.webp",
+          "alt": "Blue Hour"
+        },
+        {
+          "kind": "image",
+          "path": "media/9ac5d96fc611ee97ab52dc9132feb3fa.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cool-blue.webp",
+          "alt": "Cool Blue"
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Cool Blue is a grade. Day for Night is daylight sold as night.Blue Hour is real dusk. Tungsten Balance will make a cool gel even colder if the camera is set to 3200K.Hyper-Saturation plus gels becomes expressive color (Suspiria, Mandy), which is related gel language but not a moon key.Blue HourDay is gone but the sky still works.Cool BlueCold institutions, night, or alienation.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Revenant uses cool night against fire so moon and hearth compete. The Witch sculpts dark-forest night as a directional cool."
+        },
+        {
+          "type": "paragraph",
+          "text": "Suspiria and Mandy show how far gel color can leave natural moon; use them as grammar for expressive gels, not as default moonlight. Borrow direction and underexposure."
+        },
+        {
+          "type": "list-item",
+          "text": "Suspiria 1977The dance academy’s saturated red, blue and green interiors.",
+          "displayText": "Suspiria 1977\nThe dance academy’s saturated red, blue and green interiors."
+        },
+        {
+          "type": "list-item",
+          "text": "Mandy 2018Extreme colored light supports a subjective nightmare atmosphere.",
+          "displayText": "Mandy 2018\nExtreme colored light supports a subjective nightmare atmosphere."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/147c7d120c05bf69b4f88bd88af91d07.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/moonlight-gel/famous/00-suspiria-1977.jpg",
+          "alt": "Suspiria 1977"
+        },
+        {
+          "kind": "image",
+          "path": "media/dfb056d5ebeec2b085cf6cedee074032.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/moonlight-gel/famous/01-mandy-2018.jpg",
+          "alt": "Mandy 2018"
+        }
+      ],
+      "sourceText": "In film The Revenant uses cool night against fire so moon and hearth compete. The Witch sculpts dark-forest night as a directional cool.Suspiria and Mandy show how far gel color can leave natural moon; use them as grammar for expressive gels, not as default moonlight. Borrow direction and underexposure.Suspiria 1977The dance academy’s saturated red, blue and green interiors.Mandy 2018Extreme colored light supports a subjective nightmare atmosphere."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the cool key and the underexposure. Moonlight gel on [Subject], cyan-green night, a single cool key as the moon, deep underexposure, silver edges."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add a warm practical only if it exists in the scene. Do not write day-for-night, and do not fill the night until it is even."
+        },
+        {
+          "type": "quote",
+          "text": "A dancer crosses an empty rehearsal room divided between deep crimson side light and cold cobalt light from the opposite side. Colors remain spatially separate and shift across her body as she moves. Rich blacks, deliberate theatrical unreality, no rainbow lighting or pulsing nightclub effects."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+dancer+crosses+an+empty+rehearsal+room+divided+between+deep+crimson+side+light+and+cold+cobalt+light+from+the+opposite+side.+Colors+remain+spatially+separate+and+shift+across+her+body+as+she+moves.+Rich+blacks,+deliberate+theatrical+unreality,+no+rainbow+lighting+or+pulsing+nightclub+effects."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the cool key and the underexposure. Moonlight gel on [Subject], cyan-green night, a single cool key as the moon, deep underexposure, silver edges.Add a warm practical only if it exists in the scene. Do not write day-for-night, and do not fill the night until it is even.Copy promptUse in Video GeneratorA dancer crosses an empty rehearsal room divided between deep crimson side light and cold cobalt light from the opposite side. Colors remain spatially separate and shift across her body as she moves. Rich blacks, deliberate theatrical unreality, no rainbow lighting or pulsing nightclub effects.A dancer crosses an empty rehearsal room divided between deep crimson side light and cold cobalt light from the opposite side. Colors remain spatially separate and shift across her body as she moves. Rich blacks, deliberate theatrical unreality, no rainbow lighting or pulsing nightclub effects."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Cool Blue fill or Day for Night sun. The tell is no key direction, or hard noon shadows tinted blue.",
+          "links": [
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            },
+            {
+              "text": "Day for Night",
+              "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: one high cool source, silver rims, packed night, maybe one warm opposing practical."
+        }
+      ],
+      "links": [
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "Day for Night",
+          "url": "https://melies.co/cinematic-techniques/color/day-for-night"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Cool Blue fill or Day for Night sun. The tell is no key direction, or hard noon shadows tinted blue.Fix: one high cool source, silver rims, packed night, maybe one warm opposing practical."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is moonlight gel in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a cool gelled key used as moonlight: cyan, steel, or pale green from above, with night still underexposed and sculpted. It is lighting, not only a grade."
+        },
+        {
+          "type": "heading",
+          "text": "Moonlight Gel vs Cool Blue",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Cool blue can be a global grade with no clear source. Moonlight gel is a directional key that stands in for the moon. If there is no silver edge and no dark fill, you probably only cooled the file."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use moonlight gel?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when night must be sculpted by a moon-like key. Skip it for day-for-night terrain tricks and for even cool fills with no direction."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt moonlight gel for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Moonlight gel on [Subject], cyan-green night, a single cool key as the moon, deep underexposure, silver edges. Forbid sunny day-for-night cues and even blue fill."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is moonlight gel in film?It is a cool gelled key used as moonlight: cyan, steel, or pale green from above, with night still underexposed and sculpted. It is lighting, not only a grade.Moonlight Gel vs Cool BlueCool blue can be a global grade with no clear source. Moonlight gel is a directional key that stands in for the moon. If there is no silver edge and no dark fill, you probably only cooled the file.When should I use moonlight gel?Use it when night must be sculpted by a moon-like key. Skip it for day-for-night terrain tricks and for even cool fills with no direction.How do I prompt moonlight gel for AI image or video?Write: Moonlight gel on [Subject], cyan-green night, a single cool key as the moon, deep underexposure, silver edges. Forbid sunny day-for-night cues and even blue fill."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the cool key and the underexposure. Moonlight gel on [Subject], cyan-green night, a single cool key as the moon, deep underexposure, silver edges.",
+      "Add a warm practical only if it exists in the scene. Do not write day-for-night, and do not fill the night until it is even."
+    ],
+    "example": "A dancer crosses an empty rehearsal room divided between deep crimson side light and cold cobalt light from the opposite side. Colors remain spatially separate and shift across her body as she moves. Rich blacks, deliberate theatrical unreality, no rainbow lighting or pulsing nightclub effects."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/5288bad199c8f7efb9dfd01bbbe17c93.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/moonlight-gel.webp",
+      "alt": "Moonlight Gel example"
+    },
+    {
+      "kind": "image",
+      "path": "media/afeaf073c169bf136864eccfa0d68e92.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blue-hour.webp",
+      "alt": "Blue Hour"
+    },
+    {
+      "kind": "image",
+      "path": "media/9ac5d96fc611ee97ab52dc9132feb3fa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cool-blue.webp",
+      "alt": "Cool Blue"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/147c7d120c05bf69b4f88bd88af91d07.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/moonlight-gel/famous/00-suspiria-1977.jpg",
+      "alt": "Suspiria 1977"
+    },
+    {
+      "kind": "image",
+      "path": "media/dfb056d5ebeec2b085cf6cedee074032.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/moonlight-gel/famous/01-mandy-2018.jpg",
+      "alt": "Mandy 2018"
+    },
+    {
+      "kind": "image",
+      "path": "media/c4ef3111dfc2f58183e30da1461f0012.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/moonlight-gel/hero.jpg",
+      "alt": "Moonlight Gel",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "cd52cf77ccb3c6649e3ed8ac7f027cf13ca7cf4fd472118344f8c688902eac29"
+}

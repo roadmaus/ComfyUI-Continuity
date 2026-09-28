@@ -1,0 +1,419 @@
+{
+  "id": "camera-movement/pedestal-up",
+  "slug": "pedestal-up",
+  "title": "Pedestal Up",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pedestal-up-06-pedestal-up-v2-mini.webp",
+  "detail": "details/camera-movement/pedestal-up.json",
+  "aliases": [
+    "boom up",
+    "pedestal down"
+  ],
+  "description": "A pedestal shot moves the entire camera vertically without changing its tilt. The lens rises on a column, eyeline climbs, and architecture slides down the frame while pitch stays constant.",
+  "thumbnail": "media/8f771121a4ce93d9b0389d0b4a59b0a9.webp",
+  "video": "media/f516047901ee827b5665fc1c6658f64a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/06-pedestal-up-v2-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Height changes without the drama of a crane arc. You are still looking the same way, only from higher, so rank and horizon shift together."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a formal lift, useful when the camera must stay architecturally true. It is the wrong tool when you need to boom out over a crowd or ease back as you rise."
+        },
+        {
+          "type": "paragraph",
+          "text": "A pedestal does not draw an arc; a crane does."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Height changes without the drama of a crane arc. You are still looking the same way, only from higher, so rank and horizon shift together.It is a formal lift, useful when the camera must stay architecturally true. It is the wrong tool when you need to boom out over a crowd or ease back as you rise.A pedestal does not draw an arc; a crane does."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use a studio pedestal, a column, or a virtual Y-axis translate. Lock tilt and usually lock yaw."
+        },
+        {
+          "type": "paragraph",
+          "text": "The nodal point gains height, so you get vertical parallax: near objects drop faster than the far skyline. Prompt a pedestal up, camera rising vertically on a column with no tilt change, eyeline climbing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Use a studio pedestal, a column, or a virtual Y-axis translate. Lock tilt and usually lock yaw.The nodal point gains height, so you get vertical parallax: near objects drop faster than the far skyline. Prompt a pedestal up, camera rising vertically on a column with no tilt change, eyeline climbing."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to change height without the drama of a crane arc. Concrete beat: from a tabletop to the standing speaker, looking the same direction the whole way."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a tilt-up and call it a pedestal."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to change height without the drama of a crane arc. Concrete beat: from a tabletop to the standing speaker, looking the same direction the whole way.Do not add a tilt-up and call it a pedestal."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Crane Up arcs through space and often eases backward, changing X and Z as well as Y. A Tilt Up only pitches from a fixed height.",
+          "links": [
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            },
+            {
+              "text": "Tilt Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Jib Shot is a short pivoting arm, so its path is an arc, not a column. Pedestal Down is the same column the other way.",
+          "links": [
+            {
+              "text": "Jib Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/jib"
+            },
+            {
+              "text": "Pedestal Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+          "displayText": "Crane Up\nEnd a scene, reveal a city, or turn a person into landscape.",
+          "links": [
+            {
+              "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pedestal DownReturn to human height after a high formal view.",
+          "displayText": "Pedestal Down\nReturn to human height after a high formal view.",
+          "links": [
+            {
+              "text": "Pedestal DownReturn to human height after a high formal view.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Tilt Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        },
+        {
+          "text": "Jib Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/jib"
+        },
+        {
+          "text": "Pedestal Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-down"
+        },
+        {
+          "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Pedestal DownReturn to human height after a high formal view.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-down"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+          "alt": "Crane Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/e405f84051bf6446dd0f359b7d490215.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pedestal-down-pedestal-down-mini.webp",
+          "alt": "Pedestal Down"
+        },
+        {
+          "kind": "video",
+          "path": "media/e8508e50e5bd1473b5b65402855e5668.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pedestal-down-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Crane Up arcs through space and often eases backward, changing X and Z as well as Y. A Tilt Up only pitches from a fixed height.A Jib Shot is a short pivoting arm, so its path is an arc, not a column. Pedestal Down is the same column the other way.Crane UpEnd a scene, reveal a city, or turn a person into landscape.Pedestal DownReturn to human height after a high formal view.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "2001: A Space Odyssey treats vertical camera placement as spacecraft geometry rather than as a flourish. Studio multi-camera drama uses the pedestal column as the default lift."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pair those as grammar for tilt-locked height, not as a look to clone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film 2001: A Space Odyssey treats vertical camera placement as spacecraft geometry rather than as a flourish. Studio multi-camera drama uses the pedestal column as the default lift.Pair those as grammar for tilt-locked height, not as a look to clone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pedestal up on [Subject], camera rising vertically on a column with no tilt change, eyeline climbing, architecture sliding down the frame. For motion: the camera rises straight up on a pedestal, keeping the same tilt, lifting past [Subject]."
+        },
+        {
+          "type": "quote",
+          "text": "The camera rises straight up on a pedestal, keeping the same tilt, lifting past [Subject]."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+rises+straight+up+on+a+pedestal,+keeping+the+same+tilt,+lifting+past+[Subject]."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Pedestal up on [Subject], camera rising vertically on a column with no tilt change, eyeline climbing, architecture sliding down the frame. For motion: the camera rises straight up on a pedestal, keeping the same tilt, lifting past [Subject].Copy promptUse in Video GeneratorThe camera rises straight up on a pedestal, keeping the same tilt, lifting past [Subject].The camera rises straight up on a pedestal, keeping the same tilt, lifting past [Subject]."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Tilt Up or a Crane Up. The tell is a pitching horizon, or a backward boom that reveals a city.",
+          "links": [
+            {
+              "text": "Tilt Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            },
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: straight Y travel, tilt locked, no arc."
+        }
+      ],
+      "links": [
+        {
+          "text": "Tilt Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        },
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Tilt Up or a Crane Up. The tell is a pitching horizon, or a backward boom that reveals a city.The fix: straight Y travel, tilt locked, no arc."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Pedestal Up in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a straight vertical rise of the whole camera with tilt held constant, so you look from a higher station in the same direction."
+        },
+        {
+          "type": "heading",
+          "text": "Pedestal Up vs Crane Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Crane up follows an arm's arc and often backs away. Pedestal up is a column: height only, pitch unchanged."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Pedestal Up?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When you need a clean height change and a stable horizon, often in architecture or studio blocking. Do not use it for a skyline reveal that requires boom-out."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Pedestal Up for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Say camera rises straight up on a pedestal, no tilt change, no crane arc. Name start height and end height."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Pedestal Up in film?It is a straight vertical rise of the whole camera with tilt held constant, so you look from a higher station in the same direction.Pedestal Up vs Crane UpCrane up follows an arm's arc and often backs away. Pedestal up is a column: height only, pitch unchanged.When should I use Pedestal Up?When you need a clean height change and a stable horizon, often in architecture or studio blocking. Do not use it for a skyline reveal that requires boom-out.How do I prompt Pedestal Up for AI image or video?Say camera rises straight up on a pedestal, no tilt change, no crane arc. Name start height and end height."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Pedestal up on [Subject], camera rising vertically on a column with no tilt change, eyeline climbing, architecture sliding down the frame. For motion: the camera rises straight up on a pedestal, keeping the same tilt, lifting past [Subject]."
+    ],
+    "example": "The camera rises straight up on a pedestal, keeping the same tilt, lifting past [Subject]."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/f516047901ee827b5665fc1c6658f64a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/06-pedestal-up-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8f771121a4ce93d9b0389d0b4a59b0a9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pedestal-up-06-pedestal-up-v2-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fe4de17cb57b0a21dc13eec5a323c8f4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/pedestal-up-06-pedestal-up-v2.jpg",
+      "alt": "Pedestal Up frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+      "alt": "Crane Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e405f84051bf6446dd0f359b7d490215.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pedestal-down-pedestal-down-mini.webp",
+      "alt": "Pedestal Down"
+    },
+    {
+      "kind": "video",
+      "path": "media/e8508e50e5bd1473b5b65402855e5668.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pedestal-down-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d9596ed4945e5fc2cbbb35dac8b5f800.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pedestal-up/hero.jpg",
+      "alt": "Pedestal Up",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "7f2adc2503b6580a9e7df2ef581cbe56307beecb813f4f0e2646fd98fd653110"
+}

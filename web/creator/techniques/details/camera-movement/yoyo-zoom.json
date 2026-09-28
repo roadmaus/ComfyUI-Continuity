@@ -1,0 +1,409 @@
+{
+  "id": "camera-movement/yoyo-zoom",
+  "slug": "yoyo-zoom",
+  "title": "YoYo Zoom",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/yoyo-zoom",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/yoyo-zoom-yoyo-zoom-mini.webp",
+  "detail": "details/camera-movement/yoyo-zoom.json",
+  "aliases": [],
+  "description": "A yoyo zoom inhales and exhales on the optical axis: a punch then a release, camera body still. One breath, two directions, no dolly.",
+  "thumbnail": "media/2c855344debebaf2bc9f4526170ab31c.webp",
+  "video": "media/eaca3ae6adcdfee5e19076dd27a30b5f.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/yoyo-zoom-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "One axis, two punches. A thought that arrives and leaves, a sting, a joke: crash in, crash out, same breath."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hold at neither end for long. A funeral may not want it."
+        },
+        {
+          "type": "paragraph",
+          "text": "A slow zoom that wanders is not a yoyo. Crash zoom in is a one-way punch; this is a punch and a release."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function One axis, two punches. A thought that arrives and leaves, a sting, a joke: crash in, crash out, same breath.Hold at neither end for long. A funeral may not want it.A slow zoom that wanders is not a yoyo. Crash zoom in is a one-way punch; this is a punch and a release."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Locked body, zoom lens. In then out (or out then in) on one axis, short duration."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comic or violent depending on speed. Prompt: Yo-yo zoom on [Subject], in and out on the same axis, a punch then a release, optical breathing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Locked body, zoom lens. In then out (or out then in) on one axis, short duration.Comic or violent depending on speed. Prompt: Yo-yo zoom on [Subject], in and out on the same axis, a punch then a release, optical breathing."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a sting or a joke on one optical axis. Do not use a slow hunt and call it a yoyo."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a sting or a joke on one optical axis. Do not use a slow hunt and call it a yoyo."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crash Zoom In is one way in. Crash Zoom Out is one way out.",
+          "links": [
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            },
+            {
+              "text": "Crash Zoom Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-out"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Zoom is the parent optical change. Yoyo does both in one breath.",
+          "links": [
+            {
+              "text": "Zoom",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/zoom"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Rapid Zoom In snaps in and holds.",
+          "links": [
+            {
+              "text": "Rapid Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/rapid-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "displayText": "Crash Zoom In\nPunctuate a hit, a realization, or a comic sting.",
+          "links": [
+            {
+              "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom OutShock-reveal scale or undercut a close moment.",
+          "displayText": "Crash Zoom Out\nShock-reveal scale or undercut a close moment.",
+          "links": [
+            {
+              "text": "Crash Zoom OutShock-reveal scale or undercut a close moment.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "ZoomChange size without walking.",
+          "displayText": "Zoom\nChange size without walking.",
+          "links": [
+            {
+              "text": "ZoomChange size without walking.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/zoom"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Crash Zoom Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-out"
+        },
+        {
+          "text": "Zoom",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/zoom"
+        },
+        {
+          "text": "Rapid Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/rapid-zoom-in"
+        },
+        {
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Crash Zoom OutShock-reveal scale or undercut a close moment.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-out"
+        },
+        {
+          "text": "ZoomChange size without walking.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/zoom"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+          "alt": "Crash Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/50f4effe5c52992f8b05bebf3c572d46.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-out-03-crash-zoom-out-v2-mini.webp",
+          "alt": "Crash Zoom Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/5a74b21f2d2f97e035b9035f20977f76.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-crash-zoom-out-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d25e31917444138277d694e47b51ed65.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/zoom-zoom-mini.webp",
+          "alt": "Zoom"
+        },
+        {
+          "kind": "video",
+          "path": "media/0d472a8010ae1a9f6b31c4ca74550dbf.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/zoom-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Crash Zoom In is one way in. Crash Zoom Out is one way out.Zoom is the parent optical change. Yoyo does both in one breath.A Rapid Zoom In snaps in and holds.Crash Zoom InPunctuate a hit, a realization, or a comic sting.Crash Zoom OutShock-reveal scale or undercut a close moment.ZoomChange size without walking."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shaun of the Dead uses snap zooms as comic grammar, including in-and-out breaths. Music videos treat optical breathing as percussion."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: punch then release, body still."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Shaun of the Dead uses snap zooms as comic grammar, including in-and-out breaths. Music videos treat optical breathing as percussion.Grammar: punch then release, body still."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In then out, one breath. Still: Yo-yo zoom on [Subject], in and out on the same axis, a punch then a release, optical breathing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The lens zooms in then out on [Subject] in one breath, a yo-yo on the optical axis. No dolly."
+        },
+        {
+          "type": "paragraph",
+          "text": "Short."
+        },
+        {
+          "type": "quote",
+          "text": "The lens zooms in then out on [Subject] in one breath, a yo-yo on the optical axis."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+lens+zooms+in+then+out+on+[Subject]+in+one+breath,+a+yo-yo+on+the+optical+axis."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it In then out, one breath. Still: Yo-yo zoom on [Subject], in and out on the same axis, a punch then a release, optical breathing.Video: The lens zooms in then out on [Subject] in one breath, a yo-yo on the optical axis. No dolly.Short.Copy promptUse in Video GeneratorThe lens zooms in then out on [Subject] in one breath, a yo-yo on the optical axis.The lens zooms in then out on [Subject] in one breath, a yo-yo on the optical axis."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a slow zoom or a one-way crash. The tell: it never comes back, or it crawls."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: snap both ways on a locked body, no wheels."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a slow zoom or a one-way crash. The tell: it never comes back, or it crawls.The fix: snap both ways on a locked body, no wheels."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is YoYo Zoom in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A yoyo zoom is an in-then-out (or out-then-in) on the optical axis in one breath, camera body still. A punch and a release."
+        },
+        {
+          "type": "heading",
+          "text": "YoYo Zoom vs Crash Zoom In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A crash zoom in is a one-way punch that holds. A yoyo zoom returns on the same axis in the same breath."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use YoYo Zoom?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for a sting, a joke, or a thought that arrives and leaves. Do not use it as a slow search."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt YoYo Zoom for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write in then out on one axis, body still. Example: Yo-yo zoom on [Subject], in and out on the same axis, a punch then a release, optical breathing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is YoYo Zoom in film?A yoyo zoom is an in-then-out (or out-then-in) on the optical axis in one breath, camera body still. A punch and a release.YoYo Zoom vs Crash Zoom InA crash zoom in is a one-way punch that holds. A yoyo zoom returns on the same axis in the same breath.When should I use YoYo Zoom?Use it for a sting, a joke, or a thought that arrives and leaves. Do not use it as a slow search.How do I prompt YoYo Zoom for AI image or video?Write in then out on one axis, body still. Example: Yo-yo zoom on [Subject], in and out on the same axis, a punch then a release, optical breathing."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "In then out, one breath. Still: Yo-yo zoom on [Subject], in and out on the same axis, a punch then a release, optical breathing.",
+      "Video: The lens zooms in then out on [Subject] in one breath, a yo-yo on the optical axis. No dolly.",
+      "Short."
+    ],
+    "example": "The lens zooms in then out on [Subject] in one breath, a yo-yo on the optical axis."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/eaca3ae6adcdfee5e19076dd27a30b5f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/yoyo-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2c855344debebaf2bc9f4526170ab31c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/yoyo-zoom-yoyo-zoom-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5dc06ecc2cdb6db162fc5d6572bfc798.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/yoyo-zoom.jpg",
+      "alt": "YoYo Zoom frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": "Crash Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/50f4effe5c52992f8b05bebf3c572d46.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-out-03-crash-zoom-out-v2-mini.webp",
+      "alt": "Crash Zoom Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/5a74b21f2d2f97e035b9035f20977f76.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/03-crash-zoom-out-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d25e31917444138277d694e47b51ed65.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/zoom-zoom-mini.webp",
+      "alt": "Zoom"
+    },
+    {
+      "kind": "video",
+      "path": "media/0d472a8010ae1a9f6b31c4ca74550dbf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/29118be83db600339162c0dbef5ccba5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/yoyo-zoom/hero.jpg",
+      "alt": "YoYo Zoom",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "67c35b946102a9c0503f2c0f8f6727d8d1c028dedc3d38601c1f2838e7cec07f"
+}

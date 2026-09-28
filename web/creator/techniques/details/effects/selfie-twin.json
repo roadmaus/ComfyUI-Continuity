@@ -1,0 +1,405 @@
+{
+  "id": "effects/selfie-twin",
+  "slug": "selfie-twin",
+  "title": "Selfie Twin",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/selfie-twin",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/selfie-twin-selfie-twin-mini.webp",
+  "detail": "details/effects/selfie-twin.json",
+  "aliases": [],
+  "description": "A selfie twin puts two of the same face in a phone-arm frame, identity as a double take at arm's length. The camera is a compact wide in a hand, not a hidden studio body.",
+  "thumbnail": "media/9af4c5d9c8137b889d50e8ca347d5c7d.webp",
+  "video": "media/24e7c928c7dbaf8b1236c765e9a88a0d.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/selfie-twin-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "They posed with themselves. One is slightly closer."
+        },
+        {
+          "type": "paragraph",
+          "text": "Both share the same cheap key. Use it for identity jokes, a character who cannot escape their own image, a social double."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a wide master of twins in a room, and for a look into a production lens with only one person. If two of the same actor share a locked dramatic frame, that is duplication."
+        },
+        {
+          "type": "paragraph",
+          "text": "If one person looks into the taking lens, that is the fourth wall."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function They posed with themselves. One is slightly closer.Both share the same cheap key. Use it for identity jokes, a character who cannot escape their own image, a social double.It is the wrong tool for a wide master of twins in a room, and for a look into a production lens with only one person. If two of the same actor share a locked dramatic frame, that is duplication.If one person looks into the taking lens, that is the fourth wall."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write a phone-arm wide: short focal length, arm implied or visible, slight barrel, faces filling the near field. Match the face twice."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wardrobe may match or mismatch on purpose. Light both from the same small source (screen, window, on-camera lamp)."
+        },
+        {
+          "type": "paragraph",
+          "text": "No extra crowd unless they are the joke. Prompt a selfie twin of the subject: two of the same face in a phone-arm frame, identity as a double take."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Write a phone-arm wide: short focal length, arm implied or visible, slight barrel, faces filling the near field. Match the face twice.Wardrobe may match or mismatch on purpose. Light both from the same small source (screen, window, on-camera lamp).No extra crowd unless they are the joke. Prompt a selfie twin of the subject: two of the same face in a phone-arm frame, identity as a double take."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the double must look like a pose they took of themselves. Do not use it as a two-shot of similar strangers."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the double must look like a pose they took of themselves. Do not use it as a two-shot of similar strangers."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Duplication clones a person in dramatic coverage, often with split mattes and a hidden join. Selfie twin is the phone-arm grammar of that clone.",
+          "links": [
+            {
+              "text": "Duplication",
+              "url": "https://melies.co/cinematic-techniques/effects/duplication"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fourth Wall looks into the lens with one body. Here the lens is a phone, and there are two of the same face.",
+          "links": [
+            {
+              "text": "Fourth Wall",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DuplicationOne person is not a single self.",
+          "displayText": "Duplication\nOne person is not a single self.",
+          "links": [
+            {
+              "text": "DuplicationOne person is not a single self.",
+              "url": "https://melies.co/cinematic-techniques/effects/duplication"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Fourth WallThey know we are here.",
+          "displayText": "Fourth Wall\nThey know we are here.",
+          "links": [
+            {
+              "text": "Fourth WallThey know we are here.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Duplication",
+          "url": "https://melies.co/cinematic-techniques/effects/duplication"
+        },
+        {
+          "text": "Fourth Wall",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall"
+        },
+        {
+          "text": "DuplicationOne person is not a single self.",
+          "url": "https://melies.co/cinematic-techniques/effects/duplication"
+        },
+        {
+          "text": "Fourth WallThey know we are here.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b07a80e569770eac04d41040ec5db8d1.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/duplication-duplication-mini.webp",
+          "alt": "Duplication"
+        },
+        {
+          "kind": "video",
+          "path": "media/23be8e3bb3bf4166b8e3ed97053c9439.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/duplication-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/f1e659f7b9c51032b10cb70730b107e2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fourth-wall-135-direct-address-and-fourth-wall-break-mini.webp",
+          "alt": "Fourth Wall"
+        },
+        {
+          "kind": "video",
+          "path": "media/e7745889d0b408c463f5fcfa8b64006a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/135-direct-address-and-fourth-wall-break-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Duplication clones a person in dramatic coverage, often with split mattes and a hidden join. Selfie twin is the phone-arm grammar of that clone.Fourth Wall looks into the lens with one body. Here the lens is a phone, and there are two of the same face.DuplicationOne person is not a single self.Fourth WallThey know we are here.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Parent Trap puts one performer in both roles. Enemy makes the double a threat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those are drama cousins. Selfie twin is the casual, arm's-length version of the same identity problem."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Parent Trap puts one performer in both roles. Enemy makes the double a threat.Those are drama cousins. Selfie twin is the casual, arm's-length version of the same identity problem.Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Selfie twin of [Subject], two of the same face in a phone-arm frame, identity as a double take. Demand the same person twice, compact-camera distortion, and a phone-arm wide."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban two similar actors and ban a hidden studio two-shot."
+        },
+        {
+          "type": "quote",
+          "text": "Selfie twin of [Subject], two of the same face in a phone-arm frame, identity as a double take."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Selfie+twin+of+[Subject],+two+of+the+same+face+in+a+phone-arm+frame,+identity+as+a+double+take."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Selfie twin of [Subject], two of the same face in a phone-arm frame, identity as a double take. Demand the same person twice, compact-camera distortion, and a phone-arm wide.Ban two similar actors and ban a hidden studio two-shot.Copy promptUse in Image GeneratorSelfie twin of [Subject], two of the same face in a phone-arm frame, identity as a double take.Selfie twin of [Subject], two of the same face in a phone-arm frame, identity as a double take."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Two-Shot of lookalikes. The tell is different faces, or a long lens with no phone grammar.",
+          "links": [
+            {
+              "text": "Two-Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is one identity twice, arm's length, wide and close."
+        }
+      ],
+      "links": [
+        {
+          "text": "Two-Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/two-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Two-Shot of lookalikes. The tell is different faces, or a long lens with no phone grammar.The fix is one identity twice, arm's length, wide and close."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is selfie twin in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Selfie twin is two of the same face in a phone-arm frame. Identity is a double take at arm's length, shot like a compact camera, not a hidden studio body."
+        },
+        {
+          "type": "heading",
+          "text": "Selfie twin vs duplication",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Duplication is the general clone in a dramatic frame. Selfie twin is that clone inside phone-arm grammar: short lens, two of the same face, a pose they took of themselves."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use selfie twin?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for identity jokes and a character posed with themselves. Skip it for a wide scene of twins, and skip it if the camera is not a phone."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt selfie twin for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Selfie twin of [Subject], two of the same face in a phone-arm frame. Match the face. Keep compact-camera distortion and arm's-length distance."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is selfie twin in film?Selfie twin is two of the same face in a phone-arm frame. Identity is a double take at arm's length, shot like a compact camera, not a hidden studio body.Selfie twin vs duplicationDuplication is the general clone in a dramatic frame. Selfie twin is that clone inside phone-arm grammar: short lens, two of the same face, a pose they took of themselves.When should I use selfie twin?Use it for identity jokes and a character posed with themselves. Skip it for a wide scene of twins, and skip it if the camera is not a phone.How do I prompt selfie twin for AI image or video?Write Selfie twin of [Subject], two of the same face in a phone-arm frame. Match the face. Keep compact-camera distortion and arm's-length distance."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Selfie twin of [Subject], two of the same face in a phone-arm frame, identity as a double take. Demand the same person twice, compact-camera distortion, and a phone-arm wide.",
+      "Ban two similar actors and ban a hidden studio two-shot."
+    ],
+    "example": "Selfie twin of [Subject], two of the same face in a phone-arm frame, identity as a double take."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/24e7c928c7dbaf8b1236c765e9a88a0d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/selfie-twin-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9af4c5d9c8137b889d50e8ca347d5c7d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/selfie-twin-selfie-twin-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c851d825b3b560b5521d0da031516d5c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/selfie-twin.jpg",
+      "alt": "Selfie Twin frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/b07a80e569770eac04d41040ec5db8d1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/duplication-duplication-mini.webp",
+      "alt": "Duplication"
+    },
+    {
+      "kind": "video",
+      "path": "media/23be8e3bb3bf4166b8e3ed97053c9439.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/duplication-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f1e659f7b9c51032b10cb70730b107e2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fourth-wall-135-direct-address-and-fourth-wall-break-mini.webp",
+      "alt": "Fourth Wall"
+    },
+    {
+      "kind": "video",
+      "path": "media/e7745889d0b408c463f5fcfa8b64006a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/135-direct-address-and-fourth-wall-break-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ad300c1784dfe9f7612c9ecd4dcc1780.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/selfie-twin/hero.jpg",
+      "alt": "Selfie Twin",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "02940e310a16a3cd39e5e13904a474ce3c714f2b3f3641ec62e4ab73492cee02"
+}

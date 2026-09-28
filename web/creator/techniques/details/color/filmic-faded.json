@@ -1,0 +1,432 @@
+{
+  "id": "color/filmic-faded",
+  "slug": "filmic-faded",
+  "title": "Filmic Faded",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/filmic-faded",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/filmic-faded.webp",
+  "detail": "details/color/filmic-faded.json",
+  "aliases": [],
+  "description": "A filmic faded grade in filmic color grade work imitates a print: blacks are lifted off true zero, highlights roll off instead of clipping like video, and contrast sits like photochemical display. It is not HDR punch, and it is not automatically period costume.",
+  "thumbnail": "media/6c5de4fbb1a2ea3e097921b0637da37f.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The image looks like it could have gone through a projector. Shadows have air."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bright windows go creamy instead of digital-clipped. Romance and memory often live here because the display already forgives, but the hues can still be present and modern."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you need packed, merciless blacks (Bleach Bypass or a hard digital contrast). It is the wrong tool if the fade is meant as expired dyes and period chemistry as a whole costume: that is Vintage.",
+          "links": [
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            },
+            {
+              "text": "Vintage",
+              "url": "https://melies.co/cinematic-techniques/color/vintage"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vintage Cine Glass is the taking lens; you can shoot modern glass and still fade the print. Film Grain is texture you may add, not the fade itself.",
+          "links": [
+            {
+              "text": "Vintage Cine Glass",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            },
+            {
+              "text": "Film Grain",
+              "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Vintage",
+          "url": "https://melies.co/cinematic-techniques/color/vintage"
+        },
+        {
+          "text": "Vintage Cine Glass",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Film Grain",
+          "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The image looks like it could have gone through a projector. Shadows have air.Bright windows go creamy instead of digital-clipped. Romance and memory often live here because the display already forgives, but the hues can still be present and modern.It is the wrong tool when you need packed, merciless blacks (Bleach Bypass or a hard digital contrast). It is the wrong tool if the fade is meant as expired dyes and period chemistry as a whole costume: that is Vintage.Vintage Cine Glass is the taking lens; you can shoot modern glass and still fade the print. Film Grain is texture you may add, not the fade itself."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lift the toe (blacks sit at a low grey, not 0). Roll the shoulder so highlights compress instead of hard-clipping."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep saturation moderate unless the story is candy. A print-emulation LUT is a starting point; still check skin and that blacks are lifted, not milky-brown by accident."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Filmic faded grade on [Subject], lifted blacks, rolled-off highlights, print-emulation, slightly expired romance."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lift the toe (blacks sit at a low grey, not 0). Roll the shoulder so highlights compress instead of hard-clipping.Keep saturation moderate unless the story is candy. A print-emulation LUT is a starting point; still check skin and that blacks are lifted, not milky-brown by accident.Prompt: Filmic faded grade on [Subject], lifted blacks, rolled-off highlights, print-emulation, slightly expired romance."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the display should feel like a print rather than HDR: a summer memory, a period-adjacent present. Do not use it on a look that needs crushed blacks, and do not treat fade as a substitute for vintage glass."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the display should feel like a print rather than HDR: a summer memory, a period-adjacent present. Do not use it on a look that needs crushed blacks, and do not treat fade as a substitute for vintage glass."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vintage is a broader past-as-chemistry treatment (dye fade, period). Vintage Cine Glass is the lens.",
+          "links": [
+            {
+              "text": "Vintage",
+              "url": "https://melies.co/cinematic-techniques/color/vintage"
+            },
+            {
+              "text": "Vintage Cine Glass",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Film Grain is grain. Bleach Bypass packs density instead of lifting the toe.",
+          "links": [
+            {
+              "text": "Film Grain",
+              "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+            },
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Natural Grade can be print-like or not; natural is about hue honesty, not the toe and shoulder.",
+          "links": [
+            {
+              "text": "Natural Grade",
+              "url": "https://melies.co/cinematic-techniques/color/natural-grade"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film GrainThe image should feel developed, not rendered.",
+          "displayText": "Film Grain\nThe image should feel developed, not rendered.",
+          "links": [
+            {
+              "text": "Film GrainThe image should feel developed, not rendered.",
+              "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Vintage Cine GlassMemory, period, or beauty over resolution.",
+          "displayText": "Vintage Cine Glass\nMemory, period, or beauty over resolution.",
+          "links": [
+            {
+              "text": "Vintage Cine GlassMemory, period, or beauty over resolution.",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Vintage",
+          "url": "https://melies.co/cinematic-techniques/color/vintage"
+        },
+        {
+          "text": "Vintage Cine Glass",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Film Grain",
+          "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+        },
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Natural Grade",
+          "url": "https://melies.co/cinematic-techniques/color/natural-grade"
+        },
+        {
+          "text": "Film GrainThe image should feel developed, not rendered.",
+          "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+        },
+        {
+          "text": "Vintage Cine GlassMemory, period, or beauty over resolution.",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/5fca5d01511d1b273f967622f709e9a3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-grain-076-archival-or-damaged-medium-texture-mini.webp",
+          "alt": "Film Grain"
+        },
+        {
+          "kind": "video",
+          "path": "media/1d7683ea283deb5b71800203fb729749.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/076-archival-or-damaged-medium-texture-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7212173f77d2735523edd8889390416b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vintage-cine.webp",
+          "alt": "Vintage Cine Glass"
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Vintage is a broader past-as-chemistry treatment (dye fade, period). Vintage Cine Glass is the lens.Film Grain is grain. Bleach Bypass packs density instead of lifting the toe.Natural Grade can be print-like or not; natural is about hue honesty, not the toe and shoulder.Film GrainThe image should feel developed, not rendered.Vintage Cine GlassMemory, period, or beauty over resolution.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Master often sits in a print-like contrast with air in the blacks. Call Me by Your Name lets summer highlights roll instead of biting like video."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of toe and shoulder, not a still of a peach."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Master often sits in a print-like contrast with air in the blacks. Call Me by Your Name lets summer highlights roll instead of biting like video.Grammar of toe and shoulder, not a still of a peach."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the print curve. Filmic faded grade on [Subject], lifted blacks, rolled-off highlights, print-emulation, slightly expired romance."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say blacks are not crushed and highlights are not HDR-clipped. Do not write bleach-bypass, and do not add a sepia sticker unless you mean sepia."
+        },
+        {
+          "type": "quote",
+          "text": "Filmic faded grade on [Subject], lifted blacks, rolled-off highlights, print-emulation, slightly expired romance."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Filmic+faded+grade+on+[Subject],+lifted+blacks,+rolled-off+highlights,+print-emulation,+slightly+expired+romance."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the print curve. Filmic faded grade on [Subject], lifted blacks, rolled-off highlights, print-emulation, slightly expired romance.Say blacks are not crushed and highlights are not HDR-clipped. Do not write bleach-bypass, and do not add a sepia sticker unless you mean sepia.Copy promptUse in Image GeneratorFilmic faded grade on [Subject], lifted blacks, rolled-off highlights, print-emulation, slightly expired romance.Filmic faded grade on [Subject], lifted blacks, rolled-off highlights, print-emulation, slightly expired romance."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Bleach Bypass (packed, harsh) or a milky brown wash. The tell is crushed blacks, or a foggy image with no rolled shoulder.",
+          "links": [
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: lifted toe, compressed highlights, hues still present, contrast like a print."
+        }
+      ],
+      "links": [
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Bleach Bypass (packed, harsh) or a milky brown wash. The tell is crushed blacks, or a foggy image with no rolled shoulder.Fix: lifted toe, compressed highlights, hues still present, contrast like a print."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is filmic faded in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a print-emulation grade: lifted blacks, rolled-off highlights, contrast that sits like photochemical display rather than HDR video. Hues may still be present."
+        },
+        {
+          "type": "heading",
+          "text": "Filmic Faded vs Vintage Cine Glass",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Vintage cine is the taking lens: coatings, swirl, optical bloom. Filmic faded is the curve of the grade: toe and shoulder of a print. You can fade a modern prime, and you can shoot old glass without lifting the blacks."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use filmic faded?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the image should feel like a print, not like HDR. Skip it when blacks must pack down, or when you only needed grain or old glass."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt filmic faded for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Filmic faded grade on [Subject], lifted blacks, rolled-off highlights, print-emulation, slightly expired romance. Forbid crushed bleach-bypass blacks and HDR clip."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is filmic faded in film?It is a print-emulation grade: lifted blacks, rolled-off highlights, contrast that sits like photochemical display rather than HDR video. Hues may still be present.Filmic Faded vs Vintage Cine GlassVintage cine is the taking lens: coatings, swirl, optical bloom. Filmic faded is the curve of the grade: toe and shoulder of a print. You can fade a modern prime, and you can shoot old glass without lifting the blacks.When should I use filmic faded?Use it when the image should feel like a print, not like HDR. Skip it when blacks must pack down, or when you only needed grain or old glass.How do I prompt filmic faded for AI image or video?Write: Filmic faded grade on [Subject], lifted blacks, rolled-off highlights, print-emulation, slightly expired romance. Forbid crushed bleach-bypass blacks and HDR clip."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the print curve. Filmic faded grade on [Subject], lifted blacks, rolled-off highlights, print-emulation, slightly expired romance.",
+      "Say blacks are not crushed and highlights are not HDR-clipped. Do not write bleach-bypass, and do not add a sepia sticker unless you mean sepia."
+    ],
+    "example": "Filmic faded grade on [Subject], lifted blacks, rolled-off highlights, print-emulation, slightly expired romance."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/6c5de4fbb1a2ea3e097921b0637da37f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/filmic-faded.webp",
+      "alt": "Filmic Faded example"
+    },
+    {
+      "kind": "image",
+      "path": "media/5fca5d01511d1b273f967622f709e9a3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-grain-076-archival-or-damaged-medium-texture-mini.webp",
+      "alt": "Film Grain"
+    },
+    {
+      "kind": "video",
+      "path": "media/1d7683ea283deb5b71800203fb729749.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/076-archival-or-damaged-medium-texture-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7212173f77d2735523edd8889390416b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vintage-cine.webp",
+      "alt": "Vintage Cine Glass"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/4825eb9b8a8f607394165a067c8b70cd.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/filmic-faded/hero.jpg",
+      "alt": "Filmic Faded",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "f5446abc952f3006dfe517788e604b747abb2d6757075fc138a731cfc8c98e9c"
+}

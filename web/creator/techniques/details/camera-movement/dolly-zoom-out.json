@@ -1,0 +1,390 @@
+{
+  "id": "camera-movement/dolly-zoom-out",
+  "slug": "dolly-zoom-out",
+  "title": "Dolly Zoom Out",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom-out",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-zoom-out-dolly-zoom-out-mini.webp",
+  "detail": "details/camera-movement/dolly-zoom-out.json",
+  "aliases": [],
+  "description": "A dolly zoom out retreats on wheels while the lens zooms in, the figure shrinking or holding while space yawns. The background stretches away; the face can stay as the room leaves.",
+  "thumbnail": "media/58edf82f67f8a9f43ccf383181f0dc4f.webp",
+  "video": "media/18871850f3132ba5331ce9ce14806ded.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolly-zoom-out-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Leave, but keep the face. A hallway that lengthens, a room that becomes a tunnel, a person stranded in stretching space."
+        },
+        {
+          "type": "paragraph",
+          "text": "The retreat is physical; the glass fights it so the figure does not simply become a speck. A plain pull-out shrinks everyone honestly."
+        },
+        {
+          "type": "paragraph",
+          "text": "A plain zoom-in tightens from sticks. The compound keeps a face in play while geography yawns."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Leave, but keep the face. A hallway that lengthens, a room that becomes a tunnel, a person stranded in stretching space.The retreat is physical; the glass fights it so the figure does not simply become a speck. A plain pull-out shrinks everyone honestly.A plain zoom-in tightens from sticks. The compound keeps a face in play while geography yawns."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dolly out along the lens axis while zooming toward a longer focal length, timed so subject size holds or shrinks slowly. Background compresses and stretches away (more telephoto) as you retreat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Dolly zoom out on [Subject], the figure shrinking or holding while space yawns, a retreat that stretches the room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Dolly out along the lens axis while zooming toward a longer focal length, timed so subject size holds or shrinks slowly. Background compresses and stretches away (more telephoto) as you retreat.Prompt: Dolly zoom out on [Subject], the figure shrinking or holding while space yawns, a retreat that stretches the room."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to leave a person while keeping their face in the argument, the room stretching. Do not use it as a fancy pull-out for headroom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to leave a person while keeping their face in the argument, the room stretching. Do not use it as a fancy pull-out for headroom."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dolly Zoom is the parent. Pull Out retreats with honest perspective.",
+          "links": [
+            {
+              "text": "Dolly Zoom",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom"
+            },
+            {
+              "text": "Pull Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly Zoom In approaches with the opposite glass. The out version is the Vertigo tower feeling: depth stretching as you leave.",
+          "links": [
+            {
+              "text": "Dolly Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly ZoomA realization that the ground is not stable. Use once.",
+          "displayText": "Dolly Zoom\nA realization that the ground is not stable. Use once.",
+          "links": [
+            {
+              "text": "Dolly ZoomA realization that the ground is not stable. Use once.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pull OutShow the container around a feeling.",
+          "displayText": "Pull Out\nShow the container around a feeling.",
+          "links": [
+            {
+              "text": "Pull OutShow the container around a feeling.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Zoom",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom"
+        },
+        {
+          "text": "Pull Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+        },
+        {
+          "text": "Dolly Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom-in"
+        },
+        {
+          "text": "Dolly ZoomA realization that the ground is not stable. Use once.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom"
+        },
+        {
+          "text": "Pull OutShow the container around a feeling.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pull-out"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/9bfde942aacd6bd3cf29bdf633c0744b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-zoom-001-dolly-zoom-mini.webp",
+          "alt": "Dolly Zoom"
+        },
+        {
+          "kind": "video",
+          "path": "media/2443c10f4fa2c3ab2067b035732d8843.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/001-dolly-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/37b5595bae8858283390769367c4f5d6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pull-out-pull-out-mini.webp",
+          "alt": "Pull Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/4c02c1f19b8cf15347f8a51749112685.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pull-out-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Dolly Zoom is the parent. Pull Out retreats with honest perspective.Dolly Zoom In approaches with the opposite glass. The out version is the Vertigo tower feeling: depth stretching as you leave.Dolly ZoomA realization that the ground is not stable. Use once.Pull OutShow the container around a feeling.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Poltergeist stretches a hallway as a retreat that will not release the figure. Goodfellas again uses the compound when space should feel wrong."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: leave, keep the face, yawn the room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Poltergeist stretches a hallway as a retreat that will not release the figure. Goodfellas again uses the compound when space should feel wrong.Grammar: leave, keep the face, yawn the room."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dolly out, zoom in. Still: Dolly zoom out on [Subject], the figure shrinking or holding while space yawns, a retreat that stretches the room."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Dolly out while zooming in on [Subject], background stretching away. Both halves required."
+        },
+        {
+          "type": "quote",
+          "text": "Dolly out while zooming in on [Subject], background stretching away."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Dolly+out+while+zooming+in+on+[Subject],+background+stretching+away."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Dolly out, zoom in. Still: Dolly zoom out on [Subject], the figure shrinking or holding while space yawns, a retreat that stretches the room.Video: Dolly out while zooming in on [Subject], background stretching away. Both halves required.Copy promptUse in Video GeneratorDolly out while zooming in on [Subject], background stretching away.Dolly out while zooming in on [Subject], background stretching away."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a pull-out. The tell: the person shrinks and the room stays honest."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: dolly out plus zoom in, background stretching, face held or slowly shrinking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a pull-out. The tell: the person shrinks and the room stays honest.The fix: dolly out plus zoom in, background stretching, face held or slowly shrinking."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dolly Zoom Out in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dolly zoom out dollies away while zooming in, so the figure holds or shrinks slowly while the background stretches. The room yawns; the face can stay."
+        },
+        {
+          "type": "heading",
+          "text": "Dolly Zoom Out vs Pull Out",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A pull-out retreats with honest perspective and the person simply gets smaller. Dolly zoom out fights the retreat with a zoom-in so space warps."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dolly Zoom Out?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to leave someone while keeping their face, the geography stretching. Do not use it for ordinary headroom."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dolly Zoom Out for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write dolly out plus zoom in. Example: Dolly zoom out on [Subject], the figure shrinking or holding while space yawns, a retreat that stretches the room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dolly Zoom Out in film?A dolly zoom out dollies away while zooming in, so the figure holds or shrinks slowly while the background stretches. The room yawns; the face can stay.Dolly Zoom Out vs Pull OutA pull-out retreats with honest perspective and the person simply gets smaller. Dolly zoom out fights the retreat with a zoom-in so space warps.When should I use Dolly Zoom Out?Use it to leave someone while keeping their face, the geography stretching. Do not use it for ordinary headroom.How do I prompt Dolly Zoom Out for AI image or video?Write dolly out plus zoom in. Example: Dolly zoom out on [Subject], the figure shrinking or holding while space yawns, a retreat that stretches the room."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Dolly out, zoom in. Still: Dolly zoom out on [Subject], the figure shrinking or holding while space yawns, a retreat that stretches the room.",
+      "Video: Dolly out while zooming in on [Subject], background stretching away. Both halves required."
+    ],
+    "example": "Dolly out while zooming in on [Subject], background stretching away."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/18871850f3132ba5331ce9ce14806ded.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/dolly-zoom-out-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/58edf82f67f8a9f43ccf383181f0dc4f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-zoom-out-dolly-zoom-out-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a41908fcbd107cff3bc51e3c78649f04.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/dolly-zoom-out.jpg",
+      "alt": "Dolly Zoom Out frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/9bfde942aacd6bd3cf29bdf633c0744b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-zoom-001-dolly-zoom-mini.webp",
+      "alt": "Dolly Zoom"
+    },
+    {
+      "kind": "video",
+      "path": "media/2443c10f4fa2c3ab2067b035732d8843.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/001-dolly-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/37b5595bae8858283390769367c4f5d6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pull-out-pull-out-mini.webp",
+      "alt": "Pull Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/4c02c1f19b8cf15347f8a51749112685.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pull-out-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5ce267694fb7b6b7d00a6b01e6f9fe35.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dolly-zoom-out/hero.jpg",
+      "alt": "Dolly Zoom Out",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "808d1e69e2aa243b78bbc2ac7d0e4a908e8c14dc7e3a489a97bbc58bd7fd1293"
+}

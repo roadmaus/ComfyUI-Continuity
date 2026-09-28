@@ -1,0 +1,392 @@
+{
+  "id": "viral-looks/fallen-angel",
+  "slug": "fallen-angel",
+  "title": "Fallen Angel",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/fallen-angel",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fallen-angel.webp",
+  "detail": "details/viral-looks/fallen-angel.json",
+  "aliases": [],
+  "description": "Fallen angel, the fallen angel look, is holy light after the drop: a shaft of dirty church air, low-key flesh, wrecked wings implied by cloth, shadow, or light. The face is the altar, and costume is optional.",
+  "thumbnail": "media/014d9ca29ec6fc0f89b51a375ba1f736.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The fall already happened. You are photographing the minute after: a nave, a cliff, a rooftop, a person in wrecked pale fabric with the head slightly bowed."
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera stays still enough that the shaft of light can judge. Wings can be a coat, a shadow on stone, or nothing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Literal feathers often cheapen the theology. It is the wrong tool for Halloween, superhero sheen, or a romance that still believes in rescue."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the light is pretty and the wings are stock white, you shot a carnival float."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The fall already happened. You are photographing the minute after: a nave, a cliff, a rooftop, a person in wrecked pale fabric with the head slightly bowed.The camera stays still enough that the shaft of light can judge. Wings can be a coat, a shadow on stone, or nothing.Literal feathers often cheapen the theology. It is the wrong tool for Halloween, superhero sheen, or a romance that still believes in rescue.If the light is pretty and the wings are stock white, you shot a carnival float."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height or slightly low in a nave or on a cliff. 35mm to 50mm."
+        },
+        {
+          "type": "paragraph",
+          "text": "Key is a high dirty window or a hard shaft camera-left, pews or rock falling to black. Low-Key Lighting contrast.",
+          "links": [
+            {
+              "text": "Low-Key Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Skin like painted wood, not beauty oil. Cloth that can read as ruined wings without a feather store."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Fallen-angel image of [Subject], wrecked wings implied, church light, a holy fall, beauty after the drop."
+        }
+      ],
+      "links": [
+        {
+          "text": "Low-Key Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Eye height or slightly low in a nave or on a cliff. 35mm to 50mm.Key is a high dirty window or a hard shaft camera-left, pews or rock falling to black. Low-Key Lighting contrast.Skin like painted wood, not beauty oil. Cloth that can read as ruined wings without a feather store.Prompt: Fallen-angel image of [Subject], wrecked wings implied, church light, a holy fall, beauty after the drop."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Grief, blasphemy, a portrait that should feel judged: the person in the aisle, head bowed, dust in the shaft. Do not use it as a costume still with white wings and a clean key."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Grief, blasphemy, a portrait that should feel judged: the person in the aisle, head bowed, dust in the shaft. Do not use it as a costume still with white wings and a clean key."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Epiphany is revelation light that arrives as knowledge. Fallen angel is the same sacred air after failure.",
+          "links": [
+            {
+              "text": "Epiphany",
+              "url": "https://melies.co/cinematic-techniques/lighting/epiphany"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Low-Key Lighting is the contrast without the theology. Silhouette deletes the face.",
+          "links": [
+            {
+              "text": "Low-Key Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            },
+            {
+              "text": "Silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Here the face stays, half-lit, already fallen."
+        },
+        {
+          "type": "list-item",
+          "text": "EpiphanyUnderstanding should be visible.",
+          "displayText": "Epiphany\nUnderstanding should be visible.",
+          "links": [
+            {
+              "text": "EpiphanyUnderstanding should be visible.",
+              "url": "https://melies.co/cinematic-techniques/lighting/epiphany"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "displayText": "Low-Key Lighting\nMystery, crime, or moral night.",
+          "links": [
+            {
+              "text": "Low-Key LightingMystery, crime, or moral night.",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Epiphany",
+          "url": "https://melies.co/cinematic-techniques/lighting/epiphany"
+        },
+        {
+          "text": "Low-Key Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "EpiphanyUnderstanding should be visible.",
+          "url": "https://melies.co/cinematic-techniques/lighting/epiphany"
+        },
+        {
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a4bd01a1175d1c32c1f7965c7d1ebd0f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/epiphany-epiphany-mini.webp",
+          "alt": "Epiphany"
+        },
+        {
+          "kind": "video",
+          "path": "media/3cffafa37a53defa7c60cafb09cf0c05.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/epiphany-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+          "alt": "Low-Key Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Epiphany is revelation light that arrives as knowledge. Fallen angel is the same sacred air after failure.Low-Key Lighting is the contrast without the theology. Silhouette deletes the face.Here the face stays, half-lit, already fallen.EpiphanyUnderstanding should be visible.Low-Key LightingMystery, crime, or moral night.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wings of Desire treats angels as watchers in real air and coats. The Prophecy treats the holy as violent and tired."
+        },
+        {
+          "type": "paragraph",
+          "text": "Light is the theology. You are not copying a still."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Wings of Desire treats angels as watchers in real air and coats. The Prophecy treats the holy as violent and tired.Light is the theology. You are not copying a still."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place the body, the shaft, and the dark. Fallen-angel image of [Subject], wrecked wings implied, church light, a holy fall, beauty after the drop."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add nave or cliff, high dirty window camera-left, low-key, no superhero sheen, feathers optional and wrecked. Lock the camera."
+        },
+        {
+          "type": "quote",
+          "text": "Fallen-angel image of [Subject], wrecked wings implied, church light, a holy fall, beauty after the drop."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Fallen-angel+image+of+[Subject],+wrecked+wings+implied,+church+light,+a+holy+fall,+beauty+after+the+drop."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Place the body, the shaft, and the dark. Fallen-angel image of [Subject], wrecked wings implied, church light, a holy fall, beauty after the drop.Add nave or cliff, high dirty window camera-left, low-key, no superhero sheen, feathers optional and wrecked. Lock the camera.Copy promptUse in Image GeneratorFallen-angel image of [Subject], wrecked wings implied, church light, a holy fall, beauty after the drop.Fallen-angel image of [Subject], wrecked wings implied, church light, a holy fall, beauty after the drop."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual cousin is a stock angel with white wings, or a generic Low-Key Lighting beauty. The tell is carnival feathers and a clean key.",
+          "links": [
+            {
+              "text": "Low-Key Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: cut the feathers, keep the shaft, wreck the cloth, hold the face."
+        }
+      ],
+      "links": [
+        {
+          "text": "Low-Key Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual cousin is a stock angel with white wings, or a generic Low-Key Lighting beauty. The tell is carnival feathers and a clean key.Fix it: cut the feathers, keep the shaft, wreck the cloth, hold the face."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Fallen Angel in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A sacred low-key portrait after a fall: church or cliff light, wrecked wings implied, the face as altar. It is a lighting and costume recipe, not a camera move."
+        },
+        {
+          "type": "heading",
+          "text": "Fallen Angel vs Epiphany",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Epiphany is light as knowledge arriving. Fallen angel is holy air after the drop, grace already ruined. Same shaft, different tense."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Fallen Angel?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "On grief, blasphemy, or a judged portrait. Skip Halloween wings, superhero posters, and any beat that still wants rescue lighting."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Fallen Angel for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name nave or cliff, a dirty high window, low-key skin, then: Fallen-angel image of [Subject], wrecked wings implied, church light, a holy fall, beauty after the drop. Do not lead with costume feathers."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Fallen Angel in film?A sacred low-key portrait after a fall: church or cliff light, wrecked wings implied, the face as altar. It is a lighting and costume recipe, not a camera move.Fallen Angel vs EpiphanyEpiphany is light as knowledge arriving. Fallen angel is holy air after the drop, grace already ruined. Same shaft, different tense.When should I use Fallen Angel?On grief, blasphemy, or a judged portrait. Skip Halloween wings, superhero posters, and any beat that still wants rescue lighting.How do I prompt Fallen Angel for AI image or video?Name nave or cliff, a dirty high window, low-key skin, then: Fallen-angel image of [Subject], wrecked wings implied, church light, a holy fall, beauty after the drop. Do not lead with costume feathers."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Place the body, the shaft, and the dark. Fallen-angel image of [Subject], wrecked wings implied, church light, a holy fall, beauty after the drop.",
+      "Add nave or cliff, high dirty window camera-left, low-key, no superhero sheen, feathers optional and wrecked. Lock the camera."
+    ],
+    "example": "Fallen-angel image of [Subject], wrecked wings implied, church light, a holy fall, beauty after the drop."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/014d9ca29ec6fc0f89b51a375ba1f736.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fallen-angel.webp",
+      "alt": "Fallen Angel example"
+    },
+    {
+      "kind": "image",
+      "path": "media/a4bd01a1175d1c32c1f7965c7d1ebd0f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/epiphany-epiphany-mini.webp",
+      "alt": "Epiphany"
+    },
+    {
+      "kind": "video",
+      "path": "media/3cffafa37a53defa7c60cafb09cf0c05.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/epiphany-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+      "alt": "Low-Key Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/f0cace7508d03b2f65098a2e57714800.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/fallen-angel/hero.jpg",
+      "alt": "Fallen Angel",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "508f2885568d39a9c9011d9c45de3f5edfcd76a9cef06613ab7a4095da10c18d"
+}

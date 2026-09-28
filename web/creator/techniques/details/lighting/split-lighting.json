@@ -1,0 +1,401 @@
+{
+  "id": "lighting/split-lighting",
+  "slug": "split-lighting",
+  "title": "Split Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/split-lighting",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-lighting.webp",
+  "detail": "details/lighting/split-lighting.json",
+  "aliases": [],
+  "description": "Split lighting divides the face into a lit half and a shadow half by placing the key at about 90 degrees to the nose, a vertical cut down the center line. There is no Rembrandt triangle and no loop; the far plane is largely gone.",
+  "thumbnail": "media/46e71519bf7430c3e5e9d1358765e110.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Duality made as geometry: hero and liar, cop and crook, the same person cut in two. The audience gets one eye in light and one in almost nothing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Music, crime, and moral argument use it because the cut is literal. It is the wrong tool for charm, romance, or any beat that needs both cheeks."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you sneak fill across the center line, the split collapses into side lighting with wrap. If you raise the key and pull it forward, you may accidentally make Rembrandt.",
+          "links": [
+            {
+              "text": "side lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+            },
+            {
+              "text": "Rembrandt",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "side lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+        },
+        {
+          "text": "Rembrandt",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Duality made as geometry: hero and liar, cop and crook, the same person cut in two. The audience gets one eye in light and one in almost nothing.Music, crime, and moral argument use it because the cut is literal. It is the wrong tool for charm, romance, or any beat that needs both cheeks.If you sneak fill across the center line, the split collapses into side lighting with wrap. If you raise the key and pull it forward, you may accidentally make Rembrandt."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put a relatively hard key at 90 degrees to the face, at about eye height, so the shadow edge runs down forehead, nose, and chin. Fill is near zero."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color can be a hard white or a theatrical gel; the point is the cut, not prettiness. A true split is more severe than generic side light because the wrap over the nose is killed with flags if needed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Split lighting on [Subject], one half of the face in light, the other in shadow, a vertical moral cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put a relatively hard key at 90 degrees to the face, at about eye height, so the shadow edge runs down forehead, nose, and chin. Fill is near zero.Color can be a hard white or a theatrical gel; the point is the cut, not prettiness. A true split is more severe than generic side light because the wrap over the nose is killed with flags if needed.Prompt: Split lighting on [Subject], one half of the face in light, the other in shadow, a vertical moral cut."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a character is two things at once, a drummer under a side spot, a don in profile thought. Do not use it on a first-date close-up unless you want threat."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a character is two things at once, a drummer under a side spot, a don in profile thought. Do not use it on a first-date close-up unless you want threat."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Side lighting is the broader 90-degree direction and can still wrap a body or a room. Split is the facial pattern with a hard center line.",
+          "links": [
+            {
+              "text": "Side lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Rembrandt lighting keeps a triangle on the dark cheek; split does not. Loop lighting is much more frontal.",
+          "links": [
+            {
+              "text": "Rembrandt lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            },
+            {
+              "text": "Loop lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Short lighting can include a split if the dark cheek faces camera, but short is about which cheek the camera sees, not the 90-degree cut. Butterfly is the opposite: both cheeks open.",
+          "links": [
+            {
+              "text": "Short lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/short-lighting"
+            },
+            {
+              "text": "Butterfly",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Side LightingCarve a face like sculpture.",
+          "displayText": "Side Lighting\nCarve a face like sculpture.",
+          "links": [
+            {
+              "text": "Side LightingCarve a face like sculpture.",
+              "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Short LightingSculpt a face; add mystery on the camera side.",
+          "displayText": "Short Lighting\nSculpt a face; add mystery on the camera side.",
+          "links": [
+            {
+              "text": "Short LightingSculpt a face; add mystery on the camera side.",
+              "url": "https://melies.co/cinematic-techniques/lighting/short-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Side lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+        },
+        {
+          "text": "Rembrandt lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "Loop lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/loop-lighting"
+        },
+        {
+          "text": "Short lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/short-lighting"
+        },
+        {
+          "text": "Butterfly",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        },
+        {
+          "text": "Side LightingCarve a face like sculpture.",
+          "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+        },
+        {
+          "text": "Short LightingSculpt a face; add mystery on the camera side.",
+          "url": "https://melies.co/cinematic-techniques/lighting/short-lighting"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/bda597b29ccb89145f1d542420d70b43.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/side-lighting.webp",
+          "alt": "Side Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/5d50bc5c4bba91975b25d4c884864181.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/short-lighting.webp",
+          "alt": "Short Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Side lighting is the broader 90-degree direction and can still wrap a body or a room. Split is the facial pattern with a hard center line.Rembrandt lighting keeps a triangle on the dark cheek; split does not. Loop lighting is much more frontal.Short lighting can include a split if the dark cheek faces camera, but short is about which cheek the camera sees, not the 90-degree cut. Butterfly is the opposite: both cheeks open.Side LightingCarve a face like sculpture.Short LightingSculpt a face; add mystery on the camera side.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Godfather uses half-lit faces in the office so thought reads as a cut. Whiplash slashes players with hard side spots that often split the face on stage."
+        },
+        {
+          "type": "paragraph",
+          "text": "The pattern is the center line, not a mood word."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Godfather uses half-lit faces in the office so thought reads as a cut. Whiplash slashes players with hard side spots that often split the face on stage.The pattern is the center line, not a mood word."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand the vertical cut. Use: \"Split lighting on [Subject], one half of the face in light, the other in shadow, a vertical moral cut.\" Add key at 90 degrees, almost no fill, no triangle on the dark cheek."
+        },
+        {
+          "type": "quote",
+          "text": "Split lighting on [Subject], one half of the face in light, the other in shadow, a vertical moral cut."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Split+lighting+on+[Subject],+one+half+of+the+face+in+light,+the+other+in+shadow,+a+vertical+moral+cut."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Demand the vertical cut. Use: \"Split lighting on [Subject], one half of the face in light, the other in shadow, a vertical moral cut.\" Add key at 90 degrees, almost no fill, no triangle on the dark cheek.Copy promptUse in Image GeneratorSplit lighting on [Subject], one half of the face in light, the other in shadow, a vertical moral cut.Split lighting on [Subject], one half of the face in light, the other in shadow, a vertical moral cut."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Rembrandt or wrapped side lighting. The tell is a pocket of light on the dark cheek, or a soft wrap over the nose.",
+          "links": [
+            {
+              "text": "Rembrandt",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            },
+            {
+              "text": "side lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by moving the key to 90 degrees and killing fill until the center line is clean."
+        }
+      ],
+      "links": [
+        {
+          "text": "Rembrandt",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "side lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Rembrandt or wrapped side lighting. The tell is a pocket of light on the dark cheek, or a soft wrap over the nose.Fix it by moving the key to 90 degrees and killing fill until the center line is clean."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is split lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A key at about 90 degrees that lights one half of the face and leaves the other in shadow. The cut runs vertically down the center of the face."
+        },
+        {
+          "type": "heading",
+          "text": "Split lighting vs Rembrandt lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Split has no triangle on the dark cheek; that half is gone. Rembrandt keeps a small triangle of light under the shadow-side eye."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use split lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for duality, interrogation, or a theatrical side spot. Skip it when both eyes and both cheeks must sell a line."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt split lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Place the key at 90 degrees. State one half of the face in light, the other in shadow, no fill, no Rembrandt triangle."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is split lighting in film?A key at about 90 degrees that lights one half of the face and leaves the other in shadow. The cut runs vertically down the center of the face.Split lighting vs Rembrandt lightingSplit has no triangle on the dark cheek; that half is gone. Rembrandt keeps a small triangle of light under the shadow-side eye.When should I use split lighting?Use it for duality, interrogation, or a theatrical side spot. Skip it when both eyes and both cheeks must sell a line.How do I prompt split lighting for AI image or video?Place the key at 90 degrees. State one half of the face in light, the other in shadow, no fill, no Rembrandt triangle."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Demand the vertical cut. Use: \"Split lighting on [Subject], one half of the face in light, the other in shadow, a vertical moral cut.\" Add key at 90 degrees, almost no fill, no triangle on the dark cheek."
+    ],
+    "example": "Split lighting on [Subject], one half of the face in light, the other in shadow, a vertical moral cut."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/46e71519bf7430c3e5e9d1358765e110.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-lighting.webp",
+      "alt": "Split Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/bda597b29ccb89145f1d542420d70b43.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/side-lighting.webp",
+      "alt": "Side Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/5d50bc5c4bba91975b25d4c884864181.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/short-lighting.webp",
+      "alt": "Short Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c6d889706e76f25e370c6a3acb526dc.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/split-lighting/hero.jpg",
+      "alt": "Split Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "98788f4310a4d35284c2a34b629a9ce623930ff702fd2b045658022407d52ef6"
+}

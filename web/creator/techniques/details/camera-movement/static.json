@@ -1,0 +1,445 @@
+{
+  "id": "camera-movement/static",
+  "slug": "static",
+  "title": "Static Locked-Off",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/static",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/static-022-locked-off-duration-mini.webp",
+  "detail": "details/camera-movement/static.json",
+  "aliases": [
+    "locked off",
+    "tripod shot",
+    "Silence as tension",
+    "Sparse sound field"
+  ],
+  "description": "A static locked-off shot plants the camera on a heavy tripod with zero camera movement. Composition, blocking, and duration do the work; the frame is a living picture that does not tour.",
+  "thumbnail": "media/ef92f0234960c354d232051aa99779ce.webp",
+  "video": "media/761eb0bcc8b403eab53e427ad9a96b85.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/022-locked-off-duration-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Trust blocking and duration. Movement would be noise."
+        },
+        {
+          "type": "paragraph",
+          "text": "Comedy, ritual, and dread all live here because the audience cannot be rescued by a pan when something enters, or fails to enter, the rectangle. It is the wrong tool when geography must be discovered in motion, and the wrong tool if you add a slider 'for life' and destroy the contract."
+        },
+        {
+          "type": "paragraph",
+          "text": "Silence of the head is a relationship to the action, not a frozen audio file."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Trust blocking and duration. Movement would be noise.Comedy, ritual, and dread all live here because the audience cannot be rescued by a pan when something enters, or fails to enter, the rectangle. It is the wrong tool when geography must be discovered in motion, and the wrong tool if you add a slider 'for life' and destroy the contract.Silence of the head is a relationship to the action, not a frozen audio file."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Heavy sticks, locked head, level bubble, no touch after slate. Actors and air may move; the camera may not."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a perfectly static locked-off shot, heavy tripod, zero camera movement, composition doing all the work."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Heavy sticks, locked head, level bubble, no touch after slate. Actors and air may move; the camera may not.Prompt a perfectly static locked-off shot, heavy tripod, zero camera movement, composition doing all the work."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when blocking and duration should carry the beat and movement would be noise. Concrete beat: a domestic task held in a fixed composition until the task changes meaning."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not drift."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when blocking and duration should carry the beat and movement would be noise. Concrete beat: a domestic task held in a fixed composition until the task changes meaning.Do not drift."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Tableau is a related still, often more presentational. A Long Take may be static or moving; length is not the lock-off.",
+          "links": [
+            {
+              "text": "Tableau",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            },
+            {
+              "text": "Long Take",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/long-take"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Any dolly, pan, or zoom leaves this family. Static is zero camera path."
+        },
+        {
+          "type": "list-item",
+          "text": "TableauHold the arrangement.",
+          "displayText": "Tableau\nHold the arrangement.",
+          "links": [
+            {
+              "text": "TableauHold the arrangement.",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Long TakeDo not let the audience leave the room.",
+          "displayText": "Long Take\nDo not let the audience leave the room.",
+          "links": [
+            {
+              "text": "Long TakeDo not let the audience leave the room.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/long-take"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Tableau",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "Long Take",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/long-take"
+        },
+        {
+          "text": "TableauHold the arrangement.",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "Long TakeDo not let the audience leave the room.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/long-take"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a93c30aeb2ed5bcd737dc27a09898a53.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tableau.webp",
+          "alt": "Tableau"
+        },
+        {
+          "kind": "image",
+          "path": "media/1717020fa80841f52e94942127fd0098.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/long-take-031-genuine-feature-length-continuous-take-mini.webp",
+          "alt": "Long Take"
+        },
+        {
+          "kind": "video",
+          "path": "media/8b260304f6c04e7a6366677b1f3cd9bb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/031-genuine-feature-length-continuous-take-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Tableau is a related still, often more presentational. A Long Take may be static or moving; length is not the lock-off.Any dolly, pan, or zoom leaves this family. Static is zero camera path.TableauHold the arrangement.Long TakeDo not let the audience leave the room.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Jeanne Dielman holds domestic tasks in fixed compositions. Tokyo Story lets rooms and sitting do the motion."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Grand Budapest Hotel uses lock-offs as diagram. 2001: A Space Odyssey plants some spacecraft views as still geometry."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of the rectangle, not a kitchen to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "2001: A Space Odyssey 1968Space passages distinguish external emptiness from sounds heard through equipment and human perspective.",
+          "displayText": "2001: A Space Odyssey 1968\nSpace passages distinguish external emptiness from sounds heard through equipment and human perspective."
+        },
+        {
+          "type": "list-item",
+          "text": "A Quiet Place 2018Silence, small noises and subjective hearing become structural sources of tension.",
+          "displayText": "A Quiet Place 2018\nSilence, small noises and subjective hearing become structural sources of tension."
+        },
+        {
+          "type": "list-item",
+          "text": "Jeanne Dielman, 23 quai du Commerce, 1080 Bruxelles 1975Domestic tasks unfold in fixed compositions.",
+          "displayText": "Jeanne Dielman, 23 quai du Commerce, 1080 Bruxelles 1975\nDomestic tasks unfold in fixed compositions."
+        },
+        {
+          "type": "list-item",
+          "text": "Caché 2005The opening surveillance-like view of the house.",
+          "displayText": "Caché 2005\nThe opening surveillance-like view of the house."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/dfbfcc48ce62ff9e9630a4c335aad215.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/static/famous/00-jeanne-dielman-23-quai-du-commerce-1080-bruxelles-1975.jpg",
+          "alt": "Jeanne Dielman, 23 quai du Commerce, 1080 Bruxelles 1975"
+        },
+        {
+          "kind": "image",
+          "path": "media/8df5dab12584b99cd46af77bc0e2ffa0.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/static/famous/01-cache-2005.jpg",
+          "alt": "Caché 2005"
+        }
+      ],
+      "sourceText": "In film Jeanne Dielman holds domestic tasks in fixed compositions. Tokyo Story lets rooms and sitting do the motion.The Grand Budapest Hotel uses lock-offs as diagram. 2001: A Space Odyssey plants some spacecraft views as still geometry.Grammar of the rectangle, not a kitchen to copy.2001: A Space Odyssey 1968Space passages distinguish external emptiness from sounds heard through equipment and human perspective.A Quiet Place 2018Silence, small noises and subjective hearing become structural sources of tension.Jeanne Dielman, 23 quai du Commerce, 1080 Bruxelles 1975Domestic tasks unfold in fixed compositions.Caché 2005The opening surveillance-like view of the house."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Perfectly static locked-off shot of [Subject], heavy tripod, zero camera movement, composition doing all the work, living-picture stillness. For motion: completely locked-off camera."
+        },
+        {
+          "type": "paragraph",
+          "text": "[Subject] may breathe or the air may move, but the frame does not."
+        },
+        {
+          "type": "quote",
+          "text": "In a dark archive, a librarian listens for someone outside. Remove music entirely and retain only quiet ventilation, cloth movement and her restrained breathing. Let the ventilation stop, leaving a single distant latch click clearly exposed. No sudden monster reveal or oversized bass hit."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=In+a+dark+archive,+a+librarian+listens+for+someone+outside.+Remove+music+entirely+and+retain+only+quiet+ventilation,+cloth+movement+and+her+restrained+breathing.+Let+the+ventilation+stop,+leaving+a+single+distant+latch+click+clearly+exposed.+No+sudden+monster+reveal+or+oversized+bass+hit."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Perfectly static locked-off shot of [Subject], heavy tripod, zero camera movement, composition doing all the work, living-picture stillness. For motion: completely locked-off camera.[Subject] may breathe or the air may move, but the frame does not.Copy promptUse in Video GeneratorIn a dark archive, a librarian listens for someone outside. Remove music entirely and retain only quiet ventilation, cloth movement and her restrained breathing. Let the ventilation stop, leaving a single distant latch click clearly exposed. No sudden monster reveal or oversized bass hit.In a dark archive, a librarian listens for someone outside. Remove music entirely and retain only quiet ventilation, cloth movement and her restrained breathing. Let the ventilation stop, leaving a single distant latch click clearly exposed. No sudden monster reveal or oversized bass hit."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a tiny Slider Shot or a breathing Handheld. The tell is any parallax or micro-pan.",
+          "links": [
+            {
+              "text": "Slider Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slider"
+            },
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: locked head, no virtual drift, action inside a still frame."
+        }
+      ],
+      "links": [
+        {
+          "text": "Slider Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slider"
+        },
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a tiny Slider Shot or a breathing Handheld. The tell is any parallax or micro-pan.The fix: locked head, no virtual drift, action inside a still frame."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Static Locked-Off in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a shot with no camera movement: the support is locked and only the world or the actors may move inside the composition."
+        },
+        {
+          "type": "heading",
+          "text": "Static Locked-Off vs Long Take",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A long take is about duration and may travel. A static lock-off is about a frozen camera, whether the shot is 3 seconds or 3 minutes."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Static Locked-Off?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When blocking, comedy, or dread should happen inside a decided rectangle. Do not slide 'to add life' if the contract is stillness."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Static Locked-Off for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write completely locked-off camera, heavy tripod, zero camera movement. Subject may breathe. Ban pan, dolly, zoom, and drift."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Static Locked-Off in film?It is a shot with no camera movement: the support is locked and only the world or the actors may move inside the composition.Static Locked-Off vs Long TakeA long take is about duration and may travel. A static lock-off is about a frozen camera, whether the shot is 3 seconds or 3 minutes.When should I use Static Locked-Off?When blocking, comedy, or dread should happen inside a decided rectangle. Do not slide 'to add life' if the contract is stillness.How do I prompt Static Locked-Off for AI image or video?Write completely locked-off camera, heavy tripod, zero camera movement. Subject may breathe. Ban pan, dolly, zoom, and drift."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Perfectly static locked-off shot of [Subject], heavy tripod, zero camera movement, composition doing all the work, living-picture stillness. For motion: completely locked-off camera.",
+      "[Subject] may breathe or the air may move, but the frame does not."
+    ],
+    "example": "In a dark archive, a librarian listens for someone outside. Remove music entirely and retain only quiet ventilation, cloth movement and her restrained breathing. Let the ventilation stop, leaving a single distant latch click clearly exposed. No sudden monster reveal or oversized bass hit."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/761eb0bcc8b403eab53e427ad9a96b85.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/022-locked-off-duration-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ef92f0234960c354d232051aa99779ce.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/static-022-locked-off-duration-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7ac5ebe18e6e67d2654c22536387b71a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/static.jpg",
+      "alt": "Static Locked-Off frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/a93c30aeb2ed5bcd737dc27a09898a53.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tableau.webp",
+      "alt": "Tableau"
+    },
+    {
+      "kind": "image",
+      "path": "media/1717020fa80841f52e94942127fd0098.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/long-take-031-genuine-feature-length-continuous-take-mini.webp",
+      "alt": "Long Take"
+    },
+    {
+      "kind": "video",
+      "path": "media/8b260304f6c04e7a6366677b1f3cd9bb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/031-genuine-feature-length-continuous-take-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dfbfcc48ce62ff9e9630a4c335aad215.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/static/famous/00-jeanne-dielman-23-quai-du-commerce-1080-bruxelles-1975.jpg",
+      "alt": "Jeanne Dielman, 23 quai du Commerce, 1080 Bruxelles 1975"
+    },
+    {
+      "kind": "image",
+      "path": "media/8df5dab12584b99cd46af77bc0e2ffa0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/static/famous/01-cache-2005.jpg",
+      "alt": "Caché 2005"
+    },
+    {
+      "kind": "image",
+      "path": "media/b96bcf66651878440d0d9e24592ce884.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/static/hero.jpg",
+      "alt": "Static Locked-Off",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "ce25358337ab15aeeb5a45d2a6414acad73e0f4774c1e08f8888d4d1201ca9e2"
+}

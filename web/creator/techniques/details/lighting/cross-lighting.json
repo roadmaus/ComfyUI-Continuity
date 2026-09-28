@@ -1,0 +1,400 @@
+{
+  "id": "lighting/cross-lighting",
+  "slug": "cross-lighting",
+  "title": "Cross Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/cross-lighting",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-lighting.webp",
+  "detail": "details/lighting/cross-lighting.json",
+  "aliases": [],
+  "description": "Cross lighting keys subjects from opposite side directions, so each person or each side of a body gets a key and a far rim. It is common in dialogue coverage, stage, and concert work.",
+  "thumbnail": "media/f9879d2046e2a2863241db72e563d020.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Two moral sources, or just two people who both need a face. Sweat on a drummer, a duet, a fight: edges appear on both sides because each lamp is someone else's key."
+        },
+        {
+          "type": "paragraph",
+          "text": "Theatrical energy comes from the dual rims, not from smoke alone. It is the wrong tool for a single-source room, a motivated night interior with one lamp, or a true split on one face.",
+          "links": [
+            {
+              "text": "split",
+              "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If both keys are equally frontal you have flattened the pair. If only one side is keyed, you are back to side lighting.",
+          "links": [
+            {
+              "text": "side lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "split",
+          "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+        },
+        {
+          "text": "side lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Two moral sources, or just two people who both need a face. Sweat on a drummer, a duet, a fight: edges appear on both sides because each lamp is someone else's key.Theatrical energy comes from the dual rims, not from smoke alone. It is the wrong tool for a single-source room, a motivated night interior with one lamp, or a true split on one face.If both keys are equally frontal you have flattened the pair. If only one side is keyed, you are back to side lighting."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place two keys roughly opposite, each about 70 to 110 degrees off the camera-subject axis, often slightly back so they rim as well as key. Hardness is often hard for concerts, softer for dialogue."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color may match, or each side can carry a different gel (warm versus cool) as two worlds. Flag them off the lens."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Cross lighting on [Subject] from two opposing keys, dual rims, theatrical or concert edges on both sides."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place two keys roughly opposite, each about 70 to 110 degrees off the camera-subject axis, often slightly back so they rim as well as key. Hardness is often hard for concerts, softer for dialogue.Color may match, or each side can carry a different gel (warm versus cool) as two worlds. Flag them off the lens.Prompt: Cross lighting on [Subject] from two opposing keys, dual rims, theatrical or concert edges on both sides."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for stage, sweat, or two people who each need a key from the other's side. Do not use it in a one-lamp apartment unless you want that apartment to feel like a concert."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for stage, sweat, or two people who each need a key from the other's side. Do not use it in a one-lamp apartment unless you want that apartment to feel like a concert."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Side lighting is one direction. Rim light is a thin rear edge, not a second key.",
+          "links": [
+            {
+              "text": "Side lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+            },
+            {
+              "text": "Rim light",
+              "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Kicker is a single far-side accent. Three-point lighting uses key, fill, and back, not two opposing keys.",
+          "links": [
+            {
+              "text": "Kicker",
+              "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+            },
+            {
+              "text": "Three-point lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Split is one face cut by one key.",
+          "links": [
+            {
+              "text": "Split",
+              "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rim LightGraphic silhouette with just enough flesh.",
+          "displayText": "Rim Light\nGraphic silhouette with just enough flesh.",
+          "links": [
+            {
+              "text": "Rim LightGraphic silhouette with just enough flesh.",
+              "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Side LightingCarve a face like sculpture.",
+          "displayText": "Side Lighting\nCarve a face like sculpture.",
+          "links": [
+            {
+              "text": "Side LightingCarve a face like sculpture.",
+              "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Side lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+        },
+        {
+          "text": "Rim light",
+          "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+        },
+        {
+          "text": "Kicker",
+          "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+        },
+        {
+          "text": "Three-point lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        },
+        {
+          "text": "Split",
+          "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+        },
+        {
+          "text": "Rim LightGraphic silhouette with just enough flesh.",
+          "url": "https://melies.co/cinematic-techniques/lighting/rim-light"
+        },
+        {
+          "text": "Side LightingCarve a face like sculpture.",
+          "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/24ba922f93c8786e2def76713b970c9f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rim-light.webp",
+          "alt": "Rim Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/bda597b29ccb89145f1d542420d70b43.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/side-lighting.webp",
+          "alt": "Side Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Side lighting is one direction. Rim light is a thin rear edge, not a second key.Kicker is a single far-side accent. Three-point lighting uses key, fill, and back, not two opposing keys.Split is one face cut by one key.Rim LightGraphic silhouette with just enough flesh.Side LightingCarve a face like sculpture.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Whiplash cross-lights the band so rims and sweat read from both sides. Concert films and stage sequences in A Star Is Born use opposing keys as the grammar of performance."
+        },
+        {
+          "type": "paragraph",
+          "text": "Two sources, two edges."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Whiplash cross-lights the band so rims and sweat read from both sides. Concert films and stage sequences in A Star Is Born use opposing keys as the grammar of performance.Two sources, two edges."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name two opposing keys. \" Specify colors if they differ."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a single-side split."
+        },
+        {
+          "type": "quote",
+          "text": "Cross lighting on [Subject] from two opposing keys, dual rims, theatrical or concert energy, edges on both sides."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Cross+lighting+on+[Subject]+from+two+opposing+keys,+dual+rims,+theatrical+or+concert+energy,+edges+on+both+sides."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name two opposing keys. \" Specify colors if they differ.Forbid a single-side split.Copy promptUse in Image GeneratorCross lighting on [Subject] from two opposing keys, dual rims, theatrical or concert energy, edges on both sides.Cross lighting on [Subject] from two opposing keys, dual rims, theatrical or concert energy, edges on both sides."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is one side key or a frontal pair of fills. The tell is one rim only, or two flat cheeks.",
+          "links": [
+            {
+              "text": "side",
+              "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by parking hard or medium keys opposite each other, slightly back, and letting each throw a far edge."
+        }
+      ],
+      "links": [
+        {
+          "text": "side",
+          "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is one side key or a frontal pair of fills. The tell is one rim only, or two flat cheeks.Fix it by parking hard or medium keys opposite each other, slightly back, and letting each throw a far edge."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is cross lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Lighting from opposite sides so a subject or a pair gets keys (and often rims) from both directions. Common in dialogue, stage, and concerts."
+        },
+        {
+          "type": "heading",
+          "text": "Cross lighting vs side lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Side lighting is one 90-degree key. Cross lighting is two opposing keys, so both sides of the body or both people have an edge."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use cross lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for stage, concerts, or two-handed coverage that must key both faces. Skip it for a single motivated lamp."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt cross lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify two opposing keys and dual rims. Name hardness and any color split. Not a single-side face cut."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is cross lighting in film?Lighting from opposite sides so a subject or a pair gets keys (and often rims) from both directions. Common in dialogue, stage, and concerts.Cross lighting vs side lightingSide lighting is one 90-degree key. Cross lighting is two opposing keys, so both sides of the body or both people have an edge.When should I use cross lighting?Use it for stage, concerts, or two-handed coverage that must key both faces. Skip it for a single motivated lamp.How do I prompt cross lighting for AI image or video?Specify two opposing keys and dual rims. Name hardness and any color split. Not a single-side face cut."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name two opposing keys. \" Specify colors if they differ.",
+      "Forbid a single-side split."
+    ],
+    "example": "Cross lighting on [Subject] from two opposing keys, dual rims, theatrical or concert energy, edges on both sides."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/f9879d2046e2a2863241db72e563d020.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-lighting.webp",
+      "alt": "Cross Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/24ba922f93c8786e2def76713b970c9f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rim-light.webp",
+      "alt": "Rim Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/bda597b29ccb89145f1d542420d70b43.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/side-lighting.webp",
+      "alt": "Side Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/135245bf662600eab3c6bbd9d729121f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cross-lighting/hero.jpg",
+      "alt": "Cross Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "529b391aa18e2c752e4e6db5d93be3e74e445670e7d28ee130d1d63be7972b03"
+}

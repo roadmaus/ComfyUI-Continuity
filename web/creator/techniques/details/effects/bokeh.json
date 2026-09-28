@@ -1,0 +1,391 @@
+{
+  "id": "effects/bokeh",
+  "slug": "bokeh",
+  "title": "Bokeh",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/bokeh",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bokeh.webp",
+  "detail": "details/effects/bokeh.json",
+  "aliases": [
+    "round bokeh",
+    "oval bokeh",
+    "cat-eye bokeh",
+    "swirly bokeh",
+    "onion-ring bokeh"
+  ],
+  "description": "Bokeh in bokeh cinematography is the aesthetic character of out-of-focus rendering: the disc shape, edge, and smoothness of blurred points, not the mere fact of a thin depth of field. The glass, not a blur slider, decides whether those discs are round, oval, outlined, or swirling.",
+  "thumbnail": "media/98550ff164c9360ab041da957a11fe4b.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A city, a string of practicals, or a wet street becomes a field of discs. Circular blades make circles."
+        },
+        {
+          "type": "paragraph",
+          "text": "Anamorphic squeeze makes ovals. Mechanical vignetting cats-eyes the discs at the frame edge."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nervous, outlined, or onion-ring discs are also bokeh. They are just unkind bokeh."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the world behind or in front of a face should become light rather than information. One plane stays true."
+        },
+        {
+          "type": "paragraph",
+          "text": "The rest is the optic's handwriting. It is the wrong tool when you need the room."
+        },
+        {
+          "type": "paragraph",
+          "text": "If background signs, eyelines, or geography still have to read, creamy discs are hiding the scene. It is also the wrong word for a masked cutout with no optical discs at all."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A city, a string of practicals, or a wet street becomes a field of discs. Circular blades make circles.Anamorphic squeeze makes ovals. Mechanical vignetting cats-eyes the discs at the frame edge.Nervous, outlined, or onion-ring discs are also bokeh. They are just unkind bokeh.Use it when the world behind or in front of a face should become light rather than information. One plane stays true.The rest is the optic's handwriting. It is the wrong tool when you need the room.If background signs, eyelines, or geography still have to read, creamy discs are hiding the scene. It is also the wrong word for a masked cutout with no optical discs at all."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Open the aperture, separate subject from background, and choose glass: spherical circles, anamorphic ovals, Petzval swirl, cat-eye at the edges. Point sources (practicals, speculars, rain catches) make the discs visible."
+        },
+        {
+          "type": "paragraph",
+          "text": "Distance and focal length set disc size. Prompt the disc shape and the source of the highlights, not blurry background alone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Open the aperture, separate subject from background, and choose glass: spherical circles, anamorphic ovals, Petzval swirl, cat-eye at the edges. Point sources (practicals, speculars, rain catches) make the discs visible.Distance and focal length set disc size. Prompt the disc shape and the source of the highlights, not blurry background alone."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A close portrait in a cramped apartment, amber lamps and a magenta neon turning into circular or oval discs while the near eye stays sharp. Do not melt a wide master that still has blocking to read."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A close portrait in a cramped apartment, amber lamps and a magenta neon turning into circular or oval discs while the near eye stays sharp. Do not melt a wide master that still has blocking to read."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shallow Focus is the thin sharp plane. Bokeh is the look of whatever is off that plane.",
+          "links": [
+            {
+              "text": "Shallow Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Anamorphic turns those discs into ovals and often adds streaks. Rack Focus moves the sharp plane during the shot.",
+          "links": [
+            {
+              "text": "Anamorphic",
+              "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+            },
+            {
+              "text": "Rack Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Bokeh can change as focus moves, but the pull is a different verb."
+        },
+        {
+          "type": "list-item",
+          "text": "Shallow FocusNothing else is invited.",
+          "displayText": "Shallow Focus\nNothing else is invited.",
+          "links": [
+            {
+              "text": "Shallow FocusNothing else is invited.",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AnamorphicYou want the frame to announce it is a movie.",
+          "displayText": "Anamorphic\nYou want the frame to announce it is a movie.",
+          "links": [
+            {
+              "text": "AnamorphicYou want the frame to announce it is a movie.",
+              "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Shallow Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "Anamorphic",
+          "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+        },
+        {
+          "text": "Rack Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/rack-focus"
+        },
+        {
+          "text": "Shallow FocusNothing else is invited.",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "AnamorphicYou want the frame to announce it is a movie.",
+          "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+          "alt": "Shallow Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/b11a08fb15e0ac7dcd89ec2184cb65da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-057-anamorphic-optical-character-mini.webp",
+          "alt": "Anamorphic"
+        },
+        {
+          "kind": "video",
+          "path": "media/df5fddd2498117a9636a23f7270ff4b4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/057-anamorphic-optical-character-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Shallow Focus is the thin sharp plane. Bokeh is the look of whatever is off that plane.Anamorphic turns those discs into ovals and often adds streaks. Rack Focus moves the sharp plane during the shot.Bokeh can change as focus moves, but the pull is a different verb.Shallow FocusNothing else is invited.AnamorphicYou want the frame to announce it is a movie.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In the Mood for Love turns crowded Hong Kong lamps into soft discs around faces. Her isolates Theodore against city lights whose character is the glass, not a painted smear."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film In the Mood for Love turns crowded Hong Kong lamps into soft discs around faces. Her isolates Theodore against city lights whose character is the glass, not a painted smear."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name disc shape and highlight sources. Example: Creamy bokeh field behind [Subject], circular or oval highlight discs from practicals, subject sharp, background as light not as a masked blur."
+        },
+        {
+          "type": "quote",
+          "text": "Creamy bokeh field behind [Subject], circular or oval highlights, the world melted to light, subject isolated by glass."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Creamy+bokeh+field+behind+[Subject],+circular+or+oval+highlights,+the+world+melted+to+light,+subject+isolated+by+glass."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name disc shape and highlight sources. Example: Creamy bokeh field behind [Subject], circular or oval highlight discs from practicals, subject sharp, background as light not as a masked blur.Copy promptUse in Image GeneratorCreamy bokeh field behind [Subject], circular or oval highlights, the world melted to light, subject isolated by glass.Creamy bokeh field behind [Subject], circular or oval highlights, the world melted to light, subject isolated by glass."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: a cutout mask or generic shallow focus with no disc structure. Tell: hair cut out like a sticker, no specular discs, background replaced rather than optically soft."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: keep optical discs, cat-eye at edges if wide open, and a real distance between planes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: a cutout mask or generic shallow focus with no disc structure. Tell: hair cut out like a sticker, no specular discs, background replaced rather than optically soft.Fix: keep optical discs, cat-eye at edges if wide open, and a real distance between planes."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is bokeh in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "The character of out-of-focus rendering: circles, ovals, cat-eyes, swirl, onion rings. It describes how blur looks, not merely that something is soft."
+        },
+        {
+          "type": "heading",
+          "text": "Bokeh vs shallow focus",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Shallow focus is a narrow depth of field. Bokeh is the optical handwriting of that blur. You can have shallow focus with ugly bokeh."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use bokeh?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When only one plane may be true and the rest should become light. Do not use it when the background still has to carry information."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt bokeh for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify circular or oval discs, name the highlight sources, keep the subject sharp, and forbid cutout edges or a smeared backdrop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is bokeh in film?The character of out-of-focus rendering: circles, ovals, cat-eyes, swirl, onion rings. It describes how blur looks, not merely that something is soft.Bokeh vs shallow focusShallow focus is a narrow depth of field. Bokeh is the optical handwriting of that blur. You can have shallow focus with ugly bokeh.When should I use bokeh?When only one plane may be true and the rest should become light. Do not use it when the background still has to carry information.How do I prompt bokeh for AI image or video?Specify circular or oval discs, name the highlight sources, keep the subject sharp, and forbid cutout edges or a smeared backdrop."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name disc shape and highlight sources. Example: Creamy bokeh field behind [Subject], circular or oval highlight discs from practicals, subject sharp, background as light not as a masked blur."
+    ],
+    "example": "Creamy bokeh field behind [Subject], circular or oval highlights, the world melted to light, subject isolated by glass."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/98550ff164c9360ab041da957a11fe4b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bokeh.webp",
+      "alt": "Bokeh example"
+    },
+    {
+      "kind": "image",
+      "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+      "alt": "Shallow Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b11a08fb15e0ac7dcd89ec2184cb65da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/anamorphic-057-anamorphic-optical-character-mini.webp",
+      "alt": "Anamorphic"
+    },
+    {
+      "kind": "video",
+      "path": "media/df5fddd2498117a9636a23f7270ff4b4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/057-anamorphic-optical-character-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/14fb728c1590be40f021f613e83467d3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/bokeh/hero.jpg",
+      "alt": "Bokeh",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "a73f736e7f047d0b07cc4edb3bcacbc7e5471df31a4368c4ab988c2a9486df19"
+}

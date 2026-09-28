@@ -1,0 +1,420 @@
+{
+  "id": "genre-looks/wuxia-look",
+  "slug": "wuxia-look",
+  "title": "Wuxia",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/wuxia-look",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wuxia-look.webp",
+  "detail": "details/genre-looks/wuxia-look.json",
+  "aliases": [],
+  "description": "Wuxia cinematography stages martial chivalry in landscape: misted bamboo or desert silk, long-shot geography, and wire-assisted paths that read as weightless rather than as street punching. Color is costume and fog, not a gelled murder window.",
+  "thumbnail": "media/b6da68bb5a440a6599bef0b4e59cb6aa.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The fight is a poem in a real (or studio-built) landscape. A body travels a wire path through Mist.",
+          "links": [
+            {
+              "text": "Mist",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Long Shot keeps honor readable as choreography, not as a blur of impacts. Silk and banners carry hue.",
+          "links": [
+            {
+              "text": "Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera cranes or holds wide so the land remains the other actor. It is the wrong tool for a grit street fight or a dusty gun standoff."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hong Kong urban kung fu wants handheld wides and hits. Spaghetti Western wants hard sun and eyes.",
+          "links": [
+            {
+              "text": "Spaghetti Western",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Wuxia wants weather, fabric, and a path through air."
+        }
+      ],
+      "links": [
+        {
+          "text": "Mist",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+        },
+        {
+          "text": "Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+        },
+        {
+          "text": "Spaghetti Western",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The fight is a poem in a real (or studio-built) landscape. A body travels a wire path through Mist.A Long Shot keeps honor readable as choreography, not as a blur of impacts. Silk and banners carry hue.The camera cranes or holds wide so the land remains the other actor. It is the wrong tool for a grit street fight or a dusty gun standoff.Hong Kong urban kung fu wants handheld wides and hits. Spaghetti Western wants hard sun and eyes.Wuxia wants weather, fabric, and a path through air."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "35 spherical or anamorphic. 24mm to 40mm for wire wides, 50mm to 75mm to compress bamboo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mist or smoke as diffusion, not as a night-club haze. Crane, jib, or wire-rig the performer so the path has a rise and a float."
+        },
+        {
+          "type": "paragraph",
+          "text": "Slow the strike, not the walk. Palette: silk dyes, forest green, desert gold, color-coded armies if the story needs them."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt misted bamboo, wire-fu weightlessness implied, silk color, heroic wides, Crouching Tiger air as weather, not as a slogan."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works 35 spherical or anamorphic. 24mm to 40mm for wire wides, 50mm to 75mm to compress bamboo.Mist or smoke as diffusion, not as a night-club haze. Crane, jib, or wire-rig the performer so the path has a rise and a float.Slow the strike, not the walk. Palette: silk dyes, forest green, desert gold, color-coded armies if the story needs them.Prompt misted bamboo, wire-fu weightlessness implied, silk color, heroic wides, Crouching Tiger air as weather, not as a slogan."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when martial myth needs landscape and a weightless path. Do not use it for a bar brawl, a gun standoff, or a handheld hit sequence."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when martial myth needs landscape and a weightless path. Do not use it for a bar brawl, a gun standoff, or a handheld hit sequence."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wuxia is mist, silk, wire, and Long Shot geography. Spaghetti Western is ochre, hard sun, and eye close-ups.",
+          "links": [
+            {
+              "text": "Wuxia",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/wuxia-look"
+            },
+            {
+              "text": "Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+            },
+            {
+              "text": "Spaghetti Western",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Mist is the atmosphere only. Long Shot is the size only.",
+          "links": [
+            {
+              "text": "Mist",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+            },
+            {
+              "text": "Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A street kung-fu look is the opposite: wide, close, dirty, and weighted. Do not swap them."
+        },
+        {
+          "type": "list-item",
+          "text": "MistSofter mystery than fog. Lyric, not monster.",
+          "displayText": "Mist\nSofter mystery than fog. Lyric, not monster.",
+          "links": [
+            {
+              "text": "MistSofter mystery than fog. Lyric, not monster.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Long ShotPlace a human in a world that could ignore them.",
+          "displayText": "Long Shot\nPlace a human in a world that could ignore them.",
+          "links": [
+            {
+              "text": "Long ShotPlace a human in a world that could ignore them.",
+              "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Wuxia",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/wuxia-look"
+        },
+        {
+          "text": "Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+        },
+        {
+          "text": "Spaghetti Western",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western"
+        },
+        {
+          "text": "Mist",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+        },
+        {
+          "text": "Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+        },
+        {
+          "text": "MistSofter mystery than fog. Lyric, not monster.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/mist"
+        },
+        {
+          "text": "Long ShotPlace a human in a world that could ignore them.",
+          "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/011706e10e626fcdf7bc8085edc5d79c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mist.webp",
+          "alt": "Mist"
+        },
+        {
+          "kind": "image",
+          "path": "media/ebfd2f3da0e7c019989512b68773f278.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/long-shot.webp",
+          "alt": "Long Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Wuxia is mist, silk, wire, and Long Shot geography. Spaghetti Western is ochre, hard sun, and eye close-ups.Mist is the atmosphere only. Long Shot is the size only.A street kung-fu look is the opposite: wide, close, dirty, and weighted. Do not swap them.MistSofter mystery than fog. Lyric, not monster.Long ShotPlace a human in a world that could ignore them.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crouching Tiger, Hidden Dragon (bamboo canopy, rooftop paths, wire as flight). Hero (color-coded armies, desert and lake as moral spaces)."
+        },
+        {
+          "type": "paragraph",
+          "text": "House of Flying Daggers (forest, silk, and a fight that is also a dance). Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Crouching Tiger, Hidden Dragon (bamboo canopy, rooftop paths, wire as flight). Hero (color-coded armies, desert and lake as moral spaces).House of Flying Daggers (forest, silk, and a fight that is also a dance). Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wuxia look on [Subject], misted bamboo or silk banners, wire-fu weightlessness implied, long-shot landscape, designed costume color, crane or wide hold. Name the weather and the path through air."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not prompt a dusty gunfight or a handheld alley brawl."
+        },
+        {
+          "type": "quote",
+          "text": "Wuxia look on [Subject], misted bamboo, wire-fu weightlessness implied, silk color, heroic wides, Crouching Tiger air."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Wuxia+look+on+[Subject],+misted+bamboo,+wire-fu+weightlessness+implied,+silk+color,+heroic+wides,+Crouching+Tiger+air."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Wuxia look on [Subject], misted bamboo or silk banners, wire-fu weightlessness implied, long-shot landscape, designed costume color, crane or wide hold. Name the weather and the path through air.Do not prompt a dusty gunfight or a handheld alley brawl.Copy promptUse in Image GeneratorWuxia look on [Subject], misted bamboo, wire-fu weightlessness implied, silk color, heroic wides, Crouching Tiger air.Wuxia look on [Subject], misted bamboo, wire-fu weightlessness implied, silk color, heroic wides, Crouching Tiger air."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a grit martial film or Spaghetti Western: sweat, ochre, and punches, or a noon standoff. The tell is no mist, no wire path, and a camera in the fighters' faces.",
+          "links": [
+            {
+              "text": "Spaghetti Western",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: widen up, add mist, show the path through air, and let costume carry color."
+        }
+      ],
+      "links": [
+        {
+          "text": "Spaghetti Western",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/spaghetti-western"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a grit martial film or Spaghetti Western: sweat, ochre, and punches, or a noon standoff. The tell is no mist, no wire path, and a camera in the fighters' faces.Fix: widen up, add mist, show the path through air, and let costume carry color."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Wuxia in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A martial-chivalry look: landscape wides, mist or silk weather, wire-assisted weightless movement, and color as costume rather than as a gelled threat. The fight is staged as myth, not as a street beating."
+        },
+        {
+          "type": "heading",
+          "text": "Wuxia vs Spaghetti Western",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Both mythologize landscape. Wuxia uses mist, silk, and wire paths. Spaghetti western uses hard sun, dust, and telephoto eyes. Different weather, different combat, different close-up."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Wuxia?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a martial beat needs land, weather, and a floating path. Skip it for gun standoffs, for urban handheld fights, or for horror gels."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Wuxia for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Wuxia look on [Subject], misted bamboo, wire-fu weightlessness implied, silk color, long-shot landscape. Name the path through air. Do not ask for a dusty standoff or a street brawl."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Wuxia in film?A martial-chivalry look: landscape wides, mist or silk weather, wire-assisted weightless movement, and color as costume rather than as a gelled threat. The fight is staged as myth, not as a street beating.Wuxia vs Spaghetti WesternBoth mythologize landscape. Wuxia uses mist, silk, and wire paths. Spaghetti western uses hard sun, dust, and telephoto eyes. Different weather, different combat, different close-up.When should I use Wuxia?When a martial beat needs land, weather, and a floating path. Skip it for gun standoffs, for urban handheld fights, or for horror gels.How do I prompt Wuxia for AI image or video?Write: Wuxia look on [Subject], misted bamboo, wire-fu weightlessness implied, silk color, long-shot landscape. Name the path through air. Do not ask for a dusty standoff or a street brawl."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Wuxia look on [Subject], misted bamboo or silk banners, wire-fu weightlessness implied, long-shot landscape, designed costume color, crane or wide hold. Name the weather and the path through air.",
+      "Do not prompt a dusty gunfight or a handheld alley brawl."
+    ],
+    "example": "Wuxia look on [Subject], misted bamboo, wire-fu weightlessness implied, silk color, heroic wides, Crouching Tiger air."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/b6da68bb5a440a6599bef0b4e59cb6aa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wuxia-look.webp",
+      "alt": "Wuxia example"
+    },
+    {
+      "kind": "image",
+      "path": "media/011706e10e626fcdf7bc8085edc5d79c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mist.webp",
+      "alt": "Mist"
+    },
+    {
+      "kind": "image",
+      "path": "media/ebfd2f3da0e7c019989512b68773f278.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/long-shot.webp",
+      "alt": "Long Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/c9d66dcb7cae67f7a04f989e0621359d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/wuxia-look/hero.jpg",
+      "alt": "Wuxia",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "dbeecac70ab70462dfea1fa376eb4a2288db54e8ac2217d7f75d4ad4ba182324"
+}

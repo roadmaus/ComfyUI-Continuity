@@ -1,0 +1,406 @@
+{
+  "id": "lighting/bounce-light",
+  "slug": "bounce-light",
+  "title": "Bounce Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/bounce-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bounce-light.webp",
+  "detail": "details/lighting/bounce-light.json",
+  "aliases": [],
+  "description": "Bounce lighting reflects light from a surface (wall, ceiling, poly, card) before it reaches the subject, so the apparent source becomes that large surface. Direction remains, but shadow edges soften and wrap.",
+  "thumbnail": "media/15d2ee62653c333bb3a8b0381e7d6d7a.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You keep a window side or a lamp side without the brutality of the bare source. Faces wrap, rooms feel inhabited, and the key still has a direction because the bounce surface occupies a place in the world."
+        },
+        {
+          "type": "paragraph",
+          "text": "Period interiors and daylight rooms use it so skin does not speckle. It is the wrong tool when you need razor shadows, a gobo pattern, or a hard split."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bounce is a method, not a facial pattern: it is not Rembrandt, not split, not butterfly. Those patterns die if you bounce too much.",
+          "links": [
+            {
+              "text": "Rembrandt",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            },
+            {
+              "text": "split",
+              "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+            },
+            {
+              "text": "butterfly",
+              "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Rembrandt",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "split",
+          "url": "https://melies.co/cinematic-techniques/lighting/split-lighting"
+        },
+        {
+          "text": "butterfly",
+          "url": "https://melies.co/cinematic-techniques/lighting/butterfly-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function You keep a window side or a lamp side without the brutality of the bare source. Faces wrap, rooms feel inhabited, and the key still has a direction because the bounce surface occupies a place in the world.Period interiors and daylight rooms use it so skin does not speckle. It is the wrong tool when you need razor shadows, a gobo pattern, or a hard split.Bounce is a method, not a facial pattern: it is not Rembrandt, not split, not butterfly. Those patterns die if you bounce too much."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aim a lamp or the sun at a white or neutral surface, then let that surface light the subject. Larger and closer bounce means softer light."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color picks up the bounce surface: white stays honest, a cream wall warms, a green wall will tint. The key side is the side of the bounce, not the lamp behind it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Bounce light on [Subject], key ricocheted off a white wall or poly, wrapping, gentle, large-source softness."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Aim a lamp or the sun at a white or neutral surface, then let that surface light the subject. Larger and closer bounce means softer light.Color picks up the bounce surface: white stays honest, a cream wall warms, a green wall will tint. The key side is the side of the bounce, not the lamp behind it.Prompt: Bounce light on [Subject], key ricocheted off a white wall or poly, wrapping, gentle, large-source softness."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to soften without losing direction, a face by a white wall, a ceiling bounce in a low room. Do not bounce when you need a crisp nose shadow or projected blinds."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to soften without losing direction, a face by a white wall, a ceiling bounce in a low room. Do not bounce when you need a crisp nose shadow or projected blinds."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Soft light can also come from a large silk in line with the lamp; bounce specifically reflects first. Window light is often bounced by walls after entering.",
+          "links": [
+            {
+              "text": "Soft light",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            },
+            {
+              "text": "Window light",
+              "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fill light is a job bounce often performs. Motivated lighting may use bounce to imitate a wall the story has.",
+          "links": [
+            {
+              "text": "Fill light",
+              "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+            },
+            {
+              "text": "Motivated lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard light is the quality bounce destroys.",
+          "links": [
+            {
+              "text": "Hard light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Soft LightBeauty, memory, or kindness.",
+          "displayText": "Soft Light\nBeauty, memory, or kindness.",
+          "links": [
+            {
+              "text": "Soft LightBeauty, memory, or kindness.",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Window LightDay interiors without looking lit.",
+          "displayText": "Window Light\nDay interiors without looking lit.",
+          "links": [
+            {
+              "text": "Window LightDay interiors without looking lit.",
+              "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Soft light",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "Window light",
+          "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+        },
+        {
+          "text": "Fill light",
+          "url": "https://melies.co/cinematic-techniques/lighting/fill-light"
+        },
+        {
+          "text": "Motivated lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/motivated-lighting"
+        },
+        {
+          "text": "Hard light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Soft LightBeauty, memory, or kindness.",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "Window LightDay interiors without looking lit.",
+          "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+          "alt": "Soft Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/b40f77c3fa856d3a1ad6b3c98e9753de.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/window-light.webp",
+          "alt": "Window Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Soft light can also come from a large silk in line with the lamp; bounce specifically reflects first. Window light is often bounced by walls after entering.Fill light is a job bounce often performs. Motivated lighting may use bounce to imitate a wall the story has.Hard light is the quality bounce destroys.Soft LightBeauty, memory, or kindness.Window LightDay interiors without looking lit.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cries and Whispers uses wrap from walls and rooms so faces glow without a hard edge. The Tree of Life often lets sun hit interiors and bounce into skin."
+        },
+        {
+          "type": "paragraph",
+          "text": "The method is the ricochet, not a filter named soft."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Cries and Whispers uses wrap from walls and rooms so faces glow without a hard edge. The Tree of Life often lets sun hit interiors and bounce into skin.The method is the ricochet, not a filter named soft."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the reflecting surface. \" State the wall's side and color."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a small bare bulb as the apparent source."
+        },
+        {
+          "type": "quote",
+          "text": "Bounce light on [Subject], key ricocheted off a white wall or poly, wrapping, gentle, large-source softness."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Bounce+light+on+[Subject],+key+ricocheted+off+a+white+wall+or+poly,+wrapping,+gentle,+large-source+softness."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the reflecting surface. \" State the wall's side and color.Forbid a small bare bulb as the apparent source.Copy promptUse in Image GeneratorBounce light on [Subject], key ricocheted off a white wall or poly, wrapping, gentle, large-source softness.Bounce light on [Subject], key ricocheted off a white wall or poly, wrapping, gentle, large-source softness."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a bare hard key or a frontal silk that is not a bounce. The tell is razor nose shadows, or a source that still looks small.",
+          "links": [
+            {
+              "text": "hard",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by making the last surface before the face a large wall or board, and by naming that surface."
+        }
+      ],
+      "links": [
+        {
+          "text": "hard",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a bare hard key or a frontal silk that is not a bounce. The tell is razor nose shadows, or a source that still looks small.Fix it by making the last surface before the face a large wall or board, and by naming that surface."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is bounce light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Light that hits a surface and then the subject. The surface becomes a large, softer source while keeping some direction."
+        },
+        {
+          "type": "heading",
+          "text": "Bounce light vs soft light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Soft light is the quality (large apparent source). Bounce is one method of getting that quality, by reflecting off a wall, ceiling, or board."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use bounce light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when you want wrap and gentle shadows without losing which side is keyed. Skip it for hard graphic shadow."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt bounce light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Say the key ricochets off a white wall or poly before hitting the subject. Name the bounce side and the wrap. No small bare source on the face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is bounce light in film?Light that hits a surface and then the subject. The surface becomes a large, softer source while keeping some direction.Bounce light vs soft lightSoft light is the quality (large apparent source). Bounce is one method of getting that quality, by reflecting off a wall, ceiling, or board.When should I use bounce light?Use it when you want wrap and gentle shadows without losing which side is keyed. Skip it for hard graphic shadow.How do I prompt bounce light for AI image or video?Say the key ricochets off a white wall or poly before hitting the subject. Name the bounce side and the wrap. No small bare source on the face."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the reflecting surface. \" State the wall's side and color.",
+      "Forbid a small bare bulb as the apparent source."
+    ],
+    "example": "Bounce light on [Subject], key ricocheted off a white wall or poly, wrapping, gentle, large-source softness."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/15d2ee62653c333bb3a8b0381e7d6d7a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bounce-light.webp",
+      "alt": "Bounce Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+      "alt": "Soft Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/b40f77c3fa856d3a1ad6b3c98e9753de.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/window-light.webp",
+      "alt": "Window Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/87813ff3d4265628a00e174e7f570948.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/bounce-light/hero.jpg",
+      "alt": "Bounce Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "e445d6618bddb792f4acf1e86b6ee9eb51bd8b8d3ea73ab3b69f4081deeec761"
+}

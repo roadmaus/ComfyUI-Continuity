@@ -1,0 +1,395 @@
+{
+  "id": "camera-movement/road-rush",
+  "slug": "road-rush",
+  "title": "Road Rush",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/road-rush",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/road-rush-road-rush-mini.webp",
+  "detail": "details/camera-movement/road-rush.json",
+  "aliases": [],
+  "description": "A road rush camera sits low to the asphalt, speed as smear, headlights and lane lines as weapons. The road is the subject; a vehicle is optional.",
+  "thumbnail": "media/daa51a0826c38fc809d7e5bab0bbaf87.webp",
+  "video": "media/cb213c03417486dcc41ff8bef4c379a1.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/road-rush-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Intros to chases, night highways, a nightmare of driving: get down and let tarmac fill the frame. Lane dashes streak; light becomes paint."
+        },
+        {
+          "type": "paragraph",
+          "text": "A standing-height car commercial is not this shot. FPV is flight; this is tarmac."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not rise to a pretty three-quarter beauty pass unless you end there on purpose."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Intros to chases, night highways, a nightmare of driving: get down and let tarmac fill the frame. Lane dashes streak; light becomes paint.A standing-height car commercial is not this shot. FPV is flight; this is tarmac.Do not rise to a pretty three-quarter beauty pass unless you end there on purpose."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Low mount, bumper height or below, wide, shutter that allows streak. Lane lines, cat's eyes, wet asphalt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Motion blur as paint. Prompt: Road-rush of [Subject], low to the asphalt, speed as smear, headlights and lane lines as weapons."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Low mount, bumper height or below, wide, shutter that allows streak. Lane lines, cat's eyes, wet asphalt.Motion blur as paint. Prompt: Road-rush of [Subject], low to the asphalt, speed as smear, headlights and lane lines as weapons."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the road is the event. Do not use it as a default car portrait from chest height."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the road is the event. Do not use it as a default car portrait from chest height."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Car Chasing keeps two machines in a hunt. FPV Drone leaves the ground.",
+          "links": [
+            {
+              "text": "Car Chasing",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/car-chasing"
+            },
+            {
+              "text": "FPV Drone",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Motion Blur is a shutter fact that road-rush uses as grammar. Road-rush can exist with no car in frame at all.",
+          "links": [
+            {
+              "text": "Motion Blur",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Car ChasingTwo machines, one argument.",
+          "displayText": "Car Chasing\nTwo machines, one argument.",
+          "links": [
+            {
+              "text": "Car ChasingTwo machines, one argument.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/car-chasing"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "displayText": "FPV Drone\nImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "links": [
+            {
+              "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Motion BlurSpeed or trauma. Clarity would be false.",
+          "displayText": "Motion Blur\nSpeed or trauma. Clarity would be false.",
+          "links": [
+            {
+              "text": "Motion BlurSpeed or trauma. Clarity would be false.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Car Chasing",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/car-chasing"
+        },
+        {
+          "text": "FPV Drone",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "Motion Blur",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur"
+        },
+        {
+          "text": "Car ChasingTwo machines, one argument.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/car-chasing"
+        },
+        {
+          "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "Motion BlurSpeed or trauma. Clarity would be false.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d9ac3f5b30f4718d20808488d4833e07.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/car-chasing-car-chasing-mini.webp",
+          "alt": "Car Chasing"
+        },
+        {
+          "kind": "video",
+          "path": "media/6de27d6baed5a0493cee3d2610833366.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/car-chasing-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+          "alt": "FPV Drone"
+        },
+        {
+          "kind": "video",
+          "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/45f47ac4b0f511f8963d348e2dc5703f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motion-blur-01-motion-blur-mini.webp",
+          "alt": "Motion Blur"
+        },
+        {
+          "kind": "video",
+          "path": "media/1d6ce568ecc4c211fd8227f75c32f3b3.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-motion-blur-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Car Chasing keeps two machines in a hunt. FPV Drone leaves the ground.Motion Blur is a shutter fact that road-rush uses as grammar. Road-rush can exist with no car in frame at all.Car ChasingTwo machines, one argument.FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.Motion BlurSpeed or trauma. Clarity would be false."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tron Legacy's highway treats lanes as weapons of light. Death Proof keeps the camera down on asphalt as a threat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: low, fast, tarmac as the subject."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Tron Legacy's highway treats lanes as weapons of light. Death Proof keeps the camera down on asphalt as a threat.Grammar: low, fast, tarmac as the subject."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Get down. Still: Road-rush of [Subject], low to the asphalt, speed as smear, headlights and lane lines as weapons."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: Low camera rushing along the road with [Subject], speed blur, lane lines streaking. Fill the frame with road."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a standing-height beauty pass."
+        },
+        {
+          "type": "quote",
+          "text": "Low camera rushing along the road with [Subject], speed blur, lane lines streaking."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Low+camera+rushing+along+the+road+with+[Subject],+speed+blur,+lane+lines+streaking."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Get down. Still: Road-rush of [Subject], low to the asphalt, speed as smear, headlights and lane lines as weapons.Video: Low camera rushing along the road with [Subject], speed blur, lane lines streaking. Fill the frame with road.Forbid a standing-height beauty pass.Copy promptUse in Video GeneratorLow camera rushing along the road with [Subject], speed blur, lane lines streaking.Low camera rushing along the road with [Subject], speed blur, lane lines streaking."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a car commercial from standing height. The tell: you can read the whole vehicle cleanly and the asphalt is a thin strip."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: drop to the tarmac, streak the lanes, let the road own the frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a car commercial from standing height. The tell: you can read the whole vehicle cleanly and the asphalt is a thin strip.The fix: drop to the tarmac, streak the lanes, let the road own the frame."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Road Rush in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Road rush is a low camera on asphalt at speed, with lane lines and headlights streaking. The road is the subject."
+        },
+        {
+          "type": "heading",
+          "text": "Road Rush vs Car Chasing",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Car chasing covers pursuit from a second vehicle. Road rush can ignore the hunter and treat tarmac, lanes, and smear as the event."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Road Rush?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for night highways, chase intros, and driving as threat. Do not use it as a standing-height product pass."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Road Rush for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a low rush along asphalt with streaking lanes. Example: Road-rush of [Subject], low to the asphalt, speed as smear, headlights and lane lines as weapons."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Road Rush in film?Road rush is a low camera on asphalt at speed, with lane lines and headlights streaking. The road is the subject.Road Rush vs Car ChasingCar chasing covers pursuit from a second vehicle. Road rush can ignore the hunter and treat tarmac, lanes, and smear as the event.When should I use Road Rush?Use it for night highways, chase intros, and driving as threat. Do not use it as a standing-height product pass.How do I prompt Road Rush for AI image or video?Write a low rush along asphalt with streaking lanes. Example: Road-rush of [Subject], low to the asphalt, speed as smear, headlights and lane lines as weapons."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Get down. Still: Road-rush of [Subject], low to the asphalt, speed as smear, headlights and lane lines as weapons.",
+      "Video: Low camera rushing along the road with [Subject], speed blur, lane lines streaking. Fill the frame with road.",
+      "Forbid a standing-height beauty pass."
+    ],
+    "example": "Low camera rushing along the road with [Subject], speed blur, lane lines streaking."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/cb213c03417486dcc41ff8bef4c379a1.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/road-rush-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/daa51a0826c38fc809d7e5bab0bbaf87.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/road-rush-road-rush-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3488bdf3ab500d54ea5fa4c18014763f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/road-rush.jpg",
+      "alt": "Road Rush frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/d9ac3f5b30f4718d20808488d4833e07.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/car-chasing-car-chasing-mini.webp",
+      "alt": "Car Chasing"
+    },
+    {
+      "kind": "video",
+      "path": "media/6de27d6baed5a0493cee3d2610833366.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/car-chasing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+      "alt": "FPV Drone"
+    },
+    {
+      "kind": "video",
+      "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/45f47ac4b0f511f8963d348e2dc5703f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motion-blur-01-motion-blur-mini.webp",
+      "alt": "Motion Blur"
+    },
+    {
+      "kind": "video",
+      "path": "media/1d6ce568ecc4c211fd8227f75c32f3b3.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-motion-blur-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bf152a59ce17d01ef75dcb8e7b8201b3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/road-rush/hero.jpg",
+      "alt": "Road Rush",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "009671f04d4ecedf82a1ce19cb7a4265104c4c437cf6cbcb2abf64739d95b0ab"
+}

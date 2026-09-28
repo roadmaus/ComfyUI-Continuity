@@ -1,0 +1,427 @@
+{
+  "id": "framing/product",
+  "slug": "product",
+  "title": "Product",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/product",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/product.webp",
+  "detail": "details/framing/product.json",
+  "aliases": [],
+  "description": "Product cinematography lights and frames an object the way a portrait treats a face: hero angle, catalog clarity, controlled reflections. The thing is the subject, not a plot insert in a messy room.",
+  "thumbnail": "media/cbd86d3e590f457efed89999b67bb6d4.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A product frame sells readability: logo plane, material, edges, how metal and glass behave. Speculars are designed, not accidental."
+        },
+        {
+          "type": "paragraph",
+          "text": "The background is often a sweep, a void, or a set built to disappear. It is the wrong tool when the object is a story fact inside a scene (a bloody letter on a kitchen table)."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is an insert, and it should keep the room's key. It is also the wrong tool if the camera orbits so fast the form never settles."
+        },
+        {
+          "type": "paragraph",
+          "text": "Show the object; let a Lazy Susan turn it if every side must read.",
+          "links": [
+            {
+              "text": "Lazy Susan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Lazy Susan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A product frame sells readability: logo plane, material, edges, how metal and glass behave. Speculars are designed, not accidental.The background is often a sweep, a void, or a set built to disappear. It is the wrong tool when the object is a story fact inside a scene (a bloody letter on a kitchen table).That is an insert, and it should keep the room's key. It is also the wrong tool if the camera orbits so fast the form never settles.Show the object; let a Lazy Susan turn it if every side must read."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose a hero three-quarter or a true elevation. Large soft sources for wrapping highlights; flags and cards to kill ugly speculars on chrome."
+        },
+        {
+          "type": "paragraph",
+          "text": "Macro only for texture. A turntable or a slow orbit is a separate move.",
+          "links": [
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Product hero of [Subject], catalog clarity, controlled reflections, the object as the only subject."
+        }
+      ],
+      "links": [
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Choose a hero three-quarter or a true elevation. Large soft sources for wrapping highlights; flags and cards to kill ugly speculars on chrome.Macro only for texture. A turntable or a slow orbit is a separate move.Prompt: Product hero of [Subject], catalog clarity, controlled reflections, the object as the only subject."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to sell the thing by lighting it like a face: a phone, a bottle, a watch on a sweep. Do not use drama-insert mess if you need catalog clarity, and do not use this glamour on a plot object that should look found."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to sell the thing by lighting it like a face: a phone, a bottle, a watch on a sweep. Do not use drama-insert mess if you need catalog clarity, and do not use this glamour on a plot object that should look found."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An Insert Shot lives in scene coverage as a plot fact, matching the room. Macro is an optic for small texture, which a product shot may use.",
+          "links": [
+            {
+              "text": "Insert Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            },
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Lazy Susan is a rotation method. Product is the commercial portrait job: controlled reflections, hero angle, the object as subject.",
+          "links": [
+            {
+              "text": "Lazy Susan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MacroThe plot is microscopic.",
+          "displayText": "Macro\nThe plot is microscopic.",
+          "links": [
+            {
+              "text": "MacroThe plot is microscopic.",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lazy SusanShow an object or costume from every side.",
+          "displayText": "Lazy Susan\nShow an object or costume from every side.",
+          "links": [
+            {
+              "text": "Lazy SusanShow an object or costume from every side.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Insert Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "Lazy Susan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+        },
+        {
+          "text": "MacroThe plot is microscopic.",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "Lazy SusanShow an object or costume from every side.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/lazy-susan"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/79fc44234e86f0ee60b85636698e0f64.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/macro-058-macro-insert-mini.webp",
+          "alt": "Macro"
+        },
+        {
+          "kind": "video",
+          "path": "media/48dce430df7bb8986d91dc405cf98e2c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/058-macro-insert-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/e08a5e61f13e45920f57f62e20326731.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lazy-susan-lazy-susan-mini.webp",
+          "alt": "Lazy Susan"
+        },
+        {
+          "kind": "video",
+          "path": "media/de412fdb77aeb52f922e9ab38017a869.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lazy-susan-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots An Insert Shot lives in scene coverage as a plot fact, matching the room. Macro is an optic for small texture, which a product shot may use.A Lazy Susan is a rotation method. Product is the commercial portrait job: controlled reflections, hero angle, the object as subject.MacroThe plot is microscopic.Lazy SusanShow an object or costume from every side.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Commercials and Apple keynotes are the public grammar: one object, clean plane, designed highlights, no accidental kitchen mess. Feature films sometimes steal this for a fetishized prop, which is a choice."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: catalog clarity, not found-object dirt, unless the brief is worn-in hero."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Commercials and Apple keynotes are the public grammar: one object, clean plane, designed highlights, no accidental kitchen mess. Feature films sometimes steal this for a fetishized prop, which is a choice.Grammar: catalog clarity, not found-object dirt, unless the brief is worn-in hero."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the object as hero. Example: Product hero of [Subject], catalog clarity, controlled reflections, the object as the only subject."
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify material (brushed aluminum, glass, leather) and the background (black sweep, white cyclorama). For video, one slow turn or a locked hero; do not add a person unless they are a scale hand."
+        },
+        {
+          "type": "quote",
+          "text": "Product hero of [Subject], catalog clarity, controlled reflections, the object as celebrity."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Product+hero+of+[Subject],+catalog+clarity,+controlled+reflections,+the+object+as+celebrity."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the object as hero. Example: Product hero of [Subject], catalog clarity, controlled reflections, the object as the only subject.Specify material (brushed aluminum, glass, leather) and the background (black sweep, white cyclorama). For video, one slow turn or a locked hero; do not add a person unless they are a scale hand.Copy promptUse in Image GeneratorProduct hero of [Subject], catalog clarity, controlled reflections, the object as celebrity.Product hero of [Subject], catalog clarity, controlled reflections, the object as celebrity."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an Insert Shot in dirty scene light, or a Macro texture with no hero angle. The tell is leftover room clutter, or a smear of uncontrolled speculars.",
+          "links": [
+            {
+              "text": "Insert Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            },
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: isolate the object, design the highlights, pick a hero angle."
+        }
+      ],
+      "links": [
+        {
+          "text": "Insert Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an Insert Shot in dirty scene light, or a Macro texture with no hero angle. The tell is leftover room clutter, or a smear of uncontrolled speculars.Fix: isolate the object, design the highlights, pick a hero angle."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Product in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Product cinematography frames and lights an object as the subject, with catalog clarity and controlled reflections, the way a portrait treats a face. It is a commercial or hero-object job, not a synonym for any close-up of a thing."
+        },
+        {
+          "type": "heading",
+          "text": "Product vs Insert Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An insert is a story detail inside a scene, usually matching that scene's light. A product shot isolates the object as a hero, often on a sweep or void, with designed speculars. A bloody envelope on a table is an insert; a phone on black acrylic is product."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Product?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the object must read as a designed hero. Do not use it for a plot fact that should stay in the room, and do not let reflections go unmanaged on chrome and glass."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Product for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Product hero of [Subject], catalog clarity, controlled reflections, the object as the only subject. Name materials and background. For video, a slow turntable or a locked hero beat."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Product in film?Product cinematography frames and lights an object as the subject, with catalog clarity and controlled reflections, the way a portrait treats a face. It is a commercial or hero-object job, not a synonym for any close-up of a thing.Product vs Insert ShotAn insert is a story detail inside a scene, usually matching that scene's light. A product shot isolates the object as a hero, often on a sweep or void, with designed speculars. A bloody envelope on a table is an insert; a phone on black acrylic is product.When should I use Product?Use it when the object must read as a designed hero. Do not use it for a plot fact that should stay in the room, and do not let reflections go unmanaged on chrome and glass.How do I prompt Product for AI image or video?Write Product hero of [Subject], catalog clarity, controlled reflections, the object as the only subject. Name materials and background. For video, a slow turntable or a locked hero beat."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the object as hero. Example: Product hero of [Subject], catalog clarity, controlled reflections, the object as the only subject.",
+      "Specify material (brushed aluminum, glass, leather) and the background (black sweep, white cyclorama). For video, one slow turn or a locked hero; do not add a person unless they are a scale hand."
+    ],
+    "example": "Product hero of [Subject], catalog clarity, controlled reflections, the object as celebrity."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/cbd86d3e590f457efed89999b67bb6d4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/product.webp",
+      "alt": "Product example"
+    },
+    {
+      "kind": "image",
+      "path": "media/79fc44234e86f0ee60b85636698e0f64.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/macro-058-macro-insert-mini.webp",
+      "alt": "Macro"
+    },
+    {
+      "kind": "video",
+      "path": "media/48dce430df7bb8986d91dc405cf98e2c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/058-macro-insert-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e08a5e61f13e45920f57f62e20326731.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lazy-susan-lazy-susan-mini.webp",
+      "alt": "Lazy Susan"
+    },
+    {
+      "kind": "video",
+      "path": "media/de412fdb77aeb52f922e9ab38017a869.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lazy-susan-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9029a572d7dc1e17c73a06c95ef48d57.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/product/hero.jpg",
+      "alt": "Product",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "c0f051ed5afdd899c553f2dfd0591041a02289a5c563c079f627669c997492de"
+}

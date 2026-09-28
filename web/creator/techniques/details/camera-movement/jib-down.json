@@ -1,0 +1,397 @@
+{
+  "id": "camera-movement/jib-down",
+  "slug": "jib-down",
+  "title": "Jib Down",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/jib-down",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jib-down-jib-down-mini.webp",
+  "detail": "details/camera-movement/jib-down.json",
+  "aliases": [
+    "short crane down"
+  ],
+  "description": "A jib down camera is a short descending arm, a few feet of boom, intimate arrival with nearby foreground sliding as the camera sits down. It is a small crane, not a city-scale drop.",
+  "thumbnail": "media/50c4ef24a19e738a61c172c46b01b4ba.webp",
+  "video": "media/53e0655a400aa728543493a6f71c0054.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/jib-down-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A full crane is too much city. Sit down into the talk: a table, a face, a huddle."
+        },
+        {
+          "type": "paragraph",
+          "text": "You drop from standing-eye or a little above into the scene like a guest sitting down. An aerial of a fortress wants a crane."
+        },
+        {
+          "type": "paragraph",
+          "text": "A tilt down from a locked tripod has no sliding foreground. Speed is polite unless you say otherwise."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not travel a city block."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A full crane is too much city. Sit down into the talk: a table, a face, a huddle.You drop from standing-eye or a little above into the scene like a guest sitting down. An aerial of a fortress wants a crane.A tilt down from a locked tripod has no sliding foreground. Speed is polite unless you say otherwise.Do not travel a city block."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Short jib, remote or operator on the arm, start a little high, end at the subject. Nearby foreground (glasses, a lamp, a railing) should parallax."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Jib down onto [Subject], a short descending arm, intimate arrival, nearby foreground sliding as the camera sits down."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Short jib, remote or operator on the arm, start a little high, end at the subject. Nearby foreground (glasses, a lamp, a railing) should parallax.Prompt: Jib down onto [Subject], a short descending arm, intimate arrival, nearby foreground sliding as the camera sits down."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to arrive at a table, a secret, a song starting. Do not use it when you need a city to drop away."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to arrive at a table, a secret, a song starting. Do not use it when you need a city to drop away."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crane Down is the big cousin, tens of feet, map becoming a person. Jib Up is the reverse small lift.",
+          "links": [
+            {
+              "text": "Crane Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            },
+            {
+              "text": "Jib Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/jib-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Tilt Down only pitches from sticks. Jib down translates a short arm.",
+          "links": [
+            {
+              "text": "Tilt Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane DownArrive from god-view into a person.",
+          "displayText": "Crane Down\nArrive from god-view into a person.",
+          "links": [
+            {
+              "text": "Crane DownArrive from god-view into a person.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Jib UpLeave the face, keep the architecture small.",
+          "displayText": "Jib Up\nLeave the face, keep the architecture small.",
+          "links": [
+            {
+              "text": "Jib UpLeave the face, keep the architecture small.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/jib-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        },
+        {
+          "text": "Jib Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/jib-up"
+        },
+        {
+          "text": "Tilt Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+        },
+        {
+          "text": "Crane DownArrive from god-view into a person.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        },
+        {
+          "text": "Jib UpLeave the face, keep the architecture small.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/jib-up"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/aa53863e7f0a44b5d017fc87459915f3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-down-011-crane-down-detail-reveal-mini.webp",
+          "alt": "Crane Down"
+        },
+        {
+          "kind": "video",
+          "path": "media/8a7719557669858db37b76f7c7c1f596.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/011-crane-down-detail-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/5e573509692684882b6d97e9368095f7.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jib-up-jib-up-mini.webp",
+          "alt": "Jib Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/59f9dad5bc080fea0d98764b3bc8f8a1.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/jib-up-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Crane Down is the big cousin, tens of feet, map becoming a person. Jib Up is the reverse small lift.A Tilt Down only pitches from sticks. Jib down translates a short arm.Crane DownArrive from god-view into a person.Jib UpLeave the face, keep the architecture small.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Music videos and small-set drama are the grammar: intimate sit-downs, a guest arriving at a table. The still is the end of the sit-down, not a skyline."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Music videos and small-set drama are the grammar: intimate sit-downs, a guest arriving at a table. The still is the end of the sit-down, not a skyline."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Short arm, sit down. Still: Jib down onto [Subject], a short descending arm, intimate arrival, nearby foreground sliding as the camera sits down."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: A short jib down into [Subject], small crane, the room arriving rather than a city-scale drop. Demand foreground slide."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a tilt from sticks."
+        },
+        {
+          "type": "quote",
+          "text": "A short jib down into [Subject], small crane, the room arriving rather than a city-scale drop."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+short+jib+down+into+[Subject],+small+crane,+the+room+arriving+rather+than+a+city-scale+drop."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Short arm, sit down. Still: Jib down onto [Subject], a short descending arm, intimate arrival, nearby foreground sliding as the camera sits down.Video: A short jib down into [Subject], small crane, the room arriving rather than a city-scale drop. Demand foreground slide.Forbid a tilt from sticks.Copy promptUse in Video GeneratorA short jib down into [Subject], small crane, the room arriving rather than a city-scale drop.A short jib down into [Subject], small crane, the room arriving rather than a city-scale drop."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a tilt down. The tell: the support never moved, no foreground shear."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: a short descending arm, nearby objects sliding, human-scale arrival."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a tilt down. The tell: the support never moved, no foreground shear.The fix: a short descending arm, nearby objects sliding, human-scale arrival."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Jib Down in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A jib down is a short descending crane arm, a few feet of boom, arriving at a person with nearby foreground sliding. Intimate, not city-scale."
+        },
+        {
+          "type": "heading",
+          "text": "Jib Down vs Crane Down",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A crane down can drop from rooftops or hills. A jib down is a small arm sitting into a table, a face, or a huddle."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Jib Down?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to sit down into a talk or a song. Do not use it when a fortress or a skyline must fall away."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Jib Down for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a short descending arm and sliding foreground. Example: Jib down onto [Subject], a short descending arm, intimate arrival, nearby foreground sliding as the camera sits down."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Jib Down in film?A jib down is a short descending crane arm, a few feet of boom, arriving at a person with nearby foreground sliding. Intimate, not city-scale.Jib Down vs Crane DownA crane down can drop from rooftops or hills. A jib down is a small arm sitting into a table, a face, or a huddle.When should I use Jib Down?Use it to sit down into a talk or a song. Do not use it when a fortress or a skyline must fall away.How do I prompt Jib Down for AI image or video?Write a short descending arm and sliding foreground. Example: Jib down onto [Subject], a short descending arm, intimate arrival, nearby foreground sliding as the camera sits down."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Short arm, sit down. Still: Jib down onto [Subject], a short descending arm, intimate arrival, nearby foreground sliding as the camera sits down.",
+      "Video: A short jib down into [Subject], small crane, the room arriving rather than a city-scale drop. Demand foreground slide.",
+      "Forbid a tilt from sticks."
+    ],
+    "example": "A short jib down into [Subject], small crane, the room arriving rather than a city-scale drop."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/53e0655a400aa728543493a6f71c0054.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/jib-down-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/50c4ef24a19e738a61c172c46b01b4ba.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jib-down-jib-down-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/da778895f550e1af4022bb51290bc008.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/jib-down.jpg",
+      "alt": "Jib Down frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/aa53863e7f0a44b5d017fc87459915f3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-down-011-crane-down-detail-reveal-mini.webp",
+      "alt": "Crane Down"
+    },
+    {
+      "kind": "video",
+      "path": "media/8a7719557669858db37b76f7c7c1f596.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/011-crane-down-detail-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5e573509692684882b6d97e9368095f7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jib-up-jib-up-mini.webp",
+      "alt": "Jib Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/59f9dad5bc080fea0d98764b3bc8f8a1.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/jib-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/713128d089c714e8690a1c8f51298c49.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/jib-down/hero.jpg",
+      "alt": "Jib Down",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "dae0bc08b88fd043899427a16285f0445326d459e158297b24c0f9cdae0b0989"
+}

@@ -1,0 +1,404 @@
+{
+  "id": "camera-movement/zoom",
+  "slug": "zoom",
+  "title": "Zoom",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/zoom",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/zoom-zoom-mini.webp",
+  "detail": "details/camera-movement/zoom.json",
+  "aliases": [
+    "zoom in",
+    "zoom out",
+    "slow zoom",
+    "snap zoom"
+  ],
+  "description": "A zoom shot changes focal length without moving the camera. Space flattens or opens with no parallax: near and far grow or shrink together because the nodal point stays put.",
+  "thumbnail": "media/d25e31917444138277d694e47b51ed65.webp",
+  "video": "media/0d472a8010ae1a9f6b31c4ca74550dbf.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/zoom-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Change size without walking. Surveillance, emphasis, a punch: the glass does the work."
+        },
+        {
+          "type": "paragraph",
+          "text": "The background does not shear; it merely occupies more or less of the frame. If you need the room to be real, dolly."
+        },
+        {
+          "type": "paragraph",
+          "text": "The compound cousin is a dolly zoom, where travel and glass disagree on purpose. A zoom used as fake geography will flatten the set and give the cheat away."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Change size without walking. Surveillance, emphasis, a punch: the glass does the work.The background does not shear; it merely occupies more or less of the frame. If you need the room to be real, dolly.The compound cousin is a dolly zoom, where travel and glass disagree on purpose. A zoom used as fake geography will flatten the set and give the cheat away."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Locked body, zoom lens, often on sticks. In flattens (more telephoto); out opens (more wide)."
+        },
+        {
+          "type": "paragraph",
+          "text": "No near-object shear. Prompt: Zoom on [Subject], optical magnification, camera body still, space flattening or opening without parallax."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Locked body, zoom lens, often on sticks. In flattens (more telephoto); out opens (more wide).No near-object shear. Prompt: Zoom on [Subject], optical magnification, camera body still, space flattening or opening without parallax."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to change size from one stance: a watcher's glass, a snap to a face, a slow tightening. Do not label a dolly as a zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to change size from one stance: a watcher's glass, a snap to a face, a slow tightening. Do not label a dolly as a zoom."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Slow Zoom In is the same axis at a crawl. Crash Zoom In is the punch.",
+          "links": [
+            {
+              "text": "Slow Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            },
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Dolly Zoom pairs opposite travel and glass so perspective warps. A Dolly translates and produces parallax.",
+          "links": [
+            {
+              "text": "Dolly Zoom",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom"
+            },
+            {
+              "text": "Dolly",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "displayText": "Crash Zoom In\nPunctuate a hit, a realization, or a comic sting.",
+          "links": [
+            {
+              "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly ZoomA realization that the ground is not stable. Use once.",
+          "displayText": "Dolly Zoom\nA realization that the ground is not stable. Use once.",
+          "links": [
+            {
+              "text": "Dolly ZoomA realization that the ground is not stable. Use once.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        },
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Dolly Zoom",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom"
+        },
+        {
+          "text": "Dolly",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        },
+        {
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Dolly ZoomA realization that the ground is not stable. Use once.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-zoom"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+          "alt": "Crash Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/9bfde942aacd6bd3cf29bdf633c0744b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-zoom-001-dolly-zoom-mini.webp",
+          "alt": "Dolly Zoom"
+        },
+        {
+          "kind": "video",
+          "path": "media/2443c10f4fa2c3ab2067b035732d8843.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/001-dolly-zoom-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Slow Zoom In is the same axis at a crawl. Crash Zoom In is the punch.A Dolly Zoom pairs opposite travel and glass so perspective warps. A Dolly translates and produces parallax.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.Crash Zoom InPunctuate a hit, a realization, or a comic sting.Dolly ZoomA realization that the ground is not stable. Use once."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Conversation uses optical magnification as surveillance, glass doing the watching. Jaws is famous for a dolly zoom, the other move: do not cite that beach shock as a plain zoom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Conversation uses optical magnification as surveillance, glass doing the watching. Jaws is famous for a dolly zoom, the other move: do not cite that beach shock as a plain zoom."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the body still. Still: Zoom on [Subject], optical magnification, camera body still, space flattening or opening without parallax."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The lens zooms on [Subject], no camera travel, space compressing. Say in or out."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid wheels."
+        },
+        {
+          "type": "quote",
+          "text": "The lens zooms on [Subject], no camera travel, space compressing."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+lens+zooms+on+[Subject],+no+camera+travel,+space+compressing."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Keep the body still. Still: Zoom on [Subject], optical magnification, camera body still, space flattening or opening without parallax.Video: The lens zooms on [Subject], no camera travel, space compressing. Say in or out.Forbid wheels.Copy promptUse in Video GeneratorThe lens zooms on [Subject], no camera travel, space compressing.The lens zooms on [Subject], no camera travel, space compressing."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a dolly-in. The tell: a lamp shears, a doorway slides, true parallax."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: lock the camera, change only focal length, and let planes scale together."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a dolly-in. The tell: a lamp shears, a doorway slides, true parallax.The fix: lock the camera, change only focal length, and let planes scale together."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Zoom in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A zoom changes focal length while the camera body stays put. Size changes; parallax does not appear."
+        },
+        {
+          "type": "heading",
+          "text": "Zoom vs Dolly",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dolly moves the camera through space, so near objects shear. A zoom only changes the lens, so the world scales as one card."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Zoom?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to change size without walking: surveillance, a snap, a slow tighten. Do not use it to fake a walk through a room."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Zoom for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write optical magnification and no camera travel. Example: Zoom on [Subject], optical magnification, camera body still, space flattening or opening without parallax."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Zoom in film?A zoom changes focal length while the camera body stays put. Size changes; parallax does not appear.Zoom vs DollyA dolly moves the camera through space, so near objects shear. A zoom only changes the lens, so the world scales as one card.When should I use Zoom?Use it to change size without walking: surveillance, a snap, a slow tighten. Do not use it to fake a walk through a room.How do I prompt Zoom for AI image or video?Write optical magnification and no camera travel. Example: Zoom on [Subject], optical magnification, camera body still, space flattening or opening without parallax."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Keep the body still. Still: Zoom on [Subject], optical magnification, camera body still, space flattening or opening without parallax.",
+      "Video: The lens zooms on [Subject], no camera travel, space compressing. Say in or out.",
+      "Forbid wheels."
+    ],
+    "example": "The lens zooms on [Subject], no camera travel, space compressing."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/0d472a8010ae1a9f6b31c4ca74550dbf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d25e31917444138277d694e47b51ed65.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/zoom-zoom-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/38812aab26abdf9141b3ddde03aaa018.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/zoom.jpg",
+      "alt": "Zoom frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": "Crash Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9bfde942aacd6bd3cf29bdf633c0744b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-zoom-001-dolly-zoom-mini.webp",
+      "alt": "Dolly Zoom"
+    },
+    {
+      "kind": "video",
+      "path": "media/2443c10f4fa2c3ab2067b035732d8843.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/001-dolly-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d3e4d0f671431a3a663ff3654a26346f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/zoom/hero.jpg",
+      "alt": "Zoom",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "786adaaa57332645d06885fe885fea6a0ca72e652a6dc089f615e28bea697325"
+}

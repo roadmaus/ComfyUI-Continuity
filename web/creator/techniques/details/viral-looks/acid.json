@@ -1,0 +1,381 @@
+{
+  "id": "viral-looks/acid",
+  "slug": "acid",
+  "title": "Acid",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/acid",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/acid-acid-mini.webp",
+  "detail": "details/viral-looks/acid.json",
+  "aliases": [],
+  "description": "Acid, the acid visual look, is a ruined print: burned chroma, melting edges, silver that shifted, dyes left in the sun too long. The dyes should misbehave, and a festive rainbow LUT is not damage.",
+  "thumbnail": "media/4d5be8932be7eed4df71041bfaf39267.webp",
+  "video": "media/e8413cc7e5b233fecd5621b960575a6a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/acid-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Nights that went wrong, posters, a memory that chemically failed: a face still held, edges melting, magentas and yellows overcooked. LSD is wet perception."
+        },
+        {
+          "type": "paragraph",
+          "text": "Acid is the print after the sun. Cross-process is a cousin in the soup."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for grocery-store realism, and the wrong tool if you add trails. Trails belong to LSD."
+        },
+        {
+          "type": "paragraph",
+          "text": "If it looks festive rather than damaged, you shot a party filter."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Nights that went wrong, posters, a memory that chemically failed: a face still held, edges melting, magentas and yellows overcooked. LSD is wet perception.Acid is the print after the sun. Cross-process is a cousin in the soup.It is the wrong tool for grocery-store realism, and the wrong tool if you add trails. Trails belong to LSD.If it looks festive rather than damaged, you shot a party filter."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock off, 35mm to 50mm, eye height. Keep a readable face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt melted edges, overcooked magentas and yellows, shifted silver. Do not add trails unless you want LSD as well."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pick one. Prompt: Acid look on [Subject], burned chroma, melting edges, a print left in the sun too long."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock off, 35mm to 50mm, eye height. Keep a readable face.Prompt melted edges, overcooked magentas and yellows, shifted silver. Do not add trails unless you want LSD as well.Pick one. Prompt: Acid look on [Subject], burned chroma, melting edges, a print left in the sun too long."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A night that chemically failed, a poster, a damaged memory. Do not use it as a rainbow party grade, and do not mix trails unless you mean LSD."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A night that chemically failed, a poster, a damaged memory. Do not use it as a rainbow party grade, and do not mix trails unless you mean LSD."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "LSD is wet trails and breathing walls. Acid is print damage.",
+          "links": [
+            {
+              "text": "LSD",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/lsd"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cross Process is a specific soup mistake that shifts hues. Acid is the named ruin: melt, burn, sun-sick dyes.",
+          "links": [
+            {
+              "text": "Cross Process",
+              "url": "https://melies.co/cinematic-techniques/color/cross-process"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Not a festive LUT."
+        },
+        {
+          "type": "list-item",
+          "text": "LSDPerception is the set.",
+          "displayText": "LSD\nPerception is the set.",
+          "links": [
+            {
+              "text": "LSDPerception is the set.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/lsd"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cross ProcessWrong chemistry on purpose.",
+          "displayText": "Cross Process\nWrong chemistry on purpose.",
+          "links": [
+            {
+              "text": "Cross ProcessWrong chemistry on purpose.",
+              "url": "https://melies.co/cinematic-techniques/color/cross-process"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "LSD",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/lsd"
+        },
+        {
+          "text": "Cross Process",
+          "url": "https://melies.co/cinematic-techniques/color/cross-process"
+        },
+        {
+          "text": "LSDPerception is the set.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/lsd"
+        },
+        {
+          "text": "Cross ProcessWrong chemistry on purpose.",
+          "url": "https://melies.co/cinematic-techniques/color/cross-process"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8ae3a5e5bf6f4c1e2b94742ff30758ea.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lsd-lsd-mini.webp",
+          "alt": "LSD"
+        },
+        {
+          "kind": "video",
+          "path": "media/b5487a839469e188787750488bd137ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lsd-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1327295c65e87c53f955855b54fa99fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-process.webp",
+          "alt": "Cross Process"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots LSD is wet trails and breathing walls. Acid is print damage.Cross Process is a specific soup mistake that shifts hues. Acid is the named ruin: melt, burn, sun-sick dyes.Not a festive LUT.LSDPerception is the set.Cross ProcessWrong chemistry on purpose.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Enter the Void can overlap with LSD, but its dye is usable as burned chroma. Spring Breakers cooks color until it hurts."
+        },
+        {
+          "type": "paragraph",
+          "text": "Chemistry, not a party filter. Grammar, not a frame to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Enter the Void can overlap with LSD, but its dye is usable as burned chroma. Spring Breakers cooks color until it hurts.Chemistry, not a party filter. Grammar, not a frame to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Damage, not a party. Acid look on [Subject], burned chroma, melting edges, a print left in the sun too long."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add lock-off, held face, melted edges, overcooked magenta and yellow, no trails. Pick acid or LSD, not both."
+        },
+        {
+          "type": "quote",
+          "text": "Acid look on [Subject], burned chroma, melting edges, a print left in the sun too long."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Acid+look+on+[Subject],+burned+chroma,+melting+edges,+a+print+left+in+the+sun+too+long."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Damage, not a party. Acid look on [Subject], burned chroma, melting edges, a print left in the sun too long.Add lock-off, held face, melted edges, overcooked magenta and yellow, no trails. Pick acid or LSD, not both.Copy promptUse in Image GeneratorAcid look on [Subject], burned chroma, melting edges, a print left in the sun too long.Acid look on [Subject], burned chroma, melting edges, a print left in the sun too long."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A rainbow LUT, or trails from LSD stacked on melt. The tell is festive rather than ruined.",
+          "links": [
+            {
+              "text": "LSD",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/lsd"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: show the melt, burn the dyes, hold the face."
+        }
+      ],
+      "links": [
+        {
+          "text": "LSD",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/lsd"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A rainbow LUT, or trails from LSD stacked on melt. The tell is festive rather than ruined.Fix it: show the melt, burn the dyes, hold the face."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Acid in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A ruined-print look: burned chroma, melting edges, dyes that sat in the sun. It is chemical damage, not a rainbow grade."
+        },
+        {
+          "type": "heading",
+          "text": "Acid vs LSD",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "LSD is wet perception: trails, breathing walls. Acid is a print that failed: melt and burn. Trails belong to LSD. Damage belongs to acid."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Acid?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Failed nights, posters, chemically sick memory. Skip grocery realism and party rainbows."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Acid for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Hold the face, then: Acid look on [Subject], burned chroma, melting edges, a print left in the sun too long. Forbid trails unless you mean LSD instead."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Acid in film?A ruined-print look: burned chroma, melting edges, dyes that sat in the sun. It is chemical damage, not a rainbow grade.Acid vs LSDLSD is wet perception: trails, breathing walls. Acid is a print that failed: melt and burn. Trails belong to LSD. Damage belongs to acid.When should I use Acid?Failed nights, posters, chemically sick memory. Skip grocery realism and party rainbows.How do I prompt Acid for AI image or video?Hold the face, then: Acid look on [Subject], burned chroma, melting edges, a print left in the sun too long. Forbid trails unless you mean LSD instead."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Damage, not a party. Acid look on [Subject], burned chroma, melting edges, a print left in the sun too long.",
+      "Add lock-off, held face, melted edges, overcooked magenta and yellow, no trails. Pick acid or LSD, not both."
+    ],
+    "example": "Acid look on [Subject], burned chroma, melting edges, a print left in the sun too long."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/e8413cc7e5b233fecd5621b960575a6a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/acid-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4d5be8932be7eed4df71041bfaf39267.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/acid-acid-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b700b29d6be8df8819386da2adb4fe85.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/acid.jpg",
+      "alt": "Acid frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/8ae3a5e5bf6f4c1e2b94742ff30758ea.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lsd-lsd-mini.webp",
+      "alt": "LSD"
+    },
+    {
+      "kind": "video",
+      "path": "media/b5487a839469e188787750488bd137ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/lsd-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1327295c65e87c53f955855b54fa99fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-process.webp",
+      "alt": "Cross Process"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/8176ce9e746851f9469d5e31eda4751d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/acid/hero.jpg",
+      "alt": "Acid",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "98449160d89b12f809fbb8f8cc11b4f6beb2a453d3e48d916434bc273ba3e14e"
+}

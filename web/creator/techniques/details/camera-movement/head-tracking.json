@@ -1,0 +1,385 @@
+{
+  "id": "camera-movement/head-tracking",
+  "slug": "head-tracking",
+  "title": "Head Tracking",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/head-tracking",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/head-tracking-head-tracking-mini.webp",
+  "detail": "details/camera-movement/head-tracking.json",
+  "aliases": [],
+  "description": "A head tracking camera glues the lens to the skull so the face stays pinned while the background orbits. The head is the tripod; turns shear the room.",
+  "thumbnail": "media/92b5ef5cd524329b36543857f6939599.webp",
+  "video": "media/294e5ee23389115c0a1e88d715566ae0.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/head-tracking-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The face is the only stable point. Disorientation, intimacy, a character who cannot see the room changing: the world slides around a pinned portrait."
+        },
+        {
+          "type": "paragraph",
+          "text": "A close-up that pans with them from far away is not glued. Snorricam is chest-mounted and sees the body; head tracking pins the face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Turns must sweep the background."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The face is the only stable point. Disorientation, intimacy, a character who cannot see the room changing: the world slides around a pinned portrait.A close-up that pans with them from far away is not glued. Snorricam is chest-mounted and sees the body; head tracking pins the face.Turns must sweep the background."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Helmet rig, face mount, or a digital lock to the skull. Face sharp, no extra zoom."
+        },
+        {
+          "type": "paragraph",
+          "text": "When they turn, the room orbits. Prompt: Head-tracking camera on [Subject], the lens glued to the skull, background sliding as the face stays pinned."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Helmet rig, face mount, or a digital lock to the skull. Face sharp, no extra zoom.When they turn, the room orbits. Prompt: Head-tracking camera on [Subject], the lens glued to the skull, background sliding as the face stays pinned."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the face must stay while the world becomes weather. Do not use a long-lens pan and claim a lock."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the face must stay while the world becomes weather. Do not use a long-lens pan and claim a lock."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "SnorriCam rides the chest and often sees torso and world, face at the edge or absent. Locked-On is the general glued-to-subject idea (body, car, object).",
+          "links": [
+            {
+              "text": "SnorriCam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            },
+            {
+              "text": "Locked-On",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Head tracking is skull-specific."
+        },
+        {
+          "type": "list-item",
+          "text": "Locked-OnOne thing is the only stable point in a moving world.",
+          "displayText": "Locked-On\nOne thing is the only stable point in a moving world.",
+          "links": [
+            {
+              "text": "Locked-OnOne thing is the only stable point in a moving world.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SnorriCamTrap the audience in a body that cannot get out.",
+          "displayText": "SnorriCam\nTrap the audience in a body that cannot get out.",
+          "links": [
+            {
+              "text": "SnorriCamTrap the audience in a body that cannot get out.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "SnorriCam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        },
+        {
+          "text": "Locked-On",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+        },
+        {
+          "text": "Locked-OnOne thing is the only stable point in a moving world.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/locked-on"
+        },
+        {
+          "text": "SnorriCamTrap the audience in a body that cannot get out.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/snorricam"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/4790b7e023e1de9ff71cdf19b2f02238.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/locked-on-020-object-locked-moving-camera-mini.webp",
+          "alt": "Locked-On"
+        },
+        {
+          "kind": "video",
+          "path": "media/f1e2073d98c065752bc9f43a7462a2aa.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/020-object-locked-moving-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/a377ca603c759f0f3e573588303d2336.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snorricam-018-body-mounted-face-camera-mini.webp",
+          "alt": "SnorriCam"
+        },
+        {
+          "kind": "video",
+          "path": "media/03868d02fedb015bdcc173c26c4c7b3e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/018-body-mounted-face-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots SnorriCam rides the chest and often sees torso and world, face at the edge or absent. Locked-On is the general glued-to-subject idea (body, car, object).Head tracking is skull-specific.Locked-OnOne thing is the only stable point in a moving world.SnorriCamTrap the audience in a body that cannot get out.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Gravity pins faces while debris and station geometry shear around the skull. Enter the Void uses head-locked subjectivity so the world orbits a consciousness."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: the skull is the tripod."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Gravity pins faces while debris and station geometry shear around the skull. Enter the Void uses head-locked subjectivity so the world orbits a consciousness.Grammar: the skull is the tripod."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Glue to the skull. Still: Head-tracking camera on [Subject], the lens glued to the skull, background sliding as the face stays pinned."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera stays locked to [Subject]'s head as they turn, background orbiting. No extra zoom."
+        },
+        {
+          "type": "paragraph",
+          "text": "Face sharp."
+        },
+        {
+          "type": "quote",
+          "text": "The camera stays locked to [Subject]'s head as they turn, background orbiting."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+stays+locked+to+[Subject]'s+head+as+they+turn,+background+orbiting."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Glue to the skull. Still: Head-tracking camera on [Subject], the lens glued to the skull, background sliding as the face stays pinned.Video: The camera stays locked to [Subject]'s head as they turn, background orbiting. No extra zoom.Face sharp.Copy promptUse in Video GeneratorThe camera stays locked to [Subject]'s head as they turn, background orbiting.The camera stays locked to [Subject]'s head as they turn, background orbiting."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a close-up panned from a distance. The tell: the face drifts in frame, or the background does not shear on a turn."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: lock to the skull, pin the face, let the room orbit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a close-up panned from a distance. The tell: the face drifts in frame, or the background does not shear on a turn.The fix: lock to the skull, pin the face, let the room orbit."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Head Tracking in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Head tracking glues the camera to the skull so the face stays pinned while the background orbits as the person turns."
+        },
+        {
+          "type": "heading",
+          "text": "Head Tracking vs SnorriCam",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Snorricam is typically chest-mounted and sees the body in the world. Head tracking pins the face; the skull is the tripod."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Head Tracking?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for disorientation or intimacy when the face is the only stable point. Do not fake it with a long-lens pan."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Head Tracking for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a camera locked to the head, face sharp, world sliding. Example: Head-tracking camera on [Subject], the lens glued to the skull, background sliding as the face stays pinned."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Head Tracking in film?Head tracking glues the camera to the skull so the face stays pinned while the background orbits as the person turns.Head Tracking vs SnorriCamSnorricam is typically chest-mounted and sees the body in the world. Head tracking pins the face; the skull is the tripod.When should I use Head Tracking?Use it for disorientation or intimacy when the face is the only stable point. Do not fake it with a long-lens pan.How do I prompt Head Tracking for AI image or video?Write a camera locked to the head, face sharp, world sliding. Example: Head-tracking camera on [Subject], the lens glued to the skull, background sliding as the face stays pinned."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Glue to the skull. Still: Head-tracking camera on [Subject], the lens glued to the skull, background sliding as the face stays pinned.",
+      "Video: The camera stays locked to [Subject]'s head as they turn, background orbiting. No extra zoom.",
+      "Face sharp."
+    ],
+    "example": "The camera stays locked to [Subject]'s head as they turn, background orbiting."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/294e5ee23389115c0a1e88d715566ae0.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/head-tracking-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/92b5ef5cd524329b36543857f6939599.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/head-tracking-head-tracking-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0af556c7446bcc8988d1a3d12d920fe3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/head-tracking.jpg",
+      "alt": "Head Tracking frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/4790b7e023e1de9ff71cdf19b2f02238.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/locked-on-020-object-locked-moving-camera-mini.webp",
+      "alt": "Locked-On"
+    },
+    {
+      "kind": "video",
+      "path": "media/f1e2073d98c065752bc9f43a7462a2aa.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/020-object-locked-moving-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a377ca603c759f0f3e573588303d2336.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/snorricam-018-body-mounted-face-camera-mini.webp",
+      "alt": "SnorriCam"
+    },
+    {
+      "kind": "video",
+      "path": "media/03868d02fedb015bdcc173c26c4c7b3e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/018-body-mounted-face-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e9074dae7643b508478d9ef9fcae284b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/head-tracking/hero.jpg",
+      "alt": "Head Tracking",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "29241b36092d8cadbaa42b20519be934b88aba494572b2a1c26c35ca49ed4947"
+}

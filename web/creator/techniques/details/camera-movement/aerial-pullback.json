@@ -1,0 +1,396 @@
+{
+  "id": "camera-movement/aerial-pullback",
+  "slug": "aerial-pullback",
+  "title": "Aerial Pullback",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+  "detail": "details/camera-movement/aerial-pullback.json",
+  "aliases": [],
+  "description": "An aerial pullback rises and recedes until a person or building becomes a small mark in a landscape. The move hands the scene from a character to geography, from helicopter or high-drone height rather than from a ground crane.",
+  "thumbnail": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+  "video": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Close a chapter. Geography wins."
+        },
+        {
+          "type": "paragraph",
+          "text": "The figure remains trackable long enough to prove continuity, then land, city, or army takes the frame. Timing decides whether the feeling is release or erasure."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool at the start of a scene that still needs a face, and the wrong tool if a Technocrane's tens of feet would suffice. If you never leave human-scale air, you craned."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Close a chapter. Geography wins.The figure remains trackable long enough to prove continuity, then land, city, or army takes the frame. Timing decides whether the feeling is release or erasure.It is the wrong tool at the start of a scene that still needs a face, and the wrong tool if a Technocrane's tens of feet would suffice. If you never leave human-scale air, you craned."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Helicopter, high drone, or virtual camera on a rising, receding path. Keep a readable anchor as scale changes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Horizon can stay level. Prompt an aerial pullback, camera rising and receding until the figure is a speck in geography, helicopter or high drone grammar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Helicopter, high drone, or virtual camera on a rising, receding path. Keep a readable anchor as scale changes.Horizon can stay level. Prompt an aerial pullback, camera rising and receding until the figure is a speck in geography, helicopter or high drone grammar."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to close a chapter when geography must win. Concrete beat: a rider on a ridge becoming a mark in a desert."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not pull back if the last frame is still a medium-full of the same person."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to close a chapter when geography must win. Concrete beat: a rider on a ridge becoming a mark in a desert.Do not pull back if the last frame is still a medium-full of the same person."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Crane Up starts at human height on an arm and may only reveal a square. An Extreme Long Shot can be a still of that end frame.",
+          "links": [
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            },
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Aerial Push In is the reverse path, map to person. Aerial pullback is altitude plus retreat until land owns the picture.",
+          "links": [
+            {
+              "text": "Aerial Push In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-push"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+          "displayText": "Crane Up\nEnd a scene, reveal a city, or turn a person into landscape.",
+          "links": [
+            {
+              "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Long ShotScale is the emotion.",
+          "displayText": "Extreme Long Shot\nScale is the emotion.",
+          "links": [
+            {
+              "text": "Extreme Long ShotScale is the emotion.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Aerial Push In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-push"
+        },
+        {
+          "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Extreme Long ShotScale is the emotion.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+          "alt": "Crane Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+          "alt": "Extreme Long Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Crane Up starts at human height on an arm and may only reveal a square. An Extreme Long Shot can be a still of that end frame.An Aerial Push In is the reverse path, map to person. Aerial pullback is altitude plus retreat until land owns the picture.Crane UpEnd a scene, reveal a city, or turn a person into landscape.Extreme Long ShotScale is the emotion.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lawrence of Arabia lets desert scale erase and define a figure. The Lord of the Rings uses high pullbacks so companies become marks in ranges and plains."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of handing a scene to land, not a mountain to clone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Lawrence of Arabia lets desert scale erase and define a figure. The Lord of the Rings uses high pullbacks so companies become marks in ranges and plains.Grammar of handing a scene to land, not a mountain to clone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aerial pullback from [Subject], camera rising and receding until the figure is a speck in geography, helicopter or high drone grammar, landscape taking the frame. For motion: the camera rises and pulls back from [Subject] until the surrounding landscape dominates."
+        },
+        {
+          "type": "quote",
+          "text": "The camera rises and pulls back from [Subject] until the surrounding landscape dominates."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+rises+and+pulls+back+from+[Subject]+until+the+surrounding+landscape+dominates."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Aerial pullback from [Subject], camera rising and receding until the figure is a speck in geography, helicopter or high drone grammar, landscape taking the frame. For motion: the camera rises and pulls back from [Subject] until the surrounding landscape dominates.Copy promptUse in Video GeneratorThe camera rises and pulls back from [Subject] until the surrounding landscape dominates.The camera rises and pulls back from [Subject] until the surrounding landscape dominates."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Crane Up or a cut to an Extreme Long Shot. The tell is a jib-sized lift, or a jump in scale.",
+          "links": [
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            },
+            {
+              "text": "Extreme Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: continuous rise and recede from altitude, figure remaining trackable, land dominating the end."
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Extreme Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-long-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Crane Up or a cut to an Extreme Long Shot. The tell is a jib-sized lift, or a jump in scale.The fix: continuous rise and recede from altitude, figure remaining trackable, land dominating the end."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Aerial Pullback in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a high camera receding and rising until a person or building becomes small in a landscape, handing the scene to geography."
+        },
+        {
+          "type": "heading",
+          "text": "Aerial Pullback vs Crane Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Crane up is an arm on the ground, often ending on a city block or a square. Aerial pullback works from helicopter or high-drone height until the map wins."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Aerial Pullback?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a chapter should end on land, army, or city rather than on a face. Do not use it as a decorative drone hover."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Aerial Pullback for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write camera rises and pulls back from [Subject] until landscape dominates, helicopter or high drone, figure remains trackable, then becomes a speck."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Aerial Pullback in film?It is a high camera receding and rising until a person or building becomes small in a landscape, handing the scene to geography.Aerial Pullback vs Crane UpCrane up is an arm on the ground, often ending on a city block or a square. Aerial pullback works from helicopter or high-drone height until the map wins.When should I use Aerial Pullback?When a chapter should end on land, army, or city rather than on a face. Do not use it as a decorative drone hover.How do I prompt Aerial Pullback for AI image or video?Write camera rises and pulls back from [Subject] until landscape dominates, helicopter or high drone, figure remains trackable, then becomes a speck."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Aerial pullback from [Subject], camera rising and receding until the figure is a speck in geography, helicopter or high drone grammar, landscape taking the frame. For motion: the camera rises and pulls back from [Subject] until the surrounding landscape dominates."
+    ],
+    "example": "The camera rises and pulls back from [Subject] until the surrounding landscape dominates."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/427cc296a6a5f69c0b5ebe0dee32c371.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/aerial-pullback.jpg",
+      "alt": "Aerial Pullback frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+      "alt": "Crane Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+      "alt": "Extreme Long Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b886a77ff14039a60f82c9d2834e1f3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/aerial-pullback/hero.jpg",
+      "alt": "Aerial Pullback",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "c52ca15d3425b28c2ba539193a77a6a485cc16370d429a86cca1df3c283675d6"
+}

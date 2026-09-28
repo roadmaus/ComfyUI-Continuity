@@ -1,0 +1,390 @@
+{
+  "id": "camera-movement/push-in",
+  "slug": "push-in",
+  "title": "Push In",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/push-in",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/push-in-push-in-mini.webp",
+  "detail": "details/camera-movement/push-in.json",
+  "aliases": [],
+  "description": "A push in shot moves physically or virtually closer to the subject so size grows because the camera walks. It is a short pressure advance, often so gradual the audience feels the walls close before they notice motion.",
+  "thumbnail": "media/47c873ce3b75c118eebcc03f9ebba030.webp",
+  "video": "media/ff1d0cd1ffd7716264b1bf880a5b857a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/push-in-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A thought lands. Do not rush it."
+        },
+        {
+          "type": "paragraph",
+          "text": "The job is the realization, the lie, the trap, not the display of a rig. Parallax still appears, even if the travel is only a meter, because the station point changes."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you wanted optical compression from a locked body, and the wrong tool when you wanted a long track into a room as geography. If you add a second flourish, the thought is gone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A thought lands. Do not rush it.The job is the realization, the lie, the trap, not the display of a rig. Parallax still appears, even if the travel is only a meter, because the station point changes.It is the wrong tool when you wanted optical compression from a locked body, and the wrong tool when you wanted a long track into a room as geography. If you add a second flourish, the thought is gone."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dolly, slider, Steadicam, or virtual camera on the Z axis, usually from medium to medium close-up. Keep the lens fixed so the push is distance, not zoom."
+        },
+        {
+          "type": "paragraph",
+          "text": "Tiny parallax is the honesty. Prompt an imperceptibly slow push in, medium into medium close-up, walls closing before the motion is noticed."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Dolly, slider, Steadicam, or virtual camera on the Z axis, usually from medium to medium close-up. Keep the lens fixed so the push is distance, not zoom.Tiny parallax is the honesty. Prompt an imperceptibly slow push in, medium into medium close-up, walls closing before the motion is noticed."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a thought lands and you should not rush it. Concrete beat: a listener understands they are caught, medium to MCU over 6 seconds."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not push in on every line."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a thought lands and you should not rush it. Concrete beat: a listener understands they are caught, medium to MCU over 6 seconds.Do not push in on every line."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Dolly In names the wheeled support and often travels farther, as geography. A Slow Zoom In never moves the camera, so there is no parallax.",
+          "links": [
+            {
+              "text": "Dolly In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            },
+            {
+              "text": "Slow Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Push in is the pressure beat: short, physical or virtual, tied to a thought. If the track is a room long, you are dollying."
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "displayText": "Dolly In\nEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "links": [
+            {
+              "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom OutReveal context, isolation, or a joke that was off-screen.",
+          "displayText": "Slow Zoom Out\nReveal context, isolation, or a joke that was off-screen.",
+          "links": [
+            {
+              "text": "Slow Zoom OutReveal context, isolation, or a joke that was off-screen.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Slow Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        },
+        {
+          "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        },
+        {
+          "text": "Slow Zoom OutReveal context, isolation, or a joke that was off-screen.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-out"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+          "alt": "Dolly In"
+        },
+        {
+          "kind": "video",
+          "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4ac31249e720e1115c85ec7206f447e1.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-out-02-slow-zoom-out-v2-mini.webp",
+          "alt": "Slow Zoom Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4dcf30309cadb6112f74b8f705e8d05.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-slow-zoom-out-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Dolly In names the wheeled support and often travels farther, as geography. A Slow Zoom In never moves the camera, so there is no parallax.Push in is the pressure beat: short, physical or virtual, tied to a thought. If the track is a room long, you are dollying.Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.Slow Zoom OutReveal context, isolation, or a joke that was off-screen."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Silence of the Lambs uses slow physical approaches so conversations become traps. The Shining and There Will Be Blood let small advances register as mental weather."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the patience and the parallax, not a particular actor's blocking as a clone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Silence of the Lambs uses slow physical approaches so conversations become traps. The Shining and There Will Be Blood let small advances register as mental weather.Use the patience and the parallax, not a particular actor's blocking as a clone."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Imperceptibly slow push in on [Subject], the camera closing from medium to medium close-up so gradually the audience feels walls closing before they notice motion. For motion: very slow push in toward [Subject] over 6 seconds, medium into medium close-up."
+        },
+        {
+          "type": "quote",
+          "text": "Very slow push in toward [Subject] over 6 seconds, medium into medium close-up."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Very+slow+push+in+toward+[Subject]+over+6+seconds,+medium+into+medium+close-up."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Imperceptibly slow push in on [Subject], the camera closing from medium to medium close-up so gradually the audience feels walls closing before they notice motion. For motion: very slow push in toward [Subject] over 6 seconds, medium into medium close-up.Copy promptUse in Video GeneratorVery slow push in toward [Subject] over 6 seconds, medium into medium close-up.Very slow push in toward [Subject] over 6 seconds, medium into medium close-up."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Slow Zoom In. The tell is enlargement without sliding foreground.",
+          "links": [
+            {
+              "text": "Slow Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: translate closer, fixed lens, short path, end on the thought, no extra move."
+        }
+      ],
+      "links": [
+        {
+          "text": "Slow Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Slow Zoom In. The tell is enlargement without sliding foreground.The fix: translate closer, fixed lens, short path, end on the thought, no extra move."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Push In in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a short, usually slow advance of the camera toward a subject so the frame tightens because the lens occupies a nearer station."
+        },
+        {
+          "type": "heading",
+          "text": "Push In vs Dolly In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly in specifies a wheeled or tracked translation and can be a long geographic enter. Push in is the pressure job: often shorter, sometimes virtual, always tied to a thought landing."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Push In?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When a realization or trap should close the air around a face. Do not use it as a default on every close-up."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Push In for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write very slow push in, camera walking closer, medium to MCU, 6 seconds, no optical zoom. Mention slight parallax."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Push In in film?It is a short, usually slow advance of the camera toward a subject so the frame tightens because the lens occupies a nearer station.Push In vs Dolly InDolly in specifies a wheeled or tracked translation and can be a long geographic enter. Push in is the pressure job: often shorter, sometimes virtual, always tied to a thought landing.When should I use Push In?When a realization or trap should close the air around a face. Do not use it as a default on every close-up.How do I prompt Push In for AI image or video?Write very slow push in, camera walking closer, medium to MCU, 6 seconds, no optical zoom. Mention slight parallax."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Imperceptibly slow push in on [Subject], the camera closing from medium to medium close-up so gradually the audience feels walls closing before they notice motion. For motion: very slow push in toward [Subject] over 6 seconds, medium into medium close-up."
+    ],
+    "example": "Very slow push in toward [Subject] over 6 seconds, medium into medium close-up."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/ff1d0cd1ffd7716264b1bf880a5b857a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/push-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47c873ce3b75c118eebcc03f9ebba030.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/push-in-push-in-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4dfdf123e00515fd807313d9d507a09a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/push-in.jpg",
+      "alt": "Push In frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+      "alt": "Dolly In"
+    },
+    {
+      "kind": "video",
+      "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4ac31249e720e1115c85ec7206f447e1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-out-02-slow-zoom-out-v2-mini.webp",
+      "alt": "Slow Zoom Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4dcf30309cadb6112f74b8f705e8d05.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-slow-zoom-out-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8a22eb05d04896279804d80e101f52a2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/push-in/hero.jpg",
+      "alt": "Push In",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "2e2b004ddd629787a3b1072d175dc915e9d5a047120a609e21b671f108c3a85e"
+}

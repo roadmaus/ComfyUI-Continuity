@@ -1,0 +1,406 @@
+{
+  "id": "color/cross-process",
+  "slug": "cross-process",
+  "title": "Cross Process",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/cross-process",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-process.webp",
+  "detail": "details/color/cross-process.json",
+  "aliases": [],
+  "description": "A cross process look imitates developing a film in the wrong chemistry, such as slide stock in color-negative developer, so primaries skew off their true identities. Contrast often climbs; cyan shadows, magenta or yellow skin shifts, and other chemical accidents become the palette.",
+  "thumbnail": "media/1327295c65e87c53f955855b54fa99fe.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong chemistry on purpose. Fashion films and music videos of the 1990s used the accident as style: skies go odd, shadows pick up cyan or green, skin slides toward magenta or jaundice."
+        },
+        {
+          "type": "paragraph",
+          "text": "The world looks like a lab error you kept. It is the wrong tool when you wanted true hues only louder."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is Hyper-Saturation. It is the wrong tool for a designed complementary split with protected skin (Teal and Orange).",
+          "links": [
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            },
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vaporwave may borrow skewed primaries as a genre costume; cross-process is the chemical alibi, not the nostalgia package.",
+          "links": [
+            {
+              "text": "Vaporwave",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Vaporwave",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Wrong chemistry on purpose. Fashion films and music videos of the 1990s used the accident as style: skies go odd, shadows pick up cyan or green, skin slides toward magenta or jaundice.The world looks like a lab error you kept. It is the wrong tool when you wanted true hues only louder.That is Hyper-Saturation. It is the wrong tool for a designed complementary split with protected skin (Teal and Orange).Vaporwave may borrow skewed primaries as a genre costume; cross-process is the chemical alibi, not the nostalgia package."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Offset primary relationships: push shadows toward cyan or green, let highlights go yellow, magenta, or red depending on the stock story, and raise contrast. Skin will not grade like a commercial unless you isolate it, which fights the look."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not randomly assign hues shot to shot; pick one accident and keep it. Prompt: Cross-processed look on [Subject], skewed primaries, cyan shadows, magenta skin shift, music-video chemical accident."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Offset primary relationships: push shadows toward cyan or green, let highlights go yellow, magenta, or red depending on the stock story, and raise contrast. Skin will not grade like a commercial unless you isolate it, which fights the look.Do not randomly assign hues shot to shot; pick one accident and keep it. Prompt: Cross-processed look on [Subject], skewed primaries, cyan shadows, magenta skin shift, music-video chemical accident."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the image should look like a kept lab error: a 1990s fashion clip, a music video, an unreliable night. Do not use it as loud-but-true color, and do not confuse it with teal-orange."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the image should look like a kept lab error: a 1990s fashion clip, a music video, an unreliable night. Do not use it as loud-but-true color, and do not confuse it with teal-orange."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hyper-Saturation intensifies correct hues. Teal and Orange is a controlled complementary grade.",
+          "links": [
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            },
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vaporwave is a genre palette. Color Shift is a change of color state over time or across a threshold.",
+          "links": [
+            {
+              "text": "Vaporwave",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+            },
+            {
+              "text": "Color Shift",
+              "url": "https://melies.co/cinematic-techniques/color/color-shift"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cross-process is a skewed primary relationship from the start."
+        },
+        {
+          "type": "list-item",
+          "text": "Hyper-SaturationFeeling is louder than fact.",
+          "displayText": "Hyper-Saturation\nFeeling is louder than fact.",
+          "links": [
+            {
+              "text": "Hyper-SaturationFeeling is louder than fact.",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "VaporwaveNostalgia for a future that never shipped.",
+          "displayText": "Vaporwave\nNostalgia for a future that never shipped.",
+          "links": [
+            {
+              "text": "VaporwaveNostalgia for a future that never shipped.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Vaporwave",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+        },
+        {
+          "text": "Color Shift",
+          "url": "https://melies.co/cinematic-techniques/color/color-shift"
+        },
+        {
+          "text": "Hyper-SaturationFeeling is louder than fact.",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        },
+        {
+          "text": "VaporwaveNostalgia for a future that never shipped.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ff7af3ff1afd93718ceacc3cdb976b00.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hyper-saturation.webp",
+          "alt": "Hyper-Saturation"
+        },
+        {
+          "kind": "image",
+          "path": "media/0c0663ca1133e579f6300aa7fd020a66.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vaporwave-look.webp",
+          "alt": "Vaporwave"
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Hyper-Saturation intensifies correct hues. Teal and Orange is a controlled complementary grade.Vaporwave is a genre palette. Color Shift is a change of color state over time or across a threshold.Cross-process is a skewed primary relationship from the start.Hyper-SaturationFeeling is louder than fact.VaporwaveNostalgia for a future that never shipped.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "1990s fashion films and music videos are the grammar: chemical accident as style, not a single canonical feature. When a narrative film borrows it, the tell is displaced primaries rather than simple loud red."
+        },
+        {
+          "type": "paragraph",
+          "text": "Treat those clips as the reference class."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film 1990s fashion films and music videos are the grammar: chemical accident as style, not a single canonical feature. When a narrative film borrows it, the tell is displaced primaries rather than simple loud red.Treat those clips as the reference class."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the wrong primaries. Cross-processed look on [Subject], skewed primaries, cyan shadows, magenta skin shift, music-video chemical accident."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the accident consistent. Do not write Velvia-true reds, and do not write teal-orange protected skin."
+        },
+        {
+          "type": "quote",
+          "text": "Cross-processed look on [Subject], skewed primaries, cyan shadows, magenta skin shift, music-video chemical accident."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Cross-processed+look+on+[Subject],+skewed+primaries,+cyan+shadows,+magenta+skin+shift,+music-video+chemical+accident."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the wrong primaries. Cross-processed look on [Subject], skewed primaries, cyan shadows, magenta skin shift, music-video chemical accident.Keep the accident consistent. Do not write Velvia-true reds, and do not write teal-orange protected skin.Copy promptUse in Image GeneratorCross-processed look on [Subject], skewed primaries, cyan shadows, magenta skin shift, music-video chemical accident.Cross-processed look on [Subject], skewed primaries, cyan shadows, magenta skin shift, music-video chemical accident."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Hyper-Saturation or Teal and Orange. The tell is correct reds that are only louder, or peach faces on cyan streets in a studio-split pattern.",
+          "links": [
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            },
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: hues that have slipped to the wrong neighbors, contrasty accident, skin not commercially protected."
+        }
+      ],
+      "links": [
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Hyper-Saturation or Teal and Orange. The tell is correct reds that are only louder, or peach faces on cyan streets in a studio-split pattern.Fix: hues that have slipped to the wrong neighbors, contrasty accident, skin not commercially protected."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is cross process in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the look of film developed in the wrong chemistry, or a digital imitation of that mismatch. Primaries skew, contrast often rises, and skin and shadows take on unnatural neighbors."
+        },
+        {
+          "type": "heading",
+          "text": "Cross Process vs Hyper-Saturation",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Hyper-saturation makes true hues louder. Cross-process puts hues in the wrong place: cyan shadows, magenta skin, yellow highlights. Loud is not the same as wrong."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use cross process?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for a kept chemical accident: fashion, music video, unreliable color. Skip it when hues should be true, even if loud, or when you wanted a teal-orange split."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt cross process for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Cross-processed look on [Subject], skewed primaries, cyan shadows, magenta skin shift, music-video chemical accident. Forbid correct loud primaries and protected peach skin."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is cross process in film?It is the look of film developed in the wrong chemistry, or a digital imitation of that mismatch. Primaries skew, contrast often rises, and skin and shadows take on unnatural neighbors.Cross Process vs Hyper-SaturationHyper-saturation makes true hues louder. Cross-process puts hues in the wrong place: cyan shadows, magenta skin, yellow highlights. Loud is not the same as wrong.When should I use cross process?Use it for a kept chemical accident: fashion, music video, unreliable color. Skip it when hues should be true, even if loud, or when you wanted a teal-orange split.How do I prompt cross process for AI image or video?Write: Cross-processed look on [Subject], skewed primaries, cyan shadows, magenta skin shift, music-video chemical accident. Forbid correct loud primaries and protected peach skin."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the wrong primaries. Cross-processed look on [Subject], skewed primaries, cyan shadows, magenta skin shift, music-video chemical accident.",
+      "Keep the accident consistent. Do not write Velvia-true reds, and do not write teal-orange protected skin."
+    ],
+    "example": "Cross-processed look on [Subject], skewed primaries, cyan shadows, magenta skin shift, music-video chemical accident."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/1327295c65e87c53f955855b54fa99fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-process.webp",
+      "alt": "Cross Process example"
+    },
+    {
+      "kind": "image",
+      "path": "media/ff7af3ff1afd93718ceacc3cdb976b00.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hyper-saturation.webp",
+      "alt": "Hyper-Saturation"
+    },
+    {
+      "kind": "image",
+      "path": "media/0c0663ca1133e579f6300aa7fd020a66.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vaporwave-look.webp",
+      "alt": "Vaporwave"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/cb944d967c3d75b26580e114a5d0460b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cross-process/hero.jpg",
+      "alt": "Cross Process",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "64075708f65278ed92cb1281ae7af21e0d3663139c455dec15e2c8d82ecf7d4e"
+}

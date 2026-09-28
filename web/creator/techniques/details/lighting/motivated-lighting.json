@@ -1,0 +1,485 @@
+{
+  "id": "lighting/motivated-lighting",
+  "slug": "motivated-lighting",
+  "title": "Motivated Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/motivated-lighting",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motivated-lighting.webp",
+  "detail": "details/lighting/motivated-lighting.json",
+  "aliases": [
+    "Music source reveal",
+    "Source-score play"
+  ],
+  "description": "Motivated lighting is designed to appear consistent with a visible or plausible story-world source: a window, a lamp, a sign, the sky. Hidden units may exist, but they match that source in direction, hardness, and color.",
+  "thumbnail": "media/72b4a8abf049e156a7fe62f44ecbdf57.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The room feels like a world rather than a studio. A hotel sconce, a kitchen window, a sodium street, an overcast sky: the key could have come from there even if a silk outside the window is doing the real work."
+        },
+        {
+          "type": "paragraph",
+          "text": "Control stays; theatricality hides. It is the wrong tool when the point is frankly theatrical (a follow spot, a beauty butterfly that no lamp in the room could throw)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Motivated is not the same as using only what is already there. That is available light.",
+          "links": [
+            {
+              "text": "available light",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also not the same as showing the bulb. That is a practical.",
+          "links": [
+            {
+              "text": "practical",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "available light",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "practical",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The room feels like a world rather than a studio. A hotel sconce, a kitchen window, a sodium street, an overcast sky: the key could have come from there even if a silk outside the window is doing the real work.Control stays; theatricality hides. It is the wrong tool when the point is frankly theatrical (a follow spot, a beauty butterfly that no lamp in the room could throw).Motivated is not the same as using only what is already there. That is available light.It is also not the same as showing the bulb. That is a practical."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose the story source first. Match camera-side direction to that window or fixture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Match hardness: a distant sun stays hard; a sheer curtain becomes a large soft key; a bare bulb stays small. Match color: tungsten practicals around 2800 to 3200K, daylight windows nearer 5600K, sodium and neon as they are."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hide extra units along the same axis, flagged to the same throw. Prompt: Motivated lighting on [Subject], every source justified by a window, lamp, or sign that could exist in the room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Choose the story source first. Match camera-side direction to that window or fixture.Match hardness: a distant sun stays hard; a sheer curtain becomes a large soft key; a bare bulb stays small. Match color: tungsten practicals around 2800 to 3200K, daylight windows nearer 5600K, sodium and neon as they are.Hide extra units along the same axis, flagged to the same throw. Prompt: Motivated lighting on [Subject], every source justified by a window, lamp, or sign that could exist in the room."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for realism with control, a hotel corridor, a kitchen at 4 p.m., a car at night that should feel streetlit. Do not use it as an excuse to keep a frontal beauty key that no source in the space could explain."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for realism with control, a hotel corridor, a kitchen at 4 p.m., a car at night that should feel streetlit. Do not use it as an excuse to keep a frontal beauty key that no source in the space could explain."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Practical lighting is the visible fixture in frame; motivated lighting can boost or replace it from hiding. Available light uses what exists without adding units.",
+          "links": [
+            {
+              "text": "Practical lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            },
+            {
+              "text": "Available light",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Naturalistic ambient is the overall wrap that hides craft. Bounce light is a method you may use to imitate a wall or ceiling the story already has.",
+          "links": [
+            {
+              "text": "Naturalistic ambient",
+              "url": "https://melies.co/cinematic-techniques/lighting/naturalistic-ambient"
+            },
+            {
+              "text": "Bounce light",
+              "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Rembrandt and window light are patterns or sources that motivated work often chooses, not synonyms.",
+          "links": [
+            {
+              "text": "Rembrandt",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            },
+            {
+              "text": "window light",
+              "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Practical LightingLet the set light the face.",
+          "displayText": "Practical Lighting\nLet the set light the face.",
+          "links": [
+            {
+              "text": "Practical LightingLet the set light the face.",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Available LightCommit to the hour you have.",
+          "displayText": "Available Light\nCommit to the hour you have.",
+          "links": [
+            {
+              "text": "Available LightCommit to the hour you have.",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Practical lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "Available light",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Naturalistic ambient",
+          "url": "https://melies.co/cinematic-techniques/lighting/naturalistic-ambient"
+        },
+        {
+          "text": "Bounce light",
+          "url": "https://melies.co/cinematic-techniques/lighting/bounce-light"
+        },
+        {
+          "text": "Rembrandt",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "window light",
+          "url": "https://melies.co/cinematic-techniques/lighting/window-light"
+        },
+        {
+          "text": "Practical LightingLet the set light the face.",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "Available LightCommit to the hour you have.",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e57ccee4dac77a8b92955074bb2f3c0a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/practical-lighting-065-practical-source-motivation-mini.webp",
+          "alt": "Practical Lighting"
+        },
+        {
+          "kind": "video",
+          "path": "media/1aa504cae7d8c87fc765f9694501981f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/065-practical-source-motivation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+          "alt": "Available Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Practical lighting is the visible fixture in frame; motivated lighting can boost or replace it from hiding. Available light uses what exists without adding units.Naturalistic ambient is the overall wrap that hides craft. Bounce light is a method you may use to imitate a wall or ceiling the story already has.Rembrandt and window light are patterns or sources that motivated work often chooses, not synonyms.Practical LightingLet the set light the face.Available LightCommit to the hour you have.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Shining lets lamps and hotel fixtures justify interior direction. Children of Men keeps windows, fixtures, and available sky as the logic of the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Blade Runner 2049 and In the Mood for Love build rooms whose keys could be the signs, blinds, and lamps we see, even when film lights help."
+        },
+        {
+          "type": "list-item",
+          "text": "Blazing Saddles 1974A seemingly conventional musical accompaniment is revealed as a band in the desert.",
+          "displayText": "Blazing Saddles 1974\nA seemingly conventional musical accompaniment is revealed as a band in the desert."
+        },
+        {
+          "type": "list-item",
+          "text": "Birdman 2014Visible percussion performance plays with the status of the drum soundtrack.",
+          "displayText": "Birdman 2014\nVisible percussion performance plays with the status of the drum soundtrack."
+        },
+        {
+          "type": "list-item",
+          "text": "Yi Yi 2000The image eventually identifies the source of previously heard piano music.",
+          "displayText": "Yi Yi 2000\nThe image eventually identifies the source of previously heard piano music."
+        },
+        {
+          "type": "list-item",
+          "text": "The Shining 1980Lamps and hotel fixtures motivate much of the interior look.",
+          "displayText": "The Shining 1980\nLamps and hotel fixtures motivate much of the interior look."
+        },
+        {
+          "type": "list-item",
+          "text": "Children of Men 2006Windows, fixtures and available light help maintain a grounded world.",
+          "displayText": "Children of Men 2006\nWindows, fixtures and available light help maintain a grounded world."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e20c681ad2ef03ad6d66e146ce28e9b3.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/motivated-lighting/famous/00-the-shining-1980.jpg",
+          "alt": "The Shining 1980"
+        },
+        {
+          "kind": "image",
+          "path": "media/18b222a36f9c8b79bd38a751bd5a4cd6.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/motivated-lighting/famous/01-children-of-men-2006.jpg",
+          "alt": "Children of Men 2006"
+        }
+      ],
+      "sourceText": "In film The Shining lets lamps and hotel fixtures justify interior direction. Children of Men keeps windows, fixtures, and available sky as the logic of the frame.Blade Runner 2049 and In the Mood for Love build rooms whose keys could be the signs, blinds, and lamps we see, even when film lights help.Blazing Saddles 1974A seemingly conventional musical accompaniment is revealed as a band in the desert.Birdman 2014Visible percussion performance plays with the status of the drum soundtrack.Yi Yi 2000The image eventually identifies the source of previously heard piano music.The Shining 1980Lamps and hotel fixtures motivate much of the interior look.Children of Men 2006Windows, fixtures and available light help maintain a grounded world."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Justify every beam. \" Name the story source, its side, hardness, and Kelvin."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid an unexplained frontal beauty key."
+        },
+        {
+          "type": "quote",
+          "text": "A solemn traveler crosses an empty plaza accompanied by an original elegant string theme. Pan slowly to reveal a small string quartet following him on a wheeled platform, still playing the exact phrase. Their presence is treated matter-of-factly. Generate the visual reveal and synchronize an original performance in the edit."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+solemn+traveler+crosses+an+empty+plaza+accompanied+by+an+original+elegant+string+theme.+Pan+slowly+to+reveal+a+small+string+quartet+following+him+on+a+wheeled+platform,+still+playing+the+exact+phrase.+Their+presence+is+treated+matter-of-factly.+Generate+the+visual+reveal+and+synchronize+an+original+performance+in+the+edit."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Justify every beam. \" Name the story source, its side, hardness, and Kelvin.Forbid an unexplained frontal beauty key.Copy promptUse in Video GeneratorA solemn traveler crosses an empty plaza accompanied by an original elegant string theme. Pan slowly to reveal a small string quartet following him on a wheeled platform, still playing the exact phrase. Their presence is treated matter-of-factly. Generate the visual reveal and synchronize an original performance in the edit.A solemn traveler crosses an empty plaza accompanied by an original elegant string theme. Pan slowly to reveal a small string quartet following him on a wheeled platform, still playing the exact phrase. Their presence is treated matter-of-factly. Generate the visual reveal and synchronize an original performance in the edit."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is unmotivated studio three-point or claiming available light while describing movie lamps. The tell is a key from a wall with no window or fixture.",
+          "links": [
+            {
+              "text": "three-point",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            },
+            {
+              "text": "available light",
+              "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by naming the story source and aligning hidden units to it."
+        }
+      ],
+      "links": [
+        {
+          "text": "three-point",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        },
+        {
+          "text": "available light",
+          "url": "https://melies.co/cinematic-techniques/lighting/available-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is unmotivated studio three-point or claiming available light while describing movie lamps. The tell is a key from a wall with no window or fixture.Fix it by naming the story source and aligning hidden units to it."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is motivated lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Lighting designed to look as if it comes from a plausible story-world source. Extra units are allowed if they match that source's direction, hardness, and color."
+        },
+        {
+          "type": "heading",
+          "text": "Motivated lighting vs practical lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A practical is a visible lamp in the set. Motivated lighting is the logic: hidden lights may imitate or reinforce that lamp or a window you may not even see."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use motivated lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the scene should feel like a real room with control. Skip it for frankly theatrical spots and beauty setups the room cannot explain."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt motivated lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the window, lamp, or sign that justifies every source. Match direction, hardness, and color to that object. No orphan movie lights."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is motivated lighting in film?Lighting designed to look as if it comes from a plausible story-world source. Extra units are allowed if they match that source's direction, hardness, and color.Motivated lighting vs practical lightingA practical is a visible lamp in the set. Motivated lighting is the logic: hidden lights may imitate or reinforce that lamp or a window you may not even see.When should I use motivated lighting?Use it when the scene should feel like a real room with control. Skip it for frankly theatrical spots and beauty setups the room cannot explain.How do I prompt motivated lighting for AI image or video?Name the window, lamp, or sign that justifies every source. Match direction, hardness, and color to that object. No orphan movie lights."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Justify every beam. \" Name the story source, its side, hardness, and Kelvin.",
+      "Forbid an unexplained frontal beauty key."
+    ],
+    "example": "A solemn traveler crosses an empty plaza accompanied by an original elegant string theme. Pan slowly to reveal a small string quartet following him on a wheeled platform, still playing the exact phrase. Their presence is treated matter-of-factly. Generate the visual reveal and synchronize an original performance in the edit."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/72b4a8abf049e156a7fe62f44ecbdf57.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/motivated-lighting.webp",
+      "alt": "Motivated Lighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/e57ccee4dac77a8b92955074bb2f3c0a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/practical-lighting-065-practical-source-motivation-mini.webp",
+      "alt": "Practical Lighting"
+    },
+    {
+      "kind": "video",
+      "path": "media/1aa504cae7d8c87fc765f9694501981f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/065-practical-source-motivation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5daf6c1bb78eaf60443d98f777a72ac4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/available-light.webp",
+      "alt": "Available Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/e20c681ad2ef03ad6d66e146ce28e9b3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/motivated-lighting/famous/00-the-shining-1980.jpg",
+      "alt": "The Shining 1980"
+    },
+    {
+      "kind": "image",
+      "path": "media/18b222a36f9c8b79bd38a751bd5a4cd6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/motivated-lighting/famous/01-children-of-men-2006.jpg",
+      "alt": "Children of Men 2006"
+    },
+    {
+      "kind": "image",
+      "path": "media/ee8d96c46f7556be699e53159ed04e54.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/motivated-lighting/hero.jpg",
+      "alt": "Motivated Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "43aa6cc66058202dcc0d3952c1b27c363ef97568f36bf09e42335ac1bc620478"
+}

@@ -1,0 +1,428 @@
+{
+  "id": "camera-angles/trunk-shot",
+  "slug": "trunk-shot",
+  "title": "Trunk Shot",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/trunk-shot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/trunk-shot-162-trunk-point-of-view-mini.webp",
+  "detail": "details/camera-angles/trunk-shot.json",
+  "aliases": [
+    "View from inside a container"
+  ],
+  "description": "A trunk shot places the camera inside a car trunk or similar confined pit, looking up at the people who open it, with the lid and rim framing their downward looks. It is a located low viewpoint, not a generic look-up in a parking lot.",
+  "thumbnail": "media/6a77944fbaa9405ef343b11d7e93b33d.webp",
+  "video": "media/83ec5394ddc6757d09a04527a19f4d17.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/162-trunk-point-of-view-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The audience is the object or the concealed body. Two faces appear over a bright lid; they look down at us; the dark rim eats the edges."
+        },
+        {
+          "type": "paragraph",
+          "text": "Power and curiosity swap: the standing people have the height, the camera has the secret. Tarantino's crime grammar made the car trunk a signature, but any container (a crate, an instrument case) can host the same physics."
+        },
+        {
+          "type": "paragraph",
+          "text": "A Low Angle on a street has no lid. A Worm's-Eye View on a tower has no one looking into the lens.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "Worm's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If you cannot see the opening, you do not have the shot."
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Worm's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The audience is the object or the concealed body. Two faces appear over a bright lid; they look down at us; the dark rim eats the edges.Power and curiosity swap: the standing people have the height, the camera has the secret. Tarantino's crime grammar made the car trunk a signature, but any container (a crate, an instrument case) can host the same physics.A Low Angle on a street has no lid. A Worm's-Eye View on a tower has no one looking into the lens.If you cannot see the opening, you do not have the shot."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put a low camera in a trunk, a box, or an open-bottom set piece. Keep the container edge in frame on several sides."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stage the lid's movement and aim the actors' eyelines at the same interior point. Daylight or a parking-lamp key from above is motivated by the open lid; the interior stays in shadow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: trunk shot looking up from inside a car trunk or confined pit, rim framing the faces."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put a low camera in a trunk, a box, or an open-bottom set piece. Keep the container edge in frame on several sides.Stage the lid's movement and aim the actors' eyelines at the same interior point. Daylight or a parking-lamp key from above is motivated by the open lid; the interior stays in shadow.Prompt: trunk shot looking up from inside a car trunk or confined pit, rim framing the faces."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when someone is in the trunk, or when the reveal should come from inside a container. Concrete beat: two people pop a lid and lean in, looking down at the lens, dark rim against a bright sky."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it as a decorative low-angle on standing gangsters with no car."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when someone is in the trunk, or when the reveal should come from inside a container. Concrete beat: two people pop a lid and lean in, looking down at the lens, dark rim against a bright sky.Do not use it as a decorative low-angle on standing gangsters with no car."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Low Angle looks up without a container. Worm's-Eye View looks up at architecture from the dirt.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "Worm's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Object POV can live inside a thing, but usually as the thing moving through the world, not as people opening it. Point of View of a bound captive can coincide with a trunk shot when the occupant is a character we have already met.",
+          "links": [
+            {
+              "text": "Object POV",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+            },
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low AnglePower, monument, or intimidation.",
+          "displayText": "Low Angle\nPower, monument, or intimidation.",
+          "links": [
+            {
+              "text": "Low AnglePower, monument, or intimidation.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Worm's-Eye ViewThe subject is a tower. You are dust.",
+          "displayText": "Worm's-Eye View\nThe subject is a tower. You are dust.",
+          "links": [
+            {
+              "text": "Worm's-Eye ViewThe subject is a tower. You are dust.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Worm's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+        },
+        {
+          "text": "Object POV",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/object-pov"
+        },
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Low AnglePower, monument, or intimidation.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Worm's-Eye ViewThe subject is a tower. You are dust.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+          "alt": "Low Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/887c6cd61bc4f3b795172ec2c50b6c45.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/worms-eye.webp",
+          "alt": "Worm's-Eye View"
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        }
+      ],
+      "sourceText": "Compared with similar shots Low Angle looks up without a container. Worm's-Eye View looks up at architecture from the dirt.Object POV can live inside a thing, but usually as the thing moving through the world, not as people opening it. Point of View of a bound captive can coincide with a trunk shot when the occupant is a character we have already met.Low AnglePower, monument, or intimidation.Worm's-Eye ViewThe subject is a tower. You are dust.Eye LevelDefault honesty. Do not look down or up unless you mean it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pulp Fiction views Jules and Vincent from inside the car trunk as they look down. Reservoir Dogs stages the same downward look into an open trunk."
+        },
+        {
+          "type": "paragraph",
+          "text": "Kill Bill and From Dusk Till Dawn reuse the pit-and-lid grammar. Borrow the rim, the lid, and the eyelines into the box."
+        },
+        {
+          "type": "list-item",
+          "text": "Reservoir Dogs 1992Characters are seen looking down into the open trunk.",
+          "displayText": "Reservoir Dogs 1992\nCharacters are seen looking down into the open trunk."
+        },
+        {
+          "type": "list-item",
+          "text": "Pulp Fiction 1994Jules and Vincent are viewed from inside the car trunk.",
+          "displayText": "Pulp Fiction 1994\nJules and Vincent are viewed from inside the car trunk."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Pulp Fiction views Jules and Vincent from inside the car trunk as they look down. Reservoir Dogs stages the same downward look into an open trunk.Kill Bill and From Dusk Till Dawn reuse the pit-and-lid grammar. Borrow the rim, the lid, and the eyelines into the box.Reservoir Dogs 1992Characters are seen looking down into the open trunk.Pulp Fiction 1994Jules and Vincent are viewed from inside the car trunk."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The rim is mandatory. Quote: Trunk shot looking up at [Subject] from inside a car trunk or similar confined pit, playful low-angle signature."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: dark container edge framing the frame, lid or sky above, actors looking down into the lens, camera not rising out of the box."
+        },
+        {
+          "type": "quote",
+          "text": "From inside an old wooden instrument case, look upward as two conservators open the lid and lean over it. The dark case rim frames their faces against a bright workshop ceiling. Clear lid movement, coherent downward eyelines, no camera rise or reveal of the observer."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=From+inside+an+old+wooden+instrument+case,+look+upward+as+two+conservators+open+the+lid+and+lean+over+it.+The+dark+case+rim+frames+their+faces+against+a+bright+workshop+ceiling.+Clear+lid+movement,+coherent+downward+eyelines,+no+camera+rise+or+reveal+of+the+observer."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it The rim is mandatory. Quote: Trunk shot looking up at [Subject] from inside a car trunk or similar confined pit, playful low-angle signature.Add: dark container edge framing the frame, lid or sky above, actors looking down into the lens, camera not rising out of the box.Copy promptUse in Video GeneratorFrom inside an old wooden instrument case, look upward as two conservators open the lid and lean over it. The dark case rim frames their faces against a bright workshop ceiling. Clear lid movement, coherent downward eyelines, no camera rise or reveal of the observer.From inside an old wooden instrument case, look upward as two conservators open the lid and lean over it. The dark case rim frames their faces against a bright workshop ceiling. Clear lid movement, coherent downward eyelines, no camera rise or reveal of the observer."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a generic Low Angle in a driveway. Tell: full standing bodies, no lid, no rim, horizon of a parking lot.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: inside the trunk, rim in frame, faces leaning over an opening, downward eyelines. If the camera floats up and reveals the observer, you left the container."
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a generic Low Angle in a driveway. Tell: full standing bodies, no lid, no rim, horizon of a parking lot.Fix: inside the trunk, rim in frame, faces leaning over an opening, downward eyelines. If the camera floats up and reveals the observer, you left the container."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a trunk shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A trunk shot looks up from inside a car trunk or similar pit. The lid and rim frame people looking down, so the camera sits where an object or captive would sit."
+        },
+        {
+          "type": "heading",
+          "text": "Trunk shot vs low angle",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A low angle looks up from below eye level anywhere. A trunk shot is specifically inside a container; without the opening and the rim, it is just a low angle."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a trunk shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the viewpoint belongs in a trunk, a crate, or a case, and the standing people are looking in. Do not use it as a style sticker on any crime scene."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a trunk shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Trunk shot looking up at [Subject] from inside a car trunk, dark rim framing the faces, lid open, actors looking down into the lens. Say the camera stays in the pit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a trunk shot in film?A trunk shot looks up from inside a car trunk or similar pit. The lid and rim frame people looking down, so the camera sits where an object or captive would sit.Trunk shot vs low angleA low angle looks up from below eye level anywhere. A trunk shot is specifically inside a container; without the opening and the rim, it is just a low angle.When should I use a trunk shot?Use it when the viewpoint belongs in a trunk, a crate, or a case, and the standing people are looking in. Do not use it as a style sticker on any crime scene.How do I prompt a trunk shot for AI image or video?Write: Trunk shot looking up at [Subject] from inside a car trunk, dark rim framing the faces, lid open, actors looking down into the lens. Say the camera stays in the pit."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "The rim is mandatory. Quote: Trunk shot looking up at [Subject] from inside a car trunk or similar confined pit, playful low-angle signature.",
+      "Add: dark container edge framing the frame, lid or sky above, actors looking down into the lens, camera not rising out of the box."
+    ],
+    "example": "From inside an old wooden instrument case, look upward as two conservators open the lid and lean over it. The dark case rim frames their faces against a bright workshop ceiling. Clear lid movement, coherent downward eyelines, no camera rise or reveal of the observer."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/83ec5394ddc6757d09a04527a19f4d17.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/162-trunk-point-of-view-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a77944fbaa9405ef343b11d7e93b33d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/trunk-shot-162-trunk-point-of-view-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9cf173aca7c3b67e3a59689eb16bdc89.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/trunk-shot.jpg",
+      "alt": "Trunk Shot frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+      "alt": "Low Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/887c6cd61bc4f3b795172ec2c50b6c45.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/worms-eye.webp",
+      "alt": "Worm's-Eye View"
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/bc3c95b6bd16972adacc83a7b64a7338.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/trunk-shot/hero.jpg",
+      "alt": "Trunk Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "2bd3865683dacd95db345bf5134027742df4c870120b3e73e041d8409301785a"
+}

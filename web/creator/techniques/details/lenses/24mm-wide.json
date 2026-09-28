@@ -1,0 +1,410 @@
+{
+  "id": "lenses/24mm-wide",
+  "slug": "24mm-wide",
+  "title": "24mm Wide",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/24mm-wide",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/24mm-wide-055-close-wide-angle-distortion-mini.webp",
+  "detail": "details/lenses/24mm-wide.json",
+  "aliases": [],
+  "description": "A 24mm wide in 24mm lens cinematography is a moderately wide prime that holds a person and a usable amount of place without extreme stretch. Body and architecture share the rectangle; neither fully wins.",
+  "thumbnail": "media/628b32ea127fbd2eb64660fbc452f455.webp",
+  "video": "media/7426a29d0521c2e8cebe331ee900e38c.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/055-close-wide-angle-distortion-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This is the environmental portrait length. You can see the hands, the floor, and the doorway, and the face still belongs to a human rather than a mural."
+        },
+        {
+          "type": "paragraph",
+          "text": "Reportage interiors, street coverage, and walking masters live here because the room is a partner, not a special effect. It is the wrong tool when the space should attack the face, or when the face should erase the space."
+        },
+        {
+          "type": "paragraph",
+          "text": "A closer 14mm will balloon the near ground. An 85mm Portrait will melt the room into stacked color.",
+          "links": [
+            {
+              "text": "85mm Portrait",
+              "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the beat is most narrative talk with a little extra world, 35mm Moderate Wide is the quieter default.",
+          "links": [
+            {
+              "text": "35mm Moderate Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "85mm Portrait",
+          "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+        },
+        {
+          "text": "35mm Moderate Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function This is the environmental portrait length. You can see the hands, the floor, and the doorway, and the face still belongs to a human rather than a mural.Reportage interiors, street coverage, and walking masters live here because the room is a partner, not a special effect. It is the wrong tool when the space should attack the face, or when the face should erase the space.A closer 14mm will balloon the near ground. An 85mm Portrait will melt the room into stacked color.If the beat is most narrative talk with a little extra world, 35mm Moderate Wide is the quieter default."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stand first: usually a few feet back, not on the nose. 24mm then includes a generous field with only moderate perspective stretch on a full-frame or Super 35 sensor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the camera closer to eye height unless rank is the point; a low 24mm will still heroic the figure because of the field, not because of a power slogan. Hands and foreground furniture will read large, so place them on purpose."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: 24mm wide on [Subject], environmental portrait, body in space, moderate stretch, reportage coverage."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Stand first: usually a few feet back, not on the nose. 24mm then includes a generous field with only moderate perspective stretch on a full-frame or Super 35 sensor.Keep the camera closer to eye height unless rank is the point; a low 24mm will still heroic the figure because of the field, not because of a power slogan. Hands and foreground furniture will read large, so place them on purpose.Prompt: 24mm wide on [Subject], environmental portrait, body in space, moderate stretch, reportage coverage."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a person plus their place must share the frame, neither winning: a soldier in a kitchen, a walker in a street. Do not use it to fake 14mm intrusion or 85mm isolation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a person plus their place must share the frame, neither winning: a soldier in a kitchen, a walker in a street. Do not use it to fake 14mm intrusion or 85mm isolation."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "14mm Ultra-Wide from close exaggerates near-to-far size until the room attacks. 35mm Moderate Wide shows less world and less stretch, the usual storyteller step inward.",
+          "links": [
+            {
+              "text": "14mm Ultra-Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            },
+            {
+              "text": "35mm Moderate Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "50mm Normal from the same stand crops the environment. Anamorphic is a squeeze system, not a wider 24mm.",
+          "links": [
+            {
+              "text": "50mm Normal",
+              "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+            },
+            {
+              "text": "Anamorphic",
+              "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "35mm Moderate WideMost narrative coverage. Human but not telephoto.",
+          "displayText": "35mm Moderate Wide\nMost narrative coverage. Human but not telephoto.",
+          "links": [
+            {
+              "text": "35mm Moderate WideMost narrative coverage. Human but not telephoto.",
+              "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "50mm NormalYou do not want the glass to editorialize.",
+          "displayText": "50mm Normal\nYou do not want the glass to editorialize.",
+          "links": [
+            {
+              "text": "50mm NormalYou do not want the glass to editorialize.",
+              "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "14mm Ultra-Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        },
+        {
+          "text": "35mm Moderate Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+        },
+        {
+          "text": "50mm Normal",
+          "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+        },
+        {
+          "text": "Anamorphic",
+          "url": "https://melies.co/cinematic-techniques/lenses/anamorphic"
+        },
+        {
+          "text": "35mm Moderate WideMost narrative coverage. Human but not telephoto.",
+          "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        },
+        {
+          "text": "50mm NormalYou do not want the glass to editorialize.",
+          "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/192baaa553dac5fb337404d41c596029.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/35mm-moderate.webp",
+          "alt": "35mm Moderate Wide"
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        },
+        {
+          "kind": "image",
+          "path": "media/e9bae839781c16a528f25d7fa4dbf0bc.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/50mm-normal.webp",
+          "alt": "50mm Normal"
+        }
+      ],
+      "sourceText": "Compared with similar shots 14mm Ultra-Wide from close exaggerates near-to-far size until the room attacks. 35mm Moderate Wide shows less world and less stretch, the usual storyteller step inward.50mm Normal from the same stand crops the environment. Anamorphic is a squeeze system, not a wider 24mm.35mm Moderate WideMost narrative coverage. Human but not telephoto.14mm Ultra-WidePut the audience inside a space that is too big or too close.50mm NormalYou do not want the glass to editorialize."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Children of Men often covers bodies in threatened rooms at a wide-normal that still lets geography read. The Hurt Locker does similar work in streets and interiors: person plus place, neither a poster."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use that grammar of shared space, not a matching still."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Children of Men often covers bodies in threatened rooms at a wide-normal that still lets geography read. The Hurt Locker does similar work in streets and interiors: person plus place, neither a poster.Use that grammar of shared space, not a matching still."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lead with body in space, not with a mood. 24mm wide on [Subject], environmental portrait, body in space, moderate stretch, reportage coverage."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name what architecture must remain (door, street, kitchen). Do not ask for extreme distortion, oval bokeh, or a melted background."
+        },
+        {
+          "type": "quote",
+          "text": "24mm wide on [Subject], environmental portrait, body in space, moderate stretch, reportage cinema."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=24mm+wide+on+[Subject],+environmental+portrait,+body+in+space,+moderate+stretch,+reportage+cinema."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lead with body in space, not with a mood. 24mm wide on [Subject], environmental portrait, body in space, moderate stretch, reportage coverage.Name what architecture must remain (door, street, kitchen). Do not ask for extreme distortion, oval bokeh, or a melted background.Copy promptUse in Image Generator24mm wide on [Subject], environmental portrait, body in space, moderate stretch, reportage cinema.24mm wide on [Subject], environmental portrait, body in space, moderate stretch, reportage cinema."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is 14mm Ultra-Wide or 35mm Moderate Wide. The 14mm tell is a looming foreground and cartoon edges.",
+          "links": [
+            {
+              "text": "14mm Ultra-Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            },
+            {
+              "text": "35mm Moderate Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The 35mm tell is a tighter room with the environment demoted. Fix: stand a few feet back, hold full body or three-quarter plus readable architecture, keep stretch moderate."
+        }
+      ],
+      "links": [
+        {
+          "text": "14mm Ultra-Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        },
+        {
+          "text": "35mm Moderate Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is 14mm Ultra-Wide or 35mm Moderate Wide. The 14mm tell is a looming foreground and cartoon edges.The 35mm tell is a tighter room with the environment demoted. Fix: stand a few feet back, hold full body or three-quarter plus readable architecture, keep stretch moderate."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is 24mm wide in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a moderately wide lens that holds a person and a usable amount of their environment without extreme near-to-far exaggeration. Body and place share the frame."
+        },
+        {
+          "type": "heading",
+          "text": "24mm Wide vs 35mm Moderate Wide",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "24mm includes more architecture and a little more stretch. 35mm is the common narrative step tighter: still human, less room. 24mm is reportage space. 35mm is default coverage."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use 24mm wide?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the beat is person plus place, neither winning. Skip it for close portraits and for ultra-wide intrusion."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt 24mm wide for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: 24mm wide on [Subject], environmental portrait, body in space, moderate stretch, reportage coverage. Name the room. Forbid fisheye bowing and telephoto falloff."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is 24mm wide in film?It is a moderately wide lens that holds a person and a usable amount of their environment without extreme near-to-far exaggeration. Body and place share the frame.24mm Wide vs 35mm Moderate Wide24mm includes more architecture and a little more stretch. 35mm is the common narrative step tighter: still human, less room. 24mm is reportage space. 35mm is default coverage.When should I use 24mm wide?Use it when the beat is person plus place, neither winning. Skip it for close portraits and for ultra-wide intrusion.How do I prompt 24mm wide for AI image or video?Write: 24mm wide on [Subject], environmental portrait, body in space, moderate stretch, reportage coverage. Name the room. Forbid fisheye bowing and telephoto falloff."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lead with body in space, not with a mood. 24mm wide on [Subject], environmental portrait, body in space, moderate stretch, reportage coverage.",
+      "Name what architecture must remain (door, street, kitchen). Do not ask for extreme distortion, oval bokeh, or a melted background."
+    ],
+    "example": "24mm wide on [Subject], environmental portrait, body in space, moderate stretch, reportage cinema."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/7426a29d0521c2e8cebe331ee900e38c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/055-close-wide-angle-distortion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/628b32ea127fbd2eb64660fbc452f455.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/24mm-wide-055-close-wide-angle-distortion-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a2b16244035388f81636de149fe3865d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/24mm-wide.jpg",
+      "alt": "24mm Wide frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/192baaa553dac5fb337404d41c596029.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/35mm-moderate.webp",
+      "alt": "35mm Moderate Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/e9bae839781c16a528f25d7fa4dbf0bc.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/50mm-normal.webp",
+      "alt": "50mm Normal"
+    },
+    {
+      "kind": "image",
+      "path": "media/e6a85a91a2856234b4eea8e3a4cffdeb.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/24mm-wide/hero.jpg",
+      "alt": "24mm Wide",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "e538203619a3d5b28e61541aa464c0ffd345fa8674fc5c7a0a9d885de9c17934"
+}

@@ -1,0 +1,421 @@
+{
+  "id": "effects/floating-fall",
+  "slug": "floating-fall",
+  "title": "Floating Fall",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/floating-fall",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/floating-fall-floating-fall-mini.webp",
+  "detail": "details/effects/floating-fall.json",
+  "aliases": [],
+  "description": "A floating fall is a body hanging in a slow drop: delayed gravity on hair and coat, still going down. The path remains toward the ground, even when the clock on the body is late.",
+  "thumbnail": "media/d783a471519cb97b77dc462cfe77b2b6.webp",
+  "video": "media/eddc639a822aedf05e8312186757759a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/floating-fall-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Someone has left the roof. The coat opens late."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hair hangs. The street is still far."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat after the push, when the drop should feel like a hymn and a disaster at once. It is the wrong tool for a hover, and for a real-time camera drop."
+        },
+        {
+          "type": "paragraph",
+          "text": "If there is no net descent, you shot levitation. If the whole frame is simply overcranked equally, you shot slow motion of a normal fall."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Someone has left the roof. The coat opens late.Hair hangs. The street is still far.Use it for the beat after the push, when the drop should feel like a hymn and a disaster at once. It is the wrong tool for a hover, and for a real-time camera drop.If there is no net descent, you shot levitation. If the whole frame is simply overcranked equally, you shot slow motion of a normal fall."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep downward travel. Delay gravity on hair, coat, and debris more than on the torso."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera is locked, the body drifts down through a stable frame. If the camera also drops, the building or cliff should still parallax as falling-past."
+        },
+        {
+          "type": "paragraph",
+          "text": "A side-key keeps the body separate from the void. Name the height and what is already below."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a floating fall: a body hanging in slow drop, delayed gravity. For video, falls in slow, floating pieces, delayed gravity."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Keep downward travel. Delay gravity on hair, coat, and debris more than on the torso.If the camera is locked, the body drifts down through a stable frame. If the camera also drops, the building or cliff should still parallax as falling-past.A side-key keeps the body separate from the void. Name the height and what is already below.Prompt a floating fall: a body hanging in slow drop, delayed gravity. For video, falls in slow, floating pieces, delayed gravity."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the second after leaving the ledge, the dream of dropping, the stunt that should hang. Do not use it for a slapstick trip down stairs unless the joke is that time went soft."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the second after leaving the ledge, the dream of dropping, the stunt that should hang. Do not use it for a slapstick trip down stairs unless the joke is that time went soft."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Levitation hovers with no net drop. Falling uses real-time weight, ground rushing.",
+          "links": [
+            {
+              "text": "Levitation",
+              "url": "https://melies.co/cinematic-techniques/effects/levitation"
+            },
+            {
+              "text": "Falling",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/falling"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Slow Motion overcranks the whole shot equally. A floating fall delays gravity on the body while descent remains the plot.",
+          "links": [
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "FallingGravity is the plot.",
+          "displayText": "Falling\nGravity is the plot.",
+          "links": [
+            {
+              "text": "FallingGravity is the plot.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/falling"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "LevitationWeight is optional.",
+          "displayText": "Levitation\nWeight is optional.",
+          "links": [
+            {
+              "text": "LevitationWeight is optional.",
+              "url": "https://melies.co/cinematic-techniques/effects/levitation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Levitation",
+          "url": "https://melies.co/cinematic-techniques/effects/levitation"
+        },
+        {
+          "text": "Falling",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/falling"
+        },
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        },
+        {
+          "text": "FallingGravity is the plot.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/falling"
+        },
+        {
+          "text": "LevitationWeight is optional.",
+          "url": "https://melies.co/cinematic-techniques/effects/levitation"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/3002a60ee79525d8dc1a0daa720fd81e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/falling-falling-mini.webp",
+          "alt": "Falling"
+        },
+        {
+          "kind": "video",
+          "path": "media/2e16cf279b0e1e7eb5a07ea20738b4c5.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/falling-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ea46739793d6dbc92421feac9e26abd5.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/levitation-145-wire-assisted-flight-and-levitation-mini.webp",
+          "alt": "Levitation"
+        },
+        {
+          "kind": "video",
+          "path": "media/8a5df7352710bead9c1a7f10f8641f8f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/145-wire-assisted-flight-and-levitation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Levitation hovers with no net drop. Falling uses real-time weight, ground rushing.Slow Motion overcranks the whole shot equally. A floating fall delays gravity on the body while descent remains the plot.FallingGravity is the plot.LevitationWeight is optional.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Inception's hallway physics turns a fall into a drift through architecture. The Matrix rooftop and street drops hang bodies in delayed time."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of delayed gravity, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Inception's hallway physics turns a fall into a drift through architecture. The Matrix rooftop and street drops hang bodies in delayed time.Grammar of delayed gravity, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Floating fall of [Subject], a body hanging in slow drop, weightless disaster, hair and coat in delayed gravity. Video: [Subject] falls in slow, floating pieces, delayed gravity, a dream of dropping."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the height, the ground, and that the path is down."
+        },
+        {
+          "type": "quote",
+          "text": "[Subject] falls in slow, floating pieces, delayed gravity, a dream of dropping."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=[Subject]+falls+in+slow,+floating+pieces,+delayed+gravity,+a+dream+of+dropping."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Floating fall of [Subject], a body hanging in slow drop, weightless disaster, hair and coat in delayed gravity. Video: [Subject] falls in slow, floating pieces, delayed gravity, a dream of dropping.Name the height, the ground, and that the path is down.Copy promptUse in Video Generator[Subject] falls in slow, floating pieces, delayed gravity, a dream of dropping.[Subject] falls in slow, floating pieces, delayed gravity, a dream of dropping."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousins are balloon Levitation and ordinary Slow Motion. The tell is a body that never descends, or a normal fall that is only slowed.",
+          "links": [
+            {
+              "text": "Levitation",
+              "url": "https://melies.co/cinematic-techniques/effects/levitation"
+            },
+            {
+              "text": "Slow Motion",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is net downward travel, delayed cloth, and a readable ground."
+        }
+      ],
+      "links": [
+        {
+          "text": "Levitation",
+          "url": "https://melies.co/cinematic-techniques/effects/levitation"
+        },
+        {
+          "text": "Slow Motion",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousins are balloon Levitation and ordinary Slow Motion. The tell is a body that never descends, or a normal fall that is only slowed.The fix is net downward travel, delayed cloth, and a readable ground."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is floating fall in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A floating fall is a drop with delayed gravity: the body hangs in a slow descent, hair and coat late, the ground still far. It is a fall, not a hover."
+        },
+        {
+          "type": "heading",
+          "text": "Floating fall vs levitation",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Levitation stays up. A floating fall goes down with the clock wrong. One needs a gap under the feet that does not close. The other needs a ground that is coming."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use floating fall?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat after the push, when a drop should hang. Skip it for a true hover, and for a real-time camera fall with rushing ground."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt floating fall for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Floating fall of [Subject], a body hanging in slow drop, hair and coat in delayed gravity. Name height and ground. For video, slow floating pieces, path still down."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is floating fall in film?A floating fall is a drop with delayed gravity: the body hangs in a slow descent, hair and coat late, the ground still far. It is a fall, not a hover.Floating fall vs levitationLevitation stays up. A floating fall goes down with the clock wrong. One needs a gap under the feet that does not close. The other needs a ground that is coming.When should I use floating fall?Use it for the beat after the push, when a drop should hang. Skip it for a true hover, and for a real-time camera fall with rushing ground.How do I prompt floating fall for AI image or video?Write Floating fall of [Subject], a body hanging in slow drop, hair and coat in delayed gravity. Name height and ground. For video, slow floating pieces, path still down."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Floating fall of [Subject], a body hanging in slow drop, weightless disaster, hair and coat in delayed gravity. Video: [Subject] falls in slow, floating pieces, delayed gravity, a dream of dropping.",
+      "Name the height, the ground, and that the path is down."
+    ],
+    "example": "[Subject] falls in slow, floating pieces, delayed gravity, a dream of dropping."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/eddc639a822aedf05e8312186757759a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/floating-fall-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d783a471519cb97b77dc462cfe77b2b6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/floating-fall-floating-fall-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dab9575dedd7d1d856fdb87d7fae5ad6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/floating-fall.jpg",
+      "alt": "Floating Fall frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/3002a60ee79525d8dc1a0daa720fd81e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/falling-falling-mini.webp",
+      "alt": "Falling"
+    },
+    {
+      "kind": "video",
+      "path": "media/2e16cf279b0e1e7eb5a07ea20738b4c5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/falling-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ea46739793d6dbc92421feac9e26abd5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/levitation-145-wire-assisted-flight-and-levitation-mini.webp",
+      "alt": "Levitation"
+    },
+    {
+      "kind": "video",
+      "path": "media/8a5df7352710bead9c1a7f10f8641f8f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/145-wire-assisted-flight-and-levitation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5ff4771de66f3f8d8df930195f309929.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/floating-fall/hero.jpg",
+      "alt": "Floating Fall",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "4045e094d88b0fe4129883cb766009a99996101b7aa5c00f687d9255909c3533"
+}

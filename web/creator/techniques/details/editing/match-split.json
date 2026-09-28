@@ -1,0 +1,452 @@
+{
+  "id": "editing/match-split",
+  "slug": "match-split",
+  "title": "Match Split",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/match-split",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-split-05-match-split-mini.webp",
+  "detail": "details/editing/match-split.json",
+  "aliases": [],
+  "description": "A match split continues a graphic line or motion across a divide, so one contour belongs to two worlds at once. One side of the join is a pane or half-frame; the other is its partner; the shared edge, horizon, or gesture is the match.",
+  "thumbnail": "media/cb618449013d77e5accfe52a43d6a18f.webp",
+  "video": "media/12a4d074df5eee6bb1843a3d8bd88fcb.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/05-match-split-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A table edge runs from a 1960s kitchen into a present-day diner. A face is halved: left is the party you imagined, right is the party you got."
+        },
+        {
+          "type": "paragraph",
+          "text": "One line, two worlds. Use it when a split should feel like one organism rather than two televisions."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the panes have no shared contour and are only simultaneous: that is ordinary Split Screen. It is also the wrong tool when you cut from one full frame to another rhyming full frame: that is a Match Cut or Graphic Match.",
+          "links": [
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            },
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            },
+            {
+              "text": "Graphic Match",
+              "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The divide is not a scratch. It is a designed seam that the eye can follow."
+        }
+      ],
+      "links": [
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Graphic Match",
+          "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A table edge runs from a 1960s kitchen into a present-day diner. A face is halved: left is the party you imagined, right is the party you got.One line, two worlds. Use it when a split should feel like one organism rather than two televisions.It is the wrong tool when the panes have no shared contour and are only simultaneous: that is ordinary Split Screen. It is also the wrong tool when you cut from one full frame to another rhyming full frame: that is a Match Cut or Graphic Match.The divide is not a scratch. It is a designed seam that the eye can follow."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Compose both halves so a line, eyeline, horizon, or motion vector continues across the boundary. Match scale of heads if two versions of one person share a couch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep lighting motivated per world unless the gag is that light also matches. Prompt: match split of [Subject], a graphic divide that continues a line or motion into another space."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Compose both halves so a line, eyeline, horizon, or motion vector continues across the boundary. Match scale of heads if two versions of one person share a couch.Keep lighting motivated per world unless the gag is that light also matches. Prompt: match split of [Subject], a graphic divide that continues a line or motion into another space."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for twins, double lives, expectation versus reality, a road that is two times of day. Do not use it if the two spaces should not touch graphically."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you need a phone call with frankly separate rooms, a clean split is enough."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for twins, double lives, expectation versus reality, a road that is two times of day. Do not use it if the two spaces should not touch graphically.If you need a phone call with frankly separate rooms, a clean split is enough."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Split Screen co-presents; match split is a split whose form rhymes or continues. A Match Cut replaces one full image with another.",
+          "links": [
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            },
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Frame within Frame is a window in the set. Graphic Match happens across a hard cut in time, not across a simultaneous seam.",
+          "links": [
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            },
+            {
+              "text": "Graphic Match",
+              "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Split ScreenTwo rooms, one moment.",
+          "displayText": "Split Screen\nTwo rooms, one moment.",
+          "links": [
+            {
+              "text": "Split ScreenTwo rooms, one moment.",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Graphic MatchForm carries you across time.",
+          "displayText": "Graphic Match\nForm carries you across time.",
+          "links": [
+            {
+              "text": "Graphic MatchForm carries you across time.",
+              "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Graphic Match",
+          "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        },
+        {
+          "text": "Split ScreenTwo rooms, one moment.",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "Graphic MatchForm carries you across time.",
+          "url": "https://melies.co/cinematic-techniques/editing/graphic-match"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/aa1f55893c6980380f31912c5c293abe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-screen-120-simultaneous-split-screen-mini.webp",
+          "alt": "Split Screen"
+        },
+        {
+          "kind": "video",
+          "path": "media/6b8983f75155ce580e4009fe6c11abb4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/120-simultaneous-split-screen-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/87ceda0519aff5db427c7cd37728798e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/graphic-match-099-graphic-match-cut-mini.webp",
+          "alt": "Graphic Match"
+        },
+        {
+          "kind": "video",
+          "path": "media/ffba929ec8dc585d8a9c73346ee4cd87.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/099-graphic-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Split Screen co-presents; match split is a split whose form rhymes or continues. A Match Cut replaces one full image with another.Frame within Frame is a window in the set. Graphic Match happens across a hard cut in time, not across a simultaneous seam.Match CutTwo images are the same idea.Split ScreenTwo rooms, one moment.Graphic MatchForm carries you across time."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Parent Trap seats two versions of one girl in a shared graphic so the split is a relationship. (500) Days of Summer divides a party into expectation and reality along a readable seam."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the continued line, not the plot."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Parent Trap seats two versions of one girl in a shared graphic so the split is a relationship. (500) Days of Summer divides a party into expectation and reality along a readable seam.Use the continued line, not the plot."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Match split of [Subject], a graphic divide that continues a line or motion into another space. Name the shared contour (horizon, table, eyeline), what each half contains, and that both are simultaneous."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, two plates, one continued line, a stable boundary. No morph across the seam."
+        },
+        {
+          "type": "quote",
+          "text": "Match split of [Subject], a graphic divide that continues a line or motion into another space."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Match+split+of+[Subject],+a+graphic+divide+that+continues+a+line+or+motion+into+another+space."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Match split of [Subject], a graphic divide that continues a line or motion into another space. Name the shared contour (horizon, table, eyeline), what each half contains, and that both are simultaneous.For video, two plates, one continued line, a stable boundary. No morph across the seam.Copy promptUse in Image GeneratorMatch split of [Subject], a graphic divide that continues a line or motion into another space.Match split of [Subject], a graphic divide that continues a line or motion into another space."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a generic Split Screen with unmatched eyelines, or a Match Cut in sequence. The tell: two stacked clips with no shared line, or a cut instead of a co-present seam.",
+          "links": [
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            },
+            {
+              "text": "Match Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: design the divide, continue one contour, hold both worlds at once."
+        }
+      ],
+      "links": [
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "Match Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a generic Split Screen with unmatched eyelines, or a Match Cut in sequence. The tell: two stacked clips with no shared line, or a cut instead of a co-present seam.The fix: design the divide, continue one contour, hold both worlds at once."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Match Split in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A match split is a divided frame where a line, motion, or contour continues from one world into the other. Both sides of the join are visible together and graphically related."
+        },
+        {
+          "type": "heading",
+          "text": "Match Split vs Split Screen",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Split screen shows two fields at once. Match split is a split that rhymes or continues a line across the seam. All match splits are splits; not all splits match."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Match Split?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when one contour should belong to two worlds at the same time. Do not use it for a simple phone-call panel with no shared geometry."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Match Split for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the continued line and both halves. Example: Match split of [Subject], a graphic divide that continues a line or motion into another space. Simultaneous panes, no morph."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Match Split in film?A match split is a divided frame where a line, motion, or contour continues from one world into the other. Both sides of the join are visible together and graphically related.Match Split vs Split ScreenSplit screen shows two fields at once. Match split is a split that rhymes or continues a line across the seam. All match splits are splits; not all splits match.When should I use Match Split?Use it when one contour should belong to two worlds at the same time. Do not use it for a simple phone-call panel with no shared geometry.How do I prompt Match Split for AI image or video?Name the continued line and both halves. Example: Match split of [Subject], a graphic divide that continues a line or motion into another space. Simultaneous panes, no morph."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Match split of [Subject], a graphic divide that continues a line or motion into another space. Name the shared contour (horizon, table, eyeline), what each half contains, and that both are simultaneous.",
+      "For video, two plates, one continued line, a stable boundary. No morph across the seam."
+    ],
+    "example": "Match split of [Subject], a graphic divide that continues a line or motion into another space."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/12a4d074df5eee6bb1843a3d8bd88fcb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/05-match-split-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cb618449013d77e5accfe52a43d6a18f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-split-05-match-split-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6234748f412c862a7b4b047b69ebf61a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/match-split.jpg",
+      "alt": "Match Split frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aa1f55893c6980380f31912c5c293abe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-screen-120-simultaneous-split-screen-mini.webp",
+      "alt": "Split Screen"
+    },
+    {
+      "kind": "video",
+      "path": "media/6b8983f75155ce580e4009fe6c11abb4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/120-simultaneous-split-screen-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/87ceda0519aff5db427c7cd37728798e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/graphic-match-099-graphic-match-cut-mini.webp",
+      "alt": "Graphic Match"
+    },
+    {
+      "kind": "video",
+      "path": "media/ffba929ec8dc585d8a9c73346ee4cd87.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/099-graphic-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4a0ee9f727d5793641f121ea632600d2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/match-split/hero.jpg",
+      "alt": "Match Split",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "5cce019b870ccacf7b454a1d2f59c6d26038331bd3a82827ccbfb58d56221b41"
+}

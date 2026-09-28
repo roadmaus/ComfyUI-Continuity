@@ -1,0 +1,468 @@
+{
+  "id": "camera-movement/handheld",
+  "slug": "handheld",
+  "title": "Handheld",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/handheld",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+  "detail": "details/camera-movement/handheld.json",
+  "aliases": [
+    "shaky cam",
+    "The Children of Men car ambush"
+  ],
+  "description": "A handheld camera is operated from the body without a stabilizing vest or gimbal, so breathing, micro-shake, and mass stay in the frame. The image has the nerves of a person holding weight, not a track and not a motor.",
+  "thumbnail": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+  "video": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Urgency, documentary contract, or a mind that cannot sit still. The operator is a body in the room, which can make escape routes and vulnerability tangible."
+        },
+        {
+          "type": "paragraph",
+          "text": "Used well, the shake is a result of attention and movement, not a plugin. It is the wrong tool for a formal lock-off, and the wrong tool if you add random shake to a tripod clip."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not describe a car ambush as simply a person with a Steadicam inside an ordinary car when the original was a designed interior path."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Urgency, documentary contract, or a mind that cannot sit still. The operator is a body in the room, which can make escape routes and vulnerability tangible.Used well, the shake is a result of attention and movement, not a plugin. It is the wrong tool for a formal lock-off, and the wrong tool if you add random shake to a tripod clip.Do not describe a car ambush as simply a person with a Steadicam inside an ordinary car when the original was a designed interior path."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hold the camera at the shoulder, chest, or under-slung. Let gait and breath exist; do not stabilize them out."
+        },
+        {
+          "type": "paragraph",
+          "text": "Exposure and focus are harder because the body is the head. Prompt handheld, breathing micro-shake, documentary immediacy, organic micro-tremors, no stabilization."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Hold the camera at the shoulder, chest, or under-slung. Let gait and breath exist; do not stabilize them out.Exposure and focus are harder because the body is the head. Prompt handheld, breathing micro-shake, documentary immediacy, organic micro-tremors, no stabilization."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for urgency, documentary truth, or a mind that cannot sit still. Concrete beat: a raid through a crowd where the operator cannot get a clean view."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not handheld a still product on a table."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for urgency, documentary truth, or a mind that cannot sit still. Concrete beat: a raid through a crowd where the operator cannot get a clean view.Do not handheld a still product on a table."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Steadicam isolates footfall mechanically. A Gimbal Shot kills roll and high-frequency shake with motors.",
+          "links": [
+            {
+              "text": "Steadicam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            },
+            {
+              "text": "Gimbal Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Handheld keeps the operator's body in the frame's nerves. A Follow Shot can be handheld, but follow is a station, not a support.",
+          "links": [
+            {
+              "text": "Follow Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Gimbal ShotRun-and-gun smoothness without a Steadicam vest.",
+          "displayText": "Gimbal Shot\nRun-and-gun smoothness without a Steadicam vest.",
+          "links": [
+            {
+              "text": "Gimbal ShotRun-and-gun smoothness without a Steadicam vest.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "displayText": "Steadicam\nLong connecting moves through architecture. Neither handheld nor dolly.",
+          "links": [
+            {
+              "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Steadicam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Gimbal Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+        },
+        {
+          "text": "Follow Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+        },
+        {
+          "text": "Gimbal ShotRun-and-gun smoothness without a Steadicam vest.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+        },
+        {
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/3070be4364be0a73e6306a1e7dfc594b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gimbal-gimbal-mini.webp",
+          "alt": "Gimbal Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/f1caa36e2a9a5509ff6632687fe93d2d.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/gimbal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+          "alt": "Steadicam"
+        },
+        {
+          "kind": "video",
+          "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Steadicam isolates footfall mechanically. A Gimbal Shot kills roll and high-frequency shake with motors.Handheld keeps the operator's body in the frame's nerves. A Follow Shot can be handheld, but follow is a station, not a support.Gimbal ShotRun-and-gun smoothness without a Steadicam vest.SteadicamLong connecting moves through architecture. Neither handheld nor dolly.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Battle of Algiers presents street raids with newsreel-like immediacy. Rosetta and The Hurt Locker keep bodies and breath in the operating."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Bourne Ultimatum uses aggressive handheld as fight grammar. Children of Men's car ambush is a designed interior path among occupants, not a casual shake preset."
+        },
+        {
+          "type": "list-item",
+          "text": "Children of Men 2006The road ambush is seen from a moving viewpoint among the car’s occupants.",
+          "displayText": "Children of Men 2006\nThe road ambush is seen from a moving viewpoint among the car’s occupants."
+        },
+        {
+          "type": "list-item",
+          "text": "Children of Men 2006The camera accompanies Theo through the uprising.",
+          "displayText": "Children of Men 2006\nThe camera accompanies Theo through the uprising."
+        },
+        {
+          "type": "list-item",
+          "text": "The Battle of Algiers 1966Street raids and crowds presented with newsreel-like immediacy.",
+          "displayText": "The Battle of Algiers 1966\nStreet raids and crowds presented with newsreel-like immediacy."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/200c8e8de89c38af0bd04809183059ba.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/handheld/famous/00-children-of-men-2006.jpg",
+          "alt": "Children of Men 2006"
+        },
+        {
+          "kind": "image",
+          "path": "media/bb5b9163b05e5754956399e3fbaac404.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/handheld/famous/01-children-of-men-2006.jpg",
+          "alt": "Children of Men 2006"
+        },
+        {
+          "kind": "image",
+          "path": "media/5cd116238eacf2a4a4f62bf134993caa.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/handheld/famous/01-the-battle-of-algiers-1966.jpg",
+          "alt": "The Battle of Algiers 1966"
+        }
+      ],
+      "sourceText": "In film The Battle of Algiers presents street raids with newsreel-like immediacy. Rosetta and The Hurt Locker keep bodies and breath in the operating.The Bourne Ultimatum uses aggressive handheld as fight grammar. Children of Men's car ambush is a designed interior path among occupants, not a casual shake preset.Children of Men 2006The road ambush is seen from a moving viewpoint among the car’s occupants.Children of Men 2006The camera accompanies Theo through the uprising.The Battle of Algiers 1966Street raids and crowds presented with newsreel-like immediacy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Handheld camera on [Subject], breathing micro-shake, documentary immediacy, Super 16 grain feel, the operator's body in the frame's nerves. For motion: handheld camera with natural operator shake holding [Subject] in frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Organic micro-tremors, no stabilization."
+        },
+        {
+          "type": "quote",
+          "text": "Inside a moving minibus, a compact camera pivots from two chatting passengers to the windscreen as a fallen tree blocks the road, then to the driver’s reaction and the rear window. One continuous-looking viewpoint, consistent seats, believable window parallax, restrained panic. Build separate interior and exterior plates when necessary."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Inside+a+moving+minibus,+a+compact+camera+pivots+from+two+chatting+passengers+to+the+windscreen+as+a+fallen+tree+blocks+the+road,+then+to+the+driver%E2%80%99s+reaction+and+the+rear+window.+One+continuous-looking+viewpoint,+consistent+seats,+believable+window+parallax,+restrained+panic.+Build+separate+interior+and+exterior+plates+when+necessary."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Handheld camera on [Subject], breathing micro-shake, documentary immediacy, Super 16 grain feel, the operator's body in the frame's nerves. For motion: handheld camera with natural operator shake holding [Subject] in frame.Organic micro-tremors, no stabilization.Copy promptUse in Video GeneratorInside a moving minibus, a compact camera pivots from two chatting passengers to the windscreen as a fallen tree blocks the road, then to the driver’s reaction and the rear window. One continuous-looking viewpoint, consistent seats, believable window parallax, restrained panic. Build separate interior and exterior plates when necessary.Inside a moving minibus, a compact camera pivots from two chatting passengers to the windscreen as a fallen tree blocks the road, then to the driver’s reaction and the rear window. One continuous-looking viewpoint, consistent seats, believable window parallax, restrained panic. Build separate interior and exterior plates when necessary."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a shake preset on a Gimbal Shot or Static Locked-Off clip. The tell is wobble without mass, or a perfectly level horizon with fake jitter.",
+          "links": [
+            {
+              "text": "Gimbal Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+            },
+            {
+              "text": "Static Locked-Off",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: operator-held weight, breath, attention, no electronic lock."
+        }
+      ],
+      "links": [
+        {
+          "text": "Gimbal Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/gimbal"
+        },
+        {
+          "text": "Static Locked-Off",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/static"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a shake preset on a Gimbal Shot or Static Locked-Off clip. The tell is wobble without mass, or a perfectly level horizon with fake jitter.The fix: operator-held weight, breath, attention, no electronic lock."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Handheld in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a camera operated from the body without a stabilizer, so the operator's mass, breath, and micro-tremor remain in the image."
+        },
+        {
+          "type": "heading",
+          "text": "Handheld vs Steadicam",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Steadicam walks smoothly by isolating the camera from footfall. Handheld lets that footfall and breath into the frame as part of the contract."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Handheld?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When immediacy, documentary ethics, or panic should be visible in the operating. Do not add shake to a shot that wanted a lock-off."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Handheld for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write handheld, natural operator shake, breathing micro-tremors, no stabilization, no gimbal. Name who is held in frame and the space."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Handheld in film?It is a camera operated from the body without a stabilizer, so the operator's mass, breath, and micro-tremor remain in the image.Handheld vs SteadicamSteadicam walks smoothly by isolating the camera from footfall. Handheld lets that footfall and breath into the frame as part of the contract.When should I use Handheld?When immediacy, documentary ethics, or panic should be visible in the operating. Do not add shake to a shot that wanted a lock-off.How do I prompt Handheld for AI image or video?Write handheld, natural operator shake, breathing micro-tremors, no stabilization, no gimbal. Name who is held in frame and the space."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Handheld camera on [Subject], breathing micro-shake, documentary immediacy, Super 16 grain feel, the operator's body in the frame's nerves. For motion: handheld camera with natural operator shake holding [Subject] in frame.",
+      "Organic micro-tremors, no stabilization."
+    ],
+    "example": "Inside a moving minibus, a compact camera pivots from two chatting passengers to the windscreen as a fallen tree blocks the road, then to the driver’s reaction and the rear window. One continuous-looking viewpoint, consistent seats, believable window parallax, restrained panic. Build separate interior and exterior plates when necessary."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f7b06d109348a4997a6508e36118ef96.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/handheld.jpg",
+      "alt": "Handheld frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/3070be4364be0a73e6306a1e7dfc594b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/gimbal-gimbal-mini.webp",
+      "alt": "Gimbal Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/f1caa36e2a9a5509ff6632687fe93d2d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/gimbal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+      "alt": "Steadicam"
+    },
+    {
+      "kind": "video",
+      "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/200c8e8de89c38af0bd04809183059ba.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/handheld/famous/00-children-of-men-2006.jpg",
+      "alt": "Children of Men 2006"
+    },
+    {
+      "kind": "image",
+      "path": "media/bb5b9163b05e5754956399e3fbaac404.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/handheld/famous/01-children-of-men-2006.jpg",
+      "alt": "Children of Men 2006"
+    },
+    {
+      "kind": "image",
+      "path": "media/5cd116238eacf2a4a4f62bf134993caa.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/handheld/famous/01-the-battle-of-algiers-1966.jpg",
+      "alt": "The Battle of Algiers 1966"
+    },
+    {
+      "kind": "image",
+      "path": "media/49a049b26e156b6f8b5b2c2ebbc41646.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/handheld/hero.jpg",
+      "alt": "Handheld",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "beaa9d9e89ed23fbc347c3e2ad7a73bd8c0ba47edf43937adee6ae0526894d17"
+}

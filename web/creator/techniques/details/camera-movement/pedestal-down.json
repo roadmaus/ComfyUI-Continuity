@@ -1,0 +1,406 @@
+{
+  "id": "camera-movement/pedestal-down",
+  "slug": "pedestal-down",
+  "title": "Pedestal Down",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/pedestal-down",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pedestal-down-pedestal-down-mini.webp",
+  "detail": "details/camera-movement/pedestal-down.json",
+  "aliases": [
+    "pedestal up"
+  ],
+  "description": "A pedestal down lowers the entire camera vertically without changing its tilt. The descent stays on one axis: a calm drop through the same look, not a nod and not a crane swoop.",
+  "thumbnail": "media/e405f84051bf6446dd0f359b7d490215.webp",
+  "video": "media/e8508e50e5bd1473b5b65402855e5668.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pedestal-down-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Return to human height after a high formal view, or sit the camera down to a child, a table, a wound. Because tilt is constant, the world does not bow; we simply stand lower in it."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you must look down as you drop, or when the arm should swing over a railing. If pitch changes, you left the pedestal."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Return to human height after a high formal view, or sit the camera down to a child, a table, a wound. Because tilt is constant, the world does not bow; we simply stand lower in it.It is the wrong tool when you must look down as you drop, or when the arm should swing over a railing. If pitch changes, you left the pedestal."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Translate on Y only. Keep tilt, and usually keep yaw."
+        },
+        {
+          "type": "paragraph",
+          "text": "Vertical parallax reverses the up-move: architecture climbs the frame. Prompt a pedestal down, camera lowering vertically, no tilt, a calm descent through the same axis."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Translate on Y only. Keep tilt, and usually keep yaw.Vertical parallax reverses the up-move: architecture climbs the frame. Prompt a pedestal down, camera lowering vertically, no tilt, a calm descent through the same axis."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to return to human height after a high formal view. Concrete beat: from a chandelier's height down to the couple, still looking along the ballroom, not down at the floor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not tilt to keep them in frame; change height instead."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to return to human height after a high formal view. Concrete beat: from a chandelier's height down to the couple, still looking along the ballroom, not down at the floor.Do not tilt to keep them in frame; change height instead."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Crane Down can arc, advance, and even hand off to a walk. A Tilt Down pitches from a fixed height.",
+          "links": [
+            {
+              "text": "Crane Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            },
+            {
+              "text": "Tilt Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Pedestal Up is the opposite column. Pedestal down sits the camera down while it keeps looking the same way.",
+          "links": [
+            {
+              "text": "Pedestal Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane DownArrive from god-view into a person.",
+          "displayText": "Crane Down\nArrive from god-view into a person.",
+          "links": [
+            {
+              "text": "Crane DownArrive from god-view into a person.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Pedestal UpChange height without the drama of a crane arc.",
+          "displayText": "Pedestal Up\nChange height without the drama of a crane arc.",
+          "links": [
+            {
+              "text": "Pedestal UpChange height without the drama of a crane arc.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        },
+        {
+          "text": "Tilt Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+        },
+        {
+          "text": "Pedestal Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up"
+        },
+        {
+          "text": "Crane DownArrive from god-view into a person.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        },
+        {
+          "text": "Pedestal UpChange height without the drama of a crane arc.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-up"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/aa53863e7f0a44b5d017fc87459915f3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-down-011-crane-down-detail-reveal-mini.webp",
+          "alt": "Crane Down"
+        },
+        {
+          "kind": "video",
+          "path": "media/8a7719557669858db37b76f7c7c1f596.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/011-crane-down-detail-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8f771121a4ce93d9b0389d0b4a59b0a9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pedestal-up-06-pedestal-up-v2-mini.webp",
+          "alt": "Pedestal Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/f516047901ee827b5665fc1c6658f64a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/06-pedestal-up-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Crane Down can arc, advance, and even hand off to a walk. A Tilt Down pitches from a fixed height.Pedestal Up is the opposite column. Pedestal down sits the camera down while it keeps looking the same way.Crane DownArrive from god-view into a person.Pedestal UpChange height without the drama of a crane arc.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Barry Lyndon favors formal, measured height and locked geometry over swooping arms. 2001: A Space Odyssey again treats vertical station as a physical fact of the set."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use them as tilt-locked descent grammar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Barry Lyndon favors formal, measured height and locked geometry over swooping arms. 2001: A Space Odyssey again treats vertical station as a physical fact of the set.Use them as tilt-locked descent grammar."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pedestal down on [Subject], camera lowering vertically, no tilt, a calm descent through the same axis. For motion: the camera lowers straight down on a pedestal, keeping tilt constant, settling onto [Subject]."
+        },
+        {
+          "type": "quote",
+          "text": "The camera lowers straight down on a pedestal, keeping tilt constant, settling onto [Subject]."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+lowers+straight+down+on+a+pedestal,+keeping+tilt+constant,+settling+onto+[Subject]."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Pedestal down on [Subject], camera lowering vertically, no tilt, a calm descent through the same axis. For motion: the camera lowers straight down on a pedestal, keeping tilt constant, settling onto [Subject].Copy promptUse in Video GeneratorThe camera lowers straight down on a pedestal, keeping tilt constant, settling onto [Subject].The camera lowers straight down on a pedestal, keeping tilt constant, settling onto [Subject]."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Tilt Down or Crane Down. The tell is a nodding horizon or a curved path over furniture.",
+          "links": [
+            {
+              "text": "Tilt Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+            },
+            {
+              "text": "Crane Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: straight drop, tilt frozen, end at the new eyeline."
+        }
+      ],
+      "links": [
+        {
+          "text": "Tilt Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-down"
+        },
+        {
+          "text": "Crane Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Tilt Down or Crane Down. The tell is a nodding horizon or a curved path over furniture.The fix: straight drop, tilt frozen, end at the new eyeline."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Pedestal Down in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a straight vertical lowering of the camera with tilt unchanged, so the lens occupies a lower station without nodding."
+        },
+        {
+          "type": "heading",
+          "text": "Pedestal Down vs Crane Down",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Crane down travels on an arm and often changes angle as it arrives. Pedestal down is a column drop: same pitch, new height."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Pedestal Down?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When rank or scale should change by sitting the camera down, not by looking down. Do not use it to dive at a face from a rooftop."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Pedestal Down for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write camera lowers straight down on a pedestal, tilt constant, no arc. Name the start height and the settle."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Pedestal Down in film?It is a straight vertical lowering of the camera with tilt unchanged, so the lens occupies a lower station without nodding.Pedestal Down vs Crane DownCrane down travels on an arm and often changes angle as it arrives. Pedestal down is a column drop: same pitch, new height.When should I use Pedestal Down?When rank or scale should change by sitting the camera down, not by looking down. Do not use it to dive at a face from a rooftop.How do I prompt Pedestal Down for AI image or video?Write camera lowers straight down on a pedestal, tilt constant, no arc. Name the start height and the settle."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Pedestal down on [Subject], camera lowering vertically, no tilt, a calm descent through the same axis. For motion: the camera lowers straight down on a pedestal, keeping tilt constant, settling onto [Subject]."
+    ],
+    "example": "The camera lowers straight down on a pedestal, keeping tilt constant, settling onto [Subject]."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/e8508e50e5bd1473b5b65402855e5668.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/pedestal-down-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e405f84051bf6446dd0f359b7d490215.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pedestal-down-pedestal-down-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/454d9aaab2f24958262a84f5e02188b5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/pedestal-down.jpg",
+      "alt": "Pedestal Down frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/aa53863e7f0a44b5d017fc87459915f3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-down-011-crane-down-detail-reveal-mini.webp",
+      "alt": "Crane Down"
+    },
+    {
+      "kind": "video",
+      "path": "media/8a7719557669858db37b76f7c7c1f596.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/011-crane-down-detail-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8f771121a4ce93d9b0389d0b4a59b0a9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pedestal-up-06-pedestal-up-v2-mini.webp",
+      "alt": "Pedestal Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/f516047901ee827b5665fc1c6658f64a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/06-pedestal-up-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f798664be6a2438fc431a825a3c15f1f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pedestal-down/hero.jpg",
+      "alt": "Pedestal Down",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "c2bffcd7b3be0eb90485cc1cdd7d213be04961bdfeaf693a2bff58f8540ea7cb"
+}

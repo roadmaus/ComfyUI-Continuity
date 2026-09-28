@@ -1,0 +1,431 @@
+{
+  "id": "framing/interview",
+  "slug": "interview",
+  "title": "Interview",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/interview",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/interview.webp",
+  "detail": "details/framing/interview.json",
+  "aliases": [],
+  "description": "Interview cinematography is a talking-head setup: stable size, eyeline just off the lens, a listener implied. Someone is answering a question we often do not hear.",
+  "thumbnail": "media/da395574cb94b3fc9f5a9b56398abbab.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An interview frame is not merely an MCU. It is a social geometry: the subject speaks to a person beside the camera, look space opens toward that listener, and the audience sits in on an answered question."
+        },
+        {
+          "type": "paragraph",
+          "text": "Direct address into the lens is a different contract (confession, host, warning). It is the wrong tool when two fictional characters are in a scene together and you needed OTS or a two-shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool if the eyeline hits the glass and you did not mean to break the fourth wall. Keep the size stable; hunting around the face turns testimony into a music video."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function An interview frame is not merely an MCU. It is a social geometry: the subject speaks to a person beside the camera, look space opens toward that listener, and the audience sits in on an answered question.Direct address into the lens is a different contract (confession, host, warning). It is the wrong tool when two fictional characters are in a scene together and you needed OTS or a two-shot.It is also the wrong tool if the eyeline hits the glass and you did not mean to break the fourth wall. Keep the size stable; hunting around the face turns testimony into a music video."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Size usually Medium Close-Up or a loose Close-Up. Camera at Eye Level.",
+          "links": [
+            {
+              "text": "Medium Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            },
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            },
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Eyeline a few degrees off lens, toward an implied interviewer. Give Look Space on the look side.",
+          "links": [
+            {
+              "text": "Look Space",
+              "url": "https://melies.co/cinematic-techniques/composition/look-space"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Motivated, simple key; catchlight in the eyes. Prompt: Interview frame of [Subject], talking-head distance, eyeline just off lens, a listener implied."
+        }
+      ],
+      "links": [
+        {
+          "text": "Medium Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Look Space",
+          "url": "https://melies.co/cinematic-techniques/composition/look-space"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Size usually Medium Close-Up or a loose Close-Up. Camera at Eye Level.Eyeline a few degrees off lens, toward an implied interviewer. Give Look Space on the look side.Motivated, simple key; catchlight in the eyes. Prompt: Interview frame of [Subject], talking-head distance, eyeline just off lens, a listener implied."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when someone is answering a question we did not hear: documentary testimony, a fake-doc confession, a talking-head insert in a drama. Do not put the eyeline into the lens unless you mean direct address, and do not use this grammar for a two-person scene that should be OTS."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when someone is answering a question we did not hear: documentary testimony, a fake-doc confession, a talking-head insert in a drama. Do not put the eyeline into the lens unless you mean direct address, and do not use this grammar for a two-person scene that should be OTS."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Medium Close-Up is only a crop; interview is the off-lens eyeline plus implied listener. Eye level is the height.",
+          "links": [
+            {
+              "text": "Medium Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            },
+            {
+              "text": "Eye level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Over-the-Shoulder would show the questioner. A video portrait holds a face as a study, often without the Q&A contract.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            },
+            {
+              "text": "video portrait",
+              "url": "https://melies.co/cinematic-techniques/framing/video-portraits"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Interview means testimony geometry."
+        },
+        {
+          "type": "list-item",
+          "text": "Medium Close-UpTalk without losing body language.",
+          "displayText": "Medium Close-Up\nTalk without losing body language.",
+          "links": [
+            {
+              "text": "Medium Close-UpTalk without losing body language.",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Medium Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        },
+        {
+          "text": "Eye level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Over-the-Shoulder",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "video portrait",
+          "url": "https://melies.co/cinematic-techniques/framing/video-portraits"
+        },
+        {
+          "text": "Medium Close-UpTalk without losing body language.",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7df131a7bb3865fbb2b48a5c82d56f2b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-close-up.webp",
+          "alt": "Medium Close-Up"
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Medium Close-Up is only a crop; interview is the off-lens eyeline plus implied listener. Eye level is the height.Over-the-Shoulder would show the questioner. A video portrait holds a face as a study, often without the Q&A contract.Interview means testimony geometry.Medium Close-UpTalk without losing body language.Eye LevelDefault honesty. Do not look down or up unless you mean it.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Fog of War parks a speaker in this grammar so policy becomes a face answering questions. Many social-issue films borrow the same talking-head language (including The Social Dilemma's interview mode): stable size, off-lens eyeline, a listener we take on faith."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: someone is being asked."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Fog of War parks a speaker in this grammar so policy becomes a face answering questions. Many social-issue films borrow the same talking-head language (including The Social Dilemma's interview mode): stable size, off-lens eyeline, a listener we take on faith.Grammar: someone is being asked."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock eyeline and size. Example: Interview frame of [Subject], talking-head distance, eyeline just off lens, a listener implied."
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify look space toward camera-left or camera-right. For video, hold; small hand motion is fine."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not stare down the lens unless you want direct address."
+        },
+        {
+          "type": "quote",
+          "text": "Interview frame of [Subject], talking-head distance, eyeline just off lens, a listener implied."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Interview+frame+of+[Subject],+talking-head+distance,+eyeline+just+off+lens,+a+listener+implied."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lock eyeline and size. Example: Interview frame of [Subject], talking-head distance, eyeline just off lens, a listener implied.Specify look space toward camera-left or camera-right. For video, hold; small hand motion is fine.Do not stare down the lens unless you want direct address.Copy promptUse in Image GeneratorInterview frame of [Subject], talking-head distance, eyeline just off lens, a listener implied.Interview frame of [Subject], talking-head distance, eyeline just off lens, a listener implied."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a generic Medium Close-Up with eyes into the lens, or an Over-the-Shoulder Coverage of a scene. The tell is a host stare, or a second character in a fictional blocking.",
+          "links": [
+            {
+              "text": "Medium Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            },
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: off-lens eyeline, implied listener, stable talking-head size."
+        }
+      ],
+      "links": [
+        {
+          "text": "Medium Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        },
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a generic Medium Close-Up with eyes into the lens, or an Over-the-Shoulder Coverage of a scene. The tell is a host stare, or a second character in a fictional blocking.Fix: off-lens eyeline, implied listener, stable talking-head size."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Interview in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Interview cinematography is a talking-head setup in which the subject answers an offscreen questioner. Size is stable, the eyeline sits just off the lens, and a listener is implied even if we never see them."
+        },
+        {
+          "type": "heading",
+          "text": "Interview vs Medium Close-Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "MCU is a chest-up crop that can be used for any dialogue. Interview is a setup: off-lens eyeline, look space toward a questioner, testimony as the job. You can shoot an MCU that is not an interview, and an interview that is slightly tighter or looser than MCU."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Interview?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for testimony, documentary talking heads, or a drama that borrows that contract. Do not use it when two characters should share a scene in OTS, and do not aim the eyes at the lens unless you mean direct address."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Interview for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Interview frame of [Subject], talking-head distance, eyeline just off lens, a listener implied. Add look space and eye-level. For video, hold the size; do not tour the room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Interview in film?Interview cinematography is a talking-head setup in which the subject answers an offscreen questioner. Size is stable, the eyeline sits just off the lens, and a listener is implied even if we never see them.Interview vs Medium Close-UpMCU is a chest-up crop that can be used for any dialogue. Interview is a setup: off-lens eyeline, look space toward a questioner, testimony as the job. You can shoot an MCU that is not an interview, and an interview that is slightly tighter or looser than MCU.When should I use Interview?Use it for testimony, documentary talking heads, or a drama that borrows that contract. Do not use it when two characters should share a scene in OTS, and do not aim the eyes at the lens unless you mean direct address.How do I prompt Interview for AI image or video?Write Interview frame of [Subject], talking-head distance, eyeline just off lens, a listener implied. Add look space and eye-level. For video, hold the size; do not tour the room."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lock eyeline and size. Example: Interview frame of [Subject], talking-head distance, eyeline just off lens, a listener implied.",
+      "Specify look space toward camera-left or camera-right. For video, hold; small hand motion is fine.",
+      "Do not stare down the lens unless you want direct address."
+    ],
+    "example": "Interview frame of [Subject], talking-head distance, eyeline just off lens, a listener implied."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/da395574cb94b3fc9f5a9b56398abbab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/interview.webp",
+      "alt": "Interview example"
+    },
+    {
+      "kind": "image",
+      "path": "media/7df131a7bb3865fbb2b48a5c82d56f2b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-close-up.webp",
+      "alt": "Medium Close-Up"
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5bc006fe1f480deeafe7b3454315cfab.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/interview/hero.jpg",
+      "alt": "Interview",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "76c35c875082e3cd79aeabf604b05ca5042a5111ab195f645502824d18aa76a2"
+}

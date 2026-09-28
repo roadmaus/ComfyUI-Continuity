@@ -1,0 +1,381 @@
+{
+  "id": "effects/particles",
+  "slug": "particles",
+  "title": "Particles",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/particles",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/particles-particles-mini.webp",
+  "detail": "details/effects/particles.json",
+  "aliases": [],
+  "description": "Particle effects cinematography fills the air with countable bits: dust, sparks, pollen, a weather of motes, each one catching light. Atmosphere you can inventory, not a blanket of fog.",
+  "thumbnail": "media/d3e34f0291639924a4c5ff1898e55451.webp",
+  "video": "media/ddfc39957e978e9062f724fbb3c58908.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/particles-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A shaft becomes a census. Embers drift."
+        },
+        {
+          "type": "paragraph",
+          "text": "Flour hangs. Use it when the air should be a substance the eye can number, and when a beam is the reason we see it."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the air should vanish, or when you only need a shaft of scatter with no specks. If the bits are soap films with refraction, you want bubbles."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the picture is only the beam, you want volumetric light. If the bits are only dust in a church, dust motes may be enough."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A shaft becomes a census. Embers drift.Flour hangs. Use it when the air should be a substance the eye can number, and when a beam is the reason we see it.It is the wrong tool when the air should vanish, or when you only need a shaft of scatter with no specks. If the bits are soap films with refraction, you want bubbles.If the picture is only the beam, you want volumetric light. If the bits are only dust in a church, dust motes may be enough."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Backlight the bits. Place a hard source so each mote has a specular tick."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the species: dust, embers, pollen, ash. Keep the subject readable through the cloud."
+        },
+        {
+          "type": "paragraph",
+          "text": "Volume is a shaft, not a filter over the whole frame. The camera can be locked."
+        },
+        {
+          "type": "paragraph",
+          "text": "The motes move. Prompt particles around the subject: dust, sparks, pollen, a weather of bits, light catching each one."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Backlight the bits. Place a hard source so each mote has a specular tick.Name the species: dust, embers, pollen, ash. Keep the subject readable through the cloud.Volume is a shaft, not a filter over the whole frame. The camera can be locked.The motes move. Prompt particles around the subject: dust, sparks, pollen, a weather of bits, light catching each one."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for holy rooms, barns, battle aftercare, a kitchen with flour. Do not use it when the air should be invisible."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for holy rooms, barns, battle aftercare, a kitchen with flour. Do not use it when the air should be invisible."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dust Motes are specifically dust in a beam. Particles is the broader countable weather, including sparks and pollen.",
+          "links": [
+            {
+              "text": "Dust Motes",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Volumetric Light is the shaft made visible by scatter. Particles are the scatterers as objects you could count.",
+          "links": [
+            {
+              "text": "Volumetric Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dust MotesStillness that is still alive.",
+          "displayText": "Dust Motes\nStillness that is still alive.",
+          "links": [
+            {
+              "text": "Dust MotesStillness that is still alive.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "displayText": "Volumetric Light\nAir has to be photographed, not just the subject.",
+          "links": [
+            {
+              "text": "Volumetric LightAir has to be photographed, not just the subject.",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dust Motes",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+        },
+        {
+          "text": "Volumetric Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "Dust MotesStillness that is still alive.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+        },
+        {
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/5b89d5741ff5b3c872b3d55861e1221b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dust-motes.webp",
+          "alt": "Dust Motes"
+        },
+        {
+          "kind": "image",
+          "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+          "alt": "Volumetric Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Dust Motes are specifically dust in a beam. Particles is the broader countable weather, including sparks and pollen.Volumetric Light is the shaft made visible by scatter. Particles are the scatterers as objects you could count.Dust MotesStillness that is still alive.Volumetric LightAir has to be photographed, not just the subject.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blade Runner 2049 rakes motes and droplets until the air is inventory. The Assassination of Jesse James lets backlight turn dust into weather."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of countable air, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Blade Runner 2049 rakes motes and droplets until the air is inventory. The Assassination of Jesse James lets backlight turn dust into weather.Grammar of countable air, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Particles around [Subject], dust, sparks, pollen, a weather of bits, light catching each one. Name the species, a backlight, and that the bits are discrete."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ban a fog wash with no specks."
+        },
+        {
+          "type": "quote",
+          "text": "Particles around [Subject], dust, sparks, pollen, a weather of bits, light catching each one."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Particles+around+[Subject],+dust,+sparks,+pollen,+a+weather+of+bits,+light+catching+each+one."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Particles around [Subject], dust, sparks, pollen, a weather of bits, light catching each one. Name the species, a backlight, and that the bits are discrete.Ban a fog wash with no specks.Copy promptUse in Image GeneratorParticles around [Subject], dust, sparks, pollen, a weather of bits, light catching each one.Particles around [Subject], dust, sparks, pollen, a weather of bits, light catching each one."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Fog or a mist overlay. The tell is a blanket with no individual specks.",
+          "links": [
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is backlight, a named species, and motes you could count."
+        }
+      ],
+      "links": [
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Fog or a mist overlay. The tell is a blanket with no individual specks.The fix is backlight, a named species, and motes you could count."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is particles in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Particles make weather out of bits: dust, sparks, pollen, each catching light. The air is countable, not a fog blanket."
+        },
+        {
+          "type": "heading",
+          "text": "Particles vs volumetric light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Volumetric light is the beam. Particles are the bits that make the beam visible and that can exist as sparks or pollen even outside a single shaft. One is the volume. The other is the inventory."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use particles?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the air should be a substance you can number. Skip it when the air should disappear, or when you only need a clean shaft."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt particles for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Particles around [Subject], dust, sparks, pollen, light catching each one. Name the species and a backlight. Demand discrete motes, not a mist filter."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is particles in film?Particles make weather out of bits: dust, sparks, pollen, each catching light. The air is countable, not a fog blanket.Particles vs volumetric lightVolumetric light is the beam. Particles are the bits that make the beam visible and that can exist as sparks or pollen even outside a single shaft. One is the volume. The other is the inventory.When should I use particles?Use it when the air should be a substance you can number. Skip it when the air should disappear, or when you only need a clean shaft.How do I prompt particles for AI image or video?Write Particles around [Subject], dust, sparks, pollen, light catching each one. Name the species and a backlight. Demand discrete motes, not a mist filter."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Particles around [Subject], dust, sparks, pollen, a weather of bits, light catching each one. Name the species, a backlight, and that the bits are discrete.",
+      "Ban a fog wash with no specks."
+    ],
+    "example": "Particles around [Subject], dust, sparks, pollen, a weather of bits, light catching each one."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/ddfc39957e978e9062f724fbb3c58908.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/particles-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d3e34f0291639924a4c5ff1898e55451.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/particles-particles-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/44387aac3b23be1d660dd247ec832dc0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/particles.jpg",
+      "alt": "Particles frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/5b89d5741ff5b3c872b3d55861e1221b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dust-motes.webp",
+      "alt": "Dust Motes"
+    },
+    {
+      "kind": "image",
+      "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+      "alt": "Volumetric Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7d4218c02f5985f3aa3bd915cbb7b7f4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/particles/hero.jpg",
+      "alt": "Particles",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "631eb088230218d140c9ae1eabf193b812ddd32c5b853f64d4851f18a47b1bae"
+}

@@ -1,0 +1,403 @@
+{
+  "id": "composition/centered-composition",
+  "slug": "centered-composition",
+  "title": "Centered Composition",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/centered-composition",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+  "detail": "details/composition/centered-composition.json",
+  "aliases": [],
+  "description": "Centered composition places the dominant subject on or near the central vertical axis and organizes the rest of the picture around that axis. The frame reads as a frontal tableau: walls, furniture, and attendants arranged so the subject is an altar, not an accident of blocking.",
+  "thumbnail": "media/807b0df01a31d0570ce5b7247583613a.webp",
+  "video": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Control, ritual, comedy, and fate all like this diagram. The person does not borrow space from a third."
+        },
+        {
+          "type": "paragraph",
+          "text": "The room reports to them, or pretends to. Who owns space is settled in advance by the architecture."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for eavesdropping, pursuit, and most dialogue that needs a look-off. If the sides are busy with unequal life, you have an offset picture with a centered head, which is a different sentence."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wes Anderson made the grammar famous, which is a reason to be precise. Formality is the instrument."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pastel luggage is not."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Control, ritual, comedy, and fate all like this diagram. The person does not borrow space from a third.The room reports to them, or pretends to. Who owns space is settled in advance by the architecture.It is the wrong tool for eavesdropping, pursuit, and most dialogue that needs a look-off. If the sides are busy with unequal life, you have an offset picture with a centered head, which is a different sentence.Wes Anderson made the grammar famous, which is a reason to be precise. Formality is the instrument.Pastel luggage is not."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Square the camera to the back wall. Match left and right masses, or let a planned mismatch be the only joke."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the lens on the centerline of the set, not a casual handheld approximation. A 27mm to 40mm will show the room's obedience."
+        },
+        {
+          "type": "paragraph",
+          "text": "Longer glass will crop the salute and leave you with mere central framing. Prompt: Dead-center composition of [Subject], bilateral symmetry or frontal tableau, Wes Anderson formality, the subject as altar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Square the camera to the back wall. Match left and right masses, or let a planned mismatch be the only joke.Keep the lens on the centerline of the set, not a casual handheld approximation. A 27mm to 40mm will show the room's obedience.Longer glass will crop the salute and leave you with mere central framing. Prompt: Dead-center composition of [Subject], bilateral symmetry or frontal tableau, Wes Anderson formality, the subject as altar."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a ritual entrance, a desk of power, a dollhouse comedy, or a fate that feels designed. Do not use it on a chase or a whispered aside that should feel stolen."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a ritual entrance, a desk of power, a dollhouse comedy, or a fate that feels designed. Do not use it on a chase or a whispered aside that should feel stolen."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Central Framing only demands the body on the crosshairs. Centered composition demands the field.",
+          "links": [
+            {
+              "text": "Central Framing",
+              "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Symmetry is the stronger claim that left mirrors right. You can center a subject in a room that is not a mirror.",
+          "links": [
+            {
+              "text": "Symmetry",
+              "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "One-Point Perspective adds a vanishing point on the same axis, a tunnel instead of a flat altar. Tableau holds the arrangement in time.",
+          "links": [
+            {
+              "text": "One-Point Perspective",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            },
+            {
+              "text": "Tableau",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SymmetryThe world is designed. Or pretending to be.",
+          "displayText": "Symmetry\nThe world is designed. Or pretending to be.",
+          "links": [
+            {
+              "text": "SymmetryThe world is designed. Or pretending to be.",
+              "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "One-Point PerspectiveDestiny has a vanishing point.",
+          "displayText": "One-Point Perspective\nDestiny has a vanishing point.",
+          "links": [
+            {
+              "text": "One-Point PerspectiveDestiny has a vanishing point.",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Central Framing",
+          "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+        },
+        {
+          "text": "Symmetry",
+          "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+        },
+        {
+          "text": "One-Point Perspective",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Tableau",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "SymmetryThe world is designed. Or pretending to be.",
+          "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+        },
+        {
+          "text": "One-Point PerspectiveDestiny has a vanishing point.",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/433ff490835bf3f002cef6f2447f05d3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/symmetry.webp",
+          "alt": "Symmetry"
+        },
+        {
+          "kind": "image",
+          "path": "media/fd42e6b828b510faf2cf566bcbd2d93b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-point-perspective-037-symmetry-and-one-point-perspective-mini.webp",
+          "alt": "One-Point Perspective"
+        },
+        {
+          "kind": "video",
+          "path": "media/6a0595c4b52cce7843ef5c4ab8eb4adf.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/037-symmetry-and-one-point-perspective-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Central Framing only demands the body on the crosshairs. Centered composition demands the field.Symmetry is the stronger claim that left mirrors right. You can center a subject in a room that is not a mirror.One-Point Perspective adds a vanishing point on the same axis, a tunnel instead of a flat altar. Tableau holds the arrangement in time.SymmetryThe world is designed. Or pretending to be.One-Point PerspectiveDestiny has a vanishing point.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Grand Budapest Hotel builds hotel interiors as frontal altars. Moonrise Kingdom presents tents, churches, and children as arranged diagrams."
+        },
+        {
+          "type": "paragraph",
+          "text": "Both films let a small human deviation read loudly because the axis was so clean. Grammar, not a production-design costume."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Grand Budapest Hotel builds hotel interiors as frontal altars. Moonrise Kingdom presents tents, churches, and children as arranged diagrams.Both films let a small human deviation read loudly because the axis was so clean. Grammar, not a production-design costume."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ask for the whole altar. Dead-center composition of [Subject], bilateral symmetry or frontal tableau, Wes Anderson formality, the subject as altar."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the back wall, matching lamps or windows, camera square to architecture. Do not stop at face in the middle."
+        },
+        {
+          "type": "quote",
+          "text": "Dead-center composition of [Subject], bilateral symmetry or frontal tableau, Wes Anderson formality, the subject as altar."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Dead-center+composition+of+[Subject],+bilateral+symmetry+or+frontal+tableau,+Wes+Anderson+formality,+the+subject+as+altar."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Ask for the whole altar. Dead-center composition of [Subject], bilateral symmetry or frontal tableau, Wes Anderson formality, the subject as altar.Name the back wall, matching lamps or windows, camera square to architecture. Do not stop at face in the middle.Copy promptUse in Image GeneratorDead-center composition of [Subject], bilateral symmetry or frontal tableau, Wes Anderson formality, the subject as altar.Dead-center composition of [Subject], bilateral symmetry or frontal tableau, Wes Anderson formality, the subject as altar."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a centered head in an uncomposed room. The tell is a bullseye face with a plant on one side and a door on the other."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to square the camera, match the masses, or switch to Central Framing and let the mess be honest.",
+          "links": [
+            {
+              "text": "Central Framing",
+              "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Central Framing",
+          "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a centered head in an uncomposed room. The tell is a bullseye face with a plant on one side and a door on the other.The fix is to square the camera, match the masses, or switch to Central Framing and let the mess be honest."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is centered composition in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "The dominant subject sits on the central axis, and the rest of the picture is organized around that axis. The frame becomes a frontal tableau. The person is an altar. Leftover space does not belong to a look-off."
+        },
+        {
+          "type": "heading",
+          "text": "Centered Composition vs Symmetry",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Centered composition puts the subject on the axis. Symmetry mirrors masses across that axis. A centered desk in a lopsided office is centered without being symmetrical. A mirrored hall with nobody in the middle is symmetrical without a centered hero."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use centered composition?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for control, ritual, comedy, or fate: someone presented by a room that obeys. Do not use it when the character should be hunting through space or hiding in someone else's diagram."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt centered composition for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Demand the axis and the room. Example: Dead-center composition of [Subject], bilateral symmetry or frontal tableau, Wes Anderson formality, the subject as altar. Say camera square to the back wall. If you only say centered face, you will get a portrait crop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is centered composition in film?The dominant subject sits on the central axis, and the rest of the picture is organized around that axis. The frame becomes a frontal tableau. The person is an altar. Leftover space does not belong to a look-off.Centered Composition vs SymmetryCentered composition puts the subject on the axis. Symmetry mirrors masses across that axis. A centered desk in a lopsided office is centered without being symmetrical. A mirrored hall with nobody in the middle is symmetrical without a centered hero.When should I use centered composition?Use it for control, ritual, comedy, or fate: someone presented by a room that obeys. Do not use it when the character should be hunting through space or hiding in someone else's diagram.How do I prompt centered composition for AI image or video?Demand the axis and the room. Example: Dead-center composition of [Subject], bilateral symmetry or frontal tableau, Wes Anderson formality, the subject as altar. Say camera square to the back wall. If you only say centered face, you will get a portrait crop."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Ask for the whole altar. Dead-center composition of [Subject], bilateral symmetry or frontal tableau, Wes Anderson formality, the subject as altar.",
+      "Name the back wall, matching lamps or windows, camera square to architecture. Do not stop at face in the middle."
+    ],
+    "example": "Dead-center composition of [Subject], bilateral symmetry or frontal tableau, Wes Anderson formality, the subject as altar."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/418d311cf49030cab5f3746ed86a27d1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/centered-composition.jpg",
+      "alt": "Centered Composition frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/433ff490835bf3f002cef6f2447f05d3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/symmetry.webp",
+      "alt": "Symmetry"
+    },
+    {
+      "kind": "image",
+      "path": "media/fd42e6b828b510faf2cf566bcbd2d93b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-point-perspective-037-symmetry-and-one-point-perspective-mini.webp",
+      "alt": "One-Point Perspective"
+    },
+    {
+      "kind": "video",
+      "path": "media/6a0595c4b52cce7843ef5c4ab8eb4adf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/037-symmetry-and-one-point-perspective-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/1b2f14c244629d6896f093e0bae28b0d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/centered-composition/hero.jpg",
+      "alt": "Centered Composition",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "4374620ab43c70d676f6477ae9b2d22d5a94cdc2a6a57a8fbc8a80d3978718cd"
+}

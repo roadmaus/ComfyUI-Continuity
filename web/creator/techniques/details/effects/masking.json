@@ -1,0 +1,413 @@
+{
+  "id": "effects/masking",
+  "slug": "masking",
+  "title": "Masking",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/masking",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/masking-masking-mini.webp",
+  "detail": "details/effects/masking.json",
+  "aliases": [],
+  "description": "Masking cinematography uses a matte, a viewfinder object, or a graphic window so looking is visible as a shape cutting the picture. We see through binoculars, a keyhole, or a hard-edged hole.",
+  "thumbnail": "media/2ddb734916b72a7342a63890baa5f001.webp",
+  "video": "media/dee527ba7cb1a73ba4c9a6a1b22f6100.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/masking-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The audience is made to look as a character looks. A circle of night, a door slot, a camera's own frame-lines."
+        },
+        {
+          "type": "paragraph",
+          "text": "The surround is black or graphic. The photograph lives only in the hole."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you merely want a tighter shot, or when the container itself should widen. If the outer bounds of the movie change ratio, that is a ratio switch."
+        },
+        {
+          "type": "paragraph",
+          "text": "If a doorway is simply in the set, that is a frame within a frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The audience is made to look as a character looks. A circle of night, a door slot, a camera's own frame-lines.The surround is black or graphic. The photograph lives only in the hole.It is the wrong tool when you merely want a tighter shot, or when the container itself should widen. If the outer bounds of the movie change ratio, that is a ratio switch.If a doorway is simply in the set, that is a frame within a frame."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put a physical mask in front of the lens (binoculars, a cutout, an iris board) or add a hard matte in optical printing. The interior of the hole is the exposure."
+        },
+        {
+          "type": "paragraph",
+          "text": "The surround stays opaque. Keep the subject composed for that shape, not for the full sensor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Light the interior as a real scene. The mask does not need its own key."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a masked frame around the subject: a shape cutting the picture, binoculars, a keyhole, a graphic window."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put a physical mask in front of the lens (binoculars, a cutout, an iris board) or add a hard matte in optical printing. The interior of the hole is the exposure.The surround stays opaque. Keep the subject composed for that shape, not for the full sensor.Light the interior as a real scene. The mask does not need its own key.Prompt a masked frame around the subject: a shape cutting the picture, binoculars, a keyhole, a graphic window."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat of spying, peeping, or a title that looks through an object. Do not use it as a fancy crop on a scene that is not about looking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat of spying, peeping, or a title that looks through an object. Do not use it as a fancy crop on a scene that is not about looking."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Frame within Frame uses architecture already in the room: a window, a door, a mirror. Masking cuts the picture with a shape that is the act of looking.",
+          "links": [
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Iris opens or closes a circle as a transition. A masked binocular hole can sit for the whole shot.",
+          "links": [
+            {
+              "text": "Iris",
+              "url": "https://melies.co/cinematic-techniques/editing/iris"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+          "displayText": "Frame within Frame\nSomeone is watched, trapped, or pictured.",
+          "links": [
+            {
+              "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "IrisPoint with the mask itself.",
+          "displayText": "Iris\nPoint with the mask itself.",
+          "links": [
+            {
+              "text": "IrisPoint with the mask itself.",
+              "url": "https://melies.co/cinematic-techniques/editing/iris"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Iris",
+          "url": "https://melies.co/cinematic-techniques/editing/iris"
+        },
+        {
+          "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "IrisPoint with the mask itself.",
+          "url": "https://melies.co/cinematic-techniques/editing/iris"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+          "alt": "Frame within Frame"
+        },
+        {
+          "kind": "video",
+          "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ac66d050cb3a40e5efe5550f1b3c9242.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/iris-104-iris-opening-or-closing-mini.webp",
+          "alt": "Iris"
+        },
+        {
+          "kind": "video",
+          "path": "media/df975cf4d452b48274b222e578129ce2.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/104-iris-opening-or-closing-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Frame within Frame uses architecture already in the room: a window, a door, a mirror. Masking cuts the picture with a shape that is the act of looking.Iris opens or closes a circle as a transition. A masked binocular hole can sit for the whole shot.Frame within FrameSomeone is watched, trapped, or pictured.IrisPoint with the mask itself.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Kill Bill looks through coffin slots and tight graphic holes. The Grand Budapest Hotel boxes looking as a designed window."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar for seeing-as-object, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Kill Bill looks through coffin slots and tight graphic holes. The Grand Budapest Hotel boxes looking as a designed window.Grammar for seeing-as-object, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Masked frame around [Subject], a shape cutting the picture, binoculars, a keyhole, a graphic window. Name the shape, keep the interior photographed, and keep the surround opaque."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not stretch the image to fill the hole."
+        },
+        {
+          "type": "quote",
+          "text": "Masked frame around [Subject], a shape cutting the picture, binoculars, a keyhole, a graphic window."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Masked+frame+around+[Subject],+a+shape+cutting+the+picture,+binoculars,+a+keyhole,+a+graphic+window."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Masked frame around [Subject], a shape cutting the picture, binoculars, a keyhole, a graphic window. Name the shape, keep the interior photographed, and keep the surround opaque.Do not stretch the image to fill the hole.Copy promptUse in Image GeneratorMasked frame around [Subject], a shape cutting the picture, binoculars, a keyhole, a graphic window.Masked frame around [Subject], a shape cutting the picture, binoculars, a keyhole, a graphic window."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousins are a Wide Shot with a vignette, or a Ratio Switch. The tell is a soft dark edge, or the whole frame widening.",
+          "links": [
+            {
+              "text": "Wide Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+            },
+            {
+              "text": "Ratio Switch",
+              "url": "https://melies.co/cinematic-techniques/effects/ratio-switch"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is a hard shape, a hole, and a scene composed for that hole."
+        }
+      ],
+      "links": [
+        {
+          "text": "Wide Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+        },
+        {
+          "text": "Ratio Switch",
+          "url": "https://melies.co/cinematic-techniques/effects/ratio-switch"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousins are a Wide Shot with a vignette, or a Ratio Switch. The tell is a soft dark edge, or the whole frame widening.The fix is a hard shape, a hole, and a scene composed for that hole."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is masking in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Masking cuts the picture with a shape so looking is visible as an object: binoculars, a keyhole, a graphic window. The photograph lives inside the hole."
+        },
+        {
+          "type": "heading",
+          "text": "Masking vs iris",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An iris is usually a circular transition that opens or closes. Masking is a persistent shape through which we look. One is a join. The other is a viewfinder."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use masking?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the act of looking should be an object in the shot. Skip it when you only need a closer framing or a change of aspect ratio."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt masking for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Masked frame around [Subject], a shape cutting the picture. Name binoculars, a keyhole, or a graphic window. Keep the surround opaque and the interior a real photograph."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is masking in film?Masking cuts the picture with a shape so looking is visible as an object: binoculars, a keyhole, a graphic window. The photograph lives inside the hole.Masking vs irisAn iris is usually a circular transition that opens or closes. Masking is a persistent shape through which we look. One is a join. The other is a viewfinder.When should I use masking?Use it when the act of looking should be an object in the shot. Skip it when you only need a closer framing or a change of aspect ratio.How do I prompt masking for AI image or video?Write Masked frame around [Subject], a shape cutting the picture. Name binoculars, a keyhole, or a graphic window. Keep the surround opaque and the interior a real photograph."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Masked frame around [Subject], a shape cutting the picture, binoculars, a keyhole, a graphic window. Name the shape, keep the interior photographed, and keep the surround opaque.",
+      "Do not stretch the image to fill the hole."
+    ],
+    "example": "Masked frame around [Subject], a shape cutting the picture, binoculars, a keyhole, a graphic window."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/dee527ba7cb1a73ba4c9a6a1b22f6100.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/masking-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2ddb734916b72a7342a63890baa5f001.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/masking-masking-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6dbcc3be5706e288b9ebc1c2ed500900.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/masking.jpg",
+      "alt": "Masking frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+      "alt": "Frame within Frame"
+    },
+    {
+      "kind": "video",
+      "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ac66d050cb3a40e5efe5550f1b3c9242.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/iris-104-iris-opening-or-closing-mini.webp",
+      "alt": "Iris"
+    },
+    {
+      "kind": "video",
+      "path": "media/df975cf4d452b48274b222e578129ce2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/104-iris-opening-or-closing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/df07b95ea625fb7ca23b68c283a6300c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/masking/hero.jpg",
+      "alt": "Masking",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "90ea5bfc8c5fb7d394456b2a92861180e34b63cd6ed5278fa4f784a897fbe91b"
+}

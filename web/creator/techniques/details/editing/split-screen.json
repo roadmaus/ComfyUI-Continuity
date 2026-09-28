@@ -1,0 +1,517 @@
+{
+  "id": "editing/split-screen",
+  "slug": "split-screen",
+  "title": "Split Screen",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/split-screen",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-screen-120-simultaneous-split-screen-mini.webp",
+  "detail": "details/editing/split-screen.json",
+  "aliases": [
+    "Rashomon structure",
+    "Replayed encounter"
+  ],
+  "description": "Split screen shows two or more image fields at once, so separate spaces share a single moment on the same frame. Both sides of the join are visible together; there is no waiting for the next cut.",
+  "thumbnail": "media/aa1f55893c6980380f31912c5c293abe.webp",
+  "video": "media/6b8983f75155ce580e4009fe6c11abb4.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/120-simultaneous-split-screen-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A phone call places two apartments in one picture. A party splits into the night you wanted and the night you got."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dual identity, dual time, or dual witness: the pane is the grammar. Use it when two rooms must be one moment, or when comparison is the joke."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the audience should assume contact and then be wrong: that surprise is often better as Cross-Cutting. It is also not a window, doorway, or mirror inside the set.",
+          "links": [
+            {
+              "text": "Cross-Cutting",
+              "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "That is Frame within Frame, a diegetic frame, not a panel. Replaying an event from another angle does not automatically make the accounts unreliable.",
+          "links": [
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Split screen can show agreement as easily as a lie."
+        }
+      ],
+      "links": [
+        {
+          "text": "Cross-Cutting",
+          "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+        },
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A phone call places two apartments in one picture. A party splits into the night you wanted and the night you got.Dual identity, dual time, or dual witness: the pane is the grammar. Use it when two rooms must be one moment, or when comparison is the joke.It is the wrong tool when the audience should assume contact and then be wrong: that surprise is often better as Cross-Cutting. It is also not a window, doorway, or mirror inside the set.That is Frame within Frame, a diegetic frame, not a panel. Replaying an event from another angle does not automatically make the accounts unreliable.Split screen can show agreement as easily as a lie."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shoot or generate each pane with matched eye-lines, horizon, or motion if you want the split to feel like one organism (a Match Split). Or keep the panes frankly separate for a phone call.",
+          "links": [
+            {
+              "text": "Match Split",
+              "url": "https://melies.co/cinematic-techniques/editing/match-split"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Decide the boundary: hard vertical, architectural, torn. Keep identity stable unless the point is two versions of one person."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: split screen with [Subject] in one pane and another life in the other, simultaneous spaces, phone-call cinema or dual identity."
+        }
+      ],
+      "links": [
+        {
+          "text": "Match Split",
+          "url": "https://melies.co/cinematic-techniques/editing/match-split"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Shoot or generate each pane with matched eye-lines, horizon, or motion if you want the split to feel like one organism (a Match Split). Or keep the panes frankly separate for a phone call.Decide the boundary: hard vertical, architectural, torn. Keep identity stable unless the point is two versions of one person.Prompt: split screen with [Subject] in one pane and another life in the other, simultaneous spaces, phone-call cinema or dual identity."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for simultaneous phone calls, twins, expectation versus reality, four quadrants of one hour. Do not use it as wallpaper on a single conversation that wants ordinary coverage."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you need the second room later, cut later."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for simultaneous phone calls, twins, expectation versus reality, four quadrants of one hour. Do not use it as wallpaper on a single conversation that wants ordinary coverage.If you need the second room later, cut later."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cross-Cutting alternates; split screen co-presents. Frame within Frame is a picture found in the world (a window, a phone, a doorway).",
+          "links": [
+            {
+              "text": "Cross-Cutting",
+              "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+            },
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Match Split is a split whose dividing line or contour continues from one world into the other. Montage sequences images; split screen stacks them now.",
+          "links": [
+            {
+              "text": "Match Split",
+              "url": "https://melies.co/cinematic-techniques/editing/match-split"
+            },
+            {
+              "text": "Montage",
+              "url": "https://melies.co/cinematic-techniques/editing/montage"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+          "displayText": "Frame within Frame\nSomeone is watched, trapped, or pictured.",
+          "links": [
+            {
+              "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cross-CuttingMeanwhile is the engine.",
+          "displayText": "Cross-Cutting\nMeanwhile is the engine.",
+          "links": [
+            {
+              "text": "Cross-CuttingMeanwhile is the engine.",
+              "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cross-Cutting",
+          "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+        },
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Match Split",
+          "url": "https://melies.co/cinematic-techniques/editing/match-split"
+        },
+        {
+          "text": "Montage",
+          "url": "https://melies.co/cinematic-techniques/editing/montage"
+        },
+        {
+          "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Cross-CuttingMeanwhile is the engine.",
+          "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+          "alt": "Frame within Frame"
+        },
+        {
+          "kind": "video",
+          "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8f3e9fa837a5cfd76a9d6348a999ed0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-cut-111-cross-cutting-between-converging-actions-mini.webp",
+          "alt": "Cross-Cutting"
+        },
+        {
+          "kind": "video",
+          "path": "media/ffb85c669ad8b5e280269a83f59f771a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/111-cross-cutting-between-converging-actions-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Cross-Cutting alternates; split screen co-presents. Frame within Frame is a picture found in the world (a window, a phone, a doorway).Match Split is a split whose dividing line or contour continues from one world into the other. Montage sequences images; split screen stacks them now.Frame within FrameSomeone is watched, trapped, or pictured.Cross-CuttingMeanwhile is the engine.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pillow Talk and other studio comedies park two ends of a phone call in one frame. Timecode runs four continuous views in quadrants."
+        },
+        {
+          "type": "paragraph",
+          "text": "Kill Bill and Sisters use panels as simultaneous action. (500) Days of Summer splits expectation and reality at a party."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the pane logic, not a copied poster."
+        },
+        {
+          "type": "list-item",
+          "text": "Rashomon 1950Testimonies offer incompatible versions of the central encounter.",
+          "displayText": "Rashomon 1950\nTestimonies offer incompatible versions of the central encounter."
+        },
+        {
+          "type": "list-item",
+          "text": "Elephant 2003Paths and encounters are revisited from different students’ viewpoints.",
+          "displayText": "Elephant 2003\nPaths and encounters are revisited from different students’ viewpoints."
+        },
+        {
+          "type": "list-item",
+          "text": "Jackie Brown 1997The money exchange is replayed through different participants’ perspectives.",
+          "displayText": "Jackie Brown 1997\nThe money exchange is replayed through different participants’ perspectives."
+        },
+        {
+          "type": "list-item",
+          "text": "Carrie 1976The prom catastrophe uses simultaneous panels.",
+          "displayText": "Carrie 1976\nThe prom catastrophe uses simultaneous panels."
+        },
+        {
+          "type": "list-item",
+          "text": "Sisters 1972Separate fields of action share the screen.",
+          "displayText": "Sisters 1972\nSeparate fields of action share the screen."
+        },
+        {
+          "type": "list-item",
+          "text": "Pillow Talk 1959Telephone conversations place separated people together.",
+          "displayText": "Pillow Talk 1959\nTelephone conversations place separated people together."
+        },
+        {
+          "type": "list-item",
+          "text": "Timecode 2000Four continuous camera views occupy four screen quadrants.",
+          "displayText": "Timecode 2000\nFour continuous camera views occupy four screen quadrants."
+        },
+        {
+          "type": "list-item",
+          "text": "Napoléon 1927The finale expands into a triptych in its Polyvision presentation.",
+          "displayText": "Napoléon 1927\nThe finale expands into a triptych in its Polyvision presentation."
+        },
+        {
+          "type": "list-item",
+          "text": "(500) Days of Summer 2009The party is divided into expectations and reality.",
+          "displayText": "(500) Days of Summer 2009\nThe party is divided into expectations and reality."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Pillow Talk and other studio comedies park two ends of a phone call in one frame. Timecode runs four continuous views in quadrants.Kill Bill and Sisters use panels as simultaneous action. (500) Days of Summer splits expectation and reality at a party.Use the pane logic, not a copied poster.Rashomon 1950Testimonies offer incompatible versions of the central encounter.Elephant 2003Paths and encounters are revisited from different students’ viewpoints.Jackie Brown 1997The money exchange is replayed through different participants’ perspectives.Carrie 1976The prom catastrophe uses simultaneous panels.Sisters 1972Separate fields of action share the screen.Pillow Talk 1959Telephone conversations place separated people together.Timecode 2000Four continuous camera views occupy four screen quadrants.Napoléon 1927The finale expands into a triptych in its Polyvision presentation.(500) Days of Summer 2009The party is divided into expectations and reality."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Split screen with [Subject] in one pane and another life in the other, simultaneous spaces, phone-call cinema or dual identity. Name the boundary, whether eyelines match, and what each pane contains."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, two (or more) complete shots composited, not one image torn as a texture."
+        },
+        {
+          "type": "quote",
+          "text": "Show one lost-wallet incident three times: from the owner’s view, a cleaner’s view and a distant passenger’s view. Preserve the same station clock, movements and wallet position, but reveal different occluded actions each time. The third version resolves the apparent theft without inventing a new event."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Show+one+lost-wallet+incident+three+times:+from+the+owner%E2%80%99s+view,+a+cleaner%E2%80%99s+view+and+a+distant+passenger%E2%80%99s+view.+Preserve+the+same+station+clock,+movements+and+wallet+position,+but+reveal+different+occluded+actions+each+time.+The+third+version+resolves+the+apparent+theft+without+inventing+a+new+event."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Split screen with [Subject] in one pane and another life in the other, simultaneous spaces, phone-call cinema or dual identity. Name the boundary, whether eyelines match, and what each pane contains.For video, two (or more) complete shots composited, not one image torn as a texture.Copy promptUse in Video GeneratorShow one lost-wallet incident three times: from the owner’s view, a cleaner’s view and a distant passenger’s view. Preserve the same station clock, movements and wallet position, but reveal different occluded actions each time. The third version resolves the apparent theft without inventing a new event.Show one lost-wallet incident three times: from the owner’s view, a cleaner’s view and a distant passenger’s view. Preserve the same station clock, movements and wallet position, but reveal different occluded actions each time. The third version resolves the apparent theft without inventing a new event."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Frame within Frame (a real window) or Cross-Cutting (sequential). The tell: a doorway in the set, or the model giving you one wide with a scratch down the middle.",
+          "links": [
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            },
+            {
+              "text": "Cross-Cutting",
+              "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: two fully directed spaces, a graphic divide, simultaneous time."
+        }
+      ],
+      "links": [
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Cross-Cutting",
+          "url": "https://melies.co/cinematic-techniques/editing/cross-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Frame within Frame (a real window) or Cross-Cutting (sequential). The tell: a doorway in the set, or the model giving you one wide with a scratch down the middle.The fix: two fully directed spaces, a graphic divide, simultaneous time."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Split Screen in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Split screen shows multiple image fields at once. Both sides of the join occupy the frame together, so two rooms or two versions share one moment."
+        },
+        {
+          "type": "heading",
+          "text": "Split Screen vs Cross-Cutting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Cross-cutting alternates lines so you see one, then the other. Split screen presents them simultaneously. Alternation creates meanwhile; panels create co-presence."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Split Screen?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when two spaces must be one moment: a call, twins, expectation versus reality. Do not use it as a substitute for a window in the set or for ordinary coverage."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Split Screen for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Describe each pane and the divide. Example: Split screen with [Subject] in one pane and another life in the other, simultaneous spaces. Specify a hard boundary and two complete scenes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Split Screen in film?Split screen shows multiple image fields at once. Both sides of the join occupy the frame together, so two rooms or two versions share one moment.Split Screen vs Cross-CuttingCross-cutting alternates lines so you see one, then the other. Split screen presents them simultaneously. Alternation creates meanwhile; panels create co-presence.When should I use Split Screen?Use it when two spaces must be one moment: a call, twins, expectation versus reality. Do not use it as a substitute for a window in the set or for ordinary coverage.How do I prompt Split Screen for AI image or video?Describe each pane and the divide. Example: Split screen with [Subject] in one pane and another life in the other, simultaneous spaces. Specify a hard boundary and two complete scenes."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Split screen with [Subject] in one pane and another life in the other, simultaneous spaces, phone-call cinema or dual identity. Name the boundary, whether eyelines match, and what each pane contains.",
+      "For video, two (or more) complete shots composited, not one image torn as a texture."
+    ],
+    "example": "Show one lost-wallet incident three times: from the owner’s view, a cleaner’s view and a distant passenger’s view. Preserve the same station clock, movements and wallet position, but reveal different occluded actions each time. The third version resolves the apparent theft without inventing a new event."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/6b8983f75155ce580e4009fe6c11abb4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/120-simultaneous-split-screen-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aa1f55893c6980380f31912c5c293abe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-screen-120-simultaneous-split-screen-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/72725777234de8908eec9f8c54000617.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/split-screen.jpg",
+      "alt": "Split Screen frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+      "alt": "Frame within Frame"
+    },
+    {
+      "kind": "video",
+      "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8f3e9fa837a5cfd76a9d6348a999ed0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-cut-111-cross-cutting-between-converging-actions-mini.webp",
+      "alt": "Cross-Cutting"
+    },
+    {
+      "kind": "video",
+      "path": "media/ffb85c669ad8b5e280269a83f59f771a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/111-cross-cutting-between-converging-actions-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9de1e49e74e9a5117b6506b5fe0bd26c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/split-screen/hero.jpg",
+      "alt": "Split Screen",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "7efb8aadf909996410a5381c7ee0b4f7a465be4abba0c883cfc2a5b1df2c1fa6"
+}

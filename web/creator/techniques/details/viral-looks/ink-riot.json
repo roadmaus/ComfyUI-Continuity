@@ -1,0 +1,394 @@
+{
+  "id": "viral-looks/ink-riot",
+  "slug": "ink-riot",
+  "title": "Ink Riot",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/ink-riot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ink-riot-ink-riot-mini.webp",
+  "detail": "details/viral-looks/ink-riot.json",
+  "aliases": [],
+  "description": "Ink riot, the ink riot effect, is liquid calligraphy occupying the air around a still-photographic subject: black and color blooming, dripping, exploding off a brush. The camera still needs a stand and a readable face, because the ink is weather, not a texture pack.",
+  "thumbnail": "media/4f2e0687488ed5fe069887e8841b9eaa.webp",
+  "video": "media/710fb78f97a115252986da945497849b.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ink-riot-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The shot is a page that fought back. Hold the person."
+        },
+        {
+          "type": "paragraph",
+          "text": "Let ink do the violence: a bloom past the cheek, a splash that hides a doorway, a black tide that has not yet reached the eyes. Titles, music, and a character whose interior is a mess can survive this."
+        },
+        {
+          "type": "paragraph",
+          "text": "Procedural crime coverage usually cannot, unless you are in the credits. It is the wrong tool when you need geography, eyelines, or a clean insert."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the face drowns, you shot a stock loop of paint, not a scene."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The shot is a page that fought back. Hold the person.Let ink do the violence: a bloom past the cheek, a splash that hides a doorway, a black tide that has not yet reached the eyes. Titles, music, and a character whose interior is a mess can survive this.Procedural crime coverage usually cannot, unless you are in the credits. It is the wrong tool when you need geography, eyelines, or a clean insert.If the face drowns, you shot a stock loop of paint, not a scene."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock off, or use a tiny handheld that does not chase every splash. Eye height, 35mm to 50mm, subject sharp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Key is a real lamp (sodium, window, practical) so the photographic body has a shadow. Describe ink as matter: blooming, dripping, occupying air."
+        },
+        {
+          "type": "paragraph",
+          "text": "One palette, not every hue. Keep eyes clear."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Ink riot around [Subject], black and color blooming in liquid, calligraphy as explosion, a page that fights."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock off, or use a tiny handheld that does not chase every splash. Eye height, 35mm to 50mm, subject sharp.Key is a real lamp (sodium, window, practical) so the photographic body has a shadow. Describe ink as matter: blooming, dripping, occupying air.One palette, not every hue. Keep eyes clear.Prompt: Ink riot around [Subject], black and color blooming in liquid, calligraphy as explosion, a page that fights."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A title card, a breakdown, a music still where the room should spill. Do not use it on a two-shot that has to cut on dialogue."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A title card, a breakdown, a music still where the room should spill. Do not use it on a two-shot that has to cut on dialogue."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Collage is cut paper and edges, dry pieces, not liquid. Mixed Media stacks stocks and techniques.",
+          "links": [
+            {
+              "text": "Collage",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            },
+            {
+              "text": "Mixed Media",
+              "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Akrill is thick paint sitting on the world. Ink riot is airborne calligraphy around a face that still photographs.",
+          "links": [
+            {
+              "text": "Akrill",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/akrill"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CollageOne image is not enough; stack them.",
+          "displayText": "Collage\nOne image is not enough; stack them.",
+          "links": [
+            {
+              "text": "CollageOne image is not enough; stack them.",
+              "url": "https://melies.co/cinematic-techniques/effects/collage"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Mixed MediaNo single medium owns the truth.",
+          "displayText": "Mixed Media\nNo single medium owns the truth.",
+          "links": [
+            {
+              "text": "Mixed MediaNo single medium owns the truth.",
+              "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Collage",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        },
+        {
+          "text": "Mixed Media",
+          "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+        },
+        {
+          "text": "Akrill",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/akrill"
+        },
+        {
+          "text": "CollageOne image is not enough; stack them.",
+          "url": "https://melies.co/cinematic-techniques/effects/collage"
+        },
+        {
+          "text": "Mixed MediaNo single medium owns the truth.",
+          "url": "https://melies.co/cinematic-techniques/effects/mixed-media"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+          "alt": "Collage"
+        },
+        {
+          "kind": "image",
+          "path": "media/83d2cb5611a01b24c14f80d7066eb566.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mixed-media-mixed-media-mini.webp",
+          "alt": "Mixed Media"
+        },
+        {
+          "kind": "video",
+          "path": "media/d444dde0403cf42d4c72951f133ce07c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mixed-media-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Collage is cut paper and edges, dry pieces, not liquid. Mixed Media stacks stocks and techniques.Akrill is thick paint sitting on the world. Ink riot is airborne calligraphy around a face that still photographs.CollageOne image is not enough; stack them.Mixed MediaNo single medium owns the truth.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Zhang Yimou's Hero uses ink-in-water as weather around bodies. Sin City titles treat ink as the world."
+        },
+        {
+          "type": "paragraph",
+          "text": "The still should look wet. You are borrowing the liquid law, not a frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Zhang Yimou's Hero uses ink-in-water as weather around bodies. Sin City titles treat ink as the world.The still should look wet. You are borrowing the liquid law, not a frame."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Hold a readable subject, then the liquid. Ink riot around [Subject], black and color blooming in liquid, calligraphy as explosion, a page that fights."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add lock-off, key side, and which features must stay dry. For motion, ink blooms and settles."
+        },
+        {
+          "type": "paragraph",
+          "text": "The person does not dissolve."
+        },
+        {
+          "type": "quote",
+          "text": "Ink riot around [Subject], black and color blooming in liquid, calligraphy as explosion, a page that fights."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Ink+riot+around+[Subject],+black+and+color+blooming+in+liquid,+calligraphy+as+explosion,+a+page+that+fights."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Hold a readable subject, then the liquid. Ink riot around [Subject], black and color blooming in liquid, calligraphy as explosion, a page that fights.Add lock-off, key side, and which features must stay dry. For motion, ink blooms and settles.The person does not dissolve.Copy promptUse in Image GeneratorInk riot around [Subject], black and color blooming in liquid, calligraphy as explosion, a page that fights.Ink riot around [Subject], black and color blooming in liquid, calligraphy as explosion, a page that fights."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Models drown the subject or add Comic halftone and oil at once. The tell is no eyes, or every medium in one frame.",
+          "links": [
+            {
+              "text": "Comic",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/comic"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: one ink palette, photographic face, lock-off, ink as matter in air."
+        }
+      ],
+      "links": [
+        {
+          "text": "Comic",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/comic"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong Models drown the subject or add Comic halftone and oil at once. The tell is no eyes, or every medium in one frame.Fix it: one ink palette, photographic face, lock-off, ink as matter in air."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Ink Riot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A graphic look where ink behaves as weather around a photographic subject: blooming, dripping calligraphy. The camera still has a stand. The face still has to read."
+        },
+        {
+          "type": "heading",
+          "text": "Ink Riot vs Collage",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Collage is cut pieces with dry edges. Ink riot is liquid in air. If you can peel a layer off the frame, you wanted collage. If it should look wet, you wanted this."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Ink Riot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Titles, music, a character whose interior spills. Skip it for procedural coverage and any beat that needs a clean eyeline."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Ink Riot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the person, lock the camera, name the key, then: Ink riot around [Subject], black and color blooming in liquid, calligraphy as explosion, a page that fights. Keep the eyes. One ink palette."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Ink Riot in film?A graphic look where ink behaves as weather around a photographic subject: blooming, dripping calligraphy. The camera still has a stand. The face still has to read.Ink Riot vs CollageCollage is cut pieces with dry edges. Ink riot is liquid in air. If you can peel a layer off the frame, you wanted collage. If it should look wet, you wanted this.When should I use Ink Riot?Titles, music, a character whose interior spills. Skip it for procedural coverage and any beat that needs a clean eyeline.How do I prompt Ink Riot for AI image or video?Name the person, lock the camera, name the key, then: Ink riot around [Subject], black and color blooming in liquid, calligraphy as explosion, a page that fights. Keep the eyes. One ink palette."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Hold a readable subject, then the liquid. Ink riot around [Subject], black and color blooming in liquid, calligraphy as explosion, a page that fights.",
+      "Add lock-off, key side, and which features must stay dry. For motion, ink blooms and settles.",
+      "The person does not dissolve."
+    ],
+    "example": "Ink riot around [Subject], black and color blooming in liquid, calligraphy as explosion, a page that fights."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/710fb78f97a115252986da945497849b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/ink-riot-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4f2e0687488ed5fe069887e8841b9eaa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ink-riot-ink-riot-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bb9c9f9e6370425e15792f334e22b7dc.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/ink-riot.jpg",
+      "alt": "Ink Riot frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/a726b8edf4c49125fec23e01978562a0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/collage.webp",
+      "alt": "Collage"
+    },
+    {
+      "kind": "image",
+      "path": "media/83d2cb5611a01b24c14f80d7066eb566.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mixed-media-mixed-media-mini.webp",
+      "alt": "Mixed Media"
+    },
+    {
+      "kind": "video",
+      "path": "media/d444dde0403cf42d4c72951f133ce07c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mixed-media-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/90c25aa70104384b95a4ad846cc25109.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/ink-riot/hero.jpg",
+      "alt": "Ink Riot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "dd30f7d462dabb6566629dff64c3216f261f37241cf340c4ad51713b3e06fbc5"
+}

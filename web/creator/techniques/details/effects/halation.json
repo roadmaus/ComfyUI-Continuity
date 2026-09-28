@@ -1,0 +1,415 @@
+{
+  "id": "effects/halation",
+  "slug": "halation",
+  "title": "Halation",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/halation",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+  "detail": "details/effects/halation.json",
+  "aliases": [
+    "Soft filtration",
+    "Highlight bloom"
+  ],
+  "description": "Halation in film is a reddish or warm glow around bright highlights caused by light passing through the emulsion, reflecting off the base, and scattering back into the image. It is a stock behavior, not a diffusion filter and not flare inside the lens.",
+  "thumbnail": "media/64560f259c1e22d0c35cad281156880b.webp",
+  "video": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A lamp, a window, or a candle does not clip to a hard video edge. The highlight breathes."
+        },
+        {
+          "type": "paragraph",
+          "text": "A thin red or amber ring forms where the bright tone meets darker density. Fine contrast softens while faces and rooms stay readable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the picture should feel developed on film: tungsten practicals, Super 8 lamps, a window in a small apartment. Tie the bloom to a point of view, not to every specular in the grade."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you blur the whole frame equally and call it analog. If eyes go milky and there is no extra glow at highlight edges, you applied diffusion or defocus, not halation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A lamp, a window, or a candle does not clip to a hard video edge. The highlight breathes.A thin red or amber ring forms where the bright tone meets darker density. Fine contrast softens while faces and rooms stay readable.Use it when the picture should feel developed on film: tungsten practicals, Super 8 lamps, a window in a small apartment. Tie the bloom to a point of view, not to every specular in the grade.It is the wrong tool when you blur the whole frame equally and call it analog. If eyes go milky and there is no extra glow at highlight edges, you applied diffusion or defocus, not halation."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "On film, skip or weaken the anti-halation layer, or use stocks and formats that show base scatter (some Super 8 and 16mm). In camera, keep highlights luminous but not clipped, and do not confuse this with a Promist on the lens."
+        },
+        {
+          "type": "paragraph",
+          "text": "Digital recreation should bloom only the brightest edges, often with a warm or red fringe, while preserving grain structure and eye texture. Prompt red-edge bloom around lamps, not a fog filter over the set."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works On film, skip or weaken the anti-halation layer, or use stocks and formats that show base scatter (some Super 8 and 16mm). In camera, keep highlights luminous but not clipped, and do not confuse this with a Promist on the lens.Digital recreation should bloom only the brightest edges, often with a warm or red fringe, while preserving grain structure and eye texture. Prompt red-edge bloom around lamps, not a fog filter over the set."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A woman beside a rain window, amber practicals breathing, the neon sign outside gaining a warm halo while her eyes stay sharp. Do not frost the entire frame and destroy highlight information."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A woman beside a rain window, amber practicals breathing, the neon sign outside gaining a warm halo while her eyes stay sharp. Do not frost the entire frame and destroy highlight information."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lens Flare is scatter inside the glass, ghosts and veils that track a source into the optic. Halation is scatter in the film layers around a highlight already in the image.",
+          "links": [
+            {
+              "text": "Lens Flare",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Film Grain is the random silver or dye texture, not the glow. Vintage Cine Glass can add both bloom and falloff, but the physical cause of halation is the emulsion, not old coatings alone.",
+          "links": [
+            {
+              "text": "Film Grain",
+              "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+            },
+            {
+              "text": "Vintage Cine Glass",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film GrainThe image should feel developed, not rendered.",
+          "displayText": "Film Grain\nThe image should feel developed, not rendered.",
+          "links": [
+            {
+              "text": "Film GrainThe image should feel developed, not rendered.",
+              "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Vintage Cine GlassMemory, period, or beauty over resolution.",
+          "displayText": "Vintage Cine Glass\nMemory, period, or beauty over resolution.",
+          "links": [
+            {
+              "text": "Vintage Cine GlassMemory, period, or beauty over resolution.",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Lens Flare",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        },
+        {
+          "text": "Film Grain",
+          "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+        },
+        {
+          "text": "Vintage Cine Glass",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Film GrainThe image should feel developed, not rendered.",
+          "url": "https://melies.co/cinematic-techniques/effects/film-grain"
+        },
+        {
+          "text": "Vintage Cine GlassMemory, period, or beauty over resolution.",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/5fca5d01511d1b273f967622f709e9a3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-grain-076-archival-or-damaged-medium-texture-mini.webp",
+          "alt": "Film Grain"
+        },
+        {
+          "kind": "video",
+          "path": "media/1d7683ea283deb5b71800203fb729749.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/076-archival-or-damaged-medium-texture-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7212173f77d2735523edd8889390416b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vintage-cine.webp",
+          "alt": "Vintage Cine Glass"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Lens Flare is scatter inside the glass, ghosts and veils that track a source into the optic. Halation is scatter in the film layers around a highlight already in the image.Film Grain is the random silver or dye texture, not the glow. Vintage Cine Glass can add both bloom and falloff, but the physical cause of halation is the emulsion, not old coatings alone.Film GrainThe image should feel developed, not rendered.Vintage Cine GlassMemory, period, or beauty over resolution.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Master lets 65mm highlights bloom without turning faces to vapor. Barry Lyndon is grammar for candlelit tones that stay luminous instead of clipping."
+        },
+        {
+          "type": "paragraph",
+          "text": "Atonement uses soft summer windows around the country house. Those are highlight behaviors, not frames to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "Barry Lyndon 1975Soft pictorial light and luminous candlelit interiors.",
+          "displayText": "Barry Lyndon 1975\nSoft pictorial light and luminous candlelit interiors."
+        },
+        {
+          "type": "list-item",
+          "text": "Atonement 2007Soft, luminous summer imagery around the country house.",
+          "displayText": "Atonement 2007\nSoft, luminous summer imagery around the country house."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/19fea7c79e1620ff4919fdb8d099d6ec.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/halation/famous/00-barry-lyndon-1975.jpg",
+          "alt": "Barry Lyndon 1975"
+        },
+        {
+          "kind": "image",
+          "path": "media/d9158799ebb01fbdf8d8565677500083.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/halation/famous/01-atonement-2007.jpg",
+          "alt": "Atonement 2007"
+        }
+      ],
+      "sourceText": "In film The Master lets 65mm highlights bloom without turning faces to vapor. Barry Lyndon is grammar for candlelit tones that stay luminous instead of clipping.Atonement uses soft summer windows around the country house. Those are highlight behaviors, not frames to copy.Barry Lyndon 1975Soft pictorial light and luminous candlelit interiors.Atonement 2007Soft, luminous summer imagery around the country house."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bloom the highlight edge, not the whole room. Example: Halation glow around highlights on [Subject], red-edge bloom of film stock, lamps breathing, eyes and fabric texture preserved, not a global fog."
+        },
+        {
+          "type": "quote",
+          "text": "A woman reads beside a bright summer window. Fine facial detail stays readable while window highlights bloom gently into the surrounding air. Subtle soft filtration, luminous skin without smoothing away texture, no fog overlay or global defocus."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+woman+reads+beside+a+bright+summer+window.+Fine+facial+detail+stays+readable+while+window+highlights+bloom+gently+into+the+surrounding+air.+Subtle+soft+filtration,+luminous+skin+without+smoothing+away+texture,+no+fog+overlay+or+global+defocus."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Bloom the highlight edge, not the whole room. Example: Halation glow around highlights on [Subject], red-edge bloom of film stock, lamps breathing, eyes and fabric texture preserved, not a global fog.Copy promptUse in Video GeneratorA woman reads beside a bright summer window. Fine facial detail stays readable while window highlights bloom gently into the surrounding air. Subtle soft filtration, luminous skin without smoothing away texture, no fog overlay or global defocus.A woman reads beside a bright summer window. Fine facial detail stays readable while window highlights bloom gently into the surrounding air. Subtle soft filtration, luminous skin without smoothing away texture, no fog overlay or global defocus."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: Promist, bloom filter, or shallow-focus mush. Tell: even blur, no red-edge, highlights crushed to white with no density."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: confine the glow to bright edges, keep a warm fringe, and hold texture in faces."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: Promist, bloom filter, or shallow-focus mush. Tell: even blur, no red-edge, highlights crushed to white with no density.Fix: confine the glow to bright edges, keep a warm fringe, and hold texture in faces."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is halation in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A warm or reddish glow around highlights from light scattering in the film layers after bouncing off the base. It is emulsion physics, not a lens filter."
+        },
+        {
+          "type": "heading",
+          "text": "Halation vs lens flare",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Flare is stray light inside the optic. Halation is a halo on the stock around a bright tone already photographed. One lives in glass, the other in the film."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use halation?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When lamps and windows should bleed like film instead of clipping like video. Do not use it as a dream filter on every frame."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt halation for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for red-edge or warm bloom around specific highlights, preserved eyes, and film-stock behavior. Ban global defocus and fog overlays."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is halation in film?A warm or reddish glow around highlights from light scattering in the film layers after bouncing off the base. It is emulsion physics, not a lens filter.Halation vs lens flareFlare is stray light inside the optic. Halation is a halo on the stock around a bright tone already photographed. One lives in glass, the other in the film.When should I use halation?When lamps and windows should bleed like film instead of clipping like video. Do not use it as a dream filter on every frame.How do I prompt halation for AI image or video?Ask for red-edge or warm bloom around specific highlights, preserved eyes, and film-stock behavior. Ban global defocus and fog overlays."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Bloom the highlight edge, not the whole room. Example: Halation glow around highlights on [Subject], red-edge bloom of film stock, lamps breathing, eyes and fabric texture preserved, not a global fog."
+    ],
+    "example": "A woman reads beside a bright summer window. Fine facial detail stays readable while window highlights bloom gently into the surrounding air. Subtle soft filtration, luminous skin without smoothing away texture, no fog overlay or global defocus."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/91ba3a81cac5293c3dc4723aaa1dd332.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/061-diffusion-and-halation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/64560f259c1e22d0c35cad281156880b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/halation-061-diffusion-and-halation-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/2172c91246719f0563178948101f3b7b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/halation.jpg",
+      "alt": "Halation frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/5fca5d01511d1b273f967622f709e9a3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-grain-076-archival-or-damaged-medium-texture-mini.webp",
+      "alt": "Film Grain"
+    },
+    {
+      "kind": "video",
+      "path": "media/1d7683ea283deb5b71800203fb729749.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/076-archival-or-damaged-medium-texture-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7212173f77d2735523edd8889390416b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vintage-cine.webp",
+      "alt": "Vintage Cine Glass"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/19fea7c79e1620ff4919fdb8d099d6ec.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/halation/famous/00-barry-lyndon-1975.jpg",
+      "alt": "Barry Lyndon 1975"
+    },
+    {
+      "kind": "image",
+      "path": "media/d9158799ebb01fbdf8d8565677500083.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/halation/famous/01-atonement-2007.jpg",
+      "alt": "Atonement 2007"
+    },
+    {
+      "kind": "image",
+      "path": "media/162ad85cd440461c691f1adb731d611f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/halation/hero.jpg",
+      "alt": "Halation",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "5942c9b86b44a1c66535cfb62ef7fccd1bb9e57e816cbb28400135e426000931"
+}

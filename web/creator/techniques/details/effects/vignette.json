@@ -1,0 +1,367 @@
+{
+  "id": "effects/vignette",
+  "slug": "vignette",
+  "title": "Vignette",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/vignette",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vignette.webp",
+  "detail": "details/effects/vignette.json",
+  "aliases": [],
+  "description": "A vignette in vignette cinematography darkens, desaturates, or lowers contrast toward the frame edges because of optical falloff, mechanical vignetting in the barrel, a filter, or a later grade. Optical vignette follows the lens, while a post oval is a drawing.",
+  "thumbnail": "media/ce7df81aaefa9edb85f0198d8c4f923a.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The corners lose stop. Attention pools in the center without a spotlight on the actor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Vintage wide glass and some anamorphics do this unasked. Cameo lighting can look similar, but that is a lighting plot, not falloff in the optic."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to hold the eye in, to mimic old glass, or to admit that the field is darker off axis. Keep it gentle enough that the sides still exist."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool as a heavy post oval crushed onto every wide. If the edges go to black like a spotlight and the falloff is a perfect geometric shape unrelated to the lens, you have a filter, not an optic."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The corners lose stop. Attention pools in the center without a spotlight on the actor.Vintage wide glass and some anamorphics do this unasked. Cameo lighting can look similar, but that is a lighting plot, not falloff in the optic.Use it to hold the eye in, to mimic old glass, or to admit that the field is darker off axis. Keep it gentle enough that the sides still exist.It is the wrong tool as a heavy post oval crushed onto every wide. If the edges go to black like a spotlight and the falloff is a perfect geometric shape unrelated to the lens, you have a filter, not an optic."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wide-open vintage glass, a wide angle on a small coverage circle, or an ND or grad at the edges. Cosine-fourth falloff is natural."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mechanical vignetting is the barrel cutting the bundle. In a grade, darken corners with a soft, lens-shaped roll, not a hard oval."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: natural optical vignette, edges falling off, vintage falloff, not a post oval."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Wide-open vintage glass, a wide angle on a small coverage circle, or an ND or grad at the edges. Cosine-fourth falloff is natural.Mechanical vignetting is the barrel cutting the bundle. In a grade, darken corners with a soft, lens-shaped roll, not a hard oval.Prompt: natural optical vignette, edges falling off, vintage falloff, not a post oval."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A rooftop figure at blue hour, corners a stop down, center holding the coat and the city. Do not crush the sides of a group shot until the people at the edge disappear."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A rooftop figure at blue hour, corners a stop down, center holding the coat and the city. Do not crush the sides of a group shot until the people at the edge disappear."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cameo Lighting lights a figure against a dark field. The darkness is in the set, not in the glass.",
+          "links": [
+            {
+              "text": "Cameo Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vintage Cine Glass often includes natural vignette plus aberrations. Central Framing is a compositional choice that vignette can support.",
+          "links": [
+            {
+              "text": "Vintage Cine Glass",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            },
+            {
+              "text": "Central Framing",
+              "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Halation glows highlights. Vignette darkens edges.",
+          "links": [
+            {
+              "text": "Halation",
+              "url": "https://melies.co/cinematic-techniques/effects/halation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Vintage Cine GlassMemory, period, or beauty over resolution.",
+          "displayText": "Vintage Cine Glass\nMemory, period, or beauty over resolution.",
+          "links": [
+            {
+              "text": "Vintage Cine GlassMemory, period, or beauty over resolution.",
+              "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cameo LightingErase the world. Keep the person.",
+          "displayText": "Cameo Lighting\nErase the world. Keep the person.",
+          "links": [
+            {
+              "text": "Cameo LightingErase the world. Keep the person.",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cameo Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Vintage Cine Glass",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Central Framing",
+          "url": "https://melies.co/cinematic-techniques/composition/central-framing"
+        },
+        {
+          "text": "Halation",
+          "url": "https://melies.co/cinematic-techniques/effects/halation"
+        },
+        {
+          "text": "Vintage Cine GlassMemory, period, or beauty over resolution.",
+          "url": "https://melies.co/cinematic-techniques/lenses/vintage-cine"
+        },
+        {
+          "text": "Cameo LightingErase the world. Keep the person.",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7212173f77d2735523edd8889390416b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vintage-cine.webp",
+          "alt": "Vintage Cine Glass"
+        },
+        {
+          "kind": "image",
+          "path": "media/eb2b22619f7f3f03ae5875d0cbf8986f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cameo-lighting.webp",
+          "alt": "Cameo Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Cameo Lighting lights a figure against a dark field. The darkness is in the set, not in the glass.Vintage Cine Glass often includes natural vignette plus aberrations. Central Framing is a compositional choice that vignette can support.Halation glows highlights. Vignette darkens edges.Vintage Cine GlassMemory, period, or beauty over resolution.Cameo LightingErase the world. Keep the person.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Barry Lyndon shows fast vintage glass with natural corner falloff in candlelit rooms. The Witch uses older optics whose edges go quietly, holding the eye in the clearing or the kitchen."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Barry Lyndon shows fast vintage glass with natural corner falloff in candlelit rooms. The Witch uses older optics whose edges go quietly, holding the eye in the clearing or the kitchen."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ask for lens falloff, not a baked oval. Example: Natural optical vignette around [Subject], corners a stop down, attention pooled in the center, vintage falloff not a post oval."
+        },
+        {
+          "type": "quote",
+          "text": "Natural optical vignette around [Subject], edges falling off, attention pooled in the center, vintage falloff not a post oval."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Natural+optical+vignette+around+[Subject],+edges+falling+off,+attention+pooled+in+the+center,+vintage+falloff+not+a+post+oval."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Ask for lens falloff, not a baked oval. Example: Natural optical vignette around [Subject], corners a stop down, attention pooled in the center, vintage falloff not a post oval.Copy promptUse in Image GeneratorNatural optical vignette around [Subject], edges falling off, attention pooled in the center, vintage falloff not a post oval.Natural optical vignette around [Subject], edges falling off, attention pooled in the center, vintage falloff not a post oval."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: a circular crop, cameo spotlight, or a heavy social-media oval. Tell: perfect ellipse of black, subjects at the edge crushed, no relation to the lens."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: soft, stop-based roll, keep edge information, match the glass."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: a circular crop, cameo spotlight, or a heavy social-media oval. Tell: perfect ellipse of black, subjects at the edge crushed, no relation to the lens.Fix: soft, stop-based roll, keep edge information, match the glass."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a vignette in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Darkening or contrast loss at the frame edges from optics, the barrel, a filter, or a grade. Optical vignette is falloff. A post oval is an added shape."
+        },
+        {
+          "type": "heading",
+          "text": "Vignette vs cameo lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Cameo lighting is a dark set with a figure lit in the middle. A vignette is the frame itself losing light toward the corners, even if the set is even."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a vignette?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "To hold the eye in or to match vintage glass. Do not crush the sides as a default filter, especially on groups and wides that need the edges."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a vignette for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Request natural optical falloff, a stop or so in the corners, and no hard post oval. Name vintage glass if that is the cause."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a vignette in film?Darkening or contrast loss at the frame edges from optics, the barrel, a filter, or a grade. Optical vignette is falloff. A post oval is an added shape.Vignette vs cameo lightingCameo lighting is a dark set with a figure lit in the middle. A vignette is the frame itself losing light toward the corners, even if the set is even.When should I use a vignette?To hold the eye in or to match vintage glass. Do not crush the sides as a default filter, especially on groups and wides that need the edges.How do I prompt a vignette for AI image or video?Request natural optical falloff, a stop or so in the corners, and no hard post oval. Name vintage glass if that is the cause."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Ask for lens falloff, not a baked oval. Example: Natural optical vignette around [Subject], corners a stop down, attention pooled in the center, vintage falloff not a post oval."
+    ],
+    "example": "Natural optical vignette around [Subject], edges falling off, attention pooled in the center, vintage falloff not a post oval."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/ce7df81aaefa9edb85f0198d8c4f923a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vignette.webp",
+      "alt": "Vignette example"
+    },
+    {
+      "kind": "image",
+      "path": "media/7212173f77d2735523edd8889390416b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vintage-cine.webp",
+      "alt": "Vintage Cine Glass"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb2b22619f7f3f03ae5875d0cbf8986f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cameo-lighting.webp",
+      "alt": "Cameo Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/66f852bb65e632868edea4a115aafd5a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/vignette/hero.jpg",
+      "alt": "Vignette",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "d16aa22c18ae95a60de67388c9bfba533f9e6d1b639e18e07631c8b17104b041"
+}

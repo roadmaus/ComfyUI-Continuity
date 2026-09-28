@@ -1,0 +1,410 @@
+{
+  "id": "atmosphere/dust-storm",
+  "slug": "dust-storm",
+  "title": "Dust and Sand",
+  "categoryId": "atmosphere",
+  "categoryTitle": "Atmosphere and Weather",
+  "sourceUrl": "https://melies.co/cinematic-techniques/atmosphere/dust-storm",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dust-storm.webp",
+  "detail": "details/atmosphere/dust-storm.json",
+  "aliases": [],
+  "description": "Dust and sand as weather is mineral grit driven by wind until the sun is a dull coin and figures become silhouettes. The land attacks: particles occupy near air, sting highlights, and erase the horizon that Atmospheric Haze would only pale.",
+  "thumbnail": "media/af0ae2eefb1a882f5be8d0f04a6e123c.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A rider is a cutout. The sun is a disk you can look at."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grit crawls across metal and teeth. This is not a poetic far ridge."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the ground in the lungs. Use it when the environment is an antagonist: border desert, convoy, siege."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you only need paler mountains behind a sharp hero (Atmospheric Haze). It is the wrong tool when the particles hang in a quiet indoor shaft (Dust Motes).",
+          "links": [
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            },
+            {
+              "text": "Dust Motes",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard Light through a storm becomes a brown disk; do not keep a crisp white sun and a clean face unless the storm is still on the way.",
+          "links": [
+            {
+              "text": "Hard Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Dust Motes",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/dust-motes"
+        },
+        {
+          "text": "Hard Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A rider is a cutout. The sun is a disk you can look at.Grit crawls across metal and teeth. This is not a poetic far ridge.This is the ground in the lungs. Use it when the environment is an antagonist: border desert, convoy, siege.It is the wrong tool when you only need paler mountains behind a sharp hero (Atmospheric Haze). It is the wrong tool when the particles hang in a quiet indoor shaft (Dust Motes).Hard Light through a storm becomes a brown disk; do not keep a crisp white sun and a clean face unless the storm is still on the way."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fill near and mid air with wind-driven particulates (fuller's earth, practical sand, or digital grit) so contrast collapses at working distance. Keep a strong directional wind."
+        },
+        {
+          "type": "paragraph",
+          "text": "Backlight or sun-through-dust to silhouette. Let highlights on skin and vehicles pick up specks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: dust or sandstorm wrapping [Subject], sun as a dull coin, silhouettes, grit in the highlights."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Fill near and mid air with wind-driven particulates (fuller's earth, practical sand, or digital grit) so contrast collapses at working distance. Keep a strong directional wind.Backlight or sun-through-dust to silhouette. Let highlights on skin and vehicles pick up specks.Prompt: dust or sandstorm wrapping [Subject], sun as a dull coin, silhouettes, grit in the highlights."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for an ambush, a crossing, a road that should be unsurvivable. Do not use it as a warm grade on a calm dune."
+        },
+        {
+          "type": "paragraph",
+          "text": "If flags hang limp and pores are clean, there is no storm."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for an ambush, a crossing, a road that should be unsurvivable. Do not use it as a warm grade on a calm dune.If flags hang limp and pores are clean, there is no storm."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Atmospheric Haze is calm aerial perspective over kilometers, subject still sharp. Fog is water, grey-white, little wind required.",
+          "links": [
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            },
+            {
+              "text": "Fog",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Smoke has a fire source. Hard Light is the sun's character; in a storm that sun is filtered.",
+          "links": [
+            {
+              "text": "Smoke",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+            },
+            {
+              "text": "Hard Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dust-storm is mineral, windy, and near."
+        },
+        {
+          "type": "list-item",
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "displayText": "Atmospheric Haze\nShow kilometers, not just meters.",
+          "links": [
+            {
+              "text": "Atmospheric HazeShow kilometers, not just meters.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "displayText": "Hard Light\nGrit, noon sun, or interrogation.",
+          "links": [
+            {
+              "text": "Hard LightGrit, noon sun, or interrogation.",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "RainMake the air visible and the ground reflective.",
+          "displayText": "Rain\nMake the air visible and the ground reflective.",
+          "links": [
+            {
+              "text": "RainMake the air visible and the ground reflective.",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Fog",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/fog"
+        },
+        {
+          "text": "Smoke",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/smoke"
+        },
+        {
+          "text": "Hard Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Atmospheric HazeShow kilometers, not just meters.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        },
+        {
+          "text": "Hard LightGrit, noon sun, or interrogation.",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "RainMake the air visible and the ground reflective.",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/rain"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+          "alt": "Atmospheric Haze"
+        },
+        {
+          "kind": "image",
+          "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+          "alt": "Hard Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+          "alt": "Rain"
+        }
+      ],
+      "sourceText": "Compared with similar shots Atmospheric Haze is calm aerial perspective over kilometers, subject still sharp. Fog is water, grey-white, little wind required.Smoke has a fire source. Hard Light is the sun's character; in a storm that sun is filtered.Dust-storm is mineral, windy, and near.Atmospheric HazeShow kilometers, not just meters.Hard LightGrit, noon sun, or interrogation.RainMake the air visible and the ground reflective."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sicario lets desert particulate erase edges and turn daylight hostile. Mad Max: Fury Road drives through walls of grit and sun as a coin."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lawrence of Arabia also uses blowing sand as an attack, not only distant haze. Use wind and near opacity, not a tan LUT."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Sicario lets desert particulate erase edges and turn daylight hostile. Mad Max: Fury Road drives through walls of grit and sun as a coin.Lawrence of Arabia also uses blowing sand as an attack, not only distant haze. Use wind and near opacity, not a tan LUT."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dust or sandstorm wrapping [Subject], sun as a dull coin, silhouettes, grit in the highlights. Name wind direction, reduced visibility, and dirty speculars on skin and metal."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, horizontal grit, flapping cloth, no calm air, no sharp far town unless it is a brief hole in the storm."
+        },
+        {
+          "type": "quote",
+          "text": "Dust or sandstorm wrapping [Subject], sun as a dull coin, silhouettes, grit in the highlights, Sicario weather."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Dust+or+sandstorm+wrapping+[Subject],+sun+as+a+dull+coin,+silhouettes,+grit+in+the+highlights,+Sicario+weather."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Dust or sandstorm wrapping [Subject], sun as a dull coin, silhouettes, grit in the highlights. Name wind direction, reduced visibility, and dirty speculars on skin and metal.For video, horizontal grit, flapping cloth, no calm air, no sharp far town unless it is a brief hole in the storm.Copy promptUse in Image GeneratorDust or sandstorm wrapping [Subject], sun as a dull coin, silhouettes, grit in the highlights, Sicario weather.Dust or sandstorm wrapping [Subject], sun as a dull coin, silhouettes, grit in the highlights, Sicario weather."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Atmospheric Haze (sharp rider, paler citadel) or a brown grade. The tell: clean pores, limp flags, a white sun, crisp horizon.",
+          "links": [
+            {
+              "text": "Atmospheric Haze",
+              "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: wind, near-air grit, silhouettes, a dull solar disk, specks on highlights."
+        }
+      ],
+      "links": [
+        {
+          "text": "Atmospheric Haze",
+          "url": "https://melies.co/cinematic-techniques/atmosphere/haze"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Atmospheric Haze (sharp rider, paler citadel) or a brown grade. The tell: clean pores, limp flags, a white sun, crisp horizon.The fix: wind, near-air grit, silhouettes, a dull solar disk, specks on highlights."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Dust and Sand in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dust and sand as a storm is wind-driven mineral in the air, dense enough to silhouette figures and turn the sun into a dull coin. The land occupies the near optical path."
+        },
+        {
+          "type": "heading",
+          "text": "Dust and Sand vs Atmospheric Haze",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Haze pales far planes and leaves the subject sharp. A dust storm attacks the near ground, reduces visibility, and needs wind. One is distance; the other is an assault."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Dust and Sand?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the land should attack: crossings, convoys, sieges. Do not use it as a warm filter on a still desert portrait."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Dust and Sand for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for wind-driven grit and a dull sun. Example: dust or sandstorm wrapping [Subject], sun as a dull coin, silhouettes, grit in the highlights. Demand dirty air at working distance."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Dust and Sand in film?Dust and sand as a storm is wind-driven mineral in the air, dense enough to silhouette figures and turn the sun into a dull coin. The land occupies the near optical path.Dust and Sand vs Atmospheric HazeHaze pales far planes and leaves the subject sharp. A dust storm attacks the near ground, reduces visibility, and needs wind. One is distance; the other is an assault.When should I use Dust and Sand?Use it when the land should attack: crossings, convoys, sieges. Do not use it as a warm filter on a still desert portrait.How do I prompt Dust and Sand for AI image or video?Ask for wind-driven grit and a dull sun. Example: dust or sandstorm wrapping [Subject], sun as a dull coin, silhouettes, grit in the highlights. Demand dirty air at working distance."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Dust or sandstorm wrapping [Subject], sun as a dull coin, silhouettes, grit in the highlights. Name wind direction, reduced visibility, and dirty speculars on skin and metal.",
+      "For video, horizontal grit, flapping cloth, no calm air, no sharp far town unless it is a brief hole in the storm."
+    ],
+    "example": "Dust or sandstorm wrapping [Subject], sun as a dull coin, silhouettes, grit in the highlights, Sicario weather."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/af0ae2eefb1a882f5be8d0f04a6e123c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dust-storm.webp",
+      "alt": "Dust and Sand example"
+    },
+    {
+      "kind": "image",
+      "path": "media/eb6c88fce73d88ec37338a186450b66c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/haze.webp",
+      "alt": "Atmospheric Haze"
+    },
+    {
+      "kind": "image",
+      "path": "media/fcb1941c61341559adc1e6ed60b12b8d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hard-light.webp",
+      "alt": "Hard Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/bfe86f3122643d1162c1ac928b96aff0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rain.webp",
+      "alt": "Rain"
+    },
+    {
+      "kind": "image",
+      "path": "media/441da4cd4a16dac10d7be3b9093f15a1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/dust-storm/hero.jpg",
+      "alt": "Dust and Sand",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "4103ba14ff6344b77446f1808e3578e35bb2f5694e062ed3e8eb2ddd0b662ff3"
+}

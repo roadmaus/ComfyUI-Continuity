@@ -1,0 +1,397 @@
+{
+  "id": "composition/lead-room",
+  "slug": "lead-room",
+  "title": "Lead Room",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/lead-room",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lead-room.webp",
+  "detail": "details/composition/lead-room.json",
+  "aliases": [
+    "nose room",
+    "looking room"
+  ],
+  "description": "Lead room in lead room cinematography (nose room, looking room) is space in the direction a subject looks or moves. More frame sits ahead of the walk or the gaze than behind the head, so the surplus is the path rather than leftover wallpaper.",
+  "thumbnail": "media/00082839284cdeb7bf57bb7a3a31a168.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The horizontal diagram assigns the future. Air in front of the nose is the path, the other person, the door."
+        },
+        {
+          "type": "paragraph",
+          "text": "Air behind the skull is the past or a trap. Classical coverage buys this air by default."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the character has nowhere to go. A prisoner, a liar pinned by a question, a car about to hit a wall: giving them lead room is politeness the scene does not want."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lead room is not automatically thirds. You can give a walker a huge field (almost a landscape) or a modest band in a close-up."
+        },
+        {
+          "type": "paragraph",
+          "text": "The direction of the surplus is the definition."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The horizontal diagram assigns the future. Air in front of the nose is the path, the other person, the door.Air behind the skull is the past or a trap. Classical coverage buys this air by default.It is the wrong tool when the character has nowhere to go. A prisoner, a liar pinned by a question, a car about to hit a wall: giving them lead room is politeness the scene does not want.Lead room is not automatically thirds. You can give a walker a huge field (almost a landscape) or a modest band in a close-up.The direction of the surplus is the definition."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the look or the motion toward the empty side. If they walk screen-left, leave more frame on the left."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pan with a walker to keep that surplus, or let them eat it if arrival is the point. A profile needs more lead than a three-quarter."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Lead room in front of [Subject]'s look or walk, more space in the direction of attention than behind, forward narrative."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put the look or the motion toward the empty side. If they walk screen-left, leave more frame on the left.Pan with a walker to keep that surplus, or let them eat it if arrival is the point. A profile needs more lead than a three-quarter.Prompt: Lead room in front of [Subject]'s look or walk, more space in the direction of attention than behind, forward narrative."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for walks, looks that will be answered, and any coverage that should feel like forward grammar. Do not give lead room to a character you mean to trap."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is Short Siding's job.",
+          "links": [
+            {
+              "text": "Short Siding",
+              "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Short Siding",
+          "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it for walks, looks that will be answered, and any coverage that should feel like forward grammar. Do not give lead room to a character you mean to trap.That is Short Siding's job."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Short Siding crushes the look against the edge they face and parks dead air behind them. Rule of Thirds often creates lead room as a side effect of an offset face.",
+          "links": [
+            {
+              "text": "Short Siding",
+              "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+            },
+            {
+              "text": "Rule of Thirds",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Look Space is the field a gaze owns, especially when the object is off-screen. Lead room includes motion.",
+          "links": [
+            {
+              "text": "Look Space",
+              "url": "https://melies.co/cinematic-techniques/composition/look-space"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A still look can be either, but a sprint is lead room first. Headroom is the vertical cousin.",
+          "links": [
+            {
+              "text": "Headroom",
+              "url": "https://melies.co/cinematic-techniques/composition/headroom"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Short SidingDeny the character air.",
+          "displayText": "Short Siding\nDeny the character air.",
+          "links": [
+            {
+              "text": "Short SidingDeny the character air.",
+              "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Golden RatioA more secret order than thirds.",
+          "displayText": "Golden Ratio\nA more secret order than thirds.",
+          "links": [
+            {
+              "text": "Golden RatioA more secret order than thirds.",
+              "url": "https://melies.co/cinematic-techniques/composition/golden-ratio"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Short Siding",
+          "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+        },
+        {
+          "text": "Rule of Thirds",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        },
+        {
+          "text": "Look Space",
+          "url": "https://melies.co/cinematic-techniques/composition/look-space"
+        },
+        {
+          "text": "Headroom",
+          "url": "https://melies.co/cinematic-techniques/composition/headroom"
+        },
+        {
+          "text": "Short SidingDeny the character air.",
+          "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        },
+        {
+          "text": "Golden RatioA more secret order than thirds.",
+          "url": "https://melies.co/cinematic-techniques/composition/golden-ratio"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/2f33d83d9e10b44e03ac9d46e311e253.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/short-siding.webp",
+          "alt": "Short Siding"
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        },
+        {
+          "kind": "image",
+          "path": "media/820f9b78f9bd93714cc8ce3feb2a5f5f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-ratio.webp",
+          "alt": "Golden Ratio"
+        }
+      ],
+      "sourceText": "Compared with similar shots Short Siding crushes the look against the edge they face and parks dead air behind them. Rule of Thirds often creates lead room as a side effect of an offset face.Look Space is the field a gaze owns, especially when the object is off-screen. Lead room includes motion.A still look can be either, but a sprint is lead room first. Headroom is the vertical cousin.Short SidingDeny the character air.Rule of ThirdsDefault dynamic balance. Break it later on purpose.Golden RatioA more secret order than thirds."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Classical coverage puts looking room in front of singles as default grammar, from studio talkies onward. Westerns and road films extend that air into landscape so a rider has a country to enter."
+        },
+        {
+          "type": "paragraph",
+          "text": "When a film withholds it, you feel the withheld future immediately."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Classical coverage puts looking room in front of singles as default grammar, from studio talkies onward. Westerns and road films extend that air into landscape so a rider has a country to enter.When a film withholds it, you feel the withheld future immediately."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the direction of the surplus. Lead room in front of [Subject]'s look or walk, more space in the direction of attention than behind, forward narrative."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say looking left or walking right, more frame ahead of the face than behind the head. Do not write balanced."
+        },
+        {
+          "type": "quote",
+          "text": "Lead room in front of [Subject]'s look or walk, more space in the direction of attention than behind, forward narrative."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Lead+room+in+front+of+[Subject]'s+look+or+walk,+more+space+in+the+direction+of+attention+than+behind,+forward+narrative."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the direction of the surplus. Lead room in front of [Subject]'s look or walk, more space in the direction of attention than behind, forward narrative.Say looking left or walking right, more frame ahead of the face than behind the head. Do not write balanced.Copy promptUse in Image GeneratorLead room in front of [Subject]'s look or walk, more space in the direction of attention than behind, forward narrative.Lead room in front of [Subject]'s look or walk, more space in the direction of attention than behind, forward narrative."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Short Siding by accident. The tell is a profile kissing the edge they look toward, with a warehouse of wallpaper behind the hair.",
+          "links": [
+            {
+              "text": "Short Siding",
+              "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to pan toward the look until the surplus sits ahead, unless the trap was intended."
+        }
+      ],
+      "links": [
+        {
+          "text": "Short Siding",
+          "url": "https://melies.co/cinematic-techniques/composition/short-siding"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Short Siding by accident. The tell is a profile kissing the edge they look toward, with a warehouse of wallpaper behind the hair.The fix is to pan toward the look until the surplus sits ahead, unless the trap was intended."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is lead room in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is extra space in the direction of a look or a move. More frame ahead of the nose than behind the head. The surplus is the path. Classical coverage treats it as default manners."
+        },
+        {
+          "type": "heading",
+          "text": "Lead Room vs Short Siding",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Lead room gives the character air to look or walk into. Short siding puts the face against the edge it faces and leaves the empty field behind. One is forward grammar. The other is a trap or a jolt."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use lead room?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when they are going somewhere, even standing: a look that will cut to an object, a walk, a car in motion. Do not use it when you mean to deny the future."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt lead room for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "State the look direction and the surplus. Example: Lead room in front of [Subject]'s look or walk, more space in the direction of attention than behind, forward narrative. Say looking screen-left, empty frame ahead of the eyes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is lead room in film?It is extra space in the direction of a look or a move. More frame ahead of the nose than behind the head. The surplus is the path. Classical coverage treats it as default manners.Lead Room vs Short SidingLead room gives the character air to look or walk into. Short siding puts the face against the edge it faces and leaves the empty field behind. One is forward grammar. The other is a trap or a jolt.When should I use lead room?Use it when they are going somewhere, even standing: a look that will cut to an object, a walk, a car in motion. Do not use it when you mean to deny the future.How do I prompt lead room for AI image or video?State the look direction and the surplus. Example: Lead room in front of [Subject]'s look or walk, more space in the direction of attention than behind, forward narrative. Say looking screen-left, empty frame ahead of the eyes."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the direction of the surplus. Lead room in front of [Subject]'s look or walk, more space in the direction of attention than behind, forward narrative.",
+      "Say looking left or walking right, more frame ahead of the face than behind the head. Do not write balanced."
+    ],
+    "example": "Lead room in front of [Subject]'s look or walk, more space in the direction of attention than behind, forward narrative."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/00082839284cdeb7bf57bb7a3a31a168.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lead-room.webp",
+      "alt": "Lead Room example"
+    },
+    {
+      "kind": "image",
+      "path": "media/2f33d83d9e10b44e03ac9d46e311e253.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/short-siding.webp",
+      "alt": "Short Siding"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/820f9b78f9bd93714cc8ce3feb2a5f5f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/golden-ratio.webp",
+      "alt": "Golden Ratio"
+    },
+    {
+      "kind": "image",
+      "path": "media/d87994996b3c25ab9fb9b0cb511f86c3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/lead-room/hero.jpg",
+      "alt": "Lead Room",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "8d6ff1e6c76f7821cfa5cb3bc4b57f400e20b8e7ba1b08337fe2c614cffcfcea"
+}

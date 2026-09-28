@@ -1,0 +1,426 @@
+{
+  "id": "color/hyper-saturation",
+  "slug": "hyper-saturation",
+  "title": "Hyper-Saturation",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/hyper-saturation",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hyper-saturation.webp",
+  "detail": "details/color/hyper-saturation.json",
+  "aliases": [],
+  "description": "Hyper-saturation in saturated cinematography raises color intensity past ordinary record, so hues read as lacquer, fever, or dream. Feeling is louder than fact; the palette is not documentary.",
+  "thumbnail": "media/ff7af3ff1afd93718ceacc3cdb976b00.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Reds become wet enamel. Greens look poisonous or operatic."
+        },
+        {
+          "type": "paragraph",
+          "text": "A dance academy, a wuxia desert, a Hong Kong corridor: the world is painted, and the paint is the emotion. Accents do not hide; they shout."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the location's real color science should be believed. That is Natural Grade.",
+          "links": [
+            {
+              "text": "Natural Grade",
+              "url": "https://melies.co/cinematic-techniques/color/natural-grade"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a complementary studio split that still wants plausible skin (Teal and Orange), and it is not a chemical accident (Cross Process), which skews primaries off their true identities. Giallo often uses this lever, but giallo is a genre system, not the saturation knob.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            },
+            {
+              "text": "Cross Process",
+              "url": "https://melies.co/cinematic-techniques/color/cross-process"
+            },
+            {
+              "text": "Giallo",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Natural Grade",
+          "url": "https://melies.co/cinematic-techniques/color/natural-grade"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Cross Process",
+          "url": "https://melies.co/cinematic-techniques/color/cross-process"
+        },
+        {
+          "text": "Giallo",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Reds become wet enamel. Greens look poisonous or operatic.A dance academy, a wuxia desert, a Hong Kong corridor: the world is painted, and the paint is the emotion. Accents do not hide; they shout.It is the wrong tool when the location's real color science should be believed. That is Natural Grade.It is the wrong tool for a complementary studio split that still wants plausible skin (Teal and Orange), and it is not a chemical accident (Cross Process), which skews primaries off their true identities. Giallo often uses this lever, but giallo is a genre system, not the saturation knob."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Push chroma, especially in chosen primaries, while watching skin. You may isolate skin to protect it or let it go with the fever."
+        },
+        {
+          "type": "paragraph",
+          "text": "Contrast can be high or candy-flat; saturation is independent. Production design should already supply the hues you will amplify, or the grade will invent plastic color."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Hyper-saturated color on [Subject], Velvia intensity, reds like lacquer, a dream or a fever, not documentary."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Push chroma, especially in chosen primaries, while watching skin. You may isolate skin to protect it or let it go with the fever.Contrast can be high or candy-flat; saturation is independent. Production design should already supply the hues you will amplify, or the grade will invent plastic color.Prompt: Hyper-saturated color on [Subject], Velvia intensity, reds like lacquer, a dream or a fever, not documentary."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when feeling is louder than fact: a nightmare corridor, a told-and-retold battle, a romance that is all dye. Do not use it on a documentary claim, and do not confuse it with teal-orange punch."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when feeling is louder than fact: a nightmare corridor, a told-and-retold battle, a romance that is all dye. Do not use it on a documentary claim, and do not confuse it with teal-orange punch."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Teal and Orange is a complementary split, often at moderate-to-high but controlled chroma. Cross Process misplaces hues (cyan shadows, magenta skin).",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            },
+            {
+              "text": "Cross Process",
+              "url": "https://melies.co/cinematic-techniques/color/cross-process"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Giallo is a genre package that frequently includes this intensity. Desaturation is the opposite lever.",
+          "links": [
+            {
+              "text": "Giallo",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+            },
+            {
+              "text": "Desaturation",
+              "url": "https://melies.co/cinematic-techniques/color/desaturation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "GialloHorror that is also fashion.",
+          "displayText": "Giallo\nHorror that is also fashion.",
+          "links": [
+            {
+              "text": "GialloHorror that is also fashion.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "displayText": "Bleach Bypass\nWar, crime, or a world without mercy.",
+          "links": [
+            {
+              "text": "Bleach BypassWar, crime, or a world without mercy.",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Cross Process",
+          "url": "https://melies.co/cinematic-techniques/color/cross-process"
+        },
+        {
+          "text": "Giallo",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+        },
+        {
+          "text": "Desaturation",
+          "url": "https://melies.co/cinematic-techniques/color/desaturation"
+        },
+        {
+          "text": "GialloHorror that is also fashion.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6fffff8a122580e32891c039dcb4e8c7.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/giallo-look.webp",
+          "alt": "Giallo"
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        },
+        {
+          "kind": "image",
+          "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+          "alt": "Bleach Bypass"
+        },
+        {
+          "kind": "video",
+          "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Teal and Orange is a complementary split, often at moderate-to-high but controlled chroma. Cross Process misplaces hues (cyan shadows, magenta skin).Giallo is a genre package that frequently includes this intensity. Desaturation is the opposite lever.GialloHorror that is also fashion.Teal and OrangeYou want contemporary studio punch. Use with taste.Bleach BypassWar, crime, or a world without mercy."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Suspiria (1977) treats color as a physical force, reds and blues at full scream. Hero organizes versions of a story as saturated fields of cloth and desert."
+        },
+        {
+          "type": "paragraph",
+          "text": "In the Mood for Love lets corridor and cheongsam dyes run hotter than life. Grammar of intensity, not a still of a lamp."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Suspiria (1977) treats color as a physical force, reds and blues at full scream. Hero organizes versions of a story as saturated fields of cloth and desert.In the Mood for Love lets corridor and cheongsam dyes run hotter than life. Grammar of intensity, not a still of a lamp."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name intensity, not a mood word. Hyper-saturated color on [Subject], Velvia intensity, reds like lacquer, a dream or a fever, not documentary."
+        },
+        {
+          "type": "paragraph",
+          "text": "List the loud hues. Do not write teal-orange split, and do not ask for naturalistic skin if the fever should include the face."
+        },
+        {
+          "type": "quote",
+          "text": "Hyper-saturated color on [Subject], Velvia intensity, reds like lacquer, a dream or a fever, not documentary."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Hyper-saturated+color+on+[Subject],+Velvia+intensity,+reds+like+lacquer,+a+dream+or+a+fever,+not+documentary."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name intensity, not a mood word. Hyper-saturated color on [Subject], Velvia intensity, reds like lacquer, a dream or a fever, not documentary.List the loud hues. Do not write teal-orange split, and do not ask for naturalistic skin if the fever should include the face.Copy promptUse in Image GeneratorHyper-saturated color on [Subject], Velvia intensity, reds like lacquer, a dream or a fever, not documentary.Hyper-saturated color on [Subject], Velvia intensity, reds like lacquer, a dream or a fever, not documentary."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Teal and Orange (controlled complementary) or Cross Process (wrong primaries). The tell is cyan shadows with peach skin, or hues that have slipped to the wrong neighbors.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            },
+            {
+              "text": "Cross Process",
+              "url": "https://melies.co/cinematic-techniques/color/cross-process"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: true hues, louder than life, design that already holds those colors."
+        }
+      ],
+      "links": [
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Cross Process",
+          "url": "https://melies.co/cinematic-techniques/color/cross-process"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Teal and Orange (controlled complementary) or Cross Process (wrong primaries). The tell is cyan shadows with peach skin, or hues that have slipped to the wrong neighbors.Fix: true hues, louder than life, design that already holds those colors."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is hyper-saturation in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is color intensity pushed past ordinary record so hues look like lacquer or fever. The image is not claiming documentary fact."
+        },
+        {
+          "type": "heading",
+          "text": "Hyper-Saturation vs Teal and Orange",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Teal-orange is a complementary pairing with protected warm skin. Hyper-saturation is a volume knob on chroma, any hues. You can have quiet teal-orange or loud red-and-green opera."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use hyper-saturation?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when emotion should outrun realism: dream, fever, operatic genre. Skip it when the location must be believed as itself."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt hyper-saturation for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Hyper-saturated color on [Subject], Velvia intensity, reds like lacquer, a dream or a fever, not documentary. Name the loud hues. Forbid naturalistic documentary color and teal-orange as a substitute."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is hyper-saturation in film?It is color intensity pushed past ordinary record so hues look like lacquer or fever. The image is not claiming documentary fact.Hyper-Saturation vs Teal and OrangeTeal-orange is a complementary pairing with protected warm skin. Hyper-saturation is a volume knob on chroma, any hues. You can have quiet teal-orange or loud red-and-green opera.When should I use hyper-saturation?Use it when emotion should outrun realism: dream, fever, operatic genre. Skip it when the location must be believed as itself.How do I prompt hyper-saturation for AI image or video?Write: Hyper-saturated color on [Subject], Velvia intensity, reds like lacquer, a dream or a fever, not documentary. Name the loud hues. Forbid naturalistic documentary color and teal-orange as a substitute."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name intensity, not a mood word. Hyper-saturated color on [Subject], Velvia intensity, reds like lacquer, a dream or a fever, not documentary.",
+      "List the loud hues. Do not write teal-orange split, and do not ask for naturalistic skin if the fever should include the face."
+    ],
+    "example": "Hyper-saturated color on [Subject], Velvia intensity, reds like lacquer, a dream or a fever, not documentary."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/ff7af3ff1afd93718ceacc3cdb976b00.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hyper-saturation.webp",
+      "alt": "Hyper-Saturation example"
+    },
+    {
+      "kind": "image",
+      "path": "media/6fffff8a122580e32891c039dcb4e8c7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/giallo-look.webp",
+      "alt": "Giallo"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+      "alt": "Bleach Bypass"
+    },
+    {
+      "kind": "video",
+      "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ce0548ac5006dd0214158e4fd6ae47b5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/hyper-saturation/hero.jpg",
+      "alt": "Hyper-Saturation",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "b04eda63437d06cfbf494f9423cf80e80d83a4733eb6432b591d067d1badfd5f"
+}

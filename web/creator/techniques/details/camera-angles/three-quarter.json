@@ -1,0 +1,459 @@
+{
+  "id": "camera-angles/three-quarter",
+  "slug": "three-quarter",
+  "title": "Three-Quarter Angle",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/three-quarter",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-quarter.webp",
+  "detail": "details/camera-angles/three-quarter.json",
+  "aliases": [],
+  "description": "A three-quarter angle turns the face about 45 degrees to the camera so both eyes remain visible and the far cheek recedes. It is the standard narrative portrait angle: dimensionality without a full front or a true side.",
+  "thumbnail": "media/e214c4920cfb873825f7bf364f046d40.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Most coverage of a talking face lives here. You see both eyes, the bridge of the nose, and a cheek going away, which is enough skull to light and enough access to read a listen."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is useful because it models the head and still connects to an offscreen partner along a natural eyeline. It is the wrong tool when you want a coin (use Profile) or a confession into the taking lens (use Fourth Wall).",
+          "links": [
+            {
+              "text": "Profile",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+            },
+            {
+              "text": "Fourth Wall",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also not a height: you can shoot three-quarter from Eye Level, Low Angle, or High Angle. The name is yaw, not tilt.",
+          "links": [
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            },
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Profile",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+        },
+        {
+          "text": "Fourth Wall",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall"
+        },
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Most coverage of a talking face lives here. You see both eyes, the bridge of the nose, and a cheek going away, which is enough skull to light and enough access to read a listen.It is useful because it models the head and still connects to an offscreen partner along a natural eyeline. It is the wrong tool when you want a coin (use Profile) or a confession into the taking lens (use Fourth Wall).It is also not a height: you can shoot three-quarter from Eye Level, Low Angle, or High Angle. The name is yaw, not tilt."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place the camera about 30 to 50 degrees off the subject's nose. Keep both irises; hide only a sliver of the far ear if any."
+        },
+        {
+          "type": "paragraph",
+          "text": "A 50mm to 85mm holds the head without stretching the near eye. Key from the far or near side depending on short or broad lighting; the angle is what gives the planes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: three-quarter angle, face turned about 45 degrees, both eyes, classic portrait dimensionality."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place the camera about 30 to 50 degrees off the subject's nose. Keep both irises; hide only a sliver of the far ear if any.A 50mm to 85mm holds the head without stretching the near eye. Key from the far or near side depending on short or broad lighting; the angle is what gives the planes.Prompt: three-quarter angle, face turned about 45 degrees, both eyes, classic portrait dimensionality."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it as the default narrative portrait when a face must have volume and still belong to a scene. Concrete beat: a diner single, body open 45 degrees, eyeline to the partner off left, both eyes sharp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it when concealment is the point; rotate to Profile.",
+          "links": [
+            {
+              "text": "Profile",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Profile",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it as the default narrative portrait when a face must have volume and still belong to a scene. Concrete beat: a diner single, body open 45 degrees, eyeline to the partner off left, both eyes sharp.Do not use it when concealment is the point; rotate to Profile."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Profile is 90 degrees, one ear, far eye gone. Eye Level is how high the camera sits; three-quarter is how the head is turned.",
+          "links": [
+            {
+              "text": "Profile",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+            },
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Over-the-Shoulder Coverage often holds a three-quarter far face with a near shoulder chewing the frame. A full-front look into lens is Fourth Wall or an Interview eyeline, not three-quarter.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            },
+            {
+              "text": "Fourth Wall",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall"
+            },
+            {
+              "text": "Interview",
+              "url": "https://melies.co/cinematic-techniques/framing/interview"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "ProfileStatue, secrecy, or a nose as architecture.",
+          "displayText": "Profile\nStatue, secrecy, or a nose as architecture.",
+          "links": [
+            {
+              "text": "ProfileStatue, secrecy, or a nose as architecture.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "displayText": "High Angle\nVulnerability, surveillance, or a map of a room.",
+          "links": [
+            {
+              "text": "High AngleVulnerability, surveillance, or a map of a room.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Profile",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+        },
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Fourth Wall",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/fourth-wall"
+        },
+        {
+          "text": "Interview",
+          "url": "https://melies.co/cinematic-techniques/framing/interview"
+        },
+        {
+          "text": "ProfileStatue, secrecy, or a nose as architecture.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        },
+        {
+          "text": "High AngleVulnerability, surveillance, or a map of a room.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/099147d2498c6f840cdab5e24a576c9b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/profile.webp",
+          "alt": "Profile"
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        },
+        {
+          "kind": "image",
+          "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+          "alt": "High Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Profile is 90 degrees, one ear, far eye gone. Eye Level is how high the camera sits; three-quarter is how the head is turned.Over-the-Shoulder Coverage often holds a three-quarter far face with a near shoulder chewing the frame. A full-front look into lens is Fourth Wall or an Interview eyeline, not three-quarter.ProfileStatue, secrecy, or a nose as architecture.Eye LevelDefault honesty. Do not look down or up unless you mean it.High AngleVulnerability, surveillance, or a map of a room."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Heat's diner encounter parks two faces in three-quarter so each man remains a full head while screen direction stays clean. Classical portrait coverage from studio-era close-ups through drawing-room films uses the same 45-degree turn to model a cheek."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the yaw and the two eyes, not a copied booth."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Heat's diner encounter parks two faces in three-quarter so each man remains a full head while screen direction stays clean. Classical portrait coverage from studio-era close-ups through drawing-room films uses the same 45-degree turn to model a cheek.Borrow the yaw and the two eyes, not a copied booth."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the turn in degrees and keep both eyes. Quote: Three-quarter angle on [Subject], face turned about 45 degrees, classic portrait dimensionality."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: both eyes visible, far cheek receding, not a true profile, not looking into the lens. Specify height separately (eye-level three-quarter, and so on)."
+        },
+        {
+          "type": "quote",
+          "text": "Three-quarter angle on [Subject], face turned about 45 degrees, classic portrait dimensionality."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Three-quarter+angle+on+[Subject],+face+turned+about+45+degrees,+classic+portrait+dimensionality."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the turn in degrees and keep both eyes. Quote: Three-quarter angle on [Subject], face turned about 45 degrees, classic portrait dimensionality.Add: both eyes visible, far cheek receding, not a true profile, not looking into the lens. Specify height separately (eye-level three-quarter, and so on).Copy promptUse in Image GeneratorThree-quarter angle on [Subject], face turned about 45 degrees, classic portrait dimensionality.Three-quarter angle on [Subject], face turned about 45 degrees, classic portrait dimensionality."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Profile (too much turn) or a passport front (too little). Tell: far eye gone, or both ears equally seen.",
+          "links": [
+            {
+              "text": "Profile",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: about 45 degrees, both irises, one ear dominant. The other failure is calling a Low Angle a three-quarter.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Pitch is not yaw; say both."
+        }
+      ],
+      "links": [
+        {
+          "text": "Profile",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/profile"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Profile (too much turn) or a passport front (too little). Tell: far eye gone, or both ears equally seen.Fix: about 45 degrees, both irises, one ear dominant. The other failure is calling a Low Angle a three-quarter.Pitch is not yaw; say both."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a three-quarter angle in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A three-quarter angle turns the face about 45 degrees to camera. Both eyes stay visible and the far cheek recedes, which is the default narrative portrait."
+        },
+        {
+          "type": "heading",
+          "text": "Three-quarter angle vs profile",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Three-quarter keeps both eyes and a receding cheek. Profile is a 90-degree side view: one ear, nose as a line, far eye hidden."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a three-quarter angle?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for most talking portraits that still need a connection to an offscreen partner. Use profile to withhold, or a look into lens to admit the audience."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a three-quarter angle for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Three-quarter angle on [Subject], face turned about 45 degrees, both eyes visible, far cheek receding. Name camera height separately. Not profile, not into the lens."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a three-quarter angle in film?A three-quarter angle turns the face about 45 degrees to camera. Both eyes stay visible and the far cheek recedes, which is the default narrative portrait.Three-quarter angle vs profileThree-quarter keeps both eyes and a receding cheek. Profile is a 90-degree side view: one ear, nose as a line, far eye hidden.When should I use a three-quarter angle?Use it for most talking portraits that still need a connection to an offscreen partner. Use profile to withhold, or a look into lens to admit the audience.How do I prompt a three-quarter angle for AI image or video?Write: Three-quarter angle on [Subject], face turned about 45 degrees, both eyes visible, far cheek receding. Name camera height separately. Not profile, not into the lens."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the turn in degrees and keep both eyes. Quote: Three-quarter angle on [Subject], face turned about 45 degrees, classic portrait dimensionality.",
+      "Add: both eyes visible, far cheek receding, not a true profile, not looking into the lens. Specify height separately (eye-level three-quarter, and so on)."
+    ],
+    "example": "Three-quarter angle on [Subject], face turned about 45 degrees, classic portrait dimensionality."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/e214c4920cfb873825f7bf364f046d40.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-quarter.webp",
+      "alt": "Three-Quarter Angle example"
+    },
+    {
+      "kind": "image",
+      "path": "media/099147d2498c6f840cdab5e24a576c9b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/profile.webp",
+      "alt": "Profile"
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/b2fa143e51fd95a3148525f148a4dbd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-angle-044-high-angle-vulnerability-mini.webp",
+      "alt": "High Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9067f9827919996f0e22da5b31f81d4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/044-high-angle-vulnerability-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e77ab245d874b7d7599679f048a18189.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/three-quarter/hero.jpg",
+      "alt": "Three-Quarter Angle",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "6f66735ae466c69cdf72efb0f784db8fed31a815a4fb535b81c368fa82e47cfe"
+}

@@ -1,0 +1,520 @@
+{
+  "id": "time-and-motion/long-take",
+  "slug": "long-take",
+  "title": "Long Take",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/long-take",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/long-take-031-genuine-feature-length-continuous-take-mini.webp",
+  "detail": "details/time-and-motion/long-take.json",
+  "aliases": [
+    "plan sequence",
+    "extended take",
+    "long-duration shot",
+    "true long take",
+    "simulated long take",
+    "The Atonement beach tableau"
+  ],
+  "description": "Long take cinematography is an unusually extended shot that preserves continuous performance, space, action, or duration without an overt cut. Blocking and camera share one sentence so the audience cannot leave the room.",
+  "thumbnail": "media/1717020fa80841f52e94942127fd0098.webp",
+  "video": "media/8b260304f6c04e7a6366677b1f3cd9bb.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/031-genuine-feature-length-continuous-take-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when incompatible facts must coexist in one geography: boredom beside danger, a joke beside a wound, a bomb in a trunk while people chat. The eye scans a functioning world instead of consuming an insert."
+        },
+        {
+          "type": "paragraph",
+          "text": "Duration is the tension. A dense crowd is not enough."
+        },
+        {
+          "type": "paragraph",
+          "text": "Each zone needs an intelligible action timed to the camera. It is the wrong tool when the scene is a virtuoso ride that may hide joins, or when coverage should isolate a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "A oner is designed to play as one take and may be stitched. A long take's claim is continuous time."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not hold a static close-up for two minutes and call the endurance a panorama."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when incompatible facts must coexist in one geography: boredom beside danger, a joke beside a wound, a bomb in a trunk while people chat. The eye scans a functioning world instead of consuming an insert.Duration is the tension. A dense crowd is not enough.Each zone needs an intelligible action timed to the camera. It is the wrong tool when the scene is a virtuoso ride that may hide joins, or when coverage should isolate a face.A oner is designed to play as one take and may be stitched. A long take's claim is continuous time.Do not hold a static close-up for two minutes and call the endurance a panorama."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Block foreground, midground, and background on a shared timeline. Give the camera a clear route (Steadicam, crane, handheld, or studio dolly) and vary its attention without losing the human anchor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Rehearse contacts, eyelines, and extra business so the take can survive. Prompt: Long take covering [Subject] without a cut, duration as tension, blocking and camera choreographed as one sentence."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Block foreground, midground, and background on a shared timeline. Give the camera a clear route (Steadicam, crane, handheld, or studio dolly) and vary its attention without losing the human anchor.Rehearse contacts, eyelines, and extra business so the take can survive. Prompt: Long take covering [Subject] without a cut, duration as tension, blocking and camera choreographed as one sentence."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the audience must stay in the room, such as a car that cannot cut away from incoming gunfire. Do not use it to show off a corridor walk with nothing happening in depth."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the audience must stay in the room, such as a car that cannot cut away from incoming gunfire. Do not use it to show off a corridor walk with nothing happening in depth."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A long take emphasizes continuous duration. A Oner is designed to play without visible edits and may hide stitches.",
+          "links": [
+            {
+              "text": "Oner",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Steadicam is a support, not a duration claim. An Invisible Cut is how some oners cheat.",
+          "links": [
+            {
+              "text": "Steadicam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            },
+            {
+              "text": "Invisible Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Master Shot covers the action so the scene can be cut. A long take often is the scene.",
+          "links": [
+            {
+              "text": "Master Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "OnerThe scene is a ride.",
+          "displayText": "Oner\nThe scene is a ride.",
+          "links": [
+            {
+              "text": "OnerThe scene is a ride.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "displayText": "Steadicam\nLong connecting moves through architecture. Neither handheld nor dolly.",
+          "links": [
+            {
+              "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Oner",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+        },
+        {
+          "text": "Steadicam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Invisible Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+        },
+        {
+          "text": "Master Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/master-shot"
+        },
+        {
+          "text": "OnerThe scene is a ride.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+        },
+        {
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/5a298b3eb3b678926135a630f52fe6da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-er-026-social-access-tracking-oner-mini.webp",
+          "alt": "Oner"
+        },
+        {
+          "kind": "video",
+          "path": "media/60e5248f694fc74656ed80d4e908fe31.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/026-social-access-tracking-oner-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+          "alt": "Steadicam"
+        },
+        {
+          "kind": "video",
+          "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A long take emphasizes continuous duration. A Oner is designed to play without visible edits and may hide stitches.Steadicam is a support, not a duration claim. An Invisible Cut is how some oners cheat.A Master Shot covers the action so the scene can be cut. A long take often is the scene.OnerThe scene is a ride.SteadicamLong connecting moves through architecture. Neither handheld nor dolly.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Children of Men keeps car and birth passages inside continuous danger. The Player opens by walking conversations across a studio lot in one moving sentence."
+        },
+        {
+          "type": "paragraph",
+          "text": "Touch of Evil follows a bomb car while nearby people remain unaware. Atonement's Dunkirk beach moves among soldiers, wreckage, and stranded activity."
+        },
+        {
+          "type": "paragraph",
+          "text": "Russian Ark and Victoria extend the wager to feature length."
+        },
+        {
+          "type": "list-item",
+          "text": "Atonement 2007The Dunkirk beach passage moves among soldiers, wreckage and stranded activity.",
+          "displayText": "Atonement 2007\nThe Dunkirk beach passage moves among soldiers, wreckage and stranded activity."
+        },
+        {
+          "type": "list-item",
+          "text": "The Player 1992The opening moves between conversations across the studio lot.",
+          "displayText": "The Player 1992\nThe opening moves between conversations across the studio lot."
+        },
+        {
+          "type": "list-item",
+          "text": "Touch of Evil 1958The opening follows a car after a bomb is placed in its trunk, while nearby people remain unaware.",
+          "displayText": "Touch of Evil 1958\nThe opening follows a car after a bomb is placed in its trunk, while nearby people remain unaware."
+        },
+        {
+          "type": "list-item",
+          "text": "Russian Ark 2002The journey through the Hermitage is presented as one continuous feature-length take.",
+          "displayText": "Russian Ark 2002\nThe journey through the Hermitage is presented as one continuous feature-length take."
+        },
+        {
+          "type": "list-item",
+          "text": "Victoria 2015The night out and subsequent events unfold in a continuous feature-length take.",
+          "displayText": "Victoria 2015\nThe night out and subsequent events unfold in a continuous feature-length take."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7fb75ec4249f160af16ef843193dc423.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/long-take/famous/00-atonement-2007.jpg",
+          "alt": "Atonement 2007"
+        },
+        {
+          "kind": "image",
+          "path": "media/c9b5f6a9e1526033ad59449d51a3ff51.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/long-take/famous/01-the-player-1992.jpg",
+          "alt": "The Player 1992"
+        },
+        {
+          "kind": "image",
+          "path": "media/7eb1e2f12038502ee33874761315ea5d.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/long-take/famous/00-touch-of-evil-1958.jpg",
+          "alt": "Touch of Evil 1958"
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0d58d45d1e8131c40e255a8ede2e95.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/long-take/famous/00-russian-ark-2002.jpg",
+          "alt": "Russian Ark 2002"
+        },
+        {
+          "kind": "image",
+          "path": "media/33580c1a9ba0c3f463c7b502be88a15d.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/long-take/famous/01-victoria-2015.jpg",
+          "alt": "Victoria 2015"
+        }
+      ],
+      "sourceText": "In film Children of Men keeps car and birth passages inside continuous danger. The Player opens by walking conversations across a studio lot in one moving sentence.Touch of Evil follows a bomb car while nearby people remain unaware. Atonement's Dunkirk beach moves among soldiers, wreckage, and stranded activity.Russian Ark and Victoria extend the wager to feature length.Atonement 2007The Dunkirk beach passage moves among soldiers, wreckage and stranded activity.The Player 1992The opening moves between conversations across the studio lot.Touch of Evil 1958The opening follows a car after a bomb is placed in its trunk, while nearby people remain unaware.Russian Ark 2002The journey through the Hermitage is presented as one continuous feature-length take.Victoria 2015The night out and subsequent events unfold in a continuous feature-length take."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write unbroken duration and what happens in depth. Still: a wide ensemble with a readable route, not proof of a take."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: An unbroken long take following [Subject] through the space with no cut. Name foreground, midground, and background actions on one timeline."
+        },
+        {
+          "type": "quote",
+          "text": "Follow a harbor nurse through an improvised waiting area after a storm. In one flowing shot, pass people playing cards, repairing a radio, tending injuries and staring silently at the sea. No disaster spectacle; distinct actions continue independently in depth. Keep the nurse as a loose visual anchor."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Follow+a+harbor+nurse+through+an+improvised+waiting+area+after+a+storm.+In+one+flowing+shot,+pass+people+playing+cards,+repairing+a+radio,+tending+injuries+and+staring+silently+at+the+sea.+No+disaster+spectacle;+distinct+actions+continue+independently+in+depth.+Keep+the+nurse+as+a+loose+visual+anchor."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write unbroken duration and what happens in depth. Still: a wide ensemble with a readable route, not proof of a take.Video: An unbroken long take following [Subject] through the space with no cut. Name foreground, midground, and background actions on one timeline.Copy promptUse in Video GeneratorFollow a harbor nurse through an improvised waiting area after a storm. In one flowing shot, pass people playing cards, repairing a radio, tending injuries and staring silently at the sea. No disaster spectacle; distinct actions continue independently in depth. Keep the nurse as a loose visual anchor.Follow a harbor nurse through an improvised waiting area after a storm. In one flowing shot, pass people playing cards, repairing a radio, tending injuries and staring silently at the sea. No disaster spectacle; distinct actions continue independently in depth. Keep the nurse as a loose visual anchor."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a stitched Oner sold as uncut truth, or a crowded wide with no timed business. The tell is a whip into darkness, a crossing truck, or extras who only occupy space.",
+          "links": [
+            {
+              "text": "Oner",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: one overt take, distinct actions in depth, a camera route, and a human anchor."
+        }
+      ],
+      "links": [
+        {
+          "text": "Oner",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/one-er"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a stitched Oner sold as uncut truth, or a crowded wide with no timed business. The tell is a whip into darkness, a crossing truck, or extras who only occupy space.Fix: one overt take, distinct actions in depth, a camera route, and a human anchor."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Long Take in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A long take is an unusually extended shot that keeps performance, space, and duration continuous without an overt cut."
+        },
+        {
+          "type": "heading",
+          "text": "Long Take vs Oner",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A long take claims continuous recorded time. A oner is designed to play as one take and may include invisible stitches as long as the joins do not read."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Long Take?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When leaving the room would leak tension, and the world in depth must keep working around the people we follow."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Long Take for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write an unbroken take with no cut, a camera route, and separate actions in foreground, midground, and background. Name the human anchor."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Long Take in film?A long take is an unusually extended shot that keeps performance, space, and duration continuous without an overt cut.Long Take vs OnerA long take claims continuous recorded time. A oner is designed to play as one take and may include invisible stitches as long as the joins do not read.When should I use Long Take?When leaving the room would leak tension, and the world in depth must keep working around the people we follow.How do I prompt Long Take for AI image or video?Write an unbroken take with no cut, a camera route, and separate actions in foreground, midground, and background. Name the human anchor."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write unbroken duration and what happens in depth. Still: a wide ensemble with a readable route, not proof of a take.",
+      "Video: An unbroken long take following [Subject] through the space with no cut. Name foreground, midground, and background actions on one timeline."
+    ],
+    "example": "Follow a harbor nurse through an improvised waiting area after a storm. In one flowing shot, pass people playing cards, repairing a radio, tending injuries and staring silently at the sea. No disaster spectacle; distinct actions continue independently in depth. Keep the nurse as a loose visual anchor."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/8b260304f6c04e7a6366677b1f3cd9bb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/031-genuine-feature-length-continuous-take-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1717020fa80841f52e94942127fd0098.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/long-take-031-genuine-feature-length-continuous-take-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dc54aaa8065b7df3d8e4ef7273a12cc9.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/long-take.jpg",
+      "alt": "Long Take frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/5a298b3eb3b678926135a630f52fe6da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-er-026-social-access-tracking-oner-mini.webp",
+      "alt": "Oner"
+    },
+    {
+      "kind": "video",
+      "path": "media/60e5248f694fc74656ed80d4e908fe31.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/026-social-access-tracking-oner-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+      "alt": "Steadicam"
+    },
+    {
+      "kind": "video",
+      "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7fb75ec4249f160af16ef843193dc423.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/long-take/famous/00-atonement-2007.jpg",
+      "alt": "Atonement 2007"
+    },
+    {
+      "kind": "image",
+      "path": "media/c9b5f6a9e1526033ad59449d51a3ff51.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/long-take/famous/01-the-player-1992.jpg",
+      "alt": "The Player 1992"
+    },
+    {
+      "kind": "image",
+      "path": "media/7eb1e2f12038502ee33874761315ea5d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/long-take/famous/00-touch-of-evil-1958.jpg",
+      "alt": "Touch of Evil 1958"
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0d58d45d1e8131c40e255a8ede2e95.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/long-take/famous/00-russian-ark-2002.jpg",
+      "alt": "Russian Ark 2002"
+    },
+    {
+      "kind": "image",
+      "path": "media/33580c1a9ba0c3f463c7b502be88a15d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/long-take/famous/01-victoria-2015.jpg",
+      "alt": "Victoria 2015"
+    },
+    {
+      "kind": "image",
+      "path": "media/b439fc7a26a52940911cc4f4cb68cc62.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/long-take/hero.jpg",
+      "alt": "Long Take",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "2be67af312158519774685035ff41ef70511f41daae915765b7cf7fc9e608df8"
+}

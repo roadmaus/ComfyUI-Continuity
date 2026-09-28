@@ -1,0 +1,443 @@
+{
+  "id": "camera-angles/ground-level",
+  "slug": "ground-level",
+  "title": "Ground Level",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/ground-level",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ground-level.webp",
+  "detail": "details/camera-angles/ground-level.json",
+  "aliases": [],
+  "description": "A ground-level shot puts the lens almost on the floor, so boots, hems, wheels, and the dirt become actors. Height is the fact: the camera starts from the ground plane, whether it looks along the street or steeply up.",
+  "thumbnail": "media/90e4116fa502af93f97dc97b380107b3.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "From the dirt, a walk is a sequence of soles. A coat trailing, a wheel, a dropped gun, a snake's view of a street: the floor is the foreground and architecture goes large above it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Westerns and car films live here because the ground is where decisions land. Worm's-Eye View is the cousin that looks straight up until there is no street, only a zenith.",
+          "links": [
+            {
+              "text": "Worm's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Low Angle can be shot from the waist and never touch the floor. Hip Level still belongs to hands and holsters.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "Hip Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/hip-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Ground-level is the pedestal on the boards."
+        }
+      ],
+      "links": [
+        {
+          "text": "Worm's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Hip Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/hip-level"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function From the dirt, a walk is a sequence of soles. A coat trailing, a wheel, a dropped gun, a snake's view of a street: the floor is the foreground and architecture goes large above it.Westerns and car films live here because the ground is where decisions land. Worm's-Eye View is the cousin that looks straight up until there is no street, only a zenith.Low Angle can be shot from the waist and never touch the floor. Hip Level still belongs to hands and holsters.Ground-level is the pedestal on the boards."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Set the camera on a low plate, a sandbag, or a hole so the sensor is centimeters from the ground. A wide lens exaggerates the near boots and the far horizon."
+        },
+        {
+          "type": "paragraph",
+          "text": "You may look along the floor (track, tire, hem) or tilt up (a coat filling the sky). Keep grit, wet, or dust in the near field; that is how the height reads."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: ground-level camera, lens nearly on the floor, boots and trailing coat, horizon very low."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Set the camera on a low plate, a sandbag, or a hole so the sensor is centimeters from the ground. A wide lens exaggerates the near boots and the far horizon.You may look along the floor (track, tire, hem) or tilt up (a coat filling the sky). Keep grit, wet, or dust in the near field; that is how the height reads.Prompt: ground-level camera, lens nearly on the floor, boots and trailing coat, horizon very low."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the story starts from the dirt: an arrival on foot, a car, a body on the road. Concrete beat: boots stepping onto a dusty street, coat hem in the near field, town rising beyond."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it as the default for a walking conversation; that is Shoulder Level or Eye Level.",
+          "links": [
+            {
+              "text": "Shoulder Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/shoulder-level"
+            },
+            {
+              "text": "Eye Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Shoulder Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/shoulder-level"
+        },
+        {
+          "text": "Eye Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it when the story starts from the dirt: an arrival on foot, a car, a body on the road. Concrete beat: boots stepping onto a dusty street, coat hem in the near field, town rising beyond.Do not use it as the default for a walking conversation; that is Shoulder Level or Eye Level."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Worm's-Eye View looks sharply up from this height until verticals collapse and the horizon dies. Low Angle is a pitch from below the eyes, not a requirement that the lens kiss the floor.",
+          "links": [
+            {
+              "text": "Worm's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+            },
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hip Level sits at belt height so hands stay in the plane of focus. Overhead Top-Down is the opposite pole: the floor as a plan, not as a foreground.",
+          "links": [
+            {
+              "text": "Hip Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/hip-level"
+            },
+            {
+              "text": "Overhead Top-Down",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Worm's-Eye ViewThe subject is a tower. You are dust.",
+          "displayText": "Worm's-Eye View\nThe subject is a tower. You are dust.",
+          "links": [
+            {
+              "text": "Worm's-Eye ViewThe subject is a tower. You are dust.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low AnglePower, monument, or intimidation.",
+          "displayText": "Low Angle\nPower, monument, or intimidation.",
+          "links": [
+            {
+              "text": "Low AnglePower, monument, or intimidation.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Worm's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+        },
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Hip Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/hip-level"
+        },
+        {
+          "text": "Overhead Top-Down",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/overhead"
+        },
+        {
+          "text": "Worm's-Eye ViewThe subject is a tower. You are dust.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+        },
+        {
+          "text": "Low AnglePower, monument, or intimidation.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/887c6cd61bc4f3b795172ec2c50b6c45.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/worms-eye.webp",
+          "alt": "Worm's-Eye View"
+        },
+        {
+          "kind": "image",
+          "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+          "alt": "Low Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        }
+      ],
+      "sourceText": "Compared with similar shots Worm's-Eye View looks sharply up from this height until verticals collapse and the horizon dies. Low Angle is a pitch from below the eyes, not a requirement that the lens kiss the floor.Hip Level sits at belt height so hands stay in the plane of focus. Overhead Top-Down is the opposite pole: the floor as a plan, not as a foreground.Worm's-Eye ViewThe subject is a tower. You are dust.Low AnglePower, monument, or intimidation.Eye LevelDefault honesty. Do not look down or up unless you mean it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Once Upon a Time in the West lets the station boards, tracks, and boots own the opening; the ground is duration. Drive keeps cars, asphalt, and shoes in the near field so the street is the world."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the low pedestal and the near-ground texture."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Once Upon a Time in the West lets the station boards, tracks, and boots own the opening; the ground is duration. Drive keeps cars, asphalt, and shoes in the near field so the street is the world.Borrow the low pedestal and the near-ground texture."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the floor as foreground. Quote: Ground-level camera looking steeply up at [Subject], lens nearly on the floor, boots and trailing coat monumental."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you want the along-the-dirt variant, say looking along the ground, boots in the near field, horizon low, not straight up at the sky."
+        },
+        {
+          "type": "quote",
+          "text": "Ground-level camera looking steeply up at [Subject], lens nearly on the floor, boots and trailing coat monumental."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Ground-level+camera+looking+steeply+up+at+[Subject],+lens+nearly+on+the+floor,+boots+and+trailing+coat+monumental."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the floor as foreground. Quote: Ground-level camera looking steeply up at [Subject], lens nearly on the floor, boots and trailing coat monumental.If you want the along-the-dirt variant, say looking along the ground, boots in the near field, horizon low, not straight up at the sky.Copy promptUse in Image GeneratorGround-level camera looking steeply up at [Subject], lens nearly on the floor, boots and trailing coat monumental.Ground-level camera looking steeply up at [Subject], lens nearly on the floor, boots and trailing coat monumental."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Low Angle from kneeling height with a clean floor and a full face. Tell: no near-ground texture, no boots, camera clearly at knee-plus.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: lens nearly on the floor, grit or pavement sharp in the foreground. If the shot is only nostrils and sky, you drifted into Worm's-Eye View.",
+          "links": [
+            {
+              "text": "Worm's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Worm's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/worms-eye"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Low Angle from kneeling height with a clean floor and a full face. Tell: no near-ground texture, no boots, camera clearly at knee-plus.Fix: lens nearly on the floor, grit or pavement sharp in the foreground. If the shot is only nostrils and sky, you drifted into Worm's-Eye View."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is ground level in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A ground-level shot places the lens almost on the floor. Boots, hems, wheels, and pavement become the near subject; the world rises from the dirt."
+        },
+        {
+          "type": "heading",
+          "text": "Ground level vs worm's-eye view",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Ground level is a height: camera on the floor, often looking along boots or steeply up a coat. Worm's-eye view is an extreme upward pitch from that height, verticals collapsing, almost no street horizon."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use ground level?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the ground is part of the beat: a walk, a car, a dropped object, a Western arrival. Do not use it for ordinary seated talk."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt ground level for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Ground-level camera, lens nearly on the floor, boots and trailing coat in the near field, horizon low. Say whether it looks along the dirt or steeply up."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is ground level in film?A ground-level shot places the lens almost on the floor. Boots, hems, wheels, and pavement become the near subject; the world rises from the dirt.Ground level vs worm's-eye viewGround level is a height: camera on the floor, often looking along boots or steeply up a coat. Worm's-eye view is an extreme upward pitch from that height, verticals collapsing, almost no street horizon.When should I use ground level?Use it when the ground is part of the beat: a walk, a car, a dropped object, a Western arrival. Do not use it for ordinary seated talk.How do I prompt ground level for AI image or video?Write: Ground-level camera, lens nearly on the floor, boots and trailing coat in the near field, horizon low. Say whether it looks along the dirt or steeply up."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the floor as foreground. Quote: Ground-level camera looking steeply up at [Subject], lens nearly on the floor, boots and trailing coat monumental.",
+      "If you want the along-the-dirt variant, say looking along the ground, boots in the near field, horizon low, not straight up at the sky."
+    ],
+    "example": "Ground-level camera looking steeply up at [Subject], lens nearly on the floor, boots and trailing coat monumental."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/90e4116fa502af93f97dc97b380107b3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ground-level.webp",
+      "alt": "Ground Level example"
+    },
+    {
+      "kind": "image",
+      "path": "media/887c6cd61bc4f3b795172ec2c50b6c45.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/worms-eye.webp",
+      "alt": "Worm's-Eye View"
+    },
+    {
+      "kind": "image",
+      "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+      "alt": "Low Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/ff93b0a305ee655263366bd101630f2c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/ground-level/hero.jpg",
+      "alt": "Ground Level",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "148ee2bad5a2a735eb6760fe0c35b13340cb3245e30a1daee12b19917e8c5bdf"
+}

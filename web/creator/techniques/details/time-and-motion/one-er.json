@@ -1,0 +1,435 @@
+{
+  "id": "time-and-motion/one-er",
+  "slug": "one-er",
+  "title": "Oner",
+  "categoryId": "time-and-motion",
+  "categoryTitle": "Time and Motion",
+  "sourceUrl": "https://melies.co/cinematic-techniques/time-and-motion/one-er",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-er-026-social-access-tracking-oner-mini.webp",
+  "detail": "details/time-and-motion/one-er.json",
+  "aliases": [
+    "true oner",
+    "stitched oner"
+  ],
+  "description": "A oner shot is designed to play as if the scene were one take, with no visible edits. It may be a true single take or a stitched oner whose joins hide in whips, darkness, or crossing bodies.",
+  "thumbnail": "media/5a298b3eb3b678926135a630f52fe6da.webp",
+  "video": "media/60e5248f694fc74656ed80d4e908fe31.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/026-social-access-tracking-oner-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when geography, breath, and choreography should feel like one continuous push: a backstage spiral, a trench, an extraction through apartments. Hidden cuts are allowed only if they are invisible."
+        },
+        {
+          "type": "paragraph",
+          "text": "The audience should not be able to point to the splice. The camera and the blocking are one machine."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when the ethical claim is uncut duration, or when the scene is a quiet two-person talk that only needs a master. A true long take refuses the stitch."
+        },
+        {
+          "type": "paragraph",
+          "text": "A oner may use it. Do not call three coverage angles a oner because the editor was smooth."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Use it when geography, breath, and choreography should feel like one continuous push: a backstage spiral, a trench, an extraction through apartments. Hidden cuts are allowed only if they are invisible.The audience should not be able to point to the splice. The camera and the blocking are one machine.It is the wrong tool when the ethical claim is uncut duration, or when the scene is a quiet two-person talk that only needs a master. A true long take refuses the stitch.A oner may use it. Do not call three coverage angles a oner because the editor was smooth."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choreograph a path that can be performed, then decide where a join could hide if the take cannot be true. Steadicam, crane, and handheld all work if the breath stays consistent."
+        },
+        {
+          "type": "paragraph",
+          "text": "Match lighting and eyelines across stitches. Prompt: Apparent oner of [Subject], a whole scene as one take, hidden cuts allowed only if invisible."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Choreograph a path that can be performed, then decide where a join could hide if the take cannot be true. Steadicam, crane, and handheld all work if the breath stays consistent.Match lighting and eyelines across stitches. Prompt: Apparent oner of [Subject], a whole scene as one take, hidden cuts allowed only if invisible."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the scene is a ride through connected actions, such as a backstage spiral or a trench crossing. Do not use it for a static conversation that only needs coverage."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the scene is a ride through connected actions, such as a backstage spiral or a trench crossing. Do not use it for a static conversation that only needs coverage."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Long Take emphasizes uncut duration as a fact. A oner emphasizes the ride and may be stitched.",
+          "links": [
+            {
+              "text": "Long Take",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/long-take"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Steadicam is often the support. An Invisible Cut is the join.",
+          "links": [
+            {
+              "text": "Steadicam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            },
+            {
+              "text": "Invisible Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tracking Shot and Follow Shot can exist inside a oner without making every track a oner.",
+          "links": [
+            {
+              "text": "Tracking Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+            },
+            {
+              "text": "Follow Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Long TakeDo not let the audience leave the room.",
+          "displayText": "Long Take\nDo not let the audience leave the room.",
+          "links": [
+            {
+              "text": "Long TakeDo not let the audience leave the room.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/long-take"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "displayText": "Steadicam\nLong connecting moves through architecture. Neither handheld nor dolly.",
+          "links": [
+            {
+              "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow MotionA second contains a scene.",
+          "displayText": "Slow Motion\nA second contains a scene.",
+          "links": [
+            {
+              "text": "Slow MotionA second contains a scene.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Long Take",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/long-take"
+        },
+        {
+          "text": "Steadicam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Invisible Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/invisible-cut"
+        },
+        {
+          "text": "Tracking Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tracking"
+        },
+        {
+          "text": "Follow Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/follow"
+        },
+        {
+          "text": "Long TakeDo not let the audience leave the room.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/long-take"
+        },
+        {
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Slow MotionA second contains a scene.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/slow-motion"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1717020fa80841f52e94942127fd0098.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/long-take-031-genuine-feature-length-continuous-take-mini.webp",
+          "alt": "Long Take"
+        },
+        {
+          "kind": "video",
+          "path": "media/8b260304f6c04e7a6366677b1f3cd9bb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/031-genuine-feature-length-continuous-take-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+          "alt": "Steadicam"
+        },
+        {
+          "kind": "video",
+          "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+          "alt": "Slow Motion"
+        },
+        {
+          "kind": "video",
+          "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Long Take emphasizes uncut duration as a fact. A oner emphasizes the ride and may be stitched.Steadicam is often the support. An Invisible Cut is the join.Tracking Shot and Follow Shot can exist inside a oner without making every track a oner.Long TakeDo not let the audience leave the room.SteadicamLong connecting moves through architecture. Neither handheld nor dolly.Slow MotionA second contains a scene."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Birdman plays backstage panic as one apparent breath, stitches hidden. 1917 connects trench and field into a continuous war path, also stitched."
+        },
+        {
+          "type": "paragraph",
+          "text": "Extraction runs apartment and vehicle action as a designed single-take sequence. Compare those with Russian Ark, a true feature-length take, if the claim is uncut fact rather than ride."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Birdman plays backstage panic as one apparent breath, stitches hidden. 1917 connects trench and field into a continuous war path, also stitched.Extraction runs apartment and vehicle action as a designed single-take sequence. Compare those with Russian Ark, a true feature-length take, if the claim is uncut fact rather than ride."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write a whole scene as one take. Still: a frame from the path, not proof."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: A continuous oner following [Subject] through connected actions without a visible cut. Name rooms, turns, and the human anchor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hidden cuts only if they would not read."
+        },
+        {
+          "type": "quote",
+          "text": "A continuous oner following [Subject] through connected actions without a visible cut."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+continuous+oner+following+[Subject]+through+connected+actions+without+a+visible+cut."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write a whole scene as one take. Still: a frame from the path, not proof.Video: A continuous oner following [Subject] through connected actions without a visible cut. Name rooms, turns, and the human anchor.Hidden cuts only if they would not read.Copy promptUse in Video GeneratorA continuous oner following [Subject] through connected actions without a visible cut.A continuous oner following [Subject] through connected actions without a visible cut."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is ordinary coverage, or a Long Take you secretly cut. The tell is a change of breath, a jump in extra positions, or a whip that does not match.",
+          "links": [
+            {
+              "text": "Long Take",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/long-take"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: one visible path, matched energy across any hidden join, and no insert that admits the splice."
+        }
+      ],
+      "links": [
+        {
+          "text": "Long Take",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/long-take"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is ordinary coverage, or a Long Take you secretly cut. The tell is a change of breath, a jump in extra positions, or a whip that does not match.Fix: one visible path, matched energy across any hidden join, and no insert that admits the splice."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Oner in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A oner is a shot designed to play without visible edits, whether it is a true single take or a stitched sequence whose joins do not read."
+        },
+        {
+          "type": "heading",
+          "text": "Oner vs Long Take",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A long take is continuous recorded duration. A oner is the ride: it can be true or stitched, as long as the audience cannot see the cut."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Oner?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the scene should feel like one breath through connected spaces and actions, and coverage would leak the charge."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Oner for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a continuous oner following [Subject] through connected actions with no visible cut. Name the path. Allow hidden cuts only if they stay invisible."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Oner in film?A oner is a shot designed to play without visible edits, whether it is a true single take or a stitched sequence whose joins do not read.Oner vs Long TakeA long take is continuous recorded duration. A oner is the ride: it can be true or stitched, as long as the audience cannot see the cut.When should I use Oner?When the scene should feel like one breath through connected spaces and actions, and coverage would leak the charge.How do I prompt Oner for AI image or video?Write a continuous oner following [Subject] through connected actions with no visible cut. Name the path. Allow hidden cuts only if they stay invisible."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write a whole scene as one take. Still: a frame from the path, not proof.",
+      "Video: A continuous oner following [Subject] through connected actions without a visible cut. Name rooms, turns, and the human anchor.",
+      "Hidden cuts only if they would not read."
+    ],
+    "example": "A continuous oner following [Subject] through connected actions without a visible cut."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/60e5248f694fc74656ed80d4e908fe31.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/026-social-access-tracking-oner-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5a298b3eb3b678926135a630f52fe6da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/one-er-026-social-access-tracking-oner-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c4e105c905ab919ccdd3a6fb917f09dc.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/one-er.jpg",
+      "alt": "Oner frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/1717020fa80841f52e94942127fd0098.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/long-take-031-genuine-feature-length-continuous-take-mini.webp",
+      "alt": "Long Take"
+    },
+    {
+      "kind": "video",
+      "path": "media/8b260304f6c04e7a6366677b1f3cd9bb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/031-genuine-feature-length-continuous-take-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+      "alt": "Steadicam"
+    },
+    {
+      "kind": "video",
+      "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b0ca94acbf2a0be30355241862ffd34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-motion-077-slow-motion-mini.webp",
+      "alt": "Slow Motion"
+    },
+    {
+      "kind": "video",
+      "path": "media/81de45df7a58df9dacb58a27689f45a8.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/077-slow-motion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/647f043e7cf14627dec12a3f41a09b0e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/one-er/hero.jpg",
+      "alt": "Oner",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "33f375eaa2ee91d8fe452fbcaadcd77d6d4c7ed3e6dca62322bf1445107b7d69"
+}

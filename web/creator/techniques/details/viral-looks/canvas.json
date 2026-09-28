@@ -1,0 +1,365 @@
+{
+  "id": "viral-looks/canvas",
+  "slug": "canvas",
+  "title": "Canvas",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/canvas",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/canvas.webp",
+  "detail": "details/viral-looks/canvas.json",
+  "aliases": [],
+  "description": "Canvas, the canvas painting look, is a photographic subject wearing oil: visible bristle, canvas tooth, thicker paint in the lights, eyes that still look. It is not a slider named oil: brushwork has direction and weight.",
+  "thumbnail": "media/1d3244991bc2e19cddb76634840966ac.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Portraits that should feel made by hand, credits, a memory: you still compose a shot of a person, then the stock becomes paint. The camera is usually a portrait distance, locked, so stroke direction can be read."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you cannot see a stroke, it is a grade, not canvas. It is the wrong tool when you wanted unfinished line, optical dabs, or wet process."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those are sketch, Monet muse, and hand-paint. A luxury ad may want magazine instead."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Portraits that should feel made by hand, credits, a memory: you still compose a shot of a person, then the stock becomes paint. The camera is usually a portrait distance, locked, so stroke direction can be read.If you cannot see a stroke, it is a grade, not canvas. It is the wrong tool when you wanted unfinished line, optical dabs, or wet process.Those are sketch, Monet muse, and hand-paint. A luxury ad may want magazine instead."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "50mm to 85mm, eye height, lock-off. North window or a large soft source, painter's studio logic."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for visible bristle, canvas tooth, thicker paint in the lights, photographic structure underneath. Prompt: Canvas treatment of [Subject], visible brush, oil tooth, a painting that still has a face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works 50mm to 85mm, eye height, lock-off. North window or a large soft source, painter's studio logic.Ask for visible bristle, canvas tooth, thicker paint in the lights, photographic structure underneath. Prompt: Canvas treatment of [Subject], visible brush, oil tooth, a painting that still has a face."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A handmade portrait, a credit still, a memory that should feel painted and finished. Do not use it as a smooth painterly filter with no tooth."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A handmade portrait, a credit still, a memory that should feel painted and finished. Do not use it as a smooth painterly filter with no tooth."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Monet Muse is broken color mixed in the eye, light as the subject. Sketch stops before the paint.",
+          "links": [
+            {
+              "text": "Monet Muse",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/monet-muse"
+            },
+            {
+              "text": "Sketch",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/sketch"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hand Paint shows the wet act. Akrill is plastic poster pigment sitting on top.",
+          "links": [
+            {
+              "text": "Hand Paint",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/hand-paint"
+            },
+            {
+              "text": "Akrill",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/akrill"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Canvas is finished oil as the stock."
+        },
+        {
+          "type": "list-item",
+          "text": "Monet MuseLight is the subject.",
+          "displayText": "Monet Muse\nLight is the subject.",
+          "links": [
+            {
+              "text": "Monet MuseLight is the subject.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/monet-muse"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SketchStop before the paint.",
+          "displayText": "Sketch\nStop before the paint.",
+          "links": [
+            {
+              "text": "SketchStop before the paint.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/sketch"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Monet Muse",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/monet-muse"
+        },
+        {
+          "text": "Sketch",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/sketch"
+        },
+        {
+          "text": "Hand Paint",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/hand-paint"
+        },
+        {
+          "text": "Akrill",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/akrill"
+        },
+        {
+          "text": "Monet MuseLight is the subject.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/monet-muse"
+        },
+        {
+          "text": "SketchStop before the paint.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/sketch"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e90a13a862acf0f48f03214d4505577f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monet-muse.webp",
+          "alt": "Monet Muse"
+        },
+        {
+          "kind": "image",
+          "path": "media/5662b5297402b02f9b8e3b7035833fef.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/sketch.webp",
+          "alt": "Sketch"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Monet Muse is broken color mixed in the eye, light as the subject. Sketch stops before the paint.Hand Paint shows the wet act. Akrill is plastic poster pigment sitting on top.Canvas is finished oil as the stock.Monet MuseLight is the subject.SketchStop before the paint.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Loving Vincent treats oil as the entire image stock while faces still look. The Mill and the Cross restages painted space as a living crowd."
+        },
+        {
+          "type": "paragraph",
+          "text": "Paint is matter, not varnish."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Loving Vincent treats oil as the entire image stock while faces still look. The Mill and the Cross restages painted space as a living crowd.Paint is matter, not varnish."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the portrait structure, then the oil. Canvas treatment of [Subject], visible brush, oil tooth, a painting that still has a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add 85mm lock-off, window key, bristle direction, eyes sharp. No smooth plastic painterly."
+        },
+        {
+          "type": "quote",
+          "text": "Canvas treatment of [Subject], visible brush, oil tooth, a painting that still has a face."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Canvas+treatment+of+[Subject],+visible+brush,+oil+tooth,+a+painting+that+still+has+a+face."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Keep the portrait structure, then the oil. Canvas treatment of [Subject], visible brush, oil tooth, a painting that still has a face.Add 85mm lock-off, window key, bristle direction, eyes sharp. No smooth plastic painterly.Copy promptUse in Image GeneratorCanvas treatment of [Subject], visible brush, oil tooth, a painting that still has a face.Canvas treatment of [Subject], visible brush, oil tooth, a painting that still has a face."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Smooth plastic painterly with no tooth, or a mash with Sketch line. The tell is no stroke.",
+          "links": [
+            {
+              "text": "Sketch",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/sketch"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: bristle, canvas weave, thicker paint in the lights, a face that still looks."
+        }
+      ],
+      "links": [
+        {
+          "text": "Sketch",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/sketch"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong Smooth plastic painterly with no tooth, or a mash with Sketch line. The tell is no stroke.Fix it: bristle, canvas weave, thicker paint in the lights, a face that still looks."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Canvas in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A photographic shot whose stock is oil paint: visible bristle, canvas tooth, a face that still looks. It is material, not a mood word."
+        },
+        {
+          "type": "heading",
+          "text": "Canvas vs Monet Muse",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Canvas shows the object of painting: bristle and tooth. Monet muse dissolves the scene into optical dabs. If you see weave, you are on canvas. If you see broken color mixing, you wanted Monet muse."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Canvas?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Handmade portraits, credits, memory. Skip unfinished sketches, wet process shots, and smooth filters with no stroke."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Canvas for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Portrait lens, window key, then: Canvas treatment of [Subject], visible brush, oil tooth, a painting that still has a face. Demand bristle and tooth. Keep the eyes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Canvas in film?A photographic shot whose stock is oil paint: visible bristle, canvas tooth, a face that still looks. It is material, not a mood word.Canvas vs Monet MuseCanvas shows the object of painting: bristle and tooth. Monet muse dissolves the scene into optical dabs. If you see weave, you are on canvas. If you see broken color mixing, you wanted Monet muse.When should I use Canvas?Handmade portraits, credits, memory. Skip unfinished sketches, wet process shots, and smooth filters with no stroke.How do I prompt Canvas for AI image or video?Portrait lens, window key, then: Canvas treatment of [Subject], visible brush, oil tooth, a painting that still has a face. Demand bristle and tooth. Keep the eyes."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Keep the portrait structure, then the oil. Canvas treatment of [Subject], visible brush, oil tooth, a painting that still has a face.",
+      "Add 85mm lock-off, window key, bristle direction, eyes sharp. No smooth plastic painterly."
+    ],
+    "example": "Canvas treatment of [Subject], visible brush, oil tooth, a painting that still has a face."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/1d3244991bc2e19cddb76634840966ac.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/canvas.webp",
+      "alt": "Canvas example"
+    },
+    {
+      "kind": "image",
+      "path": "media/e90a13a862acf0f48f03214d4505577f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/monet-muse.webp",
+      "alt": "Monet Muse"
+    },
+    {
+      "kind": "image",
+      "path": "media/5662b5297402b02f9b8e3b7035833fef.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/sketch.webp",
+      "alt": "Sketch"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/d2b653e5b8f004f1fd7ddb60b3e07391.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/canvas/hero.jpg",
+      "alt": "Canvas",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "e1cc8b80bfe1a975e827a6944b3e7477560b7b154dcec8bf7cd2ba8aa17389d6"
+}

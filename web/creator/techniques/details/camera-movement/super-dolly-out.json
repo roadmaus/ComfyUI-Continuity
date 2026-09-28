@@ -1,0 +1,380 @@
+{
+  "id": "camera-movement/super-dolly-out",
+  "slug": "super-dolly-out",
+  "title": "Super Dolly Out",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/super-dolly-out",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/super-dolly-out-super-dolly-out-mini.webp",
+  "detail": "details/camera-movement/super-dolly-out.json",
+  "aliases": [],
+  "description": "A super dolly out is a long retreat that dumps the person into geography, the room exploding open. The environment takes the frame; the figure is left inside a system they no longer fill.",
+  "thumbnail": "media/739d819105514907657296227a98e1ac.webp",
+  "video": "media/19688deb84bc6c0d29788bb35157d81b.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/super-dolly-out-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Leave them in the system. A constructed world revealed, a street that was a room, a face that becomes a statistic of space."
+        },
+        {
+          "type": "paragraph",
+          "text": "The retreat is long enough that the map wins. An aerial pullback continues until land is everything."
+        },
+        {
+          "type": "paragraph",
+          "text": "Super-dolly-out stays on a human axis, wheels or vest, but the path is long and the dump is fast. A short pull-out only gives headroom."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Leave them in the system. A constructed world revealed, a street that was a room, a face that becomes a statistic of space.The retreat is long enough that the map wins. An aerial pullback continues until land is everything.Super-dolly-out stays on a human axis, wheels or vest, but the path is long and the dump is fast. A short pull-out only gives headroom."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Long reverse track on the lens axis, often starting close. Speed is high; end wide."
+        },
+        {
+          "type": "paragraph",
+          "text": "Parallax opens the room rather than eating it. Prompt: Super dolly out from [Subject], a long retreat that dumps the person into geography, the room exploding open."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Long reverse track on the lens axis, often starting close. Speed is high; end wide.Parallax opens the room rather than eating it. Prompt: Super dolly out from [Subject], a long retreat that dumps the person into geography, the room exploding open."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to dump a person into a larger system in one retreat. Do not use a short pull for headroom and call it super."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to dump a person into a larger system in one retreat. Do not use a short pull for headroom and call it super."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dolly Out is the polite reverse. Aerial Pullback leaves the human axis and wins as a map from the air.",
+          "links": [
+            {
+              "text": "Dolly Out",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+            },
+            {
+              "text": "Aerial Pullback",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Super-dolly-out stays grounded but goes far and fast."
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly OutLeave someone behind, or show how small they are in the system.",
+          "displayText": "Dolly Out\nLeave someone behind, or show how small they are in the system.",
+          "links": [
+            {
+              "text": "Dolly OutLeave someone behind, or show how small they are in the system.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "displayText": "Aerial Pullback\nClose a chapter. Geography wins.",
+          "links": [
+            {
+              "text": "Aerial PullbackClose a chapter. Geography wins.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly Out",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+        },
+        {
+          "text": "Aerial Pullback",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Dolly OutLeave someone behind, or show how small they are in the system.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-out"
+        },
+        {
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/250b08be437f19b68ce05ee85ac60c70.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-out-04-dolly-out-v2-mini.webp",
+          "alt": "Dolly Out"
+        },
+        {
+          "kind": "video",
+          "path": "media/92e21cccbf00e7cb0422d0c370c86118.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/04-dolly-out-v2-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+          "alt": "Aerial Pullback"
+        },
+        {
+          "kind": "video",
+          "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Dolly Out is the polite reverse. Aerial Pullback leaves the human axis and wins as a map from the air.Super-dolly-out stays grounded but goes far and fast.Dolly OutLeave someone behind, or show how small they are in the system.Aerial PullbackClose a chapter. Geography wins.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Truman Show retreats until a constructed world owns the person. A reverse of the Copacabana energy (leaving the club instead of entering) is the grammar of dumping a figure back into a system."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use them as long retreats, not as frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Truman Show retreats until a constructed world owns the person. A reverse of the Copacabana energy (leaving the club instead of entering) is the grammar of dumping a figure back into a system.Use them as long retreats, not as frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Long reverse, geography wins. Still: Super dolly out from [Subject], a long retreat that dumps the person into geography, the room exploding open."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: A long, fast dolly out from [Subject] until the environment owns the frame. Forbid a zoom out from sticks."
+        },
+        {
+          "type": "quote",
+          "text": "A long, fast dolly out from [Subject] until the environment owns the frame."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+long,+fast+dolly+out+from+[Subject]+until+the+environment+owns+the+frame."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Long reverse, geography wins. Still: Super dolly out from [Subject], a long retreat that dumps the person into geography, the room exploding open.Video: A long, fast dolly out from [Subject] until the environment owns the frame. Forbid a zoom out from sticks.Copy promptUse in Video GeneratorA long, fast dolly out from [Subject] until the environment owns the frame.A long, fast dolly out from [Subject] until the environment owns the frame."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a zoom out or a short pull. The tell: the face shrinks with no shear, or the path is only a step."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: long physical reverse, room exploding open, environment owning the frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a zoom out or a short pull. The tell: the face shrinks with no shear, or the path is only a step.The fix: long physical reverse, room exploding open, environment owning the frame."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Super Dolly Out in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A super dolly out is a long, fast physical retreat that dumps a person into geography until the environment owns the frame."
+        },
+        {
+          "type": "heading",
+          "text": "Super Dolly Out vs Aerial Pullback",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An aerial pullback leaves by air until land is the subject. Super dolly out stays on a grounded axis but the reverse is long and the dump is fast."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Super Dolly Out?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to leave someone inside a system that suddenly looks huge. Do not use a short pull for headroom."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Super Dolly Out for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a long reverse until the environment owns the frame. Example: Super dolly out from [Subject], a long retreat that dumps the person into geography."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Super Dolly Out in film?A super dolly out is a long, fast physical retreat that dumps a person into geography until the environment owns the frame.Super Dolly Out vs Aerial PullbackAn aerial pullback leaves by air until land is the subject. Super dolly out stays on a grounded axis but the reverse is long and the dump is fast.When should I use Super Dolly Out?Use it to leave someone inside a system that suddenly looks huge. Do not use a short pull for headroom.How do I prompt Super Dolly Out for AI image or video?Write a long reverse until the environment owns the frame. Example: Super dolly out from [Subject], a long retreat that dumps the person into geography."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Long reverse, geography wins. Still: Super dolly out from [Subject], a long retreat that dumps the person into geography, the room exploding open.",
+      "Video: A long, fast dolly out from [Subject] until the environment owns the frame. Forbid a zoom out from sticks."
+    ],
+    "example": "A long, fast dolly out from [Subject] until the environment owns the frame."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/19688deb84bc6c0d29788bb35157d81b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/super-dolly-out-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/739d819105514907657296227a98e1ac.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/super-dolly-out-super-dolly-out-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/146090f74695f8750974c3cec3f10e4e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/super-dolly-out.jpg",
+      "alt": "Super Dolly Out frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/250b08be437f19b68ce05ee85ac60c70.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-out-04-dolly-out-v2-mini.webp",
+      "alt": "Dolly Out"
+    },
+    {
+      "kind": "video",
+      "path": "media/92e21cccbf00e7cb0422d0c370c86118.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/04-dolly-out-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+      "alt": "Aerial Pullback"
+    },
+    {
+      "kind": "video",
+      "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8e83b7aba8f540586080ee0a1f04a858.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/super-dolly-out/hero.jpg",
+      "alt": "Super Dolly Out",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "857f7d4f342e888b74d0bcb64df30391c31ad1ba6ca7616f603b21c1b564851c"
+}

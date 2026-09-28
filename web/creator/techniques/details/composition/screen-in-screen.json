@@ -1,0 +1,444 @@
+{
+  "id": "composition/screen-in-screen",
+  "slug": "screen-in-screen",
+  "title": "Screen in Screen",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/screen-in-screen",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/screen-in-screen.webp",
+  "detail": "details/composition/screen-in-screen.json",
+  "aliases": [
+    "Desktop film",
+    "Interface as the camera"
+  ],
+  "description": "Screen in screen (desktop film, interface as the camera) nests a monitor, phone, television, or cinema inside the cinema so someone is watching a picture of someone. The inner image has its own crop, delay, and artifacts, and nested looking is the diagram.",
+  "thumbnail": "media/e3a8a12ac5326c54e2ebfc4188f52da5.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A picture of a picture changes ownership. The person on the inner screen is already framed by someone else: a director, a hacker, a parent, a god."
+        },
+        {
+          "type": "paragraph",
+          "text": "We watch the watcher, or we become them if the interface takes over the outer frame. It is the wrong tool when the inner screen is an unreadable glow."
+        },
+        {
+          "type": "paragraph",
+          "text": "If text, faces, or timing cannot be parsed, you have set dressing. Desktop films live or die on exact writing and cursor behavior."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is not split screen. Split screen is a graphic of two presents."
+        },
+        {
+          "type": "paragraph",
+          "text": "Screen-in-screen is a nested world with a power relation."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A picture of a picture changes ownership. The person on the inner screen is already framed by someone else: a director, a hacker, a parent, a god.We watch the watcher, or we become them if the interface takes over the outer frame. It is the wrong tool when the inner screen is an unreadable glow.If text, faces, or timing cannot be parsed, you have set dressing. Desktop films live or die on exact writing and cursor behavior.This is not split screen. Split screen is a graphic of two presents.Screen-in-screen is a nested world with a power relation."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Design a real timeline and a legible inner frame. Photograph or generate the inner picture as an asset, then place it in a monitor with correct perspective, refresh, and reflections."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not ask a generator to invent stable UI and accurate text in one pass if the words matter. Prompt: Screen-in-screen of [Subject], a monitor, phone, or cinema inside the cinema, nested looking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Design a real timeline and a legible inner frame. Photograph or generate the inner picture as an asset, then place it in a monitor with correct perspective, refresh, and reflections.Do not ask a generator to invent stable UI and accurate text in one pass if the words matter. Prompt: Screen-in-screen of [Subject], a monitor, phone, or cinema inside the cinema, nested looking."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when looking is already mediated: security, live TV, a search on a laptop, a projectionist, a god's control room. Do not add a TV that plays nothing relevant."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when looking is already mediated: security, live TV, a search on a laptop, a projectionist, a god's control room. Do not add a TV that plays nothing relevant."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Frame within Frame is usually architecture. Screen-in-screen is a display with its own image.",
+          "links": [
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Split Screen tiles simultaneous presents without one being a device in the other. Windows stacks architectural panes of lives.",
+          "links": [
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            },
+            {
+              "text": "Windows",
+              "url": "https://melies.co/cinematic-techniques/composition/windows"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Voyeur may watch a screen, but voyeur is the concealment ethic. Reflections can stack a face on a dark monitor, a hybrid.",
+          "links": [
+            {
+              "text": "Voyeur",
+              "url": "https://melies.co/cinematic-techniques/composition/voyeur"
+            },
+            {
+              "text": "Reflections",
+              "url": "https://melies.co/cinematic-techniques/composition/reflections"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+          "displayText": "Frame within Frame\nSomeone is watched, trapped, or pictured.",
+          "links": [
+            {
+              "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Split ScreenTwo rooms, one moment.",
+          "displayText": "Split Screen\nTwo rooms, one moment.",
+          "links": [
+            {
+              "text": "Split ScreenTwo rooms, one moment.",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "Windows",
+          "url": "https://melies.co/cinematic-techniques/composition/windows"
+        },
+        {
+          "text": "Voyeur",
+          "url": "https://melies.co/cinematic-techniques/composition/voyeur"
+        },
+        {
+          "text": "Reflections",
+          "url": "https://melies.co/cinematic-techniques/composition/reflections"
+        },
+        {
+          "text": "Frame within FrameSomeone is watched, trapped, or pictured.",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Split ScreenTwo rooms, one moment.",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+          "alt": "Frame within Frame"
+        },
+        {
+          "kind": "video",
+          "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/aa1f55893c6980380f31912c5c293abe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-screen-120-simultaneous-split-screen-mini.webp",
+          "alt": "Split Screen"
+        },
+        {
+          "kind": "video",
+          "path": "media/6b8983f75155ce580e4009fe6c11abb4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/120-simultaneous-split-screen-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Frame within Frame is usually architecture. Screen-in-screen is a display with its own image.Split Screen tiles simultaneous presents without one being a device in the other. Windows stacks architectural panes of lives.Voyeur may watch a screen, but voyeur is the concealment ethic. Reflections can stack a face on a dark monitor, a hybrid.Frame within FrameSomeone is watched, trapped, or pictured.Split ScreenTwo rooms, one moment.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Truman Show makes the world a production watched on screens. Videodrome infects the watcher through the tube."
+        },
+        {
+          "type": "paragraph",
+          "text": "Searching and Unfriended run investigation and terror through interfaces whose text and timing are the coverage. Sherlock Jr."
+        },
+        {
+          "type": "paragraph",
+          "text": "lets a projectionist enter the inner picture. Grammar of nested looking, not a wallpaper of monitors."
+        },
+        {
+          "type": "list-item",
+          "text": "Searching 2018The investigation is presented through screens, calls and digital activity.",
+          "displayText": "Searching 2018\nThe investigation is presented through screens, calls and digital activity."
+        },
+        {
+          "type": "list-item",
+          "text": "Unfriended 2014The action unfolds through a computer interface and group call.",
+          "displayText": "Unfriended 2014\nThe action unfolds through a computer interface and group call."
+        },
+        {
+          "type": "list-item",
+          "text": "Sherlock Jr. 1924The projectionist enters the world of the cinema screen.",
+          "displayText": "Sherlock Jr. 1924\nThe projectionist enters the world of the cinema screen."
+        },
+        {
+          "type": "list-item",
+          "text": "The Stendhal Syndrome 1996Anna’s perception carries her into a painting.",
+          "displayText": "The Stendhal Syndrome 1996\nAnna’s perception carries her into a painting."
+        },
+        {
+          "type": "list-item",
+          "text": "Paprika 2006Images and screens become passages between dream spaces.",
+          "displayText": "Paprika 2006\nImages and screens become passages between dream spaces."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Truman Show makes the world a production watched on screens. Videodrome infects the watcher through the tube.Searching and Unfriended run investigation and terror through interfaces whose text and timing are the coverage. Sherlock Jr.lets a projectionist enter the inner picture. Grammar of nested looking, not a wallpaper of monitors.Searching 2018The investigation is presented through screens, calls and digital activity.Unfriended 2014The action unfolds through a computer interface and group call.Sherlock Jr. 1924The projectionist enters the world of the cinema screen.The Stendhal Syndrome 1996Anna’s perception carries her into a painting.Paprika 2006Images and screens become passages between dream spaces."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Specify the outer view and the inner picture. Screen-in-screen of [Subject], a monitor, phone, or cinema inside the cinema, nested looking."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the device, the content on it, and whether we see the watcher, only the UI, or both. If text matters, write the exact words."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the inner image stable."
+        },
+        {
+          "type": "quote",
+          "text": "Create a desktop-screen short: a woman starts writing an apology email, deletes it, receives an old photo and opens a video call she hesitates to answer. Generate the photo and call footage separately. Build the interface, readable text, cursor path and notification timing with code or compositing. No unreadable AI-generated UI text."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Create+a+desktop-screen+short:+a+woman+starts+writing+an+apology+email,+deletes+it,+receives+an+old+photo+and+opens+a+video+call+she+hesitates+to+answer.+Generate+the+photo+and+call+footage+separately.+Build+the+interface,+readable+text,+cursor+path+and+notification+timing+with+code+or+compositing.+No+unreadable+AI-generated+UI+text."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Specify the outer view and the inner picture. Screen-in-screen of [Subject], a monitor, phone, or cinema inside the cinema, nested looking.Name the device, the content on it, and whether we see the watcher, only the UI, or both. If text matters, write the exact words.Keep the inner image stable.Copy promptUse in Video GeneratorCreate a desktop-screen short: a woman starts writing an apology email, deletes it, receives an old photo and opens a video call she hesitates to answer. Generate the photo and call footage separately. Build the interface, readable text, cursor path and notification timing with code or compositing. No unreadable AI-generated UI text.Create a desktop-screen short: a woman starts writing an apology email, deletes it, receives an old photo and opens a video call she hesitates to answer. Generate the photo and call footage separately. Build the interface, readable text, cursor path and notification timing with code or compositing. No unreadable AI-generated UI text."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a blurry TV set, or a fake Split Screen. The tell is unreadable text, melting UI, or two images tiled with no device.",
+          "links": [
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to treat the inner picture as a designed insert with real words and a physically plausible monitor."
+        }
+      ],
+      "links": [
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a blurry TV set, or a fake Split Screen. The tell is unreadable text, melting UI, or two images tiled with no device.The fix is to treat the inner picture as a designed insert with real words and a physically plausible monitor."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is screen in screen in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A display inside the shot carries its own picture: monitor, phone, cinema screen. Someone is watching a picture of someone. The inner crop, delay, and artifacts are part of the grammar."
+        },
+        {
+          "type": "heading",
+          "text": "Screen in Screen vs Split Screen",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Split screen tiles two or more presents as a graphic. Screen-in-screen puts one picture inside a device in the other. Power and mediation differ. A control-room wall of monitors is nested looking. A graphic half-and-half of two callers is split screen unless those halves are phones in a room."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use screen in screen?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when looking is already a broadcast, a search, a tape, or a show: surveillance, desktop investigation, a film within the film. Do not add a glowing panel with no content."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt screen in screen for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name device and inner content. Example: Screen-in-screen of [Subject], a monitor, phone, or cinema inside the cinema, nested looking. For UI stories, render text deterministically. Do not generate the whole interface as unstable video if words must be exact."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is screen in screen in film?A display inside the shot carries its own picture: monitor, phone, cinema screen. Someone is watching a picture of someone. The inner crop, delay, and artifacts are part of the grammar.Screen in Screen vs Split ScreenSplit screen tiles two or more presents as a graphic. Screen-in-screen puts one picture inside a device in the other. Power and mediation differ. A control-room wall of monitors is nested looking. A graphic half-and-half of two callers is split screen unless those halves are phones in a room.When should I use screen in screen?Use it when looking is already a broadcast, a search, a tape, or a show: surveillance, desktop investigation, a film within the film. Do not add a glowing panel with no content.How do I prompt screen in screen for AI image or video?Name device and inner content. Example: Screen-in-screen of [Subject], a monitor, phone, or cinema inside the cinema, nested looking. For UI stories, render text deterministically. Do not generate the whole interface as unstable video if words must be exact."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Specify the outer view and the inner picture. Screen-in-screen of [Subject], a monitor, phone, or cinema inside the cinema, nested looking.",
+      "Name the device, the content on it, and whether we see the watcher, only the UI, or both. If text matters, write the exact words.",
+      "Keep the inner image stable."
+    ],
+    "example": "Create a desktop-screen short: a woman starts writing an apology email, deletes it, receives an old photo and opens a video call she hesitates to answer. Generate the photo and call footage separately. Build the interface, readable text, cursor path and notification timing with code or compositing. No unreadable AI-generated UI text."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/e3a8a12ac5326c54e2ebfc4188f52da5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/screen-in-screen.webp",
+      "alt": "Screen in Screen example"
+    },
+    {
+      "kind": "image",
+      "path": "media/7fb8717dc33bdab5fa9327aa9b223768.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/frame-in-frame-041-frame-within-the-frame-mini.webp",
+      "alt": "Frame within Frame"
+    },
+    {
+      "kind": "video",
+      "path": "media/54614dea1ddfd268fc984d20a14ffe8b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/041-frame-within-the-frame-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aa1f55893c6980380f31912c5c293abe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-screen-120-simultaneous-split-screen-mini.webp",
+      "alt": "Split Screen"
+    },
+    {
+      "kind": "video",
+      "path": "media/6b8983f75155ce580e4009fe6c11abb4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/120-simultaneous-split-screen-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/3f1f09211d6a55ca12202b8fd6fca3d8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/screen-in-screen/hero.jpg",
+      "alt": "Screen in Screen",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "f48063e6f5254058b6d1f1413a3c4bf907f09216c0bf364d76042c936eafd39e"
+}

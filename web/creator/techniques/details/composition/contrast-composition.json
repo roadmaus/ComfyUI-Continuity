@@ -1,0 +1,409 @@
+{
+  "id": "composition/contrast-composition",
+  "slug": "contrast-composition",
+  "title": "Tonal Contrast",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/contrast-composition",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/contrast-composition.webp",
+  "detail": "details/composition/contrast-composition.json",
+  "aliases": [],
+  "description": "Tonal contrast, the contrast composition of lightest against darkest mass, organizes the frame as a fight of value with the subject as one of those poles. Graphic punch replaces mid-grey mush, so the diagram reads as a poster of value rather than a gentle range of detail.",
+  "thumbnail": "media/4e25cab2b250aeef87cc81fad7db7f47.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Make a poster out of a frame and the eye cannot miss the subject. A white face in a black room, a black coat on a white street, a lighthouse beam cutting tar: value owns space more loudly than furniture."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a scene that lives in complexion, food, or mixed daylight conversation. If you crush the mids, you lose the sweat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Not every picture should be a woodcut. Tonal contrast is composition, not automatically Low-Key Lighting lighting.",
+          "links": [
+            {
+              "text": "Low-Key Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "You can shoot high contrast at noon with hard sun and deep shade. Low-key is a lighting ratio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Contrast composition is where the masses sit."
+        }
+      ],
+      "links": [
+        {
+          "text": "Low-Key Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Make a poster out of a frame and the eye cannot miss the subject. A white face in a black room, a black coat on a white street, a lighthouse beam cutting tar: value owns space more loudly than furniture.It is the wrong tool for a scene that lives in complexion, food, or mixed daylight conversation. If you crush the mids, you lose the sweat.Not every picture should be a woodcut. Tonal contrast is composition, not automatically Low-Key Lighting lighting.You can shoot high contrast at noon with hard sun and deep shade. Low-key is a lighting ratio.Contrast composition is where the masses sit."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Meter for the winner. Let the other mass fall off or blow, on purpose."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hard light and a dark flag help. A backlight rim can keep a dark figure readable on dark."
+        },
+        {
+          "type": "paragraph",
+          "text": "Expose for highlights if the subject is the bright mass. Kill fill if the subject is the dark mass on a bright field."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: High tonal contrast composition with [Subject] as the lightest or darkest mass, graphic punch, no mid-gray mush."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Meter for the winner. Let the other mass fall off or blow, on purpose.Hard light and a dark flag help. A backlight rim can keep a dark figure readable on dark.Expose for highlights if the subject is the bright mass. Kill fill if the subject is the dark mass on a bright field.Prompt: High tonal contrast composition with [Subject] as the lightest or darkest mass, graphic punch, no mid-gray mush."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for night hunts, moral binaries, graphic titles, and any beat that should read at a distance. Do not crush a scene whose information lives in the midtones."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for night hunts, moral binaries, graphic titles, and any beat that should read at a distance. Do not crush a scene whose information lives in the midtones."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Low-Key Lighting is a lighting style with dominant shadow. Tonal contrast can also be a bright graphic (white wall, black figure).",
+          "links": [
+            {
+              "text": "Low-Key Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Silhouette gives up interior detail. Contrast composition may still keep an eye.",
+          "links": [
+            {
+              "text": "Silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Figure-Ground is the broader first-read split, including color and focus. Chiaroscuro is the painterly modeling of form with light and dark, which may be less poster-flat.",
+          "links": [
+            {
+              "text": "Figure-Ground",
+              "url": "https://melies.co/cinematic-techniques/composition/figure-ground"
+            },
+            {
+              "text": "Chiaroscuro",
+              "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Void deletes the field. Contrast still has two masses.",
+          "links": [
+            {
+              "text": "Void",
+              "url": "https://melies.co/cinematic-techniques/composition/void"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "displayText": "Low-Key Lighting\nMystery, crime, or moral night.",
+          "links": [
+            {
+              "text": "Low-Key LightingMystery, crime, or moral night.",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SilhouetteIdentity is less important than shape.",
+          "displayText": "Silhouette\nIdentity is less important than shape.",
+          "links": [
+            {
+              "text": "SilhouetteIdentity is less important than shape.",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Low-Key Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Figure-Ground",
+          "url": "https://melies.co/cinematic-techniques/composition/figure-ground"
+        },
+        {
+          "text": "Chiaroscuro",
+          "url": "https://melies.co/cinematic-techniques/lighting/chiaroscuro"
+        },
+        {
+          "text": "Void",
+          "url": "https://melies.co/cinematic-techniques/composition/void"
+        },
+        {
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "SilhouetteIdentity is less important than shape.",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+          "alt": "Low-Key Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/b5d6146a73c5baa985f280578740ef59.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/silhouette-049-silhouette-as-graphic-storytelling-mini.webp",
+          "alt": "Silhouette"
+        },
+        {
+          "kind": "video",
+          "path": "media/aa375d20479989e1dab53b000981e0c5.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/049-silhouette-as-graphic-storytelling-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Low-Key Lighting is a lighting style with dominant shadow. Tonal contrast can also be a bright graphic (white wall, black figure).Silhouette gives up interior detail. Contrast composition may still keep an eye.Figure-Ground is the broader first-read split, including color and focus. Chiaroscuro is the painterly modeling of form with light and dark, which may be less poster-flat.Void deletes the field. Contrast still has two masses.Low-Key LightingMystery, crime, or moral night.SilhouetteIdentity is less important than shape.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sin City language turns faces and streets into ink and paper. The Lighthouse grinds value until salt, beam, and body are almost woodcut."
+        },
+        {
+          "type": "paragraph",
+          "text": "Both make composition out of value first. Grammar, not a comic-panel kit to steal."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Sin City language turns faces and streets into ink and paper. The Lighthouse grinds value until salt, beam, and body are almost woodcut.Both make composition out of value first. Grammar, not a comic-panel kit to steal."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Declare which pole the subject occupies. High tonal contrast composition with [Subject] as the lightest or darkest mass, graphic punch, no mid-gray mush."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say pale face in a black field, or black coat on white concrete. Forbid even grey fill."
+        },
+        {
+          "type": "quote",
+          "text": "High tonal contrast composition with [Subject] as the lightest or darkest mass, graphic punch, no mid-gray mush."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=High+tonal+contrast+composition+with+[Subject]+as+the+lightest+or+darkest+mass,+graphic+punch,+no+mid-gray+mush."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Declare which pole the subject occupies. High tonal contrast composition with [Subject] as the lightest or darkest mass, graphic punch, no mid-gray mush.Say pale face in a black field, or black coat on white concrete. Forbid even grey fill.Copy promptUse in Image GeneratorHigh tonal contrast composition with [Subject] as the lightest or darkest mass, graphic punch, no mid-gray mush.High tonal contrast composition with [Subject] as the lightest or darkest mass, graphic punch, no mid-gray mush."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is muddy mid-grey. The tell is a face, a wall, and a coat all sitting in the same value band."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to pick the lightest or darkest mass and send the rest away with flags, exposure, or costume."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is muddy mid-grey. The tell is a face, a wall, and a coat all sitting in the same value band.The fix is to pick the lightest or darkest mass and send the rest away with flags, exposure, or costume."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is tonal contrast in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a composition built from strong light and dark masses, with the subject as one of those poles. The picture reads as a graphic. Mid-grey detail is reduced so value, not clutter, owns the frame."
+        },
+        {
+          "type": "heading",
+          "text": "Tonal Contrast vs Low-Key Lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Low-key is a lighting ratio: little fill, dominant shadow. Tonal contrast is where light and dark sit as shapes. A noon street with hard sun and deep shade can be high contrast without being a night interior. A low-key room can still be a soft, detailed face."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use tonal contrast?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the shot should read as a poster: night, moral split, graphic title, a figure as a cut-out. Do not crush scenes that need skin, food, or mixed conversation detail."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt tonal contrast for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the poles. Example: High tonal contrast composition with [Subject] as the lightest or darkest mass, graphic punch, no mid-gray mush. Say which one they are. Ban even illumination."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is tonal contrast in film?It is a composition built from strong light and dark masses, with the subject as one of those poles. The picture reads as a graphic. Mid-grey detail is reduced so value, not clutter, owns the frame.Tonal Contrast vs Low-Key LightingLow-key is a lighting ratio: little fill, dominant shadow. Tonal contrast is where light and dark sit as shapes. A noon street with hard sun and deep shade can be high contrast without being a night interior. A low-key room can still be a soft, detailed face.When should I use tonal contrast?Use it when the shot should read as a poster: night, moral split, graphic title, a figure as a cut-out. Do not crush scenes that need skin, food, or mixed conversation detail.How do I prompt tonal contrast for AI image or video?Name the poles. Example: High tonal contrast composition with [Subject] as the lightest or darkest mass, graphic punch, no mid-gray mush. Say which one they are. Ban even illumination."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Declare which pole the subject occupies. High tonal contrast composition with [Subject] as the lightest or darkest mass, graphic punch, no mid-gray mush.",
+      "Say pale face in a black field, or black coat on white concrete. Forbid even grey fill."
+    ],
+    "example": "High tonal contrast composition with [Subject] as the lightest or darkest mass, graphic punch, no mid-gray mush."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/4e25cab2b250aeef87cc81fad7db7f47.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/contrast-composition.webp",
+      "alt": "Tonal Contrast example"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+      "alt": "Low-Key Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/b5d6146a73c5baa985f280578740ef59.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/silhouette-049-silhouette-as-graphic-storytelling-mini.webp",
+      "alt": "Silhouette"
+    },
+    {
+      "kind": "video",
+      "path": "media/aa375d20479989e1dab53b000981e0c5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/049-silhouette-as-graphic-storytelling-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/41e181b26a946bf85ec57712d4c5f475.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/contrast-composition/hero.jpg",
+      "alt": "Tonal Contrast",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "fbe84bb35d0b5ecc020a6b78b988743e791321d3c41f479e2d82b4838e15d436"
+}

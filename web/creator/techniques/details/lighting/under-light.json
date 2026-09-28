@@ -1,0 +1,394 @@
+{
+  "id": "lighting/under-light",
+  "slug": "under-light",
+  "title": "Underlighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/under-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/under-light.webp",
+  "detail": "details/lighting/under-light.json",
+  "aliases": [
+    "uplighting"
+  ],
+  "description": "Underlighting, also called uplighting, lights from below the face so shadows climb the cheekbones and the tops of the eye sockets. The modeling is the reverse of daylight and often reads as uncanny.",
+  "thumbnail": "media/37fd93cf4962f10e77869ecfc8008a95.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The source is fire, a screen on the floor, a flashlight under a chin, or a monster. Faces invert: the brow ridge goes dark, the nostrils and chin light up."
+        },
+        {
+          "type": "paragraph",
+          "text": "Horror and campfire talk use the same physics; only the object changes. It is the wrong tool for ordinary conversation under a ceiling."
+        },
+        {
+          "type": "paragraph",
+          "text": "A candle on a table can underlight if it sits below the chin, but candlelight is a source type that can also sit beside a face. Underlighting is the direction.",
+          "links": [
+            {
+              "text": "candlelight",
+              "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "candlelight",
+          "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The source is fire, a screen on the floor, a flashlight under a chin, or a monster. Faces invert: the brow ridge goes dark, the nostrils and chin light up.Horror and campfire talk use the same physics; only the object changes. It is the wrong tool for ordinary conversation under a ceiling.A candle on a table can underlight if it sits below the chin, but candlelight is a source type that can also sit beside a face. Underlighting is the direction."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place a lamp, flame, or panel below the chin, pointing up. Keep it close so inverse-square falloff hits the face and dies on the ceiling."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness is often hard or small-soft (a phone screen is a smallish source). Color is flame-warm, screen-cool, or theatrical green; the climb of the shadows is the tell."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: A lamp on the table below [Subject]'s chin, pointing up. Shadows climb the cheekbones and eye sockets."
+        },
+        {
+          "type": "paragraph",
+          "text": "The source is under the face, not beside it."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place a lamp, flame, or panel below the chin, pointing up. Keep it close so inverse-square falloff hits the face and dies on the ceiling.Hardness is often hard or small-soft (a phone screen is a smallish source). Color is flame-warm, screen-cool, or theatrical green; the climb of the shadows is the tell.Prompt: A lamp on the table below [Subject]'s chin, pointing up. Shadows climb the cheekbones and eye sockets.The source is under the face, not beside it."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the source is fire, a floor screen, or a threat under the chin. Do not use it as a default beauty fill from a white card unless you want unease."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the source is fire, a floor screen, or a threat under the chin. Do not use it as a default beauty fill from a white card unless you want unease."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Top light is the opposite. Candlelight may underlight if the flame is low, but a candelabra at face height is more of a small frontal or side key.",
+          "links": [
+            {
+              "text": "Top light",
+              "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+            },
+            {
+              "text": "Candlelight",
+              "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Practical lighting is the visible object; underlighting is where it sits. Glam sometimes uses a weak under fill (a reflector) that must stay far below key so it does not invert the face.",
+          "links": [
+            {
+              "text": "Practical lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+            },
+            {
+              "text": "Glam",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Top LightPower sitting in a chair, or guilt.",
+          "displayText": "Top Light\nPower sitting in a chair, or guilt.",
+          "links": [
+            {
+              "text": "Top LightPower sitting in a chair, or guilt.",
+              "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CandlelightPeriod night or ritual.",
+          "displayText": "Candlelight\nPeriod night or ritual.",
+          "links": [
+            {
+              "text": "CandlelightPeriod night or ritual.",
+              "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Top light",
+          "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+        },
+        {
+          "text": "Candlelight",
+          "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+        },
+        {
+          "text": "Practical lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/practical-lighting"
+        },
+        {
+          "text": "Glam",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "Top LightPower sitting in a chair, or guilt.",
+          "url": "https://melies.co/cinematic-techniques/lighting/top-light"
+        },
+        {
+          "text": "CandlelightPeriod night or ritual.",
+          "url": "https://melies.co/cinematic-techniques/lighting/candlelight"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e702e3ff8e7ea2df6c3899c49c686bc6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/top-light.webp",
+          "alt": "Top Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/63d3a366e4a80f088428e87b46d5c969.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/candlelight-066-candlelit-naturalism-mini.webp",
+          "alt": "Candlelight"
+        },
+        {
+          "kind": "video",
+          "path": "media/ca4aadaa8863da5b4b9ea93abb6843f2.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/066-candlelit-naturalism-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Top light is the opposite. Candlelight may underlight if the flame is low, but a candelabra at face height is more of a small frontal or side key.Practical lighting is the visible object; underlighting is where it sits. Glam sometimes uses a weak under fill (a reflector) that must stay far below key so it does not invert the face.Top LightPower sitting in a chair, or guilt.CandlelightPeriod night or ritual.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "James Whale's Frankenstein (1931) underlights the creature so the brow and sockets invert. Hereditary uses low sources and ritual light to the same uncanny effect."
+        },
+        {
+          "type": "paragraph",
+          "text": "The shadows must climb, not slide sideways."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film James Whale's Frankenstein (1931) underlights the creature so the brow and sockets invert. Hereditary uses low sources and ritual light to the same uncanny effect.The shadows must climb, not slide sideways."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the source under the chin. Use: \"A lamp on the table below [Subject]'s chin, pointing up."
+        },
+        {
+          "type": "paragraph",
+          "text": "Shadows climb the cheekbones and eye sockets. \" Name fire, screen, or bulb."
+        },
+        {
+          "type": "quote",
+          "text": "A lamp on the table below [Subject]'s chin, pointing up. Shadows climb the cheekbones and eye sockets. The source is under the face, not beside it."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=A+lamp+on+the+table+below+[Subject]'s+chin,+pointing+up.+Shadows+climb+the+cheekbones+and+eye+sockets.+The+source+is+under+the+face,+not+beside+it."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Put the source under the chin. Use: \"A lamp on the table below [Subject]'s chin, pointing up.Shadows climb the cheekbones and eye sockets. \" Name fire, screen, or bulb.Copy promptUse in Image GeneratorA lamp on the table below [Subject]'s chin, pointing up. Shadows climb the cheekbones and eye sockets. The source is under the face, not beside it.A lamp on the table below [Subject]'s chin, pointing up. Shadows climb the cheekbones and eye sockets. The source is under the face, not beside it."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is side lighting or a candle off to the side. The tell is a left-right split instead of shadows that climb.",
+          "links": [
+            {
+              "text": "side lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by lowering the source below the jaw and aiming up."
+        }
+      ],
+      "links": [
+        {
+          "text": "side lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/side-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is side lighting or a candle off to the side. The tell is a left-right split instead of shadows that climb.Fix it by lowering the source below the jaw and aiming up."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is underlighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Lighting from below the face so shadows climb the cheeks and sockets. It inverts ordinary daylight modeling and often feels uncanny."
+        },
+        {
+          "type": "heading",
+          "text": "Underlighting vs top light",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Top light comes from above and hollows the eyes from overhead. Underlighting comes from below and lights the chin and nostrils while the brow goes dark."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use underlighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for firelight below the face, a screen on the floor, or a horror invert. Skip it for ordinary daylight talk."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt underlighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Place the lamp or flame under the chin, pointing up. State that shadows climb the cheekbones and sockets, source under the face, not beside it."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is underlighting in film?Lighting from below the face so shadows climb the cheeks and sockets. It inverts ordinary daylight modeling and often feels uncanny.Underlighting vs top lightTop light comes from above and hollows the eyes from overhead. Underlighting comes from below and lights the chin and nostrils while the brow goes dark.When should I use underlighting?Use it for firelight below the face, a screen on the floor, or a horror invert. Skip it for ordinary daylight talk.How do I prompt underlighting for AI image or video?Place the lamp or flame under the chin, pointing up. State that shadows climb the cheekbones and sockets, source under the face, not beside it."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Put the source under the chin. Use: \"A lamp on the table below [Subject]'s chin, pointing up.",
+      "Shadows climb the cheekbones and eye sockets. \" Name fire, screen, or bulb."
+    ],
+    "example": "A lamp on the table below [Subject]'s chin, pointing up. Shadows climb the cheekbones and eye sockets. The source is under the face, not beside it."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/37fd93cf4962f10e77869ecfc8008a95.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/under-light.webp",
+      "alt": "Underlighting example"
+    },
+    {
+      "kind": "image",
+      "path": "media/e702e3ff8e7ea2df6c3899c49c686bc6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/top-light.webp",
+      "alt": "Top Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/63d3a366e4a80f088428e87b46d5c969.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/candlelight-066-candlelit-naturalism-mini.webp",
+      "alt": "Candlelight"
+    },
+    {
+      "kind": "video",
+      "path": "media/ca4aadaa8863da5b4b9ea93abb6843f2.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/066-candlelit-naturalism-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/189be4f1db00e2468704fce34a0d13b0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/under-light/hero.jpg",
+      "alt": "Underlighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "aac959ab98f10c0da0268ab403dbcbec6835cc5a05170d1872720d06df9a15c5"
+}

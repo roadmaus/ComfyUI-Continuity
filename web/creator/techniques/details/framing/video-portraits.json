@@ -1,0 +1,437 @@
+{
+  "id": "framing/video-portraits",
+  "slug": "video-portraits",
+  "title": "Video Portraits",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/video-portraits",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/video-portraits-video-portraits-mini.webp",
+  "detail": "details/framing/video-portraits.json",
+  "aliases": [],
+  "description": "A video portrait is a sustained, simply covered study of one person: stable size, patient time, the face as the whole event. Duration is the intimacy; a person is enough.",
+  "thumbnail": "media/91e2da8c105991d7b0f8cb8363596e5c.webp",
+  "video": "media/25a36c626fe1ac88dca8ebddf617a177.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/video-portraits-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A video portrait is not a close-up you cut away from after a line. You hold."
+        },
+        {
+          "type": "paragraph",
+          "text": "Blink, breath, a swallow, the tiny life in the face becomes the content. It sits closer to a painting that is allowed to live than to dialogue coverage."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you need ping-pong coverage, a story insert, or a camera tour of the room. It is also the wrong tool if you freeze everything except one looping element: that is a cinemagraph."
+        },
+        {
+          "type": "paragraph",
+          "text": "Here the person is alive in small ways, and time is the point."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A video portrait is not a close-up you cut away from after a line. You hold.Blink, breath, a swallow, the tiny life in the face becomes the content. It sits closer to a painting that is allowed to live than to dialogue coverage.It is the wrong tool when you need ping-pong coverage, a story insert, or a camera tour of the room. It is also the wrong tool if you freeze everything except one looping element: that is a cinemagraph.Here the person is alive in small ways, and time is the point."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock the camera. Size a Close-Up or Medium Close-Up.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            },
+            {
+              "text": "Medium Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Light a simple, stable key. Hold long enough that duration registers (several seconds, sometimes much more)."
+        },
+        {
+          "type": "paragraph",
+          "text": "No motivated move unless a tiny push is the brief. Prompt still: Video portrait of [Subject], a held face, duration as intimacy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Motion brief: A long held portrait of [Subject], tiny life in the face, almost still."
+        }
+      ],
+      "links": [
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Medium Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Lock the camera. Size a Close-Up or Medium Close-Up.Light a simple, stable key. Hold long enough that duration registers (several seconds, sometimes much more).No motivated move unless a tiny push is the brief. Prompt still: Video portrait of [Subject], a held face, duration as intimacy.Motion brief: A long held portrait of [Subject], tiny life in the face, almost still."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a person is enough: a Screen Test, a study, an almost-still that breathes. Do not add a tour, and do not cut away the moment a thought appears; the hold is the piece."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a person is enough: a Screen Test, a study, an almost-still that breathes. Do not add a tour, and do not cut away the moment a thought appears; the hold is the piece."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Close-Up is a size used inside coverage; it usually leaves. A Cinemagraph freezes most of the image and loops one isolated motion.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            },
+            {
+              "text": "Cinemagraph",
+              "url": "https://melies.co/cinematic-techniques/effects/cinemagraph"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Single is occupancy of one body in scene coverage. A video portrait is duration plus stillness of a person as the entire event.",
+          "links": [
+            {
+              "text": "Single",
+              "url": "https://melies.co/cinematic-techniques/framing/single"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Interview testimony has a questioner; this may have none."
+        },
+        {
+          "type": "list-item",
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "displayText": "Close-Up\nRead micro-expression. Default for important dialogue.",
+          "links": [
+            {
+              "text": "Close-UpRead micro-expression. Default for important dialogue.",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CinemagraphA photograph that refuses to die.",
+          "displayText": "Cinemagraph\nA photograph that refuses to die.",
+          "links": [
+            {
+              "text": "CinemagraphA photograph that refuses to die.",
+              "url": "https://melies.co/cinematic-techniques/effects/cinemagraph"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Cinemagraph",
+          "url": "https://melies.co/cinematic-techniques/effects/cinemagraph"
+        },
+        {
+          "text": "Single",
+          "url": "https://melies.co/cinematic-techniques/framing/single"
+        },
+        {
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "CinemagraphA photograph that refuses to die.",
+          "url": "https://melies.co/cinematic-techniques/effects/cinemagraph"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/95136909e657a1816141551e20893339.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+          "alt": "Close-Up"
+        },
+        {
+          "kind": "image",
+          "path": "media/5e31f6b855e7fe96ca6f97144033b3bd.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinemagraph-cinemagraph-mini.webp",
+          "alt": "Cinemagraph"
+        },
+        {
+          "kind": "video",
+          "path": "media/ab617a228494596144b6b44f078fcd61.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/cinemagraph-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Close-Up is a size used inside coverage; it usually leaves. A Cinemagraph freezes most of the image and loops one isolated motion.A Single is occupancy of one body in scene coverage. A video portrait is duration plus stillness of a person as the entire event.Interview testimony has a questioner; this may have none.Close-UpRead micro-expression. Default for important dialogue.CinemagraphA photograph that refuses to die.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Warhol's Screen Tests are the plain grammar: a person, a hold, time doing the work. The Irishman uses long, patient close-ups of faces that are allowed to sit, related in duration if not in art-historical setup."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: hold the person."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Warhol's Screen Tests are the plain grammar: a person, a hold, time doing the work. The Irishman uses long, patient close-ups of faces that are allowed to sit, related in duration if not in art-historical setup.Grammar: hold the person."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Demand the hold. Still: Video portrait of [Subject], a held face, duration as intimacy."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: A long held portrait of [Subject], tiny life in the face, almost still. Forbid camera travel."
+        },
+        {
+          "type": "paragraph",
+          "text": "Allow blink, breath, a swallow. Do not write cinemagraph unless only one element should move."
+        },
+        {
+          "type": "quote",
+          "text": "A long held portrait of [Subject], tiny life in the face, almost still."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+long+held+portrait+of+[Subject],+tiny+life+in+the+face,+almost+still."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Demand the hold. Still: Video portrait of [Subject], a held face, duration as intimacy.Video: A long held portrait of [Subject], tiny life in the face, almost still. Forbid camera travel.Allow blink, breath, a swallow. Do not write cinemagraph unless only one element should move.Copy promptUse in Video GeneratorA long held portrait of [Subject], tiny life in the face, almost still.A long held portrait of [Subject], tiny life in the face, almost still."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a dialogue Close-Up that wants a reverse, or a Cinemagraph with a frozen body and a looping steam jet. The tell is a camera move, a cut on a line, or a dead freeze.",
+          "links": [
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            },
+            {
+              "text": "Cinemagraph",
+              "url": "https://melies.co/cinematic-techniques/effects/cinemagraph"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: lock off, keep the person slightly alive, hold."
+        }
+      ],
+      "links": [
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Cinemagraph",
+          "url": "https://melies.co/cinematic-techniques/effects/cinemagraph"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a dialogue Close-Up that wants a reverse, or a Cinemagraph with a frozen body and a looping steam jet. The tell is a camera move, a cut on a line, or a dead freeze.Fix: lock off, keep the person slightly alive, hold."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Video Portraits in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A video portrait is a sustained study of one person at a stable size, with time itself as the intimacy. The face (or figure) is the whole event, almost still, with only tiny life in the features."
+        },
+        {
+          "type": "heading",
+          "text": "Video Portraits vs Close-Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A close-up is a crop that often exists to deliver a line or a reaction, then leave. A video portrait uses a similar crop but stays: duration is the point. If you are about to cut to the other person, you are in coverage, not in a portrait study."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Video Portraits?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a person is enough and holding is the piece. Do not use it for ordinary shot/reverse, and do not turn it into a looping cinemagraph unless that is the brief."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Video Portraits for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Video portrait of [Subject], a held face, duration as intimacy. For motion: A long held portrait of [Subject], tiny life in the face, almost still. Lock the camera. Allow only blink, breath, or a swallow."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Video Portraits in film?A video portrait is a sustained study of one person at a stable size, with time itself as the intimacy. The face (or figure) is the whole event, almost still, with only tiny life in the features.Video Portraits vs Close-UpA close-up is a crop that often exists to deliver a line or a reaction, then leave. A video portrait uses a similar crop but stays: duration is the point. If you are about to cut to the other person, you are in coverage, not in a portrait study.When should I use Video Portraits?Use it when a person is enough and holding is the piece. Do not use it for ordinary shot/reverse, and do not turn it into a looping cinemagraph unless that is the brief.How do I prompt Video Portraits for AI image or video?Write Video portrait of [Subject], a held face, duration as intimacy. For motion: A long held portrait of [Subject], tiny life in the face, almost still. Lock the camera. Allow only blink, breath, or a swallow."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Demand the hold. Still: Video portrait of [Subject], a held face, duration as intimacy.",
+      "Video: A long held portrait of [Subject], tiny life in the face, almost still. Forbid camera travel.",
+      "Allow blink, breath, a swallow. Do not write cinemagraph unless only one element should move."
+    ],
+    "example": "A long held portrait of [Subject], tiny life in the face, almost still."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/25a36c626fe1ac88dca8ebddf617a177.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/video-portraits-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/91e2da8c105991d7b0f8cb8363596e5c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/video-portraits-video-portraits-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/cdfe9342cfc07069a66baad61c9c4a65.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/video-portraits.jpg",
+      "alt": "Video Portraits frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/95136909e657a1816141551e20893339.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+      "alt": "Close-Up"
+    },
+    {
+      "kind": "image",
+      "path": "media/5e31f6b855e7fe96ca6f97144033b3bd.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cinemagraph-cinemagraph-mini.webp",
+      "alt": "Cinemagraph"
+    },
+    {
+      "kind": "video",
+      "path": "media/ab617a228494596144b6b44f078fcd61.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/cinemagraph-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/32c06ca1968e5116ffa9c53883308bcd.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/video-portraits/hero.jpg",
+      "alt": "Video Portraits",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "5fa25f5488b44d388368334e1570f6be51efe9f6fcc1f368f28b038baaab8894"
+}

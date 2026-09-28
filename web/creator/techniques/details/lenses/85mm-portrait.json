@@ -1,0 +1,426 @@
+{
+  "id": "lenses/85mm-portrait",
+  "slug": "85mm-portrait",
+  "title": "85mm Portrait",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/85mm-portrait",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/85mm-portrait.webp",
+  "detail": "details/lenses/85mm-portrait.json",
+  "aliases": [],
+  "description": "An 85mm portrait in 85mm cinematography is a short telephoto used from a farther stand so a head-and-shoulders stays large while the background enlarges and recedes in importance. The person becomes the landscape; the room becomes stacked color and shape behind them.",
+  "thumbnail": "media/f0701a4a46018686692cc73d442a80ae.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Walk back until an 85mm fills the frame with a face. Noses stop dominating."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ears sit in proportion. The wall behind them comes forward as a soft plane rather than a readable room."
+        },
+        {
+          "type": "paragraph",
+          "text": "Isolation is the job: a person is the country, and everyone else is weather. It is the wrong tool for geography."
+        },
+        {
+          "type": "paragraph",
+          "text": "You cannot hold a kitchen two-shot honestly at 85mm in a small room because you cannot get far enough, and if you could, the space would flatten into wallpaper. If the beat is person plus place, go to 35mm Moderate Wide or 24mm Wide.",
+          "links": [
+            {
+              "text": "35mm Moderate Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+            },
+            {
+              "text": "24mm Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the beat is surveillance from across a street, you wanted 135mm Telephoto.",
+          "links": [
+            {
+              "text": "135mm Telephoto",
+              "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "35mm Moderate Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/35mm-moderate"
+        },
+        {
+          "text": "24mm Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        },
+        {
+          "text": "135mm Telephoto",
+          "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Walk back until an 85mm fills the frame with a face. Noses stop dominating.Ears sit in proportion. The wall behind them comes forward as a soft plane rather than a readable room.Isolation is the job: a person is the country, and everyone else is weather. It is the wrong tool for geography.You cannot hold a kitchen two-shot honestly at 85mm in a small room because you cannot get far enough, and if you could, the space would flatten into wallpaper. If the beat is person plus place, go to 35mm Moderate Wide or 24mm Wide.If the beat is surveillance from across a street, you wanted 135mm Telephoto."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stand first, farther than conversation. Restore subject size with 85mm."
+        },
+        {
+          "type": "paragraph",
+          "text": "That distant viewpoint is what compresses facial features and enlarges background objects; the 85mm only chooses the crop. Open the aperture if you want rapid falloff, but shallow focus is a separate choice from the length."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the camera at eye height unless you mean a power tilt. Prompt: 85mm portrait of [Subject], compressed background, rapid falloff, isolation, the face as the only country."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Stand first, farther than conversation. Restore subject size with 85mm.That distant viewpoint is what compresses facial features and enlarges background objects; the 85mm only chooses the crop. Open the aperture if you want rapid falloff, but shallow focus is a separate choice from the length.Keep the camera at eye height unless you mean a power tilt. Prompt: 85mm portrait of [Subject], compressed background, rapid falloff, isolation, the face as the only country."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a person is the landscape: a close-up of thought, a romantic single, a face that should not share billing with the room. Do not use it for masters, group geography, or any beat that still needs architecture as a partner."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a person is the landscape: a close-up of thought, a romantic single, a face that should not share billing with the room. Do not use it for masters, group geography, or any beat that still needs architecture as a partner."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "50mm Normal from closer keeps the room honest. 135mm Telephoto stacks even harder and feels like eavesdropping.",
+          "links": [
+            {
+              "text": "50mm Normal",
+              "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+            },
+            {
+              "text": "135mm Telephoto",
+              "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Shallow Focus can happen on many lengths; 85mm is a stand plus a crop, not a synonym for blur. Macro is close-focusing on a tiny object, not a portrait length.",
+          "links": [
+            {
+              "text": "Shallow Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            },
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "135mm TelephotoSurveillance, sports, or stacked city.",
+          "displayText": "135mm Telephoto\nSurveillance, sports, or stacked city.",
+          "links": [
+            {
+              "text": "135mm TelephotoSurveillance, sports, or stacked city.",
+              "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Shallow FocusNothing else is invited.",
+          "displayText": "Shallow Focus\nNothing else is invited.",
+          "links": [
+            {
+              "text": "Shallow FocusNothing else is invited.",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "50mm Normal",
+          "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+        },
+        {
+          "text": "135mm Telephoto",
+          "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+        },
+        {
+          "text": "Shallow Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "135mm TelephotoSurveillance, sports, or stacked city.",
+          "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+        },
+        {
+          "text": "Shallow FocusNothing else is invited.",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/722dfd2bdae65decf4f175762ccc4f03.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/135mm-telephoto-056-telephoto-compression-mini.webp",
+          "alt": "135mm Telephoto"
+        },
+        {
+          "kind": "video",
+          "path": "media/f149ff24f98f3c3b5f56e817f9a37f22.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/056-telephoto-compression-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+          "alt": "Shallow Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots 50mm Normal from closer keeps the room honest. 135mm Telephoto stacks even harder and feels like eavesdropping.Shallow Focus can happen on many lengths; 85mm is a stand plus a crop, not a synonym for blur. Macro is close-focusing on a tiny object, not a portrait length.135mm TelephotoSurveillance, sports, or stacked city.Shallow FocusNothing else is invited.14mm Ultra-WidePut the audience inside a space that is too big or too close."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Her often isolates faces against a soft city so the person is the only country in the frame. Portrait cinema in general uses short telephotos this way: farther stand, larger face, background as a plane."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the distance and the isolation, not a still of Joaquin Phoenix."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Her often isolates faces against a soft city so the person is the only country in the frame. Portrait cinema in general uses short telephotos this way: farther stand, larger face, background as a plane.Borrow the distance and the isolation, not a still of Joaquin Phoenix."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the farther stand and the isolation. 85mm portrait of [Subject], compressed background, rapid falloff, isolation, the face as the only country."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say head-and-shoulders, background as a soft plane, not a readable room. Do not write 24mm, and do not ask for environmental architecture in focus."
+        },
+        {
+          "type": "quote",
+          "text": "85mm portrait of [Subject], compressed background, beautiful falloff, isolation, the face as the only country."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=85mm+portrait+of+[Subject],+compressed+background,+beautiful+falloff,+isolation,+the+face+as+the+only+country."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the farther stand and the isolation. 85mm portrait of [Subject], compressed background, rapid falloff, isolation, the face as the only country.Say head-and-shoulders, background as a soft plane, not a readable room. Do not write 24mm, and do not ask for environmental architecture in focus.Copy promptUse in Image Generator85mm portrait of [Subject], compressed background, beautiful falloff, isolation, the face as the only country.85mm portrait of [Subject], compressed background, beautiful falloff, isolation, the face as the only country."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is 50mm Normal or a wide close-up that balloons the nose. The tell is a large room still readable behind a close face, or a stretched forehead from standing too close with short glass.",
+          "links": [
+            {
+              "text": "50mm Normal",
+              "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: walk back, 85mm, face large, background stacked and secondary."
+        }
+      ],
+      "links": [
+        {
+          "text": "50mm Normal",
+          "url": "https://melies.co/cinematic-techniques/lenses/50mm-normal"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is 50mm Normal or a wide close-up that balloons the nose. The tell is a large room still readable behind a close face, or a stretched forehead from standing too close with short glass.Fix: walk back, 85mm, face large, background stacked and secondary."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is 85mm portrait in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a short telephoto used from a farther stand so a face stays large while the background enlarges and loses importance. The person reads as the landscape."
+        },
+        {
+          "type": "heading",
+          "text": "85mm Portrait vs 50mm Normal",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "50mm at talking distance still shows a honest room. 85mm from farther back compresses that room into a plane and isolates the face. Same crop size, different stand, different space."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use 85mm portrait?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the face is the scene and the room should not compete. Skip it for geography, two-shots in small rooms, and environmental portraits."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt 85mm portrait for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: 85mm portrait of [Subject], compressed background, rapid falloff, isolation, the face as the only country. Specify head-and-shoulders. Forbid wide stretch and readable architecture."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is 85mm portrait in film?It is a short telephoto used from a farther stand so a face stays large while the background enlarges and loses importance. The person reads as the landscape.85mm Portrait vs 50mm Normal50mm at talking distance still shows a honest room. 85mm from farther back compresses that room into a plane and isolates the face. Same crop size, different stand, different space.When should I use 85mm portrait?Use it when the face is the scene and the room should not compete. Skip it for geography, two-shots in small rooms, and environmental portraits.How do I prompt 85mm portrait for AI image or video?Write: 85mm portrait of [Subject], compressed background, rapid falloff, isolation, the face as the only country. Specify head-and-shoulders. Forbid wide stretch and readable architecture."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the farther stand and the isolation. 85mm portrait of [Subject], compressed background, rapid falloff, isolation, the face as the only country.",
+      "Say head-and-shoulders, background as a soft plane, not a readable room. Do not write 24mm, and do not ask for environmental architecture in focus."
+    ],
+    "example": "85mm portrait of [Subject], compressed background, beautiful falloff, isolation, the face as the only country."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/f0701a4a46018686692cc73d442a80ae.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/85mm-portrait.webp",
+      "alt": "85mm Portrait example"
+    },
+    {
+      "kind": "image",
+      "path": "media/722dfd2bdae65decf4f175762ccc4f03.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/135mm-telephoto-056-telephoto-compression-mini.webp",
+      "alt": "135mm Telephoto"
+    },
+    {
+      "kind": "video",
+      "path": "media/f149ff24f98f3c3b5f56e817f9a37f22.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/056-telephoto-compression-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+      "alt": "Shallow Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/7d7c86863f107695122fbecb8a175333.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/85mm-portrait/hero.jpg",
+      "alt": "85mm Portrait",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "36036d883fd0a1862acaf95e04afb56e65ce0e537158932c3c41bf1776ec3e7e"
+}

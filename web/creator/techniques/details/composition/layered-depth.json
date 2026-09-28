@@ -1,0 +1,449 @@
+{
+  "id": "composition/layered-depth",
+  "slug": "layered-depth",
+  "title": "Layered Depth",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/layered-depth",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/layered-depth-039-deep-space-staging-mini.webp",
+  "detail": "details/composition/layered-depth.json",
+  "aliases": [
+    "Foreground-midground-background action"
+  ],
+  "description": "Layered depth, or layered composition, stages important action on at least two distances, typically foreground, midground, and background in one picture. Depth staging is that arrangement, while deep focus is a separate optical choice about how much of it is sharp.",
+  "thumbnail": "media/47c2f2a4219b4a46900cd429c8828630.webp",
+  "video": "media/3da50c27545f0cee9650df39199c5aef.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/039-deep-space-staging-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Social geometry becomes visible at once. Adults sign a boy's future in a near room while the boy plays in a distant window."
+        },
+        {
+          "type": "paragraph",
+          "text": "A phone booth and a piano split a bar. Who owns space is a matter of which plane can still act."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when only one plane has story. Three pretty layers of wallpaper are not layered depth."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you cannot imagine walking from the near object to the far door, the diagram is a collage. Do not assume every deep stage must be uniformly sharp."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can hold two actions and still rack. The arrangement is the composition."
+        },
+        {
+          "type": "paragraph",
+          "text": "The iris is the optics."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Social geometry becomes visible at once. Adults sign a boy's future in a near room while the boy plays in a distant window.A phone booth and a piano split a bar. Who owns space is a matter of which plane can still act.It is the wrong tool when only one plane has story. Three pretty layers of wallpaper are not layered depth.If you cannot imagine walking from the near object to the far door, the diagram is a collage. Do not assume every deep stage must be uniformly sharp.You can hold two actions and still rack. The arrangement is the composition.The iris is the optics."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place meaningful bodies or objects on separate planes with readable gaps. Keep sightlines and entrances clear."
+        },
+        {
+          "type": "paragraph",
+          "text": "Choose a wider lens and more distance if you want natural deep space. Stop down (and add light) if several planes must be sharp."
+        },
+        {
+          "type": "paragraph",
+          "text": "A split diopter is a different cheat. Prompt: Three-plane composition around [Subject], foreground, mid, and deep background all carrying information, deep staging."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place meaningful bodies or objects on separate planes with readable gaps. Keep sightlines and entrances clear.Choose a wider lens and more distance if you want natural deep space. Stop down (and add light) if several planes must be sharp.A split diopter is a different cheat. Prompt: Three-plane composition around [Subject], foreground, mid, and deep background all carrying information, deep staging."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when two relationships must be true in one hold: a deal and a child, a dance and a call, a guard and a prisoner. Do not stack bric-a-brac in three zones and call it staging."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when two relationships must be true in one hold: a deal and a child, a dance and a call, a guard and a prisoner. Do not stack bric-a-brac in three zones and call it staging."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Deep Focus is the optical result of small aperture and sufficient light, or a digital imitation. Layered depth can exist with selective focus.",
+          "links": [
+            {
+              "text": "Deep Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Foreground Interest only guarantees a near layer. Layered depth requires the far planes to work.",
+          "links": [
+            {
+              "text": "Foreground Interest",
+              "url": "https://melies.co/cinematic-techniques/composition/foreground-interest"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tableau may be deep or flat, but it privileges a fixed arrangement over cutting. One-Point Perspective can organize the walkable space as a tunnel.",
+          "links": [
+            {
+              "text": "Tableau",
+              "url": "https://melies.co/cinematic-techniques/composition/tableau"
+            },
+            {
+              "text": "One-Point Perspective",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Deep FocusLet the audience find the story in the whole room.",
+          "displayText": "Deep Focus\nLet the audience find the story in the whole room.",
+          "links": [
+            {
+              "text": "Deep FocusLet the audience find the story in the whole room.",
+              "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Foreground InterestPut air and obstacle between us and them.",
+          "displayText": "Foreground Interest\nPut air and obstacle between us and them.",
+          "links": [
+            {
+              "text": "Foreground InterestPut air and obstacle between us and them.",
+              "url": "https://melies.co/cinematic-techniques/composition/foreground-interest"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Deep Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+        },
+        {
+          "text": "Foreground Interest",
+          "url": "https://melies.co/cinematic-techniques/composition/foreground-interest"
+        },
+        {
+          "text": "Tableau",
+          "url": "https://melies.co/cinematic-techniques/composition/tableau"
+        },
+        {
+          "text": "One-Point Perspective",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Deep FocusLet the audience find the story in the whole room.",
+          "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+        },
+        {
+          "text": "Foreground InterestPut air and obstacle between us and them.",
+          "url": "https://melies.co/cinematic-techniques/composition/foreground-interest"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/2085760298012aaa946dc04506a877fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/deep-focus-051-deep-focus-mini.webp",
+          "alt": "Deep Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/3b7ec49068c390bdc3af6487abab0eaf.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/051-deep-focus-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8175d3a232dbdeb67405c9ffbd646e6d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/foreground-interest.webp",
+          "alt": "Foreground Interest"
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Deep Focus is the optical result of small aperture and sufficient light, or a digital imitation. Layered depth can exist with selective focus.Foreground Interest only guarantees a near layer. Layered depth requires the far planes to work.Tableau may be deep or flat, but it privileges a fixed arrangement over cutting. One-Point Perspective can organize the walkable space as a tunnel.Deep FocusLet the audience find the story in the whole room.Foreground InterestPut air and obstacle between us and them.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Citizen Kane stages Kane's future indoors while the boy plays outside the window, planes in one sentence. The Best Years of Our Lives splits a bar between piano and telephone booth so attention has to choose."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Conformist uses fascist architecture as deep, walkable politics. Grammar of staging, not a focus preset."
+        },
+        {
+          "type": "list-item",
+          "text": "Citizen Kane 1941The adults arrange Kane’s future while the boy plays outside the window.",
+          "displayText": "Citizen Kane 1941\nThe adults arrange Kane’s future while the boy plays outside the window."
+        },
+        {
+          "type": "list-item",
+          "text": "The Best Years of Our Lives 1946The bar scene distributes attention between the piano area and the telephone booth.",
+          "displayText": "The Best Years of Our Lives 1946\nThe bar scene distributes attention between the piano area and the telephone booth."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8a6d8d8a745a9ed72f431fbde167d2a0.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/layered-depth/famous/00-citizen-kane-1941.jpg",
+          "alt": "Citizen Kane 1941"
+        },
+        {
+          "kind": "image",
+          "path": "media/1a90c4da7ad4a337c5b755df31bd51b4.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/layered-depth/famous/01-the-best-years-of-our-lives-1946.jpg",
+          "alt": "The Best Years of Our Lives 1946"
+        }
+      ],
+      "sourceText": "In film Citizen Kane stages Kane's future indoors while the boy plays outside the window, planes in one sentence. The Best Years of Our Lives splits a bar between piano and telephone booth so attention has to choose.The Conformist uses fascist architecture as deep, walkable politics. Grammar of staging, not a focus preset.Citizen Kane 1941The adults arrange Kane’s future while the boy plays outside the window.The Best Years of Our Lives 1946The bar scene distributes attention between the piano area and the telephone booth."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Assign jobs to planes. Three-plane composition around [Subject], foreground, mid, and deep background all carrying information, deep staging."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name what happens near, middle, and far. Say whether all planes are sharp or which one holds focus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not write 3D as a slogan."
+        },
+        {
+          "type": "quote",
+          "text": "A landlord signs a document in the near foreground while, through an open doorway, a family quietly packs in the distant room. Hold both actions in one wide composition. The foreground gesture must not obscure the family. No cut or explanatory insert."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+landlord+signs+a+document+in+the+near+foreground+while,+through+an+open+doorway,+a+family+quietly+packs+in+the+distant+room.+Hold+both+actions+in+one+wide+composition.+The+foreground+gesture+must+not+obscure+the+family.+No+cut+or+explanatory+insert."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Assign jobs to planes. Three-plane composition around [Subject], foreground, mid, and deep background all carrying information, deep staging.Name what happens near, middle, and far. Say whether all planes are sharp or which one holds focus.Do not write 3D as a slogan.Copy promptUse in Video GeneratorA landlord signs a document in the near foreground while, through an open doorway, a family quietly packs in the distant room. Hold both actions in one wide composition. The foreground gesture must not obscure the family. No cut or explanatory insert.A landlord signs a document in the near foreground while, through an open doorway, a family quietly packs in the distant room. Hold both actions in one wide composition. The foreground gesture must not obscure the family. No cut or explanatory insert."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Deep Focus wallpaper. The tell is everything sharp and only one action.",
+          "links": [
+            {
+              "text": "Deep Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to put a second story on another plane, or to admit you wanted a single-plane portrait and simplify."
+        }
+      ],
+      "links": [
+        {
+          "text": "Deep Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/deep-focus"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Deep Focus wallpaper. The tell is everything sharp and only one action.The fix is to put a second story on another plane, or to admit you wanted a single-plane portrait and simplify."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is layered depth in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Important actions occupy different distances in one composition. Foreground, midground, and background can all carry information. The shot is walkable. That arrangement is depth staging, whether or not every plane is sharp."
+        },
+        {
+          "type": "heading",
+          "text": "Layered Depth vs Deep Focus",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Layered depth is spatial organization: who stands where. Deep focus is optics: how much is sharp. You can stage three planes and rack between them. You can also stop down so the whole stage holds. Do not conflate the two."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use layered depth?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when two or more relationships should be visible at once without a cut. Skip it when only one plane has a job. Pretty receding walls are not enough."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt layered depth for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name three planes and their actions. Example: Three-plane composition around [Subject], foreground, mid, and deep background all carrying information, deep staging. State focus treatment. If you only say depth, you may get blur and no staging."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is layered depth in film?Important actions occupy different distances in one composition. Foreground, midground, and background can all carry information. The shot is walkable. That arrangement is depth staging, whether or not every plane is sharp.Layered Depth vs Deep FocusLayered depth is spatial organization: who stands where. Deep focus is optics: how much is sharp. You can stage three planes and rack between them. You can also stop down so the whole stage holds. Do not conflate the two.When should I use layered depth?Use it when two or more relationships should be visible at once without a cut. Skip it when only one plane has a job. Pretty receding walls are not enough.How do I prompt layered depth for AI image or video?Name three planes and their actions. Example: Three-plane composition around [Subject], foreground, mid, and deep background all carrying information, deep staging. State focus treatment. If you only say depth, you may get blur and no staging."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Assign jobs to planes. Three-plane composition around [Subject], foreground, mid, and deep background all carrying information, deep staging.",
+      "Name what happens near, middle, and far. Say whether all planes are sharp or which one holds focus.",
+      "Do not write 3D as a slogan."
+    ],
+    "example": "A landlord signs a document in the near foreground while, through an open doorway, a family quietly packs in the distant room. Hold both actions in one wide composition. The foreground gesture must not obscure the family. No cut or explanatory insert."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/3da50c27545f0cee9650df39199c5aef.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/039-deep-space-staging-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/47c2f2a4219b4a46900cd429c8828630.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/layered-depth-039-deep-space-staging-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3b5497a93e03700305ae526b0dad0fdf.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/layered-depth.jpg",
+      "alt": "Layered Depth frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/2085760298012aaa946dc04506a877fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/deep-focus-051-deep-focus-mini.webp",
+      "alt": "Deep Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/3b7ec49068c390bdc3af6487abab0eaf.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/051-deep-focus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8175d3a232dbdeb67405c9ffbd646e6d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/foreground-interest.webp",
+      "alt": "Foreground Interest"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/8a6d8d8a745a9ed72f431fbde167d2a0.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/layered-depth/famous/00-citizen-kane-1941.jpg",
+      "alt": "Citizen Kane 1941"
+    },
+    {
+      "kind": "image",
+      "path": "media/1a90c4da7ad4a337c5b755df31bd51b4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/layered-depth/famous/01-the-best-years-of-our-lives-1946.jpg",
+      "alt": "The Best Years of Our Lives 1946"
+    },
+    {
+      "kind": "image",
+      "path": "media/95bc2101649d7763ac42920fec090294.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/layered-depth/hero.jpg",
+      "alt": "Layered Depth",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "3f1e63d5abb4964a40d0bde03198ebdd92e387ae640e48d4fa28939f2f7bcd6b"
+}

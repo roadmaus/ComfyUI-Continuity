@@ -1,0 +1,404 @@
+{
+  "id": "lighting/chiaroscuro",
+  "slug": "chiaroscuro",
+  "title": "Chiaroscuro",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/chiaroscuro",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/chiaroscuro-063-low-key-chiaroscuro-mini.webp",
+  "detail": "details/lighting/chiaroscuro.json",
+  "aliases": [
+    "Selective darkness",
+    "Clair-obscur"
+  ],
+  "description": "Chiaroscuro lighting uses strong light-dark contrast to model volume and to create moral, psychological, or dramatic tension. Darkness withholds; the lit plane is what the scene will admit.",
+  "thumbnail": "media/574be572bd18fb911661cfde31c02f26.webp",
+  "video": "media/02a6da7712d15780d0526991b4982c3c.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/063-low-key-chiaroscuro-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A single warm source, a face turning into light, the rest of the room falling away: the audience reads character as a matter of what remains visible. Tenebrism is the hard end of this, where everything beyond arm's reach is black."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crime, period night, and religious doubt all use the same physics. It is the wrong tool for a wide that must describe architecture, or for comedy that needs a second face in the shadows."
+        },
+        {
+          "type": "paragraph",
+          "text": "Underexposing an even room is not chiaroscuro. You have to place a key and let falloff do the cutting."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A single warm source, a face turning into light, the rest of the room falling away: the audience reads character as a matter of what remains visible. Tenebrism is the hard end of this, where everything beyond arm's reach is black.Crime, period night, and religious doubt all use the same physics. It is the wrong tool for a wide that must describe architecture, or for comedy that needs a second face in the shadows.Underexposing an even room is not chiaroscuro. You have to place a key and let falloff do the cutting."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Place one motivated key (window, lamp, candle), reduce fill, and flag spill. The key is often warm, slightly high, and small enough to fall off fast."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hardness can be moderately hard so planes of the face turn quickly. Keep enough separation that eyes and hands in the pool stay legible."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Chiaroscuro lighting on [Subject], Caravaggio tenebrism, a single warm source, everything beyond arm's reach falling into black."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Place one motivated key (window, lamp, candle), reduce fill, and flag spill. The key is often warm, slightly high, and small enough to fall off fast.Hardness can be moderately hard so planes of the face turn quickly. Keep enough separation that eyes and hands in the pool stay legible.Prompt: Chiaroscuro lighting on [Subject], Caravaggio tenebrism, a single warm source, everything beyond arm's reach falling into black."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when light is moral and darkness hides or judges, for example a confession across a desk lamp. Do not use it as a global grade on a daylight street."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when light is moral and darkness hides or judges, for example a confession across a desk lamp. Do not use it as a global grade on a daylight street."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Low-key lighting is the broader contrast strategy; chiaroscuro insists on modeled volume, not just a dark frame. Rembrandt lighting is a specific cheek-triangle pattern that often lives inside chiaroscuro.",
+          "links": [
+            {
+              "text": "Low-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            },
+            {
+              "text": "Rembrandt lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cameo lighting isolates against void and may flatten the world to a stage cutout. Hard light helps the cut but is not required if falloff is steep.",
+          "links": [
+            {
+              "text": "Cameo lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            },
+            {
+              "text": "Hard light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "displayText": "Low-Key Lighting\nMystery, crime, or moral night.",
+          "links": [
+            {
+              "text": "Low-Key LightingMystery, crime, or moral night.",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rembrandt LightingClassic dramatic portrait.",
+          "displayText": "Rembrandt Lighting\nClassic dramatic portrait.",
+          "links": [
+            {
+              "text": "Rembrandt LightingClassic dramatic portrait.",
+              "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Low-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Rembrandt lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "Cameo lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Hard light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hard-light"
+        },
+        {
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Rembrandt LightingClassic dramatic portrait.",
+          "url": "https://melies.co/cinematic-techniques/lighting/rembrandt"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+          "alt": "Low-Key Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/0731eeefead98e8a64c8429a412becb9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rembrandt.webp",
+          "alt": "Rembrandt Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Low-key lighting is the broader contrast strategy; chiaroscuro insists on modeled volume, not just a dark frame. Rembrandt lighting is a specific cheek-triangle pattern that often lives inside chiaroscuro.Cameo lighting isolates against void and may flatten the world to a stage cutout. Hard light helps the cut but is not required if falloff is steep.Low-Key LightingMystery, crime, or moral night.Rembrandt LightingClassic dramatic portrait.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Godfather's dark office against the wedding outside is textbook withholding. The Third Man uses Vienna night so figures appear and vanish in designed dark."
+        },
+        {
+          "type": "paragraph",
+          "text": "Barry Lyndon and The Night of the Hunter both let a single source model faces while the room dies."
+        },
+        {
+          "type": "list-item",
+          "text": "The Godfather 1972The Don’s dark office contrasts with the wedding outside.",
+          "displayText": "The Godfather 1972\nThe Don’s dark office contrasts with the wedding outside."
+        },
+        {
+          "type": "list-item",
+          "text": "The Third Man 1949Vienna’s night streets and hidden figures.",
+          "displayText": "The Third Man 1949\nVienna’s night streets and hidden figures."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d349755cb963affa06fe242812fa4d23.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/chiaroscuro/famous/00-the-godfather-1972.jpg",
+          "alt": "The Godfather 1972"
+        },
+        {
+          "kind": "image",
+          "path": "media/65ab48c14f31af5e8e304313d39615c8.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/chiaroscuro/famous/01-the-third-man-1949.jpg",
+          "alt": "The Third Man 1949"
+        }
+      ],
+      "sourceText": "In film The Godfather's dark office against the wedding outside is textbook withholding. The Third Man uses Vienna night so figures appear and vanish in designed dark.Barry Lyndon and The Night of the Hunter both let a single source model faces while the room dies.The Godfather 1972The Don’s dark office contrasts with the wedding outside.The Third Man 1949Vienna’s night streets and hidden figures."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "One source, fast falloff, modeled planes. \" Name the lamp."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid extra fill and even ambient."
+        },
+        {
+          "type": "quote",
+          "text": "A tailor listens to an uneasy visitor in a dim back room. One high window shapes half the tailor’s face; the rest falls into deep but readable shadow. Warm desk practical in the distance, no even beauty fill, no crushed featureless blacks."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+tailor+listens+to+an+uneasy+visitor+in+a+dim+back+room.+One+high+window+shapes+half+the+tailor%E2%80%99s+face;+the+rest+falls+into+deep+but+readable+shadow.+Warm+desk+practical+in+the+distance,+no+even+beauty+fill,+no+crushed+featureless+blacks."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it One source, fast falloff, modeled planes. \" Name the lamp.Forbid extra fill and even ambient.Copy promptUse in Video GeneratorA tailor listens to an uneasy visitor in a dim back room. One high window shapes half the tailor’s face; the rest falls into deep but readable shadow. Warm desk practical in the distance, no even beauty fill, no crushed featureless blacks.A tailor listens to an uneasy visitor in a dim back room. One high window shapes half the tailor’s face; the rest falls into deep but readable shadow. Warm desk practical in the distance, no even beauty fill, no crushed featureless blacks."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is muddy underexposure. The tell is no key direction and featureless blacks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by placing one warm source, flagging bounce, and exposing the lit planes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is muddy underexposure. The tell is no key direction and featureless blacks.Fix it by placing one warm source, flagging bounce, and exposing the lit planes."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is chiaroscuro in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Strong light-dark contrast used to model volume and to create tension. Selected areas are lit; substantial parts of the image stay dark on purpose."
+        },
+        {
+          "type": "heading",
+          "text": "Chiaroscuro vs Rembrandt lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Chiaroscuro is the overall contrast language. Rembrandt lighting is a portrait pattern: a triangle of light on the shadow-side cheek."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use chiaroscuro?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when what is hidden matters as much as what is shown: confession, crime, night bargains. Skip it when the whole room must read."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt chiaroscuro for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify a single warm source, faces modeled, everything beyond arm's reach falling into black. No extra fill, no even room tone."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is chiaroscuro in film?Strong light-dark contrast used to model volume and to create tension. Selected areas are lit; substantial parts of the image stay dark on purpose.Chiaroscuro vs Rembrandt lightingChiaroscuro is the overall contrast language. Rembrandt lighting is a portrait pattern: a triangle of light on the shadow-side cheek.When should I use chiaroscuro?Use it when what is hidden matters as much as what is shown: confession, crime, night bargains. Skip it when the whole room must read.How do I prompt chiaroscuro for AI image or video?Specify a single warm source, faces modeled, everything beyond arm's reach falling into black. No extra fill, no even room tone."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "One source, fast falloff, modeled planes. \" Name the lamp.",
+      "Forbid extra fill and even ambient."
+    ],
+    "example": "A tailor listens to an uneasy visitor in a dim back room. One high window shapes half the tailor’s face; the rest falls into deep but readable shadow. Warm desk practical in the distance, no even beauty fill, no crushed featureless blacks."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/02a6da7712d15780d0526991b4982c3c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/063-low-key-chiaroscuro-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/574be572bd18fb911661cfde31c02f26.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/chiaroscuro-063-low-key-chiaroscuro-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a25a344ab2ca20312f5c1e4ab694c4ae.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/chiaroscuro.jpg",
+      "alt": "Chiaroscuro frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+      "alt": "Low-Key Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/0731eeefead98e8a64c8429a412becb9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rembrandt.webp",
+      "alt": "Rembrandt Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/d349755cb963affa06fe242812fa4d23.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/chiaroscuro/famous/00-the-godfather-1972.jpg",
+      "alt": "The Godfather 1972"
+    },
+    {
+      "kind": "image",
+      "path": "media/65ab48c14f31af5e8e304313d39615c8.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/chiaroscuro/famous/01-the-third-man-1949.jpg",
+      "alt": "The Third Man 1949"
+    },
+    {
+      "kind": "image",
+      "path": "media/4e3916010e8f9babac5f432a72166c68.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/chiaroscuro/hero.jpg",
+      "alt": "Chiaroscuro",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "b34880cbe359678baf83457f2f31d31e7a00dca7dafd23a090b2ffb1b2d1de65"
+}

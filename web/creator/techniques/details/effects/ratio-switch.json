@@ -1,0 +1,395 @@
+{
+  "id": "effects/ratio-switch",
+  "slug": "ratio-switch",
+  "title": "Ratio Switch",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/ratio-switch",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ratio-switch-109-aspect-ratio-change-as-an-event-mini.webp",
+  "detail": "details/effects/ratio-switch.json",
+  "aliases": [
+    "Expanding frame",
+    "Narrative frame boundary"
+  ],
+  "description": "An aspect ratio switch changes the image's visible boundaries so the container itself widens or closes as the story changes register. The picture is not stretched: previously unseen area is revealed, or the crop tightens.",
+  "thumbnail": "media/f2236c80e5df50cdcc1f4acc32ba530f.webp",
+  "video": "media/c61bb96fa336e9ecf9da27d8cbbeec5e.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/109-aspect-ratio-change-as-an-event-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A square world learns it can become a wide one. A scope picture suddenly sits in a taller box."
+        },
+        {
+          "type": "paragraph",
+          "text": "The frame is a character. Use it when a period, a freedom, or a constraint should be felt as the edge of the movie."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a zoom, and it is not a mask inside the picture. If the lens merely tightens, the container never changed."
+        },
+        {
+          "type": "paragraph",
+          "text": "If a keyhole sits inside a stable 16:9, that is masking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A square world learns it can become a wide one. A scope picture suddenly sits in a taller box.The frame is a character. Use it when a period, a freedom, or a constraint should be felt as the edge of the movie.It is the wrong tool for a zoom, and it is not a mask inside the picture. If the lens merely tightens, the container never changed.If a keyhole sits inside a stable 16:9, that is masking."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Compose protected areas for both ratios. Animate the crop or the side mattes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Preserve subject geometry. Bodies must not squash to fill the new frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera may be locked. The event is the bounds."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt an aspect-ratio switch on the subject: the frame itself widening or closing. For video, a visible crop or reveal during the sequence."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Compose protected areas for both ratios. Animate the crop or the side mattes.Preserve subject geometry. Bodies must not squash to fill the new frame.The camera may be locked. The event is the bounds.Prompt an aspect-ratio switch on the subject: the frame itself widening or closing. For video, a visible crop or reveal during the sequence."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when a character pushes the world open, or when a new time period deserves a different box. Do not use it as a zoom-out that only changes shot size."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when a character pushes the world open, or when a new time period deserves a different box. Do not use it as a zoom-out that only changes shot size."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Masking cuts a shape inside a stable container. A ratio switch changes the container.",
+          "links": [
+            {
+              "text": "Masking",
+              "url": "https://melies.co/cinematic-techniques/effects/masking"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Wide Shot is a shot size inside whatever ratio you already have. Switching ratio is not going wider with the lens.",
+          "links": [
+            {
+              "text": "Wide Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MaskingShow looking as an object.",
+          "displayText": "Masking\nShow looking as an object.",
+          "links": [
+            {
+              "text": "MaskingShow looking as an object.",
+              "url": "https://melies.co/cinematic-techniques/effects/masking"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Wide ShotDo not isolate yet.",
+          "displayText": "Wide Shot\nDo not isolate yet.",
+          "links": [
+            {
+              "text": "Wide ShotDo not isolate yet.",
+              "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Masking",
+          "url": "https://melies.co/cinematic-techniques/effects/masking"
+        },
+        {
+          "text": "Wide Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+        },
+        {
+          "text": "MaskingShow looking as an object.",
+          "url": "https://melies.co/cinematic-techniques/effects/masking"
+        },
+        {
+          "text": "Wide ShotDo not isolate yet.",
+          "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/2ddb734916b72a7342a63890baa5f001.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/masking-masking-mini.webp",
+          "alt": "Masking"
+        },
+        {
+          "kind": "video",
+          "path": "media/dee527ba7cb1a73ba4c9a6a1b22f6100.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/masking-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d40f44faa39b7ca4d29706438c303e51.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wide-shot.webp",
+          "alt": "Wide Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Masking cuts a shape inside a stable container. A ratio switch changes the container.Wide Shot is a shot size inside whatever ratio you already have. Switching ratio is not going wider with the lens.MaskingShow looking as an object.Wide ShotDo not isolate yet.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mommy lets Steve appear to open a constrained frame outward. The Grand Budapest Hotel assigns different narrative periods different frame shapes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ozark and other Xavier Dolan films use the same container-as-event grammar. Not frames to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "Mommy 2014Steve appears to open the constrained frame outward.",
+          "displayText": "Mommy 2014\nSteve appears to open the constrained frame outward."
+        },
+        {
+          "type": "list-item",
+          "text": "The Grand Budapest Hotel 2014Different narrative periods use different frame shapes.",
+          "displayText": "The Grand Budapest Hotel 2014\nDifferent narrative periods use different frame shapes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Mommy lets Steve appear to open a constrained frame outward. The Grand Budapest Hotel assigns different narrative periods different frame shapes.Ozark and other Xavier Dolan films use the same container-as-event grammar. Not frames to copy.Mommy 2014Steve appears to open the constrained frame outward.The Grand Budapest Hotel 2014Different narrative periods use different frame shapes."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aspect-ratio switch on [Subject], the frame itself widening or closing as the story changes register. Video: The frame around [Subject] changes aspect ratio during the sequence, a visible crop or reveal."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say the image does not stretch. Name the start ratio and the end ratio."
+        },
+        {
+          "type": "quote",
+          "text": "Begin with a young cyclist confined within a square image. As she reaches an open seaside road and takes a deep breath, widen the frame smoothly to a broad rectangle, revealing the ocean on both sides. Reveal previously unseen image area; never stretch her body or bicycle. Animate the framing in post."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Begin+with+a+young+cyclist+confined+within+a+square+image.+As+she+reaches+an+open+seaside+road+and+takes+a+deep+breath,+widen+the+frame+smoothly+to+a+broad+rectangle,+revealing+the+ocean+on+both+sides.+Reveal+previously+unseen+image+area;+never+stretch+her+body+or+bicycle.+Animate+the+framing+in+post."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Aspect-ratio switch on [Subject], the frame itself widening or closing as the story changes register. Video: The frame around [Subject] changes aspect ratio during the sequence, a visible crop or reveal.Say the image does not stretch. Name the start ratio and the end ratio.Copy promptUse in Video GeneratorBegin with a young cyclist confined within a square image. As she reaches an open seaside road and takes a deep breath, widen the frame smoothly to a broad rectangle, revealing the ocean on both sides. Reveal previously unseen image area; never stretch her body or bicycle. Animate the framing in post.Begin with a young cyclist confined within a square image. As she reaches an open seaside road and takes a deep breath, widen the frame smoothly to a broad rectangle, revealing the ocean on both sides. Reveal previously unseen image area; never stretch her body or bicycle. Animate the framing in post."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousins are a zoom and a stretch. The tell is the body fattening to fill the new box, or the lens punching in with no matte move."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is a crop or reveal of extra picture, geometry preserved."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousins are a zoom and a stretch. The tell is the body fattening to fill the new box, or the lens punching in with no matte move.The fix is a crop or reveal of extra picture, geometry preserved."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a ratio switch in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A ratio switch changes the visible boundaries of the image, widening or closing the container. It marks a shift in time, viewpoint, or possibility. The picture is not stretched."
+        },
+        {
+          "type": "heading",
+          "text": "Ratio switch vs masking",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Masking puts a shape inside the picture. A ratio switch changes the outer bounds of the movie. One is a hole. The other is a new box."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a ratio switch?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the container should act: a period change, a sudden freedom, a learned restriction opening. Skip it when you only need a wider lens or a tighter close-up."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a ratio switch for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Aspect-ratio switch on [Subject], the frame widening or closing. Name both ratios. Demand a crop or reveal, not a zoom, and no stretching of the body."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a ratio switch in film?A ratio switch changes the visible boundaries of the image, widening or closing the container. It marks a shift in time, viewpoint, or possibility. The picture is not stretched.Ratio switch vs maskingMasking puts a shape inside the picture. A ratio switch changes the outer bounds of the movie. One is a hole. The other is a new box.When should I use a ratio switch?Use it when the container should act: a period change, a sudden freedom, a learned restriction opening. Skip it when you only need a wider lens or a tighter close-up.How do I prompt a ratio switch for AI image or video?Write Aspect-ratio switch on [Subject], the frame widening or closing. Name both ratios. Demand a crop or reveal, not a zoom, and no stretching of the body."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Aspect-ratio switch on [Subject], the frame itself widening or closing as the story changes register. Video: The frame around [Subject] changes aspect ratio during the sequence, a visible crop or reveal.",
+      "Say the image does not stretch. Name the start ratio and the end ratio."
+    ],
+    "example": "Begin with a young cyclist confined within a square image. As she reaches an open seaside road and takes a deep breath, widen the frame smoothly to a broad rectangle, revealing the ocean on both sides. Reveal previously unseen image area; never stretch her body or bicycle. Animate the framing in post."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/c61bb96fa336e9ecf9da27d8cbbeec5e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/109-aspect-ratio-change-as-an-event-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f2236c80e5df50cdcc1f4acc32ba530f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ratio-switch-109-aspect-ratio-change-as-an-event-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/dc89fd51717dbd81dabaa8ae17c9aa7a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/ratio-switch.jpg",
+      "alt": "Ratio Switch frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/2ddb734916b72a7342a63890baa5f001.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/masking-masking-mini.webp",
+      "alt": "Masking"
+    },
+    {
+      "kind": "video",
+      "path": "media/dee527ba7cb1a73ba4c9a6a1b22f6100.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/masking-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d40f44faa39b7ca4d29706438c303e51.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wide-shot.webp",
+      "alt": "Wide Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/102a5af658a51b5d6e3488917f01db17.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/ratio-switch/hero.jpg",
+      "alt": "Ratio Switch",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "69e442bf8cda051bfde972a3f29af1e3d9e437859f6698cf3ff54316e937efd6"
+}

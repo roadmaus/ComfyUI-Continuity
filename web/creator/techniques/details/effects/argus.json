@@ -1,0 +1,419 @@
+{
+  "id": "effects/argus",
+  "slug": "argus",
+  "title": "Argus",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/argus",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/argus-argus-mini.webp",
+  "detail": "details/effects/argus.json",
+  "aliases": [],
+  "description": "An Argus image, argus many eyes, fills the frame with looking: extra pupils on a body, a swarm of viewpoints, a creature or a city of eyes. The surplus is seeing, counted as organs or cameras, not as flare.",
+  "thumbnail": "media/44c31dd2c27c27f54efd91c15e1d244b.webp",
+  "video": "media/5fc22373cb9f3039e88e7ec183452c3f.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/argus-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Surveillance becomes anatomy. A wall of cameras."
+        },
+        {
+          "type": "paragraph",
+          "text": "A god covered in irises. Use it when paranoia, divinity, or the internet should be visible as too much seeing."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a single honest portrait, and for a tidy split of two scenes. If the same person repeats as clones, that is duplication."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the frame is divided into panels, that is split screen. If facets mirror one image, that is a kaleidoscope."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Surveillance becomes anatomy. A wall of cameras.A god covered in irises. Use it when paranoia, divinity, or the internet should be visible as too much seeing.It is the wrong tool for a single honest portrait, and for a tidy split of two scenes. If the same person repeats as clones, that is duplication.If the frame is divided into panels, that is split screen. If facets mirror one image, that is a kaleidoscope."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Count the eyes. Place them as objects: on skin, on walls, as a field of viewpoints around a still center."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep a readable subject so the swarm has a king. Light each iris with a small catchlight if they are organs."
+        },
+        {
+          "type": "paragraph",
+          "text": "If they are cameras, give each lens a tiny practical. Do not dissolve them into noise."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt an Argus image of the subject: many eyes, many viewpoints, a creature or a city of looking."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Count the eyes. Place them as objects: on skin, on walls, as a field of viewpoints around a still center.Keep a readable subject so the swarm has a king. Light each iris with a small catchlight if they are organs.If they are cameras, give each lens a tiny practical. Do not dissolve them into noise.Prompt an Argus image of the subject: many eyes, many viewpoints, a creature or a city of looking."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for paranoia, gods, a network that stares. Do not use it as extra pupils on a portrait that only needed one pair."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for paranoia, gods, a network that stares. Do not use it as extra pupils on a portrait that only needed one pair."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Duplication repeats a person. Argus multiplies looking, not necessarily the whole body.",
+          "links": [
+            {
+              "text": "Duplication",
+              "url": "https://melies.co/cinematic-techniques/effects/duplication"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Split Screen divides the frame into panels of action. Argus can be one composition swarming with eyes.",
+          "links": [
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Kaleidoscope mirrors facets. Here the eyes are the point.",
+          "links": [
+            {
+              "text": "Kaleidoscope",
+              "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "DuplicationOne person is not a single self.",
+          "displayText": "Duplication\nOne person is not a single self.",
+          "links": [
+            {
+              "text": "DuplicationOne person is not a single self.",
+              "url": "https://melies.co/cinematic-techniques/effects/duplication"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Split ScreenTwo rooms, one moment.",
+          "displayText": "Split Screen\nTwo rooms, one moment.",
+          "links": [
+            {
+              "text": "Split ScreenTwo rooms, one moment.",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Duplication",
+          "url": "https://melies.co/cinematic-techniques/effects/duplication"
+        },
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "Kaleidoscope",
+          "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+        },
+        {
+          "text": "DuplicationOne person is not a single self.",
+          "url": "https://melies.co/cinematic-techniques/effects/duplication"
+        },
+        {
+          "text": "Split ScreenTwo rooms, one moment.",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b07a80e569770eac04d41040ec5db8d1.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/duplication-duplication-mini.webp",
+          "alt": "Duplication"
+        },
+        {
+          "kind": "video",
+          "path": "media/23be8e3bb3bf4166b8e3ed97053c9439.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/duplication-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/aa1f55893c6980380f31912c5c293abe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-screen-120-simultaneous-split-screen-mini.webp",
+          "alt": "Split Screen"
+        },
+        {
+          "kind": "video",
+          "path": "media/6b8983f75155ce580e4009fe6c11abb4.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/120-simultaneous-split-screen-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Duplication repeats a person. Argus multiplies looking, not necessarily the whole body.Split Screen divides the frame into panels of action. Argus can be one composition swarming with eyes.Kaleidoscope mirrors facets. Here the eyes are the point.DuplicationOne person is not a single self.Split ScreenTwo rooms, one moment.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Doctor Strange kaleidoscopes tunnel looking into too many angles. The Fountain multiplies visionary sight."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of a swarm of gazes, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Doctor Strange kaleidoscopes tunnel looking into too many angles. The Fountain multiplies visionary sight.Grammar of a swarm of gazes, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Argus image of [Subject], many eyes, many viewpoints, a creature or a city of looking. Count the eyes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep a center. Ban lens flare standing in for pupils, and ban a simple two-panel split."
+        },
+        {
+          "type": "quote",
+          "text": "Argus image of [Subject], many eyes, many viewpoints, a creature or a city of looking."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Argus+image+of+[Subject],+many+eyes,+many+viewpoints,+a+creature+or+a+city+of+looking."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Argus image of [Subject], many eyes, many viewpoints, a creature or a city of looking. Count the eyes.Keep a center. Ban lens flare standing in for pupils, and ban a simple two-panel split.Copy promptUse in Image GeneratorArgus image of [Subject], many eyes, many viewpoints, a creature or a city of looking.Argus image of [Subject], many eyes, many viewpoints, a creature or a city of looking."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is flare on a face, or a Split Screen. The tell is no extra eyes as objects, or a tidy two-way divide.",
+          "links": [
+            {
+              "text": "Split Screen",
+              "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is countable pupils or viewpoints, a swarm with a center."
+        }
+      ],
+      "links": [
+        {
+          "text": "Split Screen",
+          "url": "https://melies.co/cinematic-techniques/editing/split-screen"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is flare on a face, or a Split Screen. The tell is no extra eyes as objects, or a tidy two-way divide.The fix is countable pupils or viewpoints, a swarm with a center."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Argus in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Argus is many eyes and many viewpoints: a creature or a city of looking. One gaze is not enough. Looking becomes a swarm."
+        },
+        {
+          "type": "heading",
+          "text": "Argus vs duplication",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Duplication repeats a person in the frame. Argus multiplies eyes or viewpoints. You may still have one body. The surplus is seeing."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Argus?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for paranoia, gods, networks of watching. Skip it on a single honest portrait, and skip it when you only need two panels of action."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Argus for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Argus image of [Subject], many eyes, many viewpoints. Count them. Keep a center so it is not noise. Eyes should be objects, not flare."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Argus in film?Argus is many eyes and many viewpoints: a creature or a city of looking. One gaze is not enough. Looking becomes a swarm.Argus vs duplicationDuplication repeats a person in the frame. Argus multiplies eyes or viewpoints. You may still have one body. The surplus is seeing.When should I use Argus?Use it for paranoia, gods, networks of watching. Skip it on a single honest portrait, and skip it when you only need two panels of action.How do I prompt Argus for AI image or video?Write Argus image of [Subject], many eyes, many viewpoints. Count them. Keep a center so it is not noise. Eyes should be objects, not flare."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Argus image of [Subject], many eyes, many viewpoints, a creature or a city of looking. Count the eyes.",
+      "Keep a center. Ban lens flare standing in for pupils, and ban a simple two-panel split."
+    ],
+    "example": "Argus image of [Subject], many eyes, many viewpoints, a creature or a city of looking."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/5fc22373cb9f3039e88e7ec183452c3f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/argus-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/44c31dd2c27c27f54efd91c15e1d244b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/argus-argus-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ed795c261076f86b7267806c17f718ae.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/argus.jpg",
+      "alt": "Argus frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/b07a80e569770eac04d41040ec5db8d1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/duplication-duplication-mini.webp",
+      "alt": "Duplication"
+    },
+    {
+      "kind": "video",
+      "path": "media/23be8e3bb3bf4166b8e3ed97053c9439.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/duplication-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aa1f55893c6980380f31912c5c293abe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/split-screen-120-simultaneous-split-screen-mini.webp",
+      "alt": "Split Screen"
+    },
+    {
+      "kind": "video",
+      "path": "media/6b8983f75155ce580e4009fe6c11abb4.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/120-simultaneous-split-screen-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b72ae5652f93b7db1d052e2976c2fa1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/argus/hero.jpg",
+      "alt": "Argus",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "0b08056e7086a90747a183f6c12c7451d315f1c7fe9b67cc6b143107d9167f4a"
+}

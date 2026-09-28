@@ -1,0 +1,396 @@
+{
+  "id": "lighting/rim-light",
+  "slug": "rim-light",
+  "title": "Rim Light",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/rim-light",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rim-light.webp",
+  "detail": "details/lighting/rim-light.json",
+  "aliases": [],
+  "description": "Rim lighting is a narrow edge of light, usually from a flagged backlight, that separates a subject from the background without opening the face. The highlight sits on brim, hair, and coat; flesh stays mostly dark.",
+  "thumbnail": "media/24ba922f93c8786e2def76713b970c9f.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The shot becomes a graphic: a profile or three-quarter figure drawn with a thread of exposure. You keep just enough flesh to know it is a person, not a paper doll."
+        },
+        {
+          "type": "paragraph",
+          "text": "Crime, spy, and night-city work use it so a body reads against wet asphalt or a black wall. It is the wrong tool for a dialogue close-up that needs both eyes."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the rim fattens into a cheek slash, you have a kicker. If the whole figure goes empty and the sky is the subject, you have a silhouette.",
+          "links": [
+            {
+              "text": "kicker",
+              "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+            },
+            {
+              "text": "silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "kicker",
+          "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+        },
+        {
+          "text": "silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The shot becomes a graphic: a profile or three-quarter figure drawn with a thread of exposure. You keep just enough flesh to know it is a person, not a paper doll.Crime, spy, and night-city work use it so a body reads against wet asphalt or a black wall. It is the wrong tool for a dialogue close-up that needs both eyes.If the rim fattens into a cheek slash, you have a kicker. If the whole figure goes empty and the sky is the subject, you have a silhouette."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use a small hard source behind the subject, slightly off to one side, with flags or a snoot so the beam only kisses the outline. Keep it out of the lens unless you want veil."
+        },
+        {
+          "type": "paragraph",
+          "text": "Color is often white or slightly cool against a warmer dim key, or warm against night blue. Do not wrap to the front plane of the face."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Photographic backlight on [Subject] from behind, a thin natural highlight on hat brim, hair, and coat edge, faces staying dark. Not a neon outline."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Use a small hard source behind the subject, slightly off to one side, with flags or a snoot so the beam only kisses the outline. Keep it out of the lens unless you want veil.Color is often white or slightly cool against a warmer dim key, or warm against night blue. Do not wrap to the front plane of the face.Prompt: Photographic backlight on [Subject] from behind, a thin natural highlight on hat brim, hair, and coat edge, faces staying dark. Not a neon outline."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a graphic night figure, a spy on a roof, a coat against a black street. Do not use it when the audience must read a mouth for a line."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a graphic night figure, a spy on a roof, a coat against a black street. Do not use it when the audience must read a mouth for a line."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Backlight is the broader rear direction; rim is the thin result. Kicker hits cheek, jaw, or shoulder as a hard side-back accent with more flesh.",
+          "links": [
+            {
+              "text": "Backlight",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            },
+            {
+              "text": "Kicker",
+              "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hair light lights only the hair from above-behind. Silhouette removes the edge highlight and exposes for the ground instead.",
+          "links": [
+            {
+              "text": "Hair light",
+              "url": "https://melies.co/cinematic-techniques/lighting/hair-light"
+            },
+            {
+              "text": "Silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "BacklightSeparate a dark figure from a dark world.",
+          "displayText": "Backlight\nSeparate a dark figure from a dark world.",
+          "links": [
+            {
+              "text": "BacklightSeparate a dark figure from a dark world.",
+              "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "KickerAdd a slice of glamour or menace on the far side.",
+          "displayText": "Kicker\nAdd a slice of glamour or menace on the far side.",
+          "links": [
+            {
+              "text": "KickerAdd a slice of glamour or menace on the far side.",
+              "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Backlight",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "Kicker",
+          "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+        },
+        {
+          "text": "Hair light",
+          "url": "https://melies.co/cinematic-techniques/lighting/hair-light"
+        },
+        {
+          "text": "Silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "BacklightSeparate a dark figure from a dark world.",
+          "url": "https://melies.co/cinematic-techniques/lighting/backlight"
+        },
+        {
+          "text": "KickerAdd a slice of glamour or menace on the far side.",
+          "url": "https://melies.co/cinematic-techniques/lighting/kicker"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+          "alt": "Backlight"
+        },
+        {
+          "kind": "video",
+          "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/f5db697a5950db2cf3bb33cc9b59213b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/kicker.webp",
+          "alt": "Kicker"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Backlight is the broader rear direction; rim is the thin result. Kicker hits cheek, jaw, or shoulder as a hard side-back accent with more flesh.Hair light lights only the hair from above-behind. Silhouette removes the edge highlight and exposes for the ground instead.BacklightSeparate a dark figure from a dark world.KickerAdd a slice of glamour or menace on the far side.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blade Runner rims figures in smoky interiors so coats and hair hold against black. Skyfall uses thin natural rims on night exteriors, faces kept dark, outlines readable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Those are edges from sources, not stickers."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Blade Runner rims figures in smoky interiors so coats and hair hold against black. Skyfall uses thin natural rims on night exteriors, faces kept dark, outlines readable.Those are edges from sources, not stickers."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Forbid the cartoon stroke. Use: \"Photographic backlight on [Subject] from behind, a thin natural highlight on hat brim, hair, and coat edge, faces staying dark."
+        },
+        {
+          "type": "paragraph",
+          "text": "\" Name one rear lamp. Keep skin exposure low."
+        },
+        {
+          "type": "quote",
+          "text": "Photographic backlight on [Subject] from behind, a thin natural highlight on hat brim, hair, and coat edge, faces staying dark. Not a neon outline."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Photographic+backlight+on+[Subject]+from+behind,+a+thin+natural+highlight+on+hat+brim,+hair,+and+coat+edge,+faces+staying+dark.+Not+a+neon+outline."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Forbid the cartoon stroke. Use: \"Photographic backlight on [Subject] from behind, a thin natural highlight on hat brim, hair, and coat edge, faces staying dark.\" Name one rear lamp. Keep skin exposure low.Copy promptUse in Image GeneratorPhotographic backlight on [Subject] from behind, a thin natural highlight on hat brim, hair, and coat edge, faces staying dark. Not a neon outline.Photographic backlight on [Subject] from behind, a thin natural highlight on hat brim, hair, and coat edge, faces staying dark. Not a neon outline."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a neon outline or a full silhouette. The tell is a glowing closed stroke around the body, or no highlight at all.",
+          "links": [
+            {
+              "text": "silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by attaching a thin highlight to hair and cloth only, from a real rear source."
+        }
+      ],
+      "links": [
+        {
+          "text": "silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a neon outline or a full silhouette. The tell is a glowing closed stroke around the body, or no highlight at all.Fix it by attaching a thin highlight to hair and cloth only, from a real rear source."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is rim light in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A narrow edge of light that separates the subject from the background. The face stays dark; brim, hair, and cloth catch the highlight."
+        },
+        {
+          "type": "heading",
+          "text": "Rim light vs kicker",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A rim traces the outline. A kicker is a harder side-back slash on jaw, cheek, or shoulder, with more flesh in the accent."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use rim light?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when shape matters more than expression, and a dark figure must still unstick from a dark ground."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt rim light for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify a thin natural highlight on hair and coat from behind, face remaining dark, no neon outline. Name the rear source."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is rim light in film?A narrow edge of light that separates the subject from the background. The face stays dark; brim, hair, and cloth catch the highlight.Rim light vs kickerA rim traces the outline. A kicker is a harder side-back slash on jaw, cheek, or shoulder, with more flesh in the accent.When should I use rim light?Use it when shape matters more than expression, and a dark figure must still unstick from a dark ground.How do I prompt rim light for AI image or video?Specify a thin natural highlight on hair and coat from behind, face remaining dark, no neon outline. Name the rear source."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Forbid the cartoon stroke. Use: \"Photographic backlight on [Subject] from behind, a thin natural highlight on hat brim, hair, and coat edge, faces staying dark.",
+      "\" Name one rear lamp. Keep skin exposure low."
+    ],
+    "example": "Photographic backlight on [Subject] from behind, a thin natural highlight on hat brim, hair, and coat edge, faces staying dark. Not a neon outline."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/24ba922f93c8786e2def76713b970c9f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rim-light.webp",
+      "alt": "Rim Light example"
+    },
+    {
+      "kind": "image",
+      "path": "media/8b8527501bd80817d093e945987be5fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/backlight-067-hard-backlight-through-atmosphere-mini.webp",
+      "alt": "Backlight"
+    },
+    {
+      "kind": "video",
+      "path": "media/c9672cd02dab5b5701ce50c368bf200f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/067-hard-backlight-through-atmosphere-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f5db697a5950db2cf3bb33cc9b59213b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/kicker.webp",
+      "alt": "Kicker"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/aa7284fcd8245845f9dd1c9a36d6c707.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/rim-light/hero.jpg",
+      "alt": "Rim Light",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "377eb7ffe35970ac4a541d4ab49ba8430506ef2c356d6e078309b76668cd0b83"
+}

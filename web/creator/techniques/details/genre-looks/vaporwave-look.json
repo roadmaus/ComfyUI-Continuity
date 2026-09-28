@@ -1,0 +1,419 @@
+{
+  "id": "genre-looks/vaporwave-look",
+  "slug": "vaporwave-look",
+  "title": "Vaporwave",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vaporwave-look.webp",
+  "detail": "details/genre-looks/vaporwave-look.json",
+  "aliases": [],
+  "description": "The vaporwave aesthetic is a pastel, low-contrast look: pink-cyan gradients, marble and palms, mall fluorescents, and VHS chroma bleed, as if a 1980s future never shipped. The camera is often centered and still. There is no crime geometry unless you add it.",
+  "thumbnail": "media/0c0663ca1133e579f6300aa7fd020a66.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Nostalgia for a catalog that closed. A bust, a grid floor, Japanese retail signage, a sunset that is a gradient more than a sun."
+        },
+        {
+          "type": "paragraph",
+          "text": "Highlights bloom like consumer tape. The mood is mall-at-closing, not investigation."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is easy to confuse with Neo-Noir because both like cyan and magenta. Noir still wants a hard key, rain guilt, and a face in shadow.",
+          "links": [
+            {
+              "text": "Neo-Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Vaporwave wants even pastel fill, sculpture, and tape artifacts. Cross Process can supply the hue shift.",
+          "links": [
+            {
+              "text": "Cross Process",
+              "url": "https://melies.co/cinematic-techniques/color/cross-process"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is not the whole look."
+        }
+      ],
+      "links": [
+        {
+          "text": "Neo-Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        },
+        {
+          "text": "Cross Process",
+          "url": "https://melies.co/cinematic-techniques/color/cross-process"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Nostalgia for a catalog that closed. A bust, a grid floor, Japanese retail signage, a sunset that is a gradient more than a sun.Highlights bloom like consumer tape. The mood is mall-at-closing, not investigation.It is easy to confuse with Neo-Noir because both like cyan and magenta. Noir still wants a hard key, rain guilt, and a face in shadow.Vaporwave wants even pastel fill, sculpture, and tape artifacts. Cross Process can supply the hue shift.It is not the whole look."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Soft, even sources: fluorescent mall, plus a pink or cyan gel as a wash, not a hard key. Center the subject."
+        },
+        {
+          "type": "paragraph",
+          "text": "35mm spherical, moderate depth. Add VHS: chroma bleed, slight tracking error, soft resolution."
+        },
+        {
+          "type": "paragraph",
+          "text": "Set dressing: marble, palms, Greek busts, grid, sunset gradient. Prompt pink-cyan gradient, marble and palms, VHS bleed, mall-at-closing melancholy as empty retail air, not as a slogan."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Soft, even sources: fluorescent mall, plus a pink or cyan gel as a wash, not a hard key. Center the subject.35mm spherical, moderate depth. Add VHS: chroma bleed, slight tracking error, soft resolution.Set dressing: marble, palms, Greek busts, grid, sunset gradient. Prompt pink-cyan gradient, marble and palms, VHS bleed, mall-at-closing melancholy as empty retail air, not as a slogan."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the image should feel like a unused future on worn tape. Do not use it as a crime night or as a hard neon-noir alley."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the image should feel like a unused future on worn tape. Do not use it as a crime night or as a hard neon-noir alley."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vaporwave is pastel, centered, and tape-soft. Neo-Noir is hard, rainy, and guilty.",
+          "links": [
+            {
+              "text": "Vaporwave",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+            },
+            {
+              "text": "Neo-Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Neon Practicals is the tube. Cross Process is a chemical hue shift.",
+          "links": [
+            {
+              "text": "Neon Practicals",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            },
+            {
+              "text": "Cross Process",
+              "url": "https://melies.co/cinematic-techniques/color/cross-process"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tech Noir still investigates. If the face is unfilled and the street is wet, you have left the mall.",
+          "links": [
+            {
+              "text": "Tech Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cross ProcessWrong chemistry on purpose.",
+          "displayText": "Cross Process\nWrong chemistry on purpose.",
+          "links": [
+            {
+              "text": "Cross ProcessWrong chemistry on purpose.",
+              "url": "https://melies.co/cinematic-techniques/color/cross-process"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "displayText": "Neon Practicals\nThe city is the lighting department.",
+          "links": [
+            {
+              "text": "Neon PracticalsThe city is the lighting department.",
+              "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Vaporwave",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/vaporwave-look"
+        },
+        {
+          "text": "Neo-Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        },
+        {
+          "text": "Neon Practicals",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "Cross Process",
+          "url": "https://melies.co/cinematic-techniques/color/cross-process"
+        },
+        {
+          "text": "Tech Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/tech-noir"
+        },
+        {
+          "text": "Cross ProcessWrong chemistry on purpose.",
+          "url": "https://melies.co/cinematic-techniques/color/cross-process"
+        },
+        {
+          "text": "Neon PracticalsThe city is the lighting department.",
+          "url": "https://melies.co/cinematic-techniques/lighting/neon-practical"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1327295c65e87c53f955855b54fa99fe.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-process.webp",
+          "alt": "Cross Process"
+        },
+        {
+          "kind": "image",
+          "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+          "alt": "Neon Practicals"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Vaporwave is pastel, centered, and tape-soft. Neo-Noir is hard, rainy, and guilty.Neon Practicals is the tube. Cross Process is a chemical hue shift.Tech Noir still investigates. If the face is unfilled and the street is wet, you have left the mall.Cross ProcessWrong chemistry on purpose.Neon PracticalsThe city is the lighting department.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Drive supplies adjacent night grammar (pink-cyan practicals) but remains neo-noir in blocking. The look itself is more native to music video and internet stills than to a single film cycle."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use Drive only as a cousin for hue, not as a crime template."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Drive supplies adjacent night grammar (pink-cyan practicals) but remains neo-noir in blocking. The look itself is more native to music video and internet stills than to a single film cycle.Use Drive only as a cousin for hue, not as a crime template."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vaporwave treatment of [Subject], pink-cyan gradient, marble and palms, VHS bleed, centered 35mm, mall fluorescent fill, no hard unfilled cheek. Name the bust or the grid."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not prompt a wet detective alley."
+        },
+        {
+          "type": "quote",
+          "text": "Vaporwave treatment of [Subject], pink-cyan gradient, marble and palms, VHS bleed, mall-at-closing melancholy."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Vaporwave+treatment+of+[Subject],+pink-cyan+gradient,+marble+and+palms,+VHS+bleed,+mall-at-closing+melancholy."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Vaporwave treatment of [Subject], pink-cyan gradient, marble and palms, VHS bleed, centered 35mm, mall fluorescent fill, no hard unfilled cheek. Name the bust or the grid.Do not prompt a wet detective alley.Copy promptUse in Image GeneratorVaporwave treatment of [Subject], pink-cyan gradient, marble and palms, VHS bleed, mall-at-closing melancholy.Vaporwave treatment of [Subject], pink-cyan gradient, marble and palms, VHS bleed, mall-at-closing melancholy."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Neo-Noir: rain, hard key, raincoat. The tell is an unfilled cheek and wet asphalt.",
+          "links": [
+            {
+              "text": "Neo-Noir",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: flatten the contrast, center the frame, add marble or palms, and let VHS chroma bleed the edges."
+        }
+      ],
+      "links": [
+        {
+          "text": "Neo-Noir",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/neo-noir"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Neo-Noir: rain, hard key, raincoat. The tell is an unfilled cheek and wet asphalt.Fix: flatten the contrast, center the frame, add marble or palms, and let VHS chroma bleed the edges."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Vaporwave in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A pastel look of pink-cyan wash, marble, palms, mall light, and VHS bleed. It nostalgizes a retail future that never arrived. It is not a crime lighting plot unless you force one."
+        },
+        {
+          "type": "heading",
+          "text": "Vaporwave vs Neo-Noir",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Both may use cyan and magenta. Neo-noir keeps hard keys, rain, and isolation. Vaporwave keeps even fill, sculpture, and tape softness. Hue overlap is not the same look."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Vaporwave?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the beat is unused-future nostalgia on consumer tape. Skip it for investigation, for hard rain, or for early-web horror (that is Weirdcore).",
+          "links": [
+            {
+              "text": "Weirdcore",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/weirdcore"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Vaporwave for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Vaporwave treatment of [Subject], pink-cyan gradient, marble and palms, VHS bleed, centered 35mm, mall fluorescent fill. Do not add a hard unfilled noir cheek."
+        }
+      ],
+      "links": [
+        {
+          "text": "Weirdcore",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/weirdcore"
+        }
+      ],
+      "media": [],
+      "sourceText": "Questions What is Vaporwave in film?A pastel look of pink-cyan wash, marble, palms, mall light, and VHS bleed. It nostalgizes a retail future that never arrived. It is not a crime lighting plot unless you force one.Vaporwave vs Neo-NoirBoth may use cyan and magenta. Neo-noir keeps hard keys, rain, and isolation. Vaporwave keeps even fill, sculpture, and tape softness. Hue overlap is not the same look.When should I use Vaporwave?When the beat is unused-future nostalgia on consumer tape. Skip it for investigation, for hard rain, or for early-web horror (that is Weirdcore).How do I prompt Vaporwave for AI image or video?Write: Vaporwave treatment of [Subject], pink-cyan gradient, marble and palms, VHS bleed, centered 35mm, mall fluorescent fill. Do not add a hard unfilled noir cheek."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Vaporwave treatment of [Subject], pink-cyan gradient, marble and palms, VHS bleed, centered 35mm, mall fluorescent fill, no hard unfilled cheek. Name the bust or the grid.",
+      "Do not prompt a wet detective alley."
+    ],
+    "example": "Vaporwave treatment of [Subject], pink-cyan gradient, marble and palms, VHS bleed, mall-at-closing melancholy."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/0c0663ca1133e579f6300aa7fd020a66.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/vaporwave-look.webp",
+      "alt": "Vaporwave example"
+    },
+    {
+      "kind": "image",
+      "path": "media/1327295c65e87c53f955855b54fa99fe.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cross-process.webp",
+      "alt": "Cross Process"
+    },
+    {
+      "kind": "image",
+      "path": "media/1fd141baaea9244319c5acf3d9cdeac6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/neon-practical.webp",
+      "alt": "Neon Practicals"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/83c2d10c609abbb7df65e8ac8e836195.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/vaporwave-look/hero.jpg",
+      "alt": "Vaporwave",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "81bc03352df9c6b224dfc0913496f0dfea228f61ce2264938afca9a650bdf451"
+}

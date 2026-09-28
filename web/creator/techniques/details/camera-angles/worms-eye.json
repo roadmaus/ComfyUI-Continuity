@@ -1,0 +1,435 @@
+{
+  "id": "camera-angles/worms-eye",
+  "slug": "worms-eye",
+  "title": "Worm's-Eye View",
+  "categoryId": "camera-angles",
+  "categoryTitle": "Camera Angles",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-angles/worms-eye",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/worms-eye.webp",
+  "detail": "details/camera-angles/worms-eye.json",
+  "aliases": [],
+  "description": "A worm's-eye view looks sharply upward from ground level or below the subject, an extreme low pitch that collapses verticals inward. The subject is a tower and the camera is dust.",
+  "thumbnail": "media/887c6cd61bc4f3b795172ec2c50b6c45.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "This is not a slightly taller portrait. The lens is on or under the floor plane and the look is nearly straight up: nostrils, cornices, the belly of a ship, a ceiling that has become the whole sky."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wonder and terror share the same geometry because scale has nowhere to go but over you. Use a Low Angle when you still need a face that can speak.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Use Ground Level when the dirt, the boots, and the trailing hem are the actors and the look may travel along the ground rather than up the body. Worm's-eye is the vanishing point in the zenith.",
+          "links": [
+            {
+              "text": "Ground Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Ground Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function This is not a slightly taller portrait. The lens is on or under the floor plane and the look is nearly straight up: nostrils, cornices, the belly of a ship, a ceiling that has become the whole sky.Wonder and terror share the same geometry because scale has nowhere to go but over you. Use a Low Angle when you still need a face that can speak.Use Ground Level when the dirt, the boots, and the trailing hem are the actors and the look may travel along the ground rather than up the body. Worm's-eye is the vanishing point in the zenith."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put the lens on the floor, in a pit, or at ground grade. Tilt up hard, often past 60 degrees, until architecture converges to a point above the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ultra-wide glass increases the collapse; keep anatomy plausible (one head, two feet). Foreground may include earth, a curb, or a grating."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: worm's-eye from ground level looking straight up, extreme low, verticals collapsing inward."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put the lens on the floor, in a pit, or at ground grade. Tilt up hard, often past 60 degrees, until architecture converges to a point above the frame.Ultra-wide glass increases the collapse; keep anatomy plausible (one head, two feet). Foreground may include earth, a curb, or a grating.Prompt: worm's-eye from ground level looking straight up, extreme low, verticals collapsing inward."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the subject should erase you: a spacecraft hull, a courthouse, a giant. Concrete beat: looking straight up the wall of a ship or a tower so the person is architecture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it for a simple power two-shot; that is a Low Angle.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it Use it when the subject should erase you: a spacecraft hull, a courthouse, a giant. Concrete beat: looking straight up the wall of a ship or a tower so the person is architecture.Do not use it for a simple power two-shot; that is a Low Angle."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Low Angle looks up from below the eyes and still delivers a portrait. Ground Level names the height of the lens on the floor; it can look along boots instead of straight up.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            },
+            {
+              "text": "Ground Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Trunk Shot looks up from inside a container with a rim. High Angle and Bird's-Eye View are the opposing downward family.",
+          "links": [
+            {
+              "text": "Trunk Shot",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/trunk-shot"
+            },
+            {
+              "text": "High Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+            },
+            {
+              "text": "Bird's-Eye View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low AnglePower, monument, or intimidation.",
+          "displayText": "Low Angle\nPower, monument, or intimidation.",
+          "links": [
+            {
+              "text": "Low AnglePower, monument, or intimidation.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Ground LevelStart from the dirt.",
+          "displayText": "Ground Level\nStart from the dirt.",
+          "links": [
+            {
+              "text": "Ground LevelStart from the dirt.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "displayText": "Eye Level\nDefault honesty. Do not look down or up unless you mean it.",
+          "links": [
+            {
+              "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Ground Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        },
+        {
+          "text": "Trunk Shot",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/trunk-shot"
+        },
+        {
+          "text": "High Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/high-angle"
+        },
+        {
+          "text": "Bird's-Eye View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/birds-eye"
+        },
+        {
+          "text": "Low AnglePower, monument, or intimidation.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Ground LevelStart from the dirt.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        },
+        {
+          "text": "Eye LevelDefault honesty. Do not look down or up unless you mean it.",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/eye-level"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+          "alt": "Low Angle"
+        },
+        {
+          "kind": "video",
+          "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/90e4116fa502af93f97dc97b380107b3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ground-level.webp",
+          "alt": "Ground Level"
+        },
+        {
+          "kind": "image",
+          "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+          "alt": "Eye Level"
+        }
+      ],
+      "sourceText": "Compared with similar shots Low Angle looks up from below the eyes and still delivers a portrait. Ground Level names the height of the lens on the floor; it can look along boots instead of straight up.Trunk Shot looks up from inside a container with a rim. High Angle and Bird's-Eye View are the opposing downward family.Low AnglePower, monument, or intimidation.Ground LevelStart from the dirt.Eye LevelDefault honesty. Do not look down or up unless you mean it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Citizen Kane pushes some interiors past a working low angle into a pit look, ceilings crushing the figure. Arrival stages the shell so humans look up from grass and become small against a hull."
+        },
+        {
+          "type": "paragraph",
+          "text": "Borrow the extreme upward pitch and the collapse of verticals."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Citizen Kane pushes some interiors past a working low angle into a pit look, ceilings crushing the figure. Arrival stages the shell so humans look up from grass and become small against a hull.Borrow the extreme upward pitch and the collapse of verticals."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say straight up, not merely low. Quote: Worm's-eye view from ground level looking straight up at [Subject], extreme low, verticals collapsing inward, awe or terror."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add: lens on the dirt or in a pit, architecture towering, face foreshortened from below. Not a waist-height power tilt."
+        },
+        {
+          "type": "quote",
+          "text": "Worm's-eye view from ground level looking straight up at [Subject], extreme low, verticals collapsing inward, awe or terror."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Worm's-eye+view+from+ground+level+looking+straight+up+at+[Subject],+extreme+low,+verticals+collapsing+inward,+awe+or+terror."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say straight up, not merely low. Quote: Worm's-eye view from ground level looking straight up at [Subject], extreme low, verticals collapsing inward, awe or terror.Add: lens on the dirt or in a pit, architecture towering, face foreshortened from below. Not a waist-height power tilt.Copy promptUse in Image GeneratorWorm's-eye view from ground level looking straight up at [Subject], extreme low, verticals collapsing inward, awe or terror.Worm's-eye view from ground level looking straight up at [Subject], extreme low, verticals collapsing inward, awe or terror."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Low Angle. Tell: a readable standing portrait from belt height, a little ceiling, no collapse.",
+          "links": [
+            {
+              "text": "Low Angle",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: camera on the ground, looking straight up, verticals rushing inward. The other cousin is Ground Level along the street: you see a row of boots and a horizon.",
+          "links": [
+            {
+              "text": "Ground Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Worm's-eye has almost no horizon; it has a zenith."
+        }
+      ],
+      "links": [
+        {
+          "text": "Low Angle",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/low-angle"
+        },
+        {
+          "text": "Ground Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/ground-level"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Low Angle. Tell: a readable standing portrait from belt height, a little ceiling, no collapse.Fix: camera on the ground, looking straight up, verticals rushing inward. The other cousin is Ground Level along the street: you see a row of boots and a horizon.Worm's-eye has almost no horizon; it has a zenith."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is worm's-eye view in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A worm's-eye view looks sharply up from ground level or below the subject. Verticals collapse inward and the figure or building reads as a tower over the lens."
+        },
+        {
+          "type": "heading",
+          "text": "Worm's-eye view vs low angle",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A low angle is a moderate look-up from below the eyes. Worm's-eye is extreme: floor or pit, looking straight up, almost no standing horizon, scale as threat or wonder."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use worm's-eye view?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the subject should be a tower and the audience should be dust. Do not use it for ordinary dialogue power; use a low angle there."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt worm's-eye view for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Worm's-eye view from ground level looking straight up at [Subject], extreme low, verticals collapsing inward. Specify lens on the floor or in a pit, not waist height."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is worm's-eye view in film?A worm's-eye view looks sharply up from ground level or below the subject. Verticals collapse inward and the figure or building reads as a tower over the lens.Worm's-eye view vs low angleA low angle is a moderate look-up from below the eyes. Worm's-eye is extreme: floor or pit, looking straight up, almost no standing horizon, scale as threat or wonder.When should I use worm's-eye view?Use it when the subject should be a tower and the audience should be dust. Do not use it for ordinary dialogue power; use a low angle there.How do I prompt worm's-eye view for AI image or video?Write: Worm's-eye view from ground level looking straight up at [Subject], extreme low, verticals collapsing inward. Specify lens on the floor or in a pit, not waist height."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say straight up, not merely low. Quote: Worm's-eye view from ground level looking straight up at [Subject], extreme low, verticals collapsing inward, awe or terror.",
+      "Add: lens on the dirt or in a pit, architecture towering, face foreshortened from below. Not a waist-height power tilt."
+    ],
+    "example": "Worm's-eye view from ground level looking straight up at [Subject], extreme low, verticals collapsing inward, awe or terror."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/887c6cd61bc4f3b795172ec2c50b6c45.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/worms-eye.webp",
+      "alt": "Worm's-Eye View example"
+    },
+    {
+      "kind": "image",
+      "path": "media/676ce98e92626feb7c14d13312c51f8b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-angle-043-low-angle-power-and-ceilings-mini.webp",
+      "alt": "Low Angle"
+    },
+    {
+      "kind": "video",
+      "path": "media/edd8e6585abddafb5716b4697af1e6cb.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/043-low-angle-power-and-ceilings-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/90e4116fa502af93f97dc97b380107b3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ground-level.webp",
+      "alt": "Ground Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/bf199662537c2e4e8c08cd3fdd726564.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/eye-level.webp",
+      "alt": "Eye Level"
+    },
+    {
+      "kind": "image",
+      "path": "media/953252db4f3204cb93e95b1e5ce22e90.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/worms-eye/hero.jpg",
+      "alt": "Worm's-Eye View",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "baea5f0386e2dea0289406fd86a88368b862defe9216737fcf8d62b204219a26"
+}

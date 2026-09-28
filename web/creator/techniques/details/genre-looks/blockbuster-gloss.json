@@ -1,0 +1,449 @@
+{
+  "id": "genre-looks/blockbuster-gloss",
+  "slug": "blockbuster-gloss",
+  "title": "Blockbuster Gloss",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blockbuster-gloss.webp",
+  "detail": "details/genre-looks/blockbuster-gloss.json",
+  "aliases": [],
+  "description": "Blockbuster cinematography is high-contrast, billboard-readable coverage: clean skies or designed weather, a heroic rim on hair and shoulder, volumetric shafts, and a grade that often splits teal shadow from warm skin. The shot must still parse at poster size.",
+  "thumbnail": "media/18f85213fad25ca54f2043844a4189fc.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Adventure as a still that could sell the film. Faces are shaped."
+        },
+        {
+          "type": "paragraph",
+          "text": "Horizons are clean. Dust and haze exist to carry god-rays, not to hide information."
+        },
+        {
+          "type": "paragraph",
+          "text": "39 anamorphic, but the finish is expensive contrast, not empty duration. It is the wrong tool when thought needs space or when cheapness is the truth."
+        },
+        {
+          "type": "paragraph",
+          "text": "Arthouse leaves headroom and waits. Stylistic Suck would be dishonest here in reverse: polish is the contract.",
+          "links": [
+            {
+              "text": "Arthouse",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+            },
+            {
+              "text": "Stylistic Suck",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Teal and Orange is a grade you can apply to anything. Gloss is the whole package: rim, scale, cleanliness.",
+          "links": [
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Arthouse",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+        },
+        {
+          "text": "Stylistic Suck",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Adventure as a still that could sell the film. Faces are shaped.Horizons are clean. Dust and haze exist to carry god-rays, not to hide information.39 anamorphic, but the finish is expensive contrast, not empty duration. It is the wrong tool when thought needs space or when cheapness is the truth.Arthouse leaves headroom and waits. Stylistic Suck would be dishonest here in reverse: polish is the contract.Teal and Orange is a grade you can apply to anything. Gloss is the whole package: rim, scale, cleanliness."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Key plus a strong backlight rim. Add haze for Volumetric Light shafts.",
+          "links": [
+            {
+              "text": "Volumetric Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep skies clean or dramatically designed, not stained by accident. 24mm to 40mm for scale, longer glass for faces if the format is large."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grade: expensive contrast, often teal-orange, highlights rolled but still bright. Prompt expensive contrast, clean skies, heroic rim, IMAX-scale finish, adventure poster in motion."
+        }
+      ],
+      "links": [
+        {
+          "text": "Volumetric Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Key plus a strong backlight rim. Add haze for Volumetric Light shafts.Keep skies clean or dramatically designed, not stained by accident. 24mm to 40mm for scale, longer glass for faces if the format is large.Grade: expensive contrast, often teal-orange, highlights rolled but still bright. Prompt expensive contrast, clean skies, heroic rim, IMAX-scale finish, adventure poster in motion."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the shot must play on a billboard and the world should look funded. Do not use it for a quiet empty interior, a vérité interview, or a decaying porch."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the shot must play on a billboard and the world should look funded. Do not use it for a quiet empty interior, a vérité interview, or a decaying porch."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blockbuster Gloss is rim, scale, and clean contrast. Teal and Orange is only the grade.",
+          "links": [
+            {
+              "text": "Blockbuster Gloss",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+            },
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Volumetric Light is only the shaft. Arthouse is the opposite contract: patience and empty frame.",
+          "links": [
+            {
+              "text": "Volumetric Light",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            },
+            {
+              "text": "Arthouse",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Maximalism packs pattern. Gloss can be relatively simple, just expensive.",
+          "links": [
+            {
+              "text": "Maximalism",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/maximalism"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Dystopian dirties the civic future. Gloss polishes the adventure.",
+          "links": [
+            {
+              "text": "Dystopian",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/dystopian"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "displayText": "Volumetric Light\nAir has to be photographed, not just the subject.",
+          "links": [
+            {
+              "text": "Volumetric LightAir has to be photographed, not just the subject.",
+              "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Blockbuster Gloss",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Volumetric Light",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "Arthouse",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+        },
+        {
+          "text": "Maximalism",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/maximalism"
+        },
+        {
+          "text": "Dystopian",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/dystopian"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        },
+        {
+          "text": "Volumetric LightAir has to be photographed, not just the subject.",
+          "url": "https://melies.co/cinematic-techniques/lighting/volumetric-light"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        },
+        {
+          "kind": "image",
+          "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+          "alt": "Volumetric Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Blockbuster Gloss is rim, scale, and clean contrast. Teal and Orange is only the grade.Volumetric Light is only the shaft. Arthouse is the opposite contract: patience and empty frame.Maximalism packs pattern. Gloss can be relatively simple, just expensive.Dystopian dirties the civic future. Gloss polishes the adventure.Teal and OrangeYou want contemporary studio punch. Use with taste.Volumetric LightAir has to be photographed, not just the subject.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mad Max: Fury Road (hard sun, rims, desert contrast built for large screens). Dune (2021) (volumetric shafts, monumental wides, controlled haze)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Skyfall (poster-clear action geography, expensive night and landscape). Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Mad Max: Fury Road (hard sun, rims, desert contrast built for large screens). Dune (2021) (volumetric shafts, monumental wides, controlled haze).Skyfall (poster-clear action geography, expensive night and landscape). Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Blockbuster gloss on [Subject], expensive contrast, clean skies, heroic rim, volumetric haze, IMAX-scale finish, adventure poster in motion. Name the rim and the horizon."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not prompt odd headroom or mixed unstyled color."
+        },
+        {
+          "type": "quote",
+          "text": "Blockbuster gloss on [Subject], expensive contrast, clean skies, heroic rim, IMAX-scale finish, adventure poster in motion."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Blockbuster+gloss+on+[Subject],+expensive+contrast,+clean+skies,+heroic+rim,+IMAX-scale+finish,+adventure+poster+in+motion."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Blockbuster gloss on [Subject], expensive contrast, clean skies, heroic rim, volumetric haze, IMAX-scale finish, adventure poster in motion. Name the rim and the horizon.Do not prompt odd headroom or mixed unstyled color.Copy promptUse in Image GeneratorBlockbuster gloss on [Subject], expensive contrast, clean skies, heroic rim, IMAX-scale finish, adventure poster in motion.Blockbuster gloss on [Subject], expensive contrast, clean skies, heroic rim, IMAX-scale finish, adventure poster in motion."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Arthouse emptiness or a Teal and Orange grade on a poorly lit face. The tell is no rim, stained accidental skies, and a frame that would not read as a poster.",
+          "links": [
+            {
+              "text": "Arthouse",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+            },
+            {
+              "text": "Teal and Orange",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: add a backlight rim, clean the sky, and raise the contrast until the silhouette holds at small size."
+        }
+      ],
+      "links": [
+        {
+          "text": "Arthouse",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+        },
+        {
+          "text": "Teal and Orange",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Arthouse emptiness or a Teal and Orange grade on a poorly lit face. The tell is no rim, stained accidental skies, and a frame that would not read as a poster.Fix: add a backlight rim, clean the sky, and raise the contrast until the silhouette holds at small size."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Blockbuster Gloss in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A large-scale adventure finish: high contrast, clean or designed weather, a heroic rim, volumetric shafts, and billboard-readable geography. The image is built to sell and to parse far from the screen."
+        },
+        {
+          "type": "heading",
+          "text": "Blockbuster Gloss vs Arthouse",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Gloss fills and shapes: rim, contrast, poster horizon. Arthouse leaves space, odd headroom, and duration. One is afraid of emptiness. The other uses emptiness as the point."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Blockbuster Gloss?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the beat must read as a funded adventure still. Skip it for vérité, for decaying humidity, for empty arthouse holds, or for a teal-orange grade with no rim and no geography."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Blockbuster Gloss for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Blockbuster gloss on [Subject], expensive contrast, clean skies, heroic rim, volumetric haze, IMAX-scale finish. Name the horizon. Do not ask for odd headroom or unstyled mixed color."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Blockbuster Gloss in film?A large-scale adventure finish: high contrast, clean or designed weather, a heroic rim, volumetric shafts, and billboard-readable geography. The image is built to sell and to parse far from the screen.Blockbuster Gloss vs ArthouseGloss fills and shapes: rim, contrast, poster horizon. Arthouse leaves space, odd headroom, and duration. One is afraid of emptiness. The other uses emptiness as the point.When should I use Blockbuster Gloss?When the beat must read as a funded adventure still. Skip it for vérité, for decaying humidity, for empty arthouse holds, or for a teal-orange grade with no rim and no geography.How do I prompt Blockbuster Gloss for AI image or video?Write: Blockbuster gloss on [Subject], expensive contrast, clean skies, heroic rim, volumetric haze, IMAX-scale finish. Name the horizon. Do not ask for odd headroom or unstyled mixed color."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Blockbuster gloss on [Subject], expensive contrast, clean skies, heroic rim, volumetric haze, IMAX-scale finish, adventure poster in motion. Name the rim and the horizon.",
+      "Do not prompt odd headroom or mixed unstyled color."
+    ],
+    "example": "Blockbuster gloss on [Subject], expensive contrast, clean skies, heroic rim, IMAX-scale finish, adventure poster in motion."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/18f85213fad25ca54f2043844a4189fc.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/blockbuster-gloss.webp",
+      "alt": "Blockbuster Gloss example"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/b6a67c031e730613387133e7c955d6c9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/volumetric-light.webp",
+      "alt": "Volumetric Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/d6c06e9383c84893a1abc237bb1ca4e4.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/blockbuster-gloss/hero.jpg",
+      "alt": "Blockbuster Gloss",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "2d47c27a2732d8396983e3dcced6fa70d0936783cd39ad016be8f502f4a44945"
+}

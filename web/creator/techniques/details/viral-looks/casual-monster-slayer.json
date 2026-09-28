@@ -1,0 +1,375 @@
+{
+  "id": "viral-looks/casual-monster-slayer",
+  "slug": "casual-monster-slayer",
+  "title": "Casual Monster Slayer",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/casual-monster-slayer",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/casual-monster-slayer-casual-monster-slayer-mini.webp",
+  "detail": "details/viral-looks/casual-monster-slayer.json",
+  "aliases": [],
+  "description": "Casual monster slayer is deadpan heroism in ordinary clothes: supermarket wardrobe, impossible creature work, the same naturalistic light on both. The joke is register clash, and the camera should look like coverage of a commute, not a poster.",
+  "thumbnail": "media/8a6c415612196b9bf2f3ceeb154fe495.webp",
+  "video": "media/a6f8111767bf3a7c40304790e2160f51.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/casual-monster-slayer-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the tote bag. Make the dragon expensive."
+        },
+        {
+          "type": "paragraph",
+          "text": "A person in a hoodie or an undershirt does creature work as if it were a chore, then wants to get home. Handheld or a simple lock-off."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera goes baroque, the gag dies and you have a grimdark poster with a hoodie. It is the wrong tool when the hero is already designed as a warrior, or when you wanted a win pose."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mighty fighter is that posed cousin. This one still has dirty sneakers."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Keep the tote bag. Make the dragon expensive.A person in a hoodie or an undershirt does creature work as if it were a chore, then wants to get home. Handheld or a simple lock-off.If the camera goes baroque, the gag dies and you have a grimdark poster with a hoodie. It is the wrong tool when the hero is already designed as a warrior, or when you wanted a win pose.Mighty fighter is that posed cousin. This one still has dirty sneakers."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height, 35mm, handheld or lock-off. Describe the mundane outfit in boring detail, then put the creature or weapon in the same key: available street, kitchen practical, overcast."
+        },
+        {
+          "type": "paragraph",
+          "text": "Same grade on both. No rim that turns them into a sprite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Casual monster-slayer of [Subject], everyday clothes, impossible creature work, deadpan heroism, a commute that includes a dragon."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Eye height, 35mm, handheld or lock-off. Describe the mundane outfit in boring detail, then put the creature or weapon in the same key: available street, kitchen practical, overcast.Same grade on both. No rim that turns them into a sprite.Prompt: Casual monster-slayer of [Subject], everyday clothes, impossible creature work, deadpan heroism, a commute that includes a dragon."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Comedy-horror, a trailer still, a hero who wants to finish and go home: Shaun in the street, Jack in the alley. Do not use it for a grimdark champion poster."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Comedy-horror, a trailer still, a hero who wants to finish and go home: Shaun in the street, Jack in the alley. Do not use it for a grimdark champion poster."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mighty Fighter is the win pose, toy-box stance, cabinet art. Action Figure is plastic merchandise.",
+          "links": [
+            {
+              "text": "Mighty Fighter",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+            },
+            {
+              "text": "Action Figure",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/action-figure"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Casual monster slayer keeps grocery-store wardrobe and ordinary light on extraordinary work."
+        },
+        {
+          "type": "list-item",
+          "text": "Mighty FighterThey should look like a sprite that won.",
+          "displayText": "Mighty Fighter\nThey should look like a sprite that won.",
+          "links": [
+            {
+              "text": "Mighty FighterThey should look like a sprite that won.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Action FigureSell them in a box.",
+          "displayText": "Action Figure\nSell them in a box.",
+          "links": [
+            {
+              "text": "Action FigureSell them in a box.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/action-figure"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Mighty Fighter",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+        },
+        {
+          "text": "Action Figure",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/action-figure"
+        },
+        {
+          "text": "Mighty FighterThey should look like a sprite that won.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+        },
+        {
+          "text": "Action FigureSell them in a box.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/action-figure"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/046b608906416624c9d8433b3b4e890d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mighty-fighter-mighty-fighter-mini.webp",
+          "alt": "Mighty Fighter"
+        },
+        {
+          "kind": "video",
+          "path": "media/0d7921ffd701093cbc0e915976e8824f.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mighty-fighter-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/efa643ba0f5c274305422d171b69ae57.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/action-figure.webp",
+          "alt": "Action Figure"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Mighty Fighter is the win pose, toy-box stance, cabinet art. Action Figure is plastic merchandise.Casual monster slayer keeps grocery-store wardrobe and ordinary light on extraordinary work.Mighty FighterThey should look like a sprite that won.Action FigureSell them in a box.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Shaun of the Dead puts cricket-bat labor in daylight streets. Big Trouble in Little China puts a truck driver in impossible creature work."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ordinary light, extraordinary job. Not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Shaun of the Dead puts cricket-bat labor in daylight streets. Big Trouble in Little China puts a truck driver in impossible creature work.Ordinary light, extraordinary job. Not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Specify boring clothes, then the creature, then plain coverage. Casual monster-slayer of [Subject], everyday clothes, impossible creature work, deadpan heroism, a commute that includes a dragon."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add eye-height 35mm, handheld or lock-off, same key on person and monster. No hero rim."
+        },
+        {
+          "type": "quote",
+          "text": "Casual monster-slayer of [Subject], everyday clothes, impossible creature work, deadpan heroism, a commute that includes a dragon."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Casual+monster-slayer+of+[Subject],+everyday+clothes,+impossible+creature+work,+deadpan+heroism,+a+commute+that+includes+a+dragon."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Specify boring clothes, then the creature, then plain coverage. Casual monster-slayer of [Subject], everyday clothes, impossible creature work, deadpan heroism, a commute that includes a dragon.Add eye-height 35mm, handheld or lock-off, same key on person and monster. No hero rim.Copy promptUse in Image GeneratorCasual monster-slayer of [Subject], everyday clothes, impossible creature work, deadpan heroism, a commute that includes a dragon.Casual monster-slayer of [Subject], everyday clothes, impossible creature work, deadpan heroism, a commute that includes a dragon."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A warrior in a hoodie that still looks designed, or a slide into Mighty Fighter. The tell is stylish dirt and a low-angle rim.",
+          "links": [
+            {
+              "text": "Mighty Fighter",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: boring clothes, expensive monster, commute camera."
+        }
+      ],
+      "links": [
+        {
+          "text": "Mighty Fighter",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/mighty-fighter"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A warrior in a hoodie that still looks designed, or a slide into Mighty Fighter. The tell is stylish dirt and a low-angle rim.Fix it: boring clothes, expensive monster, commute camera."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Casual Monster Slayer in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A register-clash recipe: everyday clothes, impossible creature work, deadpan coverage. The camera looks like a commute. The threat does not."
+        },
+        {
+          "type": "heading",
+          "text": "Casual Monster Slayer vs Mighty Fighter",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Mighty fighter is a posed champion, low three-quarter, hard rim. Casual monster slayer is the same joke with a tote bag and ordinary light. If they look like a sprite, you wandered."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Casual Monster Slayer?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Comedy-horror and deadpan heroism. Skip grimdark posters and any beat that needs a select-screen stance."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Casual Monster Slayer for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the boring outfit, the creature, eye-height handheld or lock-off, then: Casual monster-slayer of [Subject], everyday clothes, impossible creature work, deadpan heroism, a commute that includes a dragon."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Casual Monster Slayer in film?A register-clash recipe: everyday clothes, impossible creature work, deadpan coverage. The camera looks like a commute. The threat does not.Casual Monster Slayer vs Mighty FighterMighty fighter is a posed champion, low three-quarter, hard rim. Casual monster slayer is the same joke with a tote bag and ordinary light. If they look like a sprite, you wandered.When should I use Casual Monster Slayer?Comedy-horror and deadpan heroism. Skip grimdark posters and any beat that needs a select-screen stance.How do I prompt Casual Monster Slayer for AI image or video?Name the boring outfit, the creature, eye-height handheld or lock-off, then: Casual monster-slayer of [Subject], everyday clothes, impossible creature work, deadpan heroism, a commute that includes a dragon."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Specify boring clothes, then the creature, then plain coverage. Casual monster-slayer of [Subject], everyday clothes, impossible creature work, deadpan heroism, a commute that includes a dragon.",
+      "Add eye-height 35mm, handheld or lock-off, same key on person and monster. No hero rim."
+    ],
+    "example": "Casual monster-slayer of [Subject], everyday clothes, impossible creature work, deadpan heroism, a commute that includes a dragon."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/a6f8111767bf3a7c40304790e2160f51.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/casual-monster-slayer-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8a6c415612196b9bf2f3ceeb154fe495.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/casual-monster-slayer-casual-monster-slayer-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c6309a777b92fcfaafd2db43030a15af.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/casual-monster-slayer.jpg",
+      "alt": "Casual Monster Slayer frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/046b608906416624c9d8433b3b4e890d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/mighty-fighter-mighty-fighter-mini.webp",
+      "alt": "Mighty Fighter"
+    },
+    {
+      "kind": "video",
+      "path": "media/0d7921ffd701093cbc0e915976e8824f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/mighty-fighter-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/efa643ba0f5c274305422d171b69ae57.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/action-figure.webp",
+      "alt": "Action Figure"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/f259b7812a221b39370493b13799533a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/casual-monster-slayer/hero.jpg",
+      "alt": "Casual Monster Slayer",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "905f61563129da2738ca493cb9c5f6c34bf7dcda0de315af2ff339dbbd4e14ca"
+}

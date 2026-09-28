@@ -1,0 +1,385 @@
+{
+  "id": "viral-looks/superstar",
+  "slug": "superstar",
+  "title": "Superstar",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/superstar",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/superstar-superstar-mini.webp",
+  "detail": "details/viral-looks/superstar.json",
+  "aliases": [],
+  "description": "Superstar, the superstar look, is a face built for covers: beauty key, catchlights, a flash wall or crowd implied, wardrobe that photographs as money. Fame is a fact in the lighting, and the room is already looking.",
+  "thumbnail": "media/31002824b52ca76758c3e755e8b6f0d6.webp",
+  "video": "media/776b8f7833f86445f2ce4541b61aee89.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/superstar-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Arrivals, stages, a character who wins by being seen. Hold the eyeline."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not dirty the frame unless the fame is collapsing. Glamour is in the setup, not added later as a grade."
+        },
+        {
+          "type": "paragraph",
+          "text": "A spy in a basement does not want this. It is the wrong tool when attention is theft rather than consent."
+        },
+        {
+          "type": "paragraph",
+          "text": "That sidewalk glare is 2000s paparazzi. If nobody in the world of the shot would stop walking, you did not shoot a superstar."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Arrivals, stages, a character who wins by being seen. Hold the eyeline.Do not dirty the frame unless the fame is collapsing. Glamour is in the setup, not added later as a grade.A spy in a basement does not want this. It is the wrong tool when attention is theft rather than consent.That sidewalk glare is 2000s paparazzi. If nobody in the world of the shot would stop walking, you did not shoot a superstar."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Eye height, 85mm or 50mm, lock-off. Beauty key with a large source, catchlights, a little diffusion, optional kicker."
+        },
+        {
+          "type": "paragraph",
+          "text": "Flash wall or crowd implied in highlights, not as readable letters. Wardrobe that reads as money."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Superstar treatment of [Subject], paparazzi bloom, flash wall, a face built for covers."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Eye height, 85mm or 50mm, lock-off. Beauty key with a large source, catchlights, a little diffusion, optional kicker.Flash wall or crowd implied in highlights, not as readable letters. Wardrobe that reads as money.Prompt: Superstar treatment of [Subject], paparazzi bloom, flash wall, a face built for covers."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A red-carpet arrival, a stage still, a character the public already paid to see. Do not use it on a hunted sidewalk face, and do not use it in a basement spy scene."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A red-carpet arrival, a stage still, a character the public already paid to see. Do not use it on a hunted sidewalk face, and do not use it in a basement spy scene."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Glam is the lighting language. Superstar adds the social fact of being watched.",
+          "links": [
+            {
+              "text": "Glam",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "2000s Paparazzi is the ugly stolen flash. Magazine is the page layout around the face, masthead space included.",
+          "links": [
+            {
+              "text": "2000s Paparazzi",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi"
+            },
+            {
+              "text": "Magazine",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/magazine"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "GlamSell the face.",
+          "displayText": "Glam\nSell the face.",
+          "links": [
+            {
+              "text": "GlamSell the face.",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "2000s PaparazziFame as a strobe.",
+          "displayText": "2000s Paparazzi\nFame as a strobe.",
+          "links": [
+            {
+              "text": "2000s PaparazziFame as a strobe.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Glam",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "2000s Paparazzi",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi"
+        },
+        {
+          "text": "Magazine",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/magazine"
+        },
+        {
+          "text": "GlamSell the face.",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "2000s PaparazziFame as a strobe.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d0c6118ba609a42d93a75e2dc10200d3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/glam.webp",
+          "alt": "Glam"
+        },
+        {
+          "kind": "image",
+          "path": "media/06642059ad749895e9403b5a4e19a430.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/2000s-paparazzi-2000s-paparazzi-mini.webp",
+          "alt": "2000s Paparazzi"
+        },
+        {
+          "kind": "video",
+          "path": "media/6764560fe3048c902e391df99ef78685.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/2000s-paparazzi-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Glam is the lighting language. Superstar adds the social fact of being watched.2000s Paparazzi is the ugly stolen flash. Magazine is the page layout around the face, masthead space included.GlamSell the face.2000s PaparazziFame as a strobe.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Star Is Born lights fame as public weather around a face. Dreamgirls treats the stage key as destiny."
+        },
+        {
+          "type": "paragraph",
+          "text": "Light like the public already paid. Not a poster to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film A Star Is Born lights fame as public weather around a face. Dreamgirls treats the stage key as destiny.Light like the public already paid. Not a poster to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Beauty key, eyeline, implied public. Superstar treatment of [Subject], paparazzi bloom, flash wall, a face built for covers."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add 85mm, catchlights, clean frame, wardrobe that photographs as money. No compact-digital accident."
+        },
+        {
+          "type": "quote",
+          "text": "Superstar treatment of [Subject], paparazzi bloom, flash wall, a face built for covers."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Superstar+treatment+of+[Subject],+paparazzi+bloom,+flash+wall,+a+face+built+for+covers."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Beauty key, eyeline, implied public. Superstar treatment of [Subject], paparazzi bloom, flash wall, a face built for covers.Add 85mm, catchlights, clean frame, wardrobe that photographs as money. No compact-digital accident.Copy promptUse in Image GeneratorSuperstar treatment of [Subject], paparazzi bloom, flash wall, a face built for covers.Superstar treatment of [Subject], paparazzi bloom, flash wall, a face built for covers."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Soft beauty with no myth, or a slide into 2000s Paparazzi sidewalk glare. The tell is a face nobody would stop for, or a stolen red-eye.",
+          "links": [
+            {
+              "text": "2000s Paparazzi",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: catchlights, flash wall implied, eyeline held, sanctioned light."
+        }
+      ],
+      "links": [
+        {
+          "text": "2000s Paparazzi",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/2000s-paparazzi"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong Soft beauty with no myth, or a slide into 2000s Paparazzi sidewalk glare. The tell is a face nobody would stop for, or a stolen red-eye.Fix it: catchlights, flash wall implied, eyeline held, sanctioned light."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Superstar in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A fame recipe: beauty key, catchlights, implied flash wall, a face the room is already looking at. The camera is usually locked. The light is consent, not theft."
+        },
+        {
+          "type": "heading",
+          "text": "Superstar vs 2000s Paparazzi",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Superstar is sanctioned cover light. 2000s paparazzi is on-camera flash, compact digital, a face not ready. If the shadow on the wall is ugly and accidental, you wanted the cousin."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Superstar?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Arrivals, stages, a character who wins by being seen. Skip spies, basements, and hunted sidewalks."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Superstar for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "85mm, beauty key, catchlights, then: Superstar treatment of [Subject], paparazzi bloom, flash wall, a face built for covers. Hold eyeline. Do not dirty the frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Superstar in film?A fame recipe: beauty key, catchlights, implied flash wall, a face the room is already looking at. The camera is usually locked. The light is consent, not theft.Superstar vs 2000s PaparazziSuperstar is sanctioned cover light. 2000s paparazzi is on-camera flash, compact digital, a face not ready. If the shadow on the wall is ugly and accidental, you wanted the cousin.When should I use Superstar?Arrivals, stages, a character who wins by being seen. Skip spies, basements, and hunted sidewalks.How do I prompt Superstar for AI image or video?85mm, beauty key, catchlights, then: Superstar treatment of [Subject], paparazzi bloom, flash wall, a face built for covers. Hold eyeline. Do not dirty the frame."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Beauty key, eyeline, implied public. Superstar treatment of [Subject], paparazzi bloom, flash wall, a face built for covers.",
+      "Add 85mm, catchlights, clean frame, wardrobe that photographs as money. No compact-digital accident."
+    ],
+    "example": "Superstar treatment of [Subject], paparazzi bloom, flash wall, a face built for covers."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/776b8f7833f86445f2ce4541b61aee89.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/superstar-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/31002824b52ca76758c3e755e8b6f0d6.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/superstar-superstar-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fc93411bbddecfc7feff1291f4322e5e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/superstar.jpg",
+      "alt": "Superstar frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/d0c6118ba609a42d93a75e2dc10200d3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/glam.webp",
+      "alt": "Glam"
+    },
+    {
+      "kind": "image",
+      "path": "media/06642059ad749895e9403b5a4e19a430.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/2000s-paparazzi-2000s-paparazzi-mini.webp",
+      "alt": "2000s Paparazzi"
+    },
+    {
+      "kind": "video",
+      "path": "media/6764560fe3048c902e391df99ef78685.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/2000s-paparazzi-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/ba1ead70fb3831c14cc20c631fb23796.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/superstar/hero.jpg",
+      "alt": "Superstar",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "7ee2709a2732bc5637fc8119d3b8ab82a07f489b690b06b59ca267c2914b8742"
+}

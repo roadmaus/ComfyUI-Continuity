@@ -1,0 +1,415 @@
+{
+  "id": "effects/levitation",
+  "slug": "levitation",
+  "title": "Levitation",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/levitation",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/levitation-145-wire-assisted-flight-and-levitation-mini.webp",
+  "detail": "details/effects/levitation.json",
+  "aliases": [
+    "Wire work",
+    "Wire removal"
+  ],
+  "description": "A levitation shot holds a body or object in a quiet impossible hover, refusing ordinary gravity while support is hidden or removed. Hair and cloth still hang, and the gap under the feet is the proof.",
+  "thumbnail": "media/ea46739793d6dbc92421feac9e26abd5.webp",
+  "video": "media/8a5df7352710bead9c1a7f10f8641f8f.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/145-wire-assisted-flight-and-levitation-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Someone leaves the floor and stays. The room does not drop away."
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera often holds so we can read the air under the shoes. Use it when weight is optional and the performance should still look human: a takeoff, an apex, a landing."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool for a fall. If the body is going down, even slowly, you want a floating fall."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the camera itself is dropping, you want falling."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Someone leaves the floor and stays. The room does not drop away.The camera often holds so we can read the air under the shoes. Use it when weight is optional and the performance should still look human: a takeoff, an apex, a landing.It is the wrong tool for a fall. If the body is going down, even slowly, you want a floating fall.If the camera itself is dropping, you want falling."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Support the performer on wires, a crane, or a hidden platform, then remove the rig in a clean plate. Keep a hard side-key so the gap under the feet is visible."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cloth and hair hang downward because gravity still acts on fabric. Specify launch, trajectory, apex, and landing rather than a vague request to fly."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt levitation of the subject: body or object refusing gravity, a quiet impossible hover, no visible support."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Support the performer on wires, a crane, or a hidden platform, then remove the rig in a clean plate. Keep a hard side-key so the gap under the feet is visible.Cloth and hair hang downward because gravity still acts on fabric. Specify launch, trajectory, apex, and landing rather than a vague request to fly.Prompt levitation of the subject: body or object refusing gravity, a quiet impossible hover, no visible support."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for the beat when a person hangs in a room, on a rooftop, or over a street and the hover is the fact. Do not use it for a drop that must still feel like disaster."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for the beat when a person hangs in a room, on a rooftop, or over a street and the hover is the fact. Do not use it for a drop that must still feel like disaster."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Falling drops the camera or the body with real weight, ground rising. Bullet Time orbits a pose that is frozen in time.",
+          "links": [
+            {
+              "text": "Falling",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/falling"
+            },
+            {
+              "text": "Bullet Time",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Levitation is a sustained hover with a living performance. Floating Fall still goes down.",
+          "links": [
+            {
+              "text": "Floating Fall",
+              "url": "https://melies.co/cinematic-techniques/effects/floating-fall"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "This does not."
+        },
+        {
+          "type": "list-item",
+          "text": "FallingGravity is the plot.",
+          "displayText": "Falling\nGravity is the plot.",
+          "links": [
+            {
+              "text": "FallingGravity is the plot.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/falling"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bullet TimeA moment is so important it becomes architecture.",
+          "displayText": "Bullet Time\nA moment is so important it becomes architecture.",
+          "links": [
+            {
+              "text": "Bullet TimeA moment is so important it becomes architecture.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Falling",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/falling"
+        },
+        {
+          "text": "Bullet Time",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+        },
+        {
+          "text": "Floating Fall",
+          "url": "https://melies.co/cinematic-techniques/effects/floating-fall"
+        },
+        {
+          "text": "FallingGravity is the plot.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/falling"
+        },
+        {
+          "text": "Bullet TimeA moment is so important it becomes architecture.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/bullet-time"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/3002a60ee79525d8dc1a0daa720fd81e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/falling-falling-mini.webp",
+          "alt": "Falling"
+        },
+        {
+          "kind": "video",
+          "path": "media/2e16cf279b0e1e7eb5a07ea20738b4c5.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/falling-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/ebe019bb5b6086b3f4e494a68586760b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bullet-time-080-bullet-time-mini.webp",
+          "alt": "Bullet Time"
+        },
+        {
+          "kind": "video",
+          "path": "media/8fcec48b1bd8a21cecb0d881e78ad77c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/080-bullet-time-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Falling drops the camera or the body with real weight, ground rising. Bullet Time orbits a pose that is frozen in time.Levitation is a sustained hover with a living performance. Floating Fall still goes down.This does not.FallingGravity is the plot.Bullet TimeA moment is so important it becomes architecture.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crouching Tiger, Hidden Dragon keeps human effort inside rooftop and bamboo flight. The Matrix suspends combat so a body can hang and strike."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mary Poppins arrives by an impossible hold in the air. Grammar for hover, not frames to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "Crouching Tiger, Hidden Dragon 2000Rooftop movement and the bamboo-forest duel.",
+          "displayText": "Crouching Tiger, Hidden Dragon 2000\nRooftop movement and the bamboo-forest duel."
+        },
+        {
+          "type": "list-item",
+          "text": "The Matrix 1999Suspended and extended movements during combat.",
+          "displayText": "The Matrix 1999\nSuspended and extended movements during combat."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Crouching Tiger, Hidden Dragon keeps human effort inside rooftop and bamboo flight. The Matrix suspends combat so a body can hang and strike.Mary Poppins arrives by an impossible hold in the air. Grammar for hover, not frames to copy.Crouching Tiger, Hidden Dragon 2000Rooftop movement and the bamboo-forest duel.The Matrix 1999Suspended and extended movements during combat."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Levitation of [Subject], body or object refusing gravity, a quiet impossible hover. Video: [Subject] hangs in air, slow drift, no visible support."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the gap under the feet, the hang of cloth, and takeoff or landing if they exist."
+        },
+        {
+          "type": "quote",
+          "text": "A fictional acrobat crosses between two low rooftops in one graceful extended leap. Clear push-off, smooth rising arc, brief suspension and weighted landing with knees absorbing impact. Loose fabric follows the body with delay. Fixed wide camera, consistent architecture, no teleportation or rubber limbs."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+fictional+acrobat+crosses+between+two+low+rooftops+in+one+graceful+extended+leap.+Clear+push-off,+smooth+rising+arc,+brief+suspension+and+weighted+landing+with+knees+absorbing+impact.+Loose+fabric+follows+the+body+with+delay.+Fixed+wide+camera,+consistent+architecture,+no+teleportation+or+rubber+limbs."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Levitation of [Subject], body or object refusing gravity, a quiet impossible hover. Video: [Subject] hangs in air, slow drift, no visible support.Name the gap under the feet, the hang of cloth, and takeoff or landing if they exist.Copy promptUse in Video GeneratorA fictional acrobat crosses between two low rooftops in one graceful extended leap. Clear push-off, smooth rising arc, brief suspension and weighted landing with knees absorbing impact. Loose fabric follows the body with delay. Fixed wide camera, consistent architecture, no teleportation or rubber limbs.A fictional acrobat crosses between two low rooftops in one graceful extended leap. Clear push-off, smooth rising arc, brief suspension and weighted landing with knees absorbing impact. Loose fabric follows the body with delay. Fixed wide camera, consistent architecture, no teleportation or rubber limbs."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a balloon hover or a fall shot in slow motion. The tell is missing takeoff and landing, rubber limbs, or cloth that floats as if underwater."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is a readable gap, downward hang of fabric, and a human push-off or settle."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a balloon hover or a fall shot in slow motion. The tell is missing takeoff and landing, rubber limbs, or cloth that floats as if underwater.The fix is a readable gap, downward hang of fabric, and a human push-off or settle."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is levitation in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A levitation shot holds a body or object in a hover that ordinary jumping cannot sustain. Support is hidden or removed. Hair and cloth still hang."
+        },
+        {
+          "type": "heading",
+          "text": "Levitation vs floating fall",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Levitation stays up. A floating fall still descends, with delayed gravity on hair and coat. One is a hover. The other is a drop with the clock wrong."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use levitation?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a person or object must hang in air as a quiet fact, with a human takeoff or landing. Skip it when the story is the ground coming up."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt levitation for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Levitation of [Subject], a quiet impossible hover, no visible support. Demand a gap under the feet and cloth hanging down. For video, slow drift, and name takeoff, apex, and landing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is levitation in film?A levitation shot holds a body or object in a hover that ordinary jumping cannot sustain. Support is hidden or removed. Hair and cloth still hang.Levitation vs floating fallLevitation stays up. A floating fall still descends, with delayed gravity on hair and coat. One is a hover. The other is a drop with the clock wrong.When should I use levitation?Use it when a person or object must hang in air as a quiet fact, with a human takeoff or landing. Skip it when the story is the ground coming up.How do I prompt levitation for AI image or video?Write Levitation of [Subject], a quiet impossible hover, no visible support. Demand a gap under the feet and cloth hanging down. For video, slow drift, and name takeoff, apex, and landing."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Levitation of [Subject], body or object refusing gravity, a quiet impossible hover. Video: [Subject] hangs in air, slow drift, no visible support.",
+      "Name the gap under the feet, the hang of cloth, and takeoff or landing if they exist."
+    ],
+    "example": "A fictional acrobat crosses between two low rooftops in one graceful extended leap. Clear push-off, smooth rising arc, brief suspension and weighted landing with knees absorbing impact. Loose fabric follows the body with delay. Fixed wide camera, consistent architecture, no teleportation or rubber limbs."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/8a5df7352710bead9c1a7f10f8641f8f.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/145-wire-assisted-flight-and-levitation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ea46739793d6dbc92421feac9e26abd5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/levitation-145-wire-assisted-flight-and-levitation-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5a897ce9e5b614cc8894b0f9fe3dd0ef.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/levitation.jpg",
+      "alt": "Levitation frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/3002a60ee79525d8dc1a0daa720fd81e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/falling-falling-mini.webp",
+      "alt": "Falling"
+    },
+    {
+      "kind": "video",
+      "path": "media/2e16cf279b0e1e7eb5a07ea20738b4c5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/falling-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/ebe019bb5b6086b3f4e494a68586760b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bullet-time-080-bullet-time-mini.webp",
+      "alt": "Bullet Time"
+    },
+    {
+      "kind": "video",
+      "path": "media/8fcec48b1bd8a21cecb0d881e78ad77c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/080-bullet-time-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4695442d6eba44fb712321d46219b797.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/levitation/hero.jpg",
+      "alt": "Levitation",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "b89edea2680d08566ef86b8c5f899034047e54fca34c86946ca5fa8d2f2ebca3"
+}

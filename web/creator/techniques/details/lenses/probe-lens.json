@@ -1,0 +1,402 @@
+{
+  "id": "lenses/probe-lens",
+  "slug": "probe-lens",
+  "title": "Probe Lens",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/probe-lens",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/probe-lens.webp",
+  "detail": "details/lenses/probe-lens.json",
+  "aliases": [],
+  "description": "A probe lens is a long, narrow macro optic that can pass through small spaces and create extreme close moving shots from inside the subject. The front element is tiny and far from the camera body, so the viewpoint can enter a glass, a wound of machinery, food, or a miniature set.",
+  "thumbnail": "media/c20ff36a1824a2547f8b2a7255d8b85d.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The camera body stays outside. The tube goes where a camera cannot: through ice in a drink, between gears, across a tabletop forest, into a bottle."
+        },
+        {
+          "type": "paragraph",
+          "text": "The view is often wide at the tip, so a drop of liquid becomes a lake and a crumb becomes a boulder, while the move can travel through that world. It is the wrong tool when a standard Macro from outside already sees the surface you need.",
+          "links": [
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool for a face portrait; the look is proximity through a hole, not an 85mm single. If you only wanted a 14mm in a normal room, you wanted 14mm Ultra-Wide, not a probe.",
+          "links": [
+            {
+              "text": "14mm Ultra-Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "14mm Ultra-Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The camera body stays outside. The tube goes where a camera cannot: through ice in a drink, between gears, across a tabletop forest, into a bottle.The view is often wide at the tip, so a drop of liquid becomes a lake and a crumb becomes a boulder, while the move can travel through that world. It is the wrong tool when a standard Macro from outside already sees the surface you need.It is also the wrong tool for a face portrait; the look is proximity through a hole, not an 85mm single. If you only wanted a 14mm in a normal room, you wanted 14mm Ultra-Wide, not a probe."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mount the probe, protect the barrel, and plan a path the tip can physically travel. Light from outside the tiny space or fiber the interior; the front element is close to the subject and will see your flags if you are careless."
+        },
+        {
+          "type": "paragraph",
+          "text": "Depth of field is still small despite the typical slow stop, because you are close. Stabilize the move; inches are miles."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Probe-lens view of [Subject], tiny wide lens on a stick, impossible proximity through glass, food, or machinery, miniature world."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Mount the probe, protect the barrel, and plan a path the tip can physically travel. Light from outside the tiny space or fiber the interior; the front element is close to the subject and will see your flags if you are careless.Depth of field is still small despite the typical slow stop, because you are close. Stabilize the move; inches are miles.Prompt: Probe-lens view of [Subject], tiny wide lens on a stick, impossible proximity through glass, food, or machinery, miniature world."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to go where a camera body cannot: through a drink, into a watch, across a plated meal as if it were terrain. Do not use it as a synonym for macro on a tabletop you could shoot from above."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to go where a camera body cannot: through a drink, into a watch, across a plated meal as if it were terrain. Do not use it as a synonym for macro on a tabletop you could shoot from above."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Macro photographs a small object from outside at high scale. A probe enters the space.",
+          "links": [
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "14mm Ultra-Wide is a wide field from a normal camera body. Magnification is the scale; the probe is a delivery system that also tends to be wide at the tip.",
+          "links": [
+            {
+              "text": "14mm Ultra-Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            },
+            {
+              "text": "Magnification",
+              "url": "https://melies.co/cinematic-techniques/lenses/magnification"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "MacroThe plot is microscopic.",
+          "displayText": "Macro\nThe plot is microscopic.",
+          "links": [
+            {
+              "text": "MacroThe plot is microscopic.",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "24mm WidePerson plus place, neither winning.",
+          "displayText": "24mm Wide\nPerson plus place, neither winning.",
+          "links": [
+            {
+              "text": "24mm WidePerson plus place, neither winning.",
+              "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "14mm Ultra-Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        },
+        {
+          "text": "Magnification",
+          "url": "https://melies.co/cinematic-techniques/lenses/magnification"
+        },
+        {
+          "text": "MacroThe plot is microscopic.",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        },
+        {
+          "text": "24mm WidePerson plus place, neither winning.",
+          "url": "https://melies.co/cinematic-techniques/lenses/24mm-wide"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/79fc44234e86f0ee60b85636698e0f64.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/macro-058-macro-insert-mini.webp",
+          "alt": "Macro"
+        },
+        {
+          "kind": "video",
+          "path": "media/48dce430df7bb8986d91dc405cf98e2c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/058-macro-insert-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        },
+        {
+          "kind": "image",
+          "path": "media/628b32ea127fbd2eb64660fbc452f455.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/24mm-wide-055-close-wide-angle-distortion-mini.webp",
+          "alt": "24mm Wide"
+        },
+        {
+          "kind": "video",
+          "path": "media/7426a29d0521c2e8cebe331ee900e38c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/055-close-wide-angle-distortion-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Macro photographs a small object from outside at high scale. A probe enters the space.14mm Ultra-Wide is a wide field from a normal camera body. Magnification is the scale; the probe is a delivery system that also tends to be wide at the tip.MacroThe plot is microscopic.14mm Ultra-WidePut the audience inside a space that is too big or too close.24mm WidePerson plus place, neither winning."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Commercial food and product work uses probes constantly so a camera can travel through bubbles and garnish. The Hobbit's miniature-language cousins (and similar tabletop/miniature photography) rely on tiny viewpoints inside constructed worlds."
+        },
+        {
+          "type": "paragraph",
+          "text": "Treat those as grammar for impossible proximity, not as a still to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Commercial food and product work uses probes constantly so a camera can travel through bubbles and garnish. The Hobbit's miniature-language cousins (and similar tabletop/miniature photography) rely on tiny viewpoints inside constructed worlds.Treat those as grammar for impossible proximity, not as a still to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the tube and the interior path. Probe-lens view of [Subject], tiny wide lens on a stick, impossible proximity through glass, food, or machinery, miniature world."
+        },
+        {
+          "type": "paragraph",
+          "text": "Describe the path (through the ice, between gears). Do not write 85mm portrait or ordinary overhead macro."
+        },
+        {
+          "type": "quote",
+          "text": "Probe-lens view of [Subject], tiny wide lens on a stick, impossible proximity through glass, food, or machinery, miniature world."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Probe-lens+view+of+[Subject],+tiny+wide+lens+on+a+stick,+impossible+proximity+through+glass,+food,+or+machinery,+miniature+world."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the tube and the interior path. Probe-lens view of [Subject], tiny wide lens on a stick, impossible proximity through glass, food, or machinery, miniature world.Describe the path (through the ice, between gears). Do not write 85mm portrait or ordinary overhead macro.Copy promptUse in Image GeneratorProbe-lens view of [Subject], tiny wide lens on a stick, impossible proximity through glass, food, or machinery, miniature world.Probe-lens view of [Subject], tiny wide lens on a stick, impossible proximity through glass, food, or machinery, miniature world."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Macro from outside, or a 14mm in a full-size room. The tell is a tabletop still with the camera clearly outside, or a normal interior wide.",
+          "links": [
+            {
+              "text": "Macro",
+              "url": "https://melies.co/cinematic-techniques/lenses/macro"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: viewpoint from inside a small space, barrel-path move, wide-at-the-tip scale."
+        }
+      ],
+      "links": [
+        {
+          "text": "Macro",
+          "url": "https://melies.co/cinematic-techniques/lenses/macro"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Macro from outside, or a 14mm in a full-size room. The tell is a tabletop still with the camera clearly outside, or a normal interior wide.Fix: viewpoint from inside a small space, barrel-path move, wide-at-the-tip scale."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is a probe lens in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a long, narrow close-focus optic whose tiny front element can enter small spaces. You get extreme proximity and, often, a wide view from inside an object or miniature set."
+        },
+        {
+          "type": "heading",
+          "text": "Probe Lens vs Macro",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Macro is close-focus from outside: a lens aimed at a small object. A probe is a barrel that can pass through that object or between objects, with the camera body remaining outside the tiny space."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use a probe lens?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the shot must travel through a drink, a machine, food, or a miniature gap a camera body cannot enter. Skip it if a normal macro from outside already sees the surface."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt a probe lens for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Probe-lens view of [Subject], tiny wide lens on a stick, impossible proximity through glass, food, or machinery, miniature world. Name the path through the space. Forbid ordinary portraits and overhead macros."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is a probe lens in film?It is a long, narrow close-focus optic whose tiny front element can enter small spaces. You get extreme proximity and, often, a wide view from inside an object or miniature set.Probe Lens vs MacroMacro is close-focus from outside: a lens aimed at a small object. A probe is a barrel that can pass through that object or between objects, with the camera body remaining outside the tiny space.When should I use a probe lens?Use it when the shot must travel through a drink, a machine, food, or a miniature gap a camera body cannot enter. Skip it if a normal macro from outside already sees the surface.How do I prompt a probe lens for AI image or video?Write: Probe-lens view of [Subject], tiny wide lens on a stick, impossible proximity through glass, food, or machinery, miniature world. Name the path through the space. Forbid ordinary portraits and overhead macros."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the tube and the interior path. Probe-lens view of [Subject], tiny wide lens on a stick, impossible proximity through glass, food, or machinery, miniature world.",
+      "Describe the path (through the ice, between gears). Do not write 85mm portrait or ordinary overhead macro."
+    ],
+    "example": "Probe-lens view of [Subject], tiny wide lens on a stick, impossible proximity through glass, food, or machinery, miniature world."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/c20ff36a1824a2547f8b2a7255d8b85d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/probe-lens.webp",
+      "alt": "Probe Lens example"
+    },
+    {
+      "kind": "image",
+      "path": "media/79fc44234e86f0ee60b85636698e0f64.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/macro-058-macro-insert-mini.webp",
+      "alt": "Macro"
+    },
+    {
+      "kind": "video",
+      "path": "media/48dce430df7bb8986d91dc405cf98e2c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/058-macro-insert-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/628b32ea127fbd2eb64660fbc452f455.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/24mm-wide-055-close-wide-angle-distortion-mini.webp",
+      "alt": "24mm Wide"
+    },
+    {
+      "kind": "video",
+      "path": "media/7426a29d0521c2e8cebe331ee900e38c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/055-close-wide-angle-distortion-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0d925e23511284b3d36651eed58c87b1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/probe-lens/hero.jpg",
+      "alt": "Probe Lens",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "549e590f53b69aa21d48dd62e693f302dc0f86094062076a4a754998258f014f"
+}

@@ -1,0 +1,412 @@
+{
+  "id": "color/desaturation",
+  "slug": "desaturation",
+  "title": "Desaturation",
+  "categoryId": "color",
+  "categoryTitle": "Color and Film Look",
+  "sourceUrl": "https://melies.co/cinematic-techniques/color/desaturation",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/desaturation.webp",
+  "detail": "details/color/desaturation.json",
+  "aliases": [],
+  "description": "Desaturation in desaturated cinematography reduces color intensity while leaving hue present. The world is wintered or dusted; leftover accents still speak, but chroma is no longer loud.",
+  "thumbnail": "media/0f72075d6c8e171f20ccd3752d5558a2.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Drain the world without going fully mono. A grey-green England, a dusty border, a road the color of ash: emotion sits in whatever hue remains, a red taillight or a pale face."
+        },
+        {
+          "type": "paragraph",
+          "text": "The audience feels the withholding. It is the wrong tool when you needed silver density and harsh highlights."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is Bleach Bypass. It is the wrong tool when hue should be gone entirely (Monochrome) or when feeling should be louder than fact (Hyper-Saturation).",
+          "links": [
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            },
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            },
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A teal-orange split can coexist with moderate saturation; do not confuse a complementary grade with a drain."
+        }
+      ],
+      "links": [
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Drain the world without going fully mono. A grey-green England, a dusty border, a road the color of ash: emotion sits in whatever hue remains, a red taillight or a pale face.The audience feels the withholding. It is the wrong tool when you needed silver density and harsh highlights.That is Bleach Bypass. It is the wrong tool when hue should be gone entirely (Monochrome) or when feeling should be louder than fact (Hyper-Saturation).A teal-orange split can coexist with moderate saturation; do not confuse a complementary grade with a drain."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pull global chroma down, then decide which accents survive (a practical, a costume, blood). Keep contrast independent: desaturation is not automatically high contrast."
+        },
+        {
+          "type": "paragraph",
+          "text": "Skin should stay identifiable as skin, just quieter. Prompt: Desaturated palette on [Subject], chroma pulled back, dusty, wintered, emotion in leftover color accents."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Pull global chroma down, then decide which accents survive (a practical, a costume, blood). Keep contrast independent: desaturation is not automatically high contrast.Skin should stay identifiable as skin, just quieter. Prompt: Desaturated palette on [Subject], chroma pulled back, dusty, wintered, emotion in leftover color accents."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to drain the world without going fully mono: a refugee road, a winter city, a moral hangover. Do not use it as bleach-bypass, and do not desaturate until nothing but grey remains unless you meant monochrome."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to drain the world without going fully mono: a refugee road, a winter city, a moral hangover. Do not use it as bleach-bypass, and do not desaturate until nothing but grey remains unless you meant monochrome."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bleach Bypass adds silver contrast and metallic mids on top of a drain. Monochrome is zero chroma.",
+          "links": [
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            },
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cool Blue is a hue family, which may still be saturated. Hyper-Saturation is the opposite lever.",
+          "links": [
+            {
+              "text": "Cool Blue",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            },
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "displayText": "Bleach Bypass\nWar, crime, or a world without mercy.",
+          "links": [
+            {
+              "text": "Bleach BypassWar, crime, or a world without mercy.",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Cool BlueCold institutions, night, or alienation.",
+          "displayText": "Cool Blue\nCold institutions, night, or alienation.",
+          "links": [
+            {
+              "text": "Cool BlueCold institutions, night, or alienation.",
+              "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "displayText": "Teal and Orange\nYou want contemporary studio punch. Use with taste.",
+          "links": [
+            {
+              "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+              "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        },
+        {
+          "text": "Cool Blue",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        },
+        {
+          "text": "Bleach BypassWar, crime, or a world without mercy.",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Cool BlueCold institutions, night, or alienation.",
+          "url": "https://melies.co/cinematic-techniques/color/cool-blue"
+        },
+        {
+          "text": "Teal and OrangeYou want contemporary studio punch. Use with taste.",
+          "url": "https://melies.co/cinematic-techniques/color/teal-orange"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+          "alt": "Bleach Bypass"
+        },
+        {
+          "kind": "video",
+          "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/9ac5d96fc611ee97ab52dc9132feb3fa.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cool-blue.webp",
+          "alt": "Cool Blue"
+        },
+        {
+          "kind": "image",
+          "path": "media/8024e05302f03abdeb0207516678a536.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+          "alt": "Teal and Orange"
+        }
+      ],
+      "sourceText": "Compared with similar shots Bleach Bypass adds silver contrast and metallic mids on top of a drain. Monochrome is zero chroma.Cool Blue is a hue family, which may still be saturated. Hyper-Saturation is the opposite lever.Bleach BypassWar, crime, or a world without mercy.Cool BlueCold institutions, night, or alienation.Teal and OrangeYou want contemporary studio punch. Use with taste."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Children of Men winters a near-future England so leftover color hurts. Sicario dusts the border until chroma is a ration."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Road goes further, almost ash. Grammar of withheld hue, not a copied sky."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Children of Men winters a near-future England so leftover color hurts. Sicario dusts the border until chroma is a ration.The Road goes further, almost ash. Grammar of withheld hue, not a copied sky."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pull chroma, keep accents. Desaturated palette on [Subject], chroma pulled back, dusty, wintered, emotion in leftover color accents."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the one leftover hue if there is one. Do not write bleach-bypass silver, and do not go fully black and white."
+        },
+        {
+          "type": "quote",
+          "text": "Desaturated palette on [Subject], chroma pulled back, dusty, wintered, emotion in leftover color accents."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Desaturated+palette+on+[Subject],+chroma+pulled+back,+dusty,+wintered,+emotion+in+leftover+color+accents."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Pull chroma, keep accents. Desaturated palette on [Subject], chroma pulled back, dusty, wintered, emotion in leftover color accents.Name the one leftover hue if there is one. Do not write bleach-bypass silver, and do not go fully black and white.Copy promptUse in Image GeneratorDesaturated palette on [Subject], chroma pulled back, dusty, wintered, emotion in leftover color accents.Desaturated palette on [Subject], chroma pulled back, dusty, wintered, emotion in leftover color accents."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Bleach Bypass or Monochrome. The tell is metallic packed blacks with harsh grain, or zero hue.",
+          "links": [
+            {
+              "text": "Bleach Bypass",
+              "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+            },
+            {
+              "text": "Monochrome",
+              "url": "https://melies.co/cinematic-techniques/color/monochrome"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: quieter chroma, identifiable leftover color, contrast set independently of the drain."
+        }
+      ],
+      "links": [
+        {
+          "text": "Bleach Bypass",
+          "url": "https://melies.co/cinematic-techniques/color/bleach-bypass"
+        },
+        {
+          "text": "Monochrome",
+          "url": "https://melies.co/cinematic-techniques/color/monochrome"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Bleach Bypass or Monochrome. The tell is metallic packed blacks with harsh grain, or zero hue.Fix: quieter chroma, identifiable leftover color, contrast set independently of the drain."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is desaturation in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a reduction of color intensity with hue still present. The image looks dusty or wintered, and leftover accents carry what emotion remains."
+        },
+        {
+          "type": "heading",
+          "text": "Desaturation vs Bleach Bypass",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Desaturation is a chroma lever. Bleach bypass is silver retention: denser contrast, metallic highlights, crushed color as a system. You can desaturate gently without that density."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use desaturation?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the world should be drained but not drawn in grey ink. Skip it for merciless silver processes and for loud, lacquered color."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt desaturation for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Desaturated palette on [Subject], chroma pulled back, dusty, wintered, emotion in leftover color accents. Forbid full monochrome and bleach-bypass metal."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is desaturation in film?It is a reduction of color intensity with hue still present. The image looks dusty or wintered, and leftover accents carry what emotion remains.Desaturation vs Bleach BypassDesaturation is a chroma lever. Bleach bypass is silver retention: denser contrast, metallic highlights, crushed color as a system. You can desaturate gently without that density.When should I use desaturation?Use it when the world should be drained but not drawn in grey ink. Skip it for merciless silver processes and for loud, lacquered color.How do I prompt desaturation for AI image or video?Write: Desaturated palette on [Subject], chroma pulled back, dusty, wintered, emotion in leftover color accents. Forbid full monochrome and bleach-bypass metal."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Pull chroma, keep accents. Desaturated palette on [Subject], chroma pulled back, dusty, wintered, emotion in leftover color accents.",
+      "Name the one leftover hue if there is one. Do not write bleach-bypass silver, and do not go fully black and white."
+    ],
+    "example": "Desaturated palette on [Subject], chroma pulled back, dusty, wintered, emotion in leftover color accents."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/0f72075d6c8e171f20ccd3752d5558a2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/desaturation.webp",
+      "alt": "Desaturation example"
+    },
+    {
+      "kind": "image",
+      "path": "media/c6cb6a187d1616ea5558f4e68905785b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/bleach-bypass-072-bleach-bypass-style-contrast-mini.webp",
+      "alt": "Bleach Bypass"
+    },
+    {
+      "kind": "video",
+      "path": "media/0fc6f62494b27827878da7adc857f097.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/072-bleach-bypass-style-contrast-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9ac5d96fc611ee97ab52dc9132feb3fa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cool-blue.webp",
+      "alt": "Cool Blue"
+    },
+    {
+      "kind": "image",
+      "path": "media/8024e05302f03abdeb0207516678a536.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/teal-orange.webp",
+      "alt": "Teal and Orange"
+    },
+    {
+      "kind": "image",
+      "path": "media/fe3339ca3a900c54cdc759ec7f706f31.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/desaturation/hero.jpg",
+      "alt": "Desaturation",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "001ef86bcfffaa9c9febb1c18237ccd71a503670fb2d2972a75d9ac1306e0757"
+}

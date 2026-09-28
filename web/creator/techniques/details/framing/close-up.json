@@ -1,0 +1,405 @@
+{
+  "id": "framing/close-up",
+  "slug": "close-up",
+  "title": "Close-Up (CU)",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/close-up",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+  "detail": "details/framing/close-up.json",
+  "aliases": [
+    "CU"
+  ],
+  "description": "A close-up, or close up shot, frames a face tightly enough to privilege detail over surroundings, usually head and upper shoulders. The room becomes secondary; the person still reads as a head, not a fragment.",
+  "thumbnail": "media/95136909e657a1816141551e20893339.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A close-up is a new fact on a face. It is the default for important dialogue because micro-expression, a lie, or a decision can be read without losing the idea of a person."
+        },
+        {
+          "type": "paragraph",
+          "text": "The shoulders keep a little body in the sentence so a swallow or a turned collar still exists. It is the wrong tool when the beat is a hand, a holster, or the door across the room."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool as a beauty setting on every line: if you live here, coverage becomes a slideshow of heads. Change size when the new scale reveals a fact this crop cannot prove."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A close-up is a new fact on a face. It is the default for important dialogue because micro-expression, a lie, or a decision can be read without losing the idea of a person.The shoulders keep a little body in the sentence so a swallow or a turned collar still exists. It is the wrong tool when the beat is a hand, a holster, or the door across the room.It is also the wrong tool as a beauty setting on every line: if you live here, coverage becomes a slideshow of heads. Change size when the new scale reveals a fact this crop cannot prove."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bottom frame at the upper chest or clavicle; top just above the hair, with modest Headroom. A 65mm to 85mm at conversation distance is common; the catalog 75mm Cooke is a portrait working length, not a requirement.",
+          "links": [
+            {
+              "text": "Headroom",
+              "url": "https://melies.co/cinematic-techniques/composition/headroom"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Shallow Focus will drop the room, but the size is the crop, not the bokeh. Match reverse size if this is dialogue.",
+          "links": [
+            {
+              "text": "Shallow Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Tight close-up of [Subject], head and upper shoulders."
+        }
+      ],
+      "links": [
+        {
+          "text": "Headroom",
+          "url": "https://melies.co/cinematic-techniques/composition/headroom"
+        },
+        {
+          "text": "Shallow Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Bottom frame at the upper chest or clavicle; top just above the hair, with modest Headroom. A 65mm to 85mm at conversation distance is common; the catalog 75mm Cooke is a portrait working length, not a requirement.Shallow Focus will drop the room, but the size is the crop, not the bokeh. Match reverse size if this is dialogue.Prompt: Tight close-up of [Subject], head and upper shoulders."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to read micro-expression on an important line: the moment a person decides not to answer. Do not use it as wallpaper on every sentence, and do not use it when the information is below the chest."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to read micro-expression on an important line: the moment a person decides not to answer. Do not use it as wallpaper on every sentence, and do not use it when the information is below the chest."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Choker Shot cuts off the shoulders and sits on hairline and chin. A Medium Close-Up starts at the chest and still shows dialogue-distance body language.",
+          "links": [
+            {
+              "text": "Choker Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/choker"
+            },
+            {
+              "text": "Medium Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Extreme Close-Up is a fragment inside the face. Close-up is the portrait size: head plus upper shoulders, not MCU, not choker, not ECU.",
+          "links": [
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Medium Close-UpTalk without losing body language.",
+          "displayText": "Medium Close-Up\nTalk without losing body language.",
+          "links": [
+            {
+              "text": "Medium Close-UpTalk without losing body language.",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Choker ShotEmotion with nowhere to hide.",
+          "displayText": "Choker Shot\nEmotion with nowhere to hide.",
+          "links": [
+            {
+              "text": "Choker ShotEmotion with nowhere to hide.",
+              "url": "https://melies.co/cinematic-techniques/framing/choker"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Choker Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/choker"
+        },
+        {
+          "text": "Medium Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        },
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Medium Close-UpTalk without losing body language.",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        },
+        {
+          "text": "Choker ShotEmotion with nowhere to hide.",
+          "url": "https://melies.co/cinematic-techniques/framing/choker"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/7df131a7bb3865fbb2b48a5c82d56f2b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-close-up.webp",
+          "alt": "Medium Close-Up"
+        },
+        {
+          "kind": "image",
+          "path": "media/d5bdd8f53c2bc0f78a3e63efcaac2a30.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choker.webp",
+          "alt": "Choker Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Choker Shot cuts off the shoulders and sits on hairline and chin. A Medium Close-Up starts at the chest and still shows dialogue-distance body language.An Extreme Close-Up is a fragment inside the face. Close-up is the portrait size: head plus upper shoulders, not MCU, not choker, not ECU.Medium Close-UpTalk without losing body language.Choker ShotEmotion with nowhere to hide.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Passion of Joan of Arc builds trial pressure from faces that still read as heads, not only fragments. The Silence of the Lambs uses close-ups in the interviews so thought is visible while a little of the body remains."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: the face as the location, with enough shoulder to stay a person."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Passion of Joan of Arc builds trial pressure from faces that still read as heads, not only fragments. The Silence of the Lambs uses close-ups in the interviews so thought is visible while a little of the body remains.Grammar: the face as the location, with enough shoulder to stay a person."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the anatomy. Example: Tight close-up of [Subject], head and upper shoulders, 75mm, shallow depth of field."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not write choker, chest up, or a single eye. Keep a sliver of collar or shoulder so the model does not crop inside the face."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, hold the head; a pull that reveals waist has become a different size."
+        },
+        {
+          "type": "quote",
+          "text": "Tight close-up of [Subject], head and upper shoulders, shallow depth of field, creamy bokeh, 75mm Cooke, the face as landscape."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Tight+close-up+of+[Subject],+head+and+upper+shoulders,+shallow+depth+of+field,+creamy+bokeh,+75mm+Cooke,+the+face+as+landscape."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the anatomy. Example: Tight close-up of [Subject], head and upper shoulders, 75mm, shallow depth of field.Do not write choker, chest up, or a single eye. Keep a sliver of collar or shoulder so the model does not crop inside the face.For video, hold the head; a pull that reveals waist has become a different size.Copy promptUse in Image GeneratorTight close-up of [Subject], head and upper shoulders, shallow depth of field, creamy bokeh, 75mm Cooke, the face as landscape.Tight close-up of [Subject], head and upper shoulders, shallow depth of field, creamy bokeh, 75mm Cooke, the face as landscape."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Medium Close-Up (too much chest and room) or a Choker Shot (no shoulders). The tell is either a talking-head with a lot of torso, or a face with no neck.",
+          "links": [
+            {
+              "text": "Medium Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+            },
+            {
+              "text": "Choker Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/choker"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: head and upper shoulders only. Another tell is calling any tight face a close-up when you meant ECU."
+        }
+      ],
+      "links": [
+        {
+          "text": "Medium Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-close-up"
+        },
+        {
+          "text": "Choker Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/choker"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Medium Close-Up (too much chest and room) or a Choker Shot (no shoulders). The tell is either a talking-head with a lot of torso, or a face with no neck.Fix: head and upper shoulders only. Another tell is calling any tight face a close-up when you meant ECU."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Close-Up in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A close-up is a shot that frames a face or object tightly enough that detail outranks the surroundings, typically head and upper shoulders. It is a size, not a mood, and it still shows a person rather than one isolated feature."
+        },
+        {
+          "type": "heading",
+          "text": "Close-Up vs Medium Close-Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A medium close-up starts at the chest and keeps shoulders and some hand language readable at dialogue distance. A close-up is tighter: head and upper shoulders, with the room mostly gone. If you can still see mid-chest and a slice of set, you are in MCU."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Close-Up?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when an important line or thought must be read on the face. Do not park every line here, and do not use it when the beat is a hand, a door, or a whole-face prison crop."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Close-Up for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Tight close-up of [Subject], head and upper shoulders. Add a 75mm if you want portrait proportion. For video, hold that crop; do not say close-up if you mean chest-up or hairline-to-chin."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Close-Up in film?A close-up is a shot that frames a face or object tightly enough that detail outranks the surroundings, typically head and upper shoulders. It is a size, not a mood, and it still shows a person rather than one isolated feature.Close-Up vs Medium Close-UpA medium close-up starts at the chest and keeps shoulders and some hand language readable at dialogue distance. A close-up is tighter: head and upper shoulders, with the room mostly gone. If you can still see mid-chest and a slice of set, you are in MCU.When should I use Close-Up?Use it when an important line or thought must be read on the face. Do not park every line here, and do not use it when the beat is a hand, a door, or a whole-face prison crop.How do I prompt Close-Up for AI image or video?Write Tight close-up of [Subject], head and upper shoulders. Add a 75mm if you want portrait proportion. For video, hold that crop; do not say close-up if you mean chest-up or hairline-to-chin."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the anatomy. Example: Tight close-up of [Subject], head and upper shoulders, 75mm, shallow depth of field.",
+      "Do not write choker, chest up, or a single eye. Keep a sliver of collar or shoulder so the model does not crop inside the face.",
+      "For video, hold the head; a pull that reveals waist has become a different size."
+    ],
+    "example": "Tight close-up of [Subject], head and upper shoulders, shallow depth of field, creamy bokeh, 75mm Cooke, the face as landscape."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/95136909e657a1816141551e20893339.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+      "alt": "Close-Up example"
+    },
+    {
+      "kind": "image",
+      "path": "media/7df131a7bb3865fbb2b48a5c82d56f2b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-close-up.webp",
+      "alt": "Medium Close-Up"
+    },
+    {
+      "kind": "image",
+      "path": "media/d5bdd8f53c2bc0f78a3e63efcaac2a30.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choker.webp",
+      "alt": "Choker Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/637edeae5f84447150376ea5b7b78277.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/close-up/hero.jpg",
+      "alt": "Close-Up (CU)",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "aa0698b78d24c2dbe06b9b964fcaeaebe674e9e2a6cd4068a928946a8b2ebc9a"
+}

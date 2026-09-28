@@ -1,0 +1,441 @@
+{
+  "id": "camera-movement/aerial",
+  "slug": "aerial",
+  "title": "Aerial",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/aerial",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-012-aerial-pursuit-and-landscape-mini.webp",
+  "detail": "details/camera-movement/aerial.json",
+  "aliases": [
+    "aerial shot",
+    "drone establishing",
+    "drone wide",
+    "helicopter shot",
+    "topographic shot",
+    "Drone-style follow"
+  ],
+  "description": "An aerial shot views a large area from a high flying camera so geography reads as a map, the figure small in land or city. Helicopter, drone, or a virtual path can carry it; altitude and a stable horizon are the facts.",
+  "thumbnail": "media/e631fa60adcf0aaf1b2623848e330035.webp",
+  "video": "media/5ddd869f4f3167cf9cb023e81b2b3b10.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/012-aerial-pursuit-and-landscape-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Open a world. The high moving viewpoint relates a small traveler or vehicle to a broad environment."
+        },
+        {
+          "type": "paragraph",
+          "text": "It can follow, overtake, or abandon the subject so landscape becomes a force, not a painted backdrop. It is the wrong tool for a face."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the beat is an eye-line or a whisper, come down. An aerial that never finds an anchor is weather footage."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Open a world. The high moving viewpoint relates a small traveler or vehicle to a broad environment.It can follow, overtake, or abandon the subject so landscape becomes a force, not a painted backdrop. It is the wrong tool for a face.If the beat is an eye-line or a whisper, come down. An aerial that never finds an anchor is weather footage."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Plan a safe helicopter, drone, or virtual path. Hold horizon stability and let foreground (trees, ridges, towers) pass to prove height."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep a visible subject anchor and avoid implausible jumps in altitude. Do not describe older helicopter footage as drone photography."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Aerial of [Subject] from a high flying camera, geography readable as a map, scale first, the figure small in land or city."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Plan a safe helicopter, drone, or virtual path. Hold horizon stability and let foreground (trees, ridges, towers) pass to prove height.Keep a visible subject anchor and avoid implausible jumps in altitude. Do not describe older helicopter footage as drone photography.Prompt: Aerial of [Subject] from a high flying camera, geography readable as a map, scale first, the figure small in land or city."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to make the place bigger than the person: a car on a mountain road, a rider on a ridge, a city grid. Do not use it as a default establishing shot if a street-level wide already tells the map."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to make the place bigger than the person: a car on a mountain road, a rider on a ridge, a city grid. Do not use it as a default establishing shot if a street-level wide already tells the map."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Aerial Pullback specifically retreats until geography wins. Aerial Push In descends or drives in from the air toward a target.",
+          "links": [
+            {
+              "text": "Aerial Pullback",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            },
+            {
+              "text": "Aerial Push In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-push"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "FPV Drone flies through gaps as a subjective missile; aerial is a map, not a tunnel.",
+          "links": [
+            {
+              "text": "FPV Drone",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "displayText": "Aerial Pullback\nClose a chapter. Geography wins.",
+          "links": [
+            {
+              "text": "Aerial PullbackClose a chapter. Geography wins.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Aerial Push InPick one human out of a system.",
+          "displayText": "Aerial Push In\nPick one human out of a system.",
+          "links": [
+            {
+              "text": "Aerial Push InPick one human out of a system.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-push"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "displayText": "FPV Drone\nImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "links": [
+            {
+              "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Aerial Pullback",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Aerial Push In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-push"
+        },
+        {
+          "text": "FPV Drone",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        },
+        {
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Aerial Push InPick one human out of a system.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-push"
+        },
+        {
+          "text": "FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/fpv-drone"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+          "alt": "Aerial Pullback"
+        },
+        {
+          "kind": "video",
+          "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/26412ba8012f48fc56e40df46b2c3466.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-push-aerial-push-mini.webp",
+          "alt": "Aerial Push In"
+        },
+        {
+          "kind": "video",
+          "path": "media/261517ae40cfd28cfe577de09beff8c1.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/aerial-push-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+          "alt": "FPV Drone"
+        },
+        {
+          "kind": "video",
+          "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Aerial Pullback specifically retreats until geography wins. Aerial Push In descends or drives in from the air toward a target.FPV Drone flies through gaps as a subjective missile; aerial is a map, not a tunnel.Aerial PullbackClose a chapter. Geography wins.Aerial Push InPick one human out of a system.FPV DroneImpossible proximity and speed. Not a cinematic crane; a missile with a lens."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Shining opens with an aerial pursuit of a car through mountain roads. Skyfall uses large-scale landscape and travel."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lawrence of Arabia and Sicario treat desert and border as active ground, not scenery."
+        },
+        {
+          "type": "list-item",
+          "text": "The Shining 1980Opening aerial pursuit of the car through mountain roads.",
+          "displayText": "The Shining 1980\nOpening aerial pursuit of the car through mountain roads."
+        },
+        {
+          "type": "list-item",
+          "text": "Skyfall 2012Large-scale views of landscape and travel.",
+          "displayText": "Skyfall 2012\nLarge-scale views of landscape and travel."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/0ae4756d4572e8f96ec3ad2b0bb7c524.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/aerial/famous/00-the-shining-1980.jpg",
+          "alt": "The Shining 1980"
+        },
+        {
+          "kind": "image",
+          "path": "media/f9d7a9b55cd72bfbde09cdea488762ea.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/aerial/famous/01-skyfall-2012.jpg",
+          "alt": "Skyfall 2012"
+        }
+      ],
+      "sourceText": "In film The Shining opens with an aerial pursuit of a car through mountain roads. Skyfall uses large-scale landscape and travel.Lawrence of Arabia and Sicario treat desert and border as active ground, not scenery.The Shining 1980Opening aerial pursuit of the car through mountain roads.Skyfall 2012Large-scale views of landscape and travel."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name height, the map, and the small anchor. Still: Aerial of [Subject] from a high flying camera, geography readable as a map, scale first, the figure small in land or city."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera flies high over [Subject], revealing the true scale of the location. Keep the horizon stable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a snap zoom."
+        },
+        {
+          "type": "quote",
+          "text": "An aerial camera follows a small blue car along a winding mountain road, gradually gaining altitude as the road disappears into enormous dark forest. Smooth forward motion, stable horizon, realistic road continuity and vehicle speed, no cut."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=An+aerial+camera+follows+a+small+blue+car+along+a+winding+mountain+road,+gradually+gaining+altitude+as+the+road+disappears+into+enormous+dark+forest.+Smooth+forward+motion,+stable+horizon,+realistic+road+continuity+and+vehicle+speed,+no+cut."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name height, the map, and the small anchor. Still: Aerial of [Subject] from a high flying camera, geography readable as a map, scale first, the figure small in land or city.Video: The camera flies high over [Subject], revealing the true scale of the location. Keep the horizon stable.Do not add a snap zoom.Copy promptUse in Video GeneratorAn aerial camera follows a small blue car along a winding mountain road, gradually gaining altitude as the road disappears into enormous dark forest. Smooth forward motion, stable horizon, realistic road continuity and vehicle speed, no cut.An aerial camera follows a small blue car along a winding mountain road, gradually gaining altitude as the road disappears into enormous dark forest. Smooth forward motion, stable horizon, realistic road continuity and vehicle speed, no cut."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is an FPV thread through a window. The tell: the camera is inside architecture, horizon tumbling."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: stay high, keep the subject readable as a speck or vehicle, and let the land remain a map."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is an FPV thread through a window. The tell: the camera is inside architecture, horizon tumbling.The fix: stay high, keep the subject readable as a speck or vehicle, and let the land remain a map."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Aerial in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An aerial shot is a high flying view of a large area, with geography readable as a map and the person or vehicle small inside it."
+        },
+        {
+          "type": "heading",
+          "text": "Aerial vs FPV Drone",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Aerial is a high map of land or city. FPV is a piloted flight through space, often low and threaded, with the lens behaving like a missile rather than a survey."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Aerial?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to open a world or to measure a person against land. Skip it when the scene is a face or a room."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Aerial for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a high flying camera, a stable horizon, and a small subject in a readable landscape. Example: Aerial of [Subject] from a high flying camera, geography readable as a map, scale first."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Aerial in film?An aerial shot is a high flying view of a large area, with geography readable as a map and the person or vehicle small inside it.Aerial vs FPV DroneAerial is a high map of land or city. FPV is a piloted flight through space, often low and threaded, with the lens behaving like a missile rather than a survey.When should I use Aerial?Use it to open a world or to measure a person against land. Skip it when the scene is a face or a room.How do I prompt Aerial for AI image or video?Write a high flying camera, a stable horizon, and a small subject in a readable landscape. Example: Aerial of [Subject] from a high flying camera, geography readable as a map, scale first."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name height, the map, and the small anchor. Still: Aerial of [Subject] from a high flying camera, geography readable as a map, scale first, the figure small in land or city.",
+      "Video: The camera flies high over [Subject], revealing the true scale of the location. Keep the horizon stable.",
+      "Do not add a snap zoom."
+    ],
+    "example": "An aerial camera follows a small blue car along a winding mountain road, gradually gaining altitude as the road disappears into enormous dark forest. Smooth forward motion, stable horizon, realistic road continuity and vehicle speed, no cut."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/5ddd869f4f3167cf9cb023e81b2b3b10.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/012-aerial-pursuit-and-landscape-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/e631fa60adcf0aaf1b2623848e330035.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-012-aerial-pursuit-and-landscape-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1c6c7d0c3120dcb00474012ec353a356.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/aerial.jpg",
+      "alt": "Aerial frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+      "alt": "Aerial Pullback"
+    },
+    {
+      "kind": "video",
+      "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/26412ba8012f48fc56e40df46b2c3466.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-push-aerial-push-mini.webp",
+      "alt": "Aerial Push In"
+    },
+    {
+      "kind": "video",
+      "path": "media/261517ae40cfd28cfe577de09beff8c1.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/aerial-push-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/8e80863584dbbaa6b9bb6b15165e2876.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/fpv-drone-fpv-drone-mini.webp",
+      "alt": "FPV Drone"
+    },
+    {
+      "kind": "video",
+      "path": "media/65f9733c2513f6f26cf4ba1b29ba3251.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/fpv-drone-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0ae4756d4572e8f96ec3ad2b0bb7c524.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/aerial/famous/00-the-shining-1980.jpg",
+      "alt": "The Shining 1980"
+    },
+    {
+      "kind": "image",
+      "path": "media/f9d7a9b55cd72bfbde09cdea488762ea.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/aerial/famous/01-skyfall-2012.jpg",
+      "alt": "Skyfall 2012"
+    },
+    {
+      "kind": "image",
+      "path": "media/54f18a8b5e5892d78d9c19e216412507.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/aerial/hero.jpg",
+      "alt": "Aerial",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "fc2250c56472be3e0113b515663f1e2d578a9a9c04ac7cad97ab1f9a30c720d4"
+}

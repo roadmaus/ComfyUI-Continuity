@@ -1,0 +1,462 @@
+{
+  "id": "framing/extreme-long-shot",
+  "slug": "extreme-long-shot",
+  "title": "Extreme Long Shot (ELS)",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/extreme-long-shot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+  "detail": "details/framing/extreme-long-shot.json",
+  "aliases": [
+    "ELS",
+    "extreme wide",
+    "EWS",
+    "Extreme-wide scale contrast"
+  ],
+  "description": "An extreme long shot makes environment, scale, geography, or isolation dominant over individual detail. A person, if present, is a speck: a scale mark, not a portrait.",
+  "thumbnail": "media/9a232a85588542616407a18b1b36b7f5.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An ELS turns size into the emotion: awe, insignificance, loneliness, ambition. The small anchor lets the audience measure a space that would otherwise be abstract."
+        },
+        {
+          "type": "paragraph",
+          "text": "The land, the station, the spillway, or the void is the subject. It is the wrong tool when you still need a face, a costume, or even a clearly posed full figure."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool without a readable reference: huge architecture with no human, vehicle, or known object can look like a miniature. Use it when scale is the point, then come in when a person must act."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function An ELS turns size into the emotion: awe, insignificance, loneliness, ambition. The small anchor lets the audience measure a space that would otherwise be abstract.The land, the station, the spillway, or the void is the subject. It is the wrong tool when you still need a face, a costume, or even a clearly posed full figure.It is also the wrong tool without a readable reference: huge architecture with no human, vehicle, or known object can look like a miniature. Use it when scale is the point, then come in when a person must act."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the scale reference detectable through contrast, motion, or placement. Deep focus so terrain layers read; without depth cues the space flattens into a model."
+        },
+        {
+          "type": "paragraph",
+          "text": "An Aerial Pullback can arrive here by moving; the size itself can be a lock-off from a ridge or a high vantage. Prompt: Extreme long shot of [Subject] as a speck against vast terrain, landscape as the true subject.",
+          "links": [
+            {
+              "text": "Aerial Pullback",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Aerial Pullback",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Keep the scale reference detectable through contrast, motion, or placement. Deep focus so terrain layers read; without depth cues the space flattens into a model.An Aerial Pullback can arrive here by moving; the size itself can be a lock-off from a ridge or a high vantage. Prompt: Extreme long shot of [Subject] as a speck against vast terrain, landscape as the true subject."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when scale is the emotion: a yellow coat at the base of a spillway, a rider swallowed by desert, a craft against a planet. Do not omit a readable reference object, and do not use it to cover dialogue."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when scale is the emotion: a yellow coat at the base of a spillway, a rider swallowed by desert, a craft against a planet. Do not omit a readable reference object, and do not use it to cover dialogue."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Long Shot still presents a locatable full figure in large geography. A Wide Shot lets place speak inside coverage; bodies are small but not necessarily specks.",
+          "links": [
+            {
+              "text": "Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+            },
+            {
+              "text": "Wide Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An Establishing Shot is a function that often uses this size but can also be a sign or a building. ELS is speck-scale.",
+          "links": [
+            {
+              "text": "Establishing Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Aerial Pullback is a move that can end on this size.",
+          "links": [
+            {
+              "text": "Aerial Pullback",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "displayText": "Aerial Pullback\nClose a chapter. Geography wins.",
+          "links": [
+            {
+              "text": "Aerial PullbackClose a chapter. Geography wins.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Establishing ShotOpen a scene. Tell us where and when.",
+          "displayText": "Establishing Shot\nOpen a scene. Tell us where and when.",
+          "links": [
+            {
+              "text": "Establishing ShotOpen a scene. Tell us where and when.",
+              "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+        },
+        {
+          "text": "Wide Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/wide-shot"
+        },
+        {
+          "text": "Establishing Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+        },
+        {
+          "text": "Aerial Pullback",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Aerial PullbackClose a chapter. Geography wins.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/aerial-pullback"
+        },
+        {
+          "text": "Establishing ShotOpen a scene. Tell us where and when.",
+          "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+          "alt": "Aerial Pullback"
+        },
+        {
+          "kind": "video",
+          "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/36a71bb159fb3a26051fe83669a032ee.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/establishing-shot-096-establishing-and-reestablishing-shots-mini.webp",
+          "alt": "Establishing Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/3749142ffcb30b9332f50b8ac15c9fb6.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/096-establishing-and-reestablishing-shots-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Long Shot still presents a locatable full figure in large geography. A Wide Shot lets place speak inside coverage; bodies are small but not necessarily specks.An Establishing Shot is a function that often uses this size but can also be a sign or a building. ELS is speck-scale.Aerial Pullback is a move that can end on this size.Aerial PullbackClose a chapter. Geography wins.Establishing ShotOpen a scene. Tell us where and when.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lawrence of Arabia lets figures and riders occupy vast desert until they are marks in sand. 2001: A Space Odyssey sets small human or spacecraft elements against immense environments."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nomadland uses wide country the same way: the van and the body as scale, the land as subject. Grammar: measure the world, do not portrait the person."
+        },
+        {
+          "type": "list-item",
+          "text": "Lawrence of Arabia 1962Figures and riders occupy vast expanses of desert.",
+          "displayText": "Lawrence of Arabia 1962\nFigures and riders occupy vast expanses of desert."
+        },
+        {
+          "type": "list-item",
+          "text": "2001: A Space Odyssey 1968Small human or spacecraft elements are set against immense environments.",
+          "displayText": "2001: A Space Odyssey 1968\nSmall human or spacecraft elements are set against immense environments."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/bcca6cd4a77fd3435c891b7d3fbe2d1c.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/extreme-long-shot/famous/00-lawrence-of-arabia-1962.jpg",
+          "alt": "Lawrence of Arabia 1962"
+        },
+        {
+          "kind": "image",
+          "path": "media/611cc1c8d3c41ebca334ed129f0dc1b3.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/extreme-long-shot/famous/01-2001-a-space-odyssey-1968.jpg",
+          "alt": "2001: A Space Odyssey 1968"
+        }
+      ],
+      "sourceText": "In film Lawrence of Arabia lets figures and riders occupy vast desert until they are marks in sand. 2001: A Space Odyssey sets small human or spacecraft elements against immense environments.Nomadland uses wide country the same way: the van and the body as scale, the land as subject. Grammar: measure the world, do not portrait the person.Lawrence of Arabia 1962Figures and riders occupy vast expanses of desert.2001: A Space Odyssey 1968Small human or spacecraft elements are set against immense environments."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Say speck and name the terrain. Example: Extreme long shot of [Subject] as a speck against vast terrain, infinite depth of field, landscape as the true subject."
+        },
+        {
+          "type": "paragraph",
+          "text": "Demand a detectable human-scale reference. For video, a tiny walk or a dust veil helps the figure read; a locked empty canyon with no marker will look like a maquette."
+        },
+        {
+          "type": "quote",
+          "text": "Extreme-wide static shot of a lone surveyor in a yellow coat at the base of an enormous concrete spillway. The figure is tiny but unmistakable; immense walls recede naturally. Slow drifting mist, no camera move, no giant-person scale errors."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Extreme-wide+static+shot+of+a+lone+surveyor+in+a+yellow+coat+at+the+base+of+an+enormous+concrete+spillway.+The+figure+is+tiny+but+unmistakable;+immense+walls+recede+naturally.+Slow+drifting+mist,+no+camera+move,+no+giant-person+scale+errors."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Say speck and name the terrain. Example: Extreme long shot of [Subject] as a speck against vast terrain, infinite depth of field, landscape as the true subject.Demand a detectable human-scale reference. For video, a tiny walk or a dust veil helps the figure read; a locked empty canyon with no marker will look like a maquette.Copy promptUse in Video GeneratorExtreme-wide static shot of a lone surveyor in a yellow coat at the base of an enormous concrete spillway. The figure is tiny but unmistakable; immense walls recede naturally. Slow drifting mist, no camera move, no giant-person scale errors.Extreme-wide static shot of a lone surveyor in a yellow coat at the base of an enormous concrete spillway. The figure is tiny but unmistakable; immense walls recede naturally. Slow drifting mist, no camera move, no giant-person scale errors."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Long Shot (person still a clear figure) or an Establishing Shot that is really a building postcard with no scale. The tell is a readable full-body pose, or a vast space that looks like a tabletop.",
+          "links": [
+            {
+              "text": "Long Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+            },
+            {
+              "text": "Establishing Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: shrink the human to a mark, keep them findable, add depth cues."
+        }
+      ],
+      "links": [
+        {
+          "text": "Long Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/long-shot"
+        },
+        {
+          "text": "Establishing Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/establishing-shot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Long Shot (person still a clear figure) or an Establishing Shot that is really a building postcard with no scale. The tell is a readable full-body pose, or a vast space that looks like a tabletop.Fix: shrink the human to a mark, keep them findable, add depth cues."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Extreme Long Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An extreme long shot makes environment and scale the subject, with any person reduced to a small reference in a much larger landscape or structure. Individual facial detail is gone on purpose."
+        },
+        {
+          "type": "heading",
+          "text": "Extreme Long Shot vs Long Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A long shot still shows a full, locatable figure in large geography. An extreme long shot makes that figure a speck and hands the frame to terrain, architecture, or sky. If you can costume-read the person, you are probably still in long shot."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Extreme Long Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when scale is the emotion and you have a readable human or object as a measuring stick. Do not use it for talk, and do not shoot empty vastness with no reference."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Extreme Long Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Extreme long shot of [Subject] as a speck against vast terrain, landscape as the true subject. Keep the scale reference detectable. Ask for deep focus and environmental depth cues so it does not look like a miniature."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Extreme Long Shot in film?An extreme long shot makes environment and scale the subject, with any person reduced to a small reference in a much larger landscape or structure. Individual facial detail is gone on purpose.Extreme Long Shot vs Long ShotA long shot still shows a full, locatable figure in large geography. An extreme long shot makes that figure a speck and hands the frame to terrain, architecture, or sky. If you can costume-read the person, you are probably still in long shot.When should I use Extreme Long Shot?Use it when scale is the emotion and you have a readable human or object as a measuring stick. Do not use it for talk, and do not shoot empty vastness with no reference.How do I prompt Extreme Long Shot for AI image or video?Write Extreme long shot of [Subject] as a speck against vast terrain, landscape as the true subject. Keep the scale reference detectable. Ask for deep focus and environmental depth cues so it does not look like a miniature."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Say speck and name the terrain. Example: Extreme long shot of [Subject] as a speck against vast terrain, infinite depth of field, landscape as the true subject.",
+      "Demand a detectable human-scale reference. For video, a tiny walk or a dust veil helps the figure read; a locked empty canyon with no marker will look like a maquette."
+    ],
+    "example": "Extreme-wide static shot of a lone surveyor in a yellow coat at the base of an enormous concrete spillway. The figure is tiny but unmistakable; immense walls recede naturally. Slow drifting mist, no camera move, no giant-person scale errors."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/9a232a85588542616407a18b1b36b7f5.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-long-shot.webp",
+      "alt": "Extreme Long Shot example"
+    },
+    {
+      "kind": "image",
+      "path": "media/49156006f81a8cdc3ef5fc22604ce1da.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/aerial-pullback-025-cosmic-scale-pull-back-mini.webp",
+      "alt": "Aerial Pullback"
+    },
+    {
+      "kind": "video",
+      "path": "media/cfc4f84655daeac1f5f972b18dba094b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/025-cosmic-scale-pull-back-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/36a71bb159fb3a26051fe83669a032ee.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/establishing-shot-096-establishing-and-reestablishing-shots-mini.webp",
+      "alt": "Establishing Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/3749142ffcb30b9332f50b8ac15c9fb6.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/096-establishing-and-reestablishing-shots-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/bcca6cd4a77fd3435c891b7d3fbe2d1c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/extreme-long-shot/famous/00-lawrence-of-arabia-1962.jpg",
+      "alt": "Lawrence of Arabia 1962"
+    },
+    {
+      "kind": "image",
+      "path": "media/611cc1c8d3c41ebca334ed129f0dc1b3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/extreme-long-shot/famous/01-2001-a-space-odyssey-1968.jpg",
+      "alt": "2001: A Space Odyssey 1968"
+    },
+    {
+      "kind": "image",
+      "path": "media/c9d039c01bf3a9204ebdcb1cf6ff3e10.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/extreme-long-shot/hero.jpg",
+      "alt": "Extreme Long Shot (ELS)",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "369e8382d555d38edbdee7a796a5b0ac3cb3e64db69063384e2f139ec7757990"
+}

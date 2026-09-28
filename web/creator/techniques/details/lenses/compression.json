@@ -1,0 +1,408 @@
+{
+  "id": "lenses/compression",
+  "slug": "compression",
+  "title": "Telephoto Compression",
+  "categoryId": "lenses",
+  "categoryTitle": "Lenses and Optics",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lenses/compression",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/compression.webp",
+  "detail": "details/lenses/compression.json",
+  "aliases": [
+    "Distant viewpoint",
+    "Compressed perspective"
+  ],
+  "description": "Telephoto compression in lens compression cinematography is the perspective effect of a distant viewpoint: size differences between separated depth planes shrink, so a crowd or a city appears to press against a person. A long lens then frames that distant view tightly; a long lens from a close stand does not create the effect.",
+  "thumbnail": "media/bb9f186ff1e59a3a5117a4ce07884347.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Walk away until a far building and a near figure occupy similar size, then crop with 135mm or 200mm. Escape routes in depth disappear."
+        },
+        {
+          "type": "paragraph",
+          "text": "An approaching rider takes an age. A fallen body and a car can look glued together."
+        },
+        {
+          "type": "paragraph",
+          "text": "The air gets crowded even when the location is huge. It is the wrong tool when space should recede."
+        },
+        {
+          "type": "paragraph",
+          "text": "From close with wide glass, near objects balloon and far walls drop away, the opposite sentence. Do not zoom in from a fixed tripod and call it compression: that is only a crop."
+        },
+        {
+          "type": "paragraph",
+          "text": "Stand first, then glass."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Walk away until a far building and a near figure occupy similar size, then crop with 135mm or 200mm. Escape routes in depth disappear.An approaching rider takes an age. A fallen body and a car can look glued together.The air gets crowded even when the location is huge. It is the wrong tool when space should recede.From close with wide glass, near objects balloon and far walls drop away, the opposite sentence. Do not zoom in from a fixed tripod and call it compression: that is only a crop.Stand first, then glass."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Move farther away until the relative sizes of planes collapse, then choose a long focal length to restore the subject's size in the frame. Keep atmospheric haze, foreground overlaps, and focus consistent with that distance."
+        },
+        {
+          "type": "paragraph",
+          "text": "A 200mm from 50 meters compresses; a 200mm crop of a 35mm file shot from 3 meters does not. Prompt: Telephoto compression stacking [Subject] against a wall of background, distances collapsed, crowded air, no escape in depth."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Move farther away until the relative sizes of planes collapse, then choose a long focal length to restore the subject's size in the frame. Keep atmospheric haze, foreground overlaps, and focus consistent with that distance.A 200mm from 50 meters compresses; a 200mm crop of a 35mm file shot from 3 meters does not. Prompt: Telephoto compression stacking [Subject] against a wall of background, distances collapsed, crowded air, no escape in depth."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the city, army, or terrain should sit right on their back: a walker who cannot outrun the buildings. Do not use it as a synonym for any long lens, and do not claim compression from a close stand."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the city, army, or terrain should sit right on their back: a walker who cannot outrun the buildings. Do not use it as a synonym for any long lens, and do not claim compression from a close stand."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "200mm Long Telephoto and 135mm Telephoto are lengths that often frame this viewpoint. Compression is the standpoint, not the millimeter number.",
+          "links": [
+            {
+              "text": "200mm Long Telephoto",
+              "url": "https://melies.co/cinematic-techniques/lenses/200mm-long"
+            },
+            {
+              "text": "135mm Telephoto",
+              "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "85mm Portrait starts the stack but still feels like a portrait distance. 14mm Ultra-Wide from close is the anti-compression: exaggerated size differences.",
+          "links": [
+            {
+              "text": "85mm Portrait",
+              "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+            },
+            {
+              "text": "14mm Ultra-Wide",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "200mm Long TelephotoFar away and still in their pores.",
+          "displayText": "200mm Long Telephoto\nFar away and still in their pores.",
+          "links": [
+            {
+              "text": "200mm Long TelephotoFar away and still in their pores.",
+              "url": "https://melies.co/cinematic-techniques/lenses/200mm-long"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "135mm TelephotoSurveillance, sports, or stacked city.",
+          "displayText": "135mm Telephoto\nSurveillance, sports, or stacked city.",
+          "links": [
+            {
+              "text": "135mm TelephotoSurveillance, sports, or stacked city.",
+              "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "displayText": "14mm Ultra-Wide\nPut the audience inside a space that is too big or too close.",
+          "links": [
+            {
+              "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+              "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "200mm Long Telephoto",
+          "url": "https://melies.co/cinematic-techniques/lenses/200mm-long"
+        },
+        {
+          "text": "135mm Telephoto",
+          "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+        },
+        {
+          "text": "85mm Portrait",
+          "url": "https://melies.co/cinematic-techniques/lenses/85mm-portrait"
+        },
+        {
+          "text": "14mm Ultra-Wide",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        },
+        {
+          "text": "200mm Long TelephotoFar away and still in their pores.",
+          "url": "https://melies.co/cinematic-techniques/lenses/200mm-long"
+        },
+        {
+          "text": "135mm TelephotoSurveillance, sports, or stacked city.",
+          "url": "https://melies.co/cinematic-techniques/lenses/135mm-telephoto"
+        },
+        {
+          "text": "14mm Ultra-WidePut the audience inside a space that is too big or too close.",
+          "url": "https://melies.co/cinematic-techniques/lenses/ultra-wide-14mm"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/19dabd2802012e5f2a121979db970f34.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/200mm-long.webp",
+          "alt": "200mm Long Telephoto"
+        },
+        {
+          "kind": "image",
+          "path": "media/722dfd2bdae65decf4f175762ccc4f03.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/135mm-telephoto-056-telephoto-compression-mini.webp",
+          "alt": "135mm Telephoto"
+        },
+        {
+          "kind": "video",
+          "path": "media/f149ff24f98f3c3b5f56e817f9a37f22.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/056-telephoto-compression-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+          "alt": "14mm Ultra-Wide"
+        }
+      ],
+      "sourceText": "Compared with similar shots 200mm Long Telephoto and 135mm Telephoto are lengths that often frame this viewpoint. Compression is the standpoint, not the millimeter number.85mm Portrait starts the stack but still feels like a portrait distance. 14mm Ultra-Wide from close is the anti-compression: exaggerated size differences.200mm Long TelephotoFar away and still in their pores.135mm TelephotoSurveillance, sports, or stacked city.14mm Ultra-WidePut the audience inside a space that is too big or too close."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lawrence of Arabia lets Sherif Ali approach through desert shimmer as a study in collapsed distance. Payback glues a fallen figure and a car in depth."
+        },
+        {
+          "type": "paragraph",
+          "text": "Heat and Chungking Express stack cities so people have no air behind them. Grammar of viewpoint, not a copied composition."
+        },
+        {
+          "type": "list-item",
+          "text": "Lawrence of Arabia 1962Sherif Ali’s distant approach through the desert shimmer.",
+          "displayText": "Lawrence of Arabia 1962\nSherif Ali’s distant approach through the desert shimmer."
+        },
+        {
+          "type": "list-item",
+          "text": "Payback 1999A fallen figure and a car appear tightly related in depth.",
+          "displayText": "Payback 1999\nA fallen figure and a car appear tightly related in depth."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/8b3bcf9c158349c61083883f7d2f68a2.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/compression/famous/00-lawrence-of-arabia-1962.jpg",
+          "alt": "Lawrence of Arabia 1962"
+        },
+        {
+          "kind": "image",
+          "path": "media/07273261a3ccb062c40666fae2cf6eab.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/compression/famous/01-payback-1999.jpg",
+          "alt": "Payback 1999"
+        }
+      ],
+      "sourceText": "In film Lawrence of Arabia lets Sherif Ali approach through desert shimmer as a study in collapsed distance. Payback glues a fallen figure and a car in depth.Heat and Chungking Express stack cities so people have no air behind them. Grammar of viewpoint, not a copied composition.Lawrence of Arabia 1962Sherif Ali’s distant approach through the desert shimmer.Payback 1999A fallen figure and a car appear tightly related in depth."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the collapsed distances, not only the lens. Telephoto compression stacking [Subject] against a wall of background, distances collapsed, crowded air, no escape in depth."
+        },
+        {
+          "type": "paragraph",
+          "text": "State a far camera. Do not write 14mm, and do not crop a close-stand wide and call it compression."
+        },
+        {
+          "type": "quote",
+          "text": "From far away with a long lens, frame one cyclist approaching along a straight road. Successive streetlights appear densely stacked behind him and his approach seems slow despite steady pedaling. Heat shimmer, fixed camera, no wide-angle expansion or zoom."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=From+far+away+with+a+long+lens,+frame+one+cyclist+approaching+along+a+straight+road.+Successive+streetlights+appear+densely+stacked+behind+him+and+his+approach+seems+slow+despite+steady+pedaling.+Heat+shimmer,+fixed+camera,+no+wide-angle+expansion+or+zoom."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the collapsed distances, not only the lens. Telephoto compression stacking [Subject] against a wall of background, distances collapsed, crowded air, no escape in depth.State a far camera. Do not write 14mm, and do not crop a close-stand wide and call it compression.Copy promptUse in Video GeneratorFrom far away with a long lens, frame one cyclist approaching along a straight road. Successive streetlights appear densely stacked behind him and his approach seems slow despite steady pedaling. Heat shimmer, fixed camera, no wide-angle expansion or zoom.From far away with a long lens, frame one cyclist approaching along a straight road. Successive streetlights appear densely stacked behind him and his approach seems slow despite steady pedaling. Heat shimmer, fixed camera, no wide-angle expansion or zoom."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a long-lens label on a close-stand shot, or a wide that still shows receding space. The tell is large size differences between near and far, or a cropped 35mm perspective."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: walk away, long glass, planes of similar apparent size, crowded air."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a long-lens label on a close-stand shot, or a wide that still shows receding space. The tell is large size differences between near and far, or a cropped 35mm perspective.Fix: walk away, long glass, planes of similar apparent size, crowded air."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is telephoto compression in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the flattening of size differences between depth planes caused by a distant camera position. A long lens then tightly frames that view. The lens alone, from a fixed stand, does not change perspective."
+        },
+        {
+          "type": "heading",
+          "text": "Telephoto Compression vs 200mm Long Telephoto",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "200mm is a focal length. Compression is what a distant stand does to planes, often framed with 135mm or 200mm. You can shoot 200mm from too close and get no stack. You can compress with other long lengths if you walk far enough."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use telephoto compression?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a crowd, city, or landscape should press against a person, or when an approach should seem never to arrive. Skip it when space must recede."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt telephoto compression for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Telephoto compression stacking [Subject] against a wall of background, distances collapsed, crowded air, no escape in depth. Demand a far camera. Forbid wide close-stand perspective."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is telephoto compression in film?It is the flattening of size differences between depth planes caused by a distant camera position. A long lens then tightly frames that view. The lens alone, from a fixed stand, does not change perspective.Telephoto Compression vs 200mm Long Telephoto200mm is a focal length. Compression is what a distant stand does to planes, often framed with 135mm or 200mm. You can shoot 200mm from too close and get no stack. You can compress with other long lengths if you walk far enough.When should I use telephoto compression?Use it when a crowd, city, or landscape should press against a person, or when an approach should seem never to arrive. Skip it when space must recede.How do I prompt telephoto compression for AI image or video?Write: Telephoto compression stacking [Subject] against a wall of background, distances collapsed, crowded air, no escape in depth. Demand a far camera. Forbid wide close-stand perspective."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the collapsed distances, not only the lens. Telephoto compression stacking [Subject] against a wall of background, distances collapsed, crowded air, no escape in depth.",
+      "State a far camera. Do not write 14mm, and do not crop a close-stand wide and call it compression."
+    ],
+    "example": "From far away with a long lens, frame one cyclist approaching along a straight road. Successive streetlights appear densely stacked behind him and his approach seems slow despite steady pedaling. Heat shimmer, fixed camera, no wide-angle expansion or zoom."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/bb9f186ff1e59a3a5117a4ce07884347.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/compression.webp",
+      "alt": "Telephoto Compression example"
+    },
+    {
+      "kind": "image",
+      "path": "media/19dabd2802012e5f2a121979db970f34.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/200mm-long.webp",
+      "alt": "200mm Long Telephoto"
+    },
+    {
+      "kind": "image",
+      "path": "media/722dfd2bdae65decf4f175762ccc4f03.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/135mm-telephoto-056-telephoto-compression-mini.webp",
+      "alt": "135mm Telephoto"
+    },
+    {
+      "kind": "video",
+      "path": "media/f149ff24f98f3c3b5f56e817f9a37f22.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/056-telephoto-compression-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/119a3d1bc2f860853bdca4414dbac9d9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/ultra-wide-14mm.webp",
+      "alt": "14mm Ultra-Wide"
+    },
+    {
+      "kind": "image",
+      "path": "media/8b3bcf9c158349c61083883f7d2f68a2.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/compression/famous/00-lawrence-of-arabia-1962.jpg",
+      "alt": "Lawrence of Arabia 1962"
+    },
+    {
+      "kind": "image",
+      "path": "media/07273261a3ccb062c40666fae2cf6eab.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/compression/famous/01-payback-1999.jpg",
+      "alt": "Payback 1999"
+    },
+    {
+      "kind": "image",
+      "path": "media/9c1fb43fc7791c4afe9ab9db7bdc9209.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/compression/hero.jpg",
+      "alt": "Telephoto Compression",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    }
+  ],
+  "sourceHtmlSha256": "42f7f00c92d4cba898c08f4420ea5690522f0f8940fba7e198b6597ef647b9cd"
+}

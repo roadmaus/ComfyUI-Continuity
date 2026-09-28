@@ -1,0 +1,432 @@
+{
+  "id": "lighting/high-key",
+  "slug": "high-key",
+  "title": "High-Key Lighting",
+  "categoryId": "lighting",
+  "categoryTitle": "Lighting",
+  "sourceUrl": "https://melies.co/cinematic-techniques/lighting/high-key",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-key-064-high-key-brightness-mini.webp",
+  "detail": "details/lighting/high-key.json",
+  "aliases": [
+    "Low-contrast luminous lighting"
+  ],
+  "description": "High-key lighting, or high key lighting, uses relatively low contrast, bright exposure, and limited deep shadow so the frame stays open and readable. It is a contrast ratio, not a command to overexpose.",
+  "thumbnail": "media/633961526d0799af2b516a1929d04ff7.webp",
+  "video": "media/501404f06979d708f24c98a578ccaf9a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/064-high-key-brightness-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Comedy, heaven, hospital, and candy shops live here because the world looks safe, clean, or artificially perfect. Strong colors can still sit in a high-key frame; the shadows simply do not go to black."
+        },
+        {
+          "type": "paragraph",
+          "text": "A sour performance inside that brightness can also prove the promise is false. It is the wrong tool for crime, night, or any beat that needs a hiding place."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bright is not the same as blown. If every surface is the same white, you lost material and face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Comedy, heaven, hospital, and candy shops live here because the world looks safe, clean, or artificially perfect. Strong colors can still sit in a high-key frame; the shadows simply do not go to black.A sour performance inside that brightness can also prove the promise is false. It is the wrong tool for crime, night, or any beat that needs a hiding place.Bright is not the same as blown. If every surface is the same white, you lost material and face."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use large sources, plenty of fill, and often bounce from walls and ceiling so the ratio sits near 2:1 or lower. Key can still have a side; it is just not a cliff."
+        },
+        {
+          "type": "paragraph",
+          "text": "Protect highlight detail on skin, icing, walls. Color is often daylight-balanced or pastel-friendly, sometimes slightly cool for sterile spaces, sometimes candy-warm."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: High-key lighting on [Subject], bright even illumination, minimal shadows, airy overexposure by a third, optimism or sterile future."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Use large sources, plenty of fill, and often bounce from walls and ceiling so the ratio sits near 2:1 or lower. Key can still have a side; it is just not a cliff.Protect highlight detail on skin, icing, walls. Color is often daylight-balanced or pastel-friendly, sometimes slightly cool for sterile spaces, sometimes candy-warm.Prompt: High-key lighting on [Subject], bright even illumination, minimal shadows, airy overexposure by a third, optimism or sterile future."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it for a comic interior, a showroom, a hospital, or a toy world that should feel open. Do not use it as a synonym for overexposure, and do not use it on a murder scene unless you want irony."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it for a comic interior, a showroom, a hospital, or a toy world that should feel open. Do not use it as a synonym for overexposure, and do not use it on a murder scene unless you want irony."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Low-key lighting is the opposite ratio: selective light and substantial shadow. Soft light is hardness; you can have soft low-key.",
+          "links": [
+            {
+              "text": "Low-key lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            },
+            {
+              "text": "Soft light",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Glam sells a face with a large key but can still sit in a contrasty room. Cameo lighting isolates a figure in black, the reverse of an open high-key world.",
+          "links": [
+            {
+              "text": "Glam",
+              "url": "https://melies.co/cinematic-techniques/lighting/glam"
+            },
+            {
+              "text": "Cameo lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Soft LightBeauty, memory, or kindness.",
+          "displayText": "Soft Light\nBeauty, memory, or kindness.",
+          "links": [
+            {
+              "text": "Soft LightBeauty, memory, or kindness.",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "displayText": "Low-Key Lighting\nMystery, crime, or moral night.",
+          "links": [
+            {
+              "text": "Low-Key LightingMystery, crime, or moral night.",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "displayText": "Three-Point Lighting\nTeachable portrait. Start here, then break it.",
+          "links": [
+            {
+              "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+              "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Low-key lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Soft light",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "Glam",
+          "url": "https://melies.co/cinematic-techniques/lighting/glam"
+        },
+        {
+          "text": "Cameo lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Soft LightBeauty, memory, or kindness.",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "Low-Key LightingMystery, crime, or moral night.",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Three-Point LightingTeachable portrait. Start here, then break it.",
+          "url": "https://melies.co/cinematic-techniques/lighting/three-point-lighting"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+          "alt": "Soft Light"
+        },
+        {
+          "kind": "image",
+          "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+          "alt": "Low-Key Lighting"
+        },
+        {
+          "kind": "image",
+          "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+          "alt": "Three-Point Lighting"
+        }
+      ],
+      "sourceText": "Compared with similar shots Low-key lighting is the opposite ratio: selective light and substantial shadow. Soft light is hardness; you can have soft low-key.Glam sells a face with a large key but can still sit in a contrasty room. Cameo lighting isolates a figure in black, the reverse of an open high-key world.Soft LightBeauty, memory, or kindness.Low-Key LightingMystery, crime, or moral night.Three-Point LightingTeachable portrait. Start here, then break it."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Umbrellas of Cherbourg keeps brightly colored interiors openly lit so romance is artificial and clear. Barbie builds Barbieland as a carefully controlled bright world with preserved highlight detail."
+        },
+        {
+          "type": "paragraph",
+          "text": "2001: A Space Odyssey uses high-key Discovery spaces that stay clean rather than crushed. Marie Antoinette often lives in luminous rooms."
+        },
+        {
+          "type": "list-item",
+          "text": "The Umbrellas of Cherbourg 1964Brightly colored interiors sustain an openly artificial romantic world.",
+          "displayText": "The Umbrellas of Cherbourg 1964\nBrightly colored interiors sustain an openly artificial romantic world."
+        },
+        {
+          "type": "list-item",
+          "text": "Barbie 2023The bright, carefully controlled world of Barbieland.",
+          "displayText": "Barbie 2023\nThe bright, carefully controlled world of Barbieland."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6838786bca393f1d0341e1c81f59b5ee.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/high-key/famous/00-the-umbrellas-of-cherbourg-1964.jpg",
+          "alt": "The Umbrellas of Cherbourg 1964"
+        },
+        {
+          "kind": "image",
+          "path": "media/b282340ca94d966d13111c7f50b2ee22.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/high-key/famous/01-barbie-2023.jpg",
+          "alt": "Barbie 2023"
+        }
+      ],
+      "sourceText": "In film The Umbrellas of Cherbourg keeps brightly colored interiors openly lit so romance is artificial and clear. Barbie builds Barbieland as a carefully controlled bright world with preserved highlight detail.2001: A Space Odyssey uses high-key Discovery spaces that stay clean rather than crushed. Marie Antoinette often lives in luminous rooms.The Umbrellas of Cherbourg 1964Brightly colored interiors sustain an openly artificial romantic world.Barbie 2023The bright, carefully controlled world of Barbieland."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ask for low contrast and protected whites, not a flash. \" Add large sources and say highlights hold texture."
+        },
+        {
+          "type": "paragraph",
+          "text": "Avoid calling it low-key just because the genre is serious.",
+          "links": [
+            {
+              "text": "low-key",
+              "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+            }
+          ]
+        },
+        {
+          "type": "quote",
+          "text": "A meticulously cheerful pastry shop at midday, soft broad light, luminous pastel walls and gentle shadows. The owner stands motionless while everyone else smiles. High-key image with preserved white icing texture, no blown highlights or glossy skin."
+        }
+      ],
+      "links": [
+        {
+          "text": "low-key",
+          "url": "https://melies.co/cinematic-techniques/lighting/low-key"
+        },
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+meticulously+cheerful+pastry+shop+at+midday,+soft+broad+light,+luminous+pastel+walls+and+gentle+shadows.+The+owner+stands+motionless+while+everyone+else+smiles.+High-key+image+with+preserved+white+icing+texture,+no+blown+highlights+or+glossy+skin."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Ask for low contrast and protected whites, not a flash. \" Add large sources and say highlights hold texture.Avoid calling it low-key just because the genre is serious.Copy promptUse in Video GeneratorA meticulously cheerful pastry shop at midday, soft broad light, luminous pastel walls and gentle shadows. The owner stands motionless while everyone else smiles. High-key image with preserved white icing texture, no blown highlights or glossy skin.A meticulously cheerful pastry shop at midday, soft broad light, luminous pastel walls and gentle shadows. The owner stands motionless while everyone else smiles. High-key image with preserved white icing texture, no blown highlights or glossy skin."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is overexposure or soft light in a dark room. The tell is clipped walls, or a bright face in a black void (cameo).",
+          "links": [
+            {
+              "text": "soft light",
+              "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+            },
+            {
+              "text": "cameo",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it by lowering contrast across the whole set and holding highlight detail."
+        }
+      ],
+      "links": [
+        {
+          "text": "soft light",
+          "url": "https://melies.co/cinematic-techniques/lighting/soft-light"
+        },
+        {
+          "text": "cameo",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is overexposure or soft light in a dark room. The tell is clipped walls, or a bright face in a black void (cameo).Fix it by lowering contrast across the whole set and holding highlight detail."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is high-key lighting in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A low-contrast, bright setup with limited deep shadow. The scene can still have color and some modeling; it is not automatically overexposed."
+        },
+        {
+          "type": "heading",
+          "text": "High-key lighting vs low-key lighting",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "High-key keeps the frame open and the ratio low. Low-key uses high contrast and lets most of the frame fall into shadow."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use high-key lighting?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for comedy, sterile spaces, showrooms, or candy-bright worlds. Do not use it when darkness must hide information."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt high-key lighting for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Specify bright even illumination, minimal shadows, large sources, and highlight texture preserved. Say overexposure by no more than a third."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is high-key lighting in film?A low-contrast, bright setup with limited deep shadow. The scene can still have color and some modeling; it is not automatically overexposed.High-key lighting vs low-key lightingHigh-key keeps the frame open and the ratio low. Low-key uses high contrast and lets most of the frame fall into shadow.When should I use high-key lighting?Use it for comedy, sterile spaces, showrooms, or candy-bright worlds. Do not use it when darkness must hide information.How do I prompt high-key lighting for AI image or video?Specify bright even illumination, minimal shadows, large sources, and highlight texture preserved. Say overexposure by no more than a third."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Ask for low contrast and protected whites, not a flash. \" Add large sources and say highlights hold texture.",
+      "Avoid calling it low-key just because the genre is serious."
+    ],
+    "example": "A meticulously cheerful pastry shop at midday, soft broad light, luminous pastel walls and gentle shadows. The owner stands motionless while everyone else smiles. High-key image with preserved white icing texture, no blown highlights or glossy skin."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/501404f06979d708f24c98a578ccaf9a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/064-high-key-brightness-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/633961526d0799af2b516a1929d04ff7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/high-key-064-high-key-brightness-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/a0d02da0059053cad4476aabe9bc1ce3.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/high-key.jpg",
+      "alt": "High-Key Lighting frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/420cd57bbc0f61bdd274e56e19aa493d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/soft-light.webp",
+      "alt": "Soft Light"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c4d382cdc7e176ac0cab9522ecedcc8.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/low-key.webp",
+      "alt": "Low-Key Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/76d7a005196421b57b94ac95645f8f0d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/three-point-lighting.webp",
+      "alt": "Three-Point Lighting"
+    },
+    {
+      "kind": "image",
+      "path": "media/6838786bca393f1d0341e1c81f59b5ee.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/high-key/famous/00-the-umbrellas-of-cherbourg-1964.jpg",
+      "alt": "The Umbrellas of Cherbourg 1964"
+    },
+    {
+      "kind": "image",
+      "path": "media/b282340ca94d966d13111c7f50b2ee22.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/high-key/famous/01-barbie-2023.jpg",
+      "alt": "Barbie 2023"
+    },
+    {
+      "kind": "image",
+      "path": "media/7e6894849a85d7aba304a2a852cee495.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/high-key/hero.jpg",
+      "alt": "High-Key Lighting",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Atmosphere and Weather",
+      "url": "https://melies.co/cinematic-techniques/atmosphere"
+    }
+  ],
+  "sourceHtmlSha256": "ec017b14600f6755c116cf13480d8da70f7fec38f503a837cb57348c4990e169"
+}

@@ -1,0 +1,353 @@
+{
+  "id": "viral-looks/sketch",
+  "slug": "sketch",
+  "title": "Sketch",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/sketch",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/sketch.webp",
+  "detail": "details/viral-looks/sketch.json",
+  "aliases": [],
+  "description": "Sketch, in sketch cinematography, is line on paper before paint: searching contours, hatching in the shadows, reserved paper in the lights, a drawing that still looks. Unfinished is the look, and a clean vector portrait is not.",
+  "thumbnail": "media/5662b5297402b02f9b8e3b7035833fef.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Process, memory, a story being invented: hands and eyes can be tighter than the room. Photographic structure sits underneath so it remains a shot of a person."
+        },
+        {
+          "type": "paragraph",
+          "text": "Canvas is paint. Sketch is the step before."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you need finished oil, luxury-ad polish, or full animation. If there are no searching lines, it is an illustration, not a sketch."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Process, memory, a story being invented: hands and eyes can be tighter than the room. Photographic structure sits underneath so it remains a shot of a person.Canvas is paint. Sketch is the step before.It is the wrong tool when you need finished oil, luxury-ad polish, or full animation. If there are no searching lines, it is an illustration, not a sketch."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Portrait distance, 50mm to 85mm, lock-off. Paper-white as the highlight, graphite or ink line, hatching in shadow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not finish into a clean illustration. Prompt: Sketch treatment of [Subject], line, paper tooth, unfinished hatching, a drawing that still looks."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Portrait distance, 50mm to 85mm, lock-off. Paper-white as the highlight, graphite or ink line, hatching in shadow.Do not finish into a clean illustration. Prompt: Sketch treatment of [Subject], line, paper tooth, unfinished hatching, a drawing that still looks."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A process still, a memory being drawn, a story that is not finished. Do not use it as a clean vector cover."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A process still, a memory being drawn, a story that is not finished. Do not use it as a clean vector cover."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Canvas is oil with bristle and tooth. Animation may be drawn throughout as motion.",
+          "links": [
+            {
+              "text": "Canvas",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+            },
+            {
+              "text": "Animation",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Sketch is unfinished line on paper, photographic structure underneath. Hand Paint is wet color in the act.",
+          "links": [
+            {
+              "text": "Hand Paint",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/hand-paint"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CanvasThe stock is paint.",
+          "displayText": "Canvas\nThe stock is paint.",
+          "links": [
+            {
+              "text": "CanvasThe stock is paint.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AnimationThe world is constructed, not captured.",
+          "displayText": "Animation\nThe world is constructed, not captured.",
+          "links": [
+            {
+              "text": "AnimationThe world is constructed, not captured.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Canvas",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+        },
+        {
+          "text": "Animation",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        },
+        {
+          "text": "Hand Paint",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/hand-paint"
+        },
+        {
+          "text": "CanvasThe stock is paint.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+        },
+        {
+          "text": "AnimationThe world is constructed, not captured.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/1d3244991bc2e19cddb76634840966ac.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/canvas.webp",
+          "alt": "Canvas"
+        },
+        {
+          "kind": "image",
+          "path": "media/f57edf0bd31cd8fedb8a8cc5427f2511.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/animation.webp",
+          "alt": "Animation"
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Canvas is oil with bristle and tooth. Animation may be drawn throughout as motion.Sketch is unfinished line on paper, photographic structure underneath. Hand Paint is wet color in the act.CanvasThe stock is paint.AnimationThe world is constructed, not captured.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Waltz with Bashir uses drawn line as living coverage. Loving Vincent's studies show the step before oil."
+        },
+        {
+          "type": "paragraph",
+          "text": "Unfinished is the point. Grammar, not a page to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Waltz with Bashir uses drawn line as living coverage. Loving Vincent's studies show the step before oil.Unfinished is the point. Grammar, not a page to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stop before the paint. Sketch treatment of [Subject], line, paper tooth, unfinished hatching, a drawing that still looks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add paper white in the lights, hatching in shadow, searching lines, eyes tighter than the room. No clean vector."
+        },
+        {
+          "type": "quote",
+          "text": "Sketch treatment of [Subject], line, paper tooth, unfinished hatching, a drawing that still looks."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Sketch+treatment+of+[Subject],+line,+paper+tooth,+unfinished+hatching,+a+drawing+that+still+looks."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Stop before the paint. Sketch treatment of [Subject], line, paper tooth, unfinished hatching, a drawing that still looks.Add paper white in the lights, hatching in shadow, searching lines, eyes tighter than the room. No clean vector.Copy promptUse in Image GeneratorSketch treatment of [Subject], line, paper tooth, unfinished hatching, a drawing that still looks.Sketch treatment of [Subject], line, paper tooth, unfinished hatching, a drawing that still looks."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A clean vector portrait, or a finished Canvas. The tell is no searching line.",
+          "links": [
+            {
+              "text": "Canvas",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: hatching, reserved paper, unfinished contours, a face that still looks."
+        }
+      ],
+      "links": [
+        {
+          "text": "Canvas",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/canvas"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong A clean vector portrait, or a finished Canvas. The tell is no searching line.Fix it: hatching, reserved paper, unfinished contours, a face that still looks."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Sketch in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A pre-paint recipe: line, paper tooth, unfinished hatching, a drawing that still reads as a person. Unfinished is required."
+        },
+        {
+          "type": "heading",
+          "text": "Sketch vs Canvas",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Canvas is finished oil. Sketch stops at line and hatching. If you see bristle and wet lights, you wanted canvas."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Sketch?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Process, memory, invention. Skip luxury covers and finished gallery stills."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Sketch for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Portrait lock-off, then: Sketch treatment of [Subject], line, paper tooth, unfinished hatching, a drawing that still looks. Demand searching lines and reserved paper."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Sketch in film?A pre-paint recipe: line, paper tooth, unfinished hatching, a drawing that still reads as a person. Unfinished is required.Sketch vs CanvasCanvas is finished oil. Sketch stops at line and hatching. If you see bristle and wet lights, you wanted canvas.When should I use Sketch?Process, memory, invention. Skip luxury covers and finished gallery stills.How do I prompt Sketch for AI image or video?Portrait lock-off, then: Sketch treatment of [Subject], line, paper tooth, unfinished hatching, a drawing that still looks. Demand searching lines and reserved paper."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Stop before the paint. Sketch treatment of [Subject], line, paper tooth, unfinished hatching, a drawing that still looks.",
+      "Add paper white in the lights, hatching in shadow, searching lines, eyes tighter than the room. No clean vector."
+    ],
+    "example": "Sketch treatment of [Subject], line, paper tooth, unfinished hatching, a drawing that still looks."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/5662b5297402b02f9b8e3b7035833fef.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/sketch.webp",
+      "alt": "Sketch example"
+    },
+    {
+      "kind": "image",
+      "path": "media/1d3244991bc2e19cddb76634840966ac.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/canvas.webp",
+      "alt": "Canvas"
+    },
+    {
+      "kind": "image",
+      "path": "media/f57edf0bd31cd8fedb8a8cc5427f2511.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/animation.webp",
+      "alt": "Animation"
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/08eefff51477a74ff8f45b56178185c6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/sketch/hero.jpg",
+      "alt": "Sketch",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "dd4533174659a817c5cbab13649f4b135bce504e57a62f4067922edc82bbc484"
+}

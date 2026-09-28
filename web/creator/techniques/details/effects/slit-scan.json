@@ -1,0 +1,399 @@
+{
+  "id": "effects/slit-scan",
+  "slug": "slit-scan",
+  "title": "Slit-Scan",
+  "categoryId": "effects",
+  "categoryTitle": "In-Camera and Optical Effects",
+  "sourceUrl": "https://melies.co/cinematic-techniques/effects/slit-scan",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slit-scan-146-slit-scan-and-light-tunnel-imagery-mini.webp",
+  "detail": "details/effects/slit-scan.json",
+  "aliases": [
+    "Star Gate effect",
+    "Temporal slit photography"
+  ],
+  "description": "Slit-scan exposes moving artwork or a moving camera through a narrow slit over time, stretching space into streaks and corridors with time laid along one axis. The result is structured geometry, not a random particle tunnel.",
+  "thumbnail": "media/1992e3b6bf9ffe3afc3ad36ed139e5f1.webp",
+  "video": "media/0d4f11276e09c01d513e8baafe5ea179.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/146-slit-scan-and-light-tunnel-imagery-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A slit is the only open part of the gate. Artwork or a light source moves relative to that slit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Each frame or pass accumulates a thin slice. The stack becomes a corridor of color with a vanishing point."
+        },
+        {
+          "type": "paragraph",
+          "text": "Travel is not through a photographed street. It is through exposure."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for passage that is not ordinary space: a stargate, a mind unspooling, a title that is time smeared into architecture. It is the wrong tool if you mean a kaleidoscope of mirrors, a time-lapse of a real street, or a nebula of sparks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Random neon particles do not reproduce slit-scan geometry."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function A slit is the only open part of the gate. Artwork or a light source moves relative to that slit.Each frame or pass accumulates a thin slice. The stack becomes a corridor of color with a vanishing point.Travel is not through a photographed street. It is through exposure.Use it for passage that is not ordinary space: a stargate, a mind unspooling, a title that is time smeared into architecture. It is the wrong tool if you mean a kaleidoscope of mirrors, a time-lapse of a real street, or a nebula of sparks.Random neon particles do not reproduce slit-scan geometry."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Classic optical method: slit mask, illuminated artwork on a track, camera or art in controlled relative motion, long accumulation. Digital: procedural streaks with a stable vanishing point, ordered planes, long-exposure character along one axis."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: slit-scan streaking, time smeared along one axis, a corridor of light, ordered perspective, no random sparks."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Classic optical method: slit mask, illuminated artwork on a track, camera or art in controlled relative motion, long accumulation. Digital: procedural streaks with a stable vanishing point, ordered planes, long-exposure character along one axis.Prompt: slit-scan streaking, time smeared along one axis, a corridor of light, ordered perspective, no random sparks."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A sustained passage through layered luminous planes that converge on a center, like the Star Gate. Do not fill the frame with unstructured particles and call it slit-scan."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A sustained passage through layered luminous planes that converge on a center, like the Star Gate. Do not fill the frame with unstructured particles and call it slit-scan."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Time-Lapse samples a real scene at intervals. The world stays a world.",
+          "links": [
+            {
+              "text": "Time-Lapse",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Slit-scan rebuilds space from a slit. Kaleidoscope repeats a fragment with mirrors.",
+          "links": [
+            {
+              "text": "Kaleidoscope",
+              "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "That is spatial symmetry, not temporal smear. Motion Blur streaks moving objects inside a normal photograph.",
+          "links": [
+            {
+              "text": "Motion Blur",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Slit-scan is the photograph of the slit."
+        },
+        {
+          "type": "list-item",
+          "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+          "displayText": "Time-Lapse\nShow weather, construction, or a night becoming morning.",
+          "links": [
+            {
+              "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+              "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "KaleidoscopeOrnament, drugs, or chorus girls.",
+          "displayText": "Kaleidoscope\nOrnament, drugs, or chorus girls.",
+          "links": [
+            {
+              "text": "KaleidoscopeOrnament, drugs, or chorus girls.",
+              "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Lens FlareLight is too strong to be polite.",
+          "displayText": "Lens Flare\nLight is too strong to be polite.",
+          "links": [
+            {
+              "text": "Lens FlareLight is too strong to be polite.",
+              "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Time-Lapse",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "Kaleidoscope",
+          "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+        },
+        {
+          "text": "Motion Blur",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/motion-blur"
+        },
+        {
+          "text": "Time-LapseShow weather, construction, or a night becoming morning.",
+          "url": "https://melies.co/cinematic-techniques/time-and-motion/time-lapse"
+        },
+        {
+          "text": "KaleidoscopeOrnament, drugs, or chorus girls.",
+          "url": "https://melies.co/cinematic-techniques/effects/kaleidoscope"
+        },
+        {
+          "text": "Lens FlareLight is too strong to be polite.",
+          "url": "https://melies.co/cinematic-techniques/effects/lens-flare"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/59f00cc372fa5e18d3dc936d0959e111.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/time-lapse-084-time-lapse-and-accelerated-systems-mini.webp",
+          "alt": "Time-Lapse"
+        },
+        {
+          "kind": "video",
+          "path": "media/98976fbe19bbaefa951c514246128a5b.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/084-time-lapse-and-accelerated-systems-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/5ede83e45262e78398144de105f26f7b.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/kaleidoscope.webp",
+          "alt": "Kaleidoscope"
+        },
+        {
+          "kind": "image",
+          "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+          "alt": "Lens Flare"
+        },
+        {
+          "kind": "video",
+          "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Time-Lapse samples a real scene at intervals. The world stays a world.Slit-scan rebuilds space from a slit. Kaleidoscope repeats a fragment with mirrors.That is spatial symmetry, not temporal smear. Motion Blur streaks moving objects inside a normal photograph.Slit-scan is the photograph of the slit.Time-LapseShow weather, construction, or a night becoming morning.KaleidoscopeOrnament, drugs, or chorus girls.Lens FlareLight is too strong to be polite."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "2001: A Space Odyssey is the grammar: Douglas Trumbull's Star Gate, slit-scan corridors of light. Later films quote that structured tunnel."
+        },
+        {
+          "type": "paragraph",
+          "text": "They are not a license to generate fireworks."
+        },
+        {
+          "type": "list-item",
+          "text": "2001: A Space Odyssey 1968The Star Gate passage.",
+          "displayText": "2001: A Space Odyssey 1968\nThe Star Gate passage."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film 2001: A Space Odyssey is the grammar: Douglas Trumbull's Star Gate, slit-scan corridors of light. Later films quote that structured tunnel.They are not a license to generate fireworks.2001: A Space Odyssey 1968The Star Gate passage."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ask for ordered temporal geometry. Example: Slit-scan streaking around [Subject], time smeared along one axis, structured corridor of light with a stable vanishing point, Star Gate language, no random neon particles."
+        },
+        {
+          "type": "quote",
+          "text": "A sustained voyage through abstract planes of luminous geometry. Long parallel light streaks converge toward a stable central vanishing point, evolving through layered spatial corridors. Procedural slit-scan character, controlled acceleration, no literal starfield, random sparks or kaleidoscope cuts."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+sustained+voyage+through+abstract+planes+of+luminous+geometry.+Long+parallel+light+streaks+converge+toward+a+stable+central+vanishing+point,+evolving+through+layered+spatial+corridors.+Procedural+slit-scan+character,+controlled+acceleration,+no+literal+starfield,+random+sparks+or+kaleidoscope+cuts."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Ask for ordered temporal geometry. Example: Slit-scan streaking around [Subject], time smeared along one axis, structured corridor of light with a stable vanishing point, Star Gate language, no random neon particles.Copy promptUse in Video GeneratorA sustained voyage through abstract planes of luminous geometry. Long parallel light streaks converge toward a stable central vanishing point, evolving through layered spatial corridors. Procedural slit-scan character, controlled acceleration, no literal starfield, random sparks or kaleidoscope cuts.A sustained voyage through abstract planes of luminous geometry. Long parallel light streaks converge toward a stable central vanishing point, evolving through layered spatial corridors. Procedural slit-scan character, controlled acceleration, no literal starfield, random sparks or kaleidoscope cuts."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wrong cousin: kaleidoscope, starfield, or generic long-exposure sparks. Tell: chaotic particles, no slit axis, no vanishing point, or a mirrored flower."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: one smear axis, repeating planes, controlled convergence."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong Wrong cousin: kaleidoscope, starfield, or generic long-exposure sparks. Tell: chaotic particles, no slit axis, no vanishing point, or a mirrored flower.Fix: one smear axis, repeating planes, controlled convergence."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is slit-scan in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An optical process that exposes through a narrow slit while art or camera moves, accumulating streaks and corridors. Time becomes a spatial axis."
+        },
+        {
+          "type": "heading",
+          "text": "Slit-scan vs kaleidoscope",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Kaleidoscope mirrors a fragment into radial symmetry. Slit-scan smears time through a slit into streaks. One is reflection. The other is temporal accumulation."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use slit-scan?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When travel should not look like a photographed location. Do not use it as a stand-in for sparks, nebulas, or mirrored patterns."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt slit-scan for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Request a structured light corridor, smear along one axis, a stable vanishing point, and no random particles or kaleidoscope cuts."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is slit-scan in film?An optical process that exposes through a narrow slit while art or camera moves, accumulating streaks and corridors. Time becomes a spatial axis.Slit-scan vs kaleidoscopeKaleidoscope mirrors a fragment into radial symmetry. Slit-scan smears time through a slit into streaks. One is reflection. The other is temporal accumulation.When should I use slit-scan?When travel should not look like a photographed location. Do not use it as a stand-in for sparks, nebulas, or mirrored patterns.How do I prompt slit-scan for AI image or video?Request a structured light corridor, smear along one axis, a stable vanishing point, and no random particles or kaleidoscope cuts."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Ask for ordered temporal geometry. Example: Slit-scan streaking around [Subject], time smeared along one axis, structured corridor of light with a stable vanishing point, Star Gate language, no random neon particles."
+    ],
+    "example": "A sustained voyage through abstract planes of luminous geometry. Long parallel light streaks converge toward a stable central vanishing point, evolving through layered spatial corridors. Procedural slit-scan character, controlled acceleration, no literal starfield, random sparks or kaleidoscope cuts."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/0d4f11276e09c01d513e8baafe5ea179.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/146-slit-scan-and-light-tunnel-imagery-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1992e3b6bf9ffe3afc3ad36ed139e5f1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slit-scan-146-slit-scan-and-light-tunnel-imagery-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0c11bad777837a2060e371d54bad7bbc.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/slit-scan.jpg",
+      "alt": "Slit-Scan frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/59f00cc372fa5e18d3dc936d0959e111.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/time-lapse-084-time-lapse-and-accelerated-systems-mini.webp",
+      "alt": "Time-Lapse"
+    },
+    {
+      "kind": "video",
+      "path": "media/98976fbe19bbaefa951c514246128a5b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/084-time-lapse-and-accelerated-systems-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5ede83e45262e78398144de105f26f7b.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/kaleidoscope.webp",
+      "alt": "Kaleidoscope"
+    },
+    {
+      "kind": "image",
+      "path": "media/fad2b19174e5156294d8bb4ba1bc2438.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/lens-flare-060-expressive-lens-flare-mini.webp",
+      "alt": "Lens Flare"
+    },
+    {
+      "kind": "video",
+      "path": "media/e4972be0c4ac4c3ddf851d9871fbe6ce.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/060-expressive-lens-flare-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/342658a1c52b43bfc9fccd2b16020278.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slit-scan/hero.jpg",
+      "alt": "Slit-Scan",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    }
+  ],
+  "sourceHtmlSha256": "bb454264e5c5326664c2445546075fb62d8cd0d3872306f997da0b0f1023c122"
+}

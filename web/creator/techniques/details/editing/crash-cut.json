@@ -1,0 +1,473 @@
+{
+  "id": "editing/crash-cut",
+  "slug": "crash-cut",
+  "title": "Crash Cut",
+  "categoryId": "editing",
+  "categoryTitle": "Editing and Transitions",
+  "sourceUrl": "https://melies.co/cinematic-techniques/editing/crash-cut",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-cut-02-crash-cut-mini.webp",
+  "detail": "details/editing/crash-cut.json",
+  "aliases": [
+    "Start inside the event",
+    "Flash-forward opening"
+  ],
+  "description": "A crash cut slams two images together with no blend, so the join itself stings. One side of the splice and the other collide; unlike a smash that breaks an earned quiet, a crash cut often starts inside the event or hits like a drum from the first frame.",
+  "thumbnail": "media/48db69b77d2fa3ebe58e56551a9e40ee.webp",
+  "video": "media/3c68828a0b24b8eb8e6cd3614839346b.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-crash-cut-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A trunk, a man, a knife already in play, then the story will explain how we got here. Or a cymbal, a face, a rehearsal that never had a polite establishing wide."
+        },
+        {
+          "type": "paragraph",
+          "text": "The next image must hurt, and it must hurt immediately. Use it as percussion, as in medias res, as a refusal of the soft open."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you have just built a hush that should be betrayed: that betrayal is a Smash Cut. It is the wrong tool when you only skip time in one seat: that is a Jump Cut.",
+          "links": [
+            {
+              "text": "Smash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            },
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A few frames of interrupt are a Flash Cut, not a committed new scene. Do not open on a sensation the rest of the story cannot causally earn.",
+          "links": [
+            {
+              "text": "Flash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/flash-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Smash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Flash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/flash-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function A trunk, a man, a knife already in play, then the story will explain how we got here. Or a cymbal, a face, a rehearsal that never had a polite establishing wide.The next image must hurt, and it must hurt immediately. Use it as percussion, as in medias res, as a refusal of the soft open.It is the wrong tool when you have just built a hush that should be betrayed: that betrayal is a Smash Cut. It is the wrong tool when you only skip time in one seat: that is a Jump Cut.A few frames of interrupt are a Flash Cut, not a committed new scene. Do not open on a sensation the rest of the story cannot causally earn."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cut A to B with maximum difference in scale, brightness, or violence of content, and with no mix. Often B is already mid-action (a trunk, a gun, a kit)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mark any later temporal reset clearly (a title, a younger haircut) so the crash is a structure, not an accident. Prompt: crash cut on [Subject], two images colliding with no polite blend, a hard join that should sting."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Cut A to B with maximum difference in scale, brightness, or violence of content, and with no mix. Often B is already mid-action (a trunk, a gun, a kit).Mark any later temporal reset clearly (a title, a younger haircut) so the crash is a structure, not an accident. Prompt: crash cut on [Subject], two images colliding with no polite blend, a hard join that should sting."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to open on the consequence, to hit a downbeat, to refuse an establishing courtesy. Do not use it between two similar wides."
+        },
+        {
+          "type": "paragraph",
+          "text": "If A was a long prayer, consider smash. If B lasts three frames, consider flash."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to open on the consequence, to hit a downbeat, to refuse an establishing courtesy. Do not use it between two similar wides.If A was a long prayer, consider smash. If B lasts three frames, consider flash."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Smash Cut breaks an earned state (quiet, closure, prayer). A crash cut is the collision as a blow, often before a state was offered.",
+          "links": [
+            {
+              "text": "Smash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Jump Cut stays similar. A Flash Cut is too short to become the new scene.",
+          "links": [
+            {
+              "text": "Jump Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            },
+            {
+              "text": "Flash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/flash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Quick Cuts are a run of short shots; a crash is one brutal splice.",
+          "links": [
+            {
+              "text": "Quick Cuts",
+              "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Smash CutThe next image should hurt.",
+          "displayText": "Smash Cut\nThe next image should hurt.",
+          "links": [
+            {
+              "text": "Smash CutThe next image should hurt.",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Jump CutDo not soothe. Show the skip.",
+          "displayText": "Jump Cut\nDo not soothe. Show the skip.",
+          "links": [
+            {
+              "text": "Jump CutDo not soothe. Show the skip.",
+              "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Match CutTwo images are the same idea.",
+          "displayText": "Match Cut\nTwo images are the same idea.",
+          "links": [
+            {
+              "text": "Match CutTwo images are the same idea.",
+              "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Smash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Jump Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Flash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/flash-cut"
+        },
+        {
+          "text": "Quick Cuts",
+          "url": "https://melies.co/cinematic-techniques/editing/quick-cuts"
+        },
+        {
+          "text": "Smash CutThe next image should hurt.",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Jump CutDo not soothe. Show the skip.",
+          "url": "https://melies.co/cinematic-techniques/editing/jump-cut"
+        },
+        {
+          "text": "Match CutTwo images are the same idea.",
+          "url": "https://melies.co/cinematic-techniques/editing/match-cut"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/bd7d68009bacf7d9970db0873ae94f1c.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smash-cut-165-smash-cut-mini.webp",
+          "alt": "Smash Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/bb74b65d11d6f62c19ec9876a5b85953.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/165-smash-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/30e16a300df23158df8edae534b8363d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+          "alt": "Jump Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+          "alt": "Match Cut"
+        },
+        {
+          "kind": "video",
+          "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Smash Cut breaks an earned state (quiet, closure, prayer). A crash cut is the collision as a blow, often before a state was offered.A Jump Cut stays similar. A Flash Cut is too short to become the new scene.Quick Cuts are a run of short shots; a crash is one brutal splice.Smash CutThe next image should hurt.Jump CutDo not soothe. Show the skip.Match CutTwo images are the same idea."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Goodfellas opens in the trunk, then later supplies the life that led there. Fight Club starts inside a crisis and then rewinds the path."
+        },
+        {
+          "type": "paragraph",
+          "text": "Whiplash and Requiem for a Dream use hard joins as rhythmic blows. Use the sting and the delayed explanation, not a copied trunk."
+        },
+        {
+          "type": "list-item",
+          "text": "Goodfellas 1990The trunk scene precedes the account of Henry’s earlier life.",
+          "displayText": "Goodfellas 1990\nThe trunk scene precedes the account of Henry’s earlier life."
+        },
+        {
+          "type": "list-item",
+          "text": "Fight Club 1999The opening crisis is followed by the path that led there.",
+          "displayText": "Fight Club 1999\nThe opening crisis is followed by the path that led there."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Goodfellas opens in the trunk, then later supplies the life that led there. Fight Club starts inside a crisis and then rewinds the path.Whiplash and Requiem for a Dream use hard joins as rhythmic blows. Use the sting and the delayed explanation, not a copied trunk.Goodfellas 1990The trunk scene precedes the account of Henry’s earlier life.Fight Club 1999The opening crisis is followed by the path that led there."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crash cut on [Subject], two images colliding with no polite blend, a hard join that should sting. Name A and B, the scale or sound collision, and that B may already be mid-event."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, no dissolve, no fade, no matched contour unless the match is itself the crash."
+        },
+        {
+          "type": "quote",
+          "text": "Design three sequences: begin with a violinist standing alone on a flooded stage holding an unopened letter; cut to a calm morning before the concert; later return to the stage with the meaning of the letter now clear. Generate each sequence separately and edit the order deliberately. No unrelated mystery props."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Design+three+sequences:+begin+with+a+violinist+standing+alone+on+a+flooded+stage+holding+an+unopened+letter;+cut+to+a+calm+morning+before+the+concert;+later+return+to+the+stage+with+the+meaning+of+the+letter+now+clear.+Generate+each+sequence+separately+and+edit+the+order+deliberately.+No+unrelated+mystery+props."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Crash cut on [Subject], two images colliding with no polite blend, a hard join that should sting. Name A and B, the scale or sound collision, and that B may already be mid-event.For video, no dissolve, no fade, no matched contour unless the match is itself the crash.Copy promptUse in Video GeneratorDesign three sequences: begin with a violinist standing alone on a flooded stage holding an unopened letter; cut to a calm morning before the concert; later return to the stage with the meaning of the letter now clear. Generate each sequence separately and edit the order deliberately. No unrelated mystery props.Design three sequences: begin with a violinist standing alone on a flooded stage holding an unopened letter; cut to a calm morning before the concert; later return to the stage with the meaning of the letter now clear. Generate each sequence separately and edit the order deliberately. No unrelated mystery props."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Smash Cut (after a hush) or Flash Cut (a few frames). The tell: a long quiet setup before the hit (that is smash), or B vanishing before it can be a scene (that is flash).",
+          "links": [
+            {
+              "text": "Smash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+            },
+            {
+              "text": "Flash Cut",
+              "url": "https://melies.co/cinematic-techniques/editing/flash-cut"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: collide two committed images, start inside the event if that is the structure, cut hard."
+        }
+      ],
+      "links": [
+        {
+          "text": "Smash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/smash-cut"
+        },
+        {
+          "text": "Flash Cut",
+          "url": "https://melies.co/cinematic-techniques/editing/flash-cut"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Smash Cut (after a hush) or Flash Cut (a few frames). The tell: a long quiet setup before the hit (that is smash), or B vanishing before it can be a scene (that is flash).The fix: collide two committed images, start inside the event if that is the structure, cut hard."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Crash Cut in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A crash cut is a hard join where two images collide with no blend. Both sides are committed shots; the splice stings, often by starting inside an event or hitting like a drum."
+        },
+        {
+          "type": "heading",
+          "text": "Crash Cut vs Smash Cut",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A smash cut betrays an earned quiet or closure. A crash cut is the collision itself, frequently from the first frame of a scene or as in medias res. Smash breaks a state; crash refuses to offer one."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Crash Cut?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the next image must hurt immediately, or when the story should start inside the consequence. Do not use it as a skip inside one similar frame."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Crash Cut for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name two colliding images and forbid a blend. Example: Crash cut on [Subject], two images colliding with no polite blend, a hard join that should sting. Let B be mid-action if the structure needs it."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Crash Cut in film?A crash cut is a hard join where two images collide with no blend. Both sides are committed shots; the splice stings, often by starting inside an event or hitting like a drum.Crash Cut vs Smash CutA smash cut betrays an earned quiet or closure. A crash cut is the collision itself, frequently from the first frame of a scene or as in medias res. Smash breaks a state; crash refuses to offer one.When should I use Crash Cut?Use it when the next image must hurt immediately, or when the story should start inside the consequence. Do not use it as a skip inside one similar frame.How do I prompt Crash Cut for AI image or video?Name two colliding images and forbid a blend. Example: Crash cut on [Subject], two images colliding with no polite blend, a hard join that should sting. Let B be mid-action if the structure needs it."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Crash cut on [Subject], two images colliding with no polite blend, a hard join that should sting. Name A and B, the scale or sound collision, and that B may already be mid-event.",
+      "For video, no dissolve, no fade, no matched contour unless the match is itself the crash."
+    ],
+    "example": "Design three sequences: begin with a violinist standing alone on a flooded stage holding an unopened letter; cut to a calm morning before the concert; later return to the stage with the meaning of the letter now clear. Generate each sequence separately and edit the order deliberately. No unrelated mystery props."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/3c68828a0b24b8eb8e6cd3614839346b.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/02-crash-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/48db69b77d2fa3ebe58e56551a9e40ee.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-cut-02-crash-cut-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/3e399091d476e66a4e84af51f5e0269f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/crash-cut.jpg",
+      "alt": "Crash Cut frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/bd7d68009bacf7d9970db0873ae94f1c.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/smash-cut-165-smash-cut-mini.webp",
+      "alt": "Smash Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/bb74b65d11d6f62c19ec9876a5b85953.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/165-smash-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/30e16a300df23158df8edae534b8363d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jump-cut-119-jump-cut-mini.webp",
+      "alt": "Jump Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/c671e20d8b1846cc9414c7efa3638b04.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/119-jump-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7803fad3545444a67c9c9554063420ab.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/match-cut-01-match-cut-mini.webp",
+      "alt": "Match Cut"
+    },
+    {
+      "kind": "video",
+      "path": "media/6778085101ac2284326a20c3f8e0ec02.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-match-cut-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b58bb0df76ad0c030fc7b504e1768d9d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/crash-cut/hero.jpg",
+      "alt": "Crash Cut",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Editing and Transitions",
+      "url": "https://melies.co/cinematic-techniques/editing"
+    },
+    {
+      "text": "Time and Motion",
+      "url": "https://melies.co/cinematic-techniques/time-and-motion"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "eb6f78bf3a4adf8ca1046f31c0a1b3a94ff6a8549bf3f3cb6089624b6c605ac8"
+}

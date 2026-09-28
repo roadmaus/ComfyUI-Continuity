@@ -1,0 +1,503 @@
+{
+  "id": "composition/voyeur",
+  "slug": "voyeur",
+  "title": "Voyeur",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/voyeur",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/voyeur-voyeur-mini.webp",
+  "detail": "details/composition/voyeur.json",
+  "aliases": [
+    "Unseen sound source",
+    "Sound beyond the frame"
+  ],
+  "description": "Voyeur cinematography places the camera in concealment so the audience is trespassing: a view through foliage, glass, a grate, or a distant window, often with dirty edges. The diagram is a peephole, not coverage, and the owner of that hide does not want us there.",
+  "thumbnail": "media/19d01896620575ea956b75bed6360ce0.webp",
+  "video": "media/96563cc4f41439a0cd07f6c0af5d80cd.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/voyeur-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The audience is trespassing. That is the beat."
+        },
+        {
+          "type": "paragraph",
+          "text": "A couple through blinds, a conversation across a square, a tent at night: we occupy a hiding place. The subject does not present."
+        },
+        {
+          "type": "paragraph",
+          "text": "They are caught, or they would be if they turned. It is the wrong tool for granted intimacy."
+        },
+        {
+          "type": "paragraph",
+          "text": "A close-up the character knows about is not voyeur. An over-the-shoulder in a dialogue scene is coverage, even if a shoulder dirties the edge."
+        },
+        {
+          "type": "paragraph",
+          "text": "Offscreen sound often rides with this view (a whistle, a courtyard, a tent wall) because the hide limits what we can see. The technique itself is the concealed camera, not the soundtrack."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The audience is trespassing. That is the beat.A couple through blinds, a conversation across a square, a tent at night: we occupy a hiding place. The subject does not present.They are caught, or they would be if they turned. It is the wrong tool for granted intimacy.A close-up the character knows about is not voyeur. An over-the-shoulder in a dialogue scene is coverage, even if a shoulder dirties the edge.Offscreen sound often rides with this view (a whistle, a courtyard, a tent wall) because the hide limits what we can see. The technique itself is the concealed camera, not the soundtrack."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put a real occluder between lens and subject and stand where a watcher could stand. Keep enough aperture to melt the hide (leaves, fabric, a slit) while holding the distant face."
+        },
+        {
+          "type": "paragraph",
+          "text": "A longer lens is the usual cheat for distance. Do not center the peephole like a pretty wreath unless the hide is a designed iris."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Voyeur frame of [Subject], watching from concealment, dirty edges, a view we should not have."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Put a real occluder between lens and subject and stand where a watcher could stand. Keep enough aperture to melt the hide (leaves, fabric, a slit) while holding the distant face.A longer lens is the usual cheat for distance. Do not center the peephole like a pretty wreath unless the hide is a designed iris.Prompt: Voyeur frame of [Subject], watching from concealment, dirty edges, a view we should not have."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when watching is transgression: affairs, surveillance, a neighbor, a hunter. Do not slap dirty leaves on a scene the character is performing for us."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when watching is transgression: affairs, surveillance, a neighbor, a hunter. Do not slap dirty leaves on a scene the character is performing for us."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dirty Frame is the edge grammar voyeur often uses. Voyeur is the ethical position: concealment.",
+          "links": [
+            {
+              "text": "Dirty Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "You can dirty a party from inside the crowd without hiding. Over-the-Shoulder Coverage is dialogue coverage with a known listener in the foreground.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Frame within Frame may be a window we are invited to look through. Windows stacks many lives.",
+          "links": [
+            {
+              "text": "Frame within Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+            },
+            {
+              "text": "Windows",
+              "url": "https://melies.co/cinematic-techniques/composition/windows"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Voyeur picks one hide. Point of View claims we are the character.",
+          "links": [
+            {
+              "text": "Point of View",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Voyeur often claims we are not supposed to be anyone."
+        },
+        {
+          "type": "list-item",
+          "text": "Dirty FrameWe are not supposed to have this view.",
+          "displayText": "Dirty Frame\nWe are not supposed to have this view.",
+          "links": [
+            {
+              "text": "Dirty FrameWe are not supposed to have this view.",
+              "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Over-the-Shoulder CoverageDefault dialogue coverage with spatial glue.",
+          "displayText": "Over-the-Shoulder Coverage\nDefault dialogue coverage with spatial glue.",
+          "links": [
+            {
+              "text": "Over-the-Shoulder CoverageDefault dialogue coverage with spatial glue.",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dirty Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+        },
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Frame within Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/frame-in-frame"
+        },
+        {
+          "text": "Windows",
+          "url": "https://melies.co/cinematic-techniques/composition/windows"
+        },
+        {
+          "text": "Point of View",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/pov"
+        },
+        {
+          "text": "Dirty FrameWe are not supposed to have this view.",
+          "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+        },
+        {
+          "text": "Over-the-Shoulder CoverageDefault dialogue coverage with spatial glue.",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/42192cfbcaa98a313c7df38d8a897967.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dirty-frame-040-foreground-obstruction-mini.webp",
+          "alt": "Dirty Frame"
+        },
+        {
+          "kind": "video",
+          "path": "media/d734365fbad1668a19694f50f3ad0d8e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/040-foreground-obstruction-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d65f275fff8e870e92c86c8d7270a51e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/over-the-shoulder-frame-088-over-the-shoulder-coverage-mini.webp",
+          "alt": "Over-the-Shoulder Coverage"
+        },
+        {
+          "kind": "video",
+          "path": "media/f20fdb7d226138aaf5dd59721e8bcc91.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/088-over-the-shoulder-coverage-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Dirty Frame is the edge grammar voyeur often uses. Voyeur is the ethical position: concealment.You can dirty a party from inside the crowd without hiding. Over-the-Shoulder Coverage is dialogue coverage with a known listener in the foreground.Frame within Frame may be a window we are invited to look through. Windows stacks many lives.Voyeur picks one hide. Point of View claims we are the character.Voyeur often claims we are not supposed to be anyone.Dirty FrameWe are not supposed to have this view.Over-the-Shoulder CoverageDefault dialogue coverage with spatial glue.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rear Window makes looking across a courtyard the plot. The Conversation records and watches until privacy is a myth."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cache (Hidden) holds distant, unauthorized views until the camera itself is an aggressor. M and The Blair Witch Project let presence arrive from beyond the visible, often as sound around a limited hide."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar of trespass, not a leaf kit."
+        },
+        {
+          "type": "list-item",
+          "text": "M 1931The murderer’s whistling identifies a presence beyond what is visible.",
+          "displayText": "M 1931\nThe murderer’s whistling identifies a presence beyond what is visible."
+        },
+        {
+          "type": "list-item",
+          "text": "The Blair Witch Project 1999Night sounds suggest activity outside the tent and camera view.",
+          "displayText": "The Blair Witch Project 1999\nNight sounds suggest activity outside the tent and camera view."
+        },
+        {
+          "type": "list-item",
+          "text": "The Usual Suspects 1995The final details destabilize the story that has been narrated.",
+          "displayText": "The Usual Suspects 1995\nThe final details destabilize the story that has been narrated."
+        },
+        {
+          "type": "list-item",
+          "text": "Fight Club 1999Later information changes the meaning of earlier interactions.",
+          "displayText": "Fight Club 1999\nLater information changes the meaning of earlier interactions."
+        },
+        {
+          "type": "list-item",
+          "text": "The Sixth Sense 1999The ending reorganizes the viewer’s understanding of earlier scenes.",
+          "displayText": "The Sixth Sense 1999\nThe ending reorganizes the viewer’s understanding of earlier scenes."
+        },
+        {
+          "type": "list-item",
+          "text": "Rear Window 1954Jeff’s physical position limits what can be known about the courtyard.",
+          "displayText": "Rear Window 1954\nJeff’s physical position limits what can be known about the courtyard."
+        },
+        {
+          "type": "list-item",
+          "text": "Alien 1979The creature and ship’s spaces are revealed selectively.",
+          "displayText": "Alien 1979\nThe creature and ship’s spaces are revealed selectively."
+        },
+        {
+          "type": "list-item",
+          "text": "Jaws 1975The shark is often suggested through effects and reactions rather than fully shown.",
+          "displayText": "Jaws 1975\nThe shark is often suggested through effects and reactions rather than fully shown."
+        },
+        {
+          "type": "list-item",
+          "text": "Touch of Evil 1958The audience sees the bomb before the ordinary street activity.",
+          "displayText": "Touch of Evil 1958\nThe audience sees the bomb before the ordinary street activity."
+        },
+        {
+          "type": "list-item",
+          "text": "Rope 1948The hidden body’s location is known while guests remain unaware.",
+          "displayText": "Rope 1948\nThe hidden body’s location is known while guests remain unaware."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Rear Window makes looking across a courtyard the plot. The Conversation records and watches until privacy is a myth.Cache (Hidden) holds distant, unauthorized views until the camera itself is an aggressor. M and The Blair Witch Project let presence arrive from beyond the visible, often as sound around a limited hide.Grammar of trespass, not a leaf kit.M 1931The murderer’s whistling identifies a presence beyond what is visible.The Blair Witch Project 1999Night sounds suggest activity outside the tent and camera view.The Usual Suspects 1995The final details destabilize the story that has been narrated.Fight Club 1999Later information changes the meaning of earlier interactions.The Sixth Sense 1999The ending reorganizes the viewer’s understanding of earlier scenes.Rear Window 1954Jeff’s physical position limits what can be known about the courtyard.Alien 1979The creature and ship’s spaces are revealed selectively.Jaws 1975The shark is often suggested through effects and reactions rather than fully shown.Touch of Evil 1958The audience sees the bomb before the ordinary street activity.Rope 1948The hidden body’s location is known while guests remain unaware."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the hide and the forbidden view. Voyeur frame of [Subject], watching from concealment, dirty edges, a view we should not have."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say through blinds, from behind a car, through leaves, a long lens across a courtyard. Keep the subject unaware."
+        },
+        {
+          "type": "paragraph",
+          "text": "Occupy the edges with the hide."
+        },
+        {
+          "type": "quote",
+          "text": "Locked shot inside a dim railway waiting room. An unseen suitcase rolls across the platform outside; its wheels move audibly from left to right, pause, then return. The lone passenger reacts without the camera revealing the source. Design spatially coherent audio separately, with no visible creature or arbitrary musical sting."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Locked+shot+inside+a+dim+railway+waiting+room.+An+unseen+suitcase+rolls+across+the+platform+outside;+its+wheels+move+audibly+from+left+to+right,+pause,+then+return.+The+lone+passenger+reacts+without+the+camera+revealing+the+source.+Design+spatially+coherent+audio+separately,+with+no+visible+creature+or+arbitrary+musical+sting."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the hide and the forbidden view. Voyeur frame of [Subject], watching from concealment, dirty edges, a view we should not have.Say through blinds, from behind a car, through leaves, a long lens across a courtyard. Keep the subject unaware.Occupy the edges with the hide.Copy promptUse in Video GeneratorLocked shot inside a dim railway waiting room. An unseen suitcase rolls across the platform outside; its wheels move audibly from left to right, pause, then return. The lone passenger reacts without the camera revealing the source. Design spatially coherent audio separately, with no visible creature or arbitrary musical sting.Locked shot inside a dim railway waiting room. An unseen suitcase rolls across the platform outside; its wheels move audibly from left to right, pause, then return. The lone passenger reacts without the camera revealing the source. Design spatially coherent audio separately, with no visible creature or arbitrary musical sting."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a pretty Dirty Frame the subject could see, or an Over-the-Shoulder Coverage from a scene partner. The tell is eye contact with lens, or a hide that is only a vignette.",
+          "links": [
+            {
+              "text": "Dirty Frame",
+              "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+            },
+            {
+              "text": "Over-the-Shoulder Coverage",
+              "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is a real occluder, a plausible hiding place, and a subject who does not present."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dirty Frame",
+          "url": "https://melies.co/cinematic-techniques/composition/dirty-frame"
+        },
+        {
+          "text": "Over-the-Shoulder Coverage",
+          "url": "https://melies.co/cinematic-techniques/framing/over-the-shoulder-frame"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a pretty Dirty Frame the subject could see, or an Over-the-Shoulder Coverage from a scene partner. The tell is eye contact with lens, or a hide that is only a vignette.The fix is a real occluder, a plausible hiding place, and a subject who does not present."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is voyeur in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "The camera watches from concealment. The audience is trespassing. Dirty edges, distance, and a peephole often result. The subject does not offer the view. We take it."
+        },
+        {
+          "type": "heading",
+          "text": "Voyeur vs Dirty Frame",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dirty frame occupies the edges with matter. Voyeur is why we are standing there: we are hidden. A crowded street can be dirty without being voyeur. A clean, distant locked-off shot of an apartment can be voyeur without much edge chew, as in an unauthorized surveillance hold."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use voyeur?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when looking is a transgression: neighbor, spy, hunter, affair. Do not use it as default decoration on a scene performed for the camera."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt voyeur for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name the concealment and the unaware subject. Example: Voyeur frame of [Subject], watching from concealment, dirty edges, a view we should not have. Specify blinds, foliage, a grate, a long lens. Forbid eye contact with camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is voyeur in film?The camera watches from concealment. The audience is trespassing. Dirty edges, distance, and a peephole often result. The subject does not offer the view. We take it.Voyeur vs Dirty FrameA dirty frame occupies the edges with matter. Voyeur is why we are standing there: we are hidden. A crowded street can be dirty without being voyeur. A clean, distant locked-off shot of an apartment can be voyeur without much edge chew, as in an unauthorized surveillance hold.When should I use voyeur?Use it when looking is a transgression: neighbor, spy, hunter, affair. Do not use it as default decoration on a scene performed for the camera.How do I prompt voyeur for AI image or video?Name the concealment and the unaware subject. Example: Voyeur frame of [Subject], watching from concealment, dirty edges, a view we should not have. Specify blinds, foliage, a grate, a long lens. Forbid eye contact with camera."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the hide and the forbidden view. Voyeur frame of [Subject], watching from concealment, dirty edges, a view we should not have.",
+      "Say through blinds, from behind a car, through leaves, a long lens across a courtyard. Keep the subject unaware.",
+      "Occupy the edges with the hide."
+    ],
+    "example": "Locked shot inside a dim railway waiting room. An unseen suitcase rolls across the platform outside; its wheels move audibly from left to right, pause, then return. The lone passenger reacts without the camera revealing the source. Design spatially coherent audio separately, with no visible creature or arbitrary musical sting."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/96563cc4f41439a0cd07f6c0af5d80cd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/voyeur-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/19d01896620575ea956b75bed6360ce0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/voyeur-voyeur-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0fea4fea49ac0a6cc4701cbeac358e31.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/voyeur.jpg",
+      "alt": "Voyeur frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/42192cfbcaa98a313c7df38d8a897967.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dirty-frame-040-foreground-obstruction-mini.webp",
+      "alt": "Dirty Frame"
+    },
+    {
+      "kind": "video",
+      "path": "media/d734365fbad1668a19694f50f3ad0d8e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/040-foreground-obstruction-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d65f275fff8e870e92c86c8d7270a51e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/over-the-shoulder-frame-088-over-the-shoulder-coverage-mini.webp",
+      "alt": "Over-the-Shoulder Coverage"
+    },
+    {
+      "kind": "video",
+      "path": "media/f20fdb7d226138aaf5dd59721e8bcc91.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/088-over-the-shoulder-coverage-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/17eb63699fe2cc87355879a648ff2c9a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/voyeur/hero.jpg",
+      "alt": "Voyeur",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "66a49f80773e0284d24253b1bf4bc15f477609dba2bca758241251e0ed19a0cc"
+}

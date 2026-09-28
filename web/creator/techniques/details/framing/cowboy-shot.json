@@ -1,0 +1,383 @@
+{
+  "id": "framing/cowboy-shot",
+  "slug": "cowboy-shot",
+  "title": "Cowboy Shot",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/cowboy-shot",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cowboy-shot.webp",
+  "detail": "details/framing/cowboy-shot.json",
+  "aliases": [
+    "American shot",
+    "knee shot",
+    "medium long shot",
+    "three-quarter shot"
+  ],
+  "description": "A cowboy shot frames a person from mid-thigh or the knees upward so the hands stay in at the holster line. It is also called an American shot or knee shot; it is not a waist shot and not a full figure.",
+  "thumbnail": "media/c60ed76a9d57c2a52bc1d3433036ec10.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The cowboy exists because hands are plot. A gun, a bottle, a fist, a coat hem at the thigh: the stance is the sentence."
+        },
+        {
+          "type": "paragraph",
+          "text": "You get face and threat or ease in one frame without spending the extra air that feet and floor demand. It is the wrong tool when gait, shoes, or the full costume silhouette is the information."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also the wrong tool for table talk: you will be cropping a booth at mid-thigh for no reason. Use it for standing confrontation, weapons, and posture, then go tighter for the eyes or wider for the walk."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The cowboy exists because hands are plot. A gun, a bottle, a fist, a coat hem at the thigh: the stance is the sentence.You get face and threat or ease in one frame without spending the extra air that feet and floor demand. It is the wrong tool when gait, shoes, or the full costume silhouette is the information.It is also the wrong tool for table talk: you will be cropping a booth at mid-thigh for no reason. Use it for standing confrontation, weapons, and posture, then go tighter for the eyes or wider for the walk."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bottom frame through mid-thigh. Holster, hanging hands, and coat edge should read."
+        },
+        {
+          "type": "paragraph",
+          "text": "A 35mm to 50mm from a few steps back is common. Pairing with Hip Level puts the lens near the gunbelt; that height is a choice, not the size itself.",
+          "links": [
+            {
+              "text": "Hip Level",
+              "url": "https://melies.co/cinematic-techniques/camera-angles/hip-level"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "You can shoot a cowboy at eye height. Prompt: Cowboy shot of [Subject] framed mid-thigh up, hands visible at the holster line."
+        }
+      ],
+      "links": [
+        {
+          "text": "Hip Level",
+          "url": "https://melies.co/cinematic-techniques/camera-angles/hip-level"
+        }
+      ],
+      "media": [],
+      "sourceText": "How it works Bottom frame through mid-thigh. Holster, hanging hands, and coat edge should read.A 35mm to 50mm from a few steps back is common. Pairing with Hip Level puts the lens near the gunbelt; that height is a choice, not the size itself.You can shoot a cowboy at eye height. Prompt: Cowboy shot of [Subject] framed mid-thigh up, hands visible at the holster line."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to show hands, weapons, or stance without going full body: a hand hovering at a belt, a bottle hanging, a ready posture. Do not use it if you need feet and walk, or if the beat is only a face."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to show hands, weapons, or stance without going full body: a hand hovering at a belt, a bottle hanging, a ready posture. Do not use it if you need feet and walk, or if the beat is only a face."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Medium Shot cuts at the waist, so the holster and hanging hands are gone. A Full Body includes head to toe and a strip of floor.",
+          "links": [
+            {
+              "text": "Medium Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-shot"
+            },
+            {
+              "text": "Full Body",
+              "url": "https://melies.co/cinematic-techniques/framing/full-body"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cowboy is the mid-thigh sentence: American shot, not MS, not full figure. Do not call it a medium long shot as if that erased the holster line."
+        },
+        {
+          "type": "list-item",
+          "text": "Medium ShotWorkhorse coverage. Most scenes live here.",
+          "displayText": "Medium Shot\nWorkhorse coverage. Most scenes live here.",
+          "links": [
+            {
+              "text": "Medium ShotWorkhorse coverage. Most scenes live here.",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-shot"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Full BodyCostume, blocking, and gait matter.",
+          "displayText": "Full Body\nCostume, blocking, and gait matter.",
+          "links": [
+            {
+              "text": "Full BodyCostume, blocking, and gait matter.",
+              "url": "https://melies.co/cinematic-techniques/framing/full-body"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Medium Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-shot"
+        },
+        {
+          "text": "Full Body",
+          "url": "https://melies.co/cinematic-techniques/framing/full-body"
+        },
+        {
+          "text": "Medium ShotWorkhorse coverage. Most scenes live here.",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-shot"
+        },
+        {
+          "text": "Full BodyCostume, blocking, and gait matter.",
+          "url": "https://melies.co/cinematic-techniques/framing/full-body"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b869235be06ac8ef80d61080013dc3b1.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-shot.webp",
+          "alt": "Medium Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/a56beb8abd7529d00c6b851ad11dd2cc.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/full-body.webp",
+          "alt": "Full Body"
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Medium Shot cuts at the waist, so the holster and hanging hands are gone. A Full Body includes head to toe and a strip of floor.Cowboy is the mid-thigh sentence: American shot, not MS, not full figure. Do not call it a medium long shot as if that erased the holster line.Medium ShotWorkhorse coverage. Most scenes live here.Full BodyCostume, blocking, and gait matter.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Good, the Bad and the Ugly uses this standing size so guns and faces share one frame before the eyes take over. Django Unchained keeps hands and weapons readable in the same band."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: stance plus face, not a landscape and not a waist-up talk shot."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Good, the Bad and the Ugly uses this standing size so guns and faces share one frame before the eyes take over. Django Unchained keeps hands and weapons readable in the same band.Grammar: stance plus face, not a landscape and not a waist-up talk shot."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name mid-thigh and the hands. Example: Cowboy shot of [Subject] framed mid-thigh up, hands visible at the holster line, American shot."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not write waist up or head to toe. For video, if the feet enter you have left cowboy; if the belt is the bottom you have returned to medium."
+        },
+        {
+          "type": "quote",
+          "text": "Cowboy shot of [Subject] framed mid-thigh up, hands visible at the holster line, American shot, casual authority."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Cowboy+shot+of+[Subject]+framed+mid-thigh+up,+hands+visible+at+the+holster+line,+American+shot,+casual+authority."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name mid-thigh and the hands. Example: Cowboy shot of [Subject] framed mid-thigh up, hands visible at the holster line, American shot.Do not write waist up or head to toe. For video, if the feet enter you have left cowboy; if the belt is the bottom you have returned to medium.Copy promptUse in Image GeneratorCowboy shot of [Subject] framed mid-thigh up, hands visible at the holster line, American shot, casual authority.Cowboy shot of [Subject] framed mid-thigh up, hands visible at the holster line, American shot, casual authority."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Medium Shot (waist) or a Full Body (feet in). The tell is a belt-only crop, or shoes.",
+          "links": [
+            {
+              "text": "Medium Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/medium-shot"
+            },
+            {
+              "text": "Full Body",
+              "url": "https://melies.co/cinematic-techniques/framing/full-body"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: bottom frame through the thigh, hands in, feet out. Another tell is a sitting medium labeled cowboy because the genre is Western."
+        }
+      ],
+      "links": [
+        {
+          "text": "Medium Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/medium-shot"
+        },
+        {
+          "text": "Full Body",
+          "url": "https://melies.co/cinematic-techniques/framing/full-body"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Medium Shot (waist) or a Full Body (feet in). The tell is a belt-only crop, or shoes.Fix: bottom frame through the thigh, hands in, feet out. Another tell is a sitting medium labeled cowboy because the genre is Western."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Cowboy Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A cowboy shot frames a person from mid-thigh or knees up so the hands remain visible at the holster line. It is also called an American shot. It is a standing size for stance and weapons, not a synonym for medium or full body."
+        },
+        {
+          "type": "heading",
+          "text": "Cowboy Shot vs Full Body",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Full body includes the feet and a little floor; the whole figure is complete. A cowboy stops at mid-thigh, so gait and shoes are out while hands stay in. If you can see boots on the ground, you have left cowboy."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Cowboy Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when hands, weapons, or stance matter and you do not need the walk. Do not use it for table dialogue or for costume-and-gait beats that require feet."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Cowboy Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Cowboy shot of [Subject] framed mid-thigh up, hands visible at the holster line. Say American shot if that helps the model. Forbid feet and forbid a waist crop."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Cowboy Shot in film?A cowboy shot frames a person from mid-thigh or knees up so the hands remain visible at the holster line. It is also called an American shot. It is a standing size for stance and weapons, not a synonym for medium or full body.Cowboy Shot vs Full BodyFull body includes the feet and a little floor; the whole figure is complete. A cowboy stops at mid-thigh, so gait and shoes are out while hands stay in. If you can see boots on the ground, you have left cowboy.When should I use Cowboy Shot?Use it when hands, weapons, or stance matter and you do not need the walk. Do not use it for table dialogue or for costume-and-gait beats that require feet.How do I prompt Cowboy Shot for AI image or video?Write Cowboy shot of [Subject] framed mid-thigh up, hands visible at the holster line. Say American shot if that helps the model. Forbid feet and forbid a waist crop."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name mid-thigh and the hands. Example: Cowboy shot of [Subject] framed mid-thigh up, hands visible at the holster line, American shot.",
+      "Do not write waist up or head to toe. For video, if the feet enter you have left cowboy; if the belt is the bottom you have returned to medium."
+    ],
+    "example": "Cowboy shot of [Subject] framed mid-thigh up, hands visible at the holster line, American shot, casual authority."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/c60ed76a9d57c2a52bc1d3433036ec10.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cowboy-shot.webp",
+      "alt": "Cowboy Shot example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b869235be06ac8ef80d61080013dc3b1.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/medium-shot.webp",
+      "alt": "Medium Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/a56beb8abd7529d00c6b851ad11dd2cc.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/full-body.webp",
+      "alt": "Full Body"
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/74770d17ee4faaa4d564271ef776ef6a.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/cowboy-shot/hero.jpg",
+      "alt": "Cowboy Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "b927b96daad5b1fa21ca8d2bbc66649cc0044c52e920b3f762ebd46c6c76370a"
+}

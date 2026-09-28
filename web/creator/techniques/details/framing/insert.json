@@ -1,0 +1,468 @@
+{
+  "id": "framing/insert",
+  "slug": "insert",
+  "title": "Insert Shot",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/insert",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/insert-095-narrative-insert-mini.webp",
+  "detail": "details/framing/insert.json",
+  "aliases": [
+    "Pursued object",
+    "Plot-driving objective"
+  ],
+  "description": "An insert shot is a close view of a story-relevant detail: an object, a hand action, a screen, or text. It points at the thing that will matter, at real scale.",
+  "thumbnail": "media/b5bb789f90144033b393ce87e620564d.webp",
+  "video": "media/53a13c456f43ab42d2e3d1f277d87138.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/095-narrative-insert-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An insert is not a pretty prop break. It is a fact the wider coverage cannot prove: the handwriting, the latch, the cup of water beginning to tremble, the key in a palm."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hands should be human-sized. The object should cut with the same key as the scene."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you are leaving the action for a clock on the wall or a listener in another room: that is a cutaway. It is also the wrong tool as a glowing product hero."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the object's specific mechanism never pays off, you may only have a MacGuffin in the plot, but the insert still has to be a readable picture of a thing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function An insert is not a pretty prop break. It is a fact the wider coverage cannot prove: the handwriting, the latch, the cup of water beginning to tremble, the key in a palm.Hands should be human-sized. The object should cut with the same key as the scene.It is the wrong tool when you are leaving the action for a clock on the wall or a listener in another room: that is a cutaway. It is also the wrong tool as a glowing product hero.If the object's specific mechanism never pays off, you may only have a MacGuffin in the plot, but the insert still has to be a readable picture of a thing."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Size to the object. Match the scene's key side and color so the cut belongs."
+        },
+        {
+          "type": "paragraph",
+          "text": "Macro only if the detail is small; a letter can be a close crop on a 50mm. Keep hands at real scale, no giant fingers."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Tight close-up of an object that carries the plot near [Subject]: a glass, a letter, a latch. Hands at real scale."
+        },
+        {
+          "type": "paragraph",
+          "text": "No glowing skin."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Size to the object. Match the scene's key side and color so the cut belongs.Macro only if the detail is small; a letter can be a close crop on a 50mm. Keep hands at real scale, no giant fingers.Prompt: Tight close-up of an object that carries the plot near [Subject]: a glass, a letter, a latch. Hands at real scale.No glowing skin."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to point at the thing that will matter later: a key, a letter, a latch, a trembling glass. Do not insert a decorative object that never returns, and do not light it like a catalog hero if it lives in a messy room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to point at the thing that will matter later: a key, a letter, a latch, a trembling glass. Do not insert a decorative object that never returns, and do not light it like a catalog hero if it lives in a messy room."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Cutaway leaves the primary action for context, a clock, or an observer. An Extreme Close-Up is a size; an insert is a job and may be that tight.",
+          "links": [
+            {
+              "text": "Cutaway",
+              "url": "https://melies.co/cinematic-techniques/framing/cutaway"
+            },
+            {
+              "text": "Extreme Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A cut-in tightens on something already proven in the wider shot, often on the same axis. A Gesture covers a body movement rather than an object.",
+          "links": [
+            {
+              "text": "cut-in",
+              "url": "https://melies.co/cinematic-techniques/framing/cut-ins"
+            },
+            {
+              "text": "Gesture",
+              "url": "https://melies.co/cinematic-techniques/framing/gesture"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Product lighting treats the object as a commercial portrait, which is a different job.",
+          "links": [
+            {
+              "text": "Product",
+              "url": "https://melies.co/cinematic-techniques/framing/product"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "CutawayHide a cut, show a clock, or let the room comment.",
+          "displayText": "Cutaway\nHide a cut, show a clock, or let the room comment.",
+          "links": [
+            {
+              "text": "CutawayHide a cut, show a clock, or let the room comment.",
+              "url": "https://melies.co/cinematic-techniques/framing/cutaway"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "displayText": "Extreme Close-Up\nA detail is the scene: an eye, a mouth, a trigger.",
+          "links": [
+            {
+              "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+              "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Choker ShotEmotion with nowhere to hide.",
+          "displayText": "Choker Shot\nEmotion with nowhere to hide.",
+          "links": [
+            {
+              "text": "Choker ShotEmotion with nowhere to hide.",
+              "url": "https://melies.co/cinematic-techniques/framing/choker"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Cutaway",
+          "url": "https://melies.co/cinematic-techniques/framing/cutaway"
+        },
+        {
+          "text": "Extreme Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "cut-in",
+          "url": "https://melies.co/cinematic-techniques/framing/cut-ins"
+        },
+        {
+          "text": "Gesture",
+          "url": "https://melies.co/cinematic-techniques/framing/gesture"
+        },
+        {
+          "text": "Product",
+          "url": "https://melies.co/cinematic-techniques/framing/product"
+        },
+        {
+          "text": "CutawayHide a cut, show a clock, or let the room comment.",
+          "url": "https://melies.co/cinematic-techniques/framing/cutaway"
+        },
+        {
+          "text": "Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.",
+          "url": "https://melies.co/cinematic-techniques/framing/extreme-close-up"
+        },
+        {
+          "text": "Choker ShotEmotion with nowhere to hide.",
+          "url": "https://melies.co/cinematic-techniques/framing/choker"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/e60435779dcb1a571dbf136d390be2eb.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cutaway-094-cutaway-for-meaning-or-continuity-mini.webp",
+          "alt": "Cutaway"
+        },
+        {
+          "kind": "video",
+          "path": "media/f0b62f9704045d719f79fa990e3ef9e5.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/094-cutaway-for-meaning-or-continuity-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+          "alt": "Extreme Close-Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/d5bdd8f53c2bc0f78a3e63efcaac2a30.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choker.webp",
+          "alt": "Choker Shot"
+        }
+      ],
+      "sourceText": "Compared with similar shots A Cutaway leaves the primary action for context, a clock, or an observer. An Extreme Close-Up is a size; an insert is a job and may be that tight.A cut-in tightens on something already proven in the wider shot, often on the same axis. A Gesture covers a body movement rather than an object.Product lighting treats the object as a commercial portrait, which is a different job.CutawayHide a cut, show a clock, or let the room comment.Extreme Close-UpA detail is the scene: an eye, a mouth, a trigger.Choker ShotEmotion with nowhere to hide."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Rear Window uses optical details as plot facts. Zodiac lives in handwriting and paper."
+        },
+        {
+          "type": "paragraph",
+          "text": "Notorious makes a concealed key a crucial object. Jurassic Park lets water in a cup reveal an approaching vibration."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Maltese Falcon and North by Northwest organize pursuit around objects; those are story engines, while the insert is the picture of the thing. Grammar: show the fact."
+        },
+        {
+          "type": "list-item",
+          "text": "The Maltese Falcon 1941The sought-after statuette organizes competing loyalties.",
+          "displayText": "The Maltese Falcon 1941\nThe sought-after statuette organizes competing loyalties."
+        },
+        {
+          "type": "list-item",
+          "text": "North by Northwest 1959The espionage material matters chiefly through the pursuit surrounding it.",
+          "displayText": "North by Northwest 1959\nThe espionage material matters chiefly through the pursuit surrounding it."
+        },
+        {
+          "type": "list-item",
+          "text": "Notorious 1946The concealed key becomes a crucial object.",
+          "displayText": "Notorious 1946\nThe concealed key becomes a crucial object."
+        },
+        {
+          "type": "list-item",
+          "text": "Citizen Kane 1941The sled and its inscription matter at the ending.",
+          "displayText": "Citizen Kane 1941\nThe sled and its inscription matter at the ending."
+        },
+        {
+          "type": "list-item",
+          "text": "Jurassic Park 1993Water in the cup reveals an approaching vibration.",
+          "displayText": "Jurassic Park 1993\nWater in the cup reveals an approaching vibration."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Rear Window uses optical details as plot facts. Zodiac lives in handwriting and paper.Notorious makes a concealed key a crucial object. Jurassic Park lets water in a cup reveal an approaching vibration.The Maltese Falcon and North by Northwest organize pursuit around objects; those are story engines, while the insert is the picture of the thing. Grammar: show the fact.The Maltese Falcon 1941The sought-after statuette organizes competing loyalties.North by Northwest 1959The espionage material matters chiefly through the pursuit surrounding it.Notorious 1946The concealed key becomes a crucial object.Citizen Kane 1941The sled and its inscription matter at the ending.Jurassic Park 1993Water in the cup reveals an approaching vibration."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the object and the scale. Example: Tight close-up of an object that carries the plot near [Subject]: a glass, a letter, a latch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hands at real scale. No glowing skin."
+        },
+        {
+          "type": "paragraph",
+          "text": "Match the room's key. For video, a small physical change (a tremor, a thumb on a latch) is the motion; do not orbit the prop."
+        },
+        {
+          "type": "quote",
+          "text": "Outline a short caper around an unopened blue envelope sought by three strangers. Never reveal its contents. Build the scenes around shifting trust, mistaken possession and one character choosing a friend over the envelope. Generate a consistent, easily trackable prop for every shot."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Outline+a+short+caper+around+an+unopened+blue+envelope+sought+by+three+strangers.+Never+reveal+its+contents.+Build+the+scenes+around+shifting+trust,+mistaken+possession+and+one+character+choosing+a+friend+over+the+envelope.+Generate+a+consistent,+easily+trackable+prop+for+every+shot."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the object and the scale. Example: Tight close-up of an object that carries the plot near [Subject]: a glass, a letter, a latch.Hands at real scale. No glowing skin.Match the room's key. For video, a small physical change (a tremor, a thumb on a latch) is the motion; do not orbit the prop.Copy promptUse in Video GeneratorOutline a short caper around an unopened blue envelope sought by three strangers. Never reveal its contents. Build the scenes around shifting trust, mistaken possession and one character choosing a friend over the envelope. Generate a consistent, easily trackable prop for every shot.Outline a short caper around an unopened blue envelope sought by three strangers. Never reveal its contents. Build the scenes around shifting trust, mistaken possession and one character choosing a friend over the envelope. Generate a consistent, easily trackable prop for every shot."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Cutaway (leaving the action) or a Product hero (catalog glamour). The tell is a clock in another room, or black-sweep reflections on a plot letter.",
+          "links": [
+            {
+              "text": "Cutaway",
+              "url": "https://melies.co/cinematic-techniques/framing/cutaway"
+            },
+            {
+              "text": "Product",
+              "url": "https://melies.co/cinematic-techniques/framing/product"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: same scene, same light, object at real scale, story reason to look."
+        }
+      ],
+      "links": [
+        {
+          "text": "Cutaway",
+          "url": "https://melies.co/cinematic-techniques/framing/cutaway"
+        },
+        {
+          "text": "Product",
+          "url": "https://melies.co/cinematic-techniques/framing/product"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Cutaway (leaving the action) or a Product hero (catalog glamour). The tell is a clock in another room, or black-sweep reflections on a plot letter.Fix: same scene, same light, object at real scale, story reason to look."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Insert Shot in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An insert shot is a close view of a story-relevant detail, object, hand action, screen, or text. It is coverage of a plot fact, usually cut into a wider scene, with hands and objects at real scale."
+        },
+        {
+          "type": "heading",
+          "text": "Insert Shot vs Cutaway",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An insert stays on a detail that belongs to the primary action: the letter in the hands, the latch, the glass. A cutaway leaves that action for a related piece of the world, such as a clock, a street, or a listener. If you have left the actor's beat, you are probably in a cutaway."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Insert Shot?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when a detail will matter and the wide cannot prove it. Do not use it as decoration, and do not use it when you meant to leave the scene for context."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Insert Shot for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Tight close-up of an object that carries the plot near [Subject], name the object, and specify hands at real scale. Match the scene light. No catalog glow."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Insert Shot in film?An insert shot is a close view of a story-relevant detail, object, hand action, screen, or text. It is coverage of a plot fact, usually cut into a wider scene, with hands and objects at real scale.Insert Shot vs CutawayAn insert stays on a detail that belongs to the primary action: the letter in the hands, the latch, the glass. A cutaway leaves that action for a related piece of the world, such as a clock, a street, or a listener. If you have left the actor's beat, you are probably in a cutaway.When should I use Insert Shot?Use it when a detail will matter and the wide cannot prove it. Do not use it as decoration, and do not use it when you meant to leave the scene for context.How do I prompt Insert Shot for AI image or video?Write Tight close-up of an object that carries the plot near [Subject], name the object, and specify hands at real scale. Match the scene light. No catalog glow."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the object and the scale. Example: Tight close-up of an object that carries the plot near [Subject]: a glass, a letter, a latch.",
+      "Hands at real scale. No glowing skin.",
+      "Match the room's key. For video, a small physical change (a tremor, a thumb on a latch) is the motion; do not orbit the prop."
+    ],
+    "example": "Outline a short caper around an unopened blue envelope sought by three strangers. Never reveal its contents. Build the scenes around shifting trust, mistaken possession and one character choosing a friend over the envelope. Generate a consistent, easily trackable prop for every shot."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/53a13c456f43ab42d2e3d1f277d87138.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/095-narrative-insert-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/b5bb789f90144033b393ce87e620564d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/insert-095-narrative-insert-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/211652233841f27b7d63013ef4540935.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/insert.jpg",
+      "alt": "Insert Shot frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/e60435779dcb1a571dbf136d390be2eb.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/cutaway-094-cutaway-for-meaning-or-continuity-mini.webp",
+      "alt": "Cutaway"
+    },
+    {
+      "kind": "video",
+      "path": "media/f0b62f9704045d719f79fa990e3ef9e5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/094-cutaway-for-meaning-or-continuity-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": "Extreme Close-Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/d5bdd8f53c2bc0f78a3e63efcaac2a30.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choker.webp",
+      "alt": "Choker Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/acf3384aeaab9002ac6fb503a877bc4c.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/insert/hero.jpg",
+      "alt": "Insert Shot",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "4a30bc3ecfedd3562022f6c53cc390bc1d8edcd51cab83a7603d5cb3ecafce11"
+}

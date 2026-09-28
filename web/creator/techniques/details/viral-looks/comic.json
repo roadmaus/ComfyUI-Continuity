@@ -1,0 +1,414 @@
+{
+  "id": "viral-looks/comic",
+  "slug": "comic",
+  "title": "Comic",
+  "categoryId": "viral-looks",
+  "categoryTitle": "Viral Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/viral-looks/comic",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/comic-comic-mini.webp",
+  "detail": "details/viral-looks/comic.json",
+  "aliases": [],
+  "description": "Comic, in comic book cinematography, inks a live-action frame: hard edges, halftone in the shadows, limited spots of color, a page that still has a photographed body in it. The camera still has a lens and one sun, and it is not a screenshot of a book.",
+  "thumbnail": "media/be483d79e4573084a858dc96a52b2f8e.webp",
+  "video": "media/6751e6f95d02ffafa5726984dd2e462d.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/comic-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Origin stories, punchlines, a city that should look published: the person still occupies space, but print law sits on top of the photograph. One lighting direction so the ink has a sun."
+        },
+        {
+          "type": "paragraph",
+          "text": "No speech balloons. Models ruin letters."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dialogue can survive if the ink is gentle and the faces stay human. It is the wrong tool when you need documentary pores and no line, or when you actually wanted full Animation.",
+          "links": [
+            {
+              "text": "Animation",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If there is no grain or halation of a camera, you left live action and drew a still."
+        }
+      ],
+      "links": [
+        {
+          "text": "Animation",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Origin stories, punchlines, a city that should look published: the person still occupies space, but print law sits on top of the photograph. One lighting direction so the ink has a sun.No speech balloons. Models ruin letters.Dialogue can survive if the ink is gentle and the faces stay human. It is the wrong tool when you need documentary pores and no line, or when you actually wanted full Animation.If there is no grain or halation of a camera, you left live action and drew a still."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock a 35mm or 50mm at eye height. One hard or hard-soft key so edges have a side."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ask for inked contours, halftone in shadows, a face that is still a photograph. Limited color spots."
+        },
+        {
+          "type": "paragraph",
+          "text": "No balloons. Prompt: Comic-book treatment of [Subject], inked edges, halftone, panel energy, a page that moves."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, the print holds while the body makes one small action."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock a 35mm or 50mm at eye height. One hard or hard-soft key so edges have a side.Ask for inked contours, halftone in shadows, a face that is still a photograph. Limited color spots.No balloons. Prompt: Comic-book treatment of [Subject], inked edges, halftone, panel energy, a page that moves.For video, the print holds while the body makes one small action."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A punchline, an origin beat, a city that should look printed. Do not use it as a cartoon filter on a whispering drama, and do not add balloons."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it A punchline, an origin beat, a city that should look printed. Do not use it as a cartoon filter on a whispering drama, and do not add balloons."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Animation is drawn throughout. Comic is live action wearing print.",
+          "links": [
+            {
+              "text": "Animation",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Typography makes letters the subject. Flash Comic adds a strobe bang on top of the same ink.",
+          "links": [
+            {
+              "text": "Typography",
+              "url": "https://melies.co/cinematic-techniques/effects/typography"
+            },
+            {
+              "text": "Flash Comic",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/flash-comic"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Two Color is a stricter ink budget.",
+          "links": [
+            {
+              "text": "Two Color",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/two-color"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AnimationThe world is constructed, not captured.",
+          "displayText": "Animation\nThe world is constructed, not captured.",
+          "links": [
+            {
+              "text": "AnimationThe world is constructed, not captured.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "TypographyThe sentence is in the shot.",
+          "displayText": "Typography\nThe sentence is in the shot.",
+          "links": [
+            {
+              "text": "TypographyThe sentence is in the shot.",
+              "url": "https://melies.co/cinematic-techniques/effects/typography"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AgamemnonMake them ancient and doomed.",
+          "displayText": "Agamemnon\nMake them ancient and doomed.",
+          "links": [
+            {
+              "text": "AgamemnonMake them ancient and doomed.",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Animation",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        },
+        {
+          "text": "Typography",
+          "url": "https://melies.co/cinematic-techniques/effects/typography"
+        },
+        {
+          "text": "Flash Comic",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/flash-comic"
+        },
+        {
+          "text": "Two Color",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/two-color"
+        },
+        {
+          "text": "AnimationThe world is constructed, not captured.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        },
+        {
+          "text": "TypographyThe sentence is in the shot.",
+          "url": "https://melies.co/cinematic-techniques/effects/typography"
+        },
+        {
+          "text": "AgamemnonMake them ancient and doomed.",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/agamemnon"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/f57edf0bd31cd8fedb8a8cc5427f2511.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/animation.webp",
+          "alt": "Animation"
+        },
+        {
+          "kind": "image",
+          "path": "media/81b1f876fe5e16bb270d26421a1dbb15.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/typography-typography-mini.webp",
+          "alt": "Typography"
+        },
+        {
+          "kind": "video",
+          "path": "media/8103d2a433b486f00ca65f195f8bae83.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/typography-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+          "alt": "Agamemnon"
+        }
+      ],
+      "sourceText": "Compared with similar shots Animation is drawn throughout. Comic is live action wearing print.Typography makes letters the subject. Flash Comic adds a strobe bang on top of the same ink.Two Color is a stricter ink budget.AnimationThe world is constructed, not captured.TypographyThe sentence is in the shot.AgamemnonMake them ancient and doomed."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Dick Tracy uses spot color and hard makeup as print law on photographed faces. Spider-Man: Into the Spider-Verse is animation you may borrow as a grade language, not as a frame to copy."
+        },
+        {
+          "type": "paragraph",
+          "text": "The still should look printable."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Dick Tracy uses spot color and hard makeup as print law on photographed faces. Spider-Man: Into the Spider-Verse is animation you may borrow as a grade language, not as a frame to copy.The still should look printable."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Keep the lens and the sun, then the print. Comic-book treatment of [Subject], inked edges, halftone, panel energy, a page that moves."
+        },
+        {
+          "type": "paragraph",
+          "text": "Add one key direction, photographic face, no balloons, no extra media. Motion: one action, print holding."
+        },
+        {
+          "type": "quote",
+          "text": "Comic-book treatment of [Subject], inked edges, halftone, panel energy, a page that moves."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Comic-book+treatment+of+[Subject],+inked+edges,+halftone,+panel+energy,+a+page+that+moves."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Keep the lens and the sun, then the print. Comic-book treatment of [Subject], inked edges, halftone, panel energy, a page that moves.Add one key direction, photographic face, no balloons, no extra media. Motion: one action, print holding.Copy promptUse in Image GeneratorComic-book treatment of [Subject], inked edges, halftone, panel energy, a page that moves.Comic-book treatment of [Subject], inked edges, halftone, panel energy, a page that moves."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Over-processing into a cartoon with no lens, or stacking this with Ink Riot and oil. The tell is no camera grain and no sun.",
+          "links": [
+            {
+              "text": "Ink Riot",
+              "url": "https://melies.co/cinematic-techniques/viral-looks/ink-riot"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix it: one light direction, halftone in shadows, face still a photograph."
+        }
+      ],
+      "links": [
+        {
+          "text": "Ink Riot",
+          "url": "https://melies.co/cinematic-techniques/viral-looks/ink-riot"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong Over-processing into a cartoon with no lens, or stacking this with Ink Riot and oil. The tell is no camera grain and no sun.Fix it: one light direction, halftone in shadows, face still a photograph."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Comic in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Live-action coverage wearing print law: inked edges, halftone, limited color, a photographed body. The camera still has a lens. It is not a scan of a comic page."
+        },
+        {
+          "type": "heading",
+          "text": "Comic vs Animation",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Animation is drawn as the whole image. Comic keeps photographic structure and adds ink and halftone. If there is no lens, you left this look."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Comic?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Origin beats, punchlines, a published city. Skip it when you need plain documentary skin, and skip balloons."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Comic for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name subject, lens, and one key, then: Comic-book treatment of [Subject], inked edges, halftone, panel energy, a page that moves. Forbid speech balloons. Keep the face photographic."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Comic in film?Live-action coverage wearing print law: inked edges, halftone, limited color, a photographed body. The camera still has a lens. It is not a scan of a comic page.Comic vs AnimationAnimation is drawn as the whole image. Comic keeps photographic structure and adds ink and halftone. If there is no lens, you left this look.When should I use Comic?Origin beats, punchlines, a published city. Skip it when you need plain documentary skin, and skip balloons.How do I prompt Comic for AI image or video?Name subject, lens, and one key, then: Comic-book treatment of [Subject], inked edges, halftone, panel energy, a page that moves. Forbid speech balloons. Keep the face photographic."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Keep the lens and the sun, then the print. Comic-book treatment of [Subject], inked edges, halftone, panel energy, a page that moves.",
+      "Add one key direction, photographic face, no balloons, no extra media. Motion: one action, print holding."
+    ],
+    "example": "Comic-book treatment of [Subject], inked edges, halftone, panel energy, a page that moves."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/6751e6f95d02ffafa5726984dd2e462d.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/comic-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/be483d79e4573084a858dc96a52b2f8e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/comic-comic-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/c8177847f8da3f4f1911b093c1f67017.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/comic.jpg",
+      "alt": "Comic frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/f57edf0bd31cd8fedb8a8cc5427f2511.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/animation.webp",
+      "alt": "Animation"
+    },
+    {
+      "kind": "image",
+      "path": "media/81b1f876fe5e16bb270d26421a1dbb15.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/typography-typography-mini.webp",
+      "alt": "Typography"
+    },
+    {
+      "kind": "video",
+      "path": "media/8103d2a433b486f00ca65f195f8bae83.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/typography-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/607d0dca022e55661ab74ddbea8d941e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/agamemnon.webp",
+      "alt": "Agamemnon"
+    },
+    {
+      "kind": "image",
+      "path": "media/82c952b981cf1045e1568674a8c50dcd.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/comic/hero.jpg",
+      "alt": "Comic",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Viral Looks",
+      "url": "https://melies.co/cinematic-techniques/viral-looks"
+    },
+    {
+      "text": "In-Camera and Optical Effects",
+      "url": "https://melies.co/cinematic-techniques/effects"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    }
+  ],
+  "sourceHtmlSha256": "6131549d9797821bf69fde8910083e821c7b5ba8a084f7db6f4ccab196275813"
+}

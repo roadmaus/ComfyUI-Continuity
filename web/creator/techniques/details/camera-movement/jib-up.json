@@ -1,0 +1,393 @@
+{
+  "id": "camera-movement/jib-up",
+  "slug": "jib-up",
+  "title": "Jib Up",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/jib-up",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jib-up-jib-up-mini.webp",
+  "detail": "details/camera-movement/jib-up.json",
+  "aliases": [
+    "short crane up"
+  ],
+  "description": "A jib up camera is a short rising arm that gives a table or face back to the room, human-scale lift. Who else is present appears; a skyline does not have to.",
+  "thumbnail": "media/5e573509692684882b6d97e9368095f7.webp",
+  "video": "media/59f9dad5bc080fea0d98764b3bc8f8a1.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/jib-up-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Leave the face, keep the architecture small. Endings of talks, a stand-up, a reveal of who else is in the room."
+        },
+        {
+          "type": "paragraph",
+          "text": "Intimate lift, not a city crane-up. If the background does not parallax, the arm did not move: you tilted."
+        },
+        {
+          "type": "paragraph",
+          "text": "A Technocrane that finds a skyline is a different scale. One axis, a short rise, a near object shearing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Leave the face, keep the architecture small. Endings of talks, a stand-up, a reveal of who else is in the room.Intimate lift, not a city crane-up. If the background does not parallax, the arm did not move: you tilted.A Technocrane that finds a skyline is a different scale. One axis, a short rise, a near object shearing."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Short jib, start on the subject, end with the room. Parallax of a near object (table edge, lamp, shoulder)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt: Jib up from [Subject], a short rising arm, the table or face giving the room back, human-scale lift."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Short jib, start on the subject, end with the room. Parallax of a near object (table edge, lamp, shoulder).Prompt: Jib up from [Subject], a short rising arm, the table or face giving the room back, human-scale lift."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to leave a face and show who else is in the room. Do not use it when the beat is a person becoming a city."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to leave a face and show who else is in the room. Do not use it when the beat is a person becoming a city."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Crane Up climbs toward rooftops and maps, often easing back. Jib Down sits in.",
+          "links": [
+            {
+              "text": "Crane Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            },
+            {
+              "text": "Jib Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/jib-down"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Tilt Up only pitches. Jib up is a few feet of true boom.",
+          "links": [
+            {
+              "text": "Tilt Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+          "displayText": "Crane Up\nEnd a scene, reveal a city, or turn a person into landscape.",
+          "links": [
+            {
+              "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Jib DownA full crane is too much city. Sit down into the talk.",
+          "displayText": "Jib Down\nA full crane is too much city. Sit down into the talk.",
+          "links": [
+            {
+              "text": "Jib DownA full crane is too much city. Sit down into the talk.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/jib-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Jib Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/jib-down"
+        },
+        {
+          "text": "Tilt Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        },
+        {
+          "text": "Crane UpEnd a scene, reveal a city, or turn a person into landscape.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-up"
+        },
+        {
+          "text": "Jib DownA full crane is too much city. Sit down into the talk.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/jib-down"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+          "alt": "Crane Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/50c4ef24a19e738a61c172c46b01b4ba.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jib-down-jib-down-mini.webp",
+          "alt": "Jib Down"
+        },
+        {
+          "kind": "video",
+          "path": "media/53e0655a400aa728543493a6f71c0054.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/jib-down-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Crane Up climbs toward rooftops and maps, often easing back. Jib Down sits in.A Tilt Up only pitches. Jib up is a few feet of true boom.Crane UpEnd a scene, reveal a city, or turn a person into landscape.Jib DownA full crane is too much city. Sit down into the talk.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Music videos and dialogue coverage use the polite cousin of crane-up: human-scale lift off a face or a table. Grammar: the room is given back, not a skyline."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Music videos and dialogue coverage use the polite cousin of crane-up: human-scale lift off a face or a table. Grammar: the room is given back, not a skyline."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Short rise, room returns. Still: Jib up from [Subject], a short rising arm, the table or face giving the room back, human-scale lift."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: A short jib up from [Subject], revealing who else is in the room. Demand parallax."
+        },
+        {
+          "type": "paragraph",
+          "text": "Forbid a tilt."
+        },
+        {
+          "type": "quote",
+          "text": "A short jib up from [Subject], revealing who else is in the room."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+short+jib+up+from+[Subject],+revealing+who+else+is+in+the+room."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Short rise, room returns. Still: Jib up from [Subject], a short rising arm, the table or face giving the room back, human-scale lift.Video: A short jib up from [Subject], revealing who else is in the room. Demand parallax.Forbid a tilt.Copy promptUse in Video GeneratorA short jib up from [Subject], revealing who else is in the room.A short jib up from [Subject], revealing who else is in the room."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a tilt up. The tell: no shear of a table or lamp, only a change of angle."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: boom a short arm, let a near object slide, end on the room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a tilt up. The tell: no shear of a table or lamp, only a change of angle.The fix: boom a short arm, let a near object slide, end on the room."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Jib Up in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A jib up is a short rising crane arm that leaves a face or table and gives the room back. Human-scale lift, not a city climb."
+        },
+        {
+          "type": "heading",
+          "text": "Jib Up vs Crane Up",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A crane-up can rise and ease back until a person is geography. A jib up is a few feet, revealing who else is in the room."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Jib Up?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to leave a face and show the rest of a small space. Do not use it when the world must become a skyline."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Jib Up for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a short rising arm and a room reveal. Example: Jib up from [Subject], a short rising arm, the table or face giving the room back, human-scale lift."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Jib Up in film?A jib up is a short rising crane arm that leaves a face or table and gives the room back. Human-scale lift, not a city climb.Jib Up vs Crane UpA crane-up can rise and ease back until a person is geography. A jib up is a few feet, revealing who else is in the room.When should I use Jib Up?Use it to leave a face and show the rest of a small space. Do not use it when the world must become a skyline.How do I prompt Jib Up for AI image or video?Write a short rising arm and a room reveal. Example: Jib up from [Subject], a short rising arm, the table or face giving the room back, human-scale lift."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Short rise, room returns. Still: Jib up from [Subject], a short rising arm, the table or face giving the room back, human-scale lift.",
+      "Video: A short jib up from [Subject], revealing who else is in the room. Demand parallax.",
+      "Forbid a tilt."
+    ],
+    "example": "A short jib up from [Subject], revealing who else is in the room."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/59f9dad5bc080fea0d98764b3bc8f8a1.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/jib-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5e573509692684882b6d97e9368095f7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jib-up-jib-up-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6ce5e08d4db40785325b9f7d5a64b418.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/jib-up.jpg",
+      "alt": "Jib Up frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/a5d50319cf9ddcdfe32d2c95d3a104d0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-up-010-crane-up-scale-reveal-mini.webp",
+      "alt": "Crane Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/5fdd96da0f8104ac8a48681bc0e73092.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/010-crane-up-scale-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/50c4ef24a19e738a61c172c46b01b4ba.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/jib-down-jib-down-mini.webp",
+      "alt": "Jib Down"
+    },
+    {
+      "kind": "video",
+      "path": "media/53e0655a400aa728543493a6f71c0054.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/jib-down-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/afbe05425b56367943b4c534525ef8ac.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/jib-up/hero.jpg",
+      "alt": "Jib Up",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "3082067ba4ca8057b49a633a19d13adbf44deb83a5d6a2e4ec5095160c7d6966"
+}

@@ -1,0 +1,449 @@
+{
+  "id": "camera-movement/slow-zoom-in",
+  "slug": "slow-zoom-in",
+  "title": "Slow Zoom In",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+  "detail": "details/camera-movement/slow-zoom-in.json",
+  "aliases": [
+    "gradual zoom",
+    "creep zoom",
+    "Creeping zoom",
+    "Zoom progressif"
+  ],
+  "description": "A slow zoom in is slow zoom in cinematography that tightens the frame by increasing focal length while the camera body stays locked. Perspective relations stay fixed: the world does not slide, it only enlarges as the lens compresses space.",
+  "thumbnail": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+  "video": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The shot is a thought that closes without walking. Geography stays put, so the audience feels watched or analyzed rather than approached."
+        },
+        {
+          "type": "paragraph",
+          "text": "Faces grow, walls stay in the same relation, and the pressure is optical. Use it when attention must narrow and the room must not rearrange itself."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you need to enter a mind by occupying the same air: that job belongs to a physical approach, because a zoom never changes the camera's station point."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The shot is a thought that closes without walking. Geography stays put, so the audience feels watched or analyzed rather than approached.Faces grow, walls stay in the same relation, and the pressure is optical. Use it when attention must narrow and the room must not rearrange itself.It is the wrong tool when you need to enter a mind by occupying the same air: that job belongs to a physical approach, because a zoom never changes the camera's station point."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lock a heavy tripod. Keep height, tilt, and nodal point still."
+        },
+        {
+          "type": "paragraph",
+          "text": "Drive focal length smoothly over several seconds and rehearse focus compensation as depth of field shallows. Compression increases: distant planes look closer to the subject even though nobody moved."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt a locked camera body, a gradual optical zoom in, rising compression, and an explicit ban on dolly parallax."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Lock a heavy tripod. Keep height, tilt, and nodal point still.Drive focal length smoothly over several seconds and rehearse focus compensation as depth of field shallows. Compression increases: distant planes look closer to the subject even though nobody moved.Prompt a locked camera body, a gradual optical zoom in, rising compression, and an explicit ban on dolly parallax."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to raise pressure on a still figure while the architecture stays legally the same. Concrete beat: a surveillance long-lens slowly isolating one person in a crowd."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it if foreground objects must peel and prove the camera walked."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to raise pressure on a still figure while the architecture stays legally the same. Concrete beat: a surveillance long-lens slowly isolating one person in a crowd.Do not use it if foreground objects must peel and prove the camera walked."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Dolly In translates the whole camera, so foreground and background change speed. A Push In is a physical or virtual walk whose job is a realization landing.",
+          "links": [
+            {
+              "text": "Dolly In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            },
+            {
+              "text": "Push In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Crash Zoom In uses the same optical mechanism at sting speed. Stay on slow zoom in when the station point must not move.",
+          "links": [
+            {
+              "text": "Crash Zoom In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Push InA thought lands. Do not rush it.",
+          "displayText": "Push In\nA thought lands. Do not rush it.",
+          "links": [
+            {
+              "text": "Push InA thought lands. Do not rush it.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "displayText": "Dolly In\nEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "links": [
+            {
+              "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "displayText": "Crash Zoom In\nPunctuate a hit, a realization, or a comic sting.",
+          "links": [
+            {
+              "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Push In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+        },
+        {
+          "text": "Crash Zoom In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        },
+        {
+          "text": "Push InA thought lands. Do not rush it.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/push-in"
+        },
+        {
+          "text": "Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        },
+        {
+          "text": "Crash Zoom InPunctuate a hit, a realization, or a comic sting.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crash-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/47c873ce3b75c118eebcc03f9ebba030.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/push-in-push-in-mini.webp",
+          "alt": "Push In"
+        },
+        {
+          "kind": "video",
+          "path": "media/ff1d0cd1ffd7716264b1bf880a5b857a.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/push-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+          "alt": "Dolly In"
+        },
+        {
+          "kind": "video",
+          "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+          "alt": "Crash Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Dolly In translates the whole camera, so foreground and background change speed. A Push In is a physical or virtual walk whose job is a realization landing.A Crash Zoom In uses the same optical mechanism at sting speed. Stay on slow zoom in when the station point must not move.Push InA thought lands. Do not rush it.Dolly InEnter a mind, a room, or a threat. Geography changes because the camera walks.Crash Zoom InPunctuate a hit, a realization, or a comic sting."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Conversation isolates figures in Union Square with a gradual long-lens close. There Will Be Blood and Phantom Thread use slow optical tightening as patience and scrutiny."
+        },
+        {
+          "type": "paragraph",
+          "text": "These are grammar for locked-body compression, not frames to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "Barry Lyndon 1975Slow widening views reveal painterly social tableaux.",
+          "displayText": "Barry Lyndon 1975\nSlow widening views reveal painterly social tableaux."
+        },
+        {
+          "type": "list-item",
+          "text": "The Conversation 1974The opening surveillance view gradually isolates figures in Union Square.",
+          "displayText": "The Conversation 1974\nThe opening surveillance view gradually isolates figures in Union Square."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/0a7c0c71db2bc69fdc7460130e80a49f.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slow-zoom-in/famous/00-barry-lyndon-1975.jpg",
+          "alt": "Barry Lyndon 1975"
+        },
+        {
+          "kind": "image",
+          "path": "media/94d92301e85f4814e5dd7bf414e11f5e.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slow-zoom-in/famous/01-the-conversation-1974.jpg",
+          "alt": "The Conversation 1974"
+        }
+      ],
+      "sourceText": "In film The Conversation isolates figures in Union Square with a gradual long-lens close. There Will Be Blood and Phantom Thread use slow optical tightening as patience and scrutiny.These are grammar for locked-body compression, not frames to copy.Barry Lyndon 1975Slow widening views reveal painterly social tableaux.The Conversation 1974The opening surveillance view gradually isolates figures in Union Square."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Slow optical zoom in on [Subject], camera body locked on a heavy tripod, lens gradually tightening over several seconds, background compression increasing, no physical dolly, prestige-drama patience. For motion: the lens slowly zooms in for 6 seconds while the camera body stays locked and the subject stays centered."
+        },
+        {
+          "type": "paragraph",
+          "text": "Smooth optical zoom only."
+        },
+        {
+          "type": "quote",
+          "text": "From a distant fixed window, slowly zoom into a solitary woman waiting at the center of a city square. Eight seconds, no camera translation, no foreground parallax, patient observational mood. She never acknowledges the camera."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=From+a+distant+fixed+window,+slowly+zoom+into+a+solitary+woman+waiting+at+the+center+of+a+city+square.+Eight+seconds,+no+camera+translation,+no+foreground+parallax,+patient+observational+mood.+She+never+acknowledges+the+camera."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Slow optical zoom in on [Subject], camera body locked on a heavy tripod, lens gradually tightening over several seconds, background compression increasing, no physical dolly, prestige-drama patience. For motion: the lens slowly zooms in for 6 seconds while the camera body stays locked and the subject stays centered.Smooth optical zoom only.Copy promptUse in Video GeneratorFrom a distant fixed window, slowly zoom into a solitary woman waiting at the center of a city square. Eight seconds, no camera translation, no foreground parallax, patient observational mood. She never acknowledges the camera.From a distant fixed window, slowly zoom into a solitary woman waiting at the center of a city square. Eight seconds, no camera translation, no foreground parallax, patient observational mood. She never acknowledges the camera."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Dolly In or a digital crop sold as a zoom. The tell is parallax: if a foreground chair slides against the wall, you translated.",
+          "links": [
+            {
+              "text": "Dolly In",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is a locked head, a true focal-length change, and a hold on the final tight frame."
+        }
+      ],
+      "links": [
+        {
+          "text": "Dolly In",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/dolly-in"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Dolly In or a digital crop sold as a zoom. The tell is parallax: if a foreground chair slides against the wall, you translated.The fix is a locked head, a true focal-length change, and a hold on the final tight frame."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Slow Zoom In in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a gradual increase of focal length with the camera support still. The image tightens and space compresses, but the camera does not occupy a new position."
+        },
+        {
+          "type": "heading",
+          "text": "Slow Zoom In vs Dolly In",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Dolly in walks the camera so perspective and parallax change. Slow zoom in only walks the lens: size grows, relative geometry of planes stays the same."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Slow Zoom In?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When you want pressure, scrutiny, or a slow isolation and you need the room to remain the same place. Skip it if the beat is actually entering the space."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Slow Zoom In for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Name a locked tripod, optical zoom in, duration, and no body travel. Example: camera body locked, lens slowly zooming in for 6 seconds, compression increasing, no dolly."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Slow Zoom In in film?It is a gradual increase of focal length with the camera support still. The image tightens and space compresses, but the camera does not occupy a new position.Slow Zoom In vs Dolly InDolly in walks the camera so perspective and parallax change. Slow zoom in only walks the lens: size grows, relative geometry of planes stays the same.When should I use Slow Zoom In?When you want pressure, scrutiny, or a slow isolation and you need the room to remain the same place. Skip it if the beat is actually entering the space.How do I prompt Slow Zoom In for AI image or video?Name a locked tripod, optical zoom in, duration, and no body travel. Example: camera body locked, lens slowly zooming in for 6 seconds, compression increasing, no dolly."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Slow optical zoom in on [Subject], camera body locked on a heavy tripod, lens gradually tightening over several seconds, background compression increasing, no physical dolly, prestige-drama patience. For motion: the lens slowly zooms in for 6 seconds while the camera body stays locked and the subject stays centered.",
+      "Smooth optical zoom only."
+    ],
+    "example": "From a distant fixed window, slowly zoom into a solitary woman waiting at the center of a city square. Eight seconds, no camera translation, no foreground parallax, patient observational mood. She never acknowledges the camera."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/5cdaae38ae80bdc6f65e6ecedb8ec67d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/slow-zoom-in-01-slow-zoom-in-v2.jpg",
+      "alt": "Slow Zoom In frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/47c873ce3b75c118eebcc03f9ebba030.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/push-in-push-in-mini.webp",
+      "alt": "Push In"
+    },
+    {
+      "kind": "video",
+      "path": "media/ff1d0cd1ffd7716264b1bf880a5b857a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/push-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7dd06c508bfa9e0632cf8a65d99ab7de.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/dolly-in-002-slow-dolly-in-mini.webp",
+      "alt": "Dolly In"
+    },
+    {
+      "kind": "video",
+      "path": "media/71315e97d3e8d203be6d71b2816c9b84.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/002-slow-dolly-in-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/31b34ee32d65abff9705c371f8f9a5f9.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crash-zoom-in-014-crash-zoom-mini.webp",
+      "alt": "Crash Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/59e32204a473aa00fee9f0ff80daac4e.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/014-crash-zoom-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0a7c0c71db2bc69fdc7460130e80a49f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slow-zoom-in/famous/00-barry-lyndon-1975.jpg",
+      "alt": "Barry Lyndon 1975"
+    },
+    {
+      "kind": "image",
+      "path": "media/94d92301e85f4814e5dd7bf414e11f5e.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slow-zoom-in/famous/01-the-conversation-1974.jpg",
+      "alt": "The Conversation 1974"
+    },
+    {
+      "kind": "image",
+      "path": "media/1a482446ae65e15e380b4da79175ec06.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/slow-zoom-in/hero.jpg",
+      "alt": "Slow Zoom In",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "c0bcaf9ae287a1c62dbe27791c923b459319f613d2016216cb84f075f64662f2"
+}

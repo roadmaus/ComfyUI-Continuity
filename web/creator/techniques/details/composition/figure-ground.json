@@ -1,0 +1,411 @@
+{
+  "id": "composition/figure-ground",
+  "slug": "figure-ground",
+  "title": "Figure-Ground",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/figure-ground",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/figure-ground.webp",
+  "detail": "details/composition/figure-ground.json",
+  "aliases": [],
+  "description": "Figure-ground composition separates the subject from the field so the person or object reads in under a second. Contrast of tone, color, or focus does the split, and if figure and ground share the same value the diagram fails even if the acting is good.",
+  "thumbnail": "media/232c9590c2225340df9e4b20b1784d39.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "First read is survival. A face against a matching wall disappears."
+        },
+        {
+          "type": "paragraph",
+          "text": "A dark coat against a dark street disappears. The audience should not have to hunt the subject unless hunting is the beat (camouflage, a sniper, a ghost)."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool to solve with a fake halo on every shot. Sometimes the story is that they do not separate: a clerk eaten by an office, a dancer eaten by a crowd."
+        },
+        {
+          "type": "paragraph",
+          "text": "Then you are composing fusion on purpose. Clean edges help."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dirty edges and busy wallpaper fight figure-ground unless the figure has a stronger currency: backlight rim, color, or a pool of focus."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function First read is survival. A face against a matching wall disappears.A dark coat against a dark street disappears. The audience should not have to hunt the subject unless hunting is the beat (camouflage, a sniper, a ghost).It is the wrong tool to solve with a fake halo on every shot. Sometimes the story is that they do not separate: a clerk eaten by an office, a dancer eaten by a crowd.Then you are composing fusion on purpose. Clean edges help.Dirty edges and busy wallpaper fight figure-ground unless the figure has a stronger currency: backlight rim, color, or a pool of focus."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Park the subject against a simpler or opposite field. A rim or backlight traces the outline."
+        },
+        {
+          "type": "paragraph",
+          "text": "A shallow plane of focus melts the ground. A costume change (dark on light, light on dark, a single saturated piece) is cheaper than a new set."
+        },
+        {
+          "type": "paragraph",
+          "text": "Check a squint test: if the silhouette dies when you defocus your eyes, the split is weak. Prompt: Clear figure-ground separation of [Subject] from background, contrast of tone, color, or focus so the person reads instantly."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Park the subject against a simpler or opposite field. A rim or backlight traces the outline.A shallow plane of focus melts the ground. A costume change (dark on light, light on dark, a single saturated piece) is cheaper than a new set.Check a squint test: if the silhouette dies when you defocus your eyes, the split is weak. Prompt: Clear figure-ground separation of [Subject] from background, contrast of tone, color, or focus so the person reads instantly."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it as default whenever a person must be found immediately: coverage, posters, any beat that is not hide-and-seek. Do not separate a character who is meant to be eaten by the room."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it as default whenever a person must be found immediately: coverage, posters, any beat that is not hide-and-seek. Do not separate a character who is meant to be eaten by the room."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Silhouette is a hard version: figure as outline against a brighter field, interior detail sacrificed. Shallow Focus buys separation with optics.",
+          "links": [
+            {
+              "text": "Silhouette",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            },
+            {
+              "text": "Shallow Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Figure-ground can also be a sharp, deep picture with tonal contrast. Tonal Contrast is the graphic extreme of lightest versus darkest mass.",
+          "links": [
+            {
+              "text": "Tonal Contrast",
+              "url": "https://melies.co/cinematic-techniques/composition/contrast-composition"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cameo Lighting isolates with a pool against dark. Architexture may intentionally lose the person in the building.",
+          "links": [
+            {
+              "text": "Cameo Lighting",
+              "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+            },
+            {
+              "text": "Architexture",
+              "url": "https://melies.co/cinematic-techniques/composition/architexture"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SilhouetteIdentity is less important than shape.",
+          "displayText": "Silhouette\nIdentity is less important than shape.",
+          "links": [
+            {
+              "text": "SilhouetteIdentity is less important than shape.",
+              "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Shallow FocusNothing else is invited.",
+          "displayText": "Shallow Focus\nNothing else is invited.",
+          "links": [
+            {
+              "text": "Shallow FocusNothing else is invited.",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Silhouette",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Shallow Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "Tonal Contrast",
+          "url": "https://melies.co/cinematic-techniques/composition/contrast-composition"
+        },
+        {
+          "text": "Cameo Lighting",
+          "url": "https://melies.co/cinematic-techniques/lighting/cameo-lighting"
+        },
+        {
+          "text": "Architexture",
+          "url": "https://melies.co/cinematic-techniques/composition/architexture"
+        },
+        {
+          "text": "SilhouetteIdentity is less important than shape.",
+          "url": "https://melies.co/cinematic-techniques/lighting/silhouette"
+        },
+        {
+          "text": "Shallow FocusNothing else is invited.",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/b5d6146a73c5baa985f280578740ef59.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/silhouette-049-silhouette-as-graphic-storytelling-mini.webp",
+          "alt": "Silhouette"
+        },
+        {
+          "kind": "video",
+          "path": "media/aa375d20479989e1dab53b000981e0c5.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/049-silhouette-as-graphic-storytelling-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+          "alt": "Shallow Focus"
+        },
+        {
+          "kind": "video",
+          "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Silhouette is a hard version: figure as outline against a brighter field, interior detail sacrificed. Shallow Focus buys separation with optics.Figure-ground can also be a sharp, deep picture with tonal contrast. Tonal Contrast is the graphic extreme of lightest versus darkest mass.Cameo Lighting isolates with a pool against dark. Architexture may intentionally lose the person in the building.SilhouetteIdentity is less important than shape.Shallow FocusNothing else is invited.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Classical cinematography treats instant separation as manners: rim, backlight, and costume contrast so a face reads in a theater. Westerns park figures against sky."
+        },
+        {
+          "type": "paragraph",
+          "text": "Noir parks them against wet highlights. When a film withholds the split, it is usually a hide, not a mistake."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Classical cinematography treats instant separation as manners: rim, backlight, and costume contrast so a face reads in a theater. Westerns park figures against sky.Noir parks them against wet highlights. When a film withholds the split, it is usually a hide, not a mistake."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the split method. Clear figure-ground separation of [Subject] from background, contrast of tone, color, or focus so the person reads instantly."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say dark figure on a pale wall, or sharp subject, background soft, or a rim outlining the coat. Do not write pops."
+        },
+        {
+          "type": "quote",
+          "text": "Clear figure-ground separation of [Subject] from background, contrast of tone, color, or focus so the person reads instantly."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Clear+figure-ground+separation+of+[Subject]+from+background,+contrast+of+tone,+color,+or+focus+so+the+person+reads+instantly."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the split method. Clear figure-ground separation of [Subject] from background, contrast of tone, color, or focus so the person reads instantly.Say dark figure on a pale wall, or sharp subject, background soft, or a rim outlining the coat. Do not write pops.Copy promptUse in Image GeneratorClear figure-ground separation of [Subject] from background, contrast of tone, color, or focus so the person reads instantly.Clear figure-ground separation of [Subject] from background, contrast of tone, color, or focus so the person reads instantly."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a matching suit on a matching wall. The tell is a hunt for the head."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is a rim, a different backdrop value, a costume change, or Shallow Focus. If they should vanish, own it and stop claiming a portrait.",
+          "links": [
+            {
+              "text": "Shallow Focus",
+              "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Shallow Focus",
+          "url": "https://melies.co/cinematic-techniques/effects/shallow-focus"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a matching suit on a matching wall. The tell is a hunt for the head.The fix is a rim, a different backdrop value, a costume change, or Shallow Focus. If they should vanish, own it and stop claiming a portrait."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is figure-ground in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the split between the subject and the field so the figure reads immediately. Tone, color, or focus can do the job. If the person and the wall share a value, the composition has not separated them."
+        },
+        {
+          "type": "heading",
+          "text": "Figure-Ground vs Silhouette",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A silhouette is figure-ground taken to outline: the field is brighter, the interior of the body goes dark. Figure-ground also includes a fully lit face against a darker or softer field. Silhouette sacrifices face for shape. Figure-ground may keep the face."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use figure-ground?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "By default, whenever the audience must find the person in a glance. Withhold it when camouflage, crowd, or architecture should swallow them."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt figure-ground for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "State how they separate. Example: Clear figure-ground separation of [Subject] from background, contrast of tone, color, or focus so the person reads instantly. Add dark coat against snow, or shallow focus, or rim light. Models often blend subject and wallpaper."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is figure-ground in film?It is the split between the subject and the field so the figure reads immediately. Tone, color, or focus can do the job. If the person and the wall share a value, the composition has not separated them.Figure-Ground vs SilhouetteA silhouette is figure-ground taken to outline: the field is brighter, the interior of the body goes dark. Figure-ground also includes a fully lit face against a darker or softer field. Silhouette sacrifices face for shape. Figure-ground may keep the face.When should I use figure-ground?By default, whenever the audience must find the person in a glance. Withhold it when camouflage, crowd, or architecture should swallow them.How do I prompt figure-ground for AI image or video?State how they separate. Example: Clear figure-ground separation of [Subject] from background, contrast of tone, color, or focus so the person reads instantly. Add dark coat against snow, or shallow focus, or rim light. Models often blend subject and wallpaper."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the split method. Clear figure-ground separation of [Subject] from background, contrast of tone, color, or focus so the person reads instantly.",
+      "Say dark figure on a pale wall, or sharp subject, background soft, or a rim outlining the coat. Do not write pops."
+    ],
+    "example": "Clear figure-ground separation of [Subject] from background, contrast of tone, color, or focus so the person reads instantly."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/232c9590c2225340df9e4b20b1784d39.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/figure-ground.webp",
+      "alt": "Figure-Ground example"
+    },
+    {
+      "kind": "image",
+      "path": "media/b5d6146a73c5baa985f280578740ef59.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/silhouette-049-silhouette-as-graphic-storytelling-mini.webp",
+      "alt": "Silhouette"
+    },
+    {
+      "kind": "video",
+      "path": "media/aa375d20479989e1dab53b000981e0c5.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/049-silhouette-as-graphic-storytelling-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/60b046d7065f8fef18f89fb3406d9d72.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/shallow-focus-052-shallow-focus-isolation-mini.webp",
+      "alt": "Shallow Focus"
+    },
+    {
+      "kind": "video",
+      "path": "media/2bd585b5a4df7cbfff4857f586efe00c.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/052-shallow-focus-isolation-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/3b35a73a537b8a09aa9ce9888947ce8b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/figure-ground/hero.jpg",
+      "alt": "Figure-Ground",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "5a25e47d5f30643cc8fd9cd63306d1fb978d965af0352bc702e860606e41974d"
+}

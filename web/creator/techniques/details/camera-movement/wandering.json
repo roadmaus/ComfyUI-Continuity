@@ -1,0 +1,390 @@
+{
+  "id": "camera-movement/wandering",
+  "slug": "wandering",
+  "title": "Wandering",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/wandering",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wandering-wandering-mini.webp",
+  "detail": "details/camera-movement/wandering.json",
+  "aliases": [],
+  "description": "A wandering camera drifts near the subject as curiosity, a search without a target yet. The move is not a motivated reframe to a known fact; looking itself is the action until something is found.",
+  "thumbnail": "media/1b5a5567b074936cba5812af88798118.webp",
+  "video": "media/ca9f175c393d60974e3831917400ff13.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/wandering-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Looking is the action. Openings, parties, streets: the lens behaves like a guest who has not decided what matters."
+        },
+        {
+          "type": "paragraph",
+          "text": "Discovery is the point, not a pre-aimed hero. Once the camera knows the target and drives at it, the wandering is over."
+        },
+        {
+          "type": "paragraph",
+          "text": "A hunt is a track. A tour that never finds anything is also empty: curiosity still needs a world worth searching."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Looking is the action. Openings, parties, streets: the lens behaves like a guest who has not decided what matters.Discovery is the point, not a pre-aimed hero. Once the camera knows the target and drives at it, the wandering is over.A hunt is a track. A tour that never finds anything is also empty: curiosity still needs a world worth searching."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Steadicam or handheld, human height, no locked axis. Speed is uneven on purpose."
+        },
+        {
+          "type": "paragraph",
+          "text": "Let the frame glance off extras, corners, and unfinished business, then arrive. Prompt: Wandering camera near [Subject], unmotivated drift that becomes curiosity, a search without a target yet."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Steadicam or handheld, human height, no locked axis. Speed is uneven on purpose.Let the frame glance off extras, corners, and unfinished business, then arrive. Prompt: Wandering camera near [Subject], unmotivated drift that becomes curiosity, a search without a target yet."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the scene is a search: an opening that discovers a location, a camera that has not chosen a side. Do not wander through a scene whose power geography is already known."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the scene is a search: an opening that discovers a location, a camera that has not chosen a side. Do not wander through a scene whose power geography is already known."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Handheld is a body and a shake; it can still be aimed. Steadicam is a float that can wander or can be a laser.",
+          "links": [
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            },
+            {
+              "text": "Steadicam",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Wandering is the motive: discovery, not targeting. A Pan from sticks surveys from one point; wandering translates.",
+          "links": [
+            {
+              "text": "Pan",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pan"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "displayText": "Handheld\nUrgency, documentary truth, or a mind that cannot sit still.",
+          "links": [
+            {
+              "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "displayText": "Steadicam\nLong connecting moves through architecture. Neither handheld nor dolly.",
+          "links": [
+            {
+              "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Steadicam",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Pan",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pan"
+        },
+        {
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "SteadicamLong connecting moves through architecture. Neither handheld nor dolly.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/steadicam"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+          "alt": "Handheld"
+        },
+        {
+          "kind": "video",
+          "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+          "alt": "Steadicam"
+        },
+        {
+          "kind": "video",
+          "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots Handheld is a body and a shake; it can still be aimed. Steadicam is a float that can wander or can be a laser.Wandering is the motive: discovery, not targeting. A Pan from sticks surveys from one point; wandering translates.HandheldUrgency, documentary truth, or a mind that cannot sit still.SteadicamLong connecting moves through architecture. Neither handheld nor dolly.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Children of Men openings let the camera discover a street before the event lands. The Player's start wanders a lot as a search that becomes a sentence."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grammar: looking before knowing."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Children of Men openings let the camera discover a street before the event lands. The Player's start wanders a lot as a search that becomes a sentence.Grammar: looking before knowing."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write discovery, not a target lock. Still: Wandering camera near [Subject], unmotivated drift that becomes curiosity, a search without a target yet."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video: The camera wanders through the space around [Subject], discovering rather than targeting. Forbid a straight push to a close-up as the first idea."
+        },
+        {
+          "type": "quote",
+          "text": "The camera wanders through the space around [Subject], discovering rather than targeting."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+wanders+through+the+space+around+[Subject],+discovering+rather+than+targeting."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Write discovery, not a target lock. Still: Wandering camera near [Subject], unmotivated drift that becomes curiosity, a search without a target yet.Video: The camera wanders through the space around [Subject], discovering rather than targeting. Forbid a straight push to a close-up as the first idea.Copy promptUse in Video GeneratorThe camera wanders through the space around [Subject], discovering rather than targeting.The camera wanders through the space around [Subject], discovering rather than targeting."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a hero-cam walk or a clean track. The tell: the subject is already centered and inevitable."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: drift, miss, then find; let the space exist before the aim."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a hero-cam walk or a clean track. The tell: the subject is already centered and inevitable.The fix: drift, miss, then find; let the space exist before the aim."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Wandering in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A wandering camera searches a space without a chosen target yet. Looking is the action; discovery comes after the drift."
+        },
+        {
+          "type": "heading",
+          "text": "Wandering vs Handheld",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Handheld is a mounting and a shake. Wandering is a motive: curiosity rather than a pre-aimed subject. A wander can be smooth on a vest."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Wandering?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it for openings and searches, when the camera has not chosen a side. Do not wander a scene whose blocking is already the point."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Wandering for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a drift that discovers rather than targets. Example: Wandering camera near [Subject], unmotivated drift that becomes curiosity, a search without a target yet."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Wandering in film?A wandering camera searches a space without a chosen target yet. Looking is the action; discovery comes after the drift.Wandering vs HandheldHandheld is a mounting and a shake. Wandering is a motive: curiosity rather than a pre-aimed subject. A wander can be smooth on a vest.When should I use Wandering?Use it for openings and searches, when the camera has not chosen a side. Do not wander a scene whose blocking is already the point.How do I prompt Wandering for AI image or video?Write a drift that discovers rather than targets. Example: Wandering camera near [Subject], unmotivated drift that becomes curiosity, a search without a target yet."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Write discovery, not a target lock. Still: Wandering camera near [Subject], unmotivated drift that becomes curiosity, a search without a target yet.",
+      "Video: The camera wanders through the space around [Subject], discovering rather than targeting. Forbid a straight push to a close-up as the first idea."
+    ],
+    "example": "The camera wanders through the space around [Subject], discovering rather than targeting."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/ca9f175c393d60974e3831917400ff13.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/wandering-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/1b5a5567b074936cba5812af88798118.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/wandering-wandering-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/902464dbca3ade3f61f3834364144fb6.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/wandering.jpg",
+      "alt": "Wandering frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+      "alt": "Handheld"
+    },
+    {
+      "kind": "video",
+      "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/35a5d645ffdcc8470128e9edf2f15fd2.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/steadicam-steadicam-mini.webp",
+      "alt": "Steadicam"
+    },
+    {
+      "kind": "video",
+      "path": "media/5119e79be51fd2c538540ccba65043be.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/steadicam-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/03229aae644916bd08bb6dd91fd0c457.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/wandering/hero.jpg",
+      "alt": "Wandering",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "05a3722deaaf5b7b72cb38593f57cd26349cf035a884c083582bbe5a202eec40"
+}

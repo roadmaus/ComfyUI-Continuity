@@ -1,0 +1,403 @@
+{
+  "id": "composition/central-framing",
+  "slug": "central-framing",
+  "title": "Central Framing",
+  "categoryId": "composition",
+  "categoryTitle": "Composition",
+  "sourceUrl": "https://melies.co/cinematic-techniques/composition/central-framing",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/central-framing.webp",
+  "detail": "details/composition/central-framing.json",
+  "aliases": [
+    "dead center",
+    "center punch"
+  ],
+  "description": "Central framing, also called dead center or center punch, places the figure on the optical axis so the body sits on the crosshairs of the frame. Bilateral weight may gather around that body, but the first fact is placement: the person is the altar, not a guest in a third.",
+  "thumbnail": "media/5c633b152c7a36754fdcca970b96d9fa.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Put them on the crosshairs and the diagram changes. Off-center space no longer belongs to the look."
+        },
+        {
+          "type": "paragraph",
+          "text": "Both leftover fields become equal attendants. The subject owns the axis."
+        },
+        {
+          "type": "paragraph",
+          "text": "Everyone else owns the wings. It is the wrong tool when the character should be hunting, fleeing, or eavesdropping."
+        },
+        {
+          "type": "paragraph",
+          "text": "A center punch on a spy in a crowd makes them a poster. A center punch on a god, a child in costume, a dictator, or a comic stiff makes the formality legible."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can center-punch a face in a messy room. That is still central framing."
+        },
+        {
+          "type": "paragraph",
+          "text": "The architecture does not have to salute. If the whole room salutes, you have walked into centered composition and maybe into symmetry."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Put them on the crosshairs and the diagram changes. Off-center space no longer belongs to the look.Both leftover fields become equal attendants. The subject owns the axis.Everyone else owns the wings. It is the wrong tool when the character should be hunting, fleeing, or eavesdropping.A center punch on a spy in a crowd makes them a poster. A center punch on a god, a child in costume, a dictator, or a comic stiff makes the formality legible.You can center-punch a face in a messy room. That is still central framing.The architecture does not have to salute. If the whole room salutes, you have walked into centered composition and maybe into symmetry."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Align the lens axis with the sternum or the bridge of the nose. Keep verticals upright unless you want a joke or a threat."
+        },
+        {
+          "type": "paragraph",
+          "text": "A longer lens (65mm to 85mm) isolates the bullseye. A wider lens will show whether the room is also axial."
+        },
+        {
+          "type": "paragraph",
+          "text": "Check both ears have similar leftover, then decide if that equality is the point. Prompt: Central framing of [Subject], the figure on the optical axis, bilateral weight, a formal altar in the frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Align the lens axis with the sternum or the bridge of the nose. Keep verticals upright unless you want a joke or a threat.A longer lens (65mm to 85mm) isolates the bullseye. A wider lens will show whether the room is also axial.Check both ears have similar leftover, then decide if that equality is the point. Prompt: Central framing of [Subject], the figure on the optical axis, bilateral weight, a formal altar in the frame."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a character must be presented, judged, or worshipped: an arrival through doors, a formal portrait, a comic stare into lens. Do not use it on a look-off that needs air in front of the eyes."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a character must be presented, judged, or worshipped: an arrival through doors, a formal portrait, a comic stare into lens. Do not use it on a look-off that needs air in front of the eyes."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Centered Composition organizes the entire field around the axis, often as a frontal tableau. Central framing can be just the body on the crosshairs.",
+          "links": [
+            {
+              "text": "Centered Composition",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Symmetry mirrors masses. You can punch a face dead center in an asymmetric street.",
+          "links": [
+            {
+              "text": "Symmetry",
+              "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Rule of Thirds is the default you are breaking. One-Point Perspective adds a vanishing point on that same axis.",
+          "links": [
+            {
+              "text": "Rule of Thirds",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            },
+            {
+              "text": "One-Point Perspective",
+              "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "displayText": "Centered Composition\nControl, ritual, comedy, or fate.",
+          "links": [
+            {
+              "text": "Centered CompositionControl, ritual, comedy, or fate.",
+              "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "SymmetryThe world is designed. Or pretending to be.",
+          "displayText": "Symmetry\nThe world is designed. Or pretending to be.",
+          "links": [
+            {
+              "text": "SymmetryThe world is designed. Or pretending to be.",
+              "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "displayText": "Rule of Thirds\nDefault dynamic balance. Break it later on purpose.",
+          "links": [
+            {
+              "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+              "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Centered Composition",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "Symmetry",
+          "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+        },
+        {
+          "text": "Rule of Thirds",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        },
+        {
+          "text": "One-Point Perspective",
+          "url": "https://melies.co/cinematic-techniques/composition/one-point-perspective"
+        },
+        {
+          "text": "Centered CompositionControl, ritual, comedy, or fate.",
+          "url": "https://melies.co/cinematic-techniques/composition/centered-composition"
+        },
+        {
+          "text": "SymmetryThe world is designed. Or pretending to be.",
+          "url": "https://melies.co/cinematic-techniques/composition/symmetry"
+        },
+        {
+          "text": "Rule of ThirdsDefault dynamic balance. Break it later on purpose.",
+          "url": "https://melies.co/cinematic-techniques/composition/rule-of-thirds"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+          "alt": "Centered Composition"
+        },
+        {
+          "kind": "video",
+          "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/433ff490835bf3f002cef6f2447f05d3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/symmetry.webp",
+          "alt": "Symmetry"
+        },
+        {
+          "kind": "image",
+          "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+          "alt": "Rule of Thirds"
+        }
+      ],
+      "sourceText": "Compared with similar shots Centered Composition organizes the entire field around the axis, often as a frontal tableau. Central framing can be just the body on the crosshairs.Symmetry mirrors masses. You can punch a face dead center in an asymmetric street.Rule of Thirds is the default you are breaking. One-Point Perspective adds a vanishing point on that same axis.Centered CompositionControl, ritual, comedy, or fate.SymmetryThe world is designed. Or pretending to be.Rule of ThirdsDefault dynamic balance. Break it later on purpose."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Grand Budapest Hotel center-punches concierges and guests as if they were stamps. Moonrise Kingdom does the same with children in uniform, frontal and unembarrassed."
+        },
+        {
+          "type": "paragraph",
+          "text": "The formality is the joke and the tenderness. Grammar, not a Wes Anderson costume kit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Grand Budapest Hotel center-punches concierges and guests as if they were stamps. Moonrise Kingdom does the same with children in uniform, frontal and unembarrassed.The formality is the joke and the tenderness. Grammar, not a Wes Anderson costume kit."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Name the axis. Central framing of [Subject], the figure on the optical axis, bilateral weight, a formal altar in the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Say the camera is square to the face or body. Forbid extra look-space."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the room must also salute, add frontal architecture. If it must not, say messy sides, figure still dead center."
+        },
+        {
+          "type": "quote",
+          "text": "Central framing of [Subject], the figure on the optical axis, bilateral weight, a formal altar in the frame."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Central+framing+of+[Subject],+the+figure+on+the+optical+axis,+bilateral+weight,+a+formal+altar+in+the+frame."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Name the axis. Central framing of [Subject], the figure on the optical axis, bilateral weight, a formal altar in the frame.Say the camera is square to the face or body. Forbid extra look-space.If the room must also salute, add frontal architecture. If it must not, say messy sides, figure still dead center.Copy promptUse in Image GeneratorCentral framing of [Subject], the figure on the optical axis, bilateral weight, a formal altar in the frame.Central framing of [Subject], the figure on the optical axis, bilateral weight, a formal altar in the frame."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is thirds with a slightly lazy offset. The tell is more air on the look side than behind the head."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix is to slide the figure until both leftover fields match, or to admit you wanted Lead Room and keep the offset.",
+          "links": [
+            {
+              "text": "Lead Room",
+              "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Lead Room",
+          "url": "https://melies.co/cinematic-techniques/composition/lead-room"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is thirds with a slightly lazy offset. The tell is more air on the look side than behind the head.The fix is to slide the figure until both leftover fields match, or to admit you wanted Lead Room and keep the offset."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is central framing in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is dead-center placement of the figure on the optical axis, a center punch. The body sits on the crosshairs. Leftover space on both sides is equal. The person is presented, not nested into a third."
+        },
+        {
+          "type": "heading",
+          "text": "Central Framing vs Centered Composition",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Central framing is where the body sits: on the axis. Centered composition is the whole diagram: furniture, walls, and other bodies often join the altar. You can center-punch a face in a messy room. That is central framing without a full centered tableau."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use central framing?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it to present, judge, or joke: a formal arrival, a portrait, a child in a uniform, a tyrant at a desk. Do not use it when the look needs air, or when the character should feel like a guest in someone else's frame."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt central framing for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Say dead center and optical axis. Example: Central framing of [Subject], the figure on the optical axis, bilateral weight, a formal altar in the frame. Add square to camera. If you only write portrait, you will get thirds."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is central framing in film?It is dead-center placement of the figure on the optical axis, a center punch. The body sits on the crosshairs. Leftover space on both sides is equal. The person is presented, not nested into a third.Central Framing vs Centered CompositionCentral framing is where the body sits: on the axis. Centered composition is the whole diagram: furniture, walls, and other bodies often join the altar. You can center-punch a face in a messy room. That is central framing without a full centered tableau.When should I use central framing?Use it to present, judge, or joke: a formal arrival, a portrait, a child in a uniform, a tyrant at a desk. Do not use it when the look needs air, or when the character should feel like a guest in someone else's frame.How do I prompt central framing for AI image or video?Say dead center and optical axis. Example: Central framing of [Subject], the figure on the optical axis, bilateral weight, a formal altar in the frame. Add square to camera. If you only write portrait, you will get thirds."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Name the axis. Central framing of [Subject], the figure on the optical axis, bilateral weight, a formal altar in the frame.",
+      "Say the camera is square to the face or body. Forbid extra look-space.",
+      "If the room must also salute, add frontal architecture. If it must not, say messy sides, figure still dead center."
+    ],
+    "example": "Central framing of [Subject], the figure on the optical axis, bilateral weight, a formal altar in the frame."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/5c633b152c7a36754fdcca970b96d9fa.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/central-framing.webp",
+      "alt": "Central Framing example"
+    },
+    {
+      "kind": "image",
+      "path": "media/807b0df01a31d0570ce5b7247583613a.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/centered-composition-038-tableau-staging-mini.webp",
+      "alt": "Centered Composition"
+    },
+    {
+      "kind": "video",
+      "path": "media/762442181a3c7f6bc4c9166b2d193978.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/038-tableau-staging-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/433ff490835bf3f002cef6f2447f05d3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/symmetry.webp",
+      "alt": "Symmetry"
+    },
+    {
+      "kind": "image",
+      "path": "media/4bee74bd39d6ae7758602034afc8c2ad.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/rule-of-thirds.webp",
+      "alt": "Rule of Thirds"
+    },
+    {
+      "kind": "image",
+      "path": "media/2fa75dfe572e74d46ddc8d63e2adf518.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/central-framing/hero.jpg",
+      "alt": "Central Framing",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "40cd13ae2096a5fa3c559d7ef025bf1ad8a591aebc88caeafcab30edab798320"
+}

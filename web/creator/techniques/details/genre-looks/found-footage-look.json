@@ -1,0 +1,503 @@
+{
+  "id": "genre-looks/found-footage-look",
+  "slug": "found-footage-look",
+  "title": "Found Footage",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/found-footage-look-167-found-footage-framing-mini.webp",
+  "detail": "details/genre-looks/found-footage-look.json",
+  "aliases": [
+    "Recovered recording",
+    "Camera as a story object"
+  ],
+  "description": "The found footage look presents images as a recording made by someone inside the events, often later discovered or assembled, so the camera is a story object with a timestamp, a battery, and a reason to keep rolling. Consumer digital, Hi8, or MiniDV optics, autofocus hunt, and amateur framing are constraints, not decoration.",
+  "thumbnail": "media/9666d1373fc66963ab24b66dc223a396.webp",
+  "video": "media/7bf374164a3dcd9eff596eb974779555.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/167-found-footage-framing-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Knowledge is limited to what the operator can point at. What the camera misses is part of the beat."
+        },
+        {
+          "type": "paragraph",
+          "text": "Autofocus hunts a doorway. A timestamp sits in the corner."
+        },
+        {
+          "type": "paragraph",
+          "text": "The person holding the camera is in danger too, which is why the frame is late, dirty, and incomplete. Handheld footage alone is not found footage."
+        },
+        {
+          "type": "paragraph",
+          "text": "If there is no fictional origin for the tape, you have Handheld or stylistic suck. If a documentary crew is interviewing, you have documentary rhetoric, not a recovered camcorder.",
+          "links": [
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            },
+            {
+              "text": "stylistic suck",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck"
+            },
+            {
+              "text": "documentary",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "stylistic suck",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck"
+        },
+        {
+          "text": "documentary",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Knowledge is limited to what the operator can point at. What the camera misses is part of the beat.Autofocus hunts a doorway. A timestamp sits in the corner.The person holding the camera is in danger too, which is why the frame is late, dirty, and incomplete. Handheld footage alone is not found footage.If there is no fictional origin for the tape, you have Handheld or stylistic suck. If a documentary crew is interviewing, you have documentary rhetoric, not a recovered camcorder."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Choose the device: Hi8, MiniDV, early digital, or a phone. Match its wide-ish zoom, auto exposure pumping, rolling shutter, and focus hunt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep a plausible operator position and a reason the camera stays on. Night-vision is a mode of that device, not a grade."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a crane or a pretty close-up the operator could not have taken. Prompt consumer digital or Hi8, timestamp, autofocus hunt, amateur framing, and documentary panic as the operator's, not the film's."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Choose the device: Hi8, MiniDV, early digital, or a phone. Match its wide-ish zoom, auto exposure pumping, rolling shutter, and focus hunt.Keep a plausible operator position and a reason the camera stays on. Night-vision is a mode of that device, not a grade.Do not add a crane or a pretty close-up the operator could not have taken. Prompt consumer digital or Hi8, timestamp, autofocus hunt, amateur framing, and documentary panic as the operator's, not the film's."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when the operator is inside the event and the tape could later be found. Do not use shake as the entire premise, and do not use it for an omniscient amateur look with no diegetic camera."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when the operator is inside the event and the tape could later be found. Do not use shake as the entire premise, and do not use it for an omniscient amateur look with no diegetic camera."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Found footage needs a diegetic recorder. Handheld is a body-mounted tool in an otherwise omniscient film.",
+          "links": [
+            {
+              "text": "Found footage",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+            },
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Stylistic Suck can look cheap without a recovered-tape story. Cinéma vérité puts a filmmaker in real life as a catalyst, not a character's camcorder.",
+          "links": [
+            {
+              "text": "Stylistic Suck",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck"
+            },
+            {
+              "text": "Cinéma vérité",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Night Vision is one mode the found camera may switch into. Documentary uses interview and observation, not a lost tape.",
+          "links": [
+            {
+              "text": "Night Vision",
+              "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+            },
+            {
+              "text": "Documentary",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "displayText": "Handheld\nUrgency, documentary truth, or a mind that cannot sit still.",
+          "links": [
+            {
+              "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Night VisionSomeone is hunting in the dark.",
+          "displayText": "Night Vision\nSomeone is hunting in the dark.",
+          "links": [
+            {
+              "text": "Night VisionSomeone is hunting in the dark.",
+              "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Found footage",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/found-footage-look"
+        },
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Stylistic Suck",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck"
+        },
+        {
+          "text": "Cinéma vérité",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/cinema-verite"
+        },
+        {
+          "text": "Night Vision",
+          "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+        },
+        {
+          "text": "Documentary",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/documentary-look"
+        },
+        {
+          "text": "HandheldUrgency, documentary truth, or a mind that cannot sit still.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Night VisionSomeone is hunting in the dark.",
+          "url": "https://melies.co/cinematic-techniques/effects/night-vision"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+          "alt": "Handheld"
+        },
+        {
+          "kind": "video",
+          "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/57004862851c5391970cbe491d31bfae.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/night-vision.webp",
+          "alt": "Night Vision"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Found footage needs a diegetic recorder. Handheld is a body-mounted tool in an otherwise omniscient film.Stylistic Suck can look cheap without a recovered-tape story. Cinéma vérité puts a filmmaker in real life as a catalyst, not a character's camcorder.Night Vision is one mode the found camera may switch into. Documentary uses interview and observation, not a lost tape.HandheldUrgency, documentary truth, or a mind that cannot sit still.Night VisionSomeone is hunting in the dark.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Blair Witch Project (recordings presented as the missing filmmakers' tapes). REC (a television crew's camera as the constrained record)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cloverfield (a personal camcorder framing a disaster). Grammar, not frames to copy."
+        },
+        {
+          "type": "list-item",
+          "text": "The Blair Witch Project 1999The narrative is presented as recordings made by the missing filmmakers.",
+          "displayText": "The Blair Witch Project 1999\nThe narrative is presented as recordings made by the missing filmmakers."
+        },
+        {
+          "type": "list-item",
+          "text": "REC 2007A television crew’s camera becomes the constrained record of events.",
+          "displayText": "REC 2007\nA television crew’s camera becomes the constrained record of events."
+        },
+        {
+          "type": "list-item",
+          "text": "Cloverfield 2008Personal recording frames the disaster experience.",
+          "displayText": "Cloverfield 2008\nPersonal recording frames the disaster experience."
+        },
+        {
+          "type": "list-item",
+          "text": "Zelig 1983New material is integrated into an archival-looking documentary world.",
+          "displayText": "Zelig 1983\nNew material is integrated into an archival-looking documentary world."
+        },
+        {
+          "type": "list-item",
+          "text": "The Battle of Algiers 1966The image evokes newsreel immediacy despite being staged.",
+          "displayText": "The Battle of Algiers 1966\nThe image evokes newsreel immediacy despite being staged."
+        }
+      ],
+      "links": [],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/cde55b2d9cf57cf07ee6642b55945c75.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/found-footage-look/famous/00-zelig-1983.jpg",
+          "alt": "Zelig 1983"
+        },
+        {
+          "kind": "image",
+          "path": "media/6c1fa8d8f2f9a94fc599f818726fcd86.jpg",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/found-footage-look/famous/01-the-battle-of-algiers-1966.jpg",
+          "alt": "The Battle of Algiers 1966"
+        }
+      ],
+      "sourceText": "In film The Blair Witch Project (recordings presented as the missing filmmakers' tapes). REC (a television crew's camera as the constrained record).Cloverfield (a personal camcorder framing a disaster). Grammar, not frames to copy.The Blair Witch Project 1999The narrative is presented as recordings made by the missing filmmakers.REC 2007A television crew’s camera becomes the constrained record of events.Cloverfield 2008Personal recording frames the disaster experience.Zelig 1983New material is integrated into an archival-looking documentary world.The Battle of Algiers 1966The image evokes newsreel immediacy despite being staged."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Found-footage camera on [Subject], consumer digital or Hi8, timestamp, autofocus hunt, amateur framing, operator-height, documentary panic. Name who holds the camera and why it stays on."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not add a second, prettier angle."
+        },
+        {
+          "type": "quote",
+          "text": "A volunteer records the final inventory of a closing observatory on a handheld camcorder. Every shot must have a plausible recording reason. When an unexplained door opens, the operator first documents the room number, then hesitates before following. Maintain limited battery, imperfect framing and consistent microphone perspective."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=A+volunteer+records+the+final+inventory+of+a+closing+observatory+on+a+handheld+camcorder.+Every+shot+must+have+a+plausible+recording+reason.+When+an+unexplained+door+opens,+the+operator+first+documents+the+room+number,+then+hesitates+before+following.+Maintain+limited+battery,+imperfect+framing+and+consistent+microphone+perspective."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Found-footage camera on [Subject], consumer digital or Hi8, timestamp, autofocus hunt, amateur framing, operator-height, documentary panic. Name who holds the camera and why it stays on.Do not add a second, prettier angle.Copy promptUse in Video GeneratorA volunteer records the final inventory of a closing observatory on a handheld camcorder. Every shot must have a plausible recording reason. When an unexplained door opens, the operator first documents the room number, then hesitates before following. Maintain limited battery, imperfect framing and consistent microphone perspective.A volunteer records the final inventory of a closing observatory on a handheld camcorder. Every shot must have a plausible recording reason. When an unexplained door opens, the operator first documents the room number, then hesitates before following. Maintain limited battery, imperfect framing and consistent microphone perspective."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Handheld shake or Stylistic Suck ugliness with no operator. The tell is a perfect close-up, a crane, or coverage the character could not have shot.",
+          "links": [
+            {
+              "text": "Handheld",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+            },
+            {
+              "text": "Stylistic Suck",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: pick the device, keep one operator position, let focus hunt, and let the frame miss the action."
+        }
+      ],
+      "links": [
+        {
+          "text": "Handheld",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/handheld"
+        },
+        {
+          "text": "Stylistic Suck",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/stylistic-suck"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Handheld shake or Stylistic Suck ugliness with no operator. The tell is a perfect close-up, a crane, or coverage the character could not have shot.Fix: pick the device, keep one operator position, let focus hunt, and let the frame miss the action."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Found Footage in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A narrative that presents images as recordings made by someone inside the fictional events, often discovered afterward. The camera's limits (timestamp, battery, autofocus, amateur framing) are the grammar."
+        },
+        {
+          "type": "heading",
+          "text": "Found Footage vs Handheld",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Handheld is how the camera is held. Found footage is who owns the tape. You can have a stable found camera (a shelf cam, a news rig). Shake without a diegetic recorder is not found footage."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Found Footage?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the operator is in the scene and the story depends on what that device can and cannot see. Skip it for omniscient cheapness, for sit-down interviews, or for any shot the character could not have taken."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Found Footage for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Found-footage camera on [Subject], consumer digital or Hi8, timestamp, autofocus hunt, amateur framing. Name the operator and why the camera stays on. Do not request a second angle or a crane."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Found Footage in film?A narrative that presents images as recordings made by someone inside the fictional events, often discovered afterward. The camera's limits (timestamp, battery, autofocus, amateur framing) are the grammar.Found Footage vs HandheldHandheld is how the camera is held. Found footage is who owns the tape. You can have a stable found camera (a shelf cam, a news rig). Shake without a diegetic recorder is not found footage.When should I use Found Footage?When the operator is in the scene and the story depends on what that device can and cannot see. Skip it for omniscient cheapness, for sit-down interviews, or for any shot the character could not have taken.How do I prompt Found Footage for AI image or video?Write: Found-footage camera on [Subject], consumer digital or Hi8, timestamp, autofocus hunt, amateur framing. Name the operator and why the camera stays on. Do not request a second angle or a crane."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Found-footage camera on [Subject], consumer digital or Hi8, timestamp, autofocus hunt, amateur framing, operator-height, documentary panic. Name who holds the camera and why it stays on.",
+      "Do not add a second, prettier angle."
+    ],
+    "example": "A volunteer records the final inventory of a closing observatory on a handheld camcorder. Every shot must have a plausible recording reason. When an unexplained door opens, the operator first documents the room number, then hesitates before following. Maintain limited battery, imperfect framing and consistent microphone perspective."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/7bf374164a3dcd9eff596eb974779555.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/167-found-footage-framing-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/9666d1373fc66963ab24b66dc223a396.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/found-footage-look-167-found-footage-framing-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aed06ec4e3a058e2cc115563f656cbe5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/found-footage-look.jpg",
+      "alt": "Found Footage frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/931d2dc2ec11dced3933dc62b9fa858e.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/handheld-017-handheld-witness-camera-mini.webp",
+      "alt": "Handheld"
+    },
+    {
+      "kind": "video",
+      "path": "media/c3edd44a29b0a1851d6d96209eb89b94.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/017-handheld-witness-camera-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/57004862851c5391970cbe491d31bfae.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/night-vision.webp",
+      "alt": "Night Vision"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/cde55b2d9cf57cf07ee6642b55945c75.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/found-footage-look/famous/00-zelig-1983.jpg",
+      "alt": "Zelig 1983"
+    },
+    {
+      "kind": "image",
+      "path": "media/6c1fa8d8f2f9a94fc599f818726fcd86.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/found-footage-look/famous/01-the-battle-of-algiers-1966.jpg",
+      "alt": "The Battle of Algiers 1966"
+    },
+    {
+      "kind": "image",
+      "path": "media/79ed9bd5be98bd34785858a3f58f38f1.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/found-footage-look/hero.jpg",
+      "alt": "Found Footage",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "7b207404fa7d1cefdafb99c855c9c12f9dcc86b26da78359193ee5a3ee4fe4c8"
+}

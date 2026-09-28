@@ -1,0 +1,415 @@
+{
+  "id": "framing/extreme-close-up",
+  "slug": "extreme-close-up",
+  "title": "Extreme Close-Up (ECU)",
+  "categoryId": "framing",
+  "categoryTitle": "Framing and Shot Size",
+  "sourceUrl": "https://melies.co/cinematic-techniques/framing/extreme-close-up",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+  "detail": "details/framing/extreme-close-up.json",
+  "aliases": [
+    "ECU",
+    "Italian shot",
+    "choker",
+    "detail close-up",
+    "Facial detail",
+    "Très gros plan"
+  ],
+  "description": "An extreme close-up, or extreme close up shot, fills the frame with one small feature: an eye, a mouth, a fingertip, a trigger. Surrounding space disappears; the crop is tighter than a whole face.",
+  "thumbnail": "media/12caea9894bac1509bb527ae448488e0.webp",
+  "video": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Size is a sentence. An extreme close-up says the scene is this fragment: a pupil tightening, a lip splitting, a safety clicking off."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cutting between such fragments can turn looking into a physical confrontation, as in a standoff built from eyes instead of bodies. It is the wrong tool when the actor still needs a whole face to play the line."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you can still see hairline and chin together, you have not arrived at this size. Use it when a detail is the event, then get out before the texture becomes a poster."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function Size is a sentence. An extreme close-up says the scene is this fragment: a pupil tightening, a lip splitting, a safety clicking off.Cutting between such fragments can turn looking into a physical confrontation, as in a standoff built from eyes instead of bodies. It is the wrong tool when the actor still needs a whole face to play the line.If you can still see hairline and chin together, you have not arrived at this size. Use it when a detail is the event, then get out before the texture becomes a poster."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pick the anatomical landmark that hits the frame lines. Camera distance and focal length are separate from the crop: a 75mm or 100mm a few feet back keeps facial proportion; a wide lens inches from the skin balloons the nose."
+        },
+        {
+          "type": "paragraph",
+          "text": "A macro is only required when the feature is truly small, such as an iris or a watch gear. Tight framing, macro optics, and shallow depth of field are three different choices."
+        },
+        {
+          "type": "paragraph",
+          "text": "Light a small source if you want pore and scar; wrap if you want the fragment to stay readable. Prompt the exact feature and the crop (brow to upper cheek, mouth only), not a vague tight close-up."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Pick the anatomical landmark that hits the frame lines. Camera distance and focal length are separate from the crop: a 75mm or 100mm a few feet back keeps facial proportion; a wide lens inches from the skin balloons the nose.A macro is only required when the feature is truly small, such as an iris or a watch gear. Tight framing, macro optics, and shallow depth of field are three different choices.Light a small source if you want pore and scar; wrap if you want the fragment to stay readable. Prompt the exact feature and the crop (brow to upper cheek, mouth only), not a vague tight close-up."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a detail is the scene: the eye that decides to fire, the mouth that will not speak. Do not use it as a default portrait or for ordinary dialogue; the rest of the person is information you have thrown away."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a detail is the scene: the eye that decides to fire, the mouth that will not speak. Do not use it as a default portrait or for ordinary dialogue; the rest of the person is information you have thrown away."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Choker Shot still holds a whole face from hairline to chin. A Close-Up keeps head and upper shoulders.",
+          "links": [
+            {
+              "text": "Choker Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/choker"
+            },
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "An extreme close-up is a fragment, not a portrait. An Insert Shot can be this tight, but an insert is a story object or hand fact, not a size.",
+          "links": [
+            {
+              "text": "Insert Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the frame still includes both eyes and a mouth as a face, you are not here yet."
+        },
+        {
+          "type": "list-item",
+          "text": "Choker ShotEmotion with nowhere to hide.",
+          "displayText": "Choker Shot\nEmotion with nowhere to hide.",
+          "links": [
+            {
+              "text": "Choker ShotEmotion with nowhere to hide.",
+              "url": "https://melies.co/cinematic-techniques/framing/choker"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "displayText": "Close-Up\nRead micro-expression. Default for important dialogue.",
+          "links": [
+            {
+              "text": "Close-UpRead micro-expression. Default for important dialogue.",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Insert ShotPoint at the thing that will matter later.",
+          "displayText": "Insert Shot\nPoint at the thing that will matter later.",
+          "links": [
+            {
+              "text": "Insert ShotPoint at the thing that will matter later.",
+              "url": "https://melies.co/cinematic-techniques/framing/insert"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Choker Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/choker"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Insert Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        },
+        {
+          "text": "Choker ShotEmotion with nowhere to hide.",
+          "url": "https://melies.co/cinematic-techniques/framing/choker"
+        },
+        {
+          "text": "Close-UpRead micro-expression. Default for important dialogue.",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        },
+        {
+          "text": "Insert ShotPoint at the thing that will matter later.",
+          "url": "https://melies.co/cinematic-techniques/framing/insert"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/d5bdd8f53c2bc0f78a3e63efcaac2a30.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choker.webp",
+          "alt": "Choker Shot"
+        },
+        {
+          "kind": "image",
+          "path": "media/95136909e657a1816141551e20893339.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+          "alt": "Close-Up"
+        },
+        {
+          "kind": "image",
+          "path": "media/b5bb789f90144033b393ce87e620564d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/insert-095-narrative-insert-mini.webp",
+          "alt": "Insert Shot"
+        },
+        {
+          "kind": "video",
+          "path": "media/53a13c456f43ab42d2e3d1f277d87138.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/095-narrative-insert-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Choker Shot still holds a whole face from hairline to chin. A Close-Up keeps head and upper shoulders.An extreme close-up is a fragment, not a portrait. An Insert Shot can be this tight, but an insert is a story object or hand fact, not a size.If the frame still includes both eyes and a mouth as a face, you are not here yet.Choker ShotEmotion with nowhere to hide.Close-UpRead micro-expression. Default for important dialogue.Insert ShotPoint at the thing that will matter later."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In The Good, the Bad and the Ugly, eyes and faces dominate the final standoff montage until looking becomes the gunfight. The Passion of Joan of Arc puts interrogation pressure on facial fragments."
+        },
+        {
+          "type": "paragraph",
+          "text": "Persona uses faces so close that identity starts to fuse. Borrow the grammar of fragment versus whole, not a poster of an iris."
+        },
+        {
+          "type": "list-item",
+          "text": "The Good, the Bad and the Ugly 1966Eyes and faces dominate the final standoff montage.",
+          "displayText": "The Good, the Bad and the Ugly 1966\nEyes and faces dominate the final standoff montage."
+        },
+        {
+          "type": "list-item",
+          "text": "The Passion of Joan of Arc 1928Faces carry the pressure of the interrogation and trial.",
+          "displayText": "The Passion of Joan of Arc 1928\nFaces carry the pressure of the interrogation and trial."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film In The Good, the Bad and the Ugly, eyes and faces dominate the final standoff montage until looking becomes the gunfight. The Passion of Joan of Arc puts interrogation pressure on facial fragments.Persona uses faces so close that identity starts to fuse. Borrow the grammar of fragment versus whole, not a poster of an iris.The Good, the Bad and the Ugly 1966Eyes and faces dominate the final standoff montage.The Passion of Joan of Arc 1928Faces carry the pressure of the interrogation and trial."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lead with the crop, then the feature. Example: Extreme close-up of [Subject], a single feature filling the frame, pores and texture, tighter than forehead-to-chin."
+        },
+        {
+          "type": "paragraph",
+          "text": "Name which feature (left eye, mouth, fingertip, trigger) and what must stay sharp. Do not write tight close-up, choker, or macro unless you actually need those."
+        },
+        {
+          "type": "paragraph",
+          "text": "For video, lock the camera, keep the feature in frame, and allow only a blink, a swallow, or a tiny gaze shift."
+        },
+        {
+          "type": "quote",
+          "text": "Extreme close-up of an older watchmaker’s eyes as she decides whether to open a sealed mechanism. Frame from brow to upper cheek, natural skin texture, tiny shift in gaze and controlled breathing. Restrained light, stable focus, no cosmetic smoothing or wide-angle facial distortion."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=Extreme+close-up+of+an+older+watchmaker%E2%80%99s+eyes+as+she+decides+whether+to+open+a+sealed+mechanism.+Frame+from+brow+to+upper+cheek,+natural+skin+texture,+tiny+shift+in+gaze+and+controlled+breathing.+Restrained+light,+stable+focus,+no+cosmetic+smoothing+or+wide-angle+facial+distortion."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lead with the crop, then the feature. Example: Extreme close-up of [Subject], a single feature filling the frame, pores and texture, tighter than forehead-to-chin.Name which feature (left eye, mouth, fingertip, trigger) and what must stay sharp. Do not write tight close-up, choker, or macro unless you actually need those.For video, lock the camera, keep the feature in frame, and allow only a blink, a swallow, or a tiny gaze shift.Copy promptUse in Video GeneratorExtreme close-up of an older watchmaker’s eyes as she decides whether to open a sealed mechanism. Frame from brow to upper cheek, natural skin texture, tiny shift in gaze and controlled breathing. Restrained light, stable focus, no cosmetic smoothing or wide-angle facial distortion.Extreme close-up of an older watchmaker’s eyes as she decides whether to open a sealed mechanism. Frame from brow to upper cheek, natural skin texture, tiny shift in gaze and controlled breathing. Restrained light, stable focus, no cosmetic smoothing or wide-angle facial distortion."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Choker Shot or a Close-Up: the whole face still reads. The tell is hairline and chin both present, or shoulders sneaking in.",
+          "links": [
+            {
+              "text": "Choker Shot",
+              "url": "https://melies.co/cinematic-techniques/framing/choker"
+            },
+            {
+              "text": "Close-Up",
+              "url": "https://melies.co/cinematic-techniques/framing/close-up"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The other tell is wide-angle distortion from parking a short lens on the nose. Fix: name the feature, crop inside the face, and pick a longer lens or a true macro only if the object is small."
+        }
+      ],
+      "links": [
+        {
+          "text": "Choker Shot",
+          "url": "https://melies.co/cinematic-techniques/framing/choker"
+        },
+        {
+          "text": "Close-Up",
+          "url": "https://melies.co/cinematic-techniques/framing/close-up"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Choker Shot or a Close-Up: the whole face still reads. The tell is hairline and chin both present, or shoulders sneaking in.The other tell is wide-angle distortion from parking a short lens on the nose. Fix: name the feature, crop inside the face, and pick a longer lens or a true macro only if the object is small."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Extreme Close-Up in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "An extreme close-up is a shot size that fills the frame with one small feature such as an eye, a mouth, or a fingertip. It is tighter than a whole-face crop, so surrounding space becomes secondary or disappears."
+        },
+        {
+          "type": "heading",
+          "text": "Extreme Close-Up vs Choker Shot",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A choker still shows a complete face from hairline to chin. An extreme close-up is a fragment: one feature, not the whole portrait. If both eyes and the mouth read as a face, you are in choker or close-up territory."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Extreme Close-Up?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Use it when the detail is the event: a trigger, an eye, a cracked lip. Skip it for ordinary talk, beauty portraits, or any beat that still needs the rest of the head and shoulders."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Extreme Close-Up for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write Extreme close-up of [Subject], name the single feature, and say it fills the frame tighter than forehead-to-chin. Add pores and texture if you need skin fact. For video, lock off and allow only a tiny motion in that feature."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Extreme Close-Up in film?An extreme close-up is a shot size that fills the frame with one small feature such as an eye, a mouth, or a fingertip. It is tighter than a whole-face crop, so surrounding space becomes secondary or disappears.Extreme Close-Up vs Choker ShotA choker still shows a complete face from hairline to chin. An extreme close-up is a fragment: one feature, not the whole portrait. If both eyes and the mouth read as a face, you are in choker or close-up territory.When should I use Extreme Close-Up?Use it when the detail is the event: a trigger, an eye, a cracked lip. Skip it for ordinary talk, beauty portraits, or any beat that still needs the rest of the head and shoulders.How do I prompt Extreme Close-Up for AI image or video?Write Extreme close-up of [Subject], name the single feature, and say it fills the frame tighter than forehead-to-chin. Add pores and texture if you need skin fact. For video, lock off and allow only a tiny motion in that feature."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lead with the crop, then the feature. Example: Extreme close-up of [Subject], a single feature filling the frame, pores and texture, tighter than forehead-to-chin.",
+      "Name which feature (left eye, mouth, fingertip, trigger) and what must stay sharp. Do not write tight close-up, choker, or macro unless you actually need those.",
+      "For video, lock the camera, keep the feature in frame, and allow only a blink, a swallow, or a tiny gaze shift."
+    ],
+    "example": "Extreme close-up of an older watchmaker’s eyes as she decides whether to open a sealed mechanism. Frame from brow to upper cheek, natural skin texture, tiny shift in gaze and controlled breathing. Restrained light, stable focus, no cosmetic smoothing or wide-angle facial distortion."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/1c5c00f750f9a161c64fb58d47bcd471.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/163-extreme-facial-close-up-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/12caea9894bac1509bb527ae448488e0.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/extreme-close-up-163-extreme-facial-close-up-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f28b3a7a4100b6036d6ece891ab19c95.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/extreme-close-up.jpg",
+      "alt": "Extreme Close-Up frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/d5bdd8f53c2bc0f78a3e63efcaac2a30.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/choker.webp",
+      "alt": "Choker Shot"
+    },
+    {
+      "kind": "image",
+      "path": "media/95136909e657a1816141551e20893339.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/close-up.webp",
+      "alt": "Close-Up"
+    },
+    {
+      "kind": "image",
+      "path": "media/b5bb789f90144033b393ce87e620564d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/insert-095-narrative-insert-mini.webp",
+      "alt": "Insert Shot"
+    },
+    {
+      "kind": "video",
+      "path": "media/53a13c456f43ab42d2e3d1f277d87138.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/095-narrative-insert-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/0a40b14042042dcc998d2e00880ed24d.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/extreme-close-up/hero.jpg",
+      "alt": "Extreme Close-Up (ECU)",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    },
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    }
+  ],
+  "sourceHtmlSha256": "97fed359537b78451f4dc3f8ef83475256cb400c436d5b032c6e0d2062b27caf"
+}

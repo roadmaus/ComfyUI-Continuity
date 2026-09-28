@@ -1,0 +1,416 @@
+{
+  "id": "genre-looks/maximalism",
+  "slug": "maximalism",
+  "title": "Maximalism",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/maximalism",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/maximalism.webp",
+  "detail": "details/genre-looks/maximalism.json",
+  "aliases": [],
+  "description": "Maximalist cinematography uses density as the point: too much color, too much pattern, ornament in every zone, and lighting that keeps the clutter readable rather than hiding it. Restraint would be a lie, so the frame is packed on purpose.",
+  "thumbnail": "media/379044a374f7b3d3cff6ebba92fc1adc.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wallpaper fights the costume. A pastry fights the uniform."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pink fights purple. The eye has no rest unless a centered axis organizes the noise (a hotel lobby) or a smash of hue refuses rest (a dance hall)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Speed and scale can join the density, but the optical fact is abundance. It is not Giallo.",
+          "links": [
+            {
+              "text": "Giallo",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Giallo stains relatively chic space with a weaponized primary. Maximalism fills the space with pattern for its own sake."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hyper-Saturation is a grade. You can saturate a empty desert and still not be maximalist.",
+          "links": [
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Giallo",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+        },
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function Wallpaper fights the costume. A pastry fights the uniform.Pink fights purple. The eye has no rest unless a centered axis organizes the noise (a hotel lobby) or a smash of hue refuses rest (a dance hall).Speed and scale can join the density, but the optical fact is abundance. It is not Giallo.Giallo stains relatively chic space with a weaponized primary. Maximalism fills the space with pattern for its own sake.Hyper-Saturation is a grade. You can saturate a empty desert and still not be maximalist."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Short to moderate lenses (24mm to 40mm) to pack furniture and pattern. Multiple colored practicals."
+        },
+        {
+          "type": "paragraph",
+          "text": "High chroma, high detail, often symmetry or a center line so the density composes. Keep enough stop that wallpaper does not melt into bokeh unless a close-up needs it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prompt too much color, too much pattern, density as the point."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Short to moderate lenses (24mm to 40mm) to pack furniture and pattern. Multiple colored practicals.High chroma, high detail, often symmetry or a center line so the density composes. Keep enough stop that wallpaper does not melt into bokeh unless a close-up needs it.Prompt too much color, too much pattern, density as the point."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it when a world is ornamental, theatrical, or stuffed, and a sparse frame would deny that world. Do not use it as a loud grade on an empty room, or as giallo threat with one gel."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it when a world is ornamental, theatrical, or stuffed, and a sparse frame would deny that world. Do not use it as a loud grade on an empty room, or as giallo threat with one gel."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Maximalism is packed production design plus chroma. Giallo is fashion-threat primaries.",
+          "links": [
+            {
+              "text": "Maximalism",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/maximalism"
+            },
+            {
+              "text": "Giallo",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Hyper-Saturation is the grade only. Blockbuster Gloss can be relatively clean and expensive.",
+          "links": [
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            },
+            {
+              "text": "Blockbuster Gloss",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Arthouse empties. If you can count three competing patterns and they are all in focus, you are in maximalism.",
+          "links": [
+            {
+              "text": "Arthouse",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "GialloHorror that is also fashion.",
+          "displayText": "Giallo\nHorror that is also fashion.",
+          "links": [
+            {
+              "text": "GialloHorror that is also fashion.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Hyper-SaturationFeeling is louder than fact.",
+          "displayText": "Hyper-Saturation\nFeeling is louder than fact.",
+          "links": [
+            {
+              "text": "Hyper-SaturationFeeling is louder than fact.",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Maximalism",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/maximalism"
+        },
+        {
+          "text": "Giallo",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+        },
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        },
+        {
+          "text": "Blockbuster Gloss",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/blockbuster-gloss"
+        },
+        {
+          "text": "Arthouse",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/arthouse"
+        },
+        {
+          "text": "GialloHorror that is also fashion.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+        },
+        {
+          "text": "Hyper-SaturationFeeling is louder than fact.",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/6fffff8a122580e32891c039dcb4e8c7.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/giallo-look.webp",
+          "alt": "Giallo"
+        },
+        {
+          "kind": "image",
+          "path": "media/ff7af3ff1afd93718ceacc3cdb976b00.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hyper-saturation.webp",
+          "alt": "Hyper-Saturation"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Maximalism is packed production design plus chroma. Giallo is fashion-threat primaries.Hyper-Saturation is the grade only. Blockbuster Gloss can be relatively clean and expensive.Arthouse empties. If you can count three competing patterns and they are all in focus, you are in maximalism.GialloHorror that is also fashion.Hyper-SaturationFeeling is louder than fact.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Grand Budapest Hotel (centered density, uniforms, pastry, wallpaper as architecture). Moulin Rouge!"
+        },
+        {
+          "type": "paragraph",
+          "text": "(theatrical color, patterned interiors, speed as ornament). Grammar, not frames to copy."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film The Grand Budapest Hotel (centered density, uniforms, pastry, wallpaper as architecture). Moulin Rouge!(theatrical color, patterned interiors, speed as ornament). Grammar, not frames to copy."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Maximalist frame of [Subject], too much color, too much pattern, multiple practicals, density as the point, 24mm to 40mm so the clutter stays readable. Name the wallpaper and the costume clash."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not empty the room."
+        },
+        {
+          "type": "quote",
+          "text": "Maximalist frame of [Subject], too much color, too much pattern, density as the point."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Maximalist+frame+of+[Subject],+too+much+color,+too+much+pattern,+density+as+the+point."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Maximalist frame of [Subject], too much color, too much pattern, multiple practicals, density as the point, 24mm to 40mm so the clutter stays readable. Name the wallpaper and the costume clash.Do not empty the room.Copy promptUse in Image GeneratorMaximalist frame of [Subject], too much color, too much pattern, density as the point.Maximalist frame of [Subject], too much color, too much pattern, density as the point."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is Giallo or Hyper-Saturation: one violent gel, or a loud grade on bare walls. The tell is empty negative space and a single hue.",
+          "links": [
+            {
+              "text": "Giallo",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+            },
+            {
+              "text": "Hyper-Saturation",
+              "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Fix: fill every zone with pattern, keep it sharp, and let several colors compete."
+        }
+      ],
+      "links": [
+        {
+          "text": "Giallo",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/giallo-look"
+        },
+        {
+          "text": "Hyper-Saturation",
+          "url": "https://melies.co/cinematic-techniques/color/hyper-saturation"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is Giallo or Hyper-Saturation: one violent gel, or a loud grade on bare walls. The tell is empty negative space and a single hue.Fix: fill every zone with pattern, keep it sharp, and let several colors compete."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Maximalism in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "A dense look: ornament, pattern, and chroma packed into every zone, with light that keeps the clutter readable. Abundance is the optical fact, not a side effect."
+        },
+        {
+          "type": "heading",
+          "text": "Maximalism vs Giallo",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Giallo uses primaries as threat inside often chic, relatively sparse interiors. Maximalism fills the interior with pattern for pleasure or theatrical excess. Both can be saturated. Only one is a murder-fashion plot."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Maximalism?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When restraint would lie about the world: a hotel, a stage, a stuffed apartment. Skip it for empty arthouse air, for noir silver, or for a single gelled hallway."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Maximalism for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write: Maximalist frame of [Subject], too much color, too much pattern, density as the point, multiple practicals, clutter sharp. Name the wallpaper. Do not empty the frame."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Maximalism in film?A dense look: ornament, pattern, and chroma packed into every zone, with light that keeps the clutter readable. Abundance is the optical fact, not a side effect.Maximalism vs GialloGiallo uses primaries as threat inside often chic, relatively sparse interiors. Maximalism fills the interior with pattern for pleasure or theatrical excess. Both can be saturated. Only one is a murder-fashion plot.When should I use Maximalism?When restraint would lie about the world: a hotel, a stage, a stuffed apartment. Skip it for empty arthouse air, for noir silver, or for a single gelled hallway.How do I prompt Maximalism for AI image or video?Write: Maximalist frame of [Subject], too much color, too much pattern, density as the point, multiple practicals, clutter sharp. Name the wallpaper. Do not empty the frame."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Maximalist frame of [Subject], too much color, too much pattern, multiple practicals, density as the point, 24mm to 40mm so the clutter stays readable. Name the wallpaper and the costume clash.",
+      "Do not empty the room."
+    ],
+    "example": "Maximalist frame of [Subject], too much color, too much pattern, density as the point."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/379044a374f7b3d3cff6ebba92fc1adc.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/maximalism.webp",
+      "alt": "Maximalism example"
+    },
+    {
+      "kind": "image",
+      "path": "media/6fffff8a122580e32891c039dcb4e8c7.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/giallo-look.webp",
+      "alt": "Giallo"
+    },
+    {
+      "kind": "image",
+      "path": "media/ff7af3ff1afd93718ceacc3cdb976b00.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/hyper-saturation.webp",
+      "alt": "Hyper-Saturation"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/689e07797bea03045a2f885eb78c2804.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/maximalism/hero.jpg",
+      "alt": "Maximalism",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "b4d95a4266c04b07d1ec84b587757787e61a963887ac6557de14d6ef33bb5586"
+}

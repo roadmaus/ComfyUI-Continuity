@@ -1,0 +1,447 @@
+{
+  "id": "genre-looks/pixel-art",
+  "slug": "pixel-art",
+  "title": "Pixel Art",
+  "categoryId": "genre-looks",
+  "categoryTitle": "Genre Looks",
+  "sourceUrl": "https://melies.co/cinematic-techniques/genre-looks/pixel-art",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pixel-art.webp",
+  "detail": "details/genre-looks/pixel-art.json",
+  "aliases": [],
+  "description": "Pixel art builds the image from visible tiles or a low-resolution grid. The world is discrete squares, not continuous grain.",
+  "thumbnail": "media/adf6b729f06ea45773c8a8d952f4eaf4.webp",
+  "video": null,
+  "videoSourceUrl": null,
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The world is tiles. If the beat is actually Video Game, change the setup instead of forcing pixel art.",
+          "links": [
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        }
+      ],
+      "media": [],
+      "sourceText": "Narrative function The world is tiles. If the beat is actually Video Game, change the setup instead of forcing pixel art."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "For pixel art: a genre look is light, palette, lens, and blocking together, not the genre name alone. In a prompt it reads like this: Pixel-art treatment of the subject, chunky samples, limited palette, game-sprite cinema."
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a start state, one change, and an end frame the next shot can inherit."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works For pixel art: a genre look is light, palette, lens, and blocking together, not the genre name alone. In a prompt it reads like this: Pixel-art treatment of the subject, chunky samples, limited palette, game-sprite cinema.Write a start state, one change, and an end frame the next shot can inherit."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The world is tiles. Do not use pixel art to make a frame look expensive."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prefer Video Game when that cousin's job is the one you actually need.",
+          "links": [
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        }
+      ],
+      "media": [],
+      "sourceText": "When to use it The world is tiles. Do not use pixel art to make a frame look expensive.Prefer Video Game when that cousin's job is the one you actually need."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pixel Art is easy to confuse with Video Game, Animation. Stay on pixel art when the world is tiles.",
+          "links": [
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            },
+            {
+              "text": "Animation",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the beat is Video Game, shoot that instead.",
+          "links": [
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Video GameThe world is playable.",
+          "displayText": "Video Game\nThe world is playable.",
+          "links": [
+            {
+              "text": "Video GameThe world is playable.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "AnimationThe world is constructed, not captured.",
+          "displayText": "Animation\nThe world is constructed, not captured.",
+          "links": [
+            {
+              "text": "AnimationThe world is constructed, not captured.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "displayText": "Film Noir\nCrime, guilt, and streetlamps.",
+          "links": [
+            {
+              "text": "Film NoirCrime, guilt, and streetlamps.",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "Animation",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        },
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "Video GameThe world is playable.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "AnimationThe world is constructed, not captured.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        },
+        {
+          "text": "Film NoirCrime, guilt, and streetlamps.",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/film-noir"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/cc466960f60cd3e61df21437f741fe05.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/video-game-video-game-mini.webp",
+          "alt": "Video Game"
+        },
+        {
+          "kind": "video",
+          "path": "media/095bd1cd39fbd09d3f9223ba9e781bfd.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/video-game-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/f57edf0bd31cd8fedb8a8cc5427f2511.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/animation.webp",
+          "alt": "Animation"
+        },
+        {
+          "kind": "image",
+          "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+          "alt": "Film Noir"
+        }
+      ],
+      "sourceText": "Compared with similar shots Pixel Art is easy to confuse with Video Game, Animation. Stay on pixel art when the world is tiles.If the beat is Video Game, shoot that instead.Video GameThe world is playable.AnimationThe world is constructed, not captured.Film NoirCrime, guilt, and streetlamps."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pixel Art is easier to picture if you remember \"Wreck-It Ralph adjacent\", \"indie games\". Borrow camera, light, and subject relationships, not a copyrighted still."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Pixel Art is easier to picture if you remember \"Wreck-It Ralph adjacent\", \"indie games\". Borrow camera, light, and subject relationships, not a copyrighted still."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lead with who does what. Camera, light, and style follow."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not replace physics with mood adjectives. Still clause: Pixel-art treatment of the subject, chunky samples, limited palette, game-sprite cinema."
+        },
+        {
+          "type": "paragraph",
+          "text": "At most one motivated camera move per clip. The last frame is law for the next shot."
+        },
+        {
+          "type": "quote",
+          "text": "Pixel-art treatment of [Subject], chunky samples, limited palette, game-sprite cinema."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Image Generator",
+          "url": "https://melies.co/ai-image-generator?prompt=Pixel-art+treatment+of+[Subject],+chunky+samples,+limited+palette,+game-sprite+cinema."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Lead with who does what. Camera, light, and style follow.Do not replace physics with mood adjectives. Still clause: Pixel-art treatment of the subject, chunky samples, limited palette, game-sprite cinema.At most one motivated camera move per clip. The last frame is law for the next shot.Copy promptUse in Image GeneratorPixel-art treatment of [Subject], chunky samples, limited palette, game-sprite cinema.Pixel-art treatment of [Subject], chunky samples, limited palette, game-sprite cinema."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual failure is asking for pixel art and getting Video Game. Pixel Art is easy to confuse with Video Game, Animation.",
+          "links": [
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            },
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            },
+            {
+              "text": "Animation",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Stay on pixel art when the world is tiles. If the beat is Video Game, shoot that instead.",
+          "links": [
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "Animation",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        },
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual failure is asking for pixel art and getting Video Game. Pixel Art is easy to confuse with Video Game, Animation.Stay on pixel art when the world is tiles. If the beat is Video Game, shoot that instead."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is pixel art in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Pixel art builds the image from visible tiles or a low-resolution grid. The world is discrete squares, not continuous grain. The world is tiles."
+        },
+        {
+          "type": "heading",
+          "text": "Pixel Art vs Video Game: what is the difference?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Pixel Art is easy to confuse with Video Game, Animation. Stay on pixel art when the world is tiles. If the beat is Video Game, shoot that instead.",
+          "links": [
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            },
+            {
+              "text": "Animation",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+            },
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "When should I use pixel art?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "The world is tiles. Do not use pixel art to make a frame look expensive. Prefer Video Game when that cousin's job is the one you actually need.",
+          "links": [
+            {
+              "text": "Video Game",
+              "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt pixel art for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Lead with who does what. Camera, light, and style follow. Do not replace physics with mood adjectives. Still clause: Pixel-art treatment of the subject, chunky samples, limited palette, game-sprite cinema. At most one motivated camera move per clip. The last frame is law for the next shot."
+        }
+      ],
+      "links": [
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "Animation",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/animation"
+        },
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        },
+        {
+          "text": "Video Game",
+          "url": "https://melies.co/cinematic-techniques/genre-looks/video-game"
+        }
+      ],
+      "media": [],
+      "sourceText": "Questions What is pixel art in film?Pixel art builds the image from visible tiles or a low-resolution grid. The world is discrete squares, not continuous grain. The world is tiles.Pixel Art vs Video Game: what is the difference?Pixel Art is easy to confuse with Video Game, Animation. Stay on pixel art when the world is tiles. If the beat is Video Game, shoot that instead.When should I use pixel art?The world is tiles. Do not use pixel art to make a frame look expensive. Prefer Video Game when that cousin's job is the one you actually need.How do I prompt pixel art for AI image or video?Lead with who does what. Camera, light, and style follow. Do not replace physics with mood adjectives. Still clause: Pixel-art treatment of the subject, chunky samples, limited palette, game-sprite cinema. At most one motivated camera move per clip. The last frame is law for the next shot."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Lead with who does what. Camera, light, and style follow.",
+      "Do not replace physics with mood adjectives. Still clause: Pixel-art treatment of the subject, chunky samples, limited palette, game-sprite cinema.",
+      "At most one motivated camera move per clip. The last frame is law for the next shot."
+    ],
+    "example": "Pixel-art treatment of [Subject], chunky samples, limited palette, game-sprite cinema."
+  },
+  "media": [
+    {
+      "kind": "image",
+      "path": "media/adf6b729f06ea45773c8a8d952f4eaf4.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/pixel-art.webp",
+      "alt": "Pixel Art example"
+    },
+    {
+      "kind": "image",
+      "path": "media/cc466960f60cd3e61df21437f741fe05.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/video-game-video-game-mini.webp",
+      "alt": "Video Game"
+    },
+    {
+      "kind": "video",
+      "path": "media/095bd1cd39fbd09d3f9223ba9e781bfd.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/video-game-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/f57edf0bd31cd8fedb8a8cc5427f2511.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/animation.webp",
+      "alt": "Animation"
+    },
+    {
+      "kind": "image",
+      "path": "media/664a8efee8cc86a1de5ba0ec46da753d.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/film-noir.webp",
+      "alt": "Film Noir"
+    },
+    {
+      "kind": "image",
+      "path": "media/4a5a58015bcec47e82aba3b3cb56197f.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/pixel-art/hero.jpg",
+      "alt": "Pixel Art",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Genre Looks",
+      "url": "https://melies.co/cinematic-techniques/genre-looks"
+    },
+    {
+      "text": "Lighting",
+      "url": "https://melies.co/cinematic-techniques/lighting"
+    },
+    {
+      "text": "Color and Film Look",
+      "url": "https://melies.co/cinematic-techniques/color"
+    },
+    {
+      "text": "Composition",
+      "url": "https://melies.co/cinematic-techniques/composition"
+    }
+  ],
+  "sourceHtmlSha256": "5512544ae73f96e58149456c55a6b3de9d8680642b6db87a2d7792e0206f58ca"
+}

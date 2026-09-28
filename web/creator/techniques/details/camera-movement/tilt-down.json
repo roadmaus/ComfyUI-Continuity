@@ -1,0 +1,400 @@
+{
+  "id": "camera-movement/tilt-down",
+  "slug": "tilt-down",
+  "title": "Tilt Down",
+  "categoryId": "camera-movement",
+  "categoryTitle": "Camera Movement",
+  "sourceUrl": "https://melies.co/cinematic-techniques/camera-movement/tilt-down",
+  "thumbnailSourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-down-tilt-down-mini.webp",
+  "detail": "details/camera-movement/tilt-down.json",
+  "aliases": [
+    "Tilt shot",
+    "tilt up",
+    "reveal tilt"
+  ],
+  "description": "A tilt-down rotates the camera vertically from a fixed position, starting higher and ending lower. It can drop from sky or architecture onto a person or object without moving the tripod.",
+  "thumbnail": "media/4aee5a86e2d08a2ccb263a4424f91a54.webp",
+  "video": "media/2a05dc613a864383ff7096c6fe1fee8a.mp4",
+  "videoSourceUrl": "https://asset.melies.co/cinematic-techniques/mini/tilt-down-mini.mp4",
+  "sections": [
+    {
+      "id": "narrative",
+      "title": "Narrative function",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The new fact is below: a body, a key, a grave, a child. Establishing scale above, then landing, keeps rank in the pitch of the head rather than in a descending crane."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is the wrong tool when you must arrive from a map into a street with true height change. A tilt cannot lower the lens into a crowd; it can only look down at one."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Narrative function The new fact is below: a body, a key, a grave, a child. Establishing scale above, then landing, keeps rank in the pitch of the head rather than in a descending crane.It is the wrong tool when you must arrive from a map into a street with true height change. A tilt cannot lower the lens into a crowd; it can only look down at one."
+    },
+    {
+      "id": "how",
+      "title": "How it works",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Compose the high start and the low end. Control exposure as you leave the sky."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep the support still so the move stays pitch, not boom. Prompt a slow tilt down onto the subject, starting in sky or ceiling and descending to the figure, a measured vertical scan."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "How it works Compose the high start and the low end. Control exposure as you leave the sky.Keep the support still so the move stays pitch, not boom. Prompt a slow tilt down onto the subject, starting in sky or ceiling and descending to the figure, a measured vertical scan."
+    },
+    {
+      "id": "when",
+      "title": "When to use it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use it to land on a person or object after establishing scale above. Concrete beat: a ceiling fan, then the sleeper."
+        },
+        {
+          "type": "paragraph",
+          "text": "Do not use it when the camera itself must come down to eye height."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "When to use it Use it to land on a person or object after establishing scale above. Concrete beat: a ceiling fan, then the sleeper.Do not use it when the camera itself must come down to eye height."
+    },
+    {
+      "id": "vs",
+      "title": "Compared with similar shots",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A Tilt Up is the opposite pitch. A Crane Down translates through height and can keep walking after the descent.",
+          "links": [
+            {
+              "text": "Tilt Up",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            },
+            {
+              "text": "Crane Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A Pedestal Down lowers the whole camera with tilt unchanged. Tilt down looks down; it does not sit down.",
+          "links": [
+            {
+              "text": "Pedestal Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Tilt UpReveal height, awe, or a face last.",
+          "displayText": "Tilt Up\nReveal height, awe, or a face last.",
+          "links": [
+            {
+              "text": "Tilt UpReveal height, awe, or a face last.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Crane DownArrive from god-view into a person.",
+          "displayText": "Crane Down\nArrive from god-view into a person.",
+          "links": [
+            {
+              "text": "Crane DownArrive from god-view into a person.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            }
+          ]
+        },
+        {
+          "type": "list-item",
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "displayText": "Slow Zoom In\nUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "links": [
+            {
+              "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Tilt Up",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        },
+        {
+          "text": "Crane Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        },
+        {
+          "text": "Pedestal Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/pedestal-down"
+        },
+        {
+          "text": "Tilt UpReveal height, awe, or a face last.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/tilt-up"
+        },
+        {
+          "text": "Crane DownArrive from god-view into a person.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        },
+        {
+          "text": "Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes.",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/slow-zoom-in"
+        }
+      ],
+      "media": [
+        {
+          "kind": "image",
+          "path": "media/ba0d5d532fbf6a3cf122ffc10add8687.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-up-009-tilt-reveal-mini.webp",
+          "alt": "Tilt Up"
+        },
+        {
+          "kind": "video",
+          "path": "media/de2a0060534bd4c5940a383f5d15c5a9.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/009-tilt-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/aa53863e7f0a44b5d017fc87459915f3.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-down-011-crane-down-detail-reveal-mini.webp",
+          "alt": "Crane Down"
+        },
+        {
+          "kind": "video",
+          "path": "media/8a7719557669858db37b76f7c7c1f596.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/011-crane-down-detail-reveal-mini.mp4",
+          "alt": ""
+        },
+        {
+          "kind": "image",
+          "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+          "alt": "Slow Zoom In"
+        },
+        {
+          "kind": "video",
+          "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+          "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+          "alt": ""
+        }
+      ],
+      "sourceText": "Compared with similar shots A Tilt Up is the opposite pitch. A Crane Down translates through height and can keep walking after the descent.A Pedestal Down lowers the whole camera with tilt unchanged. Tilt down looks down; it does not sit down.Tilt UpReveal height, awe, or a face last.Crane DownArrive from god-view into a person.Slow Zoom InUse to raise pressure without changing geography. The world stays put; attention closes."
+    },
+    {
+      "id": "examples-film",
+      "title": "In film",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Citizen Kane uses vertical looking so ceilings and power share a sentence. The Godfather lands from rooms onto faces and objects as rank."
+        },
+        {
+          "type": "paragraph",
+          "text": "These are pitch grammar, distinct from crane descents that change station."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "In film Citizen Kane uses vertical looking so ceilings and power share a sentence. The Godfather lands from rooms onto faces and objects as rank.These are pitch grammar, distinct from crane descents that change station."
+    },
+    {
+      "id": "prompt",
+      "title": "Prompt it",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Slow tilt down onto [Subject], starting in sky or ceiling and descending to the figure, a measured vertical scan. For motion: the camera tilts down from above onto [Subject], revealing the figure from head to environment."
+        },
+        {
+          "type": "quote",
+          "text": "The camera tilts down from above onto [Subject], revealing the figure from head to environment."
+        }
+      ],
+      "links": [
+        {
+          "text": "Use in Video Generator",
+          "url": "https://melies.co/ai-video-generator?prompt=The+camera+tilts+down+from+above+onto+[Subject],+revealing+the+figure+from+head+to+environment."
+        }
+      ],
+      "media": [],
+      "sourceText": "Prompt it Slow tilt down onto [Subject], starting in sky or ceiling and descending to the figure, a measured vertical scan. For motion: the camera tilts down from above onto [Subject], revealing the figure from head to environment.Copy promptUse in Video GeneratorThe camera tilts down from above onto [Subject], revealing the figure from head to environment.The camera tilts down from above onto [Subject], revealing the figure from head to environment."
+    },
+    {
+      "id": "mistakes",
+      "title": "What usually goes wrong",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The usual wrong cousin is a Crane Down. The tell is the camera's eyeline dropping through floors, with parallax as objects rise in frame.",
+          "links": [
+            {
+              "text": "Crane Down",
+              "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The fix: keep the sticks planted, pitch down, end on the lower fact."
+        }
+      ],
+      "links": [
+        {
+          "text": "Crane Down",
+          "url": "https://melies.co/cinematic-techniques/camera-movement/crane-down"
+        }
+      ],
+      "media": [],
+      "sourceText": "What usually goes wrong The usual wrong cousin is a Crane Down. The tell is the camera's eyeline dropping through floors, with parallax as objects rise in frame.The fix: keep the sticks planted, pitch down, end on the lower fact."
+    },
+    {
+      "id": "faq",
+      "title": "Questions",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "What is Tilt Down in film?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a downward pitch of a camera that stays in one position, scanning from a higher composition to a lower one."
+        },
+        {
+          "type": "heading",
+          "text": "Tilt Down vs Crane Down",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Crane down physically lowers (and often advances) the camera. Tilt down only rotates, so height of the lens stays put while the look drops."
+        },
+        {
+          "type": "heading",
+          "text": "When should I use Tilt Down?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "When the story fact is below the current look and you do not need a new station. Do not use it to enter a street from the sky."
+        },
+        {
+          "type": "heading",
+          "text": "How do I prompt Tilt Down for AI image or video?",
+          "level": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "Write fixed camera, tilt down from sky or ceiling onto [Subject], no crane, no pedestal. Name the landing object."
+        }
+      ],
+      "links": [],
+      "media": [],
+      "sourceText": "Questions What is Tilt Down in film?It is a downward pitch of a camera that stays in one position, scanning from a higher composition to a lower one.Tilt Down vs Crane DownCrane down physically lowers (and often advances) the camera. Tilt down only rotates, so height of the lens stays put while the look drops.When should I use Tilt Down?When the story fact is below the current look and you do not need a new station. Do not use it to enter a street from the sky.How do I prompt Tilt Down for AI image or video?Write fixed camera, tilt down from sky or ceiling onto [Subject], no crane, no pedestal. Name the landing object."
+    }
+  ],
+  "prompt": {
+    "guidance": [
+      "Slow tilt down onto [Subject], starting in sky or ceiling and descending to the figure, a measured vertical scan. For motion: the camera tilts down from above onto [Subject], revealing the figure from head to environment."
+    ],
+    "example": "The camera tilts down from above onto [Subject], revealing the figure from head to environment."
+  },
+  "media": [
+    {
+      "kind": "video",
+      "path": "media/2a05dc613a864383ff7096c6fe1fee8a.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/tilt-down-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4aee5a86e2d08a2ccb263a4424f91a54.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-down-tilt-down-mini.webp",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/7ad829e16853f80fe689ecaf3675aa7b.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/strips/tilt-down.jpg",
+      "alt": "Tilt Down frames over time"
+    },
+    {
+      "kind": "image",
+      "path": "media/ba0d5d532fbf6a3cf122ffc10add8687.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/tilt-up-009-tilt-reveal-mini.webp",
+      "alt": "Tilt Up"
+    },
+    {
+      "kind": "video",
+      "path": "media/de2a0060534bd4c5940a383f5d15c5a9.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/009-tilt-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/aa53863e7f0a44b5d017fc87459915f3.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/crane-down-011-crane-down-detail-reveal-mini.webp",
+      "alt": "Crane Down"
+    },
+    {
+      "kind": "video",
+      "path": "media/8a7719557669858db37b76f7c7c1f596.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/011-crane-down-detail-reveal-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/6a038554fa1f9afd57bde36a36d0e44f.webp",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/thumb/slow-zoom-in-01-slow-zoom-in-v2-mini.webp",
+      "alt": "Slow Zoom In"
+    },
+    {
+      "kind": "video",
+      "path": "media/fca39b4852f35674888cd94fff16d3ea.mp4",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/mini/01-slow-zoom-in-v2-mini.mp4",
+      "alt": ""
+    },
+    {
+      "kind": "image",
+      "path": "media/4f1bae0574077f132d6684b175dd70c5.jpg",
+      "sourceUrl": "https://asset.melies.co/cinematic-techniques/still/tilt-down/hero.jpg",
+      "alt": "Tilt Down",
+      "role": "hero"
+    }
+  ],
+  "relatedLinks": [
+    {
+      "text": "Camera Movement",
+      "url": "https://melies.co/cinematic-techniques/camera-movement"
+    },
+    {
+      "text": "Framing and Shot Size",
+      "url": "https://melies.co/cinematic-techniques/framing"
+    },
+    {
+      "text": "Camera Angles",
+      "url": "https://melies.co/cinematic-techniques/camera-angles"
+    },
+    {
+      "text": "Lenses and Optics",
+      "url": "https://melies.co/cinematic-techniques/lenses"
+    }
+  ],
+  "sourceHtmlSha256": "10c45a12721dbc58b8df0802c94f7b7540e7cbf4edbb612f9fa3a820a6b08380"
+}
