@@ -10,11 +10,21 @@ export const isVisualReference = (asset) => Boolean(asset?.filename)
   && asset.track !== "sound"
   && (asset.kind === "image" || asset.kind === "video" || S.isRefMod(asset));
 
-/** The thumbnail previews; file replacement stays in the handle's menu.
- *  Do not combine this with swappable(): its first click already opens a picker. */
-export function previewable(thumb, { title, open }) {
+// How long a first click waits for a second before it counts as a single.
+// Browsers do not expose the OS double-click interval; 250 ms sits under the
+// common defaults, and the cost is that much delay before a swap opens.
+const DOUBLE_CLICK_MS = 250;
+
+/** Double-click previews. A `click` action (the segment chip's file swap) runs
+ *  on a single click only, deferred so the second click of a double can cancel
+ *  it — swappable() cannot be combined with this, because its picker would open
+ *  on the first click of every double. From the keyboard, Enter is the click
+ *  action and Space previews, as Quick Look does; without one, both preview. */
+export function previewable(thumb, { title, open, click = null }) {
   thumb.title = title;
   thumb.classList.add("mmc-reference-preview-target");
+  // A thumbnail that still swaps looks like the one it replaced.
+  if (click) thumb.classList.add("mmc-asset-swap");
   thumb.setAttribute("role", "button");
   thumb.setAttribute("tabindex", "0");
   thumb.setAttribute("aria-label", title);
@@ -23,17 +33,28 @@ export function previewable(thumb, { title, open }) {
     // Blurring an edited Cast name can redraw this element between clicks.
     if (event.button === 0) event.preventDefault();
   });
-  thumb.addEventListener("click", (event) => event.stopPropagation());
+  let pending = null;
+  thumb.addEventListener("click", (event) => {
+    event.stopPropagation();
+    if (!click) return;
+    clearTimeout(pending);
+    pending = event.detail > 1 ? null : setTimeout(() => { pending = null; click(); },
+                                                   DOUBLE_CLICK_MS);
+  });
   thumb.addEventListener("dblclick", (event) => {
     event.preventDefault();
     event.stopPropagation();
+    clearTimeout(pending);
+    pending = null;
     open(thumb);
   });
   thumb.addEventListener("keydown", (event) => {
     if (event.key !== "Enter" && event.key !== " ") return;
     event.preventDefault();
     event.stopPropagation();
-    if (!event.repeat) open(thumb);
+    if (event.repeat) return;
+    if (click && event.key === "Enter") click();
+    else open(thumb);
   });
   return thumb;
 }

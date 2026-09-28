@@ -473,6 +473,7 @@ export const ja = {
  "No {kind} files in the input folder yet — upload one.": "入力フォルダーにはまだ{kind}ファイルがありません — アップロードしてください。",
  "The folder holds more — only the newest {count} files are listed.": "フォルダーにはさらにあります — 新しい {count} 件のみを表示しています。",
  "{path} — double-click to view": "{path} — ダブルクリックで表示",
+ "Click to swap the file behind @{handle}, double-click to view it.": "クリックで @{handle} の裏のファイルを差し替え、ダブルクリックで表示します。",
  "Remove from favorites": "お気に入りから削除",
  "Add to favorites": "お気に入りに追加",
  "sound": "サウンド",

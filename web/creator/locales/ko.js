@@ -473,6 +473,7 @@ export const ko = {
  "No {kind} files in the input folder yet — upload one.": "입력 폴더에 아직 {kind} 파일이 없습니다 — 하나 업로드하세요.",
  "The folder holds more — only the newest {count} files are listed.": "폴더에 더 있습니다 — 최신 파일 {count}개만 표시됩니다.",
  "{path} — double-click to view": "{path} — 더블 클릭하면 보기",
+ "Click to swap the file behind @{handle}, double-click to view it.": "클릭하면 @{handle} 뒤의 파일을 교체하고, 더블 클릭하면 봅니다.",
  "Remove from favorites": "즐겨찾기에서 제거",
  "Add to favorites": "즐겨찾기에 추가",
  "sound": "사운드",

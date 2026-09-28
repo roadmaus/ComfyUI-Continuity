@@ -2384,8 +2384,10 @@ export class CreatorEditor {
         : el("span", { class: "mmc-asset-thumb" }, [svg(ICONS[asset.kind], 15)]);
       if (previewReferences && isVisualReference(asset)) {
         previewable(thumb, {
-          title: t("{path} — double-click to view", { path: asset.filename }),
+          title: t("Click to swap the file behind @{handle}, double-click to view it.",
+                   { handle: asset.handle }),
           open: (returnFocus) => openReferencePreview([asset], { returnFocus }),
+          click: () => this.replaceAsset(asset),
         });
       } else {
         // Audio keeps its established single-click replacement action.

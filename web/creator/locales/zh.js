@@ -474,6 +474,7 @@ export const zh = {
  "No {kind} files in the input folder yet — upload one.": "输入文件夹里还没有{kind}文件——上传一个。",
  "The folder holds more — only the newest {count} files are listed.": "文件夹里还有更多——只列出了最新的 {count} 个文件。",
  "{path} — double-click to view": "{path}——双击查看",
+ "Click to swap the file behind @{handle}, double-click to view it.": "单击可替换 @{handle} 背后的文件，双击可查看。",
  "Remove from favorites": "从收藏中移除",
  "Add to favorites": "添加到收藏",
  "sound": "有声",

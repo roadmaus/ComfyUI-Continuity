@@ -108,7 +108,7 @@ new (require('node:vm').Script)(code, { filename: 'timeline-fixture.js' });
 let browser, requests = 0;
 async function check(name, fn) { await fn(); results.push({name,passed:true}); }
 (async () => {
-  browser = await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});
+  browser = await chromium.launch({executablePath:process.env.BROWSER_EXECUTABLE_PATH||undefined,headless:true});
   const page = await browser.newPage({viewport:{width:1100,height:850}});
   await page.route('**/*', route => { requests++; return route.abort(); });
   await page.setContent(`<html><head><style>${css}</style></head><body style="--mmc-type:1;--mmc-surface:#242424;--mmc-surface-2:#333;--mmc-line:#555;--mmc-line-2:#777;--mmc-text:#eee;--mmc-dim:#bbb;--mmc-accent:#acf;background:#111;font-family:Arial"></body></html>`);

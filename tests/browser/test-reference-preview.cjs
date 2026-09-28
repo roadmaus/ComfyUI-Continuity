@@ -182,27 +182,34 @@ const test = async (name, run) => { await run(); results.push(name); console.log
     await page.keyboard.press('Escape');
   });
   await page.setViewportSize({width:1100,height:850});
-  await test('real owned/pooled editor chip closures preview image and video without swapping', async () => {
-    await page.evaluate(() => mountAssetFixture(true));
-    for (const [index,file,tag] of [[0,'portrait.png','img'],[1,'motion.webm','video'],[3,'pooled.png','img'],[4,'pooled.webm','video']]) {
+  await test('owned chips swap on single click and preview on double click; pooled chips only preview', async () => {
+    await page.evaluate(() => { swaps=0; mountAssetFixture(true); });
+    for (const [index,file,tag,owned] of [[0,'portrait.png','img',true],[1,'motion.webm','video',true],[3,'pooled.png','img',false],[4,'pooled.webm','video',false]]) {
       const thumb=page.locator('#fixture .mmc-asset-thumb').nth(index);
+      const before=await page.evaluate(() => swaps);
       await thumb.click();
+      await page.waitForTimeout(400);
       assert.equal(await page.locator('.mmc-reference-preview').count(),0);
+      assert.equal(await page.evaluate(() => swaps),before+(owned?1:0));
+      // The first click of a double must not leave a swap behind.
       await thumb.dblclick();
+      await page.waitForTimeout(400);
+      assert.equal(await page.evaluate(() => swaps),before+(owned?1:0));
       assert.equal(await page.locator('.mmc-reference-preview').count(),1);
       assert.equal(await page.locator('.mmc-reference-preview-stage '+tag).count(),1);
       assert.equal(await page.evaluate(() => urlCalls.at(-1).file),file);
       await page.keyboard.press('Escape');
     }
-    assert.deepEqual(await page.evaluate(() => [swaps,JSON.stringify(fixtureState)===fixtureSnapshot]),[0,true]);
+    assert.deepEqual(await page.evaluate(() => [swaps,JSON.stringify(fixtureState)===fixtureSnapshot]),[2,true]);
   });
   await test('real nonvisual audio chip keeps single-click replacement', async () => {
+    await page.evaluate(() => { swaps=0; });
     await page.locator('#fixture .mmc-asset-thumb').nth(2).click();
     assert.equal(await page.evaluate(() => swaps),1);
     assert.equal(await page.locator('.mmc-reference-preview').count(),0);
   });
   await test('real Prestage/non-segment renderer retains thumbnail swap rather than preview', async () => {
-    await page.evaluate(() => mountAssetFixture(false));
+    await page.evaluate(() => { swaps=0; mountAssetFixture(false); });
     await page.locator('#fixture .mmc-asset-thumb').nth(0).click();
     await page.locator('#fixture .mmc-asset-thumb').nth(1).click();
     assert.equal(await page.evaluate(() => swaps),2);

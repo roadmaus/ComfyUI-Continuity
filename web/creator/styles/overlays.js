@@ -17,7 +17,7 @@ export const css = `
 
 /* Reference preview is read-only. Controls and captions occupy their own rows,
    so native video seeking/fullscreen controls never compete with a footer. */
-.mmc-reference-preview-target { cursor: zoom-in; }
+.mmc-reference-preview-target { cursor: pointer; }
 .mmc-reference-preview-target:focus-visible {
   outline: 2px solid var(--mmc-accent); outline-offset: 3px;
 }
