@@ -141,6 +141,29 @@ else:
           blob["models"]["devices"], {"clip": "cuda:1", "fl2va": "cuda:1", "vae": "cpu"})
 del STORED["h3"]["devices"]
 
+# The machine's row: what a node last set for the card, under a request's own.
+# Before it was read here every headless render ran plain attention.
+MACHINE = {"h3": {"attention": "kitchen", "chunk_ffn": True}}
+route.settings.load = lambda: {**route.settings.DEFAULTS, "weights": STORED, "accel": MACHINE}
+built = render(family="h3", prompt="a cat", accel={"chunk_ffn": False})
+if "problem" in built:
+    FAILURES.append(f"a render over the machine's row was refused: {built['problem']}")
+else:
+    _, _, blob = inputs(built)
+    check("the machine's row rides on a headless render, a request's own over it",
+          {k: blob["sampling"].get(k) for k in ("attention", "chunk_ffn")},
+          {"attention": "kitchen", "chunk_ffn": False})
+    check("beside the turbo switch's row rather than instead of it",
+          blob["sampling"].get("steps"),
+          headless.turbo_of(route.manifest.describe("h3"))["steps"]["medium"])
+check("a request's attention is held to the row's own list",
+      "attention" in render(family="h3", prompt="a cat", accel={"attention": "flash9"})
+      .get("problem", ""), True)
+check("and is refused on a still, where there is none to pick",
+      "accel" in render(family="krea2", prompt="a cat", still=True,
+                        accel={"attention": "sage"}).get("problem", ""), True)
+route.settings.load = lambda: {**route.settings.DEFAULTS, "weights": STORED}
+
 built = render(family="h3", prompt="a cat", fast=False)
 _, _, blob = inputs(built)
 check("fast: false is the native row, said so", (blob["loras"], built["speed"]), ([], "native"))

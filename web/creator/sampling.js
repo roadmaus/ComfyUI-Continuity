@@ -20,7 +20,7 @@ import { el, icon, dismissable, placeNear } from "./dom.js";
 import { t } from "./i18n.js";
 import { openChoicePopover, stepperPill, pillSet, pillClass, accelClass } from "./pills.js";
 import { DEFAULT_VIDEO_FAMILY, widgetsOf as S_widgetsOf } from "./state.js";
-import { listVdnStages, uiSetting } from "./api.js";
+import { listVdnStages, uiSetting, patchSettings } from "./api.js";
 import { syncVdn } from "./turbo.js";
 import { lastSeed } from "./seedmemory.js";
 
@@ -977,6 +977,20 @@ export function samplingBar({ widgets, value, set, perSegment = false,
   const lowVram = Boolean(value("chunk_ffn", false));
   const fastMath = Boolean(value("fp16_accumulation", false));
 
+  // Each of these is also written to the machine's memory of the row
+  // (`settings.accel`, `sampling.MACHINE` on the Python side), whole, for
+  // this family: a headless render has no node to read them off and samples
+  // on what was last set here. Written on a change rather than on every draw,
+  // the way a weight pick is remembered.
+  const setMachine = (name, next) => {
+    set(name, next);
+    const row = { attention: attention ?? "default", chunk_ffn: lowVram,
+                  fp16_accumulation: fastMath, [name]: next };
+    if (sparsity) row.sla_sparsity = name === "sla_sparsity" ? next
+      : Number(value("sla_sparsity", sparsity.default));
+    patchSettings({ accel: { [family]: row } });
+  };
+
   // The last two segments are named for what you get rather than for how they
   // are built. "Chunk FFN" and "fp16 accumulation" are what the packs call them
   // and are in the tooltips, where somebody looking for them will find them; on
@@ -998,7 +1012,7 @@ export function samplingBar({ widgets, value, set, perSegment = false,
               title: t("Attention"),
               options: typeof options === "function" ? options(widgets.attention) : options,
               value: attention,
-              onPick: (picked) => set("attention", picked),
+              onPick: (picked) => setMachine("attention", picked),
             }),
           }, [el("span", { text: t(ATTENTION_LABEL[attention] || ATTENTION_LABEL.default) })]);
         }
@@ -1014,7 +1028,7 @@ export function samplingBar({ widgets, value, set, perSegment = false,
           min: sparsity.min, max: sparsity.max, step: sparsity.step, width: "52px",
           title: t(sparsity.help),
           format: (n) => t("sparsity {n}", { n: n.toFixed(2) }),
-          onChange: (next) => set("sla_sparsity", next),
+          onChange: (next) => setMachine("sla_sparsity", next),
         })
       : null,
     widgets.chunk_ffn && (advanced || lowVram)
@@ -1023,7 +1037,7 @@ export function samplingBar({ widgets, value, set, perSegment = false,
           title: lowVram
             ? t("Low VRAM on — H3's feed-forward runs in chunks, so the peak is lower. The frames are the same ones: chunking is a rearrangement, not a trade. Needs ComfyUI-KJNodes.")
             : t("Low VRAM — run H3's feed-forward in chunks (KJNodes' Chunk FFN). Lowers the peak a render has to fit in, and changes nothing about the frames. Needs ComfyUI-KJNodes."),
-          onclick: () => set("chunk_ffn", !lowVram),
+          onclick: () => setMachine("chunk_ffn", !lowVram),
         }, [el("span", { text: lowVram ? t("low vram") : t("low vram off") })])
       : null,
     widgets.fp16_accumulation && (advanced || fastMath)
@@ -1032,7 +1046,7 @@ export function samplingBar({ widgets, value, set, perSegment = false,
           title: fastMath
             ? t("Fast math on — cuBLAS accumulates fp16 matmuls in fp16 while this model runs (KJNodes' fp16 accumulation). Only fp16 matmuls: a bf16 or quantized H3 has none, and nothing changes there.")
             : t("Fast math — let cuBLAS accumulate fp16 matmuls in fp16 while this model runs (KJNodes' fp16 accumulation). Faster where the card supports it, at some precision. Only reaches a genuinely fp16 model: the released H3 checkpoints run bf16, and their quantized layers go through comfy-kitchen's own kernels rather than cuBLAS, so on those this does nothing at all. Needs ComfyUI-KJNodes and torch 2.7 or newer."),
-          onclick: () => set("fp16_accumulation", !fastMath),
+          onclick: () => setMachine("fp16_accumulation", !fastMath),
         }, [el("span", { text: fastMath ? t("fast math") : t("fast math off") })])
       : null,
   ]);

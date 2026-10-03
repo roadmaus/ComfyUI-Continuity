@@ -48,6 +48,13 @@ python3 skills/continuity-render/render.py krea2 "a tabby cat, studio portrait" 
   card, which on a two-card box means the text encoder and the video model swap
   in and out of one GPU. `--device SLOT=DEVICE` pins a slot for one render
   (`--device clip=cuda:1`). The queued line says where each slot loads.
+- **Attention and memory.** A clip samples with the attention kernel, low VRAM
+  and fast math you last set on a node's sampler row for that family; the
+  machine remembers them the way it remembers the weights. Before you have set
+  one, a render runs plain attention, which on H3 can be several times slower
+  than the kitchen or sage kernel. `--attention default|sage|kitchen|sla`,
+  `--low-vram` / `--no-low-vram` and `--fast-math` / `--no-fast-math` set them
+  for one render, and the queued line names the attention it runs.
 - **Clip or picture.** Video families make a clip, and image families (Krea 2,
   Ideogram 4, Qwen, Flux 2 Klein) make a picture.
 
@@ -134,7 +141,8 @@ whether it is ready, the files it would use, and what a fast render would use.
 {"family": "h3", "prompt": "@pic-1 walks off", "pictures": [{"filename": "cat.png", "as": "start"}],
  "seconds": 6, "aspect": "16:9", "short_edge": 768, "seed": 7,
  "fast": true, "quality": "good", "turbo_lora": null, "merged": false, "still": false,
- "models": {"clip": "some_encoder.safetensors"}, "devices": {"clip": "cuda:1"}}
+ "models": {"clip": "some_encoder.safetensors"}, "devices": {"clip": "cuda:1"},
+ "accel": {"attention": "kitchen", "chunk_ffn": false, "fp16_accumulation": false}}
 ```
 
 Only `family` and `prompt` are required. It answers

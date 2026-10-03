@@ -29,12 +29,19 @@ Request (POST, JSON):
      "seconds": 6, "aspect": "16:9", "short_edge": 768, "seed": 7,
      "fast": true, "turbo_lora": null, "merged": false, "quality": null,
      "models": {"clip": "..."},      # a slot's file, over this machine's picks
-     "devices": {"clip": "cuda:1"}}  # where a slot loads, over this machine's pins
+     "devices": {"clip": "cuda:1"},  # where a slot loads, over this machine's pins
+     "accel": {"attention": "kitchen"}}  # how the card runs it, over this machine's row
 
 A picture is cited in the prompt as `@pic-1` (`@clip-1`, `@snd-1` for video and
 sound), numbered in the order sent; one that is not cited rides anyway. `as` is
 `start`, `end`, `ref` or a reference scope (`style`, `person`, ...); left out,
 the first picture opens the shot — the room's rule, `chat.video_piece`.
+
+A clip samples on the machine's half of the row (`settings.accel`: attention,
+low VRAM, fast math), the one the node last set, because the node is where a
+browser render reads it and there is no node here. The room does not need
+this — it renders with the node's own widgets — which is why it was missed:
+until it was read here every headless render ran plain attention.
 """
 
 import asyncio
@@ -44,7 +51,7 @@ from aiohttp import web
 
 from server import PromptServer
 
-from .. import chat, headless, jobs, models as core_models, server_routes, settings
+from .. import chat, headless, jobs, models as core_models, sampling, server_routes, settings
 from ..families import manifest, registry
 from ..guard import same_origin
 from . import chat as room
@@ -86,8 +93,11 @@ async def describe(request):
     return web.json_response(await loop.run_in_executor(None, _machine))
 
 
-def _request(body):
-    """The body -> `(action, ledger, rail, base, family manifest, still)`."""
+def _request(body, accel=None):
+    """The body -> `(action, ledger, rail, base, family manifest, still)`.
+
+    `accel` is the machine's remembered rows, by family (`settings.accel`).
+    """
     family_id = str(body.get("family") or "").strip()
     if family_id not in registry.FAMILIES:
         raise headless.HeadlessError(
@@ -131,13 +141,22 @@ def _request(body):
         if body.get("devices"):
             raise headless.HeadlessError(
                 "devices is for a video family; a picture family loads where ComfyUI puts it.")
+        if body.get("accel"):
+            raise headless.HeadlessError(
+                "accel is for a video family; a picture family's row has no attention to pick.")
         piece = {"version": 1, "arch": rail["still_arch"], "loras": [], "turbo": {},
                  "models": {rail["still_arch"]: overrides}}
     else:
         devices = {k: v for k, v in (body.get("devices") or {}).items()
                    if isinstance(k, str) and isinstance(v, str)}
+        try:
+            row = {**((accel or {}).get(family_id) or {}),
+                   **sampling.machine(body.get("accel") or {})}
+        except sampling.SamplingError as problem:
+            raise headless.HeadlessError(str(problem)) from None
         piece = {"version": 2, "family": family_id, "loras": [], "turbo": {},
-                 "models": {**overrides, **({"devices": devices} if devices else {})}}
+                 "models": {**overrides, **({"devices": devices} if devices else {})},
+                 **({"sampling": row} if row else {})}
     seed = body.get("seed")
     widgets = {"seed": int(seed)} if isinstance(seed, int) and not isinstance(seed, bool) else {}
     return action, ledger, rail, (piece, widgets), family, still
@@ -145,8 +164,9 @@ def _request(body):
 
 def _render(body):
     """The blocking half: build, throw the switch, build again. -> the answer."""
-    action, ledger, rail, base, family, still = _request(body)
-    stored = settings.load().get("weights") or {}
+    machine = settings.load()
+    action, ledger, rail, base, family, still = _request(body, machine.get("accel"))
+    stored = machine.get("weights") or {}
     built = room._build(action, ledger, rail, stored, base)
     if "problem" in built or not body.get("fast", True):
         return {**built, "speed": "native"}

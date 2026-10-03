@@ -400,6 +400,23 @@ with tempfile.TemporaryDirectory() as directory:
     settings.save({"weights": {}, "upscale_weights": {}})
     check("an empty map is a no-op, not a wipe", settings.load()["weights"]["h3"], {"clip": "qwen.safetensors"})
 
+    # The machine's half of the sampler row merges per family like the
+    # weights, and is held to the row's own checks on the way in.
+    settings.save({"accel": {"h3": {"attention": "kitchen", "chunk_ffn": False}}})
+    check("a node's machine row is remembered per family, merged",
+          settings.save({"accel": {"ltx25": {"fp16_accumulation": True}}})["accel"],
+          {"h3": {"attention": "kitchen", "chunk_ffn": False},
+           "ltx25": {"fp16_accumulation": True}})
+    check("a field that is the piece's, not the card's, is not kept",
+          settings.clean({"accel": {"h3": {"attention": "sage", "block_cache": "fast",
+                                           "steps": 8}}})["accel"],
+          {"h3": {"attention": "sage"}})
+    refuses("an attention this pack has no kernel for",
+            {"accel": {"h3": {"attention": "flash9"}}}, "attention")
+    refuses("a low VRAM switch that is not a switch",
+            {"accel": {"h3": {"chunk_ffn": "yes"}}}, "chunk_ffn")
+    settings.save({"accel": {}})
+
     settings.save({"video_crf": 14, "video_prefix": DEFAULT_PREFIXES["video"],
                    "image_prefix": DEFAULT_PREFIXES["still"]})
 

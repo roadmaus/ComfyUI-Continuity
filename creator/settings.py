@@ -35,7 +35,7 @@ runs it standalone, the same way `outputs.py` is tested.
 import json
 import os
 
-from . import outputs
+from . import outputs, sampling
 from .families.h3 import derope
 from .families import registry
 from .screens import spec as screen_spec
@@ -192,6 +192,14 @@ DEFAULTS = {
     # frontend reads each one back through that family's own slot table, where a
     # key it does not have is dropped.
     "weights": {},
+    # The half of the sampler row that is about this card rather than the
+    # piece, by family: `{family: {attention, sla_sparsity, chunk_ffn,
+    # fp16_accumulation}}` (`sampling.MACHINE`). A node writes it when one of
+    # those pills changes; the headless route renders with it, since a script
+    # has no node to read the row off and every render it queued ran plain
+    # attention with nothing to keep the DiT inside the card. A request may
+    # still say otherwise for one render.
+    "accel": {},
     # The same answer for the two benches: which checkpoint each of their
     # backends was last run with. They have no piece to record it in — a bench
     # writes a file and forgets — so the pick comes here, keyed by the backend's
@@ -484,6 +492,8 @@ def clean(raw):
     for key in ("upscale_weights", "control_weights"):
         if key in raw and raw[key] is not None:
             clean_settings[key] = clean_weights(raw[key], key)
+    if "accel" in raw and raw["accel"] is not None:
+        clean_settings["accel"] = clean_accel(raw["accel"])
     if "chat" in raw and raw["chat"] is not None:
         clean_settings["chat"] = clean_chat(raw["chat"])
     if "refiner" in raw and raw["refiner"] is not None:
@@ -562,9 +572,23 @@ def clean_prefixes(key, raw, defaults, legacy):
     return defaults
 
 
-# The settings that map a family or backend id to a block of files, which
+# The settings that map a family or backend id to a block of its own, which
 # `save` merges per id rather than replacing whole.
-KEYED_MAPS = ("weights", "upscale_weights", "control_weights")
+KEYED_MAPS = ("weights", "upscale_weights", "control_weights", "accel")
+
+
+def clean_accel(raw):
+    """The remembered machine rows, by family, each held to the row's own checks."""
+    if not isinstance(raw, dict):
+        raise ValueError("accel must map a family id to a row")
+    out = {}
+    for family, block in raw.items():
+        if not isinstance(family, str):
+            raise ValueError("accel: a family id must be a string")
+        kept = sampling.machine(block)
+        if kept:
+            out[family] = kept
+    return out
 
 
 def clean_weights(raw, label="weights"):
@@ -862,7 +886,7 @@ def save(raw):
         raise ValueError("settings must be an object")
     current = load()
     merged = {**current, **raw}
-    # The three per-family (per-backend) maps merge one level down: a patch
+    # The per-family (per-backend) maps merge one level down: a patch
     # naming Krea 2's files says nothing about H3's. Every writer of these
     # used to send the whole map from its own cache of it, and a cache primed
     # before another tab, the chat room or the node had written — or never

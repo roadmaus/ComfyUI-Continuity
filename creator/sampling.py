@@ -111,6 +111,20 @@ _CHOICE = {
 }
 
 
+# The fields that say how *this card* runs a model rather than what the piece is:
+# which attention kernel it has, whether it needs the feed-forward chunked to
+# fit, whether its matmuls may accumulate in fp16. The row draws them as one
+# pill for that reason (`web/creator/sampling.js`), and the machine remembers
+# them per family (`settings.accel`) so a render with no node to read them off —
+# a headless one — runs the way the browser does. Before that it ran every one
+# of them at its default: plain attention on a card whose node uses the kitchen
+# kernel, and an 8-step H3 shot on the lab spilling weights at 99 s a step.
+#
+# The step-skippers (block cache, spectrum) and VDN are not here: they change
+# the picture, so they are the piece's to ask for.
+MACHINE = ("attention", "sla_sparsity", "chunk_ffn", "fp16_accumulation")
+
+
 class SamplingError(ValueError):
     """A `sampling` block this pack will not run."""
 
@@ -128,6 +142,19 @@ def block(data):
     existed, so it is not an error — it means every field falls back.
     """
     return ROW.stored(data)
+
+
+def machine(raw):
+    """A remembered or requested machine half of the row, validated.
+
+    The row's own checks, so a value the compiler would refuse is refused where
+    it is written instead of on the next render. Fields outside `MACHINE` are
+    dropped, as `block` drops fields the row does not declare.
+    """
+    if not isinstance(raw, dict):
+        raise SamplingError("the machine's row must be an object")
+    return {name: ROW.checked(name, value) for name, value in raw.items()
+            if name in MACHINE and value is not None}
 
 
 def resolve(data, widgets):

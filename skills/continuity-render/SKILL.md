@@ -57,7 +57,8 @@ python3 <skill dir>/render.py h3 "@pic-1 turns and walks out of frame" --image c
   earlier render, pass its name with ComfyUI's annotation:
   `--image "H3_00012_.png [output]"`.
 - **Other flags:** `--seconds`, `--aspect 16:9|9:16|1:1|4:5|...`, `--edge`
-  (short edge in px), `--seed`, `--model SLOT=FILE`, `--device SLOT=DEVICE`, `--out DIR` (default
+  (short edge in px), `--seed`, `--model SLOT=FILE`, `--device SLOT=DEVICE`,
+  `--attention default|sage|kitchen|sla`, `--low-vram`, `--fast-math`, `--out DIR` (default
   `./renders`). See `--help`.
 - **Run renders in the background with a long timeout.** A fast H3 clip takes
   minutes and a still takes under a minute. Progress lines go to stderr. On
@@ -97,6 +98,9 @@ sentence instead of trying another route:
   model on ComfyUI's default device" on a machine with two GPUs means the
   render will be far slower than the user's own; ask them which card each model
   belongs on and pass `--device` (for example `--device clip=cuda:1`).
+- **Check the queued line's attention too.** "attention default" on H3 is the
+  plain kernel, which the user's own node usually is not; ask which one they
+  render with (it is the attention pill on the node) and pass `--attention`.
 
 - Queue one render at a time on a shared GPU. The client prints
   `queued, N ahead` when something is already running; tell the user rather

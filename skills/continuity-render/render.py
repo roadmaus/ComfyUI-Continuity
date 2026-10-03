@@ -214,6 +214,11 @@ def main():
                         help="a weight file for one slot, over the server's own pick")
     parser.add_argument("--device", action="append", default=[], metavar="SLOT=DEVICE",
                         help="where one slot loads (e.g. clip=cuda:1), over the server's pins")
+    parser.add_argument("--attention", help="default, sage, kitchen or sla, over the server's row")
+    parser.add_argument("--low-vram", action=argparse.BooleanOptionalAction, default=None,
+                        help="chunk the feed-forward to fit the card, over the server's row")
+    parser.add_argument("--fast-math", action=argparse.BooleanOptionalAction, default=None,
+                        help="fp16 accumulation, over the server's row")
     parser.add_argument("--out", default="renders", help="download folder (default ./renders)")
     parser.add_argument("--no-wait", action="store_true", help="queue and print the prompt id")
     parser.add_argument("--url", default=os.environ.get("COMFY_URL") or DEFAULT_URL,
@@ -250,6 +255,12 @@ def main():
         body["merged"] = True
     if devices:
         body["devices"] = devices
+    accel = {key: value for key, value in (("attention", args.attention),
+                                           ("chunk_ffn", args.low_vram),
+                                           ("fp16_accumulation", args.fast_math))
+             if value is not None}
+    if accel:
+        body["accel"] = accel
     for key, value in (("seconds", args.seconds), ("aspect", args.aspect),
                        ("short_edge", args.edge), ("quality", args.quality),
                        ("turbo_lora", args.turbo_lora)):
@@ -272,6 +283,15 @@ def main():
     pins = models.get("devices") or {}
     on += (" (" + ", ".join(f"{slot} on {device}" for slot, device in sorted(pins.items())) + ")"
            if pins else " (every model on ComfyUI's default device)")
+    # And how the card runs it, which the node's row sets in the browser and the
+    # server's memory of that row sets here: plain attention where the browser
+    # runs a kernel is the other slow render nobody asked for.
+    row = (queued.get("piece") or {}).get("sampling") or {}
+    if queued.get("node") == "MiniMaxH3Creator":
+        machine = [f"attention {row.get('attention', 'default')}"]
+        machine += ["low vram"] if row.get("chunk_ffn") else []
+        machine += ["fast math"] if row.get("fp16_accumulation") else []
+        on += ", " + ", ".join(machine)
     say(f"queued {queued['prompt_id']} — seed {seed}, {speed}{on}")
     if args.no_wait:
         print(queued["prompt_id"])
