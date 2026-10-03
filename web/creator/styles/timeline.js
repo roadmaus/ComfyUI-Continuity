@@ -302,6 +302,12 @@ export const css = `
 .mmc-tl-card-face.on, .mmc-tl-card-motion.on { background: color-mix(in srgb, var(--mmc-blue) 18%, transparent); color: var(--mmc-blue); }
 .mmc-tl-card-face:hover, .mmc-tl-card-motion:hover { filter: brightness(1.25); }
 .mmc-tl-card-foot { display: flex; align-items: center; gap: 4px; }
+/* A clip's foot carries three words and four icons, wider than a clip card is
+   at any length a clip is. Unwrapped, the row ran out past the card's edge and
+   under the seam beside it, which took the clicks meant for the ✕ — a clip
+   could not be removed. Wrapped, the overflow drops to a second line inside
+   the card. */
+.mmc-tl-clip .mmc-tl-card-foot { flex-wrap: wrap; row-gap: 6px; }
 /* The ✕ after one press: the question, in the warning colour, where the ✕
    was. Kept to the ✕'s own height so the foot does not jump. */
 .mmc-tl-card-foot .mmc-asset-x.armed {
