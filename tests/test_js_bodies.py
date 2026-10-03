@@ -1035,13 +1035,15 @@ try {
     // would be reading the input rather than what the node now holds.
     written: (() => { body.commit(); return JSON.parse(body.read()).segments.length; })(),
     wears: body.editor ? "shot" : "strip",
-    // ...and one written to hold none does too.
+    // ...but one written to hold none stays empty: it is a strip whose cards
+    // were all deleted.
     fromEmptyList: (() => {
       const other = S.parseTimeline(JSON.stringify({ version: 2, segments: [] }));
       return other.segments.length;
     })(),
-    // Deleting down to nothing leaves a blank shot rather than an empty piece,
-    // and the face goes back to being that shot's editor.
+    // Deleting down to nothing leaves the strip empty, on the strip face, with
+    // the Timeline pill as the way back; switching it off starts a blank shot
+    // and the face is that shot's editor again.
     cleared: await (async () => {
       const two = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
         version: 2, prompt: "", models: {},
@@ -1054,9 +1056,15 @@ try {
       await new Promise((done) => setTimeout(done, 0));
       two.mmcBody.timeline.segments.splice(0, 2);
       two.mmcBody.commit();
-      return { cards: two.mmcBody.timeline.segments.length,
-               prompt: two.mmcBody.timeline.segments[0].prompt,
-               wears: two.mmcBody.editor ? "shot" : "strip" };
+      const cards = two.mmcBody.timeline.segments.length;
+      const written = JSON.parse(two.mmcBody.read()).segments.length;
+      const wears = two.mmcBody.editor ? "shot" : "strip";
+      const view = two.mmcBody.pieceView();
+      view?.toggle();
+      return { cards, written, wears, toggle: Boolean(view),
+               back: two.mmcBody.timeline.segments.length,
+               prompt: two.mmcBody.timeline.segments[0]?.prompt,
+               backWears: two.mmcBody.editor ? "shot" : "strip" };
     })(),
     // ...and the strip still redraws once something is added, which is the path
     // every piece takes on its first click.
@@ -3805,18 +3813,21 @@ for wanted in ("Add image", "Add video", "Add audio", "Add LoRA", "Gallery", "Se
     if wanted not in (clip.get("node") or ""):
         FAILURES.append(f"the timeline node body has no {wanted!r} tool")
 
-# A piece is at least one shot: the empty strip is not a state the node can be
-# left in, because every way of reaching it is somebody deleting cards.
+# A fresh node is one blank shot; a strip emptied by deleting its cards stays
+# empty until the face is switched back to a shot.
 empty = report.get("empty", {})
+cleared = empty.get("cleared") or {}
 check("an empty blob opens as one blank shot", empty.get("cards"), 1)
 check("...which is what gets written back", empty.get("written"), 1)
 check("...and it wears that shot's editor", empty.get("wears"), "shot")
-check("a blob written with no cards opens the same way", empty.get("fromEmptyList"), 1)
-check("deleting every card leaves one blank shot",
-      (empty.get("cleared") or {}).get("cards"), 1)
-check("...with nothing written in it", (empty.get("cleared") or {}).get("prompt"), "")
-check("...and the face back to being that shot's",
-      (empty.get("cleared") or {}).get("wears"), "shot")
+check("a blob written with no cards opens empty", empty.get("fromEmptyList"), 0)
+check("deleting every card leaves the strip empty", cleared.get("cards"), 0)
+check("...and writes it back empty", cleared.get("written"), 0)
+check("...on the strip face", cleared.get("wears"), "strip")
+check("...which offers the Timeline pill to leave it", cleared.get("toggle"), True)
+check("switching it off starts one blank shot", cleared.get("back"), 1)
+check("...with nothing written in it", cleared.get("prompt"), "")
+check("...and the face is that shot's editor", cleared.get("backWears"), "shot")
 check("...and the strip still draws once a second is added", empty.get("added"), 2)
 
 # ---- Clear ------------------------------------------------------------------

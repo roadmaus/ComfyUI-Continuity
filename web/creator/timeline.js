@@ -1725,12 +1725,8 @@ class Timeline {
       if (position > 0) parts.push(this.renderJoin(pass.start));
       parts.push(this.renderPass(pass));
     });
-    // No empty case: `syncTimeline` keeps a piece at one shot or more, so the
-    // strip always has a card to draw. What used to be here was the leader —
-    // the unexposed head of a reel, with the two ways to begin on it — and it
-    // went when the last card stopped being deletable down to nothing. The two
-    // ways are still both offered, on the add tile beside the card, which is
-    // where they were every other time.
+    // An empty strip is just this tile: the two ways to begin, where they are
+    // the rest of the time.
     const what = S.isSingle(this.timeline) ? "Shot" : "Segment";
     // The refusal is the tooltip when there is one: the button says why it is
     // dead rather than leaving the user to find out at queue time.
@@ -3678,11 +3674,27 @@ export class TimelineBody {
    *  the piece has more than one shot: there is no shot face for it to go back
    *  to, so a control offering one would be a lie. */
   pieceView() {
-    if (!this.face || !this.loneShot()) return null;
+    if (!this.face) return null;
+    if (this.emptyPiece()) {
+      // Nothing on the strip is a shot not yet written: going back to the shot
+      // face starts the blank one it edits.
+      return {
+        shown: () => true,
+        toggle: () => { this.firstShot(); this.face.pin(false); this.commit(); },
+      };
+    }
+    if (!this.loneShot()) return null;
     return {
       shown: () => this.showsStrip(),
       toggle: () => { this.face.pin(!this.face.pinned()); this.render(); },
     };
+  }
+
+  /** A strip with every card deleted and nothing set on the piece either. It
+   *  stays empty — the strip window shows its add tile — until the face is
+   *  turned back to a shot, which is the one thing that puts a card on it. */
+  emptyPiece() {
+    return !this.timeline.segments.length && !this.pieceHolds().length;
   }
 
   dropFaceEditor() {
@@ -4237,7 +4249,7 @@ export class TimelineBody {
   }
 
   /** The way back to the shot, on the strip face. Drawn only while there is one
-   *  shot to go back to — see `pieceView`. Deliberately the pill the shot face
+   *  shot to go back to, or none and a blank one to start — see `pieceView`. Deliberately the pill the shot face
    *  draws, in the same place and with the same words: one control with two
    *  states, not two controls that happen to be opposites. */
   renderPieceViewPill() {
@@ -4276,7 +4288,7 @@ export class TimelineBody {
    */
   renderHeldPieceViewPill() {
     const segments = this.timeline.segments;
-    if (!this.face || segments.length !== 1 || S.isClip(segments[0])) return [];
+    if (!this.face || segments.length > 1 || S.isClip(segments[0])) return [];
     const holds = this.pieceHolds();
     if (!holds.length) return [];
     return [el("button", {
@@ -4467,6 +4479,7 @@ export class TimelineBody {
    * message, or null on success.
    */
   attachFromPreStage({ role, filename }) {
+    this.firstShot();
     const shots = this.timeline.segments;
     const index = role === "last_frame" ? shots.length - 1 : 0;
     const segment = shots[index];
@@ -4498,6 +4511,20 @@ export class TimelineBody {
   }
 
   /**
+   * Shot one, started if the strip is empty. A file handed to this node from
+   * outside lands on the first card, and a piece whose cards were all deleted
+   * still takes it — onto a new shot, which is what attaching it there asks for.
+   */
+  firstShot() {
+    if (!this.timeline.segments.length) {
+      this.timeline.segments.push(S.emptySegment());
+      S.syncTimeline(this.timeline);
+      S.ensureCardIds(this.timeline);
+    }
+    return this.timeline.segments[0];
+  }
+
+  /**
    * A drawing off the ControlNet bench, attached to the shot it aims.
    *
    * On the body, not on the editor, because the body is what a caller outside
@@ -4514,8 +4541,7 @@ export class TimelineBody {
    * the pre-stage's chips already give.
    */
   takeGuide({ path, kind = "video", op = "", opId = null, trim = null }) {
-    const segment = this.timeline.segments[0];
-    if (!segment) return;
+    const segment = this.firstShot();
     // Through the editor where one is already built for this shot, so the
     // caret, the chips and the redraw are the editor's own. Straight onto the
     // blob otherwise: on a strip there is no card editor to route through, and
@@ -4536,8 +4562,7 @@ export class TimelineBody {
    * silent where a picked one lands with its audio on.
    */
   async takeReference(picked) {
-    const segment = this.timeline.segments[0];
-    if (!segment) return;
+    const segment = this.firstShot();
     if (this.faceEditor?.state === segment) {
       return this.faceEditor.attachAssets([picked]);
     }
