@@ -2277,6 +2277,10 @@ def take_spec(segment, index):
     the one place this differs from a clip card, which has a switch for it: a
     clip's sound is somebody else's and may be the wrong sound for the piece,
     while a take's is the sound this piece generated for exactly these frames.
+
+    A trim or crop set on the card's take rides along unchanged: the card is a
+    clip card from here on, and `clip_spec` validates and applies them exactly
+    as it does a supplied clip's.
     """
     take = take_of(segment)
     duration = take.get("duration_s")
@@ -2302,6 +2306,9 @@ def take_spec(segment, index):
             continue
         if value > 0:
             card[key] = value
+    for key in ("trim", "crop"):
+        if take.get(key):
+            card[key] = take[key]
     return card
 
 

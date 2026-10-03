@@ -3482,6 +3482,14 @@ export function parseTimeline(raw) {
             ...(Number.isInteger(take.seed) ? { seed: take.seed } : {}),
             ...(take.stamp ? { stamp: String(take.stamp) } : {}),
           };
+          // The window and framing set on the take, read the way a clip card's
+          // are: a take is spliced as a clip, and these are its clip settings.
+          const start = Number(take.trim?.start);
+          const end = Number(take.trim?.end);
+          if (Number.isFinite(start) && Number.isFinite(end) && end > start) {
+            segment.take.trim = { start, end };
+          }
+          if (take.crop && typeof take.crop === "object") segment.take.crop = { ...take.crop };
         }
         // The card's own seed. Absent — which is every card until somebody
         // rolls one here — means the number on the node.

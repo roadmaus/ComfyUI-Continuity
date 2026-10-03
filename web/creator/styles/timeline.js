@@ -306,8 +306,8 @@ export const css = `
    at any length a clip is. Unwrapped, the row ran out past the card's edge and
    under the seam beside it, which took the clicks meant for the ✕ — a clip
    could not be removed. Wrapped, the overflow drops to a second line inside
-   the card. */
-.mmc-tl-clip .mmc-tl-card-foot { flex-wrap: wrap; row-gap: 6px; }
+   the card. A kept shot's foot carries Trim and Crop too, and wraps the same. */
+.mmc-tl-clip .mmc-tl-card-foot, .mmc-tl-kept .mmc-tl-card-foot { flex-wrap: wrap; row-gap: 6px; }
 /* The ✕ after one press: the question, in the warning colour, where the ✕
    was. Kept to the ✕'s own height so the foot does not jump. */
 .mmc-tl-card-foot .mmc-asset-x.armed {

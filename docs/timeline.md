@@ -250,6 +250,12 @@ says `kept · file gone` and the render refuses it by name before sampling
 anything; forget the take with the ✕ on the chip (or *Forget missing takes*
 for the whole strip) and the card goes back to not shot.
 
+A kept take has *Trim* and *Crop* on its card (on the pass rail, for a pass of
+several shots), the same editors a clip card has. They change what plays, not
+the file: the render splices the window you trimmed, framed as you cropped it,
+and the next seam continues from the end of that window. A retake replaces the
+take, and its trim and crop go with it.
+
 ## Cutting in your own footage
 
 A clip you already have can be a card on the strip, not just a reference. It

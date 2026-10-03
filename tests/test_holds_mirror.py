@@ -238,5 +238,25 @@ for (name, shot, played), seen in zip(WANT, walked):
     check(f"{name}: played from film", played_cards(seen["blob"]), played)
     check(f"{name}: is the step it says", seen["name"], name)
 
+# A take's trim and crop are clip settings held on the take. They have to come
+# back off a saved blob, or a reload plays the whole take uncropped again.
+EDITED = """
+const s = await import(process.argv[1]);
+const timeline = s.parseTimeline(JSON.stringify({
+  version: 2, render: "chained", prompt: "p", aspect: "16:9", short_edge: 768,
+  segments: [{ prompt: "one", duration_s: 5, assets: [], loras: [], hold: true,
+               take: { filename: "takes/s1.mp4 [output]", duration_s: 5, has_audio: true,
+                       trim: { start: 1, end: 4 },
+                       crop: { x: 0.1, y: 0, w: 0.8, h: 1 } } },
+             { prompt: "two", duration_s: 5, assets: [], loras: [] }],
+}));
+console.log(JSON.stringify(s.serializeTimeline(timeline)));
+"""
+edited = json.loads(layout.run(EDITED, MIRROR))
+edited_clip = compiler.timeline_payloads(compiler.rendered_piece(edited))[0]["clip"]
+check("a take's trim survives a reload into the render",
+      [edited_clip["start"], edited_clip["duration"]], [1.0, 3.0])
+check("...and so does its crop", "crop" in edited_clip, True)
+
 passed(f"state.js mirrors compile.py across {len(CASES)} part-shot strips, "
        f"and a {len(WANT)}-step shoot walks itself forward")

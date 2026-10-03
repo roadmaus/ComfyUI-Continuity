@@ -2119,6 +2119,16 @@ payloads = compiler.timeline_payloads(rendered, image_size_lookup=_look)
 check("the take is spliced rather than sampled", "clip" in payloads[0], True)
 check("and the shot after it continues from the take", payloads[1]["continue"], True)
 
+# A take trimmed and cropped on its card plays that window and framing, the way
+# a clip card's do.
+crop = {"x": 0.1, "y": 0.0, "w": 0.8, "h": 1.0}
+edited = strip(shot("one", hold=True,
+                    take=take(trim={"start": 1.0, "end": 4.5}, crop=crop)), shot("two"))
+payloads = compiler.timeline_payloads(compiler.rendered_piece(edited), image_size_lookup=_look)
+check("a trimmed take plays its window",
+      [payloads[0]["clip"][key] for key in ("start", "duration")], [1.0, 3.5])
+check("...cropped as it was framed", "crop" in payloads[0]["clip"], True)
+
 # The seam a kept card was generated with is not a seam any more.
 kept_seam = strip(shot("one"), shot("two", hold=True, take=take(),
                                     **{"continue": True, "feather": 22}))

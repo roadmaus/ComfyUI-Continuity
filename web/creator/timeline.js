@@ -24,7 +24,7 @@ import * as P from "./presets.js";
 import { PromptBox, openEditorSheet } from "./prompt.js";
 import { openSettings } from "./settings.js";
 import { SoundLane } from "./soundlane.js";
-import { openTrim } from "./trim.js";
+import { openTrim, trimLabel } from "./trim.js";
 import { openPicture, editPicture, asPick, cropLabel } from "./picture.js";
 import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, neuralPill, guideLoraPill, stepperPill,
          aspectGlyph, resolutionPillText, PILL_GLYPH } from "./pills.js";
@@ -1820,6 +1820,7 @@ class Timeline {
         el("span", { class: "mmc-tl-mode",
                      text: S.passMode(pass.segments, this.timeline) }),
         ...(chip ? [chip] : []),
+        ...this.takeTools(pass.start, "mmc-ghost"),
         el("button", {
           class: "mmc-ghost mmc-tl-pass-split",
           text: t("Split"),
@@ -2923,6 +2924,7 @@ class Timeline {
       })]),
       el("div", { class: "mmc-tl-card-foot" }, [
         el("button", { class: "mmc-tl-edit", text: t("Edit"), onclick: () => this.edit(index) }),
+        ...(shared ? [] : this.takeTools(index, "mmc-tl-edit")),
         el("button", {
           class: "mmc-ghost", text: "◀", title: t("Move earlier"),
           disabled: index === 0 || undefined,
@@ -3049,39 +3051,85 @@ class Timeline {
   }
 
   /** The clip's window, through the same trim editor a reference video uses. */
-  async editClip(index) {
+  editClip(index) {
     const segment = this.timeline.segments[index];
+    return this.trimFile(segment, segment.filename);
+  }
+
+  /** The clip's framing, through the same editor a reference picture uses. */
+  editClipCrop(index) {
+    const segment = this.timeline.segments[index];
+    return this.cropFile(segment, segment.filename);
+  }
+
+  /** A kept take's window and framing. The take is spliced as a clip card —
+   *  see `compile.take_spec` — so these are a clip's settings, held on the take
+   *  rather than the card: a retake replaces the take and they go with it. */
+  editTake(index) {
+    const take = S.takeOn(this.timeline.segments[index]);
+    return take && this.trimFile(take, take.filename);
+  }
+
+  editTakeCrop(index) {
+    const take = S.takeOn(this.timeline.segments[index]);
+    return take && this.cropFile(take, take.filename);
+  }
+
+  /** Writes `holder.trim`, a clip card or a take. */
+  async trimFile(holder, path) {
     const picked = await openTrim({
-      path: segment.filename,
+      path,
       kind: "video",
-      trim: segment.trim ?? null,
+      trim: holder.trim ?? null,
       // A clip card *is* the picture — its sound rides with it and is switched
       // on the card — so there is no track to choose here, unlike a reference
       // clip, which can be cited for one stream or the other.
       showTrack: false,
     });
     if (!picked) return;
-    if (picked.trim) segment.trim = picked.trim;
-    else delete segment.trim;
+    if (picked.trim) holder.trim = picked.trim;
+    else delete holder.trim;
     this.commit();
   }
 
-  /** The clip's framing, through the same editor a reference picture uses.
-   *  The canvas is offered as the lock; the card's own trim bounds the scrub. */
-  async editClipCrop(index) {
-    const segment = this.timeline.segments[index];
+  /** Writes `holder.crop`. The canvas is offered as the lock; the holder's own
+   *  trim bounds the scrub. */
+  async cropFile(holder, path) {
     const { width, height } = this.geometry();
     const picked = await openPicture({
-      path: segment.filename,
+      path,
       kind: "video",
-      crop: segment.crop ?? null,
-      trim: segment.trim ?? null,
+      crop: holder.crop ?? null,
+      trim: holder.trim ?? null,
       aspect: width && height ? { ratio: width / height, label: t("canvas") } : null,
     });
     if (!picked) return;
-    if (picked.crop) segment.crop = picked.crop;
-    else delete segment.crop;
+    if (picked.crop) holder.crop = picked.crop;
+    else delete holder.crop;
     this.commit();
+  }
+
+  /** Trim and Crop for a kept take, in the skin of the row they sit in. None
+   *  for a card that is not kept, or whose file is gone: there is nothing on
+   *  disk to scrub. */
+  takeTools(index, skin) {
+    const take = S.takeOn(this.timeline.segments[index]);
+    if (!S.isKept(this.timeline.segments[index]) || this.gone.has(take.filename)) return [];
+    return [
+      el("button", {
+        class: `${skin}${take.trim ? " on" : ""}`, text: t("Trim"),
+        title: take.trim
+          ? t("Plays {window} of the take. Click to change it.", { window: trimLabel(take) })
+          : t("Play only part of the take"),
+        onclick: () => this.editTake(index),
+      }),
+      el("button", {
+        class: `${skin}${take.crop ? " on" : ""}`, text: t("Crop"),
+        title: cropLabel(take.crop)
+          || t("Crop the take to part of the frame, or turn and mirror it, before it is scaled to the canvas"),
+        onclick: () => this.editTakeCrop(index),
+      }),
+    ];
   }
 
   duplicate(index) {
@@ -4469,6 +4517,20 @@ export class TimelineBody {
           + "stills land on the timeline's shots with one click."),
       onclick: () => { this.preStage.toggle(); this.render(); },
     }, [icon("image", 16), el("span", { text: t("pre-stage") })]);
+  }
+
+  /**
+   * Shot one, started if the strip is empty. A file handed to this node from
+   * outside lands on the first card, and a piece whose cards were all deleted
+   * still takes it — onto a new shot, which is what attaching it there asks for.
+   */
+  firstShot() {
+    if (!this.timeline.segments.length) {
+      this.timeline.segments.push(S.emptySegment());
+      S.syncTimeline(this.timeline);
+      S.ensureCardIds(this.timeline);
+    }
+    return this.timeline.segments[0];
   }
 
   /**
