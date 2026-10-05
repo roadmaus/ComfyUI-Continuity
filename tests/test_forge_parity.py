@@ -1,0 +1,258 @@
+"""The forge's CLI can do everything its routes can, and says it the same way.
+
+    python3 tests/test_forge_parity.py
+    UPDATE_GOLDENS=1 python3 tests/test_forge_parity.py   # rewrite the goldens
+
+Spec §11.6. Two halves:
+
+**Coverage.** Every route in `creator/forge/api.py`'s `ROUTES` — the list
+`routes/forge.py` serves — must be called by some command in the CLI's
+`COMMANDS` table, and every route a command names must exist. A capability
+added to the bench without a command fails here.
+
+**Behaviour.** The CLI is run, as a subprocess, against the real handlers behind
+a standard-library HTTP server standing in for ComfyUI (with its `/upload/image`
+too). Each command is checked for its stdout, its `--json` answer and its exit
+code, and a refusal for its sentence on stderr and its code on stdout. `schema`
+and `status` answers are compared against goldens in `tests/golden/`, because
+agents learn those shapes and a change to them is a change to a contract.
+
+No ComfyUI, no numpy: runs on a bare Python 3.9+.
+"""
+
+import importlib.util
+import json
+import os
+import re
+import subprocess
+import sys
+import tempfile
+import threading
+import types
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import parse_qsl, urlsplit
+
+import goldens
+import layout
+from harness import FAILURES, check
+
+ROOT = os.path.dirname(layout.PY_ROOT)
+CLI = os.path.join(ROOT, "skills", "continuity-forge", "forge.py")
+
+package = types.ModuleType("forgepkg")
+package.__path__ = [os.path.join(layout.PY_ROOT, "forge")]
+sys.modules["forgepkg"] = package
+for name in ("problems", "kinds", "targets", "style", "project", "manifest", "api"):
+    spec = importlib.util.spec_from_file_location(f"forgepkg.{name}",
+                                                  os.path.join(layout.PY_ROOT, "forge", f"{name}.py"))
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[f"forgepkg.{name}"] = module
+    spec.loader.exec_module(module)
+api = sys.modules["forgepkg.api"]
+
+spec = importlib.util.spec_from_file_location("forge_cli", CLI)
+cli = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(cli)
+
+# ---- coverage ---------------------------------------------------------------------
+
+served = {path for _, path, _ in api.ROUTES}
+called = {route for routes in cli.COMMANDS.values() for route in routes}
+check("every route has a command", sorted(served - called), [])
+check("every command calls a route that exists", sorted(called - served), [])
+check("the CLI's prefix is the server's", cli.PREFIX, api.PREFIX)
+commands = set(cli.parser()._subparsers._group_actions[0].choices)
+check("every command in the table is a command", sorted(set(cli.COMMANDS) ^ commands), [])
+
+# ---- a stand-in ComfyUI ---------------------------------------------------------------
+
+work = tempfile.mkdtemp(prefix="forge-parity-")
+base = os.path.join(work, "output", "continuity", "forge")
+inputs = os.path.join(work, "input")
+os.makedirs(inputs)
+
+
+def resolve(filename):
+    path = os.path.realpath(os.path.join(inputs, filename))
+    if not path.startswith(os.path.realpath(inputs) + os.sep) or not os.path.isfile(path):
+        raise FileNotFoundError(f"{filename!r} is not in the input folder")
+    return path
+
+
+host = api.Host(base, resolve, lambda: [{"id": "qwen21", "still": True}])
+
+
+class Handler(BaseHTTPRequestHandler):
+    def log_message(self, *args):
+        pass
+
+    def _send(self, status, body, kind="application/json"):
+        data = body if isinstance(body, bytes) else json.dumps(body).encode()
+        self.send_response(status)
+        self.send_header("Content-Type", kind)
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def _answer(self, method, params):
+        status, answer = api.call(host, method, urlsplit(self.path).path, params)
+        if isinstance(answer, api.File):
+            with open(answer.path, "rb") as handle:
+                return self._send(200, handle.read(), "application/octet-stream")
+        self._send(status, answer)
+
+    def do_GET(self):
+        self._answer("GET", dict(parse_qsl(urlsplit(self.path).query)))
+
+    def do_POST(self):
+        length = int(self.headers.get("Content-Length") or 0)
+        body = self.rfile.read(length)
+        if self.path == "/upload/image":
+            return self._upload(body)
+        # The guard every POST route sits behind (`guard.same_origin`).
+        if self.headers.get("Content-Type") != "application/json":
+            return self._send(415, {"error": "send application/json"})
+        self._answer("POST", json.loads(body))
+
+    def _upload(self, body):
+        boundary = self.headers["Content-Type"].split("boundary=", 1)[1].encode()
+        fields, filename, data = {}, None, None
+        for part in body.split(b"--" + boundary):
+            head, _, value = part.partition(b"\r\n\r\n")
+            name = re.search(rb'name="([^"]+)"', head)
+            if not name:
+                continue
+            value = value[:-2] if value.endswith(b"\r\n") else value
+            found = re.search(rb'filename="([^"]+)"', head)
+            if found:
+                filename, data = found.group(1).decode(), value
+            else:
+                fields[name.group(1).decode()] = value.decode()
+        sub = fields.get("subfolder", "")
+        os.makedirs(os.path.join(inputs, sub), exist_ok=True)
+        with open(os.path.join(inputs, sub, filename), "wb") as handle:
+            handle.write(data)
+        self._send(200, {"name": filename, "subfolder": sub, "type": "input"})
+
+
+server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+threading.Thread(target=server.serve_forever, daemon=True).start()
+URL = f"http://127.0.0.1:{server.server_address[1]}"
+
+
+def forge(*args, json_out=False):
+    """Run the CLI -> (exit code, stdout, stderr); stdout parsed when json_out."""
+    argv = [sys.executable, CLI, "--url", URL, *args] + (["--json"] if json_out else [])
+    done = subprocess.run(argv, capture_output=True, text=True, cwd=work, timeout=60)
+    out = done.stdout
+    if json_out and out.strip():
+        out = json.loads(out)
+    return done.returncode, out, done.stderr
+
+
+def ok(label, *args, json_out=False):
+    code, out, err = forge(*args, json_out=json_out)
+    check(f"{label}: exit code", code, 0)
+    if code:
+        FAILURES.append(f"{label}: stderr {err.strip()!r}")
+    return out
+
+
+def golden(name, data):
+    path = os.path.join(goldens.GOLDEN_DIR, f"forge_{name}.json")
+    text = json.dumps(data, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+    if goldens.UPDATE or not os.path.exists(path):
+        with open(path, "w", encoding="utf-8") as handle:
+            handle.write(text)
+        return
+    with open(path, encoding="utf-8") as handle:
+        check(f"golden {name}", handle.read() == text, True)
+
+
+# ---- discovery -----------------------------------------------------------------------
+
+caps = ok("capabilities", "capabilities", json_out=True)
+check("capabilities name the kinds", "sprite" in [k["id"] for k in caps["kinds"]], True)
+check("and the families", caps["families"], [{"id": "qwen21", "still": True}])
+text = ok("capabilities as text", "capabilities")
+check("text capabilities are lines", "target  gbstudio" in text, True)
+check("targets", "gbstudio" in ok("targets", "targets"), True)
+check("modes", "pixel" in ok("modes", "modes"), True)
+for kind in ("sprite", "tile", "sound"):
+    golden(f"schema_{kind}", ok(f"schema {kind}", "schema", kind, json_out=True))
+code, out, err = forge("schema", "level", json_out=True)
+check("an unknown kind exits 1", code, 1)
+check("with its code on stdout", out.get("code") if isinstance(out, dict) else out, "asset.kind")
+check("and its sentence on stderr", "is not a kind of asset" in err, True)
+
+# ---- a project, end to end ---------------------------------------------------------
+
+check("new prints the name", ok("new", "new", "mygame", "--mode", "pixel", "--target", "gbstudio",
+                                "--target", "godot4", "--seed", "11").strip(), "mygame")
+code, out, err = forge("new", "mygame", json_out=True)
+check("a second new is refused", (code, out["code"]), (1, "project.exists"))
+check("projects", ok("projects", "projects").split()[0], "mygame")
+
+plan = {"assets": [
+    {"kind": "character", "name": "hero", "prompt": "a small knight with a red plume", "seed": 7},
+    {"kind": "sprite", "name": "hero-walk", "of": "hero", "frame": [16, 16],
+     "animations": [{"name": "walk", "frames": 4, "fps": 8, "loop": True}]},
+    {"kind": "tile", "name": "grass", "prompt": "short grass", "tile": [8, 8]},
+]}
+with open(os.path.join(work, "plan.json"), "w") as handle:
+    json.dump(plan, handle)
+check("plan prints what it added", ok("plan", "plan", "mygame", "plan.json").split(),
+      ["added", "hero", "added", "hero-walk", "added", "grass"])
+again = ok("plan again", "plan", "mygame", "plan.json", json_out=True)
+check("a plan applied twice is unchanged", (again["added"], again["changed"]), ([], []))
+
+check("add", ok("add", "add", "mygame", "--kind", "icon", "--name", "coin", "--set", "icon=[8,8]").strip(), "coin")
+check("edit", ok("edit", "edit", "mygame", "coin", "--set", "prompt=a gold coin").strip(), "coin")
+code, out, err = forge("edit", "mygame", "coin", "--set", "icon=[0,8]", json_out=True)
+check("a bad edit is refused with its field", (code, out["code"], out["field"]), (1, "recipe.field", "icon"))
+
+check("style prints the name", ok("style", "style", "mygame", "--clause", "1-bit pixel art").strip(), "mygame")
+check("style with no options prints the style",
+      json.loads(ok("style show", "style", "mygame"))["clause"], "1-bit pixel art")
+ok("target add", "target", "mygame", "add", "love")
+check("target rm", ok("target rm", "target", "mygame", "rm", "love").strip(), "mygame")
+
+with open(os.path.join(work, "hero.png"), "wb") as handle:
+    handle.write(b"\x89PNG stand-in")
+check("import uploads and prints the master's path",
+      ok("import", "import", "mygame", "hero", "hero.png").strip(),
+      "assets/character/hero/masters/hero.png")
+status = ok("status", "status", "mygame")
+check("status says what is made and not looked at", "made      character  hero  (not looked at)" in status, True)
+check("status lists planned assets", "planned   tile       grass" in status, True)
+answer = ok("status --json", "status", "mygame", json_out=True)
+for row in answer["assets"]:
+    row["made"] = row["made"] and "<time>"
+golden("status", answer)
+shown = ok("show", "show", "mygame", json_out=True)
+check("show carries the project and its status", sorted(shown), ["project", "status"])
+
+check("files lists the master", "assets/character/hero/masters/hero.png" in ok("files", "files", "mygame"), True)
+pulled = ok("pull", "pull", "mygame", "--under", "assets", "--out", "pulled").split()
+check("pull writes what files lists", [os.path.relpath(p, "pulled") for p in pulled],
+      [os.path.join("assets", "character", "hero", "masters", "hero.png"),
+       os.path.join("assets", "character", "hero", "recipe.json")])
+with open(os.path.join(work, "pulled", "assets", "character", "hero", "masters", "hero.png"), "rb") as handle:
+    check("and the bytes are the file's", handle.read(), b"\x89PNG stand-in")
+
+ok("import again", "import", "mygame", "hero", "hero.png")
+check("history lists the replaced set", len(ok("history", "history", "mygame", "hero").splitlines()), 1)
+check("rm prints the asset", ok("rm", "rm", "mygame", "coin").strip(), "coin")
+
+code, out, err = forge("status", "nothere", json_out=True)
+check("a missing project", (code, out["code"]), (1, "project.missing"))
+code, out, err = forge("import", "mygame", "hero", "not-a-file.png", json_out=True)
+check("an import of nothing", (code, out["code"]), (1, "import.missing"))
+
+# ---- the server is the CLI's only way in ------------------------------------------
+
+code, _, err = forge("--url", "http://127.0.0.1:9", "projects")
+check("an unreachable server exits 3", code, 3)
+check("and says where it looked", "cannot reach" in err, True)
+
+server.shutdown()

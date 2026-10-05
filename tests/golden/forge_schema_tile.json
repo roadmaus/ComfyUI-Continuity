@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "one seamless tile",
+  "properties": {
+    "alpha": {
+      "default": true,
+      "description": "whether the master carries transparency",
+      "type": "boolean"
+    },
+    "family": {
+      "description": "the still family that makes it; the project's default if left out",
+      "type": "string"
+    },
+    "kind": {
+      "const": "tile",
+      "type": "string"
+    },
+    "layer": {
+      "default": 0,
+      "description": "depth order, back to front",
+      "maximum": 1000,
+      "minimum": -1000,
+      "type": "integer"
+    },
+    "name": {
+      "description": "the asset's name: lowercase letters, digits, - and _",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+      "type": "string"
+    },
+    "notes": {
+      "default": "",
+      "description": "anything a person or agent should know; never changes what is made",
+      "type": "string"
+    },
+    "pivot": {
+      "description": "the anchor, as a fraction of the frame [x, y]; feet-centre if left out",
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+    },
+    "post": {
+      "default": [],
+      "description": "post-steps in order; the render mode's chain if left empty",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "prompt": {
+      "default": "",
+      "description": "what to make, in plain words; the style clause is added after it",
+      "type": "string"
+    },
+    "references": {
+      "default": [],
+      "description": "pictures this asset is made from, by name (project files or ComfyUI input/)",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "seamless": {
+      "default": "both",
+      "description": "which axes wrap",
+      "enum": [
+        "both",
+        "x",
+        "y",
+        "none"
+      ],
+      "type": "string"
+    },
+    "seed": {
+      "description": "fixed seed; derived from the project seed and the name if left out",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "size": {
+      "default": [
+        1024,
+        1024
+      ],
+      "description": "the master's size in pixels, [width, height]; the kind's default if left out",
+      "items": {
+        "minimum": 1,
+        "type": "integer"
+      },
+      "maxItems": 2,
+      "maximum": 8192,
+      "minItems": 2,
+      "type": "array"
+    },
+    "targets": {
+      "default": {},
+      "description": "per-target overrides, {target: {...}}; export only",
+      "type": "object"
+    },
+    "tile": {
+      "default": [
+        16,
+        16
+      ],
+      "description": "the tile's size at the target",
+      "items": {
+        "minimum": 1,
+        "type": "integer"
+      },
+      "maxItems": 2,
+      "maximum": 1024,
+      "minItems": 2,
+      "type": "array"
+    }
+  },
+  "required": [
+    "name",
+    "kind"
+  ],
+  "title": "forge tile",
+  "type": "object"
+}

@@ -6,6 +6,18 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Game Forge, first step: a game's assets planned and kept in one project,
+from a shell.** `skills/continuity-forge/forge.py` (with its Claude Code skill)
+makes a project under `output/continuity/forge/` with a style, a render mode and
+engine targets, merges an asset plan into it by name — twice changes nothing,
+an edited entry goes stale if it was made — and imports pictures as an asset's
+masters, writing `MANIFEST.md` from the project on every change. Every write is
+staged and swapped in, and whatever it replaces is kept under `.versions/`;
+nothing deletes a file. The routes under `/continuity/forge/*` are one table
+that the server registers and a test holds the CLI's commands against, so the
+bench, when it lands, cannot do anything an agent cannot. Generation, the
+post-steps, checks and exports follow.
+
 **Screens: a picture or clip put on a phone, tablet, laptop or TV in the shot,
 with its text as sharp as the file.** A shot can carry up to two screens, each
 a device and a file, and a handle the prompt cites it by where the screen is

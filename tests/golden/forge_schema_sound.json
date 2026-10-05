@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "a sound effect, ambience or music cue",
+  "properties": {
+    "alpha": {
+      "default": true,
+      "description": "whether the master carries transparency",
+      "type": "boolean"
+    },
+    "bars": {
+      "description": "music only: loop length in bars",
+      "maximum": 256,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "engine": {
+      "description": "the audio engine; the kind's default if left out",
+      "type": "string"
+    },
+    "family": {
+      "description": "the still family that makes it; the project's default if left out",
+      "type": "string"
+    },
+    "for": {
+      "default": "",
+      "description": "foley only: the sprite asset whose animation it scores",
+      "type": "string"
+    },
+    "kind": {
+      "const": "sound",
+      "type": "string"
+    },
+    "layer": {
+      "default": 0,
+      "description": "depth order, back to front",
+      "maximum": 1000,
+      "minimum": -1000,
+      "type": "integer"
+    },
+    "loop": {
+      "default": false,
+      "description": "whether it loops seamlessly",
+      "type": "boolean"
+    },
+    "name": {
+      "description": "the asset's name: lowercase letters, digits, - and _",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+      "type": "string"
+    },
+    "notes": {
+      "default": "",
+      "description": "anything a person or agent should know; never changes what is made",
+      "type": "string"
+    },
+    "pivot": {
+      "description": "the anchor, as a fraction of the frame [x, y]; feet-centre if left out",
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+    },
+    "post": {
+      "default": [],
+      "description": "post-steps in order; the render mode's chain if left empty",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "prompt": {
+      "default": "",
+      "description": "what to make, in plain words; the style clause is added after it",
+      "type": "string"
+    },
+    "references": {
+      "default": [],
+      "description": "pictures this asset is made from, by name (project files or ComfyUI input/)",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "seconds": {
+      "description": "length; the sound kind's default if left out",
+      "maximum": 600,
+      "minimum": 0.05,
+      "type": "number"
+    },
+    "seed": {
+      "description": "fixed seed; derived from the project seed and the name if left out",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "size": {
+      "description": "the master's size in pixels, [width, height]; the kind's default if left out",
+      "items": {
+        "minimum": 1,
+        "type": "integer"
+      },
+      "maxItems": 2,
+      "maximum": 8192,
+      "minItems": 2,
+      "type": "array"
+    },
+    "sound": {
+      "default": "impact",
+      "description": "what kind of sound, which sets its defaults",
+      "enum": [
+        "ui",
+        "footstep",
+        "impact",
+        "ambience",
+        "music",
+        "bark",
+        "foley"
+      ],
+      "type": "string"
+    },
+    "targets": {
+      "default": {},
+      "description": "per-target overrides, {target: {...}}; export only",
+      "type": "object"
+    },
+    "variations": {
+      "default": 1,
+      "description": "numbered variations to make",
+      "maximum": 32,
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "name",
+    "kind"
+  ],
+  "title": "forge sound",
+  "type": "object"
+}

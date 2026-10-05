@@ -1,0 +1,62 @@
+{
+  "assets": [
+    {
+      "exported": [],
+      "family": "qwen21",
+      "kind": "character",
+      "made": "<time>",
+      "masters": [
+        "hero.png"
+      ],
+      "name": "hero",
+      "seed": 7,
+      "source": "import",
+      "status": "made",
+      "viewed": false
+    },
+    {
+      "exported": [],
+      "family": "qwen21",
+      "kind": "sprite",
+      "made": null,
+      "masters": [],
+      "name": "hero-walk",
+      "seed": 1523246679,
+      "source": null,
+      "status": "planned",
+      "viewed": false
+    },
+    {
+      "exported": [],
+      "family": "qwen21",
+      "kind": "tile",
+      "made": null,
+      "masters": [],
+      "name": "grass",
+      "seed": 1953487502,
+      "source": null,
+      "status": "planned",
+      "viewed": false
+    },
+    {
+      "exported": [],
+      "family": "qwen21",
+      "kind": "icon",
+      "made": null,
+      "masters": [],
+      "name": "coin",
+      "seed": 567005688,
+      "source": null,
+      "status": "planned",
+      "viewed": false
+    }
+  ],
+  "counts": {
+    "exported": 0,
+    "made": 1,
+    "planned": 3,
+    "stale": 0,
+    "unviewed": 1
+  },
+  "project": "mygame"
+}
