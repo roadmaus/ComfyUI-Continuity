@@ -8,7 +8,7 @@ Written 2026-10-05 against `main` at `6347afe`, after the research in §3 and
 
 A bench reached from the tools dashboard where a game's assets are made: the
 characters and their animation frames, tiles and tilesets, materials,
-textures for 3D models that already exist, backgrounds, icons and UI, sound
+3D models with clean quad topology, textures for 3D models that already exist, backgrounds, icons and UI, sound
 effects, ambience and music. Everything belongs to a **project**, and the
 project carries what every asset in it must agree on: one art style, one or
 more engine targets, a palette and grid when the style needs them, and fixed
@@ -203,6 +203,46 @@ render 8 directions from a fixed orthographic camera.
   (1 − roughness). Godot `ORMMaterial3D`: OpenGL normals, ORM as glTF.
   Power-of-two sizes, 2–8 px island padding, consistent texel density.
 
+### 3.8 Retopology
+
+A lifted mesh is dense, triangulated and sometimes non-manifold: fine to look
+at, wrong to animate, UV or ship. Game models want a clean, low,
+**quad-dominant** mesh whose edges follow the form — what ZBrush's ZRemesher
+does. The detail is not lost: it is baked from the dense mesh onto the clean
+one as normal and AO maps.
+
+- **Core has the triangle half and the bake, not quads.** `RemeshMesh` is a
+  narrow-band distance field and dual contouring (`udf` is robust to
+  non-manifold input), `DecimateMesh` is QEM to an exact face count,
+  `UnwrapMesh` is a torch/scipy unwrap, and the bakes take a high and a low
+  poly. The lift already chains these (`creator/lift.py:446-503`). No core
+  node makes quads.
+- **The field-aligned methods are the practical route.** Instant Meshes
+  (BSD-3) solves an orientation field and a position field on the surface and
+  extracts quads from them; QuadriFlow (MIT) adds a flow step that removes
+  singularities; QuadWild (GPL-3) traces feature lines first and has the most
+  artist-like flow. Controls across them: target count, crease angle,
+  quad-dominant or pure quad, boundary alignment; symmetry only in Blender's
+  QuadriFlow; density painting in none of the free ones.
+- **Python wrappers exist**: `pynanoinstantmeshes` (BSD, prebuilt wheels;
+  already used by Stable Fast 3D and kijai's Hunyuan3D wrapper) and
+  `pyQuadriFlow`. Both are small, one-maintainer projects.
+- **Neural "artist mesh" models are not ready to be the default.**
+  MeshAnything V2 caps at 1,600 faces and is non-commercial; DeepMesh (Apache
+  2.0) reaches ~30k faces but is slow and heavy; BPT is in Hunyuan's wrapper;
+  QuadGPT, Meshtron and QuadLink have no local weights. Mostly triangles.
+  Watched, not built on.
+- **Our own is feasible**: a simplified Instant-Meshes pipeline in torch —
+  hierarchy, 4-RoSy orientation field, 4-PoSy position field, extraction — is
+  about 2–3k lines and 2–4 weeks to usable. Extraction is most of the work
+  and most of the bugs (holes, T-junctions, flipped quads near singularities
+  and thin parts). It runs after core's remesh and decimate have produced a
+  clean manifold of 50–150k triangles, which removes the worst inputs.
+
+All of this comes from search results; the research could not open the
+licence files or package pages. Licences and wheel platforms are checked
+before anything is wired.
+
 ## 4. What the pack already has
 
 | Need | Where it is |
@@ -231,6 +271,8 @@ pack can use too:
 4. **Texturing an existing UV-mapped mesh** (§7.4).
 5. **Sound without picture** (§8).
 6. **A normal tracing**, for 2D lighting and as a control image.
+7. **Quad retopology** and the rest of making a mesh game-ready: LODs,
+   collision, scale and pivot (§3.8, §7.6).
 
 ## 5. The project
 
@@ -380,12 +422,69 @@ bench) and matte, the gaps behind each layer filled by masked edit, named
 tile on X. On Game Boy, the map is checked against 32×32 tiles and the tile
 budget.
 
-### 7.6 UI, icons and items
+### 7.6 3D models
+
+The lift bench already turns a picture into a textured mesh. The forge does
+not copy it: it **calls `lift.build`** with the project's pictures and keeps
+the result in the project, and then does what the lift bench does not —
+makes the mesh game-ready. A model is an asset like any other, with a recipe,
+masters and variants.
+
+1. **Source.** A concept or model sheet from the project (§7.1), so the
+   model has the project's style. When the character workshop has made the
+   front, left, back and right views, they feed Pixal3D's multi-view rig
+   directly — the same views, now doing a second job.
+2. **Lift**, through `lift.build` and `jobs.enqueue`, unchanged: Pixal3D or
+   TRELLIS.2, at the lift's detail settings. The dense result is kept as the
+   model's **high poly** and never edited.
+3. **Retopology**, one of three, chosen per asset:
+   - **Triangles** (always available): core `RemeshMesh` and `DecimateMesh`
+     to a face budget. What the lift does today.
+   - **Q-Remesh** (quad-dominant): the forge's quad remesher, with target
+     faces, crease angle, quad-dominant or pure quad, boundary alignment and
+     symmetry. It runs on whichever backend the machine has, best first:
+     an **external tool** the user has pointed the pack at in its settings
+     (Instant Meshes, QuadWild, or Blender for its QuadriFlow with symmetry —
+     run as a subprocess, which is also what keeps GPL code out of the pack);
+     then **`pynanoinstantmeshes` or `pyQuadriFlow`** if installed, detected
+     at runtime like any optional pack; then **our own** torch
+     implementation (§3.8), which is always there once it exists. The
+     result says which backend made it.
+   - **Keep** the lifted mesh as it is.
+4. **UVs.** Core `UnwrapMesh` on the triangulated low poly; the quad topology
+   is kept beside it for the formats that can carry quads.
+5. **Surface.** Either bake the lift's own texture across (base colour,
+   metallic, roughness from the voxels, as `_bake` does now), or paint it
+   with §7.4, which is the better route when the style matters. Then normal
+   and AO baked from the high poly onto the low, with a cage distance of
+   1–2 % of the bounds and the target's normal convention.
+6. **Game-ready.**
+   - **Scale and pivot:** a real-world height in metres, the pivot at the
+     bottom centre unless the recipe says otherwise, Y-up for glTF.
+   - **LODs:** `DecimateMesh` at 100/50/25/12.5 % by default, named
+     `_LOD0…_LODn`. Whether core's decimate can hold UV seams fixed is to be
+     checked; if not, LODs are decimated before the unwrap and each is baked.
+   - **Collision:** a convex hull (`scipy.spatial.ConvexHull`), or a box or
+     capsule fit, named `UCX_<name>_NN` for Unreal. Convex decomposition is
+     later.
+7. **Checks**, the mesh version of §6.6: face budget per LOD, non-manifold
+   edges, holes, UV overlap and texel density against the project's
+   density, bake artefacts as a heat map.
+8. **Look.** The lift stage (`liftstage.js`) shows it: textured, clay, wire
+   and normals, with the quad wire drawn from the kept topology rather than
+   the triangles glTF stores. For agents, `sheet` writes a turntable contact
+   sheet with a wire row.
+
+The project's style carries into 3D the same way it does into 2D: the
+source pictures are made in the style, and the paint step (§7.4) uses the
+same clause, references and seeds.
+
+### 7.7 UI, icons and items
 
 Sets generated as one grid for a shared look, split, matted. Panels exported
 9-slice. Bitmap fonts later.
 
-### 7.7 Sound
+### 7.8 Sound
 
 §8.
 
@@ -426,9 +525,13 @@ limiter, numbered variation sets (seeds, ±1–3 semitones, ±1–2 dB), 48 kHz
 5. Game Boy / GBC / GB Studio: indexed PNGs, validated.
 6. PBR sets in glTF convention with Unreal and Unity HDRP switches; textured
    GLB.
-7. Audio as §8.
+7. Models: GLB with LODs and collision as separate named nodes, and OBJ with
+   true quads for handing to a modelling package.
+8. Audio as §8.
 
-Later: Unity `.meta`, Unreal `.uasset`, Wwise and FMOD projects (they take
+Later: FBX through a binary FBX writer of our own (Unity and Unreal import
+both GLB and OBJ, so FBX waits until a target needs it, and a hand-written
+FBX must be proven in both engines first), Unity `.meta`, Unreal `.uasset`, Wwise and FMOD projects (they take
 WAVs anyway), `.uge`.
 
 ## 10. Architecture
@@ -437,7 +540,11 @@ WAVs anyway), `.uge`.
   `style.py`, `kinds/<kind>.py` (recipe → job body), `post/` (`matte.py`,
   `bleed.py`, `pixelize.py`, `constraints.py`, `atlas.py`, `tiling.py`,
   `pbr.py`, `loop.py`, `loudness.py`), `uv/` (`raster.py`, `project.py`,
-  `fill.py`), `export/<target>.py`. No ComfyUI or torch imports at module
+  `fill.py`), `mesh/` (`lift.py` calling `creator/lift.py`, `retopo.py` with
+  one module per backend, `qremesh.py` for our own, `lod.py`, `collision.py`,
+  `checks.py`), `export/<target>.py`. External remesh tools are paths in
+  `settings.py`, the machine's settings, never in a project file: a project
+  that could name an executable would be a project that runs one. No ComfyUI or torch imports at module
   scope where tests need the module.
 - **Routes** `creator/routes/forge.py` under `/continuity/forge/*`: project
   CRUD, asset recipes, previews (GETs), runs (`jobs.submit("forge", …)` or
@@ -510,7 +617,7 @@ Every route has a command; these are the groups.
 | Assets | `plan`, `add`, `edit`, `rm` (moves to `.versions/`, never deletes), `status`, `history <asset>` |
 | Making | `make <asset…>`, `make --missing`, `make --stale`, `vary <asset> --n`, `post <asset> <step…>` |
 | Looking | `sheet <asset>` (contact sheet PNG), `check` (overlay PNG + JSON), `sound-report` (loudness, peak, loop seam error, waveform PNG) |
-| 3D | `texture <mesh> <recipe>`, `views <mesh>` (the depth and normal renders it will condition on) |
+| 3D | `lift <asset>`, `retopo <asset> --mode tris\|quads\|keep --faces N`, `lod <asset>`, `collision <asset>`, `texture <mesh> <recipe>`, `views <mesh>` (the depth and normal renders it will condition on) |
 | Moving files | `import` (pictures, meshes, sounds into the project), `export <target>`, `pull` (download `build/<target>/` or the whole project) |
 | Jobs | `jobs`, `wait <id>`, `cancel <id>` |
 
@@ -559,10 +666,14 @@ contract stable for agents that have learned it.
 2. **2D generation.** Style, characters and sprites, tiles with seamless
    tiling, icons, masked inpainting.
 3. **Audio.**
-4. **Materials and model texturing.** A one-mesh spike of §7.4 runs early,
-   in parallel with 2, because it is the biggest unknown: the grid-of-views
-   route is plausible and unproven on these families.
-5. **Backgrounds and parallax, HD rigs, `.uge`, further engines.**
+4. **3D.** Materials, model texturing, and 3D models (§7.6) with
+   triangle retopology and Q-Remesh on the optional and external backends.
+   A one-mesh spike of §7.4 runs early, in parallel with 2, because it is the
+   biggest unknown: the grid-of-views route is plausible and unproven on
+   these families.
+5. **Our own Q-Remesh** (§3.8), so quads do not depend on anything
+   installed. Backgrounds and parallax, HD rigs, `.uge`, FBX, further
+   engines.
 
 ## 13. Risks
 
@@ -572,6 +683,10 @@ contract stable for agents that have learned it.
   from research that could not reach the docs. Each is verified against an
   install before it is wired, and each path has a fallback that does not need
   it.
+- **Q-Remesh quality.** Our own field-aligned remesher will be behind
+  Instant Meshes and QuadriFlow for a long time, and far behind ZRemesher on
+  edge flow around faces and hands. The external and optional backends are
+  why it is not on the critical path; the checks say when a result is poor.
 - **Grid-of-views consistency** may not hold on Qwen Image Edit at 4–6
   views. The spike decides; sequential projection is the fallback.
 - **Pixel conversion** is only as good as the 1024 picture. The constraint
@@ -584,6 +699,8 @@ contract stable for agents that have learned it.
 
 ## 14. Not in v1
 
-Rigging beyond a starting `rig.lua`, skeletal animation, LoRA training of a
+Rigging beyond a starting `rig.lua`, skeletal animation, skinning,
+neural retopology, density painting and edge-flow strokes for Q-Remesh,
+convex decomposition, LoRA training of a
 character, an identity-similarity score, `.uge`, engine-native binaries,
 level layout beyond Tiled export, voice cloning.
