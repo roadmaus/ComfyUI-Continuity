@@ -15,6 +15,7 @@ mod fill;
 mod math;
 mod mesh;
 mod partition;
+mod pattern;
 mod patches;
 mod premesh;
 mod proj;
@@ -164,9 +165,9 @@ fn remesh(args: &Args) -> Result<(), String> {
         let t = Instant::now();
         let turn = |u: u32, v: u32, w: u32| part.turn(u, v, w);
         graph = patches::build(&m, &part.cut, &part.feature, quad, Some(&turn));
-        let (added, dropped) = graph.fix_corners(&m, 3, 5);
+        let (added, dropped) = graph.fix_corners(&m, 3, 6);
         if added + dropped > 0 {
-            eprintln!("corners: {added} added, {dropped} dropped to bring every patch to 3–5");
+            eprintln!("corners: {added} added, {dropped} dropped to bring every patch to 3–6");
         }
         t_graph = t.elapsed().as_secs_f64();
         crossings = 0;

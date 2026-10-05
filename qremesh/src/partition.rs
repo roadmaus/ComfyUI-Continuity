@@ -448,14 +448,12 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
 
     let debug = std::env::var("QREMESH_DEBUG").is_ok();
     let mut added = 0;
-    let mut invalid;
     let mut round = 0;
     loop {
         round += 1;
         let regions = Regions::new(&ctx, &cut);
         let evals: Vec<(patches::Patch, usize)> = (0..regions.tris.len()).map(|r| regions.eval(&ctx, r, &cut, &label)).collect();
         let bad: Vec<usize> = (0..evals.len()).filter(|&r| evals[r].1 > 0).collect();
-        invalid = bad.len();
         if debug {
             eprintln!("partition round {round}: {} patches, {} invalid, badness {}", evals.len(), bad.len(), evals.iter().map(|e| e.1).sum::<usize>());
         }

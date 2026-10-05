@@ -297,10 +297,6 @@ fn augment(
     Some(path)
 }
 
-pub fn gauss_pub(a: Vec<Vec<f64>>, b: Vec<f64>) -> Vec<f64> {
-    gauss(a, b)
-}
-
 fn gauss(mut a: Vec<Vec<f64>>, mut b: Vec<f64>) -> Vec<f64> {
     let n = b.len();
     for col in 0..n {
@@ -363,7 +359,13 @@ struct Net<'a> {
 }
 
 impl<'a> Net<'a> {
+    /// Needs an even side total: every patch but a quad, whose equal
+    /// opposite sides make it even already.
     fn odd_kind(&self, p: usize) -> bool {
+        self.patches[p].sides.len() != 4
+    }
+    /// Has a midpoint pattern to keep spokes of.
+    fn spoked(&self, p: usize) -> bool {
         matches!(self.patches[p].sides.len(), 3 | 5)
     }
     fn total(&self, x: &[i64], p: usize) -> i64 {
@@ -467,8 +469,8 @@ impl<'a> Net<'a> {
 /// opposite side must change by the same amount; an arc on the surface's
 /// boundary ends a chain by itself. A spoke short of one is raised by
 /// lengthening the two sides it meets, each by a chain that ends in any
-/// patch that is not a quad, and the parity repaired again. -> patches
-/// still unfillable.
+/// patch that is not a quad, and the parity repaired again, last. ->
+/// patches left with an odd total.
 pub fn parity(x: &mut [i64], target: &[f64], weight: &[f64], patches: &[Sides]) -> usize {
     let mut on: Vec<Vec<usize>> = vec![Vec::new(); x.len()];
     for (p, ps) in patches.iter().enumerate() {
@@ -482,8 +484,8 @@ pub fn parity(x: &mut [i64], target: &[f64], weight: &[f64], patches: &[Sides]) 
     }
     let net = Net { target, weight, patches, on };
     let odd = |x: &[i64]| (0..patches.len()).filter(|&p| net.odd_kind(p) && net.total(x, p) % 2 != 0).collect::<Vec<_>>();
-    let thin = |x: &[i64]| (0..patches.len()).filter(|&p| net.odd_kind(p)).flat_map(|p| net.spokes2(x, p).into_iter().enumerate().filter(|&(_, t2)| t2 < 2).map(move |(k, _)| (p, k)).collect::<Vec<_>>()).collect::<Vec<_>>();
-    for _round in 0..12 {
+    let thin = |x: &[i64]| (0..patches.len()).filter(|&p| net.spoked(p)).flat_map(|p| net.spokes2(x, p).into_iter().enumerate().filter(|&(_, t2)| t2 < 2).map(move |(k, _)| (p, k)).collect::<Vec<_>>()).collect::<Vec<_>>();
+    let fix_parity = |x: &mut [i64]| {
         for _ in 0..patches.len() + 1 {
             let Some(&start) = odd(x).first() else { break };
             let starts: Vec<(usize, usize, i64)> = patches[start].sides.iter().flatten().flat_map(|&a| [(start, a, 1), (start, a, -1)]).collect();
@@ -492,6 +494,9 @@ pub fn parity(x: &mut [i64], target: &[f64], weight: &[f64], patches: &[Sides]) 
                 break;
             }
         }
+    };
+    for _round in 0..12 {
+        fix_parity(x);
         let short = thin(x);
         if short.is_empty() {
             break;
@@ -508,9 +513,8 @@ pub fn parity(x: &mut [i64], target: &[f64], weight: &[f64], patches: &[Sides]) 
             }
         }
     }
-    let mut bad: Vec<usize> = odd(x);
-    bad.extend(thin(x).into_iter().map(|(p, _)| p));
-    bad.sort_unstable();
-    bad.dedup();
-    bad.len()
+    // Parity last: a short spoke only costs the midpoint pattern (another
+    // pattern fills the patch), an odd total costs every pattern.
+    fix_parity(x);
+    odd(x).len()
 }

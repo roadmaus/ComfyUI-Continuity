@@ -189,6 +189,9 @@ pub struct Filler<'a> {
     /// Integer length of each fill arc, when the arcs are quantized before
     /// the patches are cut (`build_patches`).
     pub int: Vec<i64>,
+    /// Patches filled whole from a pattern (`build_patches`): the patch,
+    /// its sides as fill arcs, and the pattern.
+    templates: Vec<(usize, Vec<Vec<(usize, bool)>>, crate::pattern::Template)>,
 }
 
 fn fillable(p: &crate::patches::Patch) -> bool {
@@ -232,7 +235,7 @@ impl<'a> Filler<'a> {
             .map(|(i, a)| FArc { from: Node::Vertex(a.a), to: Node::Vertex(a.b), kind: Kind::Surface(i), target: a.length / h })
             .collect();
         let farc_of = (0..graph.arcs.len()).collect();
-        Filler { m, graph, h, farcs, farc_of, dpoints: Vec::new(), kites: Vec::new(), pending: Vec::new(), unfilled: 0, prelim: HashMap::new(), int: Vec::new() }
+        Filler { m, graph, h, farcs, farc_of, dpoints: Vec::new(), kites: Vec::new(), pending: Vec::new(), unfilled: 0, prelim: HashMap::new(), int: Vec::new(), templates: Vec::new() }
     }
 
     /// The outline vertex of patch `p` that is refined vertex `v`. A node
@@ -285,19 +288,17 @@ impl<'a> Filler<'a> {
         sol
     }
 
-    /// The layout's own arcs quantized first, then every patch cut into
-    /// kites where the integers say: a quad is one kite and needs its
-    /// opposite sides equal; a triangle or pentagon gets the midpoint
-    /// pattern, whose spokes follow from its side counts (side i holds the
-    /// spokes either side of it, S_i = t_{i−1} + t_{i+1}), so it needs an
-    /// even total and every spoke at least one. That is QuadWild's
-    /// quantization: equality only where a grid needs it, parity elsewhere,
-    /// and no kite-level constraints for the solver to get stuck on.
+    /// The layout's own arcs quantized first, then every patch filled whole
+    /// from a pattern for its side counts (`pattern.rs`). Quads want their
+    /// opposite sides equal; triangles and pentagons an even total with
+    /// every midpoint-pattern spoke at least one (S_i = t_{i−1} + t_{i+1});
+    /// that is QuadWild's quantization, with no kite-level constraints for
+    /// the solver to get stuck on.
     pub fn build_patches(&mut self) -> quantize::Solution {
         let na = self.graph.arcs.len();
         let target: Vec<f64> = self.graph.arcs.iter().map(|a| (a.length / self.h).max(0.05)).collect();
         let weight: Vec<f64> = target.iter().map(|t| 1.0 / t.max(1.0)).collect();
-        let ok: Vec<bool> = self.graph.patches.iter().map(|p| fillable(p) && matches!(p.corners.len(), 3 | 4 | 5)).collect();
+        let ok: Vec<bool> = self.graph.patches.iter().map(|p| fillable(p) && (3..=6).contains(&p.corners.len())).collect();
         let side_arcs = |p: &crate::patches::Patch| -> Vec<Vec<usize>> { p.sides.iter().map(|s| s.iter().map(|&(a, _)| a).collect()).collect() };
         let mut constraints = Vec::new();
         for (p, patch) in self.graph.patches.iter().enumerate() {
@@ -318,124 +319,27 @@ impl<'a> Filler<'a> {
         // Fill arcs are the graph arcs so far.
         self.int = (0..na).map(|a| sol.x[a]).collect();
         for p in 0..self.graph.patches.len() {
-            if !ok[p] || !self.cut_counted(p) {
+            if !ok[p] {
                 self.unfilled += 1;
+                continue;
+            }
+            let patch = &self.graph.patches[p];
+            let sides: Vec<Vec<(usize, bool)>> = patch.sides.iter().map(|s| s.iter().map(|&(a, f)| (self.farc_of[a], f)).collect()).collect();
+            let l: Vec<usize> = sides.iter().map(|s| s.iter().map(|&(a, _)| self.int[a].max(0) as usize).sum()).collect();
+            let corners = polygon(l.len(), &l.iter().map(|&x| x as f64).collect::<Vec<_>>());
+            match crate::pattern::build(&corners, &l) {
+                Some(t) => self.templates.push((p, sides, t)),
+                None => {
+                    if std::env::var("QREMESH_DEBUG").is_ok() {
+                        eprintln!("    patch {p}: no pattern for sides {l:?}");
+                    }
+                    self.unfilled += 1;
+                }
             }
         }
         sol.violated += odd;
         sol.x = self.int.clone();
         sol
-    }
-
-    /// Cut patch `p` into kites by its quantized side counts; false if the
-    /// counts admit no pattern (a side longer than the others allow).
-    fn cut_counted(&mut self, p: usize) -> bool {
-        let patch = &self.graph.patches[p];
-        let n = patch.corners.len();
-        let corners: Vec<Node> = (0..n).map(|c| self.node_vertex(p, c)).collect();
-        let sides: Vec<Vec<(usize, bool)>> = patch.sides.iter().map(|s| s.iter().map(|&(a, f)| (self.farc_of[a], f)).collect()).collect();
-        let total: Vec<i64> = sides.iter().map(|s| s.iter().map(|&(a, _)| self.int[a]).sum()).collect();
-        if n == 4 {
-            if total[0] != total[2] || total[1] != total[3] {
-                return false;
-            }
-            self.kites.push(Kite { patch: p, corners: [corners[0], corners[1], corners[2], corners[3]], sides: [sides[0].clone(), sides[1].clone(), sides[2].clone(), sides[3].clone()], whole: true });
-            return true;
-        }
-        // Spokes: S_i = t_{i−1} + t_{i+1}, solved over the reals and
-        // checked to be whole and at least one.
-        let mut a = vec![vec![0.0; n]; n];
-        for i in 0..n {
-            a[i][(i + n - 1) % n] += 1.0;
-            a[i][(i + 1) % n] += 1.0;
-        }
-        let t: Vec<f64> = quantize::gauss_pub(a, total.iter().map(|&x| x as f64).collect());
-        let ti: Vec<i64> = t.iter().map(|x| x.round() as i64).collect();
-        if t.iter().zip(&ti).any(|(x, r)| (x - *r as f64).abs() > 1e-6) || ti.iter().any(|&x| x < 1) {
-            if std::env::var("QREMESH_DEBUG").is_ok() {
-                eprintln!("    patch {p}: sides {total:?} give spokes {t:?}");
-            }
-            return false;
-        }
-        self.preliminary(p);
-        // Side i is split t_{i−1} from its first corner.
-        let mut mids = Vec::new();
-        for i in 0..n {
-            let Some(m) = self.split_at(&sides[i], ti[(i + n - 1) % n]) else {
-                return false;
-            };
-            mids.push(m);
-        }
-        self.dpoints.push(DPoint::Center { corners: corners.clone() });
-        let center = Node::Domain(self.dpoints.len() - 1);
-        let spokes: Vec<usize> = (0..n)
-            .map(|i| {
-                let s = self.domain_arc(p, mids[i].0, center);
-                self.int.push(ti[i]);
-                s
-            })
-            .collect();
-        for i in 0..n {
-            let prev = (i + n - 1) % n;
-            self.kites.push(Kite {
-                patch: p,
-                corners: [corners[i], mids[i].0, center, mids[prev].0],
-                sides: [mids[i].1.clone(), vec![(spokes[i], true)], vec![(spokes[prev], false)], mids[prev].2.clone()],
-                whole: false,
-            });
-        }
-        true
-    }
-
-    /// A node `pos` grid edges along a side, splitting the surface arc it
-    /// falls inside at the chain vertex nearest that fraction of it. ->
-    /// (node, first part, second part); None if the arc is a single mesh
-    /// edge with nowhere to split.
-    fn split_at(&mut self, side: &[(usize, bool)], pos: i64) -> Option<(Node, Vec<(usize, bool)>, Vec<(usize, bool)>)> {
-        let mut cum = 0;
-        for j in 0..side.len() {
-            let (a, fwd) = side[j];
-            let len = self.int[a];
-            if cum + len == pos && j + 1 < side.len() {
-                let node = if fwd { self.farcs[a].to } else { self.farcs[a].from };
-                return Some((node, side[..=j].to_vec(), side[j + 1..].to_vec()));
-            }
-            if cum + len > pos {
-                let off = pos - cum;
-                // From the arc's own start.
-                let k = if fwd { off } else { len - off };
-                let Kind::Surface(ga) = self.farcs[a].kind else { return None };
-                let chain = &self.graph.arcs[ga].chain;
-                if chain.len() < 3 {
-                    return None;
-                }
-                let mut cl = vec![0.0];
-                for w in chain.windows(2) {
-                    cl.push(cl.last().unwrap() + (self.m.v[w[1] as usize] - self.m.v[w[0] as usize]).norm());
-                }
-                let goal = cl.last().unwrap() * k as f64 / len as f64;
-                let at = (1..chain.len() - 1).min_by(|&i, &q| (cl[i] - goal).abs().total_cmp(&(cl[q] - goal).abs())).unwrap();
-                let gnew = self.graph.split_arc(self.m, ga, at);
-                let node = Node::Vertex(self.graph.arcs[ga].b);
-                let to = Node::Vertex(self.graph.arcs[gnew].b);
-                self.farcs[a].to = node;
-                self.farcs[a].target = self.graph.arcs[ga].length / self.h;
-                self.farcs.push(FArc { from: node, to, kind: Kind::Surface(gnew), target: self.graph.arcs[gnew].length / self.h });
-                let new = self.farcs.len() - 1;
-                self.farc_of.push(new);
-                self.int[a] = k;
-                self.int.push(len - k);
-                self.replace(a, new);
-                let (first, second) = if fwd {
-                    (side[..j].iter().copied().chain([(a, true)]).collect::<Vec<_>>(), [(new, true)].into_iter().chain(side[j + 1..].iter().copied()).collect::<Vec<_>>())
-                } else {
-                    (side[..j].iter().copied().chain([(new, false)]).collect::<Vec<_>>(), [(a, false)].into_iter().chain(side[j + 1..].iter().copied()).collect::<Vec<_>>())
-                };
-                return Some((node, first, second));
-            }
-            cum += len;
-        }
-        None
     }
 
     /// How far a kite's opposite sides are from equal.
@@ -868,7 +772,7 @@ impl<'a> Filler<'a> {
 
         // Final domains: boundary placed in proportion to integer lengths.
         let mut domains: HashMap<usize, (Domain, HashMap<u32, (f64, f64)>)> = HashMap::new();
-        let patches_used: std::collections::BTreeSet<usize> = self.kites.iter().map(|k| k.patch).collect();
+        let patches_used: std::collections::BTreeSet<usize> = self.kites.iter().map(|k| k.patch).chain(self.templates.iter().map(|t| t.0)).collect();
         for &p in &patches_used {
             let patch = &self.graph.patches[p];
             let n = patch.corners.len();
@@ -933,21 +837,28 @@ impl<'a> Filler<'a> {
         // Nodes and arcs first, shared by every kite that touches them. A
         // node on a side between two arcs (a T-junction) is no kite's
         // corner, so arc ends make nodes too.
-        for k in &self.kites {
-            let (dom, boundary) = &domains[&k.patch];
-            let ends: Vec<Node> = k.corners.iter().copied().chain(k.sides.iter().flatten().flat_map(|&(a, _)| [self.farcs[a].from, self.farcs[a].to])).collect();
+        let template_corners: Vec<Vec<Node>> = self.templates.iter().map(|(p, sides, _)| (0..sides.len()).map(|c| self.node_vertex(*p, c)).collect()).collect();
+        let uses: Vec<(usize, &[Node], &[Vec<(usize, bool)>])> = self
+            .kites
+            .iter()
+            .map(|k| (k.patch, &k.corners[..], &k.sides[..]))
+            .chain(self.templates.iter().zip(&template_corners).map(|((p, sides, _), c)| (*p, &c[..], &sides[..])))
+            .collect();
+        for &(patch, corners, sides) in &uses {
+            let (dom, boundary) = &domains[&patch];
+            let ends: Vec<Node> = corners.iter().copied().chain(sides.iter().flatten().flat_map(|&(a, _)| [self.farcs[a].from, self.farcs[a].to])).collect();
             for c in ends {
                 if !node_out.contains_key(&c) {
                     let (pos, fix) = match c {
                         Node::Vertex(x) => (self.m.v[x as usize], self.vertex_fixed(x)),
-                        Node::Domain(_) => (to_surface(k.patch, domain_pos(k.patch, c, &self.dpoints, boundary), dom), false),
+                        Node::Domain(_) => (to_surface(patch, domain_pos(patch, c, &self.dpoints, boundary), dom), false),
                     };
                     v.push(pos);
                     fixed.push(fix);
                     node_out.insert(c, (v.len() - 1) as u32);
                 }
             }
-            for side in &k.sides {
+            for side in sides {
                 for &(a, _) in side {
                     if arc_out.contains_key(&a) {
                         continue;
@@ -1050,7 +961,34 @@ impl<'a> Filler<'a> {
                 }
             }
         }
-        Output { v, faces, fixed, unfilled: self.unfilled, quantize_violations: 0, kites: self.kites.len(), arcs: self.farcs.len() }
+        // Patterns: boundary vertices are the arcs' own, the rest lifted
+        // from the domain.
+        for (p, sides, t) in &self.templates {
+            let (dom, _) = &domains[p];
+            let mut out: Vec<u32> = vec![u32::MAX; t.pos.len()];
+            for (i, side) in sides.iter().enumerate() {
+                let mut ids: Vec<u32> = Vec::new();
+                for (j, &(a, fwd)) in side.iter().enumerate() {
+                    let arc = &arc_out[&a];
+                    let seq: Vec<u32> = if fwd { arc.clone() } else { arc.iter().rev().copied().collect() };
+                    ids.extend(if j == 0 { seq } else { seq[1..].to_vec() });
+                }
+                for (k, &tv) in t.sides[i].iter().enumerate() {
+                    out[tv] = ids[k];
+                }
+            }
+            for (tv, id) in out.iter_mut().enumerate() {
+                if *id == u32::MAX {
+                    v.push(to_surface(*p, t.pos[tv], dom));
+                    fixed.push(false);
+                    *id = (v.len() - 1) as u32;
+                }
+            }
+            for f in &t.faces {
+                faces.push(f.iter().map(|&x| out[x]).collect());
+            }
+        }
+        Output { v, faces, fixed, unfilled: self.unfilled, quantize_violations: 0, kites: self.kites.len() + self.templates.len(), arcs: self.farcs.len() }
     }
 
     /// Whether a refined vertex lies on a feature or boundary arc.
