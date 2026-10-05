@@ -15,6 +15,7 @@ mod fill;
 mod math;
 mod mesh;
 mod patches;
+mod premesh;
 mod proj;
 mod quantize;
 mod refine;
@@ -49,6 +50,7 @@ fn main() -> ExitCode {
     let result = match words.first().map(String::as_str) {
         Some("shape") => shape(&Args { words }),
         Some("remesh") => remesh(&Args { words }),
+        Some("premesh") => premesh_only(&Args { words }),
         _ => Err("usage: qremesh shape NAME -o OUT | qremesh remesh IN -o OUT [--quads N]".into()),
     };
     match result {
@@ -96,6 +98,21 @@ fn remesh(args: &Args) -> Result<(), String> {
 
     let clock = Instant::now();
     let m = mesh::read_obj(input)?;
+    // Unless asked not to, remesh the input to even triangles a few times
+    // smaller than a quad first: everything downstream assumes it.
+    let m = if args.words.iter().any(|w| w == "--no-premesh") {
+        m
+    } else {
+        let t = Instant::now();
+        let quad = (mesh::surface_area(&m) / quads).sqrt();
+        let (pm, r) = premesh::remesh(&m, quad * args.num("--premesh-edge", 0.4)?, degrees, args.num("--premesh-rounds", 6)?);
+        eprintln!(
+            "premesh: {} -> {} triangles, slivers {:.1}% -> {:.1}%, {} feature edges, {:.2}s",
+            m.f.len(), r.triangles, r.slivers_before * 100.0, r.slivers_after * 100.0, r.feature_edges, t.elapsed().as_secs_f64()
+        );
+        let _ = r.vertices;
+        pm
+    };
     let s = cross::Surface::new(&m);
     let diameter = {
         let lo = m.v.iter().fold(m.v[0], |a, p| math::v3(a.x.min(p.x), a.y.min(p.y), a.z.min(p.z)));
@@ -294,4 +311,21 @@ fn metrics(out: &fill::Output, input: &mesh::TriMesh, proj: &proj::Projector, h:
         "{{\"vertices\": {}, \"faces\": {faces}, \"quads\": {}, \"quad_ratio\": {:.4}, \"faces_by_size\": {by_size:?}, \"valence\": {hist:?}, \"singular_vertices\": {singular}, \"boundary_edges\": {open}, \"input_boundary_edges\": {input_boundary}, \"edge_length_over_h\": {{\"mean\": {mean:.3}, \"std\": {std:.3}, \"min\": {lo:.3}, \"max\": {hi:.3}}}, \"distance_to_input\": {}, \"distance_from_input\": {}}}",
         valence.iter().filter(|&&v| v > 0).count(), by_size.get(&4).copied().unwrap_or(0), by_size.get(&4).copied().unwrap_or(0) as f64 / faces.max(1) as f64, stats(&d_out), stats(&d_in)
     )
+}
+
+fn premesh_only(args: &Args) -> Result<(), String> {
+    let input = args.words.get(1).ok_or("premesh needs an input OBJ")?;
+    let out = args.flag("-o").ok_or("premesh needs -o OUT")?;
+    let m = mesh::read_obj(input)?;
+    let edge: f64 = args.num("--edge", mesh::mean_edge(&m))?;
+    let t = Instant::now();
+    let (pm, r) = premesh::remesh(&m, edge, args.num("--features", 35.0)?, args.num("--rounds", 6)?);
+    let faces: Vec<Vec<u32>> = pm.f.iter().map(|t| t.to_vec()).collect();
+    mesh::write_obj(out, &pm.v, &faces)?;
+    eprintln!(
+        "{} -> {} triangles, slivers {:.1}% -> {:.1}%, {} feature edges, {:.2}s",
+        m.f.len(), r.triangles, r.slivers_before * 100.0, r.slivers_after * 100.0, r.feature_edges, t.elapsed().as_secs_f64()
+    );
+    let _ = r.vertices;
+    Ok(())
 }

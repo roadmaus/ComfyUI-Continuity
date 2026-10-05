@@ -192,6 +192,9 @@ pub fn feature_constraints(s: &Surface, degrees: f64) -> (Vec<Option<C>>, Vec<(u
         .map(|(&e, _)| e)
         .collect();
     sharp.sort_unstable();
+    let boundary: std::collections::HashSet<(u32, u32)> =
+        faces_of.iter().filter(|(_, f)| f.len() == 1).map(|(&e, _)| e).collect();
+    let sharp = crate::premesh::prune_features(&s.p, &sharp, &boundary);
     let mut sum = vec![C::ZERO; s.p.len()];
     let mut count = vec![0usize; s.p.len()];
     for &(a, b) in &sharp {
