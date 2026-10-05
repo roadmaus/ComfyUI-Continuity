@@ -5,6 +5,7 @@ use crate::math::{v3, Rng, V3};
 use std::f64::consts::PI;
 use std::io::Write;
 
+#[derive(Clone)]
 pub struct TriMesh {
     pub v: Vec<V3>,
     pub f: Vec<[u32; 3]>,

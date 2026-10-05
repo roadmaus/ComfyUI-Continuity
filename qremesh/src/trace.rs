@@ -31,7 +31,7 @@ impl Topology {
         Topology { edge_tris }
     }
 
-    fn across(&self, t: u32, a: u32, b: u32) -> Option<u32> {
+    pub fn across(&self, t: u32, a: u32, b: u32) -> Option<u32> {
         self.edge_tris.get(&(a.min(b), a.max(b)))?.iter().copied().find(|&x| x != t)
     }
 }
@@ -44,7 +44,7 @@ fn tri_normal(s: &Surface, t: usize) -> V3 {
 /// The field at a point inside triangle `t`, as the arm closest to `d`:
 /// each corner's four arms, the one nearest `d` from each, blended by
 /// barycentric weight and laid into the triangle's plane.
-fn field_dir(s: &Surface, z: &[C], t: usize, x: V3, d: V3) -> V3 {
+pub fn field_dir(s: &Surface, z: &[C], t: usize, x: V3, d: V3) -> V3 {
     let tri = s.tris[t].map(|v| v as usize);
     let nt = tri_normal(s, t);
     let w = barycentric(s, t, x);

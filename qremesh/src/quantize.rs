@@ -297,6 +297,10 @@ fn augment(
     Some(path)
 }
 
+pub fn gauss_pub(a: Vec<Vec<f64>>, b: Vec<f64>) -> Vec<f64> {
+    gauss(a, b)
+}
+
 fn gauss(mut a: Vec<Vec<f64>>, mut b: Vec<f64>) -> Vec<f64> {
     let n = b.len();
     for col in 0..n {
@@ -327,4 +331,176 @@ fn gauss(mut a: Vec<Vec<f64>>, mut b: Vec<f64>) -> Vec<f64> {
         x[col] = if a[col][col].abs() < 1e-300 { 0.0 } else { s / a[col][col] };
     }
     x
+}
+
+/// A patch for `parity`: its sides as lists of variables.
+pub struct Sides {
+    pub sides: Vec<Vec<usize>>,
+}
+
+const NONE: usize = usize::MAX;
+
+#[derive(PartialEq)]
+struct Item(f64, usize, usize, i64);
+impl Eq for Item {}
+impl PartialOrd for Item {
+    fn partial_cmp(&self, o: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(o))
+    }
+}
+impl Ord for Item {
+    fn cmp(&self, o: &Self) -> std::cmp::Ordering {
+        o.0.total_cmp(&self.0)
+    }
+}
+
+struct Net<'a> {
+    target: &'a [f64],
+    weight: &'a [f64],
+    patches: &'a [Sides],
+    /// Patches each variable is on.
+    on: Vec<Vec<usize>>,
+}
+
+impl<'a> Net<'a> {
+    fn odd_kind(&self, p: usize) -> bool {
+        matches!(self.patches[p].sides.len(), 3 | 5)
+    }
+    fn total(&self, x: &[i64], p: usize) -> i64 {
+        self.patches[p].sides.iter().flatten().map(|&a| x[a]).sum()
+    }
+    /// Spokes of an odd polygon's midpoint pattern: S_i = t_{i−1} + t_{i+1}
+    /// solved by the alternating sum (n odd), times two.
+    fn spokes2(&self, x: &[i64], p: usize) -> Vec<i64> {
+        let n = self.patches[p].sides.len();
+        let s: Vec<i64> = self.patches[p].sides.iter().map(|side| side.iter().map(|&a| x[a]).sum()).collect();
+        // t_k sits in S_{k+1} and S_{k−1}; walking k+1, k+3, … alternately.
+        (0..n).map(|k| (0..n).map(|j| if j % 2 == 0 { s[(k + 1 + 2 * j) % n] } else { -s[(k + 1 + 2 * j) % n] }).sum()).collect()
+    }
+
+    /// The cheapest chain of ±1 changes starting from `starts` (patch the
+    /// chain leaves, variable, sign), carried straight across four-sided
+    /// patches, until it reaches a patch `accept` takes; in an odd polygon
+    /// that is not accepted it may go on (`branch`). Applied if found.
+    fn chain(&self, x: &mut [i64], starts: &[(usize, usize, i64)], accept: &dyn Fn(&[i64], usize) -> bool, branch: bool) -> bool {
+        use std::collections::{BinaryHeap, HashMap};
+        let cost = |x: &[i64], a: usize, d: i64| {
+            let (t, w) = (self.target[a], self.weight[a]);
+            let (u, v) = (x[a] as f64, (x[a] + d) as f64);
+            w * ((v - t) * (v - t) - (u - t) * (u - t)) + 1.0
+        };
+        let mut dist: HashMap<(usize, usize, i64), f64> = HashMap::new();
+        let mut from: HashMap<(usize, usize, i64), Option<(usize, usize, i64)>> = HashMap::new();
+        let mut heap = BinaryHeap::new();
+        let push = |p: usize, a: usize, d: i64, base: f64, prev: Option<(usize, usize, i64)>, heap: &mut BinaryHeap<Item>, dist: &mut HashMap<(usize, usize, i64), f64>, from: &mut HashMap<(usize, usize, i64), Option<(usize, usize, i64)>>| {
+            if x[a] + d < 1 {
+                return;
+            }
+            let q = self.on[a].iter().copied().find(|&q| q != p).unwrap_or(NONE);
+            let nd = base + cost(x, a, d);
+            let k = (a, q, d);
+            if dist.get(&k).map_or(true, |&o| nd < o) {
+                dist.insert(k, nd);
+                from.insert(k, prev);
+                heap.push(Item(nd, a, q, d));
+            }
+        };
+        for &(p, a, d) in starts {
+            push(p, a, d, 0.0, None, &mut heap, &mut dist, &mut from);
+        }
+        let mut done = None;
+        while let Some(Item(dd, a, q, d)) = heap.pop() {
+            if dist.get(&(a, q, d)).map_or(false, |&o| dd > o) {
+                continue;
+            }
+            if q == NONE || accept(x, q) {
+                done = Some((a, q, d));
+                break;
+            }
+            let here = Some((a, q, d));
+            if self.patches[q].sides.len() == 4 {
+                let Some(i) = (0..4).find(|&i| self.patches[q].sides[i].contains(&a)) else { continue };
+                for &b in &self.patches[q].sides[(i + 2) % 4] {
+                    if b != a {
+                        push(q, b, d, dd, here, &mut heap, &mut dist, &mut from);
+                    }
+                }
+            } else if branch && self.odd_kind(q) {
+                for &b in self.patches[q].sides.iter().flatten() {
+                    if b != a {
+                        for d2 in [1, -1] {
+                            push(q, b, d2, dd, here, &mut heap, &mut dist, &mut from);
+                        }
+                    }
+                }
+            }
+        }
+        let Some(mut k) = done else { return false };
+        loop {
+            x[k.0] += k.2;
+            match from[&k] {
+                Some(prev) => k = prev,
+                None => break,
+            }
+        }
+        true
+    }
+}
+
+/// Make every three- and five-sided patch fillable by the midpoint pattern
+/// while every four-sided one keeps its opposite sides equal. The pattern
+/// needs an even side total (each spoke meets two half sides) and every
+/// spoke at least one (no side as long as the ones either side of it
+/// allow). Changing an arc by ±1 flips the parity of both patches on it, so
+/// odd patches are paired up by the cheapest chain of changes between them,
+/// carried straight across four-sided patches, where an arc of the
+/// opposite side must change by the same amount; an arc on the surface's
+/// boundary ends a chain by itself. A spoke short of one is raised by
+/// lengthening the two sides it meets, each by a chain that ends in any
+/// patch that is not a quad, and the parity repaired again. -> patches
+/// still unfillable.
+pub fn parity(x: &mut [i64], target: &[f64], weight: &[f64], patches: &[Sides]) -> usize {
+    let mut on: Vec<Vec<usize>> = vec![Vec::new(); x.len()];
+    for (p, ps) in patches.iter().enumerate() {
+        for s in &ps.sides {
+            for &a in s {
+                if !on[a].contains(&p) {
+                    on[a].push(p);
+                }
+            }
+        }
+    }
+    let net = Net { target, weight, patches, on };
+    let odd = |x: &[i64]| (0..patches.len()).filter(|&p| net.odd_kind(p) && net.total(x, p) % 2 != 0).collect::<Vec<_>>();
+    let thin = |x: &[i64]| (0..patches.len()).filter(|&p| net.odd_kind(p)).flat_map(|p| net.spokes2(x, p).into_iter().enumerate().filter(|&(_, t2)| t2 < 2).map(move |(k, _)| (p, k)).collect::<Vec<_>>()).collect::<Vec<_>>();
+    for _round in 0..12 {
+        for _ in 0..patches.len() + 1 {
+            let Some(&start) = odd(x).first() else { break };
+            let starts: Vec<(usize, usize, i64)> = patches[start].sides.iter().flatten().flat_map(|&a| [(start, a, 1), (start, a, -1)]).collect();
+            let accept = |x: &[i64], q: usize| q != start && net.odd_kind(q) && net.total(x, q) % 2 != 0;
+            if !net.chain(x, &starts, &accept, true) {
+                break;
+            }
+        }
+        let short = thin(x);
+        if short.is_empty() {
+            break;
+        }
+        for (p, k) in short {
+            let n = patches[p].sides.len();
+            if net.spokes2(x, p)[k] >= 2 {
+                continue;
+            }
+            for side in [(k + n - 1) % n, (k + 1) % n] {
+                let starts: Vec<(usize, usize, i64)> = patches[p].sides[side].iter().map(|&a| (p, a, 1)).collect();
+                let accept = |_: &[i64], q: usize| q != p && patches[q].sides.len() != 4;
+                net.chain(x, &starts, &accept, false);
+            }
+        }
+    }
+    let mut bad: Vec<usize> = odd(x);
+    bad.extend(thin(x).into_iter().map(|(p, _)| p));
+    bad.sort_unstable();
+    bad.dedup();
+    bad.len()
 }

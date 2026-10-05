@@ -59,13 +59,27 @@ pub struct Graph {
     pub pruned: usize,
 }
 
+/// A chain's length with its zigzag smoothed out first: a cut laid on mesh
+/// edges swings up to half an edge either side of the line it stands for,
+/// and its raw length overstates that line's by a tenth or more.
+pub fn chain_length(m: &TriMesh, chain: &[u32]) -> f64 {
+    let mut p: Vec<V3> = chain.iter().map(|&v| m.v[v as usize]).collect();
+    for _ in 0..3 {
+        let q = p.clone();
+        for i in 1..p.len().saturating_sub(1) {
+            p[i] = (q[i - 1] + q[i] * 2.0 + q[i + 1]) / 4.0;
+        }
+    }
+    p.windows(2).map(|w| (w[1] - w[0]).norm()).sum()
+}
+
 fn key(a: u32, b: u32) -> (u32, u32) {
     (a.min(b), a.max(b))
 }
 
 /// Cuts that end in a vertex with no other cut: a slit, which bounds
 /// nothing. They are walked back to the first real node and dropped.
-fn prune(cut: &mut HashSet<(u32, u32)>, nv: usize) -> usize {
+pub fn prune(cut: &mut HashSet<(u32, u32)>, nv: usize) -> usize {
     let mut pruned = 0;
     loop {
         let mut at: Vec<Vec<u32>> = vec![Vec::new(); nv];
@@ -94,7 +108,11 @@ fn prune(cut: &mut HashSet<(u32, u32)>, nv: usize) -> usize {
 /// `window`: how far along a feature chain to look each way when judging
 /// whether it turns a corner at a vertex (a jagged rim of mesh edges turns
 /// at every vertex and is no corner at all).
-pub fn build(m: &TriMesh, cut_in: &HashSet<(u32, u32)>, features: &HashSet<(u32, u32)>, window: f64) -> Graph {
+///
+/// `turn`, when given, says how many quarter turns to the left the cuts make
+/// at a vertex going u → v → w (from the field's arms the cuts follow); it
+/// decides nodes and corners instead of measured angles.
+pub fn build(m: &TriMesh, cut_in: &HashSet<(u32, u32)>, features: &HashSet<(u32, u32)>, window: f64, turn: Option<&Turn>) -> Graph {
     let nv = m.v.len();
     let mut cut = cut_in.clone();
     let pruned = prune(&mut cut, nv);
@@ -124,6 +142,12 @@ pub fn build(m: &TriMesh, cut_in: &HashSet<(u32, u32)>, features: &HashSet<(u32,
             continue;
         }
         let (p, q) = (at[v as usize][0], at[v as usize][1]);
+        if let Some(turn) = turn {
+            if turn(p, v, q) != 0 {
+                nodes.insert(v);
+            }
+            continue;
+        }
         if !(features.contains(&key(v, p)) && features.contains(&key(v, q))) {
             continue;
         }
@@ -168,7 +192,7 @@ pub fn build(m: &TriMesh, cut_in: &HashSet<(u32, u32)>, features: &HashSet<(u32,
             prev = v;
             v = next;
         }
-        let length = chain.windows(2).map(|w| (m.v[w[1] as usize] - m.v[w[0] as usize]).norm()).sum();
+        let length = chain_length(m, &chain);
         let feature = chain.windows(2).all(|w| features.contains(&key(w[0], w[1])));
         let id = arcs.len();
         arc_at.insert((chain[0], chain[1]), (id, true));
@@ -224,11 +248,13 @@ pub fn build(m: &TriMesh, cut_in: &HashSet<(u32, u32)>, features: &HashSet<(u32,
     for (t, &r) in region.iter().enumerate() {
         tris_of[r as usize].push(t as u32);
     }
-    let patches = tris_of.iter().map(|tris| patch(m, tris, &cut, &edge_tris, &nodes, &arc_at)).collect();
+    let patches = tris_of.iter().map(|tris| patch(m, tris, &cut, &edge_tris, &nodes, &arc_at, turn)).collect();
     Graph { arcs, patches, region, nodes, pruned }
 }
 
-fn patch(m: &TriMesh, tris: &[u32], cut: &HashSet<(u32, u32)>, edge_tris: &HashMap<(u32, u32), Vec<u32>>, nodes: &HashSet<u32>, arc_at: &HashMap<(u32, u32), (usize, bool)>) -> Patch {
+pub type Turn<'a> = dyn Fn(u32, u32, u32) -> i64 + 'a;
+
+pub fn patch(m: &TriMesh, tris: &[u32], cut: &HashSet<(u32, u32)>, edge_tris: &HashMap<(u32, u32), Vec<u32>>, nodes: &HashSet<u32>, arc_at: &HashMap<(u32, u32), (usize, bool)>, turn: Option<&Turn>) -> Patch {
     // Local vertices: each triangle corner, joined to the same corner of
     // the neighbour across every uncut edge.
     let index: HashMap<u32, usize> = tris.iter().enumerate().map(|(i, &t)| (t, i)).collect();
@@ -332,7 +358,23 @@ fn patch(m: &TriMesh, tris: &[u32], cut: &HashSet<(u32, u32)>, edge_tris: &HashM
     }
     let mut corners = Vec::new();
     let mut concave = 0;
+    if let Some(turn) = turn {
+        // A slit's tip turns back on itself: as wrong as two corners in.
+        let n = outline.len();
+        for i in 0..n {
+            let at = |k: usize| verts[outline[k % n] as usize];
+            match turn(at(i + n - 1), at(i), at(i + 1)) {
+                1 => corners.push(i),
+                -1 => concave += 1,
+                2 => concave += 2,
+                _ => {}
+            }
+        }
+    }
     for (i, &lv) in outline.iter().enumerate() {
+        if turn.is_some() {
+            break;
+        }
         if !nodes.contains(&verts[lv as usize]) {
             continue;
         }
@@ -379,7 +421,7 @@ impl Graph {
         self.arcs[a].chain.push(chain[0]);
         let node = chain[0];
         self.nodes.insert(node);
-        let len = |c: &[u32]| c.windows(2).map(|w| (m.v[w[1] as usize] - m.v[w[0] as usize]).norm()).sum::<f64>();
+        let len = |c: &[u32]| chain_length(m, c);
         self.arcs[a].length = len(&self.arcs[a].chain);
         self.arcs[a].b = node;
         let feature = self.arcs[a].feature;

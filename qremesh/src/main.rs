@@ -14,6 +14,7 @@ mod cross;
 mod fill;
 mod math;
 mod mesh;
+mod partition;
 mod patches;
 mod premesh;
 mod proj;
@@ -133,20 +134,42 @@ fn remesh(args: &Args) -> Result<(), String> {
     let t = Instant::now();
     // The side of a quad, were the surface covered in `--quads` of them.
     let quad = (mesh::surface_area(&m) / quads).sqrt();
-    let lay = trace::layout(&s, &field.z, &sings, &sharp, edge * 0.5, diameter * 3.0, quad);
-    let t_trace = t.elapsed().as_secs_f64();
-    let mut ended: std::collections::BTreeMap<&str, usize> = Default::default();
-    for tr in &lay.traces {
-        *ended.entry(tr.ended).or_default() += 1;
+    // The layout: cuts on the mesh itself, read back as an exact graph.
+    // `--legacy-layout` is the separatrix tracer, kept to compare against
+    // until the partition does at least as well on every test shape.
+    let legacy = args.words.iter().any(|w| w == "--legacy-layout");
+    let (fill_mesh, graph, traces, n_traces, t_trace, t_graph, crossings);
+    if legacy {
+        let lay = trace::layout(&s, &field.z, &sings, &sharp, edge * 0.5, diameter * 3.0, quad);
+        t_trace = t.elapsed().as_secs_f64();
+        let mut ended: std::collections::BTreeMap<&str, usize> = Default::default();
+        for tr in &lay.traces {
+            *ended.entry(tr.ended).or_default() += 1;
+        }
+        eprintln!("layout: {} traces ({ended:?}), {} regions, {} disks, {:.2}s", lay.traces.len(), lay.regions, lay.disks, t_trace);
+        let t = Instant::now();
+        let polylines: Vec<(&[V3], &[trace::Stop])> = lay.traces.iter().map(|t| (t.points.as_slice(), t.stops.as_slice())).collect();
+        let refined = refine::insert(&m, &sharp, &polylines, edge * 0.05);
+        graph = patches::build(&refined.m, &refined.cut, &refined.feature, quad, None);
+        t_graph = t.elapsed().as_secs_f64();
+        crossings = refined.crossings;
+        let drawn = if std::env::var("QREMESH_CANDIDATES").is_ok() { &lay.candidates } else { &lay.traces };
+        traces = drawn.iter().map(|t| (t.points.clone(), if t.to.is_some() { "edge" } else { t.kind })).collect::<Vec<_>>();
+        n_traces = lay.traces.len();
+        fill_mesh = refined.m;
+    } else {
+        let part = partition::layout(&s, &field.z, &sings, &sharp, quad, diameter * 3.0);
+        t_trace = t.elapsed().as_secs_f64();
+        eprintln!("layout: {} paths ({} added, {} removed), {} patches left invalid, {:.2}s", part.paths.len(), part.added, part.removed, part.invalid, t_trace);
+        let t = Instant::now();
+        let turn = |u: u32, v: u32, w: u32| part.turn(u, v, w);
+        graph = patches::build(&m, &part.cut, &part.feature, quad, Some(&turn));
+        t_graph = t.elapsed().as_secs_f64();
+        crossings = 0;
+        traces = part.paths.iter().map(|p| (p.chain.iter().map(|&v| m.v[v as usize]).collect::<Vec<V3>>(), p.kind)).collect();
+        n_traces = part.paths.len();
+        fill_mesh = m.clone();
     }
-    eprintln!("layout: {} traces ({ended:?}), {} regions, {} disks, {:.2}s", lay.traces.len(), lay.regions, lay.disks, t_trace);
-
-    // The layout cut into the mesh, and read back as an exact graph.
-    let t = Instant::now();
-    let polylines: Vec<(&[V3], &[trace::Stop])> = lay.traces.iter().map(|t| (t.points.as_slice(), t.stops.as_slice())).collect();
-    let refined = refine::insert(&m, &sharp, &polylines, edge * 0.05);
-    let graph = patches::build(&refined.m, &refined.cut, &refined.feature, quad);
-    let t_graph = t.elapsed().as_secs_f64();
     let mut corner_hist: std::collections::BTreeMap<usize, usize> = Default::default();
     let mut bad = 0;
     for p in &graph.patches {
@@ -157,18 +180,18 @@ fn remesh(args: &Args) -> Result<(), String> {
     }
     eprintln!(
         "graph: {} -> {} triangles, {} crossings, {} pruned, {} arcs, {} patches, corners {corner_hist:?}, {bad} not fillable, {:.2}s",
-        m.f.len(), refined.m.f.len(), refined.crossings, graph.pruned, graph.arcs.len(), graph.patches.len(), t_graph
+        m.f.len(), fill_mesh.f.len(), crossings, graph.pruned, graph.arcs.len(), graph.patches.len(), t_graph
     );
 
     if let Some(path) = args.flag("--layout") {
-        write_layout(path, &refined.m, &graph, &s, &field.z, &sings, &sharp, &lay)?;
+        write_layout(path, &fill_mesh, &graph, &s, &field.z, &sings, &sharp, &traces)?;
     }
     if std::env::var("QREMESH_DEBUG").is_ok() {
         for (i, p) in graph.patches.iter().enumerate() {
             let sides: Vec<String> = p.sides.iter().map(|side| {
                 side.iter().map(|&(a, _)| format!("{:.2}", graph.arcs[a].length / quad)).collect::<Vec<_>>().join("+")
             }).collect();
-            let at: Vec<String> = p.corners.iter().map(|&c| { let q = refined.m.v[p.verts[p.outline[c] as usize] as usize]; format!("({:.2},{:.2},{:.2})", q.x, q.y, q.z) }).collect();
+            let at: Vec<String> = p.corners.iter().map(|&c| { let q = fill_mesh.v[p.verts[p.outline[c] as usize] as usize]; format!("({:.2},{:.2},{:.2})", q.x, q.y, q.z) }).collect();
             eprintln!("  patch {i}: {} corners, loops {}, euler {}, concave {}, sides [{}] at {}", p.corners.len(), p.loops, p.euler, p.concave, sides.join(", "), at.join(" "));
         }
     }
@@ -176,8 +199,8 @@ fn remesh(args: &Args) -> Result<(), String> {
     // Quads.
     let t = Instant::now();
     let mut graph = graph;
-    let mut filler = fill::Filler::new(&refined.m, &mut graph, quad);
-    let q = filler.build();
+    let mut filler = fill::Filler::new(&fill_mesh, &mut graph, quad);
+    let q = if legacy { filler.build() } else { filler.build_patches() };
     let mut output = filler.place(&q.x);
     output.quantize_violations = q.violated;
     let t_fill = t.elapsed().as_secs_f64();
@@ -192,7 +215,7 @@ fn remesh(args: &Args) -> Result<(), String> {
 
     println!(
         "{{\"input\": {{\"vertices\": {}, \"triangles\": {}}}, \"field\": \"{}\", \"sharp_edges\": {}, \"field_singularities\": {{\"plus\": {plus}, \"minus\": {minus}}}, \"traces\": {}, \"patches\": {}, \"patch_corners\": {corner_hist:?}, \"unfillable_patches\": {bad}, \"kites\": {}, \"quantize_violations\": {}, \"output\": {metrics}, \"seconds\": {{\"field\": {t_field:.2}, \"trace\": {t_trace:.2}, \"graph\": {t_graph:.2}, \"fill\": {t_fill:.2}, \"smooth\": {t_smooth:.2}, \"total\": {:.2}}}}}",
-        m.v.len(), m.f.len(), field.how, sharp.len(), lay.traces.len(), graph.patches.len(), output.kites, output.quantize_violations, clock.elapsed().as_secs_f64()
+        m.v.len(), m.f.len(), field.how, sharp.len(), n_traces, graph.patches.len(), output.kites, output.quantize_violations, clock.elapsed().as_secs_f64()
     );
     Ok(())
 }
@@ -200,7 +223,7 @@ fn remesh(args: &Args) -> Result<(), String> {
 /// The picture's data for `tools/render_layout.py`: the refined mesh (so
 /// the regions are exact), the patch of each triangle, which patches can
 /// be filled, traces, singularities, features, a sample of the field.
-fn write_layout(path: &str, rm: &mesh::TriMesh, graph: &patches::Graph, s: &cross::Surface, z: &[cplx::C], sings: &[cross::Singularity], sharp: &[(u32, u32)], lay: &trace::Layout) -> Result<(), String> {
+fn write_layout(path: &str, rm: &mesh::TriMesh, graph: &patches::Graph, s: &cross::Surface, z: &[cplx::C], sings: &[cross::Singularity], sharp: &[(u32, u32)], traces: &[(Vec<V3>, &str)]) -> Result<(), String> {
     let obj = format!("{path}.obj");
     let faces: Vec<Vec<u32>> = rm.f.iter().map(|t| t.to_vec()).collect();
     mesh::write_obj(&obj, &rm.v, &faces)?;
@@ -212,10 +235,9 @@ fn write_layout(path: &str, rm: &mesh::TriMesh, graph: &patches::Graph, s: &cros
     json.push_str("], \"traces\": [");
     let pts = |ps: &[V3]| ps.iter().map(|p| format!("[{:.5},{:.5},{:.5}]", p.x, p.y, p.z)).collect::<Vec<_>>().join(",");
     // QREMESH_CANDIDATES draws every candidate instead of the layout's traces.
-    let drawn = if std::env::var("QREMESH_CANDIDATES").is_ok() { &lay.candidates } else { &lay.traces };
-    json.push_str(&drawn.iter().map(|t| format!("[{}]", pts(&t.points))).collect::<Vec<_>>().join(","));
+    json.push_str(&traces.iter().map(|t| format!("[{}]", pts(&t.0))).collect::<Vec<_>>().join(","));
     json.push_str("], \"trace_kinds\": [");
-    json.push_str(&drawn.iter().map(|t| format!("\"{}\"", if t.to.is_some() { "edge" } else { t.kind })).collect::<Vec<_>>().join(","));
+    json.push_str(&traces.iter().map(|t| format!("\"{}\"", t.1)).collect::<Vec<_>>().join(","));
     json.push_str("], \"singularities\": [");
     json.push_str(&sings.iter().map(|x| format!("[{:.5},{:.5},{:.5},{}]", x.at.x, x.at.y, x.at.z, x.index)).collect::<Vec<_>>().join(","));
     json.push_str("], \"features\": [");
