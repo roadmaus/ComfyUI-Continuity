@@ -952,7 +952,18 @@ impl<'a> Tracer<'a> {
     fn advance(&mut self, id: usize) {
         let s = self.s;
         let mut remaining = self.step;
+        // A step is half an edge, so it crosses a handful of triangles. A
+        // trace that needs hundreds of moves for one step is pinned at a
+        // vertex or an edge, bouncing between two triangles by nothing —
+        // and every bounce adds a segment its own crossing test has to scan
+        // again, which is how one stuck candidate took minutes. Stop it.
+        let mut moves = 0;
         while remaining > 1e-12 {
+            moves += 1;
+            if moves > 64 {
+                self.stop(id, "stuck");
+                return;
+            }
             let t = self.traces[id].tri as usize;
             let x = *self.traces[id].points.last().unwrap();
             if let Some(aim) = self.traces[id].aim {

@@ -218,3 +218,26 @@ Options: `--quads N`, `--features DEG` (35), `--align` (0.005), `--axes`
 - Repo conventions: commit messages are full sentences about behaviour
   ending with the session's trailer; code comments explain why; no model
   names in commits or code.
+
+## Update: input remesh and the first organic test (2026-10-05, later)
+- **New test shapes** (`src/sdf.rs`): `qremesh shape creature|pretzel --jitter 0 [--res N]`.
+  These are SDFs triangulated with marching tetrahedra: a quadruped (genus 0) and two fused tori (genus 2).
+  About 13% of their triangles are slivers, like a real lifted mesh.
+  Downloads are blocked in the cloud environment (raw.githubusercontent.com, npm and PyPI all return 403).
+- **Input remesh** (`src/premesh.rs`): Botsch–Kobbelt split, collapse, flip, relax and reproject, to an edge of 0.4 quad.
+  It runs by default in `remesh`; use `--no-premesh` to skip it, and `qremesh premesh in -o out [--edge L]` to run it alone.
+  Sharp edges are pruned to real feature lines (`prune_features`: chains of at least 6 edges that do not zigzag), both here and in `cross::feature_constraints`.
+  On the creature at `--res 50` (8.9k vertices) it does the following in 0.8 s:
+  - slivers go from 12.5% to 0%;
+  - "sharp" edges go from 490 to 19;
+  - field singularities go from 186 to 62 (+35/−27).
+
+  The cube keeps all 12 of its edges.
+  **`tools/run_all.sh` has not been rerun with the premesh on**, so check the test shapes for regressions first.
+- **The creature still times out (more than 3 minutes) in the layout stage.** It never reaches quantization.
+  Profiling (build with `CARGO_PROFILE_RELEASE_DEBUG=line-tables-only --target-dir target-prof`, then sample with `gdb -p <pid> -batch -ex bt`) puts every sample in `Tracer::crossing`, scanning a candidate's own segments.
+  This happens during the first `cand.run()` of bent shots, roughly 250 separatrices × 17 bends.
+  The suspected cause is a candidate pinned at a vertex or edge, bouncing between two triangles with near-zero moves and adding a segment each time, which makes the crossing test quadratic.
+  A guard is committed but **untested**: `advance` stops a trace after 64 moves in one step, with `ended = "stuck"`.
+  Next step: rerun the creature with `QREMESH_DEBUG=1`. Confirm the time drops and count the "stuck" ends; if they are many, find why they get pinned.
+  After that, check whether 62 singularities overwhelm the selection, routes and quantizer stages.
