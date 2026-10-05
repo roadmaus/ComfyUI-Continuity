@@ -18,6 +18,7 @@ mod patches;
 mod proj;
 mod quantize;
 mod refine;
+mod sdf;
 mod shapes;
 mod trace;
 
@@ -71,7 +72,9 @@ fn shape(args: &Args) -> Result<(), String> {
         Some("tube") => shapes::tube(args.num("--nu", 160)?, args.num("--nv", 50)?),
         Some("annulus") => shapes::annulus(args.num("--nu", 200)?, args.num("--nv", 30)?),
         Some("hemi") => shapes::hemisphere(args.num("--subdivisions", 5)?),
-        _ => return Err("shape: ico, cube, torus, blob, sphere, tube, annulus or hemi".into()),
+        Some("creature") => sdf::mesh(sdf::creature, math::v3(-1.5, -0.6, -0.5), math::v3(1.7, 0.6, 1.7), args.num("--res", 96)?),
+        Some("pretzel") => sdf::mesh(sdf::pretzel, math::v3(-1.9, -1.2, -0.5), math::v3(1.9, 1.2, 0.5), args.num("--res", 120)?),
+        _ => return Err("shape: ico, cube, torus, blob, sphere, tube, annulus, hemi, creature or pretzel".into()),
     };
     let jitter: f64 = args.num("--jitter", 0.3)?;
     if jitter > 0.0 {
