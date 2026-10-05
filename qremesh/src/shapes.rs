@@ -7,6 +7,10 @@
 //! - **torus**: no singularities at all (its Euler characteristic is zero),
 //!   strong curvature directions. Separatrices alone cannot cut it into
 //!   disks.
+//! - **blob**: a lumpy, stretched, tilted sphere. Curvature directions in
+//!   some places, none in others, and nothing lined up with the axes — the
+//!   field's singularities land wherever they land, and the layout has to
+//!   make do with them.
 
 use crate::math::{v3, Rng, V3};
 use crate::mesh::TriMesh;
@@ -45,6 +49,31 @@ pub fn icosphere(subdivisions: usize) -> TriMesh {
         f = next;
     }
     TriMesh { v, f }
+}
+
+/// An icosphere pushed in and out by a few slow waves, stretched to
+/// 1.4 × 1 × 0.75 and tilted, all from `seed`.
+pub fn blob(subdivisions: usize, seed: u64) -> TriMesh {
+    let mut m = icosphere(subdivisions);
+    let mut rng = Rng::new(seed);
+    let random_unit = |rng: &mut Rng| loop {
+        let d = v3(rng.unit() - 0.5, rng.unit() - 0.5, rng.unit() - 0.5);
+        if d.norm() > 0.1 && d.norm() < 0.5 {
+            return d.normalized();
+        }
+    };
+    let waves: Vec<(V3, f64, f64)> =
+        (0..4).map(|_| (random_unit(&mut rng), 1.5 + 2.0 * rng.unit(), 2.0 * PI * rng.unit())).collect();
+    let tilt = (random_unit(&mut rng), 0.35 + 0.4 * rng.unit());
+    let (axis, angle) = tilt;
+    for p in m.v.iter_mut() {
+        let r = 1.0 + waves.iter().map(|&(d, f, phase)| 0.07 * (f * p.dot(d) + phase).sin()).sum::<f64>();
+        let q = *p * r;
+        let q = v3(q.x * 1.4, q.y, q.z * 0.75);
+        // Rodrigues: turn by `angle` about `axis`.
+        *p = q * angle.cos() + axis.cross(q) * angle.sin() + axis * axis.dot(q) * (1.0 - angle.cos());
+    }
+    m
 }
 
 /// The cube [-1, 1]³, each face an `n`×`n` grid, welded along the edges.

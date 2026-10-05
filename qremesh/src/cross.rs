@@ -113,6 +113,40 @@ pub fn curvature_target(s: &Surface) -> Vec<C> {
         .collect()
 }
 
+/// Per vertex: the cross the object's own axes draw on the surface — the
+/// world axis closest to the normal is dropped and the other two, laid into
+/// the tangent plane, are the cross. Where two axes tie (a normal like
+/// (1, 1, 0)) either choice gives the same cross, so this field is smooth
+/// everywhere except the eight points whose normals are (±1, ±1, ±1): a
+/// sphere comes out with a cube's corners. It is what quads follow where
+/// the surface itself has no preferred direction, which is how a sculptor's
+/// retopology lines up a blob with the model's axes instead of at random.
+pub fn axis_target(s: &Surface) -> Vec<C> {
+    let axes = [V3 { x: 1.0, y: 0.0, z: 0.0 }, V3 { x: 0.0, y: 1.0, z: 0.0 }, V3 { x: 0.0, y: 0.0, z: 1.0 }];
+    (0..s.p.len())
+        .map(|i| {
+            let n = s.n[i];
+            let drop = (0..3).max_by(|&a, &b| n.dot(axes[a]).abs().total_cmp(&n.dot(axes[b]).abs())).unwrap();
+            let keep = axes[(drop + 1) % 3];
+            C::polar(1.0, 4.0 * angle_in(keep, n, s.e1[i]))
+        })
+        .collect()
+}
+
+/// Curvature where it is trusted, the axes elsewhere at `axes` of the
+/// strongest curvature pull.
+pub fn guide(s: &Surface, axes: f64) -> Vec<C> {
+    let curvature = curvature_target(s);
+    let along_axes = axis_target(s);
+    let peak = curvature.iter().map(|q| q.abs()).fold(0.0, f64::max);
+    (0..s.p.len())
+        .map(|i| {
+            let c = if peak > 1e-300 { curvature[i].scale(1.0 / peak) } else { C::ZERO };
+            c + along_axes[i].scale(axes * (1.0 - c.abs()))
+        })
+        .collect()
+}
+
 fn solve3(m: [[f64; 3]; 3], r: [f64; 3]) -> Option<[f64; 3]> {
     let det = |m: [[f64; 3]; 3]| {
         m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0])

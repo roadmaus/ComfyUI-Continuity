@@ -2,7 +2,7 @@
 //!
 //!     qremesh sphere -o sphere.obj [--rings 160 --segments 320 --jitter 0.3 --seed 1]
 //!     qremesh remesh in.obj -o out.obj [--faces 2000 --iterations 30 --seed 1]
-//!     qremesh shape ico|cube|torus -o shape.obj [--jitter 0.3]
+//!     qremesh shape ico|cube|torus|blob -o shape.obj [--jitter 0.3]
 //!     qremesh layout in.obj -o layout.json [--align 1 --features 35 --quads 600]
 //!
 //! `remesh` is the first prototype (Instant Meshes' local fields). `layout`
@@ -235,8 +235,9 @@ fn shape(args: &Args) -> Result<(), String> {
     let mut m = match args.words.get(1).map(String::as_str) {
         Some("ico") => shapes::icosphere(args.num("--subdivisions", 5)?),
         Some("cube") => shapes::cube(args.num("--n", 40)?),
+        Some("blob") => shapes::blob(args.num("--subdivisions", 5)?, args.num("--seed", 1)?),
         Some("torus") => shapes::torus(1.0, 0.4, args.num("--nu", 160)?, args.num("--nv", 64)?),
-        _ => return Err("shape: ico, cube or torus".into()),
+        _ => return Err("shape: ico, cube, torus or blob".into()),
     };
     let jitter: f64 = args.num("--jitter", 0.3)?;
     if jitter > 0.0 {
@@ -258,7 +259,7 @@ fn layout(args: &Args) -> Result<(), String> {
     let clock = Instant::now();
     let m = mesh::read_obj(input)?;
     let s = cross::Surface::new(&m);
-    let target = cross::curvature_target(&s);
+    let target = cross::guide(&s, args.num("--axes", 0.1)?);
     let (fixed, sharp) = cross::feature_constraints(&s, degrees);
     let t = Instant::now();
     let field = cross::solve(&s, &target, &fixed, align, &mut rng);
@@ -275,7 +276,9 @@ fn layout(args: &Args) -> Result<(), String> {
         (hi - lo).norm()
     };
     let t = Instant::now();
-    let lay = trace::layout(&s, &field.z, &sings, &sharp, edge * 0.5, diameter * 3.0);
+    // The side of a quad, were the surface covered in `--quads` of them.
+    let quad = (mesh::surface_area(&m) / args.num("--quads", 600.0)?).sqrt();
+    let lay = trace::layout(&s, &field.z, &sings, &sharp, edge * 0.5, diameter * 3.0, quad);
     let t_trace = t.elapsed().as_secs_f64();
     let mut ended: std::collections::BTreeMap<&str, usize> = Default::default();
     for tr in &lay.traces {
@@ -283,7 +286,8 @@ fn layout(args: &Args) -> Result<(), String> {
     }
     let mut seps: std::collections::BTreeMap<usize, usize> = Default::default();
     for k in 0..sings.len() {
-        *seps.entry(lay.traces.iter().filter(|t| t.from == k).count()).or_default() += 1;
+        let lines = lay.traces.iter().filter(|t| t.from == k).count() + lay.traces.iter().filter(|t| t.to.map(|(to, _)| to) == Some(k)).count();
+        *seps.entry(lines).or_default() += 1;
     }
 
     // The picture's data: regions, traces, singularities, features.
@@ -292,7 +296,11 @@ fn layout(args: &Args) -> Result<(), String> {
     json.push_str(&lay.region.iter().map(|r| r.to_string()).collect::<Vec<_>>().join(","));
     json.push_str("], \"traces\": [");
     let pts = |ps: &[V3]| ps.iter().map(|p| format!("[{:.5},{:.5},{:.5}]", p.x, p.y, p.z)).collect::<Vec<_>>().join(",");
-    json.push_str(&lay.traces.iter().map(|t| format!("[{}]", pts(&t.points))).collect::<Vec<_>>().join(","));
+    // QREMESH_CANDIDATES draws every candidate instead of the layout's traces.
+    let drawn = if std::env::var("QREMESH_CANDIDATES").is_ok() { &lay.candidates } else { &lay.traces };
+    json.push_str(&drawn.iter().map(|t| format!("[{}]", pts(&t.points))).collect::<Vec<_>>().join(","));
+    json.push_str("], \"trace_kinds\": [");
+    json.push_str(&drawn.iter().map(|t| format!("\"{}\"", if t.to.is_some() { "edge" } else { t.kind })).collect::<Vec<_>>().join(","));
     json.push_str("], \"singularities\": [");
     json.push_str(&sings.iter().map(|x| format!("[{:.5},{:.5},{:.5},{}]", x.at.x, x.at.y, x.at.z, x.index)).collect::<Vec<_>>().join(","));
     json.push_str("], \"features\": [");
@@ -321,11 +329,22 @@ fn layout(args: &Args) -> Result<(), String> {
         sizes.iter().filter(|&&n| n * 200 > m.f.len()).count()
     };
     eprintln!("patches (>0.5% of the surface): {patches}");
+    let mut sides: std::collections::BTreeMap<usize, usize> = Default::default();
+    {
+        let mut sizes = vec![0usize; lay.regions];
+        for &r in &lay.region { sizes[r as usize] += 1; }
+        for r in 0..lay.regions {
+            if sizes[r] * 200 > m.f.len() {
+                *sides.entry(lay.corners[r]).or_default() += 1;
+            }
+        }
+    }
     println!(
-        "{{\"vertices\": {}, \"triangles\": {}, \"field\": \"{}\", \"solver_iterations\": {}, \"sharp_edges\": {}, \"fixed_vertices\": {}, \"singularities\": {{\"plus\": {plus}, \"minus\": {minus}}}, \"separatrices_per_singularity\": {seps:?}, \"traces\": {}, \"trace_ends\": {ended:?}, \"regions\": {}, \"disks\": {}, \"non_disk_euler\": {big:?}, \"repairs\": {}, \"seconds\": {{\"field\": {t_field:.2}, \"trace\": {t_trace:.2}, \"total\": {:.2}}}}}",
+        "{{\"vertices\": {}, \"triangles\": {}, \"field\": \"{}\", \"solver_iterations\": {}, \"sharp_edges\": {}, \"fixed_vertices\": {}, \"singularities\": {{\"plus\": {plus}, \"minus\": {minus}}}, \"lines_per_singularity\": {seps:?}, \"candidates\": {}, \"candidate_edges\": {}, \"traces\": {}, \"edges\": {}, \"trace_ends\": {ended:?}, \"regions\": {}, \"disks\": {}, \"patch_corners\": {sides:?}, \"non_disk_euler\": {big:?}, \"repairs\": {}, \"seconds\": {{\"field\": {t_field:.2}, \"trace\": {t_trace:.2}, \"total\": {:.2}}}}}",
         m.v.len(), m.f.len(), field.how, field.solver_iterations, sharp.len(),
         fixed.iter().filter(|f| f.is_some()).count(),
-        lay.traces.len(), lay.regions, lay.disks, lay.repairs, clock.elapsed().as_secs_f64()
+        lay.candidates.len(), lay.candidate_edges, lay.traces.len(),
+        lay.traces.iter().filter(|t| t.kind == "edge").count(), lay.regions, lay.disks, lay.repairs, clock.elapsed().as_secs_f64()
     );
     Ok(())
 }

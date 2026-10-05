@@ -4,7 +4,8 @@
     python3 tools/render_layout.py shape.obj layout.json out.png [--view x,y,z] [--arms]
 
 Triangles take their region's colour (non-disk regions are drawn striped
-grey), traces are black, sharp edges dark blue, singularities green (+¼,
+grey), edges between singularities are black, other separatrices
+orange, repair traces purple, sharp edges dark blue, singularities green (+¼,
 three separatrices) or red (−¼, five). `--arms` draws the cross field.
 """
 
@@ -146,9 +147,13 @@ def main():
                 line(tuple(p[k] - v[k] * L for k in range(3)), tuple(p[k] + v[k] * L for k in range(3)), (90, 90, 90))
     for a, b in lay["features"]:
         line(a, b, (20, 40, 140), 2)
-    for trace in lay["traces"]:
+    # Edges (singularity to singularity) black, separatrices grown into the
+    # layout dark orange, repair traces purple.
+    kinds = lay.get("trace_kinds", ["edge"] * len(lay["traces"]))
+    ink = {"edge": (0, 0, 0), "separatrix": (200, 90, 0), "repair": (120, 40, 160)}
+    for trace, kind in zip(lay["traces"], kinds):
         for a, b in zip(trace, trace[1:]):
-            line(a, b, (0, 0, 0), 3)
+            line(a, b, ink.get(kind, (0, 0, 0)), 3)
     for x, y, z, index in lay["singularities"]:
         if visible((x, y, z)):
             sx, sy, _ = project((x, y, z))
