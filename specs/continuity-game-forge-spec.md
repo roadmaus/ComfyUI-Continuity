@@ -28,9 +28,15 @@ redrawn. The project's asset list is written out as a `MANIFEST.md` that is
 both the documentation of the game's art and the queue: "make what is
 missing" walks it.
 
-**First iteration, deliberately small** (§11): the project, the manifest, the
+**First iteration, deliberately small** (§12): the project, the manifest, the
 post-steps and the exports, then 2D generation. Audio, materials and model
 texturing follow, in that order, each behind the one before.
+
+**Agents are first-class users** (§11). Everything the bench can do, an agent
+can do from a shell with the pack's CLI, through the same routes the bench
+uses: plan a project, make its assets, check them against a target, look at
+them, export them. The bench is one client of the forge's HTTP surface; the
+CLI is the other, and neither may do anything the other cannot.
 
 ## 2. Non-negotiables
 
@@ -51,6 +57,10 @@ texturing follow, in that order, each behind the one before.
   joined under the project root, a set of files swapped in with one
   `os.replace`, the set it replaces kept as a numbered version. (VNCCS does
   this well, §3.1; we copy the idea, not the code.)
+- **The bench and the CLI have parity.** No capability lives only in the
+  browser. Anything the bench does is a `/continuity/forge/*` route with JSON
+  in and JSON out, and the CLI has a command for it (§11). A test holds the
+  two lists together.
 
 ## 3. What the research says
 
@@ -172,7 +182,7 @@ render 8 directions from a fixed orthographic camera.
 - **MiniMax H3**: the research reports a community licence that excludes the
   US, EU, UK and South Korea from self-hosting. Unverified here (it came from
   secondary sources) and it matters for the whole pack, not only this bench;
-  it is §12's first risk. Game Forge's audio does not default to H3.
+  it is §13's first risk. Game Forge's audio does not default to H3.
 
 ### 3.7 Export conventions
 
@@ -438,15 +448,114 @@ WAVs anyway), `.uge`.
 - **Frontend** `web/creator/forge.js` and `forge/*.js`, the bench room from
   `styles/bench.js`, a card in `destinations()` with art in `cards/`. Strings
   through `t()`, with the three locales.
+- **CLI** `skills/continuity-forge/forge.py` and `SKILL.md` (§11), beside
+  `continuity-render`.
 - **Tests**: plain scripts in `tests/` on `harness.py`; golden images for
   pixelize, atlas, bleed and projection; a golden manifest; the exporters
   checked against fixture files.
 
-## 11. Sequencing
+## 11. Agents and the CLI
+
+The pack already has the pattern: `skills/continuity-render/` is a Claude Code
+skill plus `render.py`, a standard-library client of `/continuity/render`.
+The server builds the render; the client uploads, queues, waits and downloads,
+prints paths on stdout and progress on stderr, and exits non-zero with the
+server's own sentence. Game Forge ships the same way, as
+`skills/continuity-forge/` with `SKILL.md` and `forge.py`.
+
+### 11.1 Why agents need more than the render client
+
+A render is one request. A game's art is hundreds of assets that must agree,
+built over many sessions, and an agent cannot see the bench. So the CLI has
+to give an agent three things the render client does not:
+
+- **A plan it can write down.** The project and its assets are data, and the
+  agent edits data rather than driving a UI.
+- **Eyes.** Every result comes with something an agent with vision can read:
+  a contact sheet, a constraint overlay, a waveform. And every result comes
+  with numbers an agent without vision can act on.
+- **Resumability.** Jobs outlive the shell that started them, and the
+  project says what is made, what is missing and what is stale, so the next
+  session picks up where the last one stopped.
+
+### 11.2 Declarative first
+
+The main way an agent works is to write a **plan** and apply it:
+
+```
+forge.py new mygame --mode pixel --target gb-studio --target godot4
+forge.py plan mygame plan.json           # merge assets into the project; idempotent
+forge.py status mygame                   # planned / made / stale / failing checks
+forge.py make mygame --missing           # queue every planned asset
+forge.py check mygame --json             # constraint violations, per asset
+forge.py export mygame godot4 --pull ./game/assets
+```
+
+A plan is the project's own asset list in JSON: kind, name, prompt, sizes,
+references, seed, target overrides. Applying it is a merge by asset name, so
+running it twice changes nothing and editing one entry marks only that asset
+stale. `forge.py schema <kind>` prints the JSON schema for a kind's recipe,
+so an agent never guesses field names. This is the lua-25d-game skill's
+manifest step made executable: the agent writes the asset list once, and the
+forge turns it into files.
+
+### 11.3 The commands
+
+Every route has a command; these are the groups.
+
+| Group | Commands |
+|---|---|
+| Discovery | `capabilities` (families, optional packs, engines per kind — the forge's `families`), `targets`, `modes`, `schema <kind>` |
+| Projects | `projects`, `new`, `show`, `style` (clause, references, LoRAs, seeds, mode), `target add/rm` |
+| Assets | `plan`, `add`, `edit`, `rm` (moves to `.versions/`, never deletes), `status`, `history <asset>` |
+| Making | `make <asset…>`, `make --missing`, `make --stale`, `vary <asset> --n`, `post <asset> <step…>` |
+| Looking | `sheet <asset>` (contact sheet PNG), `check` (overlay PNG + JSON), `sound-report` (loudness, peak, loop seam error, waveform PNG) |
+| 3D | `texture <mesh> <recipe>`, `views <mesh>` (the depth and normal renders it will condition on) |
+| Moving files | `import` (pictures, meshes, sounds into the project), `export <target>`, `pull` (download `build/<target>/` or the whole project) |
+| Jobs | `jobs`, `wait <id>`, `cancel <id>` |
+
+### 11.4 The contract
+
+- **Standard library only**, Python 3.9+, self-contained in the skill folder,
+  runs on the ComfyUI machine or anywhere that can reach its port. The same
+  server etiquette as `continuity-render`: ask for the URL, never scan.
+- **stdout is data.** Paths one per line by default; `--json` on every
+  command for a structured answer. Progress on stderr.
+- **Refusals are sentences** with a machine-readable code beside them
+  (`{"problem": "...", "code": "budget.tiles", "asset": "...", "at": [3, 2]}`),
+  so an agent can branch on the code and relay the sentence.
+- **`--no-wait`** queues and prints job ids; `wait` resumes. Jobs are
+  ComfyUI prompts, so they survive the client.
+- **Dry runs.** `make --dry-run` prints what would be queued and the
+  estimated cost (renders, frames, seconds of audio) before anything runs.
+- **Never destructive.** `rm` and every overwrite go through `.versions/`.
+  There is no command that empties a project.
+
+### 11.5 What the skill teaches
+
+`SKILL.md` is the agent's manual, written like the render skill's: start with
+`capabilities`; write a plan rather than many `add` calls; generate the
+**model sheet first** and look at it before making variants; run `check`
+after every `make` and fix what it reports; look at the `sheet` before
+claiming what anything looks like; one job at a time on a shared GPU; report
+seeds. It cross-references the lua-25d-game skill for LÖVE projects and the
+render skill for anything that is a shot rather than an asset.
+
+### 11.6 Parity, tested
+
+A test enumerates the routes registered under `/continuity/forge/` and the
+CLI's command table and fails on any route with no command. A second runs the
+CLI against a stub server for each command and checks stdout, `--json` and
+exit codes. Golden JSON for `status`, `check` and `schema` keeps the
+contract stable for agents that have learned it.
+
+## 12. Sequencing
 
 1. **Foundation.** Project storage and manifest, targets, the dashboard card,
    alpha carried to the file for 2.1, post-steps 6.1–6.7, exports 1–5. Works
    on pictures made anywhere — immediately useful for a Game Boy project.
+   The CLI and its skill ship in this step, not after: every route lands
+   with its command, and the parity test from day one.
 2. **2D generation.** Style, characters and sprites, tiles with seamless
    tiling, icons, masked inpainting.
 3. **Audio.**
@@ -455,7 +564,7 @@ WAVs anyway), `.uge`.
    route is plausible and unproven on these families.
 5. **Backgrounds and parallax, HD rigs, `.uge`, further engines.**
 
-## 12. Risks
+## 13. Risks
 
 - **The MiniMax H3 licence** (§3.6) is reported, not verified, and bears on
   the whole pack. Check the licence text before anything else.
@@ -467,10 +576,13 @@ WAVs anyway), `.uge`.
   views. The spike decides; sequential projection is the fallback.
 - **Pixel conversion** is only as good as the 1024 picture. The constraint
   check makes failure visible; a pixel touch-up editor may be wanted later.
-- **Scope.** v1 is §11 steps 1 and 2. Everything else waits until those are
+- **Agents acting blind.** An agent that never looks will ship a sheet
+  that passes every check and looks wrong. The skill makes `sheet` part of
+  the loop, and `status` marks an asset nobody has viewed since it was made.
+- **Scope.** v1 is §12 steps 1 and 2. Everything else waits until those are
   used.
 
-## 13. Not in v1
+## 14. Not in v1
 
 Rigging beyond a starting `rig.lua`, skeletal animation, LoRA training of a
 character, an identity-similarity score, `.uge`, engine-native binaries,
