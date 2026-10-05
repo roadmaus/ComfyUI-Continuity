@@ -576,6 +576,12 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
     let invalid = (0..regions.tris.len()).filter(|&r| regions.eval(&ctx, r, &cut, &label).1 > 0).count();
     if debug {
         eprintln!("partition: {added} paths added, {removed} removed, {invalid} patches left invalid");
+        for r in 0..regions.tris.len() {
+            let (p, b) = regions.eval(&ctx, r, &cut, &label);
+            if p.concave > 0 || !p.is_disk() {
+                eprintln!("  final patch {r}: {} triangles, concave {}, loops {}, euler {}, corners {}, badness {b}", regions.tris[r].len(), p.concave, p.loops, p.euler, p.corners.len());
+            }
+        }
         let mut b: Vec<String> = (0..regions.tris.len()).map(|r| format!("{:.1}/{}", regions.bending(&ctx, r, &cut), regions.singular(&ctx, r))).collect();
         b.sort();
         eprintln!("bending/singularities per patch: {}", b.join(" "));
@@ -669,7 +675,20 @@ impl Regions {
     fn eval(&self, ctx: &Ctx, r: usize, cut: &HashSet<(u32, u32)>, label: &HashMap<(u32, u32), (u8, u8)>) -> (patches::Patch, usize) {
         let turn = |u: u32, v: u32, w: u32| turn_of(label, u, v, w);
         let p = patches::patch(&ctx.mesh, &self.tris[r], cut, &ctx.edge_tris, &HashSet::new(), &HashMap::new(), Some(&turn));
-        let b = badness(&p, self.singular(ctx, r), self.bending(ctx, r, cut));
+        let mut b = badness(&p, self.singular(ctx, r), self.bending(ctx, r, cut));
+        // A sliver between two cuts running side by side: nothing can
+        // mend it (a line across it is an edge long), so a path that would
+        // make one must never be taken. Width ≈ twice the area over the
+        // perimeter.
+        let area: f64 = self.tris[r].iter().map(|&t| {
+            let [a, bb, c] = ctx.s.tris[t as usize].map(|v| ctx.s.p[v as usize]);
+            (bb - a).cross(c - a).norm() / 2.0
+        }).sum();
+        let n = p.outline.len();
+        let perimeter: f64 = (0..n).map(|i| (ctx.s.p[p.verts[p.outline[(i + 1) % n] as usize] as usize] - ctx.s.p[p.verts[p.outline[i] as usize] as usize]).norm()).sum();
+        if n > 0 && 2.0 * area / perimeter < 0.3 * ctx.quad {
+            b += 10;
+        }
         (p, b)
     }
 

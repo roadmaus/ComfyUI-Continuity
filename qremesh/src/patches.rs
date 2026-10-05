@@ -424,13 +424,25 @@ impl Graph {
     /// fill needs a polygon. Corners too many: the flattest go. Too few:
     /// new ones where the outline bends most, or, on a smooth outline, as
     /// far as possible from the corners there are; an existing node near
-    /// that point is preferred, else the arc there is split. -> corners
-    /// added and dropped.
+    /// that point is preferred, else the arc there is split. Corners
+    /// pointing in are forgotten. -> corners added and dropped.
     pub fn fix_corners(&mut self, m: &TriMesh, lo: usize, hi: usize) -> (usize, usize) {
         let (mut added, mut dropped) = (0, 0);
         for p in 0..self.patches.len() {
+            if !self.patches[p].is_disk() {
+                continue;
+            }
+            // A corner pointing in, or the tip of a slit, is forgotten: the
+            // fill maps the outline onto a convex polygon anyway, where it
+            // is a point on a side (a slit's two faces become two stretches
+            // of the outline, and the quads either side share its
+            // vertices). QuadWild does the same before filling.
+            if self.patches[p].concave > 0 {
+                self.patches[p].concave = 0;
+                dropped += 1;
+            }
             let patch = &self.patches[p];
-            if !patch.is_disk() || patch.concave > 0 || (lo..=hi).contains(&patch.corners.len()) {
+            if (lo..=hi).contains(&patch.corners.len()) {
                 continue;
             }
             let n = patch.outline.len();

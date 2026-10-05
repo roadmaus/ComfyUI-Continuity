@@ -194,7 +194,17 @@ pub fn feature_constraints(s: &Surface, degrees: f64) -> (Vec<Option<C>>, Vec<(u
     sharp.sort_unstable();
     let boundary: std::collections::HashSet<(u32, u32)> =
         faces_of.iter().filter(|(_, f)| f.len() == 1).map(|(&e, _)| e).collect();
-    let sharp = crate::premesh::prune_features(&s.p, &sharp, &boundary);
+    let mut sharp = crate::premesh::prune_features(&s.p, &sharp, &boundary);
+    // A handful of short creases on an organic shape is noise from its
+    // triangulation, not design (QuadWild's organic preset turns sharp
+    // edges off altogether): kept, each makes a slit or a stray corner in
+    // the layout. Creases that add up to less than twice the square root
+    // of the surface's area are dropped; a cube's add up to five times it.
+    let crease: f64 = sharp.iter().filter(|e| !boundary.contains(e)).map(|&(a, b)| (s.p[b as usize] - s.p[a as usize]).norm()).sum();
+    let area: f64 = s.area.iter().sum();
+    if crease < 2.0 * area.sqrt() {
+        sharp.retain(|e| boundary.contains(e));
+    }
     let mut sum = vec![C::ZERO; s.p.len()];
     let mut count = vec![0usize; s.p.len()];
     for &(a, b) in &sharp {
