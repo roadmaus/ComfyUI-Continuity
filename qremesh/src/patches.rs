@@ -41,6 +41,9 @@ pub struct Patch {
     /// Nodes on the outline whose interior angle is about three quarters
     /// of a turn or more: a corner that points in, which no grid fits.
     pub concave: usize,
+    /// Interior angle at each outline vertex (radians, the patch's own
+    /// triangle angles summed), by outline index.
+    pub angle: Vec<f64>,
 }
 
 impl Patch {
@@ -409,10 +412,102 @@ pub fn patch(m: &TriMesh, tris: &[u32], cut: &HashSet<(u32, u32)>, edge_tris: &H
         }
         sides.push(arcs);
     }
-    Patch { verts, tris: ltris, outline, loops, euler, corners, sides, concave }
+    let angle = outline.iter().map(|lv| angle.get(lv).copied().unwrap_or(PI)).collect();
+    Patch { verts, tris: ltris, outline, loops, euler, corners, sides, concave, angle }
 }
 
 impl Graph {
+    /// Force every convex disk patch's corner count into `lo..=hi`, as
+    /// QuadWild does before filling: a layout of an organic shape keeps
+    /// patches it could not make valid (a limb tip with its four
+    /// singularities in one patch, a cap with no corners at all), and the
+    /// fill needs a polygon. Corners too many: the flattest go. Too few:
+    /// new ones where the outline bends most, or, on a smooth outline, as
+    /// far as possible from the corners there are; an existing node near
+    /// that point is preferred, else the arc there is split. -> corners
+    /// added and dropped.
+    pub fn fix_corners(&mut self, m: &TriMesh, lo: usize, hi: usize) -> (usize, usize) {
+        let (mut added, mut dropped) = (0, 0);
+        for p in 0..self.patches.len() {
+            let patch = &self.patches[p];
+            if !patch.is_disk() || patch.concave > 0 || (lo..=hi).contains(&patch.corners.len()) {
+                continue;
+            }
+            let n = patch.outline.len();
+            // Turning summed over a few vertices each way: a zigzag of mesh
+            // edges bends at every vertex, a real corner over all of them.
+            let bend: Vec<f64> = (0..n).map(|i| (0..7).map(|k| PI - patch.angle[(i + n + k - 3) % n]).sum()).collect();
+            let mut corners = patch.corners.clone();
+            while corners.len() > hi {
+                let k = (0..corners.len()).min_by(|&a, &b| bend[corners[a]].total_cmp(&bend[corners[b]])).unwrap();
+                corners.remove(k);
+                dropped += 1;
+            }
+            let pos: Vec<V3> = patch.outline.iter().map(|&l| m.v[patch.verts[l as usize] as usize]).collect();
+            let mut along = vec![0.0];
+            for i in 1..=n {
+                along.push(along[i - 1] + (pos[i % n] - pos[i - 1]).norm());
+            }
+            let perimeter = along[n];
+            let gap = |i: usize, corners: &[usize]| corners.iter().map(|&c| { let d = (along[i] - along[c]).abs(); d.min(perimeter - d) }).fold(perimeter, f64::min);
+            while corners.len() < lo {
+                // Sharp enough to be a corner by itself, or else spread out.
+                let sharp = (0..n).filter(|i| !corners.contains(i) && bend[*i] > PI / 4.0 && gap(*i, &corners) > perimeter / 8.0).max_by(|&a, &b| bend[a].total_cmp(&bend[b]));
+                let i = sharp.unwrap_or_else(|| (0..n).max_by(|&a, &b| gap(a, &corners).total_cmp(&gap(b, &corners))).unwrap());
+                // A node within a tenth of the perimeter stands in.
+                let v = |k: usize| self.patches[p].verts[self.patches[p].outline[k] as usize];
+                let node = (0..n).filter(|&k| self.nodes.contains(&v(k)) && !corners.contains(&k)).filter(|&k| { let d = (along[k] - along[i]).abs(); d.min(perimeter - d) < perimeter / 10.0 }).min_by(|&a, &b| (along[a] - along[i]).abs().total_cmp(&(along[b] - along[i]).abs()));
+                let at = match node {
+                    Some(k) => k,
+                    None => {
+                        let x = v(i);
+                        let Some((a, j)) = self.arcs.iter().enumerate().find_map(|(a, arc)| arc.chain[1..arc.chain.len() - 1].iter().position(|&c| c == x).map(|j| (a, j + 1))) else { break };
+                        self.split_arc(m, a, j);
+                        i
+                    }
+                };
+                corners.push(at);
+                corners.sort_unstable();
+                added += 1;
+            }
+            self.patches[p].corners = corners;
+            self.patches[p].sides = self.sides_of(p);
+        }
+        (added, dropped)
+    }
+
+    /// A patch's sides from its corners: the arcs met along the outline.
+    fn sides_of(&self, p: usize) -> Vec<Vec<(usize, bool)>> {
+        let mut arc_at: HashMap<(u32, u32), (usize, bool)> = HashMap::new();
+        for (id, a) in self.arcs.iter().enumerate() {
+            arc_at.insert((a.chain[0], a.chain[1]), (id, true));
+            arc_at.insert((a.chain[a.chain.len() - 1], a.chain[a.chain.len() - 2]), (id, false));
+        }
+        let patch = &self.patches[p];
+        let n = patch.outline.len();
+        let k = patch.corners.len();
+        (0..k)
+            .map(|c| {
+                let (mut i, end) = (patch.corners[c], patch.corners[(c + 1) % k]);
+                let mut arcs = Vec::new();
+                loop {
+                    let v = patch.verts[patch.outline[i] as usize];
+                    let w = patch.verts[patch.outline[(i + 1) % n] as usize];
+                    if self.nodes.contains(&v) {
+                        if let Some(&a) = arc_at.get(&(v, w)) {
+                            arcs.push(a);
+                        }
+                    }
+                    i = (i + 1) % n;
+                    if i == end {
+                        break;
+                    }
+                }
+                arcs
+            })
+            .collect()
+    }
+
     /// Split arc `a` at its chain vertex `at`, which becomes a node: the
     /// first part keeps the id, the second is new, and every patch side
     /// holding the arc holds both. -> the new arc.

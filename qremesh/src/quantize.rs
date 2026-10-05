@@ -384,11 +384,16 @@ impl<'a> Net<'a> {
     /// that is not accepted it may go on (`branch`). Applied if found.
     fn chain(&self, x: &mut [i64], starts: &[(usize, usize, i64)], accept: &dyn Fn(&[i64], usize) -> bool, branch: bool) -> bool {
         use std::collections::{BinaryHeap, HashMap};
-        let cost = |x: &[i64], a: usize, d: i64| {
+        let delta = |x: &[i64], a: usize, d: i64| {
             let (t, w) = (self.target[a], self.weight[a]);
             let (u, v) = (x[a] as f64, (x[a] + d) as f64);
-            w * ((v - t) * (v - t) - (u - t) * (u - t)) + 1.0
+            w * ((v - t) * (v - t) - (u - t) * (u - t))
         };
+        // Every step costs something positive, or Dijkstra goes round a
+        // cycle of moves that each bring an arc nearer its target forever:
+        // shifted by the largest gain any single move offers.
+        let shift = 1.0 + (0..x.len()).flat_map(|a| [-delta(x, a, 1), -delta(x, a, -1)]).fold(0.0, f64::max);
+        let cost = |x: &[i64], a: usize, d: i64| delta(x, a, d) + shift;
         let mut dist: HashMap<(usize, usize, i64), f64> = HashMap::new();
         let mut from: HashMap<(usize, usize, i64), Option<(usize, usize, i64)>> = HashMap::new();
         let mut heap = BinaryHeap::new();
@@ -409,9 +414,14 @@ impl<'a> Net<'a> {
             push(p, a, d, 0.0, None, &mut heap, &mut dist, &mut from);
         }
         let mut done = None;
+        let mut pops = 0usize;
         while let Some(Item(dd, a, q, d)) = heap.pop() {
             if dist.get(&(a, q, d)).map_or(false, |&o| dd > o) {
                 continue;
+            }
+            pops += 1;
+            if pops > 8 * self.on.len() + 1000 {
+                break;
             }
             if q == NONE || accept(x, q) {
                 done = Some((a, q, d));

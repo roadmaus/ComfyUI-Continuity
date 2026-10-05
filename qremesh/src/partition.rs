@@ -512,22 +512,32 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
         }
     }
 
-    // Take paths out again, last first, wherever that leaves valid patches.
+    // Take paths out again, last first, wherever the patches they separated
+    // merge into something no worse (QuadWild's removal). Most layouts of an
+    // organic shape keep some invalid patches, so "no worse" rather than
+    // "valid" is what lets this pass coarsen them at all.
     let mut removed = 0;
     for i in (0..paths.len()).rev() {
         let edges: Vec<(u32, u32)> = paths[i].chain.windows(2).map(|w| key(w[0], w[1])).collect();
+        let touched = |regions: &Regions| -> Vec<u32> {
+            let mut t: Vec<u32> = edges.iter().flat_map(|e| ctx.edge_tris[e].iter().map(|&t| regions.of[t as usize])).collect();
+            t.sort_unstable();
+            t.dedup();
+            t
+        };
+        let before = {
+            let regions = Regions::new(&ctx, &cut);
+            let evals: Vec<(patches::Patch, usize)> = touched(&regions).iter().map(|&r| (regions.eval(&ctx, r as usize, &cut, &label).0, regions.singular(&ctx, r as usize))).collect();
+            score(s, &evals, quad)
+        };
         let saved: Vec<((u32, u32), (u8, u8))> = edges.iter().map(|e| (*e, label[e])).collect();
         for e in &edges {
             cut.remove(e);
             label.remove(e);
         }
         let regions = Regions::new(&ctx, &cut);
-        let touched: HashSet<u32> = edges.iter().flat_map(|e| ctx.edge_tris[e].iter().map(|&t| regions.of[t as usize])).collect();
-        let ok = touched.iter().all(|&r| {
-            let (p, b) = regions.eval(&ctx, r as usize, &cut, &label);
-            b == 0 && sides_fit(&side_lengths(s, &p), quad)
-        });
-        if ok {
+        let evals: Vec<(patches::Patch, usize)> = touched(&regions).iter().map(|&r| (regions.eval(&ctx, r as usize, &cut, &label).0, regions.singular(&ctx, r as usize))).collect();
+        if score(s, &evals, quad) <= before {
             paths.remove(i);
             removed += 1;
         } else {
@@ -537,10 +547,32 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
             }
         }
     }
+    let regions = Regions::new(&ctx, &cut);
+    let invalid = (0..regions.tris.len()).filter(|&r| regions.eval(&ctx, r, &cut, &label).1 > 0).count();
     if debug {
         eprintln!("partition: {added} paths added, {removed} removed, {invalid} patches left invalid");
     }
     Partition { cut, feature, label, paths, invalid, added, removed }
+}
+
+/// How bad a set of patches is, compared lexicographically, worst first:
+/// non-disks, corners pointing in, corner counts out of range, the most
+/// singularities in one patch (one is fine), fewer patches holding exactly
+/// one singularity, and sides that do not fit together. QuadWild's order
+/// for deciding whether a removal makes things worse.
+fn score(s: &Surface, evals: &[(patches::Patch, usize)], quad: f64) -> [i64; 6] {
+    let mut out = [0i64; 6];
+    for (p, singular) in evals {
+        let disk = p.is_disk();
+        let convex = disk && p.concave == 0;
+        out[0] += !disk as i64;
+        out[1] += p.concave as i64;
+        out[2] += (convex && !(3..=6).contains(&p.corners.len())) as i64;
+        out[3] = out[3].max((*singular).max(1) as i64);
+        out[4] -= (*singular == 1) as i64;
+        out[5] += (convex && (3..=6).contains(&p.corners.len()) && !sides_fit(&side_lengths(s, p), quad)) as i64;
+    }
+    out
 }
 
 /// Triangles flooded across uncut edges.
@@ -592,6 +624,7 @@ impl Regions {
         ctx.sing_tri.iter().filter(|&&t| self.of[t] == r as u32).count()
     }
 
+    /// The patch and its badness.
     fn eval(&self, ctx: &Ctx, r: usize, cut: &HashSet<(u32, u32)>, label: &HashMap<(u32, u32), (u8, u8)>) -> (patches::Patch, usize) {
         let turn = |u: u32, v: u32, w: u32| turn_of(label, u, v, w);
         let p = patches::patch(&ctx.mesh, &self.tris[r], cut, &ctx.edge_tris, &HashSet::new(), &HashMap::new(), Some(&turn));

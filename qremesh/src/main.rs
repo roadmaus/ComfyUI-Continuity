@@ -138,7 +138,7 @@ fn remesh(args: &Args) -> Result<(), String> {
     // `--legacy-layout` is the separatrix tracer, kept to compare against
     // until the partition does at least as well on every test shape.
     let legacy = args.words.iter().any(|w| w == "--legacy-layout");
-    let (fill_mesh, graph, traces, n_traces, t_trace, t_graph, crossings);
+    let (fill_mesh, mut graph, traces, n_traces, t_trace, t_graph, crossings);
     if legacy {
         let lay = trace::layout(&s, &field.z, &sings, &sharp, edge * 0.5, diameter * 3.0, quad);
         t_trace = t.elapsed().as_secs_f64();
@@ -164,6 +164,10 @@ fn remesh(args: &Args) -> Result<(), String> {
         let t = Instant::now();
         let turn = |u: u32, v: u32, w: u32| part.turn(u, v, w);
         graph = patches::build(&m, &part.cut, &part.feature, quad, Some(&turn));
+        let (added, dropped) = graph.fix_corners(&m, 3, 5);
+        if added + dropped > 0 {
+            eprintln!("corners: {added} added, {dropped} dropped to bring every patch to 3–5");
+        }
         t_graph = t.elapsed().as_secs_f64();
         crossings = 0;
         traces = part.paths.iter().map(|p| (p.chain.iter().map(|&v| m.v[v as usize]).collect::<Vec<V3>>(), p.kind)).collect();
