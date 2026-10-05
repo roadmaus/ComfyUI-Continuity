@@ -7,6 +7,10 @@
 //! - **torus**: no singularities at all (its Euler characteristic is zero),
 //!   strong curvature directions. Separatrices alone cannot cut it into
 //!   disks.
+//! - **tube**: an open cylinder, two boundary loops and no singularity.
+//! - **annulus**: a flat ring, a boundary outside and a hole inside.
+//! - **hemi**: half a sphere with its rim open: four singularities must
+//!   sit inside and the layout must end on the rim.
 //! - **blob**: a lumpy, stretched, tilted sphere. Curvature directions in
 //!   some places, none in others, and nothing lined up with the axes — the
 //!   field's singularities land wherever they land, and the layout has to
@@ -165,4 +169,79 @@ pub fn jitter(m: &mut TriMesh, amount: f64, seed: u64) {
         let t2 = n[i].cross(t1);
         m.v[i] += (t1 * (rng.unit() - 0.5) + t2 * (rng.unit() - 0.5)) * (amount * edge);
     }
+}
+
+/// An open cylinder of radius 1 and height 2, `nu` around, `nv` along.
+pub fn tube(nu: usize, nv: usize) -> TriMesh {
+    let mut v = Vec::new();
+    for i in 0..nu {
+        let a = 2.0 * PI * i as f64 / nu as f64;
+        for j in 0..=nv {
+            v.push(v3(a.cos(), a.sin(), 2.0 * j as f64 / nv as f64 - 1.0));
+        }
+    }
+    let at = |i: usize, j: usize| ((i % nu) * (nv + 1) + j) as u32;
+    let mut f = Vec::new();
+    for i in 0..nu {
+        for j in 0..nv {
+            let (a, b, c, d) = (at(i, j), at(i + 1, j), at(i + 1, j + 1), at(i, j + 1));
+            if (i + j) % 2 == 0 {
+                f.push([a, b, c]);
+                f.push([a, c, d]);
+            } else {
+                f.push([a, b, d]);
+                f.push([b, c, d]);
+            }
+        }
+    }
+    TriMesh { v, f }
+}
+
+/// A flat ring in the xy plane, radii 0.4 to 1, `nu` around, `nv` across.
+pub fn annulus(nu: usize, nv: usize) -> TriMesh {
+    let mut v = Vec::new();
+    for i in 0..nu {
+        let a = 2.0 * PI * i as f64 / nu as f64;
+        for j in 0..=nv {
+            let r = 0.4 + 0.6 * j as f64 / nv as f64;
+            v.push(v3(r * a.cos(), r * a.sin(), 0.0));
+        }
+    }
+    let at = |i: usize, j: usize| ((i % nu) * (nv + 1) + j) as u32;
+    let mut f = Vec::new();
+    for i in 0..nu {
+        for j in 0..nv {
+            let (a, b, c, d) = (at(i, j), at(i + 1, j), at(i + 1, j + 1), at(i, j + 1));
+            if (i + j) % 2 == 0 {
+                f.push([a, b, c]);
+                f.push([a, c, d]);
+            } else {
+                f.push([a, b, d]);
+                f.push([b, c, d]);
+            }
+        }
+    }
+    TriMesh { v, f }
+}
+
+/// The upper half of an icosphere, cut at the equator: faces entirely at
+/// z ≥ 0 are kept, so the rim is a jagged ring of the sphere's own edges.
+pub fn hemisphere(subdivisions: usize) -> TriMesh {
+    let m = icosphere(subdivisions);
+    let f: Vec<[u32; 3]> = m.f.iter().copied().filter(|t| t.iter().all(|&i| m.v[i as usize].z >= -1e-9)).collect();
+    let mut index = vec![u32::MAX; m.v.len()];
+    let mut v = Vec::new();
+    let f = f
+        .iter()
+        .map(|t| {
+            t.map(|i| {
+                if index[i as usize] == u32::MAX {
+                    index[i as usize] = v.len() as u32;
+                    v.push(m.v[i as usize]);
+                }
+                index[i as usize]
+            })
+        })
+        .collect();
+    TriMesh { v, f }
 }

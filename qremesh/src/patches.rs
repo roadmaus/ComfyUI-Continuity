@@ -8,6 +8,7 @@
 //! local vertices. That makes outline walking and the Euler characteristic
 //! plain mesh operations, and it is the mesh the patch is parametrized on.
 
+use crate::math::V3;
 use crate::mesh::TriMesh;
 use std::collections::{HashMap, HashSet};
 use std::f64::consts::PI;
@@ -90,7 +91,10 @@ fn prune(cut: &mut HashSet<(u32, u32)>, nv: usize) -> usize {
 }
 
 /// `features`: cut edges that are features or boundary rather than traces.
-pub fn build(m: &TriMesh, cut_in: &HashSet<(u32, u32)>, features: &HashSet<(u32, u32)>) -> Graph {
+/// `window`: how far along a feature chain to look each way when judging
+/// whether it turns a corner at a vertex (a jagged rim of mesh edges turns
+/// at every vertex and is no corner at all).
+pub fn build(m: &TriMesh, cut_in: &HashSet<(u32, u32)>, features: &HashSet<(u32, u32)>, window: f64) -> Graph {
     let nv = m.v.len();
     let mut cut = cut_in.clone();
     let pruned = prune(&mut cut, nv);
@@ -120,9 +124,27 @@ pub fn build(m: &TriMesh, cut_in: &HashSet<(u32, u32)>, features: &HashSet<(u32,
             continue;
         }
         let (p, q) = (at[v as usize][0], at[v as usize][1]);
-        let d1 = (m.v[v as usize] - m.v[p as usize]).normalized();
-        let d2 = (m.v[q as usize] - m.v[v as usize]).normalized();
-        if d1.dot(d2) < 45f64.to_radians().cos() && features.contains(&key(v, p)) && features.contains(&key(v, q)) {
+        if !(features.contains(&key(v, p)) && features.contains(&key(v, q))) {
+            continue;
+        }
+        // Along the chain `window` each way, the far points.
+        let far = |mut prev: u32, mut cur: u32| -> V3 {
+            let mut gone = 0.0;
+            while gone < window && at[cur as usize].len() == 2 {
+                gone += (m.v[cur as usize] - m.v[prev as usize]).norm();
+                let next = if at[cur as usize][0] == prev { at[cur as usize][1] } else { at[cur as usize][0] };
+                prev = cur;
+                cur = next;
+                if cur == v {
+                    break;
+                }
+            }
+            m.v[cur as usize]
+        };
+        let (pf, qf) = (far(v, p), far(v, q));
+        let d1 = (m.v[v as usize] - pf).normalized();
+        let d2 = (qf - m.v[v as usize]).normalized();
+        if d1.dot(d2) < 45f64.to_radians().cos() {
             nodes.insert(v);
         }
     }

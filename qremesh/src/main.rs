@@ -68,7 +68,10 @@ fn shape(args: &Args) -> Result<(), String> {
         Some("blob") => shapes::blob(args.num("--subdivisions", 5)?, seed),
         Some("torus") => shapes::torus(1.0, 0.4, args.num("--nu", 160)?, args.num("--nv", 64)?),
         Some("sphere") => mesh::uv_sphere(args.num("--rings", 80)?, args.num("--segments", 160)?, 0.0, seed),
-        _ => return Err("shape: ico, cube, torus, blob or sphere".into()),
+        Some("tube") => shapes::tube(args.num("--nu", 160)?, args.num("--nv", 50)?),
+        Some("annulus") => shapes::annulus(args.num("--nu", 200)?, args.num("--nv", 30)?),
+        Some("hemi") => shapes::hemisphere(args.num("--subdivisions", 5)?),
+        _ => return Err("shape: ico, cube, torus, blob, sphere, tube, annulus or hemi".into()),
     };
     let jitter: f64 = args.num("--jitter", 0.3)?;
     if jitter > 0.0 {
@@ -83,7 +86,7 @@ fn shape(args: &Args) -> Result<(), String> {
 fn remesh(args: &Args) -> Result<(), String> {
     let input = args.words.get(1).ok_or("remesh needs an input OBJ")?;
     let out = args.flag("-o").ok_or("remesh needs -o OUT")?;
-    let align: f64 = args.num("--align", 0.05)?;
+    let align: f64 = args.num("--align", 0.005)?;
     let degrees: f64 = args.num("--features", 35.0)?;
     let quads: f64 = args.num("--quads", 600.0)?;
     let mut rng = Rng::new(args.num("--seed", 1)?);
@@ -91,7 +94,12 @@ fn remesh(args: &Args) -> Result<(), String> {
     let clock = Instant::now();
     let m = mesh::read_obj(input)?;
     let s = cross::Surface::new(&m);
-    let target = cross::guide(&s, args.num("--axes", 0.1)?);
+    let diameter = {
+        let lo = m.v.iter().fold(m.v[0], |a, p| math::v3(a.x.min(p.x), a.y.min(p.y), a.z.min(p.z)));
+        let hi = m.v.iter().fold(m.v[0], |a, p| math::v3(a.x.max(p.x), a.y.max(p.y), a.z.max(p.z)));
+        (hi - lo).norm()
+    };
+    let target = cross::guide(&s, args.num("--axes", 0.1)?, diameter);
     let (fixed, sharp) = cross::feature_constraints(&s, degrees);
     let t = Instant::now();
     let field = cross::solve(&s, &target, &fixed, align, &mut rng);
@@ -102,11 +110,6 @@ fn remesh(args: &Args) -> Result<(), String> {
     eprintln!("field ({}): {} solver iterations, {:.2}s; singularities +{plus} -{minus}", field.how, field.solver_iterations, t_field);
 
     let edge = mesh::mean_edge(&m);
-    let diameter = {
-        let lo = m.v.iter().fold(m.v[0], |a, p| math::v3(a.x.min(p.x), a.y.min(p.y), a.z.min(p.z)));
-        let hi = m.v.iter().fold(m.v[0], |a, p| math::v3(a.x.max(p.x), a.y.max(p.y), a.z.max(p.z)));
-        (hi - lo).norm()
-    };
     let t = Instant::now();
     // The side of a quad, were the surface covered in `--quads` of them.
     let quad = (mesh::surface_area(&m) / quads).sqrt();
@@ -122,7 +125,7 @@ fn remesh(args: &Args) -> Result<(), String> {
     let t = Instant::now();
     let polylines: Vec<(&[V3], &[trace::Stop])> = lay.traces.iter().map(|t| (t.points.as_slice(), t.stops.as_slice())).collect();
     let refined = refine::insert(&m, &sharp, &polylines, edge * 0.05);
-    let graph = patches::build(&refined.m, &refined.cut, &refined.feature);
+    let graph = patches::build(&refined.m, &refined.cut, &refined.feature, quad);
     let t_graph = t.elapsed().as_secs_f64();
     let mut corner_hist: std::collections::BTreeMap<usize, usize> = Default::default();
     let mut bad = 0;
@@ -161,7 +164,7 @@ fn remesh(args: &Args) -> Result<(), String> {
     eprintln!("fill: {} kites, {} arcs, {} quantize violations, {} unfilled patches, {} vertices, {} faces, {:.2}s", output.kites, output.arcs, q.violated, output.unfilled, output.v.len(), output.faces.len(), t_fill);
     let t = Instant::now();
     let projector = proj::Projector::new(&m, edge * 2.0);
-    fill::smooth(&mut output, &projector, args.num("--smooth", 20)?);
+    fill::smooth(&mut output, &projector, args.num("--smooth", 60)?);
     let t_smooth = t.elapsed().as_secs_f64();
     mesh::write_obj(out, &output.v, &output.faces)?;
     let metrics = metrics(&output, &m, &projector, quad);
@@ -246,6 +249,14 @@ fn metrics(out: &fill::Output, input: &mesh::TriMesh, proj: &proj::Projector, h:
         }
     }
     let open = edges.values().filter(|&&c| c != 2).count();
+    let mut input_edges: HashMap<(u32, u32), usize> = HashMap::new();
+    for t in &input.f {
+        for k in 0..3 {
+            let (a, b) = (t[k], t[(k + 1) % 3]);
+            *input_edges.entry((a.min(b), a.max(b))).or_default() += 1;
+        }
+    }
+    let input_boundary = input_edges.values().filter(|&&c| c == 1).count();
     let mean = lengths.iter().sum::<f64>() / lengths.len().max(1) as f64;
     let std = (lengths.iter().map(|l| (l - mean) * (l - mean)).sum::<f64>() / lengths.len().max(1) as f64).sqrt();
     let (lo, hi) = lengths.iter().fold((f64::MAX, f64::MIN), |a, &l| (a.0.min(l), a.1.max(l)));
@@ -277,7 +288,7 @@ fn metrics(out: &fill::Output, input: &mesh::TriMesh, proj: &proj::Projector, h:
     };
     let faces = out.faces.len();
     format!(
-        "{{\"vertices\": {}, \"faces\": {faces}, \"quads\": {}, \"quad_ratio\": {:.4}, \"faces_by_size\": {by_size:?}, \"valence\": {hist:?}, \"singular_vertices\": {singular}, \"open_edges\": {open}, \"edge_length_over_h\": {{\"mean\": {mean:.3}, \"std\": {std:.3}, \"min\": {lo:.3}, \"max\": {hi:.3}}}, \"distance_to_input\": {}, \"distance_from_input\": {}}}",
+        "{{\"vertices\": {}, \"faces\": {faces}, \"quads\": {}, \"quad_ratio\": {:.4}, \"faces_by_size\": {by_size:?}, \"valence\": {hist:?}, \"singular_vertices\": {singular}, \"boundary_edges\": {open}, \"input_boundary_edges\": {input_boundary}, \"edge_length_over_h\": {{\"mean\": {mean:.3}, \"std\": {std:.3}, \"min\": {lo:.3}, \"max\": {hi:.3}}}, \"distance_to_input\": {}, \"distance_from_input\": {}}}",
         valence.iter().filter(|&&v| v > 0).count(), by_size.get(&4).copied().unwrap_or(0), by_size.get(&4).copied().unwrap_or(0) as f64 / faces.max(1) as f64, stats(&d_out), stats(&d_in)
     )
 }

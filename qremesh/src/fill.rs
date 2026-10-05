@@ -256,13 +256,19 @@ impl<'a> Filler<'a> {
     pub fn build(&mut self) -> quantize::Solution {
         self.cut_patches();
         let mut sol = self.quantize();
-        for _round in 0..4 {
+        for _round in 0..12 {
             if sol.violated == 0 {
                 break;
             }
-            let bad = self.violated_kites(&sol.x);
+            // One infeasible patch leaves several kites unsatisfied at once;
+            // cutting them all would fill the patch with pleats, so only the
+            // few worst go, and the rest get another chance.
+            let mut bad = self.violated_kites(&sol.x);
+            bad.sort_by(|&a, &b| self.mismatch(b, &sol.x).cmp(&self.mismatch(a, &sol.x)));
+            bad.truncate(2);
+            bad.sort_unstable();
             if std::env::var("QREMESH_DEBUG").is_ok() {
-                eprintln!("    {} kites could not be quantized; cutting them", bad.len());
+                eprintln!("    {} kites could not be quantized; cutting {}", sol.violated, bad.len());
             }
             for &k in bad.iter().rev() {
                 let kite = self.kites.remove(k);
@@ -276,10 +282,17 @@ impl<'a> Filler<'a> {
         sol
     }
 
+    /// How far a kite's opposite sides are from equal.
+    fn mismatch(&self, k: usize, x: &[i64]) -> i64 {
+        let sum = |side: &[(usize, bool)]| side.iter().map(|&(a, _)| x[a]).sum::<i64>();
+        let s = &self.kites[k].sides;
+        (sum(&s[0]) - sum(&s[2])).abs() + (sum(&s[1]) - sum(&s[3])).abs()
+    }
+
     /// Kites whose opposite sides came out unequal, ascending.
     fn violated_kites(&self, x: &[i64]) -> Vec<usize> {
         let sum = |side: &[(usize, bool)]| side.iter().map(|&(a, _)| x[a]).sum::<i64>();
-        (0..self.kites.len()).filter(|&k| { let s = &self.kites[k].sides; sum(&s[0]) != sum(&s[2]) || sum(&s[1]) != sum(&s[3]) }).collect()
+        (0..self.kites.len()).filter(|&k| { let s = &self.kites[k].sides; !s.iter().any(|s| s.is_empty()) && (sum(&s[0]) != sum(&s[2]) || sum(&s[1]) != sum(&s[3])) }).collect()
     }
 
     fn cut_patches(&mut self) {
@@ -463,6 +476,21 @@ impl<'a> Filler<'a> {
         let want = (goal - cum) / lens[j].max(1e-300);
         let want = if fwd { want } else { 1.0 - want };
         let want = want.clamp(0.0, 1.0);
+        // An arc of a single mesh edge has nowhere to split; the node at
+        // its end stands in, or if the side is that one edge, the side is
+        // left whole with an empty other half (a degenerate kite, skipped).
+        if let Kind::Surface(ga) = self.farcs[a].kind {
+            if self.graph.arcs[ga].chain.len() < 3 {
+                let (first, second, node) = if j + 1 < side.len() {
+                    (side[..=j].to_vec(), side[j + 1..].to_vec(), if fwd { self.farcs[a].to } else { self.farcs[a].from })
+                } else if j > 0 {
+                    (side[..j].to_vec(), side[j..].to_vec(), if fwd { self.farcs[a].from } else { self.farcs[a].to })
+                } else {
+                    (side.to_vec(), Vec::new(), if fwd { self.farcs[a].to } else { self.farcs[a].from })
+                };
+                return (node, first, second);
+            }
+        }
         let new = match self.farcs[a].kind {
             Kind::Surface(ga) => {
                 let chain = &self.graph.arcs[ga].chain;
@@ -520,6 +548,12 @@ impl<'a> Filler<'a> {
     fn cut(&mut self, piece: Piece) {
         let p = piece.patch;
         let n = piece.corners.len();
+        if piece.sides.iter().any(|s| s.is_empty()) {
+            // A side of nothing: an arc of one mesh edge that could not be
+            // split. The piece is left out rather than torn.
+            self.unfilled += 1;
+            return;
+        }
         if n == 4 && piece.force {
             self.preliminary(p);
             let lens: Vec<f64> = piece.sides.iter().map(|s| s.iter().map(|&(a, _)| self.farcs[a].target).sum()).collect();
@@ -638,6 +672,9 @@ impl<'a> Filler<'a> {
         let weight: Vec<f64> = target.iter().map(|t| 1.0 / t.max(1.0)).collect();
         let mut constraints = Vec::new();
         for k in &self.kites {
+            if k.sides.iter().any(|s| s.is_empty()) {
+                continue;
+            }
             for (s0, s2) in [(0, 2), (1, 3)] {
                 let mut c: Vec<(usize, i64)> = k.sides[s0].iter().map(|&(a, _)| (a, 1)).collect();
                 c.extend(k.sides[s2].iter().map(|&(a, _)| (a, -1)));
@@ -799,6 +836,9 @@ impl<'a> Filler<'a> {
 
         // The grids.
         for k in &self.kites {
+            if k.sides.iter().any(|s| s.is_empty()) {
+                continue;
+            }
             let (dom, boundary) = &domains[&k.patch];
             let side_ids = |s: usize| -> Vec<u32> {
                 let mut ids = Vec::new();

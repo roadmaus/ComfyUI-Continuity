@@ -133,16 +133,20 @@ pub fn axis_target(s: &Surface) -> Vec<C> {
         .collect()
 }
 
-/// Curvature where it is trusted, the axes elsewhere at `axes` of the
-/// strongest curvature pull.
-pub fn guide(s: &Surface, axes: f64) -> Vec<C> {
+/// Curvature where it is trusted, the axes elsewhere at `axes` of a full
+/// pull. Curvature counts in absolute terms against the object's size: a
+/// bend of radius an eighth of `diameter` is a full pull, flatter bends
+/// proportionally less. (Scaled by its own peak it would turn the noise
+/// on a flat surface into a full-strength random target.)
+pub fn guide(s: &Surface, axes: f64, diameter: f64) -> Vec<C> {
     let curvature = curvature_target(s);
     let along_axes = axis_target(s);
-    let peak = curvature.iter().map(|q| q.abs()).fold(0.0, f64::max);
+    let full = 8.0 / diameter.max(1e-300);
     (0..s.p.len())
         .map(|i| {
-            let c = if peak > 1e-300 { curvature[i].scale(1.0 / peak) } else { C::ZERO };
-            c + along_axes[i].scale(axes * (1.0 - c.abs()))
+            let strength = (curvature[i].abs() / full).min(1.0);
+            let c = if curvature[i].abs() > 1e-300 { curvature[i].scale(strength / curvature[i].abs()) } else { C::ZERO };
+            c + along_axes[i].scale(axes * (1.0 - strength))
         })
         .collect()
 }
@@ -179,10 +183,12 @@ pub fn feature_constraints(s: &Surface, degrees: f64) -> (Vec<Option<C>>, Vec<(u
             faces_of.entry((a.min(b), a.max(b))).or_default().push(fnorm);
         }
     }
+    // The surface's boundary is a feature too: the field runs along it
+    // and traces stop on it.
     let limit = degrees.to_radians().cos();
     let mut sharp: Vec<(u32, u32)> = faces_of
         .iter()
-        .filter(|(_, f)| f.len() == 2 && f[0].dot(f[1]) < limit)
+        .filter(|(_, f)| f.len() == 1 || (f.len() == 2 && f[0].dot(f[1]) < limit))
         .map(|(&e, _)| e)
         .collect();
     sharp.sort_unstable();
@@ -294,6 +300,14 @@ pub struct Field {
 /// (L + tM) x = tM q + (what the fixed vertices pull). With neither: the
 /// smoothest field, the eigenvector of L with the smallest eigenvalue, by
 /// inverse iteration.
+///
+/// `align` must be small: tM is a mass term, and a mass term screens what
+/// the constraints and the field's own smoothness say over a length of
+/// about √(1/align) edges. At 0.05 that was five edges — the "global"
+/// field was local, a flat ring between two round boundaries grew four
+/// pairs of singularities from a whisper of axis guide in its middle. At
+/// 0.005 the reach is some fifteen edges, and a sphere, a torus, a ring and
+/// a half sphere all come out with exactly the singularities they need.
 pub fn solve(s: &Surface, target: &[C], fixed: &[Option<C>], align: f64, rng: &mut Rng) -> Field {
     let n = s.p.len();
     let mean_area = s.area.iter().sum::<f64>() / n as f64;
@@ -318,11 +332,13 @@ pub fn solve(s: &Surface, target: &[C], fixed: &[Option<C>], align: f64, rng: &m
         }
         "smoothest"
     } else {
-        // Scale the target so its strongest pull is about 1, then weight it
-        // against smoothness by `align` in units of a vertex's own stiffness.
-        let peak = target.iter().map(|q| q.abs()).fold(0.0, f64::max).max(1e-300);
+        // The target's strongest pull is about 1 (`guide` scales it so);
+        // it is weighted against smoothness by `align` in units of a
+        // vertex's own stiffness. It is not rescaled here: on a flat
+        // surface only the weak axis guide is left, and it must stay weak,
+        // or it fights the boundary and makes singularities.
         let t = align * mean_degree / mean_area;
-        let mut b: Vec<C> = (0..n).map(|i| target[i].scale(t * s.area[i] / peak)).collect();
+        let mut b: Vec<C> = (0..n).map(|i| target[i].scale(t * s.area[i])).collect();
         rhs_from_fixed(s, fixed, &mut b);
         total += cg(s, t, fixed, &b, &mut x, 1e-8, 20000);
         for i in 0..n {

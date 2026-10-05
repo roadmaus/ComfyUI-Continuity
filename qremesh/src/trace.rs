@@ -143,6 +143,19 @@ pub struct Trace {
     /// A constant turn away from the field, in radians: a candidate bent
     /// toward a singularity the field's own line would just miss.
     pub bend: f64,
+    /// Waypoints to walk through (a candidate found as a cheapest path),
+    /// and the next one to head for.
+    route: Vec<V3>,
+    route_at: usize,
+    /// The separatrix the route ends on, which it aims for when close
+    /// instead of judging the slot by its heading.
+    route_to: Option<(usize, usize)>,
+    /// Its own segments by triangle, for a candidate that checks only
+    /// against itself.
+    own: HashMap<u32, Vec<Segment>>,
+    /// What the candidate costs in the selection, when it was not a bent
+    /// shot (whose cost comes from its length and bend).
+    pub cost: Option<f64>,
     travelled: f64,
     /// Distance walked straight before following the field — near a
     /// singularity the field has no direction worth following.
@@ -177,6 +190,17 @@ impl Aim {
         match *self {
             Aim::Sing { since, .. } | Aim::Node { since, .. } => since,
         }
+    }
+}
+
+impl Trace {
+    /// What choosing this candidate costs: its own cost from the path
+    /// search, or its length raised by its bend.
+    pub fn cost(&self) -> f64 {
+        self.cost.unwrap_or_else(|| {
+            let bend = self.bend.to_degrees() / 10.0;
+            self.travelled * (1.0 + bend * bend)
+        })
     }
 }
 
@@ -275,8 +299,8 @@ struct Tracer<'a> {
 }
 
 /// Bends tried each way, `BEND_STEP` degrees apart.
-const BENDS: i32 = 20;
-const BEND_STEP: f64 = 1.0;
+const BENDS: i32 = 8;
+const BEND_STEP: f64 = 2.0;
 
 fn rotate(d: V3, n: V3, angle: f64) -> V3 {
     d * angle.cos() + n.cross(d) * angle.sin()
@@ -364,6 +388,7 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
     // wherever a bent shot lands on a singularity, that is a candidate edge
     // whose cost grows with the bend. (QuadWild gets the same freedom from
     // shortest paths in a graph that charges for leaving the field.)
+    let clock_shots = std::time::Instant::now();
     let mut cand = tracer(true);
     cand.max_length = max_length * 0.5;
     for &(k, j) in &slots {
@@ -376,6 +401,36 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
         }
     }
     cand.run();
+    if std::env::var("QREMESH_DEBUG").is_ok() {
+        eprintln!("shots: {} traced in {:.2}s", cand.traces.len(), clock_shots.elapsed().as_secs_f64());
+    }
+    // Bent shots only reach a singularity the field's line nearly hits.
+    // Cheapest paths in a graph over the mesh's edges, charged for every
+    // degree they leave the field, reach any singularity there is a
+    // reasonable line to; each is walked through the mesh as a candidate
+    // like the shots, so the selection treats them alike.
+    let clock = std::time::Instant::now();
+    let routes = field_routes(s, z, &topo, sings, &seps, &feature_set, &slots, free);
+    let t_search = clock.elapsed().as_secs_f64();
+    for r in &routes {
+        let id = cand.traces.len();
+        cand.start_route(sings[r.from.0].tri as u32, r.from.0, r.from.1, r.to, free, r.points.clone(), r.cost);
+        let _ = id;
+    }
+    cand.run();
+    if std::env::var("QREMESH_DEBUG").is_ok() {
+        let landed = cand.traces.iter().filter(|t| t.cost.is_some() && t.to.is_some()).count();
+        let mut why: std::collections::BTreeMap<&str, usize> = Default::default();
+        for t in cand.traces.iter().filter(|t| t.cost.is_some()) {
+            *why.entry(t.ended).or_default() += 1;
+        }
+        eprintln!("routes: {} kept, {landed} walked to their singularity ({why:?}); search {t_search:.2}s, walk {:.2}s", routes.len(), clock.elapsed().as_secs_f64() - t_search);
+        for (r, t) in routes.iter().zip(cand.traces.iter().filter(|t| t.cost.is_some())) {
+            if std::env::var("QREMESH_ROUTES").is_ok() {
+                eprintln!("  route {:?} -> {:?} cost {:.2} ({} points): ended {} at {:?}", r.from, r.to, r.cost, r.points.len(), t.ended, t.to);
+            }
+        }
+    }
     // A separatrix whose straight shot meets a sharp edge within a few
     // triangles of its singularity runs along that edge too; the edge is
     // already in the layout. (A cube's corners: all three are its edges.)
@@ -659,8 +714,7 @@ fn edge_options(cand: &Tracer) -> Vec<(f64, usize)> {
             continue;
         }
         let key = (from.min(to), from.max(to));
-        let bend = t.bend.to_degrees() / 10.0;
-        let cost = t.travelled * (1.0 + bend * bend);
+        let cost = t.cost();
         if best.get(&key).map_or(true, |&(c, _)| cost < c) {
             best.insert(key, (cost, i));
         }
@@ -710,6 +764,11 @@ impl<'a> Tracer<'a> {
             to: None,
             kind: if from == usize::MAX { "repair" } else { "separatrix" },
             bend: 0.0,
+            route: Vec::new(),
+            route_at: 0,
+            route_to: None,
+            own: HashMap::new(),
+            cost: None,
             travelled: 0.0,
             free,
             aim: None,
@@ -718,6 +777,18 @@ impl<'a> Tracer<'a> {
             entered: None,
             segs: Vec::new(),
         });
+    }
+
+    /// A trace that walks through `route` (ending at a singularity, which
+    /// `target` then catches as usual) instead of following the field.
+    fn start_route(&mut self, tri: u32, from: usize, slot: usize, to: (usize, usize), free: f64, route: Vec<V3>, cost: f64) {
+        let dir = (route[1] - route[0]).normalized();
+        self.start(route[0], tri, dir, from, slot, free);
+        let id = self.traces.len() - 1;
+        self.traces[id].route = route;
+        self.traces[id].route_at = 1;
+        self.traces[id].route_to = Some(to);
+        self.traces[id].cost = Some(cost);
     }
 
     /// Take over a finished candidate as a layout edge.
@@ -830,7 +901,13 @@ impl<'a> Tracer<'a> {
     }
 
     fn draw(&mut self, seg: Segment) {
-        self.segments.entry(seg.tri).or_default().push(seg);
+        // Candidates run alone: nothing but the trace itself ever looks at
+        // its segments, so the shared index is not kept for them.
+        if !self.independent {
+            self.segments.entry(seg.tri).or_default().push(seg);
+        } else {
+            self.traces[seg.trace].own.entry(seg.tri).or_default().push(seg);
+        }
         if self.gap.is_finite() {
             let c = self.cell((seg.a + seg.b) * 0.5);
             self.grid.entry(c).or_default().push(seg);
@@ -917,6 +994,35 @@ impl<'a> Tracer<'a> {
                 if toward != V3::ZERO {
                     d = toward;
                 }
+            } else if !self.traces[id].route.is_empty() {
+                // Heading for the next waypoint, each one passed when
+                // reached within a step.
+                // Passed when reached within a step, or when the trace is
+                // already beyond it along the route (a waypoint just over
+                // an edge sits off this triangle's plane and may never come
+                // within a step).
+                let tr = &mut self.traces[id];
+                while tr.route_at < tr.route.len() {
+                    let w = tr.route[tr.route_at];
+                    let near = (w - x).norm() < self.step * 1.5;
+                    let beyond = tr.route_at + 1 < tr.route.len() && (tr.route[tr.route_at + 1] - w).dot(w - x) <= 0.0 && (w - x).norm() < self.step * 4.0;
+                    if near || beyond {
+                        tr.route_at += 1;
+                    } else {
+                        break;
+                    }
+                }
+                if tr.route_at >= tr.route.len() {
+                    self.stop(id, "lost");
+                    return;
+                }
+                let toward = (tr.route[tr.route_at] - x).project_tangent(nt).normalized();
+                if toward != V3::ZERO {
+                    d = toward;
+                }
+                if std::env::var("QREMESH_ROUTE_STEPS").map_or(false, |v| v == id.to_string()) {
+                    eprintln!("    step: at ({:.3},{:.3},{:.3}) tri {t} waypoint {}/{} dist {:.4} travelled {:.3}", x.x, x.y, x.z, tr.route_at, tr.route.len(), (tr.route[tr.route_at] - x).norm(), tr.travelled);
+                }
             } else if self.traces[id].travelled >= self.traces[id].free {
                 let bend = self.traces[id].bend;
                 // Undo the bend before asking the field which arm we are on.
@@ -986,7 +1092,12 @@ impl<'a> Tracer<'a> {
             }
             self.draw(Segment { tri: t as u32, trace: id, a: x, b: next, at: travelled });
             if self.traces[id].aim.is_none() {
-                if let Some((k, j)) = self.target(id, next, d) {
+                let goal = match self.traces[id].route_to {
+                    Some((k, j)) if (self.sings[k].at - next).norm() < self.snap => Some((k, j)),
+                    Some(_) => None,
+                    None => self.target(id, next, d),
+                };
+                if let Some((k, j)) = goal {
                     let gate = (self.sings[k].at - next).norm() > self.snap * 0.5;
                     self.traces[id].aim = Some(Aim::Sing { k, j, since: travelled + length, gate });
                 }
@@ -1038,8 +1149,8 @@ impl<'a> Tracer<'a> {
     /// is stopped by nothing but itself. -> (point, whether it was our own
     /// trace).
     fn crossing(&self, t: u32, id: usize, x: V3, y: V3, nt: V3) -> Option<(V3, usize)> {
-        let existing = self.segments.get(&t)?;
         let me = &self.traces[id];
+        let existing: &Vec<Segment> = if self.independent { me.own.get(&t)? } else { self.segments.get(&t)? };
         let zone = (me.free * 1.5).max(self.step * 4.0);
         // Where it started: its singularity, or a repair line's middle,
         // where its other half starts too.
@@ -1258,4 +1369,243 @@ impl<'a> Tracer<'a> {
         }
         (0..s.tris.len()).filter(|&t| region[t] == r).max_by_key(|&t| depth[t])
     }
+}
+
+/// A cheapest field-following path from one separatrix to another.
+struct Route {
+    from: (usize, usize),
+    to: (usize, usize),
+    cost: f64,
+    /// From the first singularity to the second, waypoints between.
+    points: Vec<V3>,
+}
+
+/// Paths between separatrices through a graph over the mesh's edges: a
+/// state is an edge being crossed into a triangle while following one arm
+/// of the field, a step goes on to one of that triangle's other edges and
+/// costs its length, raised by how far it turns from the arm (QuadWild's
+/// graph charges for leaving the field the same way). The arm is carried
+/// across each edge by choosing the nearest arm in the next triangle, so
+/// a path cannot slip onto the other family of lines. From every
+/// separatrix, Dijkstra; then for every other separatrix the cheapest
+/// arrival within reach of its singularity along its ray. The paths zigzag
+/// across edge midpoints and are smoothed before use.
+fn field_routes(s: &Surface, z: &[C], topo: &Topology, sings: &[Singularity], seps: &[Vec<V3>], features: &HashSet<(u32, u32)>, slots: &[(usize, usize)], free: f64) -> Vec<Route> {
+    use std::collections::BinaryHeap;
+    let mut edges: Vec<(u32, u32)> = topo.edge_tris.keys().copied().collect();
+    edges.sort_unstable();
+    let index: HashMap<(u32, u32), usize> = edges.iter().enumerate().map(|(i, &e)| (e, i)).collect();
+    let mid: Vec<V3> = edges.iter().map(|&(a, b)| (s.p[a as usize] + s.p[b as usize]) * 0.5).collect();
+    let tri_edges: Vec<[usize; 3]> = s.tris.iter().map(|t| [index[&key(t[0], t[1])], index[&key(t[1], t[2])], index[&key(t[2], t[0])]]).collect();
+    let singular: HashSet<usize> = sings.iter().map(|x| x.tri).collect();
+    let edge_tris: Vec<Vec<u32>> = edges.iter().map(|e| topo.edge_tris[e].clone()).collect();
+    // The four arms at each edge's midpoint, read in each of its triangles.
+    let arm_table: Vec<[V3; 4]> = (0..edges.len() * 2)
+        .map(|i| {
+            let (e, side) = (i / 2, i % 2);
+            let Some(&t) = edge_tris[e].get(side) else { return [V3::ZERO; 4] };
+            let t = t as usize;
+            let nt = tri_normal(s, t);
+            let a0 = field_dir(s, z, t, mid[e], V3::tangent_of(nt));
+            let a1 = nt.cross(a0);
+            [a0, a1, -a0, -a1]
+        })
+        .collect();
+    let side_of = |e: usize, t: usize| -> usize { if edge_tris[e][0] as usize == t { 0 } else { 1 } };
+    let arms = |e: usize, t: usize| -> [V3; 4] { arm_table[e * 2 + side_of(e, t)] };
+    let state = |e: usize, t: usize, k: usize| -> usize { (e * 2 + side_of(e, t)) * 4 + k };
+    let unstate = |st: usize| -> (usize, usize, usize) {
+        let (es, k) = (st / 4, st % 4);
+        let (e, side) = (es / 2, es % 2);
+        (e, edge_tris[e][side] as usize, k)
+    };
+    let step_cost = |len: f64, cos: f64| -> f64 {
+        let theta = cos.clamp(-1.0, 1.0).acos();
+        len * (1.0 + 2.0 * (theta / 45f64.to_radians()).powi(2))
+    };
+    let ring = |t: usize, depth: usize| -> Vec<usize> {
+        let mut seen: HashSet<usize> = [t].into();
+        let mut frontier = vec![t];
+        for _ in 0..depth {
+            let mut next = Vec::new();
+            for &x in &frontier {
+                for &e in &tri_edges[x] {
+                    for &o in &edge_tris[e] {
+                        if seen.insert(o as usize) {
+                            next.push(o as usize);
+                        }
+                    }
+                }
+            }
+            frontier = next;
+        }
+        // In a fixed order, so that ties in cost resolve the same way on
+        // every run.
+        let mut out: Vec<usize> = seen.into_iter().collect();
+        out.sort_unstable();
+        out
+    };
+
+    #[derive(PartialEq)]
+    struct Item(f64, usize);
+    impl Eq for Item {}
+    impl PartialOrd for Item {
+        fn partial_cmp(&self, o: &Self) -> Option<std::cmp::Ordering> {
+            Some(self.cmp(o))
+        }
+    }
+    impl Ord for Item {
+        fn cmp(&self, o: &Self) -> std::cmp::Ordering {
+            o.0.total_cmp(&self.0)
+        }
+    }
+
+    let n_states = edges.len() * 8;
+    let mut routes = Vec::new();
+    for &(k, j) in slots {
+        let at = sings[k].at;
+        let dir = seps[k][j];
+        let mut dist = vec![f64::INFINITY; n_states];
+        let mut prev = vec![usize::MAX; n_states];
+        let mut heap = BinaryHeap::new();
+        // Leave along the separatrix: any nearby edge the ray roughly
+        // points at, entered away from the singularity.
+        for t in ring(sings[k].tri, 3) {
+            for &e in &tri_edges[t] {
+                let d0 = mid[e] - at;
+                let len = d0.norm();
+                if len < 1e-9 || len > free * 1.5 {
+                    continue;
+                }
+                let cos = d0.dot(dir) / len;
+                if cos < 40f64.to_radians().cos() {
+                    continue;
+                }
+                let tris = &edge_tris[e];
+                let far = *tris
+                    .iter()
+                    .max_by(|&&a, &&b| {
+                        let c = |t: u32| { let tr = s.tris[t as usize]; ((s.p[tr[0] as usize] + s.p[tr[1] as usize] + s.p[tr[2] as usize]) / 3.0 - at).norm2() };
+                        c(a).total_cmp(&c(b))
+                    })
+                    .unwrap() as usize;
+                let arm = arms(e, far);
+                let kk = (0..4).max_by(|&a, &b| arm[a].dot(d0).total_cmp(&arm[b].dot(d0))).unwrap();
+                let st = state(e, far, kk);
+                let c = step_cost(len, cos);
+                if c < dist[st] {
+                    dist[st] = c;
+                    heap.push(Item(c, st));
+                }
+            }
+        }
+        while let Some(Item(d, st)) = heap.pop() {
+            if d > dist[st] {
+                continue;
+            }
+            let (e, t, kk) = unstate(st);
+            let a = arms(e, t)[kk];
+            for &e2 in &tri_edges[t] {
+                if e2 == e || features.contains(&edges[e2]) {
+                    continue;
+                }
+                let dd = mid[e2] - mid[e];
+                let len = dd.norm();
+                if len < 1e-12 {
+                    continue;
+                }
+                let cos = dd.dot(a) / len;
+                if cos < 50f64.to_radians().cos() {
+                    continue;
+                }
+                let Some(&t2) = edge_tris[e2].iter().find(|&&o| o as usize != t) else { continue };
+                let t2 = t2 as usize;
+                // Through another singularity's triangle is no way to go.
+                let mut c = step_cost(len, cos);
+                if singular.contains(&t2) && t2 != sings[k].tri {
+                    c *= 8.0;
+                }
+                let next_arms = arms(e2, t2);
+                let k2 = (0..4).max_by(|&x, &y| next_arms[x].dot(a).total_cmp(&next_arms[y].dot(a))).unwrap();
+                let st2 = state(e2, t2, k2);
+                let nd = d + c;
+                if nd < dist[st2] {
+                    dist[st2] = nd;
+                    prev[st2] = st;
+                    heap.push(Item(nd, st2));
+                }
+            }
+        }
+        // Arrivals.
+        for &(k2, j2) in slots {
+            if k2 == k {
+                continue;
+            }
+            let at2 = sings[k2].at;
+            let ray = seps[k2][j2];
+            let mut best: Option<(f64, usize)> = None;
+            // Any state on an edge near the ray will do: the last stretch
+            // is walked straight in through the gate, whatever the path's
+            // own heading was.
+            for t in ring(sings[k2].tri, 4) {
+                for &e in &tri_edges[t] {
+                    let off = mid[e] - at2;
+                    let len = off.norm();
+                    if len < 1e-9 || len > free * 2.0 || off.dot(ray) / len < 35f64.to_radians().cos() {
+                        continue;
+                    }
+                    for side in 0..2 {
+                        let Some(&tt) = edge_tris[e].get(side) else { continue };
+                        let arm = &arm_table[e * 2 + side];
+                        for kk in 0..4 {
+                            // Arriving means coming in along the ray, the
+                            // arm pointing at the singularity; a path that
+                            // merely passes near the ray would hook round.
+                            if arm[kk].dot(-off) / len < 60f64.to_radians().cos() {
+                                continue;
+                            }
+                            let st = state(e, tt as usize, kk);
+                            if dist[st].is_finite() {
+                                let total = dist[st] + len;
+                                if best.map_or(true, |(b, _)| total < b) {
+                                    best = Some((total, st));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            let Some((cost, end)) = best else { continue };
+            let mut points = vec![at2];
+            let mut st = end;
+            while st != usize::MAX {
+                points.push(mid[unstate(st).0]);
+                st = prev[st];
+            }
+            points.push(at);
+            points.reverse();
+            routes.push(Route { from: (k, j), to: (k2, j2), cost, points });
+        }
+    }
+    // A path far longer than the straight distance goes the long way
+    // round; it would never be chosen, and smoothing it costs time.
+    routes.retain(|r| r.cost < 2.5 * (sings[r.from.0].at - sings[r.to.0].at).norm() + free);
+    // Smoothed off the edge midpoints, back onto the surface.
+    let mesh = crate::mesh::TriMesh { v: s.p.clone(), f: s.tris.clone() };
+    let proj = crate::proj::Projector::new(&mesh, free / 1.5);
+    for r in routes.iter_mut() {
+        let n = r.points.len();
+        for _ in 0..12 {
+            let old = r.points.clone();
+            for i in 1..n - 1 {
+                let p = old[i] * 0.5 + (old[i - 1] + old[i + 1]) * 0.25;
+                r.points[i] = proj.closest(p).0;
+            }
+        }
+    }
+    routes
+}
+
+fn key(a: u32, b: u32) -> (u32, u32) {
+    (a.min(b), a.max(b))
 }
