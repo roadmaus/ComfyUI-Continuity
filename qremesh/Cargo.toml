@@ -1,0 +1,13 @@
+[package]
+name = "qremesh"
+version = "0.0.1"
+edition = "2021"
+description = "Continuity's quad remesher: field-aligned retopology, written from scratch."
+license = "MIT"
+publish = false
+
+[dependencies]
+
+[profile.release]
+opt-level = 3
+debug = false
