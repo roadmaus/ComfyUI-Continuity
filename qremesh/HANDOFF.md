@@ -1,60 +1,118 @@
-# Handoff: Game Forge and qremesh
+# Handoff: qremesh
 
 Branch `claude/game-forge-spec`, pushed, no pull request. Last updated 2026-10-05.
 
-## Context
-- **Game Forge** is a planned bench in this pack (ComfyUI-Continuity) for making a game's assets inside a project. It covers sprites, tiles, materials, texturing existing UV-mapped models, 3D models, UI and sound. Every bench feature must also work from a CLI, so agents can drive it.
-- The full design is in `specs/continuity-game-forge-spec.md`. Nothing from the spec is implemented yet; only the spec and the qremesh prototype exist.
-- **qremesh** is the pack's own quad remesher, a ZRemesher-like tool written from scratch in Rust with no dependencies. The user wants it written here, not vendored and not pulled in as a dependency.
-- The plan is to ship it as a standalone binary that the Python side runs as a subprocess. CI would build it per platform and the publish step would include the binaries.
-- The user writes no code. They expect the agent to write it.
+qremesh is the pack's own quad remesher: a ZRemesher-like tool written from
+scratch in Rust with no dependencies, as a standalone binary the Python side
+will run as a subprocess. The pipeline is QuadWild-style and implemented
+from the papers only (the QuadWild code is GPL and must not be read or
+ported; libSatsuma is MIT). The user writes no code.
 
-## Decisions so far
-- **No Instant Meshes approach.** The first prototype (`src/field.rs`, `src/extract.rs`, the `remesh` command) is Instant-Meshes-style: local fields only. It reached about 89% quads with dislocation chains. Research then showed that local methods can't reach ZRemesher quality: they give extra singularities and spiralling loops. It is kept only for reference.
-- **QuadWild-style pipeline instead**, implemented from the papers only. The QuadWild code is GPL, so don't read or port it. libSatsuma is MIT. The stages:
-  1. Uniform remesh of the input.
-  2. Detect sharp features.
-  3. Global cross field: Knöppel 2013, aligned to curvature and features.
-  4. Trace separatrices into a patch layout.
-  5. Quantize patch side counts with min-cost flow (Bi-MDF, Heistermann 2023, approximate solver).
-  6. Fill each patch with a grid or pattern, then smooth and reproject.
-- **What we know about ZRemesher:** Maxime Rouca wrote it, and Exoside's Quad Remesher is the same lineage. Nothing about it is published. Its behaviour suggests a global field, then a patch layout, then quantization.
+The Game Forge context (spec `specs/continuity-game-forge-spec.md`, nothing
+of it implemented beyond qremesh) is unchanged from the earlier handoff.
 
-## Current state: the `layout` command (spike 2)
+## The pipeline, reviewed stage by stage
+
+This is the step-back review done before the quad output was built. It says
+what is sound, what was hacky, and what was restructured.
+
+### 1. Input remesh — missing
+Test shapes are already uniform, so nothing is done. Real inputs (lifted
+TRELLIS meshes, scans) have slivers and wildly varying edge lengths; the
+field and the tracer both assume edges a few times smaller than a quad.
+Needed: an isotropic remesher (split long, collapse short, flip for valence,
+tangential smooth, reproject) that keeps sharp edges and boundaries.
+
+### 2. Sharp features — sound, boundaries were missing
+Dihedral-angle threshold on interior edges. Boundary edges (one face) were
+not features, so traces ran off an open mesh and the field ignored its rim.
+Boundary edges are now features too: the field aligns to them and traces
+stop on them.
+
+### 3. Cross field — sound
+Knöppel 2013: one complex z⁴ per vertex, discrete connection, our own
+preconditioned CG. Curvature target where it is trusted, the world axes as a
+weak guide elsewhere (a sphere gets cube corners), hard constraints on
+features. Singularities are read off per triangle. The holonomy term is
+ignored in the index; it is small per triangle on the meshes we feed it.
+
+### 4. Tracing and selection — heuristic but keeps working
+Every separatrix is traced independently at a sweep of constant bends;
+shots landing on another singularity are candidate edges, chosen cheapest
+first with no crossings and no parallel runs closer than a quad; leftovers
+end on the layout at a T, or on a feature; the rest grow until they hit
+something; non-disk regions get repair loops. It is a stack of heuristics
+over two spikes but it gives the right layouts on sphere, cube and torus and
+usable ones on the blobs. It is kept. What QuadWild does instead (shortest
+paths in a graph that charges for leaving the field, then an ILP choosing a
+subset) is the next thing to try if layouts on real inputs are poor.
+
+### 5. Patch representation — was the main structural flaw, restructured
+Patches were triangle flood fills over "crossed edges", which made outlines
+jagged, left slivers where traces met inside a triangle, and let corner
+counts be guessed from turning angles of a zigzag. The decision: **traces
+are inserted into the mesh** (`refine.rs`). Every trace polyline becomes a
+chain of mesh edges, with snapping so that nothing degenerate is made. From
+then on everything is exact: regions are edge-bounded, nodes are vertices
+where the cut graph has valence ≠ 2, arcs are the chains between nodes,
+corners are nodes where the patch's interior angle rounds to a quarter
+turn, and sides are the arcs between corners (`patches.rs`).
+
+### 6. Quantization — was missing, built as a signed-graph flow
+Every patch is first made a quad: an n-gon is subdivided from its centre
+into n quads (the Catmull-Clark/Takayama "midpoint" pattern: a valence-n
+vertex in the middle); patches with fewer than 3 or more than 5 corners
+are split first by a line between side midpoints in the patch's parameter
+domain. Then each arc gets an integer length ≥ 1 with the constraints
+"opposite sides of every sub-quad sum equal". Each arc touches at most two
+constraints with coefficient ±1, so the constraint matrix is a bi-directed
+graph incidence matrix (exactly the structure Heistermann 2023 solves with
+Bi-MDF). We solve it simply: real-valued constrained least squares, round,
+then repair residuals with augmenting paths (BFS over constraints) — the
+same moves a flow solver makes, without the network simplex. Infeasible
+parity is reported, not hidden.
+
+### 7. Filling, smoothing, reprojection — was missing, built
+Each patch's refined triangles are mapped to a 2D domain (Tutte embedding
+with positive weights: a rectangle for quads, a regular n-gon otherwise,
+boundary placed per arc in proportion to its integer length). Sub-quads are
+kites in the domain; their grids are placed bilinearly in the domain and
+pulled back to the surface through the map. Arc samples are shared between
+neighbours. Then the quad mesh is smoothed (uniform Laplacian, features and
+boundaries held) with reprojection onto the input through a grid of
+triangles.
+
+## Layout of the crate
 | File | What it does |
 |---|---|
-| `src/cross.rs` | Global cross field. Complex z⁴ per vertex, discrete connection, our own preconditioned conjugate-gradient solver. Curvature target only where \|k1−k2\| is a clear share of the curvature. Feature constraints from dihedral angle. Singularity index per triangle. |
-| `src/trace.rs` | Separatrix directions fitted from the singularity index (3 or 5, exact). All traces grow at once and stop on a trace, a singularity or a feature. Self-loops are allowed after enough distance. Repair traces are added until every region is a disk. Regions come from a flood fill over cut edges. |
-| `src/shapes.rs` | Test shapes: icosphere, cube, torus, plus jitter. |
-| `tools/render_layout.py` | Renderer using only the Python standard library. Draws the OBJ plus layout JSON to PNG with patches, traces and singularities. Use it to look at results. |
+| `src/cross.rs` | Surface frames, curvature/axis guide, feature and boundary constraints, the field solve, singularities. |
+| `src/trace.rs` | Candidates, selection, repairs; every trace point records which mesh edge it sits on. |
+| `src/refine.rs` | Inserts traces into the triangle mesh as edge chains. |
+| `src/patches.rs` | Nodes, arcs, regions, corners, sides; domain parametrization; sub-quads. |
+| `src/quantize.rs` | Integer arc lengths. |
+| `src/fill.rs` | Grid placement, assembly, smoothing, reprojection, metrics. |
+| `src/shapes.rs` | Test shapes. |
+| `tools/render_layout.py`, `tools/render.py` | Standard-library renderers for layouts and quad meshes. |
 
-Results so far:
-- Cube: 6 patches.
-- Torus: 0 singularities, 4 patches after 2 repair rounds.
-- Icosphere: exactly 8 singularities with 3 separatrices each, every region a disk, but 15 patches including thin strips. The ideal is 6.
-- Images are in `docs/`.
+Spike 1 (Instant-Meshes-style `field.rs`, `extract.rs`) was deleted; it is
+in git history before this handoff.
 
-Run it (from `qremesh/`):
+## Run it (from `qremesh/`)
 ```
 cargo build --release
 ./target/release/qremesh shape ico -o out/ico.obj --subdivisions 4
-./target/release/qremesh layout out/ico.obj -o out/ico.json
-python3 tools/render_layout.py out/ico.obj out/ico.json out/ico.png [--view x,y,z] [--arms]
+./target/release/qremesh remesh out/ico.obj -o out/ico_q.obj --quads 600 --layout out/ico.json
+python3 tools/render_layout.py out/ico.obj out/ico.json out/ico.png [--view x,y,z]
+python3 tools/render.py out/ico_q.obj out/ico_q.png
 ```
-The JSON report goes to stdout. `out/` is gitignored.
-
-## Next steps, in order
-1. **Trace selection** (the riskiest step). Trace candidates without stopping at the first hit. Drop near-parallel duplicates. Prefer traces that end on singularities. Then choose a subset so every patch is a disk with 3–6 sides. Goal: the sphere comes out as a cube-like layout.
-2. **Count patch sides and corners.** Represent patches explicitly as a graph rather than only as a triangle flood fill.
-3. **Quantization** with min-cost flow, written ourselves (network simplex or successive shortest paths).
-4. **Patch filling, smoothing and reprojection.** Output a quad OBJ.
-5. **Real inputs.** An isotropic remesher for the input, a lifted TRELLIS mesh, then the CLI contract and the Python bridge (spec §7.6 and §11), plus CI builds.
+The JSON report goes to stdout. `out/` is gitignored. `out/run.sh` runs
+every test shape.
 
 ## Gotchas
-- The renderer's depth test is in world units (tolerance `0.02 * radius`). An earlier bug let traces on the back show through, so if a render looks wrong, check the renderer before the algorithm.
-- `main.rs` still contains the `QREMESH_DEBUG` position-field diagnostics from spike 1. They can be deleted along with spike 1.
-- The spec's §3.8 and §7.6 still describe the older plan: an Instant-Meshes-style own implementation, with optional backends as fallback. Update them to the QuadWild plan and to Rust as a standalone binary.
-- Repo conventions:
-  - Commit messages are full sentences about behaviour, ending with the session's Co-Authored-By trailer.
-  - Code comments explain why, in the pack's prose style.
-  - No model names go in commits.
+- The renderer's depth test is in world units (tolerance `0.02 * radius`).
+  If a render looks wrong, check the renderer before the algorithm.
+- Debug output: `QREMESH_DEBUG` (trace selection, repairs), `QREMESH_CANDIDATES`
+  (draw every candidate), `QREMESH_NO_EDGES`.
+- Repo conventions: commit messages are full sentences about behaviour
+  ending with the session's trailer; code comments explain why; no model
+  names in commits or code.

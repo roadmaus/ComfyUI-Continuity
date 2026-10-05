@@ -113,9 +113,19 @@ fn separatrix_dirs(s: &Surface, z: &[C], sing: &Singularity, radius: f64, near: 
         .collect()
 }
 
+/// Where a trace point sits: inside triangle `tri`, or on mesh edge `edge`
+/// (shared by `tri` and the triangle it moved into).
+#[derive(Clone, Copy, Debug)]
+pub struct Stop {
+    pub tri: u32,
+    pub edge: Option<(u32, u32)>,
+}
+
 #[derive(Clone)]
 pub struct Trace {
     pub points: Vec<V3>,
+    /// One per point.
+    pub stops: Vec<Stop>,
     tri: u32,
     dir: V3,
     /// Its singularity's index, or `usize::MAX` for a repair trace.
@@ -137,12 +147,37 @@ pub struct Trace {
     /// Distance walked straight before following the field — near a
     /// singularity the field has no direction worth following.
     free: f64,
-    /// Close to a singularity it will end on: walk straight in. (Which one,
-    /// its separatrix, how far the trace had come when it turned.)
-    aim: Option<(usize, usize, f64)>,
+    /// Close to a point it will end on: walk straight in.
+    aim: Option<Aim>,
+    /// The trace it ended on, when it ended on one.
+    pub on: Option<usize>,
     /// Mesh edges it crossed: the cut it makes in the surface.
     crossed: Vec<(u32, u32)>,
+    /// The edge it entered its current triangle through, which the ray
+    /// out of the triangle must not pick again from a point sitting on it.
+    entered: Option<(u32, u32)>,
     segs: Vec<Segment>,
+}
+
+/// Where a trace is walking straight to: a singularity (which one, along
+/// which separatrix) or a node where another trace ended on the line this
+/// one is about to end on. `since`: how far the trace had come when it
+/// turned, so a walk that never arrives can be given up.
+#[derive(Clone, Copy)]
+enum Aim {
+    /// `gate`: still heading for the point on the separatrix ray half a
+    /// `free` out, so that every line into a singularity comes in along
+    /// its own ray and two of them cannot cross on the way in.
+    Sing { k: usize, j: usize, since: f64, gate: bool },
+    Node { at: V3, tri: u32, on: usize, since: f64 },
+}
+
+impl Aim {
+    fn since(&self) -> f64 {
+        match *self {
+            Aim::Sing { since, .. } | Aim::Node { since, .. } => since,
+        }
+    }
 }
 
 #[derive(Clone, Copy)]
@@ -446,12 +481,26 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
         // Which way round is the one that cuts the region open is not known
         // in advance (a second loop parallel to the first cuts an annulus in
         // two annuli): both are tried, and the better kept.
+        // One line first; it closes on itself if the field lets it (a
+        // torus's loops do), and its stub before the closing point is a
+        // slit the graph prunes. Two halves going opposite ways would
+        // spiral past each other with a lateral offset and cross twice,
+        // leaving a lens between the crossings. Only a line that ended on
+        // the layout needs its other half, to reach the layout the other
+        // way too.
+        let both_ways = |tr: &mut Tracer, d: V3| {
+            let first = tr.traces.len();
+            tr.start(centre, t as u32, d, usize::MAX, 0, 0.0);
+            tr.run();
+            if tr.traces[first].ended != "self" {
+                tr.start(centre, t as u32, -d, usize::MAX, 0, 0.0);
+                tr.run();
+            }
+        };
         let before = tr.traces.len();
         let mut best: Option<(i64, V3)> = None;
         for d in [arm, s.n[v0].cross(arm)] {
-            tr.start(centre, t as u32, d, usize::MAX, 0, 0.0);
-            tr.start(centre, t as u32, -d, usize::MAX, 0, 0.0);
-            tr.run();
+            both_ways(&mut tr, d);
             let score = defect(&tr.regions().2);
             if std::env::var("QREMESH_DEBUG").is_ok() {
                 let ends: Vec<String> = tr.traces[before..].iter().map(|t| format!("{} {:.2}", t.ended, t.travelled)).collect();
@@ -467,9 +516,7 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
             tr.retract(before);
         }
         let d = best.unwrap().1;
-        tr.start(centre, t as u32, d, usize::MAX, 0, 0.0);
-        tr.start(centre, t as u32, -d, usize::MAX, 0, 0.0);
-        tr.run();
+        both_ways(&mut tr, d);
         (region, regions, euler) = tr.regions();
         repairs += 1;
     }
@@ -653,6 +700,7 @@ impl<'a> Tracer<'a> {
     fn start(&mut self, at: V3, tri: u32, dir: V3, from: usize, slot: usize, free: f64) {
         self.traces.push(Trace {
             points: vec![at],
+            stops: vec![Stop { tri, edge: None }],
             tri,
             dir,
             from,
@@ -665,7 +713,9 @@ impl<'a> Tracer<'a> {
             travelled: 0.0,
             free,
             aim: None,
+            on: None,
             crossed: Vec::new(),
+            entered: None,
             segs: Vec::new(),
         });
     }
@@ -698,7 +748,7 @@ impl<'a> Tracer<'a> {
     /// from the singularities it starts and ends on (every line from those
     /// starts there). -> (how far along `t`, the angle between the two).
     fn first_crossing(&self, t: &Trace) -> Option<(f64, f64)> {
-        let zone = t.free * 1.5;
+        let zone = t.free * 0.5 + self.step * 1.5;
         let ends: Vec<V3> = [Some(t.from), t.to.map(|(k, _)| k)].into_iter().flatten().filter(|&k| k != usize::MAX).map(|k| self.sings[k].at).collect();
         for seg in &t.segs {
             let Some(others) = self.segments.get(&seg.tri) else { continue };
@@ -804,7 +854,7 @@ impl<'a> Tracer<'a> {
                 continue;
             }
             let ahead = d.dot(-off) / dist.max(1e-300);
-            if dist > self.step * 1.5 && ahead < 15f64.to_radians().cos() {
+            if dist > self.step * 1.5 && ahead < 30f64.to_radians().cos() {
                 continue;
             }
             let nt = tri_normal(self.s, sing.tri);
@@ -828,18 +878,42 @@ impl<'a> Tracer<'a> {
         while remaining > 1e-12 {
             let t = self.traces[id].tri as usize;
             let x = *self.traces[id].points.last().unwrap();
-            if let Some((k, j, since)) = self.traces[id].aim {
-                if t == self.sings[k].tri || self.traces[id].travelled - since > self.snap * 3.0 {
-                    self.traces[id].points.push(self.sings[k].at);
-                    self.traces[id].to = Some((k, j));
-                    self.stop(id, "singularity");
+            if let Some(aim) = self.traces[id].aim {
+                match aim {
+                    Aim::Sing { k, j, since, gate: true } => {
+                        let gate = self.aim_point(aim);
+                        if (gate - x).norm() < self.step * 1.5 || (self.sings[k].at - x).norm() < (gate - self.sings[k].at).norm() {
+                            self.traces[id].aim = Some(Aim::Sing { k, j, since, gate: false });
+                        }
+                    }
+                    Aim::Sing { k, j, gate: false, .. } if t == self.sings[k].tri => {
+                        self.traces[id].points.push(self.sings[k].at);
+                        self.traces[id].stops.push(Stop { tri: t as u32, edge: None });
+                        self.traces[id].to = Some((k, j));
+                        self.stop(id, "singularity");
+                        return;
+                    }
+                    Aim::Node { at, tri, on, .. } if t == tri as usize => {
+                        self.traces[id].points.push(at);
+                        self.traces[id].stops.push(Stop { tri: t as u32, edge: None });
+                        self.traces[id].on = Some(on);
+                        self.stop(id, if on == id { "self" } else { "trace" });
+                        return;
+                    }
+                    _ => {}
+                }
+                // Walking straight at it and still not there: something is
+                // in the way (a fold, a feature). Give up on the aim rather
+                // than teleport the trace to a point outside its triangle.
+                if self.traces[id].travelled - aim.since() > self.snap * 3.0 {
+                    self.stop(id, "lost");
                     return;
                 }
             }
             let nt = tri_normal(s, t);
             let mut d = self.traces[id].dir.project_tangent(nt).normalized();
-            if let Some((k, _, _)) = self.traces[id].aim {
-                let toward = (self.sings[k].at - x).project_tangent(nt).normalized();
+            if let Some(goal) = self.traces[id].aim.map(|a| self.aim_point(a)) {
+                let toward = (goal - x).project_tangent(nt).normalized();
                 if toward != V3::ZERO {
                     d = toward;
                 }
@@ -855,6 +929,9 @@ impl<'a> Tracer<'a> {
             let mut exit: Option<(f64, u32, u32)> = None;
             for k in 0..3 {
                 let (a, b) = (tri[k], tri[(k + 1) % 3]);
+                if self.traces[id].entered == Some((a.min(b), a.max(b))) {
+                    continue;
+                }
                 let (pa, pb) = (s.p[a as usize], s.p[b as usize]);
                 let e = pb - pa;
                 let m = d.cross(e).dot(nt);
@@ -864,8 +941,17 @@ impl<'a> Tracer<'a> {
                 let w = pa - x;
                 let sd = w.cross(e).dot(nt) / m;
                 let u = w.cross(d).dot(nt) / m;
-                if sd > 1e-10 && (-1e-9..=1.0 + 1e-9).contains(&u) && exit.map_or(true, |(best, _, _)| sd < best) {
+                if sd > 0.0 && (-1e-9..=1.0 + 1e-9).contains(&u) && exit.map_or(true, |(best, _, _)| sd < best) {
                     exit = Some((sd, a, b));
+                }
+            }
+            // The field can turn the ray back toward the edge it came in
+            // through; then that edge is the way out after all.
+            if exit.is_none() {
+                if let Some(back) = self.traces[id].entered {
+                    self.traces[id].entered = None;
+                    let _ = back;
+                    continue;
                 }
             }
             let Some((to_edge, a, b)) = exit else {
@@ -876,18 +962,38 @@ impl<'a> Tracer<'a> {
             let next = x + d * length;
             let travelled = self.traces[id].travelled;
 
-            if let Some((hit, own)) = self.crossing(t as u32, id, x, next, nt) {
+            if let Some((hit, other)) = self.crossing(t as u32, id, x, next, nt) {
+                // Ending within a quad of a node already on that line, it
+                // ends at the node instead: two lines landing a little apart
+                // would bound a sliver no grid can fill.
+                if self.traces[id].aim.is_none() {
+                    if let Some((at, tri)) = self.node_near(other, hit) {
+                        if std::env::var("QREMESH_DEBUG").is_ok() {
+                            eprintln!("trace {id} ends at a node {:.2} quads from its hit on {other}", (at - hit).norm() / self.gap);
+                        }
+                        self.traces[id].aim = Some(Aim::Node { at, tri, on: other, since: travelled });
+                        continue;
+                    }
+                }
+                // The last piece is drawn too, so a trace still coming the
+                // other way meets this one here and not a quad further on.
+                self.draw(Segment { tri: t as u32, trace: id, a: x, b: hit, at: travelled });
                 self.traces[id].points.push(hit);
-                self.stop(id, if own { "self" } else { "trace" });
+                self.traces[id].stops.push(Stop { tri: t as u32, edge: None });
+                self.traces[id].on = Some(other);
+                self.stop(id, if other == id { "self" } else { "trace" });
                 return;
             }
             self.draw(Segment { tri: t as u32, trace: id, a: x, b: next, at: travelled });
             if self.traces[id].aim.is_none() {
                 if let Some((k, j)) = self.target(id, next, d) {
-                    self.traces[id].aim = Some((k, j, travelled + length));
+                    let gate = (self.sings[k].at - next).norm() > self.snap * 0.5;
+                    self.traces[id].aim = Some(Aim::Sing { k, j, since: travelled + length, gate });
                 }
             }
             self.traces[id].points.push(next);
+            let on_edge = (length >= to_edge).then(|| (a.min(b), a.max(b)));
+            self.traces[id].stops.push(Stop { tri: t as u32, edge: on_edge });
             self.traces[id].travelled += length;
             remaining -= length;
             if self.traces[id].travelled > self.max_length {
@@ -920,8 +1026,7 @@ impl<'a> Tracer<'a> {
             let across = d.dot(out_old).abs();
             self.traces[id].dir = (e * along + in_new * across).normalized();
             self.traces[id].tri = other;
-            let nudge = self.traces[id].dir * 1e-9;
-            *self.traces[id].points.last_mut().unwrap() += nudge;
+            self.traces[id].entered = Some(key);
         }
     }
 
@@ -932,15 +1037,23 @@ impl<'a> Tracer<'a> {
     /// where every trace of that one begins, nothing stops it. A candidate
     /// is stopped by nothing but itself. -> (point, whether it was our own
     /// trace).
-    fn crossing(&self, t: u32, id: usize, x: V3, y: V3, nt: V3) -> Option<(V3, bool)> {
+    fn crossing(&self, t: u32, id: usize, x: V3, y: V3, nt: V3) -> Option<(V3, usize)> {
         let existing = self.segments.get(&t)?;
         let me = &self.traces[id];
         let zone = (me.free * 1.5).max(self.step * 4.0);
         // Where it started: its singularity, or a repair line's middle,
         // where its other half starts too.
         let home = (me.travelled < zone).then(|| me.points[0]);
-        let goal = me.aim.map(|(k, _, _)| self.sings[k].at);
-        let mut best: Option<(f64, V3, bool)> = None;
+        // Walking into a singularity, every line of that singularity is
+        // in the way near it; walking into a node, the lines through the
+        // node are. Neither counts. Any other line crossed on the way in
+        // stops the trace as usual.
+        let (goal, goal_zone) = match me.aim {
+            Some(Aim::Sing { k, .. }) => (Some(self.sings[k].at), self.snap * 0.5 + self.step * 1.5),
+            Some(Aim::Node { at, .. }) => (Some(at), self.step * 1.5),
+            None => (None, zone),
+        };
+        let mut best: Option<(f64, V3, usize)> = None;
         for seg in existing {
             let own = seg.trace == id;
             if own && me.travelled - seg.at < self.step * 8.0 {
@@ -949,12 +1062,17 @@ impl<'a> Tracer<'a> {
             if !own && self.independent {
                 continue;
             }
-            if !own && [home, goal].into_iter().flatten().any(|c| (seg.a - c).norm() < zone || (seg.b - c).norm() < zone) {
+            if !own && home.map_or(false, |c| (seg.a - c).norm() < zone || (seg.b - c).norm() < zone) {
                 continue;
+            }
+            if let Some(g) = goal {
+                if point_segment(g, seg.a, seg.b) < goal_zone || (seg.a - g).norm() < goal_zone || (seg.b - g).norm() < goal_zone {
+                    continue;
+                }
             }
             if let Some((tt, at)) = intersect_at(nt, x, y, seg.a, seg.b) {
                 if best.map_or(true, |(bt, _, _)| tt < bt) {
-                    best = Some((tt, at, own));
+                    best = Some((tt, at, seg.trace));
                 }
                 continue;
             }
@@ -966,11 +1084,39 @@ impl<'a> Tracer<'a> {
                 let ab = seg.b - seg.a;
                 let at = seg.a + ab * ((y - seg.a).dot(ab) / ab.norm2().max(1e-300)).clamp(0.0, 1.0);
                 if best.map_or(true, |(bt, _, _)| 1.0 < bt) {
-                    best = Some((1.0, at, own));
+                    best = Some((1.0, at, seg.trace));
                 }
             }
         }
-        best.map(|(_, at, own)| (at, own))
+        best.map(|(_, at, other)| (at, other))
+    }
+
+    fn aim_point(&self, a: Aim) -> V3 {
+        match a {
+            Aim::Sing { k, j, gate: true, .. } => self.sings[k].at + self.seps[k][j] * (self.snap * 0.5),
+            Aim::Sing { k, gate: false, .. } => self.sings[k].at,
+            Aim::Node { at, .. } => at,
+        }
+    }
+
+    /// A node within a quad of `hit`: where some trace ended on another.
+    /// -> (point, its triangle).
+    fn node_near(&self, _other: usize, hit: V3) -> Option<(V3, u32)> {
+        if !self.gap.is_finite() {
+            return None;
+        }
+        let mut best: Option<(f64, V3, u32)> = None;
+        for tr in self.traces.iter() {
+            if tr.alive || !matches!(tr.ended, "trace" | "self") {
+                continue;
+            }
+            let at = *tr.points.last().unwrap();
+            let d = (at - hit).norm();
+            if d < self.gap && best.map_or(true, |(bd, _, _)| d < bd) {
+                best = Some((d, at, tr.stops.last().unwrap().tri));
+            }
+        }
+        best.map(|(_, at, tri)| (at, tri))
     }
 
     /// Every mesh edge a trace or a sharp edge cuts.

@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Draw a patch layout to a PNG, standard library only.
 
-    python3 tools/render_layout.py shape.obj layout.json out.png [--view x,y,z] [--arms]
+    python3 tools/render_layout.py layout.json.obj layout.json out.png [--view x,y,z] [--arms]
+
+The OBJ is the refined mesh `remesh --layout` writes next to the JSON.
 
 Triangles take their region's colour (non-disk regions are drawn striped
 grey), edges between singularities are black, other separatrices
@@ -47,7 +49,9 @@ def main():
         d = sub(p, centre)
         return (size / 2 + dot(d, right) * scale, size / 2 - dot(d, up) * scale, dot(d, forward))
 
-    # Which regions are disks, for colouring the rest as failures.
+    # Which patches can be filled, for colouring the rest as failures. The
+    # layout says; older layouts without it are judged by Euler's formula on
+    # the triangle set, which is wrong for a patch touching itself across a cut.
     from collections import defaultdict
     rv, re, rf = defaultdict(set), defaultdict(set), defaultdict(int)
     for f, face in enumerate(faces):
@@ -57,7 +61,10 @@ def main():
             a, b = face[k], face[(k + 1) % 3]
             rv[r].add(a)
             re[r].add((min(a, b), max(a, b)))
-    disk = {r: len(rv[r]) - len(re[r]) + rf[r] == 1 for r in rf}
+    if "patch_ok" in lay:
+        disk = {r: lay["patch_ok"][r] for r in rf}
+    else:
+        disk = {r: len(rv[r]) - len(re[r]) + rf[r] == 1 for r in rf}
 
     # Neighbouring regions never share a colour: greedy colouring of the
     # region adjacency, biggest regions first.
