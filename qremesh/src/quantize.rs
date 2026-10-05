@@ -403,7 +403,13 @@ impl<'a> Net<'a> {
             if x[a] + d < 1 {
                 return;
             }
-            let q = self.on[a].iter().copied().find(|&q| q != p).unwrap_or(NONE);
+            // The patch across the arc. An arc on two sides of `p` itself
+            // (round a slit, or a patch that touches itself) changes p's
+            // total by two and flips nothing: the chain goes on in p. Only
+            // an arc with no patch across, the surface's boundary or a
+            // hole, absorbs the change.
+            let twice = self.patches[p].sides.iter().flatten().filter(|&&b| b == a).count() >= 2;
+            let q = if twice { p } else { self.on[a].iter().copied().find(|&q| q != p).unwrap_or(NONE) };
             let nd = base + cost(x, a, d);
             let k = (a, q, d);
             if dist.get(&k).map_or(true, |&o| nd < o) {
@@ -423,6 +429,9 @@ impl<'a> Net<'a> {
             }
             pops += 1;
             if pops > 8 * self.on.len() + 1000 {
+                if std::env::var("QREMESH_DEBUG").is_ok() {
+                    eprintln!("    chain: gave up after {pops} pops");
+                }
                 break;
             }
             if q == NONE || accept(x, q) {
@@ -491,6 +500,9 @@ pub fn parity(x: &mut [i64], target: &[f64], weight: &[f64], patches: &[Sides]) 
             let starts: Vec<(usize, usize, i64)> = patches[start].sides.iter().flatten().flat_map(|&a| [(start, a, 1), (start, a, -1)]).collect();
             let accept = |x: &[i64], q: usize| q != start && net.odd_kind(q) && net.total(x, q) % 2 != 0;
             if !net.chain(x, &starts, &accept, true) {
+                if std::env::var("QREMESH_DEBUG").is_ok() {
+                    eprintln!("    parity: no chain from patch {start} (odd: {:?})", odd(x));
+                }
                 break;
             }
         }

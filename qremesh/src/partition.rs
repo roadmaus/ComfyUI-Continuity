@@ -114,6 +114,9 @@ struct Ctx<'a> {
     /// Vertices of singular triangles: no cut may touch them.
     blocked: Vec<bool>,
     sing_tri: Vec<usize>,
+    /// Angle defect (2π minus the angles round it) of each vertex off the
+    /// boundary: the Gaussian curvature it carries.
+    defect: Vec<f64>,
     quad: f64,
     max_length: f64,
 }
@@ -210,6 +213,9 @@ impl<'a> Ctx<'a> {
             // nearer is a singularity's: the path skirts it by half an edge.
             let (near, far) = if mu < 0.5 { (a, b) } else { (b, a) };
             let c = if self.blocked[near as usize] && !self.blocked[far as usize] { far } else { near };
+            // Leaving a corner of the cuts, its neighbours on them are no
+            // place to stop: the far end, if free, carries the line in.
+            let c = if chain.len() == 1 && stop(c) && c != far && !stop(far) && !self.blocked[far as usize] { far } else { c };
             let last = *chain.last().unwrap();
             if c != last {
                 if chain.len() >= 2 && c == chain[chain.len() - 2] {
@@ -341,8 +347,8 @@ impl<'a> Ctx<'a> {
 /// a non-disk by the cuts still needed to open it into a disk (a sphere
 /// one, a torus two, an annulus one), a singularity too many twice (four
 /// split two and two is progress even though each half is a digon).
-fn badness(p: &patches::Patch, singular: usize) -> usize {
-    let mut b = p.concave;
+fn badness(p: &patches::Patch, singular: usize, bending: f64) -> usize {
+    let mut b = p.concave + overbent(bending);
     if !p.is_disk() {
         let holes = p.loops as i64;
         let genus = ((2 - p.euler - holes) / 2).max(0);
@@ -355,6 +361,14 @@ fn badness(p: &patches::Patch, singular: usize) -> usize {
         b += 1;
     }
     b
+}
+
+/// Quarter turns of curvature beyond one full turn: a patch bending more
+/// than that holds a limb or a lobe, which flattens onto a polygon so
+/// badly that the grid misses its tip. Good patches of a blob or a cow hold
+/// up to about five; a leg left in the body's patch, fifteen.
+fn overbent(bending: f64) -> usize {
+    (bending - 4.0).max(0.0).round() as usize
 }
 
 /// Side lengths of a patch, walked along its outline from corner to corner.
@@ -422,7 +436,20 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
             blocked[v as usize] = true;
         }
     }
-    let ctx = Ctx { s, mesh: crate::mesh::TriMesh { v: s.p.clone(), f: s.tris.clone() }, z, topo, arms, vert_tris, edge_tris, blocked, sing_tri: sings.iter().map(|x| x.tri).collect(), quad, max_length };
+    let mut defect = vec![std::f64::consts::TAU; nv];
+    for tri in &s.tris {
+        for k in 0..3 {
+            let (v, a, b) = (tri[k] as usize, tri[(k + 1) % 3] as usize, tri[(k + 2) % 3] as usize);
+            defect[v] -= (s.p[a] - s.p[v]).normalized().dot((s.p[b] - s.p[v]).normalized()).clamp(-1.0, 1.0).acos();
+        }
+    }
+    for (e, ts) in &edge_tris {
+        if ts.len() == 1 {
+            defect[e.0 as usize] = 0.0;
+            defect[e.1 as usize] = 0.0;
+        }
+    }
+    let ctx = Ctx { s, mesh: crate::mesh::TriMesh { v: s.p.clone(), f: s.tris.clone() }, z, topo, arms, vert_tris, edge_tris, blocked, sing_tri: sings.iter().map(|x| x.tri).collect(), defect, quad, max_length };
 
     // Feature lines that end in the open bound nothing; the field still
     // follows them, but as cuts they would only be slits, which the final
@@ -525,7 +552,7 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
         };
         let before = {
             let regions = Regions::new(&ctx, &cut);
-            let evals: Vec<(patches::Patch, usize)> = touched(&regions).iter().map(|&r| (regions.eval(&ctx, r as usize, &cut, &label).0, regions.singular(&ctx, r as usize))).collect();
+            let evals: Vec<(patches::Patch, usize, f64)> = touched(&regions).iter().map(|&r| (regions.eval(&ctx, r as usize, &cut, &label).0, regions.singular(&ctx, r as usize), regions.bending(&ctx, r as usize, &cut))).collect();
             score(s, &evals, quad)
         };
         let saved: Vec<((u32, u32), (u8, u8))> = edges.iter().map(|e| (*e, label[e])).collect();
@@ -534,7 +561,7 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
             label.remove(e);
         }
         let regions = Regions::new(&ctx, &cut);
-        let evals: Vec<(patches::Patch, usize)> = touched(&regions).iter().map(|&r| (regions.eval(&ctx, r as usize, &cut, &label).0, regions.singular(&ctx, r as usize))).collect();
+        let evals: Vec<(patches::Patch, usize, f64)> = touched(&regions).iter().map(|&r| (regions.eval(&ctx, r as usize, &cut, &label).0, regions.singular(&ctx, r as usize), regions.bending(&ctx, r as usize, &cut))).collect();
         if score(s, &evals, quad) <= before {
             paths.remove(i);
             removed += 1;
@@ -549,26 +576,31 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
     let invalid = (0..regions.tris.len()).filter(|&r| regions.eval(&ctx, r, &cut, &label).1 > 0).count();
     if debug {
         eprintln!("partition: {added} paths added, {removed} removed, {invalid} patches left invalid");
+        let mut b: Vec<String> = (0..regions.tris.len()).map(|r| format!("{:.1}/{}", regions.bending(&ctx, r, &cut), regions.singular(&ctx, r))).collect();
+        b.sort();
+        eprintln!("bending/singularities per patch: {}", b.join(" "));
     }
     Partition { cut, feature, label, paths, invalid, added, removed }
 }
 
 /// How bad a set of patches is, compared lexicographically, worst first:
-/// non-disks, corners pointing in, corner counts out of range, the most
+/// non-disks, corners pointing in, corner counts out of range, curvature
+/// beyond a full turn (`overbent`), the most
 /// singularities in one patch (one is fine), fewer patches holding exactly
 /// one singularity, and sides that do not fit together. QuadWild's order
 /// for deciding whether a removal makes things worse.
-fn score(s: &Surface, evals: &[(patches::Patch, usize)], quad: f64) -> [i64; 6] {
-    let mut out = [0i64; 6];
-    for (p, singular) in evals {
+fn score(s: &Surface, evals: &[(patches::Patch, usize, f64)], quad: f64) -> [i64; 7] {
+    let mut out = [0i64; 7];
+    for (p, singular, bending) in evals {
         let disk = p.is_disk();
         let convex = disk && p.concave == 0;
         out[0] += !disk as i64;
         out[1] += p.concave as i64;
         out[2] += (convex && !(3..=6).contains(&p.corners.len())) as i64;
-        out[3] = out[3].max((*singular).max(1) as i64);
-        out[4] -= (*singular == 1) as i64;
-        out[5] += (convex && (3..=6).contains(&p.corners.len()) && !sides_fit(&side_lengths(s, p), quad)) as i64;
+        out[3] += overbent(*bending) as i64;
+        out[4] = out[4].max((*singular).max(1) as i64);
+        out[5] -= (*singular == 1) as i64;
+        out[6] += (convex && (3..=6).contains(&p.corners.len()) && !sides_fit(&side_lengths(s, p), quad)) as i64;
     }
     out
 }
@@ -618,6 +650,17 @@ impl Regions {
         Regions { of, tris }
     }
 
+    /// Curvature inside patch `r` with its sign ignored, in quarter turns:
+    /// a limb is a cap and a saddle whose curvatures cancel in sum, but
+    /// not in this. Vertices on cuts are left out.
+    fn bending(&self, ctx: &Ctx, r: usize, cut: &HashSet<(u32, u32)>) -> f64 {
+        let mut verts: Vec<u32> = self.tris[r].iter().flat_map(|&t| ctx.s.tris[t as usize]).collect();
+        verts.sort_unstable();
+        verts.dedup();
+        let on_cut = |v: u32| ctx.s.adj[v as usize].iter().any(|&w| cut.contains(&key(v, w)));
+        verts.iter().filter(|&&v| !on_cut(v)).map(|&v| ctx.defect[v as usize].abs()).sum::<f64>() / std::f64::consts::FRAC_PI_2
+    }
+
     fn singular(&self, ctx: &Ctx, r: usize) -> usize {
         ctx.sing_tri.iter().filter(|&&t| self.of[t] == r as u32).count()
     }
@@ -626,7 +669,7 @@ impl Regions {
     fn eval(&self, ctx: &Ctx, r: usize, cut: &HashSet<(u32, u32)>, label: &HashMap<(u32, u32), (u8, u8)>) -> (patches::Patch, usize) {
         let turn = |u: u32, v: u32, w: u32| turn_of(label, u, v, w);
         let p = patches::patch(&ctx.mesh, &self.tris[r], cut, &ctx.edge_tris, &HashSet::new(), &HashMap::new(), Some(&turn));
-        let b = badness(&p, self.singular(ctx, r));
+        let b = badness(&p, self.singular(ctx, r), self.bending(ctx, r, cut));
         (p, b)
     }
 

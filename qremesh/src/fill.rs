@@ -1121,8 +1121,12 @@ fn tutte(m: &TriMesh, patch: &crate::patches::Patch, boundary: &HashMap<u32, (f6
     Domain::new(uv, patch.tris.clone())
 }
 
-/// Uniform Laplacian smoothing with reprojection onto the input, features
-/// and the boundary held still.
+/// Laplacian smoothing along the surface, with reprojection onto the
+/// input, features and the boundary held still. Only the tangential part of
+/// each move is taken: the plain Laplacian also pulls every vertex toward
+/// the inside of the curve it sits on, which on a limb a few quads round
+/// collapses the limb, and the closest point of the input then lies on the
+/// body instead.
 pub fn smooth(out: &mut Output, proj: &crate::proj::Projector, rounds: usize) {
     let n = out.v.len();
     let mut adj: Vec<Vec<u32>> = vec![Vec::new(); n];
@@ -1138,14 +1142,23 @@ pub fn smooth(out: &mut Output, proj: &crate::proj::Projector, rounds: usize) {
         list.dedup();
     }
     for _ in 0..rounds {
+        // Vertex normals from the faces round each vertex.
+        let mut normal = vec![V3::ZERO; n];
+        for f in &out.faces {
+            for k in 0..f.len() {
+                let (a, b, c) = (f[(k + f.len() - 1) % f.len()] as usize, f[k] as usize, f[(k + 1) % f.len()] as usize);
+                normal[b] += (out.v[c] - out.v[b]).cross(out.v[a] - out.v[b]);
+            }
+        }
         let mut next = out.v.clone();
         for i in 0..n {
             if out.fixed[i] || adj[i].is_empty() {
                 continue;
             }
             let mean = adj[i].iter().fold(V3::ZERO, |a, &j| a + out.v[j as usize]) / adj[i].len() as f64;
-            let moved = out.v[i] + (mean - out.v[i]) * 0.5;
-            next[i] = proj.closest(moved).0;
+            let nn = normal[i].normalized();
+            let d = (mean - out.v[i]).project_tangent(nn);
+            next[i] = proj.closest(out.v[i] + d * 0.5).0;
         }
         out.v = next;
     }
