@@ -300,9 +300,21 @@ impl<'a> Filler<'a> {
         let weight: Vec<f64> = target.iter().map(|t| 1.0 / t.max(1.0)).collect();
         let ok: Vec<bool> = self.graph.patches.iter().map(|p| fillable(p) && (3..=6).contains(&p.corners.len())).collect();
         let side_arcs = |p: &crate::patches::Patch| -> Vec<Vec<usize>> { p.sides.iter().map(|s| s.iter().map(|&(a, _)| a).collect()).collect() };
+        // A quad is held to equal opposite sides only where its sides'
+        // lengths allow it: within a quad or a quarter of each other.
+        // Otherwise equality squeezes one side (an arc 11.5 quads long came
+        // out 4 on Spot); QuadWild makes regularity a cost for this reason,
+        // and the patterns fill an unequal quad with a 3/5 pair.
+        let side_len = |patch: &crate::patches::Patch, i: usize| patch.sides[i].iter().map(|&(a, _)| target[a]).sum::<f64>();
+        let grid: Vec<bool> = self.graph.patches.iter().enumerate().map(|(p, patch)| {
+            ok[p] && patch.corners.len() == 4 && (0..2).all(|i| {
+                let (a, b) = (side_len(patch, i), side_len(patch, i + 2));
+                (a - b).abs() <= 1.0f64.max(0.25 * a.max(b))
+            })
+        }).collect();
         let mut constraints = Vec::new();
         for (p, patch) in self.graph.patches.iter().enumerate() {
-            if ok[p] && patch.corners.len() == 4 {
+            if grid[p] {
                 for (i, j) in [(0, 2), (1, 3)] {
                     let mut c: Vec<(usize, i64)> = patch.sides[i].iter().map(|&(a, _)| (a, 1)).collect();
                     c.extend(patch.sides[j].iter().map(|&(a, _)| (a, -1)));
@@ -311,7 +323,7 @@ impl<'a> Filler<'a> {
             }
         }
         let mut sol = quantize::solve(&quantize::Problem { target: target.clone(), weight: weight.clone(), constraints });
-        let sides: Vec<quantize::Sides> = self.graph.patches.iter().enumerate().filter(|&(p, _)| ok[p]).map(|(_, patch)| quantize::Sides { sides: side_arcs(patch) }).collect();
+        let sides: Vec<quantize::Sides> = self.graph.patches.iter().enumerate().filter(|&(p, _)| ok[p]).map(|(p, patch)| quantize::Sides { sides: side_arcs(patch), grid: grid[p] }).collect();
         let odd = quantize::parity(&mut sol.x, &target, &weight, &sides);
         if std::env::var("QREMESH_DEBUG").is_ok() {
             eprintln!("    quantized {na} arcs: {} quads unequal, {odd} patches odd", sol.violated);

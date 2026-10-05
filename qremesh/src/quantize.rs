@@ -332,6 +332,10 @@ fn gauss(mut a: Vec<Vec<f64>>, mut b: Vec<f64>) -> Vec<f64> {
 /// A patch for `parity`: its sides as lists of variables.
 pub struct Sides {
     pub sides: Vec<Vec<usize>>,
+    /// A four-sided patch held to equal opposite sides (a grid). One whose
+    /// sides differ too much for that is free, and needs an even total like
+    /// any other polygon.
+    pub grid: bool,
 }
 
 const NONE: usize = usize::MAX;
@@ -359,10 +363,10 @@ struct Net<'a> {
 }
 
 impl<'a> Net<'a> {
-    /// Needs an even side total: every patch but a quad, whose equal
+    /// Needs an even side total: every patch but a grid, whose equal
     /// opposite sides make it even already.
     fn odd_kind(&self, p: usize) -> bool {
-        self.patches[p].sides.len() != 4
+        !self.patches[p].grid
     }
     /// Has a midpoint pattern to keep spokes of.
     fn spoked(&self, p: usize) -> bool {
@@ -439,7 +443,7 @@ impl<'a> Net<'a> {
                 break;
             }
             let here = Some((a, q, d));
-            if self.patches[q].sides.len() == 4 {
+            if self.patches[q].grid {
                 let Some(i) = (0..4).find(|&i| self.patches[q].sides[i].contains(&a)) else { continue };
                 for &b in &self.patches[q].sides[(i + 2) % 4] {
                     if b != a {
@@ -520,7 +524,7 @@ pub fn parity(x: &mut [i64], target: &[f64], weight: &[f64], patches: &[Sides]) 
             }
             for side in [(k + n - 1) % n, (k + 1) % n] {
                 let starts: Vec<(usize, usize, i64)> = patches[p].sides[side].iter().map(|&a| (p, a, 1)).collect();
-                let accept = |_: &[i64], q: usize| q != p && patches[q].sides.len() != 4;
+                let accept = |_: &[i64], q: usize| q != p && !patches[q].grid;
                 net.chain(x, &starts, &accept, false);
             }
         }
