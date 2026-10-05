@@ -2,15 +2,25 @@
 //!
 //!     qremesh sphere -o sphere.obj [--rings 160 --segments 320 --jitter 0.3 --seed 1]
 //!     qremesh remesh in.obj -o out.obj [--faces 2000 --iterations 30 --seed 1]
+//!     qremesh shape ico|cube|torus -o shape.obj [--jitter 0.3]
+//!     qremesh layout in.obj -o layout.json [--align 1 --features 35 --quads 600]
+//!
+//! `remesh` is the first prototype (Instant Meshes' local fields). `layout`
+//! is the second: a global cross field, its singularities, separatrices
+//! traced into a patch layout — the front half of a QuadWild-style remesher.
 //!
 //! `remesh` prints a JSON report on stdout; progress goes to stderr. This is
 //! the feasibility prototype: the pipeline end to end, measured, without the
 //! repairs a production extraction needs.
 
+mod cplx;
+mod cross;
 mod extract;
 mod field;
 mod math;
 mod mesh;
+mod shapes;
+mod trace;
 
 use math::{Rng, V3};
 use std::collections::HashMap;
@@ -40,6 +50,8 @@ fn main() -> ExitCode {
     let result = match words.first().map(String::as_str) {
         Some("sphere") => sphere(&Args { words }),
         Some("remesh") => remesh(&Args { words }),
+        Some("shape") => shape(&Args { words }),
+        Some("layout") => layout(&Args { words }),
         _ => Err("usage: qremesh sphere -o OUT | qremesh remesh IN -o OUT [--faces N]".into()),
     };
     match result {
@@ -216,4 +228,104 @@ fn report(polys: &extract::Polygons, h: f64, singular: usize, stage: [f64; 4], t
         singular, mean, spread, r_mean, r_dev,
         stage[0], stage[1], stage[2], stage[3], total,
     )
+}
+
+fn shape(args: &Args) -> Result<(), String> {
+    let out = args.flag("-o").ok_or("shape needs -o OUT")?;
+    let mut m = match args.words.get(1).map(String::as_str) {
+        Some("ico") => shapes::icosphere(args.num("--subdivisions", 5)?),
+        Some("cube") => shapes::cube(args.num("--n", 40)?),
+        Some("torus") => shapes::torus(1.0, 0.4, args.num("--nu", 160)?, args.num("--nv", 64)?),
+        _ => return Err("shape: ico, cube or torus".into()),
+    };
+    let jitter: f64 = args.num("--jitter", 0.3)?;
+    if jitter > 0.0 {
+        shapes::jitter(&mut m, jitter, args.num("--seed", 1)?);
+    }
+    let faces: Vec<Vec<u32>> = m.f.iter().map(|t| t.to_vec()).collect();
+    mesh::write_obj(out, &m.v, &faces)?;
+    eprintln!("{} vertices, {} triangles -> {out}", m.v.len(), m.f.len());
+    Ok(())
+}
+
+fn layout(args: &Args) -> Result<(), String> {
+    let input = args.words.get(1).ok_or("layout needs an input OBJ")?;
+    let out = args.flag("-o").ok_or("layout needs -o OUT")?;
+    let align: f64 = args.num("--align", 0.05)?;
+    let degrees: f64 = args.num("--features", 35.0)?;
+    let mut rng = Rng::new(args.num("--seed", 1)?);
+
+    let clock = Instant::now();
+    let m = mesh::read_obj(input)?;
+    let s = cross::Surface::new(&m);
+    let target = cross::curvature_target(&s);
+    let (fixed, sharp) = cross::feature_constraints(&s, degrees);
+    let t = Instant::now();
+    let field = cross::solve(&s, &target, &fixed, align, &mut rng);
+    let t_field = t.elapsed().as_secs_f64();
+    let sings = cross::singularities(&s, &field.z);
+    let plus = sings.iter().filter(|x| x.index > 0).count();
+    let minus = sings.len() - plus;
+    eprintln!("field ({}): {} solver iterations, {:.2}s; singularities +{plus} -{minus}", field.how, field.solver_iterations, t_field);
+
+    let edge = mesh::mean_edge(&m);
+    let diameter = {
+        let lo = m.v.iter().fold(V3::ZERO, |a, p| math::v3(a.x.min(p.x), a.y.min(p.y), a.z.min(p.z)));
+        let hi = m.v.iter().fold(V3::ZERO, |a, p| math::v3(a.x.max(p.x), a.y.max(p.y), a.z.max(p.z)));
+        (hi - lo).norm()
+    };
+    let t = Instant::now();
+    let lay = trace::layout(&s, &field.z, &sings, &sharp, edge * 0.5, diameter * 3.0);
+    let t_trace = t.elapsed().as_secs_f64();
+    let mut ended: std::collections::BTreeMap<&str, usize> = Default::default();
+    for tr in &lay.traces {
+        *ended.entry(tr.ended).or_default() += 1;
+    }
+    let mut seps: std::collections::BTreeMap<usize, usize> = Default::default();
+    for k in 0..sings.len() {
+        *seps.entry(lay.traces.iter().filter(|t| t.from == k).count()).or_default() += 1;
+    }
+
+    // The picture's data: regions, traces, singularities, features.
+    let mut json = String::new();
+    json.push_str("{\"region\": [");
+    json.push_str(&lay.region.iter().map(|r| r.to_string()).collect::<Vec<_>>().join(","));
+    json.push_str("], \"traces\": [");
+    let pts = |ps: &[V3]| ps.iter().map(|p| format!("[{:.5},{:.5},{:.5}]", p.x, p.y, p.z)).collect::<Vec<_>>().join(",");
+    json.push_str(&lay.traces.iter().map(|t| format!("[{}]", pts(&t.points))).collect::<Vec<_>>().join(","));
+    json.push_str("], \"singularities\": [");
+    json.push_str(&sings.iter().map(|x| format!("[{:.5},{:.5},{:.5},{}]", x.at.x, x.at.y, x.at.z, x.index)).collect::<Vec<_>>().join(","));
+    json.push_str("], \"features\": [");
+    json.push_str(&sharp.iter().map(|&(a, b)| format!("[{}]", pts(&[m.v[a as usize], m.v[b as usize]]))).collect::<Vec<_>>().join(","));
+    json.push_str("], \"arms\": [");
+    let stride = (m.v.len() / 1500).max(1);
+    json.push_str(&(0..m.v.len()).step_by(stride).map(|i| {
+        let a = s.arm(i, field.z[i]);
+        format!("[{}]", pts(&[m.v[i], a, s.n[i].cross(a)]))
+    }).collect::<Vec<_>>().join(","));
+    json.push_str("]}");
+    std::fs::write(out, json).map_err(|e| format!("{out}: {e}"))?;
+
+    let big: Vec<i64> = {
+        let mut sizes = vec![0i64; lay.regions];
+        for &r in &lay.region { sizes[r as usize] += 1; }
+        let mut v: Vec<i64> = (0..lay.regions).filter(|&r| lay.region_euler[r] != 1).map(|r| lay.region_euler[r]).collect();
+        v.sort();
+        v
+    };
+    // Patches: regions holding more than half a percent of the surface. The
+    // rest are slivers where traces meet inside one triangle.
+    let patches = {
+        let mut sizes = vec![0usize; lay.regions];
+        for &r in &lay.region { sizes[r as usize] += 1; }
+        sizes.iter().filter(|&&n| n * 200 > m.f.len()).count()
+    };
+    eprintln!("patches (>0.5% of the surface): {patches}");
+    println!(
+        "{{\"vertices\": {}, \"triangles\": {}, \"field\": \"{}\", \"solver_iterations\": {}, \"sharp_edges\": {}, \"fixed_vertices\": {}, \"singularities\": {{\"plus\": {plus}, \"minus\": {minus}}}, \"separatrices_per_singularity\": {seps:?}, \"traces\": {}, \"trace_ends\": {ended:?}, \"regions\": {}, \"disks\": {}, \"non_disk_euler\": {big:?}, \"repairs\": {}, \"seconds\": {{\"field\": {t_field:.2}, \"trace\": {t_trace:.2}, \"total\": {:.2}}}}}",
+        m.v.len(), m.f.len(), field.how, field.solver_iterations, sharp.len(),
+        fixed.iter().filter(|f| f.is_some()).count(),
+        lay.traces.len(), lay.regions, lay.disks, lay.repairs, clock.elapsed().as_secs_f64()
+    );
+    Ok(())
 }
