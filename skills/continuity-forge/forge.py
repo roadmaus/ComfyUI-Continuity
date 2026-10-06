@@ -19,7 +19,9 @@ The server is `--url`, else `$COMFY_URL`, else http://127.0.0.1:8188.
 stdout is data: paths or names one per line, or with `--json` the server's
 whole answer. Progress and sentences go to stderr. A refusal prints the
 server's sentence and exits 1; with `--json` the refusal itself — `{problem,
-code, …}` — is printed on stdout too, so a caller can branch on the code. A
+code, …}` — is printed on stdout too, so a caller can branch on the code.
+`check`, `export` and `post` exit 2 when they did their work but something
+breaks a target's budget (the problems are on stderr, and in the JSON). A
 server that cannot be reached exits 3.
 """
 
@@ -54,6 +56,10 @@ COMMANDS = {
     "rm": ["/rm"],
     "status": ["/status"],
     "history": ["/history"],
+    "post": ["/post"],
+    "check": ["/check"],
+    "sheet": ["/sheet", "/file"],
+    "export": ["/export", "/files", "/file"],
     "import": ["/import"],
     "files": ["/files"],
     "pull": ["/files", "/file"],
@@ -185,6 +191,29 @@ def _print_status(answer):
         print(f"{row['status']:<9} {row['kind']:<10} {row['name']}{flag}")
 
 
+def _print_problems(problems):
+    for p in problems:
+        where = f" at tile {tuple(p['at'])}" if "at" in p else ""
+        frame = f" frame {p['frame']}" if p.get("frame") else ""
+        say(f"problem: {p.get('asset', '')}{frame}{where}: {p['problem']} [{p['code']}]")
+
+
+def _download(server, project, rel, dest):
+    data = server.get("/file", project=project, path=rel)
+    os.makedirs(os.path.dirname(os.path.abspath(dest)), exist_ok=True)
+    with open(dest, "wb") as handle:
+        handle.write(data)
+    return dest
+
+
+def problem_count(command, answer):
+    if command == "check":
+        return answer.get("count", 0)
+    if command in ("export", "post"):
+        return len(answer.get("problems", []))
+    return 0
+
+
 # ---- the commands -------------------------------------------------------------------
 
 
@@ -295,6 +324,63 @@ def run(server, args):
     if command == "history":
         return server.get_json("/history", project=args.project, asset=args.asset), lambda a: _lines(
             *(f"{v['version']:>4}  {v['at'] or '—':<25} {v['source'] or '—':<7} {v['path']}" for v in a["versions"]))
+    if command == "post":
+        body = {"project": args.project, "asset": args.asset, "steps": args.steps}
+        if args.target:
+            body["target"] = args.target
+        answer = server.post("/post", body)
+
+        def show(a):
+            say(f"{a['target']}: " + " → ".join(a["steps"]))
+            _print_problems(a["problems"])
+            _lines(*a["files"])
+        return answer, show
+    if command == "check":
+        body = {"project": args.project}
+        if args.target:
+            body["target"] = args.target
+        if args.asset:
+            body["assets"] = args.asset
+        answer = server.post("/check", body)
+
+        def show(a):
+            for report in a["targets"]:
+                for row in report["assets"]:
+                    for p in row["problems"]:
+                        at = ",".join(map(str, p["at"])) if "at" in p else "-"
+                        print(f"{report['target']}\t{row['asset']}\t{p.get('frame') or '-'}\t{at}\t"
+                              f"{p['code']}\t{p['problem']}")
+                    if row["overlay"]:
+                        say(f"{report['target']} {row['asset']}: overlay {row['overlay']}")
+                for skip in report["skipped"]:
+                    say(f"{report['target']} {skip['asset']}: skipped, {skip['why']}")
+            say(f"{a['count']} problem{'s' if a['count'] != 1 else ''}")
+        return answer, show
+    if command == "sheet":
+        answer = server.post("/sheet", {"project": args.project, "asset": args.asset})
+        answer["local"] = _download(server, args.project, answer["path"], args.out or f"{args.asset}-sheet.png")
+        return answer, lambda a: print(a["local"])
+    if command == "export":
+        body = {"project": args.project, "target": args.target}
+        if args.asset:
+            body["assets"] = args.asset
+        answer = server.post("/export", body)
+        if args.pull:
+            prefix = f"build/{args.target}/"
+            listing = server.get_json("/files", project=args.project, under=prefix.rstrip("/"))
+            answer["pulled"] = [
+                _download(server, args.project, item["path"],
+                          os.path.join(args.pull, *item["path"][len(prefix):].split("/")))
+                for item in listing["files"]
+                if item["path"].startswith(prefix) and "/check/" not in item["path"]
+                and not item["path"].rsplit("/", 1)[-1].startswith(".")]
+
+        def show(a):
+            for skip in a["skipped"]:
+                say(f"{skip['asset']}: skipped, {skip['why']}")
+            _print_problems(a["problems"])
+            _lines(*(a.get("pulled") or a["written"]))
+        return answer, show
     if command == "import":
         names = []
         for spec in args.files:
@@ -413,6 +499,28 @@ def parser():
     p.add_argument("project")
     p.add_argument("asset")
 
+    p = command("post", "run post-steps on an asset for one target; the frames go to variants/post/")
+    p.add_argument("project")
+    p.add_argument("asset")
+    p.add_argument("steps", nargs="+", help="matte, bleed, baseline, colormatch, pixelize, …")
+    p.add_argument("--target", help="the target to convert for (default: the project's first)")
+
+    p = command("check", "every target's budgets against every made asset; overlays for what breaks")
+    p.add_argument("project")
+    p.add_argument("--target", help="only this target")
+    p.add_argument("--asset", action="append", help="only this asset; repeat for more")
+
+    p = command("sheet", "a contact sheet PNG of an asset: masters, then each target's frames")
+    p.add_argument("project")
+    p.add_argument("asset")
+    p.add_argument("--out", help="where to save it (default ./<asset>-sheet.png)")
+
+    p = command("export", "write a target's engine files into build/<target>/")
+    p.add_argument("project")
+    p.add_argument("target")
+    p.add_argument("--asset", action="append", help="only this asset; repeat for more")
+    p.add_argument("--pull", metavar="DIR", help="then download build/<target>/ into DIR")
+
     p = command("import", "pictures, meshes or sounds become an asset's masters")
     p.add_argument("project")
     p.add_argument("asset")
@@ -444,7 +552,7 @@ def main(argv=None):
         print(json.dumps(answer, indent=2))
     else:
         show(answer)
-    return 0
+    return 2 if problem_count(args.command, answer) else 0
 
 
 if __name__ == "__main__":

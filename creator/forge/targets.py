@@ -73,7 +73,8 @@ TARGETS = {
         "pixel": True,
         "limits": {"screen": [160, 144], "tile": 8, "shades": 4, "sprite_colours": 3,
                    "sprite_sizes": [[8, 8], [8, 16]], "sprites": 40, "sprites_per_line": 10,
-                   "bg_tiles": 192, "map_tiles": [32, 32], "flips": False},
+                   "bg_tiles": 192, "map_tiles": [32, 32], "flips": False,
+                   "max_size": 2040, "max_area": 1048320},
     },
     "gltf": {
         "label": "glTF / PBR",
@@ -82,6 +83,23 @@ TARGETS = {
         "switches": {"flavour": ["gltf", "unreal", "unity_hdrp", "godot"]},
     },
 }
+
+# How frames sit on a sheet, per target (§6.7): a one-pixel extrusion keeps a
+# filtered sample at a frame's border from reading its neighbour. A Game Boy
+# sheet has none, because its tiles must stay on the 8-pixel grid.
+PACK = {"extrude": 1, "spacing": 0}
+PACK_ON_GRID = {"extrude": 0, "spacing": 0}
+
+
+def pack(target):
+    return PACK_ON_GRID if "tile" in TARGETS[target]["limits"] else PACK
+
+
+# GB Studio matches these four exactly, and keys sprite transparency on a fifth
+# (gbstudio.dev, Assets → Backgrounds and Sprites). Its sprites cannot use the
+# second-darkest shade.
+GBSTUDIO_PALETTE = ["#e0f8cf", "#86c06c", "#306850", "#071821"]
+GBSTUDIO_TRANSPARENT = "#65ff00"
 
 # The Game Boy's four greens, light to dark — the default palette of a pixel
 # project that targets one, and only a default: the style may name its own.

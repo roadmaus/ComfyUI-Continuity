@@ -249,6 +249,54 @@ check("a missing project", (code, out["code"]), (1, "project.missing"))
 code, out, err = forge("import", "mygame", "hero", "not-a-file.png", json_out=True)
 check("an import of nothing", (code, out["code"]), (1, "import.missing"))
 
+# ---- post, check, sheet, export (these need numpy and PIL on the server) ----------
+
+try:
+    import numpy as np
+    from PIL import Image
+except ImportError:
+    np = None
+if np is not None:
+    knight = np.zeros((256, 512, 4), np.uint8)
+    knight[40:220, 60:200] = (200, 40, 40, 255)
+    knight[40:220, 316:456] = (40, 40, 200, 255)
+    Image.fromarray(knight, "RGBA").save(os.path.join(work, "knight.png"))
+    ok("add knight", "add", "mygame", "--kind", "sprite", "--name", "knight", "--set", "frame=[16,16]",
+       "--set", 'animations=[{"name":"idle","frames":2}]')
+    ok("import knight", "import", "mygame", "knight", "knight.png")
+
+    posted = ok("post", "post", "mygame", "knight", "baseline", "--target", "godot4").split()
+    check("post prints the frames it kept", posted,
+          ["assets/sprite/knight/variants/post/godot4/idle_0.png",
+           "assets/sprite/knight/variants/post/godot4/idle_1.png"])
+    code, out, err = forge("post", "mygame", "knight", "sharpen", json_out=True)
+    check("an unknown step is refused", (code, out["code"]), (1, "post.step"))
+
+    check("a clean check prints nothing on stdout", ok("check", "check", "mygame", "--asset", "knight").strip(), "")
+    ok("edit knight off the tile grid", "edit", "mygame", "knight", "--set", "frame=[12,12]")
+    code, out, err = forge("check", "mygame", "--target", "gbstudio", "--asset", "knight")
+    check("a failing check exits 2", code, 2)
+    check("and prints one tab-separated line per problem",
+          out.splitlines()[0].split("\t")[:5], ["gbstudio", "knight", "idle_0", "-", "budget.grid"])
+    check("with the overlay on stderr", "overlay build/gbstudio/check/knight.png" in err, True)
+    code, out, err = forge("check", "mygame", "--target", "gbstudio", "--asset", "knight", json_out=True)
+    check("check --json carries the count", (code, out["count"]), (2, 2))
+    ok("edit knight back", "edit", "mygame", "knight", "--set", "frame=[16,16]")
+
+    sheet = ok("sheet", "sheet", "mygame", "knight", "--out", "knight-sheet.png").strip()
+    check("sheet downloads the PNG and prints where", sheet, "knight-sheet.png")
+    with open(os.path.join(work, sheet), "rb") as handle:
+        check("and it is a PNG", handle.read(8), b"\x89PNG\r\n\x1a\n")
+
+    pulled = ok("export --pull", "export", "mygame", "godot4", "--asset", "knight", "--pull", "game").split()
+    check("export --pull writes the engine files locally", sorted(os.path.relpath(p, "game") for p in pulled),
+          ["knight.json", "knight.png", "knight.tres"])
+    code, out, err = forge("export", "mygame", "godot4", json_out=True)
+    check("an export that skips assets still succeeds", code, 0)
+    check("and says which, and why", {s["asset"]: s["code"] for s in out["skipped"]}["hero"], "build.unreadable")
+    code, out, err = forge("export", "mygame", "love", json_out=True)
+    check("exporting to a target the project lacks", (code, out["code"]), (1, "project.target"))
+
 # ---- the server is the CLI's only way in ------------------------------------------
 
 code, _, err = forge("--url", "http://127.0.0.1:9", "projects")

@@ -52,7 +52,7 @@ VERSIONS = ".versions"
 # One lock for every write. Handlers run on the executor's threads, and two
 # edits to one project.json must not interleave; the forge is not busy enough
 # for a lock per project to be worth the bookkeeping.
-_LOCK = threading.RLock()
+LOCK = threading.RLock()
 
 
 def now():
@@ -117,6 +117,26 @@ def write_file(root, rel, data):
         if os.path.exists(tmp):
             os.unlink(tmp)
     return path
+
+
+def write_derived(root, rel, data):
+    """Write a file that is regenerated from others (build/, check overlays,
+    contact sheets): swapped in whole, but not kept as a version — the next
+    export makes it again, so the old one would be a copy of a copy."""
+    path = inside(root, rel)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path), prefix=".staging-")
+    with os.fdopen(fd, "wb") as handle:
+        handle.write(data if isinstance(data, bytes) else data.encode("utf-8"))
+    os.replace(tmp, path)
+    return path
+
+
+def safe_file(name):
+    """A frame or layer name as a file name: anything but letters, digits,
+    `.`, `-` and `_` becomes `_`, so a name cannot make a path."""
+    cleaned = re.sub(r"[^\w.-]", "_", name).lstrip(".")
+    return cleaned or "_"
 
 
 def swap_folder(root, rel, fill):
@@ -187,7 +207,7 @@ def save(base, project):
 
     root = folder(base, project["name"])
     project["updated"] = now()
-    with _LOCK:
+    with LOCK:
         write_file(root, PROJECT_FILE, _dump(project))
         # The manifest is derived, so the one it replaces is not worth keeping:
         # project.json's own version already says what it said.
@@ -200,7 +220,7 @@ def save(base, project):
 
 def create(base, name, mode=None, target_ids=(), style=None):
     root = folder(base, name)
-    with _LOCK:
+    with LOCK:
         if os.path.exists(os.path.join(root, PROJECT_FILE)):
             raise ForgeError(f"there is already a project called {name!r}", "project.exists",
                              status=409, project=name)
@@ -224,7 +244,7 @@ def create(base, name, mode=None, target_ids=(), style=None):
 
 
 def set_style(base, name, changes):
-    with _LOCK:
+    with LOCK:
         project = load(base, name)
         project["style"] = styles.normalise(changes, project["style"])
         return save(base, project)
@@ -232,7 +252,7 @@ def set_style(base, name, changes):
 
 def add_target(base, name, target):
     targets.require_target(target)
-    with _LOCK:
+    with LOCK:
         project = load(base, name)
         if target not in project["targets"]:
             project["targets"].append(target)
@@ -242,7 +262,7 @@ def add_target(base, name, target):
 
 def remove_target(base, name, target):
     """Stops exporting to `target`. Its build folder stays where it is."""
-    with _LOCK:
+    with LOCK:
         project = load(base, name)
         if target not in project["targets"]:
             raise ForgeError(f"{name} does not export to {target}", "project.target", target=target)
@@ -306,7 +326,7 @@ def merge_plan(base, name, plan):
         targets.require_target(target)
 
     report = {"added": [], "changed": [], "unchanged": [], "style": False, "targets": []}
-    with _LOCK:
+    with LOCK:
         project = load(base, name)
         if "style" in plan:
             settings = styles.normalise(plan["style"], project["style"])
@@ -340,7 +360,7 @@ def merge_plan(base, name, plan):
 
 def add_asset(base, name, entry):
     recipe = _recipe(entry)
-    with _LOCK:
+    with LOCK:
         project = load(base, name)
         if any(r["name"] == recipe["name"] for r in project["assets"]):
             raise ForgeError(f"{name} already has an asset called {recipe['name']!r}; "
@@ -357,7 +377,7 @@ def edit_asset(base, name, asset, changes):
     if "name" in changes and changes["name"] != asset:
         raise ForgeError("an asset cannot be renamed; remove it and add it again", "asset.rename",
                          asset=asset)
-    with _LOCK:
+    with LOCK:
         project = load(base, name)
         old = find(project, asset)
         if "kind" in changes and changes["kind"] != old["kind"]:
@@ -371,7 +391,7 @@ def edit_asset(base, name, asset, changes):
 
 def remove_asset(base, name, asset):
     """Take an asset out of the project. Its files move to `.versions/`."""
-    with _LOCK:
+    with LOCK:
         project = load(base, name)
         recipe = find(project, asset)
         moved = _retire(folder(base, name), asset_dir(base, project, recipe))
@@ -451,7 +471,7 @@ def put_masters(base, name, asset, sources, source="import"):
     for filename in sources:
         if not re.match(r"\A[\w.-]{1,128}\Z", filename) or filename.startswith("."):
             raise ForgeError(f"{filename!r} is not a usable file name", "import.name", asset=asset)
-    with _LOCK:
+    with LOCK:
         project = load(base, name)
         recipe = find(project, asset)
         root = folder(base, name)
@@ -479,7 +499,7 @@ def put_masters(base, name, asset, sources, source="import"):
 
 def mark_viewed(base, name, asset):
     """Record that somebody looked at what an asset is now (spec §13)."""
-    with _LOCK:
+    with LOCK:
         project = load(base, name)
         recipe = find(project, asset)
         where = asset_dir(base, project, recipe)

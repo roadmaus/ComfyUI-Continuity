@@ -193,6 +193,53 @@ def read_file(host, params):
     return File(projects.file_path(host.base, _text(params, "project"), _text(params, "path")))
 
 
+# ---- post, check, look, export ----------------------------------------------------
+#
+# These import numpy and PIL, so they are imported here rather than at module
+# scope: the storage routes above stay loadable on a bare Python.
+
+
+def _names(params, key):
+    value = params.get(key)
+    if value in (None, "", []):
+        return None
+    if isinstance(value, str):
+        value = [v for v in value.split(",") if v]
+    if not isinstance(value, list) or any(not isinstance(v, str) for v in value):
+        raise ForgeError(f"{key} must be a list of names", "request.field", field=key)
+    return value
+
+
+def post(host, params):
+    from . import review
+
+    steps = _names(params, "steps")
+    if not steps:
+        raise ForgeError("say which post-steps to run", "request.missing", field="steps")
+    return review.post(host.base, _text(params, "project"), _text(params, "asset"), steps,
+                       _text(params, "target", required=False))
+
+
+def check(host, params):
+    from . import review
+
+    return review.check(host.base, _text(params, "project"), _text(params, "target", required=False),
+                        _names(params, "assets"))
+
+
+def sheet(host, params):
+    from . import review
+
+    return review.sheet(host.base, _text(params, "project"), _text(params, "asset"))
+
+
+def export(host, params):
+    from . import export as exporting
+
+    return exporting.export(host.base, _text(params, "project"), _text(params, "target"),
+                            _names(params, "assets"))
+
+
 # Every route the forge serves: method, path under PREFIX, handler. The CLI's
 # command table is held against this list by `tests/test_forge_parity.py`.
 ROUTES = (
@@ -212,6 +259,10 @@ ROUTES = (
     ("POST", "/rm", remove_asset),
     ("GET", "/status", status),
     ("GET", "/history", history),
+    ("POST", "/post", post),
+    ("POST", "/check", check),
+    ("POST", "/sheet", sheet),
+    ("POST", "/export", export),
     ("POST", "/import", import_files),
     ("GET", "/files", list_files),
     ("GET", "/file", read_file),

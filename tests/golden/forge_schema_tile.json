@@ -4,8 +4,8 @@
   "description": "one seamless tile",
   "properties": {
     "alpha": {
-      "default": true,
-      "description": "whether the master carries transparency",
+      "default": false,
+      "description": "whether the master carries transparency; tiles, backgrounds and materials default to no",
       "type": "boolean"
     },
     "family": {

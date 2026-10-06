@@ -5,7 +5,7 @@
   "properties": {
     "alpha": {
       "default": true,
-      "description": "whether the master carries transparency",
+      "description": "whether the master carries transparency; tiles, backgrounds and materials default to no",
       "type": "boolean"
     },
     "animations": {

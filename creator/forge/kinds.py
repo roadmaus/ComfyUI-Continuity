@@ -131,7 +131,8 @@ COMMON = (
     Field("post", "names", [], "post-steps in order; the render mode's chain if left empty"),
     Field("pivot", "point", None, "the anchor, as a fraction of the frame [x, y]; feet-centre if left out"),
     Field("layer", "int", 0, "depth order, back to front", low=-1000, high=1000),
-    Field("alpha", "bool", True, "whether the master carries transparency"),
+    Field("alpha", "bool", True, "whether the master carries transparency; tiles, backgrounds and "
+          "materials default to no"),
     Field("targets", "object", {}, "per-target overrides, {target: {...}}; export only", cost=False),
     Field("notes", "str", "", "anything a person or agent should know; never changes what is made", cost=False),
 )
@@ -163,6 +164,7 @@ KINDS = {
     "tile": {
         "help": "one seamless tile",
         "size": [1024, 1024],
+        "alpha": False,
         "fields": (
             Field("tile", "size", [16, 16], "the tile's size at the target", high=1024),
             Field("seamless", "enum", "both", "which axes wrap", choices=("both", "x", "y", "none")),
@@ -171,6 +173,7 @@ KINDS = {
     "tileset": {
         "help": "a set of tiles that belong together: a terrain, a trim sheet, a wall set",
         "size": [1024, 1024],
+        "alpha": False,
         "fields": (
             Field("tile", "size", [16, 16], "one tile's size at the target", high=1024),
             Field("tiles", "names", [], "the tiles, by name, in sheet order"),
@@ -181,6 +184,7 @@ KINDS = {
     "background": {
         "help": "a scene, optionally sliced into parallax layers by depth",
         "size": [1920, 1080],
+        "alpha": False,
         "fields": (
             Field("layers", "int", 1, "parallax layers, back to front", low=1, high=12),
             Field("wrap", "bool", False, "whether the layers tile on x"),
@@ -206,6 +210,7 @@ KINDS = {
     "material": {
         "help": "a seamless PBR material: base colour, normal, height, roughness, metallic",
         "size": [1024, 1024],
+        "alpha": False,
         "fields": (
             Field("texel_density", "float", None, "texels per metre; the project's if left out", low=1),
             Field("maps", "names", ["base", "normal", "height", "roughness", "metallic", "ao"],
@@ -215,6 +220,7 @@ KINDS = {
     "texture": {
         "help": "a texture for a 3D model that already has UVs",
         "size": [2048, 2048],
+        "alpha": False,
         "fields": (
             Field("mesh", "str", "", "the mesh, a GLB or OBJ in the project or on the lift shelf"),
             Field("views", "int", 6, "cameras to generate from", low=4, high=8),
@@ -261,6 +267,7 @@ def schema(kind):
     props.update({f.name: f.schema() for f in fields(kind)})
     if spec["size"]:
         props["size"]["default"] = spec["size"]
+    props["alpha"]["default"] = spec.get("alpha", True)
     return {"$schema": "https://json-schema.org/draft/2020-12/schema",
             "title": f"forge {kind}", "description": spec["help"],
             "type": "object", "required": ["name", "kind"],
@@ -289,8 +296,8 @@ def normalise(entry, where=None):
         value = entry.get(field.name)
         if value is None:
             default = field.default
-            if field.name == "size":
-                default = spec["size"]
+            if field.name in ("size", "alpha"):
+                default = spec.get(field.name, default)
             out[field.name] = list(default) if isinstance(default, list) else (
                 dict(default) if isinstance(default, dict) else default)
         else:

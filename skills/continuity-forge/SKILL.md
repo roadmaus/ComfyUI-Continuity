@@ -1,6 +1,6 @@
 ---
 name: continuity-forge
-description: Plan and keep a game's assets (characters, sprites, tiles, tilesets, backgrounds, icons, UI, materials, textures, sounds) in a Game Forge project on a ComfyUI server that has the Continuity node pack, with the forge.py bundled in this skill. Use whenever the user asks to set up, plan, list, import, check the status of, or download a game's art or sound assets "on ComfyUI", "in the forge" or "with Continuity", for any engine (Godot, LÖVE, Tiled, Game Boy, GB Studio, Unity, Unreal, glTF). Never write project.json or MANIFEST.md by hand; this client keeps them.
+description: Plan and keep a game's assets (characters, sprites, tiles, tilesets, backgrounds, icons, UI, materials, textures, sounds) in a Game Forge project on a ComfyUI server that has the Continuity node pack, with the forge.py bundled in this skill. Use whenever the user asks to set up, plan, list, import, check, look at, export to an engine, check the status of, or download a game's art or sound assets "on ComfyUI", "in the forge" or "with Continuity", for any engine (Godot, LÖVE, Tiled, Game Boy, GB Studio, Unity, Unreal, glTF). Never write project.json or MANIFEST.md by hand; this client keeps them.
 ---
 
 # Game Forge
@@ -89,12 +89,42 @@ forge.py pull mygame --out ./mygame-art
   input folder. The import replaces the asset's masters as one set; the set it
   replaces is kept and listed by `history`.
 
-Generation (`make`), the post-steps and checks (`check`, `sheet`) and engine
-exports (`export`) are coming to the forge in later steps; `capabilities` will
-list them when the server has them. Until then, make pictures with the
-`continuity-render` skill and `import` them.
+Generation (`make`) is coming in a later step; `capabilities` will list it
+when the server has it. Until then, make pictures with the `continuity-render`
+skill and `import` them. A picture that should have transparency (sprites,
+characters, icons) must be imported **with** alpha: matting an opaque picture
+runs on the GPU and is not in the forge yet, so the build refuses it with
+`matte.opaque`.
 
-## 4. Output and refusals
+## 4. Check, look, export
+
+```
+forge.py check mygame                     # every target's budgets, every made asset
+forge.py sheet mygame hero-walk           # a contact sheet PNG; look at it
+forge.py export mygame godot4 --pull ./game/art
+forge.py post mygame hero-walk baseline --target generic   # one step, frames kept as variants
+```
+
+- **Run `check` after every import or make, and fix what it reports.** Each
+  problem is one line on stdout: target, asset, frame, tile (`column,row` or
+  `-`), code, sentence. Codes start `budget.` (`budget.colours`,
+  `budget.tiles`, `budget.grid`, `budget.atlas`, …). Where the problem has a
+  place, the overlay PNG named on stderr outlines it in red.
+- **Look at the `sheet` before saying anything about how an asset looks.** It
+  shows the masters, then each target's converted frames, with that target's
+  problems written over its row. Writing it clears **(not looked at)**.
+- `export` writes engine files under `build/<target>/`: PNG + Aseprite JSON
+  for every target, plus Godot `SpriteFrames`/`TileSet` `.tres`, Tiled
+  `.tsx`/`.tmj`, a LÖVE Lua table, indexed PNGs for Game Boy, Game Boy Color
+  and GB Studio (in GB Studio's `assets/` folders). Planned assets are skipped
+  and listed. An export is from the masters every time; nothing in `build/` is
+  worth editing by hand.
+- Converting to pixel art happens on export, at the frame, tile or icon size
+  in the recipe. A character, UI piece or background in a pixel project needs
+  the style's `grid` (master pixels per art pixel), or `targets.<target>.size`
+  on the asset.
+
+## 5. Output and refusals
 
 - stdout is data: names or paths one per line. Add `--json` to any command for
   the server's whole answer; sentences and progress go to stderr.
@@ -102,10 +132,12 @@ list them when the server has them. Until then, make pictures with the
   refusal is printed on stdout as `{"problem": "...", "code": "...", ...}`:
   branch on `code` (for example `recipe.unknown`, `recipe.field`,
   `asset.missing`, `project.exists`) and relay `problem` to the user.
+- `check`, `export` and `post` exit 2 when they did their work but something
+  breaks a target's budget; the problems are on stderr (and in `--json`).
 - A server that cannot be reached exits 3: say so and ask for the address
   again rather than trying others.
 
-## 5. Etiquette
+## 6. Etiquette
 
 - Report seeds with anything made, so it can be made again.
 - Don't hand-edit `project.json` or `MANIFEST.md` on the server; change the
