@@ -2,7 +2,9 @@
 
 Spec for a new bench. High level: architecture and decisions, not code.
 Written 2026-10-05 against `main` at `6347afe`, after the research in §3 and
-§4.
+§4. Revised 2026-10-06 against `00a9a8f`: posing through VNCCS Pose Studio
+(§3.9, §7.9): a pose stage on VNCCS Pose Studio's vendored viewer and
+its pose LoRAs, and Qwen Image Edit dropped in favour of Qwen Image 2.1 throughout.
 
 ## 1. Summary
 
@@ -119,7 +121,8 @@ drives. The practical routes for us are, in order of preference:
 
 1. **One grid image.** Tile 4–6 orthographic views into one canvas and
    generate them in one pass with depth control. The DiT's attention couples
-   the views. No adapter, works with Qwen Image Edit's native depth control.
+   the views. No multi-view adapter: the depth grid is one guide through
+   Qwen Image 2.1's Fun ControlNet-Union branch.
 2. **Sequential**, TEXTure-style: render the partial texture into the next
    view and regenerate only what is unpainted or seen badly.
 3. **A base from TRELLIS.2 texturing** (the pack already runs TRELLIS.2 for
@@ -156,9 +159,11 @@ the target size*, optionally ordered-dither, remove orphans. Sheets stay
 consistent when their frames are generated **together in one grid image**
 with a fixed seed and reference, and feet are snapped to one baseline.
 
-Directions: Qwen Image Edit with the Multiple-Angles LoRA (8 azimuths × 4
-elevations), or, more consistent, lift the sheet to a mesh, texture it, and
-render 8 directions from a fixed orthographic camera.
+Directions: the same pose turned in Pose Studio, one render per azimuth, each
+drawn onto the character by the pose LoRA (§3.9). The Multiple-Angles LoRA
+is not used: it is a Qwen Image Edit LoRA. Or, more consistent,
+lift the sheet to a mesh, texture it, and render 8 directions from a fixed
+orthographic camera.
 
 ### 3.6 Audio
 
@@ -179,10 +184,6 @@ render 8 directions from a fixed orthographic camera.
 - **Retro**: the honest version is transcription to four monophonic voices
   written as hUGETracker `.uge` (what GB Studio and GBDK play). The cheap
   version — resample, bitcrush, band-limit — only sounds the part.
-- **MiniMax H3**: the research reports a community licence that excludes the
-  US, EU, UK and South Korea from self-hosting. Unverified here (it came from
-  secondary sources) and it matters for the whole pack, not only this bench;
-  it is §13's first risk. Game Forge's audio does not default to H3.
 
 ### 3.7 Export conventions
 
@@ -243,13 +244,126 @@ All of this comes from search results; the research could not open the
 licence files or package pages. Licences and wheel platforms are checked
 before anything is wired.
 
+### 3.9 Posing: VNCCS Pose Studio and its LoRAs
+
+A sprite set is one character in many poses, and a prompt is a poor way to
+say "this pose". VNCCS's answer is the one the forge takes: pose a 3D
+mannequin, render it, and have a LoRA redraw the character in the
+mannequin's pose. Read from source (ComfyUI_VNCCS `9ee83cd`,
+ComfyUI_VNCCS_Utils `eedaed7`, both MIT).
+
+**Pose Studio** is `VNCCS_PoseStudio` in **VNCCS Utils**, not the main
+VNCCS repo. One node holds several pose tabs and up to four characters
+(MakeHuman body sliders, CC0 mesh), a camera and lights. It outputs
+`images` (one per tab in LIST mode, or one pasted grid in GRID mode) and
+`lighting_prompt`, a sentence per image describing the light and camera.
+What it draws is **a lit, skin-textured mannequin on a flat background**
+(white by default), not an OpenPose skeleton, at the tab's `view_width ×
+view_height` (VNCCS's own workflow: 640×1536). Skins: `naked`,
+`naked_marks` (orientation crosses on torso and face), `dummy_white`. The
+`pose_data` widget is JSON, schema 3: per pose, sparse bone Euler rotations
+on Unreal-style bone names, the model's rotation, the camera. It imports
+OpenPose, HMR2, RTMW, MeTRAbs and Mixamo FBX poses, and a picture through
+SAM 3D Body.
+
+**Its rendering is browser-only.** `nodes/pose_studio.py` says so in its
+header: MakeHuman morphing, skinning, posing and rendering all run in the
+browser, and the backend renderer was removed. The node asks the tab holding
+*that node on its canvas* (`app.graph.getNodeById`) for captures and fails
+without one.
+
+**What it already does, and the forge will not redo.** The work is in a few
+plain modules under `web/`, and only the 16k-line `PoseStudioWidget` around
+them is tied to ComfyUI's graph:
+
+- `vnccs_pose_studio_core.js` exports `PoseViewerCore` (load the mannequin,
+  body morphs, bones, IK, lights, camera, capture) and `AnalyticIKSolver`;
+- `vnccs_pose_animation.mjs`: the timeline, local-quaternion keys,
+  interpolation presets, frame sampling at an FPS (default 12);
+- `vnccs_mixamo_import.js`: **Mixamo FBX → retargeted clip on the
+  mannequin**, through three.js's `FBXLoader`, with the bone map and the
+  rest-pose correction;
+- `vnccs_openpose_import.js`, `vnccs_hand_presets.js`,
+  `vnccs_pose_characters.mjs`, `vnccs_pose_morph_runtime.mjs` (+ worker);
+- the mannequin `web/assets/pose_studio_makehuman.v2.bin.gz` (38 MB:
+  MakeHuman mesh, morphs, rig, weights, **CC0**) and the skins
+  `web/textures/skin.png`, `skin_marks.png`, `skin_dummy.png` (10 MB, under
+  the repo's **MIT**);
+- `PoseLibrary/`, ready poses.
+
+**So the forge vendors it** (§7.9), the way the pack carries `h3lora`,
+`mlxdlss` and `vdnh3`: copied by a script, local fixes held as a patch and
+marked `# MMC:`, the upstream revision stamped in, credited in the README.
+Everything VNCCS Utils is MIT and its mesh CC0, so this is allowed with the
+notices kept. Using the installed pack instead was rejected: its updates
+could break the forge without a change on our side, and installing it brings
+its own requirements (SAM 3D Body and the rest) for a viewer that needs none.
+
+(PoseStudio/PoseStudio on GitHub is an unrelated project: a native C++/Qt/
+Vulkan desktop poser, Windows-only, GPL-3. Nothing from it is used.)
+
+**The pose LoRAs** (AHEKOT, Hugging Face org `MIUProject`) are trained to
+read that mannequin as reference 1 and the character as reference 2. No
+trigger words; strength 1.0 in every workflow and in VNCCS's code.
+
+| Family | File | Where | How VNCCS drives it |
+|---|---|---|---|
+| **Qwen Image 2.1** | `VNCCS_QI2_PoseStudioV1.1.safetensors` | `MIUProject/VNCCS_PoseStudio_QI2.1` (no licence in the card); Civitai 2957080 (commercial use allowed) | `TextEncodeQwenImage21` with images `(pose, character)`, an empty latent at the pose's size scaled to ~1 MP, cfg 1, euler/simple. Prompt, verbatim: `Replace the pose of <image 2> with the pose of <image 1>. Keep the character of <image 2>. ` + the per-pose prompt + `Transparent background with alpha channel.` |
+| **MiniMax H3** | `VNCCS_PoseStudioH3_V1.safetensors` | `MIUProject/VNCCS_v3.0`, `models/loras/MiniMaxH3/VNCCS/` (Apache-2.0). VNCCS's own catalogue points at a path that 404s. | `MiniMaxH3ReferenceToVideo`, `ref_image_1` = pose, `ref_image_2` = character, 5 frames at the pose's aspect, ~1.5 MP, /32; frame 0 kept. Needs the audio VAE too. |
+| Flux 2 Klein 9B | `VNCCS_PoseStudioKlein9b_V2.2` | `MIUProject/VNCCS_v3.0` | Not used here. |
+| Qwen Image Edit 2511 | `VNCCS_QIE2511_PoseStudio_ART_*` | `MIUProject/VNCCS_PoseStudio` | Not used: retired in VNCCS itself, and the forge does not use Qwen Image Edit. |
+
+VNCCS as a whole, from its README, against where the forge stands:
+
+| VNCCS | The forge |
+|---|---|
+| Character Creator (Illustrious, Anima, Qwen 2.1; style library with previews; wizard) | §7.1 model sheet with the project style (§5.2, the 941-style atlas). No SDXL-era families. |
+| Character Cloner (start from an existing picture) | A model sheet may be an imported picture; the posed-variant step does the rest. |
+| Pose Studio | §7.9: its viewer, FBX import and animation vendored, our bench page and render job around them. |
+| Clothes Designer, clone clothes from a picture | §7.1 variants, ClothesCore when installed; the garment picture is a third reference. |
+| Emotion Studio (face crop, edit, paste back) | §7.1 variants, same method. |
+| BG Remove (chroma presets, SAM3 detail recovery) | §6.1: 2.1's own alpha + BiRefNet, SAM3 point rescue. No green screen needed on 2.1. |
+| Control Center (model downloads) | Out of scope; refusals name the file and its URL. |
+| Output folder of PNGs | Engine exports and a manifest (§5, §9). |
+
+Two sibling LoRAs follow the same contract and serve §7.1's variants:
+**ClothesCore** (QI2 V2.6, H3 V1; "Dress character to clothes from image 2")
+and, for expressions, no LoRA at all on QI2 — VNCCS crops the face and
+prompts the emotion, which is what §7.1 already does.
+
+What this means for the forge:
+
+- **Pose LoRA routing is the family's business, by file name**, so it works
+  as soon as the file is in `models/loras`: a render with a pose attached
+  loads the newest `*PoseStudio*` LoRA for the family's base (`VNCCS_QI2_` for
+  2.1, `H3` for H3) at 1.0, and refuses with the file name and its Hugging
+  Face URL when there is none. No hidden fallback to an unposed render.
+- **References go in VNCCS's order**, pose first, character second, and the
+  canvas is the pose's. That is the order Qwen Image 2.1 already wants: its
+  first picture is the one being redrawn.
+- **The prompt is VNCCS's sentence verbatim**, `<image 2>` with its space,
+  not passed through the pack's `<imageN>` citation: it is what the LoRA was
+  fitted on, and the 2.1 tokenizer adds its own picture markers regardless.
+- **The render is theirs, unchanged.** The LoRAs learned Pose Studio's
+  captures, and the vendored `PoseViewerCore` makes exactly those: same
+  mesh, skins, lights and background. The `# MMC:` patches touch loading and
+  wiring, never the look.
+- **`pose_data` schema 3 is the pose format**, because it is their code's
+  own. A pose made in Pose Studio pastes into the forge and back.
+- **The mannequin is not a tracing.** The Fun ControlNet-Union pose branch
+  reads an OpenPose skeleton and would read the mannequin as a picture. The
+  two pose routes stay separate and named: *mannequin* (our stage + LoRA),
+  and *pose from a picture* (SDPose skeleton from the tracing bench + the
+  ControlNet branch, for when the pose comes from a photo or a frame).
+
 ## 4. What the pack already has
 
 | Need | Where it is |
 |---|---|
 | Stills, references, edits | The still families (`creator/families/*/still.py`, `creator/compile_image.py`): Qwen Image 2.1 up to 10 references cited as `<imageN>`, Qwen Image Edit and Flux 2 Klein up to 3, Krea 2 by reference LoRA, Ideogram 4.0 none. Canvas on a /16 grid, short edge 512–2048. |
 | **Transparency** | **Qwen Image 2.1 generates a full alpha channel itself**: its VAE is 64 channels with alpha in and out (`families/qwen21/still.py:34-38`, `manifest.py:45`). BiRefNet in `creator/cutout.py` is the cleanup, and the fallback for families without alpha. |
-| Guides | The tracing bench, `creator/control.py`: edges, lines, blocks, depth (Depth Anything 3), pose, matte (SAM3). Qwen Image Edit reads depth, edges and pose natively. No normal tracing. |
+| Guides | The tracing bench, `creator/control.py`: edges, lines, blocks, depth (Depth Anything 3), pose, matte (SAM3). Qwen Image 2.1 follows edges, lines, depth, pose and luma through the Fun ControlNet-Union branch (`families/qwen21/still.py`). No normal tracing. |
+| Poses | Nothing yet; VNCCS Pose Studio's viewer, FBX import and animation are vendored for the pose stage (§7.9). Not dependent on VNCCS being installed. The pose LoRAs load through the core LoRA stack on 2.1 and `h3lora` on H3; both paths are checked with the VNCCS files before they are wired. |
 | Style | Preset scopes including `style` and `cast` (`web/creator/presets.js`), the 941-style atlas (`presets/atlas.js`, cast by `atlas:` address), RefMod for Klein (`creator/refmod.py`), LoRA stacks. |
 | A 3D viewer | `web/creator/liftstage.js`: vendored three.js with GLTFLoader, textured/clay/wire/normals modes, `photo()` with depth, normals and mask passes from the framed camera, `turntable()`, a path tracer. |
 | Image-to-3D | `creator/lift.py`: Pixal3D and TRELLIS.2 through core nodes, PBR bake via `UnwrapMesh` / `BakeTextureFromVoxel` / `BakeNormalMapFromMesh` / `BakeAmbientOcclusion`. GLB only, to `output/continuity/meshes/`. It textures only meshes it made. |
@@ -273,6 +387,10 @@ pack can use too:
 6. **A normal tracing**, for 2D lighting and as a control image.
 7. **Quad retopology** and the rest of making a mesh game-ready: LODs,
    collision, scale and pivot (§3.8, §7.6).
+8. **A pose stage** (§7.9): Pose Studio's viewer vendored, frames rendered
+   in any open tab on request, and the render used as a recipe input that routes the family's pose LoRA, puts
+   itself first among the references and sets the canvas. Any still render
+   can take one, not only the forge's.
 
 ## 5. The project
 
@@ -283,6 +401,8 @@ output/continuity/forge/<project>/
   project.json         style, targets, palette and grid, seeds, the asset list
   MANIFEST.md          written from project.json; never edited by hand
   style/               reference pictures, swatches
+  poses/<set>.json     a pose set: pose_data per pose, frame timing for an
+                       animation; renders are derived, cached under build/
   assets/<kind>/<name>/
     recipe.json        what, from what, how, through which family, which post-steps
     masters/           the large originals, with alpha
@@ -356,16 +476,30 @@ same foot that runs a job and says what came of it.
 
 ### 7.1 Characters and sprites
 
+Everything below is Qwen Image 2.1 by default, H3 where the recipe says
+so; both carry a VNCCS pose LoRA (§3.9).
+
 1. **Model sheet.** Text → still with the project style. Neutral pose, arms
-   away from the body, mouth closed, eyes open (the skill's sheet).
-2. **Variants** are edits of the sheet on the same canvas: costumes,
-   expressions (face-only crop, edit, feathered paste-back — VNCCS's method,
-   our code), held items.
-3. **Directions**: 4 or 8, by the Multiple-Angles LoRA when installed, or by
-   the 3D route (§3.5) when consistency matters more than time.
-4. **Frames**: walk, idle, attack and the rest, generated as **one grid
-   image** per animation so the frames share identity, then split.
-5. Post-chain, then the animation's metadata (durations, tags, pivots).
+   away from the body, mouth closed, eyes open (the skill's sheet). Or, to
+   fix the proportions first, the stage's A-pose (§7.9) drawn onto a prompted
+   character by the pose LoRA.
+2. **Poses.** A pose set made on the pose stage (§7.9), or written as
+   JSON by an agent, or pasted from Pose Studio.
+3. **Posed variants.** Sheet + mannequin render → the character in that
+   pose, one render per pose, pose LoRA at 1.0, VNCCS's sentence plus the
+   style clause. Same seed across a set.
+4. **Variants** are edits of the sheet or a posed variant on the same
+   canvas: costumes (ClothesCore when installed), expressions (face-only
+   crop, edit, feathered paste-back — VNCCS's method, our code), held items.
+5. **Directions**: 4 or 8 — one pose, the model rotation stepped per
+   azimuth on the stage, through step 3; or the 3D route (§3.5) when consistency matters
+   more than time.
+6. **Frames**: walk, idle, attack and the rest, as a pose set with one pose
+   per frame, through step 3. Whether a grid render (all frames' mannequins
+   in one image, so the frames share one render's identity) survives the
+   LoRA is the spike in §12; until it is proven, frames are per pose with
+   a shared seed and the colour match (§6) holds them together.
+7. Post-chain, then the animation's metadata (durations, tags, pivots).
 
 For HD cutout characters (the skill's rig): parts with joint overlap, nine
 mouths, three eyes, pivots, and a starting `rig.lua`.
@@ -488,6 +622,76 @@ Sets generated as one grid for a shared look, split, matted. Panels exported
 
 §8.
 
+### 7.9 The pose stage
+
+VNCCS Pose Studio's viewer, FBX import and animation, vendored (§3.9), on a
+page of the forge bench. Every workshop that wants a figure — sprites,
+directions, frames, a model sheet's proportions — gets one without a second
+pack installed.
+
+**Vendored, not rewritten.** `tools/vendor_posestudio.py` copies from a
+VNCCS Utils checkout into `web/creator/vendor/posestudio/`: the core, the
+animation, Mixamo and OpenPose import modules, the hand presets, characters
+and morph runtime, their `three.module.js` r160 with `OrbitControls` and
+`TransformControls`, the mannequin, the three skins and `PoseLibrary/`, plus
+`LICENSE` (MIT), the CC0 text and the mesh's licence note. Not taken:
+`PoseStudioWidget` and its node, UniCanvas, the 3D factory, SAM 3D Body,
+the model manager. The upstream revision is stamped into the copy's README.
+
+The `# MMC:` patches (`tools/posestudio.patch`, `--save` to regenerate), each
+small and each explained at its site:
+
+- **Asset paths.** `EXTENSION_URL` points at our folder instead of
+  `/extensions/ComfyUI_VNCCS_Utils/`.
+- **`FBXLoader` from a file, not a CDN.** Upstream imports three and
+  `FBXLoader` from esm.sh at run time; we vendor `FBXLoader.js` r160 (and
+  its `fflate` and `NURBSCurve` imports) beside their three, so FBX works
+  offline and nothing on the page reaches a third-party host.
+- Nothing that changes how a pose is solved or how a frame looks.
+
+**Their three r160 stays theirs.** The lift stage runs our three 0.170.
+Moving their code to 0.170 would be a patch to every file and a re-test of
+their look for no gain; two module instances on a page are fine as long as
+no object crosses between them, and none does — the pose stage hands the
+rest of the forge PNGs and JSON.
+
+**What we build around it** is the forge's half, and where it goes further
+than Pose Studio:
+
+- **The bench page.** A `PoseViewerCore` in a forge panel with our own small
+  UI: body sliders, joint gizmos, pose library, a frame strip with onion
+  skin, FBX drop, in-place or root motion, FPS. It is a client of their
+  core, not a copy of their widget.
+- **Rendering from any tab.** A frame render is a forge job: the server
+  sends `continuity.pose.render` with the pose set and sizes, and *any*
+  ComfyUI tab with the pack loaded builds an offscreen `PoseViewerCore`,
+  captures, and uploads the PNGs, which complete the job. Upstream needs the
+  one tab holding that node on its canvas; we need a tab. No tab open, the
+  job refuses with that sentence. This is how the CLI and agents pose.
+- **Sets as project data.** `poses/<set>.json` holds `pose_data` per pose
+  and the clip's FPS; the PNGs are derived and cached under `build/`.
+- **Straight into the sprite pipeline.** Frames go to the posed-variant
+  render (§7.1 step 3), then matte → baseline and pivot → pixelize → atlas
+  → engine export, instead of a folder of PNGs.
+- **Directions as a property of a set.** Turn the whole walk to 4 or 8
+  azimuths in one go (`modelRotation` per pass).
+- **A pose check on the finished sprite.** The mannequin's silhouette
+  against the sprite's matte, per frame, so a frame where the LoRA ignored
+  the pose is flagged, not shipped.
+
+Mixamo clips are the user's to import, never shipped: Adobe's terms allow
+using them in a game, not redistributing them. `PoseLibrary/` poses are
+VNCCS's and ship under its MIT.
+
+**Credits.** The README's *Thanks* gets
+`[ComfyUI_VNCCS_Utils](https://github.com/AHEKOT/ComfyUI_VNCCS_Utils) by
+AHEKOT (MIUProject) - Pose Studio's viewer, FBX import and animation behind
+the pose stage, vendored (MIT)`, the MakeHuman project for the mannequin
+(CC0), and `MIUProject` for the pose LoRAs the stage feeds. Its closing line
+about "the three vendored libraries" becomes four. The bench's pose page
+shows the same credit, and `docs/` names Pose Studio where it explains the
+stage.
+
 ## 8. Audio
 
 **Kinds**, each with defaults: UI (50–400 ms, mono), footsteps (6–10
@@ -539,7 +743,8 @@ WAVs anyway), `.uge`.
 - **Python** `creator/forge/`: `project.py` (storage, versions, manifest),
   `style.py`, `kinds/<kind>.py` (recipe → job body), `post/` (`matte.py`,
   `bleed.py`, `pixelize.py`, `constraints.py`, `atlas.py`, `tiling.py`,
-  `pbr.py`, `loop.py`, `loudness.py`), `uv/` (`raster.py`, `project.py`,
+  `pbr.py`, `loop.py`, `loudness.py`), `pose.py` (pose sets, the
+  render job and its upload route), `uv/` (`raster.py`, `project.py`,
   `fill.py`), `mesh/` (`lift.py` calling `creator/lift.py`, `retopo.py` with
   one module per backend, `qremesh.py` for our own, `lod.py`, `collision.py`,
   `checks.py`), `export/<target>.py`. External remesh tools are paths in
@@ -552,7 +757,8 @@ WAVs anyway), `.uge`.
   `__init__.py`.
 - **Nodes**: none user-facing in v1. Internal stage nodes, if a pipeline
   needs them, are `Continuity/internal` and `is_dev_only`, the lift pattern.
-- **Frontend** `web/creator/forge.js` and `forge/*.js`, the bench room from
+- **Frontend** `web/creator/forge.js` and `forge/*.js` (`forge/pose.js` the
+  pose page and the offscreen render listener), `vendor/posestudio/`, the bench room from
   `styles/bench.js`, a card in `destinations()` with art in `cards/`. Strings
   through `t()`, with the three locales.
 - **CLI** `skills/continuity-forge/forge.py` and `SKILL.md` (§11), beside
@@ -618,6 +824,7 @@ Every route has a command; these are the groups.
 | Making | `make <asset…>`, `make --missing`, `make --stale`, `vary <asset> --n`, `post <asset> <step…>` |
 | Looking | `sheet <asset>` (contact sheet PNG), `check` (overlay PNG + JSON), `sound-report` (loudness, peak, loop seam error, waveform PNG) |
 | 3D | `lift <asset>`, `retopo <asset> --mode tris\|quads\|keep --faces N`, `lod <asset>`, `collision <asset>`, `texture <mesh> <recipe>`, `views <mesh>` (the depth and normal renders it will condition on) |
+| Poses | `poses` (sets, library), `pose new <set> [--from <library pose>]`, `pose import <set> <clip.fbx> [--fps 12] [--in-place]`, `pose set <set> <frame> <bone>=<x,y,z>…`, `pose paste <set> <pose_data.json>`, `pose render <set> [--frame N]` (mannequin PNGs — the agent's eyes on a pose), `pose rm`. `import` and `render` run in an open ComfyUI tab (§7.9) and refuse when there is none. |
 | Moving files | `import` (pictures, meshes, sounds into the project), `export <target>`, `pull` (download `build/<target>/` or the whole project) |
 | Jobs | `jobs`, `wait <id>`, `cancel <id>` |
 
@@ -664,7 +871,12 @@ contract stable for agents that have learned it.
    The CLI and its skill ship in this step, not after: every route lands
    with its command, and the parity test from day one.
 2. **2D generation.** Style, characters and sprites, tiles with seamless
-   tiling, icons, masked inpainting.
+   tiling, icons, masked inpainting. The pose stage (§7.9) is part of this
+   step: the vendor script first, then a lab spike (your Mixamo walk
+   through the vendored import, the frames through the QI2.1 LoRA on the
+   pack's 2.1 graph and the H3 LoRA through `h3lora`, against VNCCS's own
+   output for the same sheet and pose, per pose and as a grid), then the
+   render job, then the pose page.
 3. **Audio.**
 4. **3D.** Materials, model texturing, and 3D models (§7.6) with
    triangle retopology and Q-Remesh on the optional and external backends.
@@ -677,8 +889,6 @@ contract stable for agents that have learned it.
 
 ## 13. Risks
 
-- **The MiniMax H3 licence** (§3.6) is reported, not verified, and bears on
-  the whole pack. Check the licence text before anything else.
 - **Node names** (`LTXVAudioOnlyModel`, `RenderMesh`, the bake nodes) come
   from research that could not reach the docs. Each is verified against an
   install before it is wired, and each path has a fallback that does not need
@@ -687,8 +897,24 @@ contract stable for agents that have learned it.
   Instant Meshes and QuadriFlow for a long time, and far behind ZRemesher on
   edge flow around faces and hands. The external and optional backends are
   why it is not on the critical path; the checks say when a result is poor.
-- **Grid-of-views consistency** may not hold on Qwen Image Edit at 4–6
-  views. The spike decides; sequential projection is the fallback.
+- **Grid-of-views consistency** may not hold on Qwen Image 2.1 at 4–6
+  views with one depth grid as the guide. The spike decides; sequential
+  projection is the fallback.
+- **Vendoring a fast-moving upstream.** VNCCS Utils changes weekly. Our
+  copy is pinned, so their changes cannot break a project; re-syncing is
+  deliberate, and a patch hunk that no longer applies stops the script. The
+  render job's contract with their core (`PoseViewerCore` construction and
+  capture) is the thing to re-check on every sync.
+- **48 MB of assets** (mannequin and skins) enter the repo and the published
+  package. Upstream ships them the same way; if the registry objects, the
+  vendor script can instead fetch them at a pinned commit into `models/` on
+  first use, with the licence files beside them.
+- **The QI2.1 pose LoRA** declares no licence on Hugging Face; Civitai's
+  terms allow commercial use. Checked before the auto-routing ships.
+- **The pose LoRAs' file names** are the routing key, and VNCCS has already
+  shipped a catalogue entry pointing at a path that 404s. The needle is
+  loose (`PoseStudio` + family marker), and the refusal names the file and
+  URL so a mismatch is one sentence, not a silent unposed render.
 - **Pixel conversion** is only as good as the 1024 picture. The constraint
   check makes failure visible; a pixel touch-up editor may be wanted later.
 - **Agents acting blind.** An agent that never looks will ship a sheet
