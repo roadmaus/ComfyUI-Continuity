@@ -132,20 +132,19 @@ function plate(item) {
  *  it that would be a picture of something else. */
 const DRAWN = new Set(["chat", "lift", "forge"]);
 
-/** The forge card's sprite, eight pixels wide: the soft figure beside it,
- *  made whole. */
-const SPRITE = [
-  "..####..",
-  ".######.",
-  ".######.",
-  "..####..",
-  ".######.",
-  "########",
-  "########",
-  "#.####.#",
-  "..####..",
-  "..#..#..",
-  "..#..#..",
+/** The forge card's walk: four frames of one cycle, in the order the cells
+ *  show them. The first two are the pose stage's mannequin, as capsules
+ *  (x1, y1, x2, y2, width, and a 1 for the far side) around a head, in units
+ *  of a 52-tall figure centred on x = 0. The last two are the sprite it
+ *  becomes, nine pixels wide: "#" the near side, "+" the far. Both were drawn
+ *  from one figure by a seeded generator (seed 555472) and are kept as data —
+ *  the sprite is that figure rasterised mode-of-cell, so it is the mannequin
+ *  in pixels rather than a second drawing that happens to match. */
+const WALK = [
+  { head: [-0.7, 6, 5.2], limbs: [[0, 28.6, -3.4, 40.6, 7.3, 1], [-3.4, 40.6, -9.1, 49.7, 6.2, 1], [-0.7, 17.2, 3, 23.9, 5.7, 1], [3, 23.9, 7.7, 31.2, 5.2, 1], [-0.7, 18.7, 0, 27, 11.4], [0, 28.6, 6.6, 39.2, 7.3], [6.6, 39.2, 9.1, 47.4, 6.2], [-0.7, 17.2, -4.4, 23.9, 5.7], [-4.4, 23.9, -7.1, 31.2, 5.2]] },
+  { head: [-0.7, 6, 5.2], limbs: [[0, 28.2, -1.7, 38.5, 7.3, 1], [-1.7, 38.5, -5.9, 46.2, 6.2, 1], [-0.7, 17.2, 1.7, 23.9, 5.7, 1], [1.7, 23.9, 5.1, 31.2, 5.2, 1], [-0.7, 18.7, 0, 26.7, 11.4], [0, 28.2, 4.8, 40.6, 7.3], [4.8, 40.6, 5.9, 49.7, 6.2], [-0.7, 17.2, -3.1, 23.9, 5.7], [-3.1, 23.9, -4.5, 31.2, 5.2]] },
+  ["...##....", "...###...", "...##....", ".........", "...###...", "...###...", "..+###...", "..+####..", "..+####..", "...##++..", "...##++..", "..##..++.", ".###..++.", ".##......"],
+  ["...##....", "...###...", "...##....", ".........", "...###...", "...###...", "...###...", "...###...", "...####..", "...##+...", "...##++..", "..###++..", "..##.++..", ".....++.."],
 ];
 
 /** A picture, at the plate's size and cropped to it. */
@@ -270,29 +269,37 @@ const TREATMENTS = {
     return plate;
   },
 
-  /** A figure, and the same figure as a sprite.
+  /** A walk, as the forge renders one: four frames in one grid on one
+   *  baseline.
    *
-   *  Drawn, for the reason the lift card is: what the forge does is a
-   *  conversion, and the honest picture of a conversion is both ends of it.
-   *  On the left the soft master an image model draws; on the right what the
-   *  forge makes of it — whole pixels on a tile grid. Under the pointer the
-   *  grid lights in amber, which is the conversion being made. */
+   *  Drawn, for the reason the lift card is. The forge renders a set of frames
+   *  as one sheet so they keep one scale and one ground, and that sheet is
+   *  the most characteristic thing it makes. The cells run from the pose
+   *  stage's mannequin into the sprite it becomes, so the conversion is read
+   *  left to right. Under the pointer an amber frame steps through the cells
+   *  at a frame a beat, which is the sheet played as the animation it is. */
   forge: () => {
     const plate = el("div", { class: "mmc-dash-forge" });
-    const cells = SPRITE.flatMap((row, y) => [...row].map((on, x) => on === "#"
-      ? `<rect x="${100 + x * 5}" y="${18 + y * 5}" width="5" height="5"/>` : "")).join("");
-    const lines = [];
-    for (let x = 0; x <= 8; x += 1) lines.push(`<line x1="${100 + x * 5}" y1="18" x2="${100 + x * 5}" y2="73"/>`);
-    for (let y = 0; y <= 11; y += 1) lines.push(`<line x1="100" y1="${18 + y * 5}" x2="140" y2="${18 + y * 5}"/>`);
-    // Built from the constant below and nothing else: no outside text reaches it.
+    const cell = 34, left = 12, top = 14, base = 76, px = 3.6;
+    const drawn = WALK.map((frame, i) => {
+      const x = left + i * cell;
+      const box = `<rect class="mmc-dash-cell" x="${x}" y="${top}" width="${cell}" height="${base - top}"/>`;
+      if (!Array.isArray(frame)) {
+        const limbs = frame.limbs.map(([x1, y1, x2, y2, w, far]) =>
+          `<line${far ? ' class="mmc-dash-far"' : ""} x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${w}"/>`).join("");
+        const [hx, hy, hr] = frame.head;
+        return `${box}<g class="mmc-dash-soft" transform="translate(${x + cell / 2} ${base - 52})">${limbs}`
+          + `<circle cx="${hx}" cy="${hy}" r="${hr}"/></g>`;
+      }
+      const x0 = x + (cell - frame[0].length * px) / 2, y0 = base - frame.length * px;
+      return box + frame.flatMap((row, y) => [...row].map((on, c) => on === "." ? ""
+        : `<rect class="${on === "#" ? "mmc-dash-px" : "mmc-dash-px-far"}" x="${x0 + c * px}" y="${y0 + y * px}" width="${px}" height="${px}"/>`)).join("");
+    }).join("");
+    // Built from the constants above and nothing else: no outside text reaches it.
     plate.innerHTML = `<svg viewBox="0 0 160 90" aria-hidden="true">
-      <g class="mmc-dash-soft">
-        <circle cx="46" cy="27" r="9"/>
-        <rect x="33" y="39" width="26" height="23" rx="10"/>
-        <rect x="37" y="58" width="7" height="15" rx="3.5"/><rect x="48" y="58" width="7" height="15" rx="3.5"/>
-      </g>
-      <g class="mmc-dash-px">${cells}</g>
-      <g class="mmc-dash-tiles">${lines.join("")}</g>
+      <line class="mmc-dash-ground" x1="${left - 4}" y1="${base}" x2="${left + cell * 4 + 4}" y2="${base}"/>
+      ${drawn}
+      <rect class="mmc-dash-play" x="${left}" y="${top}" width="${cell}" height="${base - top}"/>
     </svg>`;
     return plate;
   },

@@ -1728,26 +1728,41 @@ export const css = `
   .mmc-dash-cube, .mmc-dash-rays line { transition: none; }
 }
 
-/* The forge card, drawn: a soft figure and the same figure as whole pixels.
-   The amber is the tile grid only, and only under the pointer — the grid is
-   the conversion, and the conversion is what the card is pressed for. */
+/* The forge card, drawn: a walk in four cells on one ground, mannequin into
+   sprite. The amber is the playhead only, and only under the pointer, where
+   it steps a cell a beat (steps, not a slide: a sheet is played frame by
+   frame). Its travel is four cells of the drawing's 34 units; px inside an
+   SVG transform are user units, so it scales with the plate. */
 .mmc-dash-forge {
   position: absolute; inset: 0;
   background:
-    radial-gradient(110% 90% at 70% 50%,
+    radial-gradient(110% 90% at 60% 48%,
                     color-mix(in srgb, var(--mmc-ink) 12%, transparent), transparent 72%),
     var(--mmc-surface-3);
 }
 .mmc-dash-forge svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.mmc-dash-soft { fill: color-mix(in srgb, var(--mmc-ink) 34%, transparent); }
-.mmc-dash-px { fill: color-mix(in srgb, var(--mmc-ink) 72%, transparent); shape-rendering: crispEdges; }
-.mmc-dash-tiles line {
-  stroke: var(--mmc-accent); stroke-width: .35; opacity: 0;
-  shape-rendering: crispEdges; transition: opacity 220ms ease;
+.mmc-dash-ground { stroke: color-mix(in srgb, var(--mmc-ink) 22%, transparent); stroke-width: .5; shape-rendering: crispEdges; }
+.mmc-dash-cell {
+  fill: none; stroke: color-mix(in srgb, var(--mmc-ink) 14%, transparent); stroke-width: .5;
+  shape-rendering: crispEdges;
 }
-.mmc-dash-card:hover .mmc-dash-tiles line, .mmc-dash-card:focus-visible .mmc-dash-tiles line { opacity: .85; }
+/* One flat silhouette at the group's opacity, so overlapping limbs do not
+   darken at the joints; the far side is a step quieter, as on the sprite. */
+.mmc-dash-soft { opacity: .38; }
+.mmc-dash-soft line { stroke: var(--mmc-ink); stroke-linecap: round; }
+.mmc-dash-soft .mmc-dash-far { stroke: color-mix(in srgb, var(--mmc-ink) 55%, var(--mmc-surface-3)); }
+.mmc-dash-soft circle { fill: var(--mmc-ink); }
+.mmc-dash-px { fill: color-mix(in srgb, var(--mmc-ink) 72%, transparent); shape-rendering: crispEdges; }
+.mmc-dash-px-far { fill: color-mix(in srgb, var(--mmc-ink) 42%, transparent); shape-rendering: crispEdges; }
+.mmc-dash-play {
+  fill: none; stroke: var(--mmc-accent); stroke-width: .8; opacity: 0; shape-rendering: crispEdges;
+}
+.mmc-dash-card:hover .mmc-dash-play, .mmc-dash-card:focus-visible .mmc-dash-play {
+  opacity: 1; animation: mmc-dash-walk 1s steps(4) infinite;
+}
+@keyframes mmc-dash-walk { to { transform: translateX(136px); } }
 @media (prefers-reduced-motion: reduce) {
-  .mmc-dash-tiles line { transition: none; }
+  .mmc-dash-card:hover .mmc-dash-play, .mmc-dash-card:focus-visible .mmc-dash-play { animation: none; }
 }
 
 /* The first day, and the fallback everywhere else: no picture on the piece, so
