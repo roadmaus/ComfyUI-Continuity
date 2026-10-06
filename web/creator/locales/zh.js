@@ -2947,6 +2947,7 @@ export const zh = {
   "For finding out why a screen came out wrong. Read when a render is queued.": "用于找出屏幕出错的原因。在排队渲染时读取。",
   "plain": "纯色",
   // Game Forge
+  "The frame cuts the figure off in {list}. Turn it, or pose it smaller.": "第 {list} 帧把人物裁掉了。转个方向，或把姿势摆小一些。",
   "Side-on": "侧视",
   "Three-quarter": "四分之三视角",
   "Top-down": "俯视",

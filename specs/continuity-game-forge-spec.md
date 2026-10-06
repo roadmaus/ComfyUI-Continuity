@@ -704,6 +704,23 @@ than Pose Studio:
   53 %). The view pad snaps the core's camera to its capture camera; the
   sprite camera view zooms to the frame cell and leaves the core's capture
   frame showing, so the box on the stage is the drawing.
+- **Imports settled** (built, `web/creator/forge/figure.js`). The vendored
+  retarget anchors every keypoint at the resting pelvis, so a clip loses its
+  height as well as its travel: Sneak Walk's feet floated 47 to 91 px in a
+  1088 frame, Standard Walk's sank up to 38. After the import each frame's
+  Root is moved until the lowest point of its feet is on the standing
+  figure's ground, plus the clip's own lift read from the FBX (under a tenth
+  of a leg counts as standing: a rolling foot moves its joints that much),
+  and the clip is turned to face forward on average from its hip line
+  (Sneak Walk: 36°). Settled, the feet sit within -10 to +21 px of the ground
+  point in the picture; the rest is perspective, the camera being at chest
+  height. `ground` and `face` on the import turn either off.
+- **Frames that say where things are** (built). The tab measures each drawn
+  frame (box, ground under the hips, lowest point of each foot) and the
+  server keeps it beside the PNG, works out which edges it touches, and
+  answers a render with `clipped` and a `fit` size; the CLI's `--fit` draws
+  again at it. Requested by the agent making Harker's Journal, which pivoted
+  frames by measuring silhouettes and lost a sneak's head to the 484 width.
 - **Pitch** (built). A render takes `pitch`, degrees the camera looks down
   (-89 to 89; the core's own sign is the opposite and the tab negates it),
   and it is part of a frame's cache key only when not level, so frames drawn

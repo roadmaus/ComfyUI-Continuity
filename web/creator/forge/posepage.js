@@ -651,6 +651,13 @@ export class PosePage {
     if (!done || this.set?.name !== name) return;
     this.drawn = { set: name, yaw, pitch, frames, at: Date.now() };
     this.view = "drawn";
+    // The canvas is the sprite grid's cell; a figure it cuts off is said, by
+    // frame, so a lean or a reach is not lost without a word.
+    const cut = frames.filter((f) => f.marks?.edges?.length).map((f) => f.frame + 1);
+    if (cut.length) {
+      this.forge.error = t("The frame cuts the figure off in {list}. Turn it, or pose it smaller.",
+                           { list: cut.join(", ") });
+    }
     this.paint();
   }
 

@@ -82,6 +82,11 @@ def _flag(params, key):
     return bool(value)
 
 
+def _off(params, key):
+    """A switch that is on unless said off: absent is on."""
+    return key in params and params[key] is not None and not _flag(params, key)
+
+
 def _object(params, key):
     value = params.get(key)
     if not isinstance(value, dict):
@@ -301,7 +306,9 @@ def remove_pose(host, params):
 
 
 def import_pose(host, params):
-    """An FBX clip (a ComfyUI input file) retargeted onto the mannequin, in a tab."""
+    """An FBX clip (a ComfyUI input file) retargeted onto the mannequin, in a tab.
+    The tab grounds the feet and faces the clip forward unless `ground` or
+    `face` is false."""
     project = _text(params, "project")
     name = _text(params, "set")
     filename = _text(params, "file")
@@ -317,7 +324,12 @@ def import_pose(host, params):
                          "set.exists", status=409, set=name)
     fps = poses._fps(params.get("fps", 12))
     sub, _, leaf = filename.replace("\\", "/").rpartition("/")
-    task = {"filename": leaf, "subfolder": sub, "fps": fps, "max_frames": poses.MAX_FRAMES}
+    # In place means no travel, not no height: the feet are put on the ground
+    # each frame and the clip's own lift kept (`ground`), and the clip is
+    # turned to face forward on average (`face`), so one yaw is one view
+    # across clips. Both on unless asked off.
+    task = {"filename": leaf, "subfolder": sub, "fps": fps, "max_frames": poses.MAX_FRAMES,
+            "ground": not _off(params, "ground"), "face": not _off(params, "face")}
     return poses.public(poses.start(host, "import", project, name, task, {"replaced": exists}))
 
 
@@ -334,8 +346,8 @@ def render_pose(host, params):
     data, width, height, pitch, wanted, missing = poses.plan_render(
         host.base, project, name, frames, params.get("width"), params.get("height"), params.get("yaw"),
         params.get("pitch"))
-    answer = {"width": width, "height": height, "pitch": pitch, "frames": wanted,
-              "drawn": [m["path"] for m in missing]}
+    answer = {"width": width, "height": height, "pitch": pitch, "drawn": [m["path"] for m in missing],
+              **poses.summary(wanted, width, height)}
     if not missing:
         return {"job": None, "project": project, "set": name, "state": "done", **answer}
     task = {"width": width, "height": height, "pitch": pitch, "body": data["body"],

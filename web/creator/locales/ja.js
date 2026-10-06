@@ -2946,6 +2946,7 @@ export const ja = {
   "For finding out why a screen came out wrong. Read when a render is queued.": "画面がおかしくなった理由を調べるためのもの。レンダリングをキューに入れた時点で読み込まれます。",
   "plain": "無地",
   // Game Forge
+  "The frame cuts the figure off in {list}. Turn it, or pose it smaller.": "{list} でフレームが人物を切り取っています。向きを変えるか、小さめにポーズしてください。",
   "Side-on": "真横",
   "Three-quarter": "クォータービュー",
   "Top-down": "見下ろし",

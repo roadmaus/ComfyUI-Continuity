@@ -2947,6 +2947,7 @@ export const ko = {
   "For finding out why a screen came out wrong. Read when a render is queued.": "화면이 왜 잘못 나왔는지 알아내기 위한 것. 렌더를 대기열에 넣을 때 읽습니다.",
   "plain": "단색",
   // Game Forge
+  "The frame cuts the figure off in {list}. Turn it, or pose it smaller.": "프레임이 {list}에서 인물을 잘라냅니다. 돌리거나 더 작게 포즈하세요.",
   "Side-on": "측면",
   "Three-quarter": "쿼터뷰",
   "Top-down": "탑다운",

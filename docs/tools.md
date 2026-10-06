@@ -313,7 +313,8 @@ built into the pack; you do not need it installed.
 - **New** starts a set from a standing figure, or as a copy of the one open.
   **Import an FBX clip** (or drop one on the page) brings in a whole Mixamo
   animation, retargeted onto the mannequin in place, one frame per pose at 12
-  fps. **Paste from Pose Studio** takes its `pose_data`, a pose, or a list of
+  fps. Each frame is stood on the ground, so a crouch crouches instead of
+  floating, and the clip is turned to face forward. **Paste from Pose Studio** takes its `pose_data`, a pose, or a list of
   poses.
 - On the stage, click a joint and drag its rings to turn it. Right-drag
   orbits, middle-drag pans, scroll zooms. Ctrl/⌘ Z undoes the last drag on
@@ -340,7 +341,7 @@ built into the pack; you do not need it installed.
   camera to the game's: Side-on (0°) for a platformer, Three-quarter (30°)
   for an RPG, High (45°), Top-down (89°). Every sprite in a game shares one
   camera. **Look through it** puts the stage's view there. **Draw frames** draws every frame as the sprite render will see it,
-  into the project's `build/poses/`; **Drawn frames** shows them. Drawing
+  into the project's `build/poses/`; **Drawn frames** shows them, and the bench says which frames cut the figure off. Drawing
   needs a ComfyUI tab open in a browser, which the bench always is.
 
 Every edit is saved as you make it, to `poses/<set>.json` in the project.

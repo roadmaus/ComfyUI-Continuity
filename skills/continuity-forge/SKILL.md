@@ -128,14 +128,15 @@ forge.py post mygame hero-walk baseline --target generic   # one step, frames ke
 
 A pose set is a project's mannequin poses for one animation or one shot:
 `poses/<set>.json`, the body sliders, a frame rate, and a pose per frame in
-VNCCS Pose Studio's `pose_data` shape. They are what characters will be drawn
-into; for now you make them and look at them.
+VNCCS Pose Studio's `pose_data` shape. They are what characters are drawn
+into: until the forge has `make`, by the recipe at the end of this section.
 
 ```
 forge.py pose mygame import walk ~/Downloads/walk.fbx --fps 12   # a Mixamo clip, one pose per sample
 forge.py pose mygame render walk --out ./walk                    # mannequin PNGs; look at them
 forge.py pose mygame render walk --yaw 90 --frame 0 --frame 3    # from the side, two frames
 forge.py pose mygame render walk --pitch 30                      # looking down, for a 3/4 RPG
+forge.py pose mygame render sneak --yaw 90 --fit --json          # wider if a frame is cut off; marks per frame
 forge.py pose mygame new stand                                   # one rest pose
 forge.py pose mygame set stand 0 upperarm_l=0,0,-60 head=10,0,0  # turn bones, degrees
 forge.py pose mygame paste nod pose_data.json                    # from Pose Studio's node
@@ -146,20 +147,48 @@ forge.py poses mygame
   mannequin is drawn with WebGL in a browser. With no tab open they refuse at
   once with `pose.no_tab`: ask the user to open ComfyUI in a browser and keep
   the tab open, then try again. Frames already drawn come back without a tab.
-- Imports come in **in place**: every frame is retargeted onto the standing
-  rig, so a walk walks on the spot.
+- Imports come in **in place, on the ground, facing forward.** Every frame is
+  retargeted onto the standing rig, so a walk walks on the spot; then each
+  frame is stood on the ground (a crouch crouches, a jump still leaves the
+  ground) and the clip is turned to face the camera on average, so one
+  `--yaw` is the same view across clips. `--float` leaves the hips at
+  standing height (feet float in a crouch); `--keep-heading` keeps the
+  clip's own facing.
 - `render` draws at 484x1088 by default, one cell of the four-frame grid a
-  sprite's frames will be rendered in. `--yaw` turns the figure for another
-  direction. `--pitch` is how far the camera looks down on it, to match the
+  sprite's frames will be rendered in; `--width` and `--height` are 64 to
+  2048 each, and one render draws at most 64 frames. Keep one size, yaw and
+  pitch for a whole set: that fixed canvas is what lines frames up. `--yaw`
+  turns the figure for another direction. `--pitch` is how far the camera looks down on it, to match the
   game's camera: 0 (the default) for a side-on platformer, about 30 for a
   three-quarter RPG, up to 89 for top-down; negative looks up. Pick it from
   the game the user describes, not per frame: every sprite in a game shares
-  one.
+  one. Use `--pitch`, not a pasted `modelRotation` tilt: tilting the figure
+  tilts its lighting too.
+- **Every drawn frame says where things are** (`--json`, each frame's
+  `marks`, in pixels from the top left): `bbox` (the figure's box), `ground`
+  (the point on the ground under the hips: pivot frames on this, don't
+  measure silhouettes), `feet.l`/`feet.r` (each foot's lowest point), and
+  `edges` (the canvas edges the figure touches). The answer's `clipped` lists
+  frames the canvas cuts off and `fit` is a `[width, height]` that holds them
+  all; `--fit` draws again at it. Frames sit on one ground in the world; with
+  the camera at chest height, a foot nearer the camera lands a few pixels
+  lower in the picture, which `feet` reports as it is.
 - Bone names are the mannequin's (`pelvis`, `spine_01`…`03`, `neck_01`,
   `head`, `clavicle_l`, `upperarm_l`, `lowerarm_l`, `hand_l`, `thigh_l`,
   `calf_l`, `foot_l`, `ball_l`, fingers as `index_01_l`…, and `_r` for the
   right); an unknown one is refused with `pose.bone`.
 - Mixamo clips are the user's own download: never fetch or redistribute them.
+
+**Drawing a character into a set, until `make`** (proven on a 15-frame walk):
+render the set's frames, then for each frame run the `continuity-render`
+skill with Qwen Image 2.1, the mannequin frame as the first picture, the
+character's sheet as a reference, the LoRA `VNCCS_QI2_PoseStudioV1.1` at 1.0,
+and the sentence "Replace the pose of @pic-2 with the pose of @pic-1. Keep the
+character of @pic-2. Transparent background with alpha channel." The model
+redraws a compact pose bigger (up to a third, seen); fit each render back onto
+its mannequin frame by `bbox` before importing the frames as the sprite's
+masters. Four frames side by side in one picture keep scale and identity
+better than one render per frame (spec §7.1 step 6), when the frames fit.
 
 ## 6. Output and refusals
 

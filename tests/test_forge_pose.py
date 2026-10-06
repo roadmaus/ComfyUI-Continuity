@@ -143,6 +143,38 @@ check("only the changed frame is drawn again", [f["frame"] for f in second["fram
 check("a zero rotation leaves the pose", pose.set_bones(base, "game", "two", 1, {"head": [0, 0, 0]})["poses"][1]["bones"],
       {})
 
+# ---- what a drawn frame says ------------------------------------------------------
+
+call("/pose/paste", project="game", set="marked", data=[{}, {"bones": {"head": [3, 0, 0]}}])
+job = call("/pose/render", project="game", set="marked", width=64, height=96)
+call("/pose/claim", job=job["job"], tab="a")
+marks = [{"bbox": [10, 5, 50, 90], "ground": [30, 90], "feet": {"l": [25, 89.96], "r": [35, 89]}},
+         {"bbox": [0, 5, 63, 90], "ground": [32, 90], "feet": {"l": [20, 89], "r": None}}]
+done = call("/pose/done", job=job["job"], tab="a", frames=[url(png(64, 96))] * 2, marks=marks)
+check("a frame comes back with where things are in it", done["frames"][0]["marks"],
+      {"bbox": [10, 5, 50, 90], "ground": [30.0, 90.0], "feet": {"l": [25.0, 90.0], "r": [35.0, 89.0]}, "edges": []})
+check("a figure the canvas cuts off is said, by frame and edge",
+      (done["clipped"], done["frames"][1]["marks"]["edges"]), ([1], ["left", "right"]))
+check("with a canvas that holds every frame: wider, the same height", done["fit"], [96, 96])
+again = call("/pose/render", project="game", set="marked", width=64, height=96)
+check("a frame already drawn answers with its marks", (again["job"], again["frames"][1]["marks"]["edges"],
+                                                       again["fit"]), (None, ["left", "right"], [96, 96]))
+check("and they are kept beside it", os.path.isfile(os.path.join(base, "game", pose.marks_rel(again["frames"][0]["path"]))),
+      True)
+check("a frame drawn without marks has none, and nothing to fit", pose.fit([{"frame": 0, "marks": None}], 64, 96), None)
+job = call("/pose/render", project="game", set="marked", width=80, height=96)
+call("/pose/claim", job=job["job"], tab="a")
+refused("marks that are not one per frame are refused",
+        lambda: call("/pose/done", job=job["job"], tab="a", frames=[url(png(80, 96))] * 2, marks=[{}]), "pose.upload")
+
+# An import is told whether to stand the feet on the ground and face forward.
+resolving = api.Host(base, resolve=lambda name: name, tabs=lambda: 1, announce=lambda event, data: None)
+started = api.call(resolving, "POST", api.PREFIX + "/pose/import",
+                   {"project": "game", "set": "clip2", "file": "forge/walk.fbx", "ground": False})[1]
+task = call("/pose/claim", job=started["job"], tab="a")
+check("an import grounds and faces forward unless told not to", (task["ground"], task["face"]), (False, True))
+call("/pose/done", job=started["job"], tab="a", problem="not tested here")
+
 # ---- jobs that nobody finishes ----------------------------------------------------
 
 pose.CLAIM_WAIT = 0

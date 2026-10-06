@@ -25,6 +25,13 @@ renders the forge exists to make. They live in this process's memory, which is
 honest about their lifetime — a render takes seconds and its pictures are on disk
 before the job is answered.
 
+**A drawn frame says where things are in it.** Beside each PNG the tab stores
+the frame's marks (`<frame>.json`): the figure's bounding box in pixels, the
+point on the ground under the hips, the lowest point of each foot, and which
+edges of the canvas the figure touches. An agent lines frames up on the ground
+point instead of measuring silhouettes, and a figure cut off by the canvas is
+said, with the size that would hold every frame (`fit`).
+
 **Renders are a cache.** A frame's picture depends on its pose, the body, the
 size, the yaw and the camera's pitch, and on nothing else, so each frame is stored under
 `build/poses/<set>/` with a hash of those in its name. Asking again for what is
@@ -306,6 +313,73 @@ def frame_rel(name, index, key):
     return f"{CACHE}/{name}/{index:03d}-{key}.png"
 
 
+def marks_rel(rel):
+    return rel[:-len(".png")] + ".json"
+
+
+EDGES = ("left", "top", "right", "bottom")
+FIT_MARGIN = 0.06      # of the figure's span, either side, when a size is suggested
+
+
+def _point(value, what):
+    if value is None:
+        return None
+    if (not isinstance(value, (list, tuple)) or len(value) != 2
+            or any(isinstance(v, bool) or not isinstance(v, (int, float)) or v != v for v in value)):
+        raise ForgeError(f"a frame's {what} is two numbers", "pose.upload")
+    return [round(float(v), 1) for v in value]
+
+
+def clean_marks(marks, width, height):
+    """What a tab measured on one frame, checked: pixels, top-left origin."""
+    if not isinstance(marks, dict):
+        raise ForgeError("a frame's marks are an object", "pose.upload")
+    box = marks.get("bbox")
+    if box is not None:
+        if (not isinstance(box, (list, tuple)) or len(box) != 4
+                or any(isinstance(v, bool) or not isinstance(v, (int, float)) for v in box)):
+            raise ForgeError("a frame's bbox is [left, top, right, bottom]", "pose.upload")
+        box = [int(v) for v in box]
+    feet = marks.get("feet") or {}
+    if not isinstance(feet, dict):
+        raise ForgeError("a frame's feet are {l, r}", "pose.upload")
+    edges = [] if box is None else [edge for edge, touching in zip(
+        EDGES, (box[0] <= 0, box[1] <= 0, box[2] >= width - 1, box[3] >= height - 1)) if touching]
+    return {"bbox": box, "ground": _point(marks.get("ground"), "ground point"),
+            "feet": {side: _point(feet.get(side), f"{side} foot") for side in ("l", "r")}, "edges": edges}
+
+
+def read_marks(root, rel):
+    return projects._read_json(projects.inside(root, marks_rel(rel)))
+
+
+def fit(frames, width, height):
+    """The canvas that holds every frame's figure with a margin, the figure kept
+    where it is drawn (the capture is centred on the body), or None if every
+    frame already fits. Whole multiples of four, within `SIZE`."""
+    boxes = [f["marks"]["bbox"] for f in frames if (f.get("marks") or {}).get("bbox")]
+    if not boxes or not any(f["marks"]["edges"] for f in frames if f.get("marks")):
+        return None
+
+    def span(low, high, size):
+        half = max(max(size / 2 - lo, hi - size / 2) for lo, hi in zip(low, high))
+        return 2 * half * (1 + FIT_MARGIN)
+
+    w = span([b[0] for b in boxes], [b[2] for b in boxes], width)
+    h = span([b[1] for b in boxes], [b[3] for b in boxes], height)
+    # A figure cut off by the canvas is bigger than its box says, by however
+    # much was cut, so a touched direction asks for half as much again at least.
+    edges = {e for f in frames if f.get("marks") for e in f["marks"]["edges"]}
+    if {"left", "right"} & edges:
+        w = max(w, width * 1.5)
+    if {"top", "bottom"} & edges:
+        h = max(h, height * 1.5)
+    def whole(need, now):
+        return min(SIZE[1], max(now, int(-(-need // 4) * 4)))
+
+    return [whole(w, width), whole(h, height)]
+
+
 def _size(value, default):
     if value in (None, ""):
         return default
@@ -347,8 +421,10 @@ def plan_render(base, project, name, frames=None, width=None, height=None, yaw=0
     for index in indices:
         pose = turned(data["poses"][index], yaw)
         rel = frame_rel(name, index, frame_key(pose, data["body"], width, height, pitch))
-        wanted.append({"frame": index, "path": rel})
-        if not os.path.isfile(projects.inside(root, rel)):
+        if os.path.isfile(projects.inside(root, rel)):
+            wanted.append({"frame": index, "path": rel, "marks": read_marks(root, rel)})
+        else:
+            wanted.append({"frame": index, "path": rel, "marks": None})
             missing.append({"frame": index, "path": rel, "pose": pose})
     if len(missing) > MAX_RENDER:
         raise ForgeError(f"one render draws at most {MAX_RENDER} frames; ask for fewer", "pose.many")
@@ -461,6 +537,13 @@ def _decode_png(value, width, height):
     return data
 
 
+def summary(frames, width, height):
+    """A render's frames with their marks, which of them the canvas cuts, and
+    the size that would hold them all."""
+    clipped = [f["frame"] for f in frames if (f.get("marks") or {}).get("edges")]
+    return {"frames": frames, "clipped": clipped, "fit": fit(frames, width, height)}
+
+
 def complete(base, job_id, tab, result):
     """The tab's answer: drawn frames for a render, retargeted poses for an import."""
     job = _owned(job_id, tab)
@@ -471,8 +554,18 @@ def complete(base, job_id, tab, result):
         if not isinstance(pictures, list) or len(pictures) != len(task["frames"]):
             raise ForgeError(f"the render should come back with {len(task['frames'])} frames", "pose.upload")
         decoded = [_decode_png(p, task["width"], task["height"]) for p in pictures]
-        for rel, data in zip(job["answer"]["drawn"], decoded):
+        measured = result.get("marks")
+        if measured is not None and (not isinstance(measured, list) or len(measured) != len(pictures)):
+            raise ForgeError("a render's marks come one per frame", "pose.upload")
+        marks = [clean_marks(m, task["width"], task["height"]) for m in measured] if measured else [None] * len(decoded)
+        drawn = {}
+        for rel, data, mark in zip(job["answer"]["drawn"], decoded, marks):
             projects.write_derived(root, rel, data)
+            if mark is not None:
+                projects.write_derived(root, marks_rel(rel), projects._dump(mark).encode())
+            drawn[rel] = mark
+        frames = [{**f, "marks": drawn.get(f["path"], f.get("marks"))} for f in job["answer"]["frames"]]
+        job["answer"] = {**job["answer"], **summary(frames, task["width"], task["height"])}
     else:
         poses = result.get("poses")
         if not isinstance(poses, list) or not poses:

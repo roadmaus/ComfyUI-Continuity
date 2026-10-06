@@ -278,7 +278,8 @@ def _pose(server, args):
             say(f"uploading {name}")
             name = server.upload(name)
         answer = _wait(server, server.post("/pose/import", {
-            "project": project, "set": args.set, "file": name, "fps": args.fps, "replace": args.replace}))
+            "project": project, "set": args.set, "file": name, "fps": args.fps, "replace": args.replace,
+            "ground": not args.float, "face": not args.keep_heading}))
 
         def show(a):
             say(f"{a['frames']} frames")
@@ -291,10 +292,24 @@ def _pose(server, args):
                 body[key] = getattr(args, key)
         if args.frame:
             body["frames"] = args.frame
-        answer = server.post("/pose/render", body)
-        if answer["state"] != "done":
-            say(f"drawing {len(answer['drawn'])} of {len(answer['frames'])} frames")
-            answer = _wait(server, answer)
+        def draw(body):
+            answer = server.post("/pose/render", body)
+            if answer["state"] != "done":
+                say(f"drawing {len(answer['drawn'])} of {len(answer['frames'])} frames")
+                answer = _wait(server, answer)
+            return answer
+
+        answer = draw(body)
+        # --fit: when the canvas cut a figure off, draw the set again at the
+        # size the server says holds every frame. One more pass, never a loop.
+        if args.fit and answer.get("fit"):
+            body["width"], body["height"] = answer["fit"]
+            say(f"frames {', '.join(map(str, answer['clipped']))} were cut off; drawing at {answer['fit'][0]}x{answer['fit'][1]}")
+            answer = draw(body)
+        if answer.get("clipped"):
+            size = answer.get("fit")
+            say(f"the canvas cuts the figure off in frames {', '.join(map(str, answer['clipped']))}"
+                + (f"; --width {size[0]} --height {size[1]} (or --fit) holds every frame" if size else ""))
         out = args.out or f"{args.set}-poses"
         answer["local"] = [_download(server, project, f["path"], os.path.join(out, f"{f['frame']:03d}.png"))
                            for f in answer["frames"]]
@@ -663,11 +678,17 @@ def parser():
     q.add_argument("clip", help="a local .fbx (uploaded) or a name already on the server")
     q.add_argument("--fps", type=float, default=12, help="the rate the clip is sampled at (default 12)")
     q.add_argument("--replace", action="store_true", help="import over a set that exists")
+    q.add_argument("--float", action="store_true",
+                   help="leave the hips where the retarget puts them instead of standing the feet on the ground")
+    q.add_argument("--keep-heading", action="store_true",
+                   help="keep the clip's own facing instead of turning it to face forward")
     q = op("render", "mannequin PNGs of a set's frames, downloaded")
     q.add_argument("--frame", action="append", type=int, help="only this frame; repeat for more")
     q.add_argument("--width", type=int, help="pixels (default 484, a cell of the 4-frame grid)")
     q.add_argument("--height", type=int, help="pixels (default 1088)")
     q.add_argument("--yaw", type=float, help="turn the figure this many degrees, for another direction")
+    q.add_argument("--fit", action="store_true",
+                   help="if the canvas cuts the figure off in any frame, draw again at a size that holds every frame")
     q.add_argument("--pitch", type=float, help="degrees the camera looks down on the figure: 0 side-on "
                    "(default), ~30 a three-quarter RPG, up to 89 top-down; negative looks up")
     q.add_argument("--out", help="where to save them (default ./<set>-poses)")

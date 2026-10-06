@@ -27,6 +27,7 @@
 
 import { api } from "../../../../scripts/api.js";
 import { forgeCall } from "../api.js";
+import { clipLift, groundOf, marksOf, settleClip } from "./figure.js";
 
 const VENDOR = "../vendor/posestudio/";
 export const WHITE = [255, 255, 255];
@@ -48,7 +49,12 @@ export function vendored() {
   modules ??= Promise.all([
     import(`${VENDOR}vnccs_pose_studio_core.mjs`),
     import(`${VENDOR}vnccs_mixamo_import.mjs`),
-  ]).then(([core, mixamo]) => ({ PoseViewerCore: core.PoseViewerCore, importFBX: mixamo.importMixamoFBXAnimation }));
+    import(`${VENDOR}three.module.mjs`),
+    import(`${VENDOR}FBXLoader.mjs`),
+  ]).then(([core, mixamo, THREE, fbx]) => ({
+    PoseViewerCore: core.PoseViewerCore, importFBX: mixamo.importMixamoFBXAnimation,
+    THREE, FBXLoader: fbx.FBXLoader,
+  }));
   return modules;
 }
 
@@ -109,32 +115,46 @@ export async function makeViewer(body, width, height) {
   return { viewer, dispose };
 }
 
-/** A render task -> one PNG data URL per frame, each at the task's size. */
+/** A render task -> `{frames, marks}`: a PNG data URL per frame at the task's
+ *  size, and what each shows where (`figure.js marksOf`). */
 export async function drawFrames(task) {
   const { viewer, dispose } = await makeViewer(task.body, task.width, task.height);
   try {
-    return task.frames.map(({ pose }) => {
+    const floor = groundOf(viewer);
+    const frames = [];
+    const marks = [];
+    for (const { pose } of task.frames) {
       viewer.setPose(pose, true);
       viewer.updateLights(LIGHTS);
       // The core's pitch turns the camera below the figure for a positive
       // angle; ours is how far it looks down, so it goes in negated.
       const png = viewer.capture(task.width, task.height, 1, WHITE, 0, 0, 0, -(task.pitch || 0));
       if (!png) throw new Error("the viewer could not capture");
-      return png;
-    });
+      frames.push(png);
+      marks.push(await marksOf(viewer, png, task.width, task.height, floor));
+    }
+    return { frames, marks };
   } finally {
     dispose();
   }
 }
 
 /** An FBX clip -> the mannequin's poses, one per sampled frame. The import
- *  retargets every frame onto the standing rig, so a walk comes in in place. */
-export async function retarget(file, fps, maxFrames) {
-  const { importFBX } = await vendored();
+ *  retargets every frame onto the standing rig, so a walk comes in in place;
+ *  then the clip is settled (`figure.js settleClip`): faced forward and its
+ *  feet stood on the ground, unless the task says not to. */
+export async function retarget(file, fps, maxFrames, { ground = true, face = true } = {}) {
+  const modules = await vendored();
   const { viewer, dispose } = await makeViewer({}, 256, 256);
   try {
-    const result = await importFBX(file, viewer, { fps, maxFrames });
-    return result.poseSamples;
+    const result = await modules.importFBX(file, viewer, { fps, maxFrames });
+    const poses = result.poseSamples.map(({ bones, bonePositions, modelRotation }) => ({ bones, bonePositions, modelRotation }));
+    if (!ground && !face) return poses;
+    // The import skips a frame it cannot retarget; then the lift no longer
+    // lines up with the poses, and every frame is taken as standing.
+    const lift = ground && poses.length === result.sampleTimes.length
+      ? await clipLift(viewer, file, result.sampleTimes, modules) : null;
+    return settleClip(viewer, poses, lift, { ground, face });
   } finally {
     dispose();
   }
@@ -156,8 +176,9 @@ async function work(job) {
   }
   try {
     const answer = task.kind === "render"
-      ? { frames: await drawFrames(task) }
-      : { poses: await retarget(await inputFile(task.filename, task.subfolder), task.fps, task.max_frames) };
+      ? await drawFrames(task)
+      : { poses: await retarget(await inputFile(task.filename, task.subfolder), task.fps, task.max_frames,
+                                { ground: task.ground !== false, face: task.face !== false }) };
     await forgeCall("/pose/done", { job, tab: TAB, ...answer });
   } catch (err) {
     console.error("[continuity] pose job failed", err);
