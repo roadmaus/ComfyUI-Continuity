@@ -9,6 +9,8 @@ Corrected the same day after vendoring at VNCCS Utils `eedaed7`: the pose
 library is not vendored, the modules are copied as `.mjs`, and the mannequin
 is loaded by the core's client. Then the lab spike of the QI2.1 pose LoRA
 (§12): frames are rendered as one grid, not one render per pose (§7.1).
+Then the render job was built (§7.9, §12): what it does, what it stores, and
+that imported clips come in place.
 
 ## 1. Summary
 
@@ -689,7 +691,9 @@ than Pose Studio:
 
 - **The bench page.** A `PoseViewerCore` in a forge panel with our own small
   UI: body sliders, joint gizmos, a frame strip with onion skin, FBX drop,
-  in-place or root motion, FPS. It is a client of their core, not a copy of
+  FPS. Not root motion: the vendored import retargets each sampled frame
+  onto the standing rig by keypoints, so a clip comes in place (seen on the
+  walk: every frame centred, one baseline) and there is no travel to keep. It is a client of their core, not a copy of
   their widget, so it does the widget's set-up itself: decode the pack,
   solve the sliders in the vendored worker, `loadData` the result, turn the
   directional skydome off (`setDirectionalSkydomeVisible(false)`: the
@@ -698,12 +702,30 @@ than Pose Studio:
   widget's two default lights (directional 2.0 at (10, 20, 30), ambient
   `#505050` 1.0) on white. Proven headless in the spike: Chromium,
   SwiftShader, `capture(w, h, 1, [255, 255, 255], 0, 0, yaw, 0)`.
-- **Rendering from any tab.** A frame render is a forge job: the server
-  sends `continuity.pose.render` with the pose set and sizes, and *any*
-  ComfyUI tab with the pack loaded builds an offscreen `PoseViewerCore`,
-  captures, and uploads the PNGs, which complete the job. Upstream needs the
-  one tab holding that node on its canvas; we need a tab. No tab open, the
-  job refuses with that sentence. This is how the CLI and agents pose.
+- **Rendering from any tab** (built, `creator/forge/pose.py` and
+  `web/creator/forge/pose.js`). A frame render, and an FBX import, is a
+  forge job: the server announces `continuity.pose.job` to every tab, the
+  first to `POST /pose/claim` gets the task (poses, body, size), builds a
+  `PoseViewerCore` on a canvas off screen, and posts the PNGs (or the
+  retargeted poses) to `/pose/done`, which completes the job. A tab claims
+  one job at a time, and a hidden tab waits two seconds so a visible one,
+  whose timers are not throttled, wins. Upstream needs the one tab holding
+  that node on its canvas; we need a tab. No tab connected, the request is
+  refused at once (`pose.no_tab`); no claim within 15 s, or a tab silent
+  for two minutes after claiming, fails the job with a sentence. These are
+  not ComfyUI prompts: they use no server GPU, and holding the queue while
+  a browser draws would block the renders the forge exists for. They live in
+  the server's memory; their output is on disk before they answer. The two
+  routes a tab calls are a table of their own (`TAB_ROUTES`) beside the
+  client routes, so parity does not ask the CLI for them. This is how the
+  CLI and agents pose.
+- **Frames are a cache.** A frame's picture depends on its pose, the body,
+  the size and the yaw, so it is stored as
+  `build/poses/<set>/<frame>-<hash>.png`; asking again answers without a
+  tab, and an edited frame redraws alone. A stored pose keeps only bones,
+  bone positions and model rotation, at full precision: the camera and IK
+  helpers draw the same to the pixel without them, and rounding to six
+  decimals did not.
 - **Sets as project data.** `poses/<set>.json` holds `pose_data` per pose
   and the clip's FPS; the PNGs are derived and cached under `build/`.
 - **Straight into the sprite pipeline.** Frames go to the grid render
@@ -863,7 +885,7 @@ Every route has a command; these are the groups.
 | Making | `make <asset…>`, `make --missing`, `make --stale`, `vary <asset> --n`, `post <asset> <step…>` |
 | Looking | `sheet <asset>` (contact sheet PNG), `check` (overlay PNG + JSON), `sound-report` (loudness, peak, loop seam error, waveform PNG) |
 | 3D | `lift <asset>`, `retopo <asset> --mode tris\|quads\|keep --faces N`, `lod <asset>`, `collision <asset>`, `texture <mesh> <recipe>`, `views <mesh>` (the depth and normal renders it will condition on) |
-| Poses | `poses`, `pose new <set> [--from <set>/<frame>]`, `pose import <set> <clip.fbx> [--fps 12] [--in-place]`, `pose set <set> <frame> <bone>=<x,y,z>…`, `pose paste <set> <pose_data.json>`, `pose render <set> [--frame N]` (mannequin PNGs — the agent's eyes on a pose), `pose rm`. `import` and `render` run in an open ComfyUI tab (§7.9) and refuse when there is none. |
+| Poses | `poses <project>`, and `pose <project>` with `new <set> [--from <set>[/<frame>]]`, `import <set> <clip.fbx> [--fps 12] [--replace]`, `set <set> <frame> <bone>=<x,y,z>…`, `paste <set> <pose_data.json> [--replace]`, `render <set> [--frame N…] [--width] [--height] [--yaw]` (mannequin PNGs — the agent's eyes on a pose), `show <set>`, `rm <set>`. `import` and `render` run in an open ComfyUI tab (§7.9) and refuse when there is none. |
 | Moving files | `import` (pictures, meshes, sounds into the project), `export <target>`, `pull` (download `build/<target>/` or the whole project) |
 | Jobs | `jobs`, `wait <id>`, `cancel <id>` |
 
@@ -911,8 +933,10 @@ contract stable for agents that have learned it.
    with its command, and the parity test from day one.
 2. **2D generation.** Style, characters and sprites, tiles with seamless
    tiling, icons, masked inpainting. The pose stage (§7.9) is part of this
-   step: the vendor script (done, `c03334b`), then a lab spike, then the
-   render job, then the pose page.
+   step: the vendor script (done, `c03334b`), then a lab spike (QI2.1 half
+   done), then the render job (done: pose sets, the tab job, the CLI's
+   `pose` commands; tested headless in Chromium against the vendored core,
+   not yet in a tab of a running ComfyUI), then the pose page.
 
    **The spike, 2026-10-06, QI2.1 half.** A Mixamo walk through the vendored
    import, captured headless (side view, frames 0/3/6/9 of 15 at 12 fps),

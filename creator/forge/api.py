@@ -13,22 +13,39 @@ for a GET and the JSON body for a POST. The answer is a JSON-able dict, or a
 `{problem, code, …}` with the error's status.
 
 `Host` is what a handler needs from the machine: where projects live, how a
-ComfyUI file name becomes a path, which families exist. On a running ComfyUI
-`routes/forge.py` builds it from `folder_paths` and `media`; the suites build
-one on a temporary folder.
+ComfyUI file name becomes a path, which families exist, how many browser tabs
+are connected and how to tell them something. On a running ComfyUI
+`routes/forge.py` builds it from `folder_paths`, `media` and the PromptServer;
+the suites build one on a temporary folder.
+
+`TAB_ROUTES` are the other half of a pose job (`pose.py`): what a browser tab
+calls to take a job and hand back what it drew. They are served like the rest
+but are not a capability a client has, so the parity test does not ask the CLI
+for a command that calls them.
 """
 
-from . import kinds, project as projects, targets
+from . import kinds, pose as poses, project as projects, targets
 from .problems import ForgeError
 
 PREFIX = "/continuity/forge"
 
 
 class Host:
-    def __init__(self, base, resolve=None, families=None):
+    def __init__(self, base, resolve=None, families=None, tabs=None, announce=None):
         self.base = base
         self._resolve = resolve
         self._families = families
+        self._tabs = tabs
+        self._announce = announce
+
+    def tabs(self):
+        """How many ComfyUI tabs are connected to the websocket."""
+        return self._tabs() if self._tabs else 0
+
+    def announce(self, event, data):
+        """Tell every connected tab something, on ComfyUI's websocket."""
+        if self._announce:
+            self._announce(event, data)
 
     def resolve(self, filename):
         """A ComfyUI file name (input/, or `name [output]`) -> an absolute path."""
@@ -240,6 +257,99 @@ def export(host, params):
                             _names(params, "assets"))
 
 
+# ---- poses --------------------------------------------------------------------------
+
+
+def list_poses(host, params):
+    return {"sets": poses.listing(host.base, _text(params, "project"))}
+
+
+def show_pose(host, params):
+    return {"set": poses.load(host.base, _text(params, "project"), _text(params, "set"))}
+
+
+def new_pose(host, params):
+    """A new set: one rest pose, or copied from `from` (`walk`, or `walk/3`)."""
+    project = _text(params, "project")
+    source = _text(params, "from", required=False)
+    frames, body, fps = poses.copy_from(host.base, project, source) if source else (None, None, 12)
+    return {"set": poses.create(host.base, project, _text(params, "set"), frames, fps, body)}
+
+
+def paste_pose(host, params):
+    """Pose Studio's `pose_data`, or poses written by hand, as a set."""
+    frames, body, fps = poses.from_paste(params.get("data"))
+    if params.get("fps") is not None:
+        fps = params["fps"]
+    return {"set": poses.create(host.base, _text(params, "project"), _text(params, "set"), frames,
+                                fps or 12, body, replace=_flag(params, "replace"))}
+
+
+def set_pose(host, params):
+    return {"set": poses.set_bones(host.base, _text(params, "project"), _text(params, "set"),
+                                   params.get("frame"), _object(params, "bones"))}
+
+
+def remove_pose(host, params):
+    return poses.remove(host.base, _text(params, "project"), _text(params, "set"))
+
+
+def import_pose(host, params):
+    """An FBX clip (a ComfyUI input file) retargeted onto the mannequin, in a tab."""
+    project = _text(params, "project")
+    name = _text(params, "set")
+    filename = _text(params, "file")
+    try:
+        host.resolve(filename)
+    except ForgeError:
+        raise
+    except Exception as exc:  # noqa: BLE001 — as in import_files
+        raise ForgeError(str(exc), "import.missing", file=filename) from None
+    exists = poses.exists(host.base, project, name)
+    if exists and not _flag(params, "replace"):
+        raise ForgeError(f"{project} already has a pose set called {name!r}; say replace to import over it",
+                         "set.exists", status=409, set=name)
+    fps = poses._fps(params.get("fps", 12))
+    sub, _, leaf = filename.replace("\\", "/").rpartition("/")
+    task = {"filename": leaf, "subfolder": sub, "fps": fps, "max_frames": poses.MAX_FRAMES}
+    return poses.public(poses.start(host, "import", project, name, task, {"replaced": exists}))
+
+
+def render_pose(host, params):
+    """Mannequin pictures of a set's frames. Frames already drawn are answered
+    at once; the rest are a job for a tab."""
+    project = _text(params, "project")
+    name = _text(params, "set")
+    frames = params.get("frames")
+    if isinstance(frames, str):
+        frames = [f for f in frames.split(",") if f]
+    if frames is not None and not isinstance(frames, list):
+        raise ForgeError("frames is a list of frame numbers", "request.field", field="frames")
+    data, width, height, wanted, missing = poses.plan_render(
+        host.base, project, name, frames, params.get("width"), params.get("height"), params.get("yaw"))
+    answer = {"width": width, "height": height, "frames": wanted, "drawn": [m["path"] for m in missing]}
+    if not missing:
+        return {"job": None, "project": project, "set": name, "state": "done", **answer}
+    task = {"width": width, "height": height, "body": data["body"],
+            "frames": [{"frame": m["frame"], "pose": m["pose"]} for m in missing]}
+    return poses.public(poses.start(host, "render", project, name, task, answer))
+
+
+def pose_job(host, params):
+    return poses.public(poses.find_job(_text(params, "job")))
+
+
+def claim_pose_job(host, params):
+    return poses.claim(_text(params, "job"), _text(params, "tab"))
+
+
+def finish_pose_job(host, params):
+    job, tab = _text(params, "job"), _text(params, "tab")
+    if params.get("problem"):
+        return poses.fail(job, tab, params["problem"])
+    return poses.complete(host.base, job, tab, params)
+
+
 # Every route the forge serves: method, path under PREFIX, handler. The CLI's
 # command table is held against this list by `tests/test_forge_parity.py`.
 ROUTES = (
@@ -266,6 +376,20 @@ ROUTES = (
     ("POST", "/import", import_files),
     ("GET", "/files", list_files),
     ("GET", "/file", read_file),
+    ("GET", "/poses", list_poses),
+    ("GET", "/pose/show", show_pose),
+    ("POST", "/pose/new", new_pose),
+    ("POST", "/pose/paste", paste_pose),
+    ("POST", "/pose/set", set_pose),
+    ("POST", "/pose/rm", remove_pose),
+    ("POST", "/pose/import", import_pose),
+    ("POST", "/pose/render", render_pose),
+    ("GET", "/pose/job", pose_job),
+)
+
+TAB_ROUTES = (
+    ("POST", "/pose/claim", claim_pose_job),
+    ("POST", "/pose/done", finish_pose_job),
 )
 
 
@@ -275,7 +399,7 @@ def call(host, method, path, params):
     The one place a ForgeError becomes an answer, shared by the aiohttp routes
     and the suites' stand-in server, so both refuse in the same words.
     """
-    for want_method, want_path, handler in ROUTES:
+    for want_method, want_path, handler in ROUTES + TAB_ROUTES:
         if method == want_method and path == PREFIX + want_path:
             try:
                 return 200, handler(host, params)

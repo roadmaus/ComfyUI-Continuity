@@ -20,15 +20,18 @@ agents learn those shapes and a change to them is a change to a contract.
 No ComfyUI, no numpy: runs on a bare Python 3.9+.
 """
 
+import base64
 import importlib.util
 import json
 import os
 import re
+import struct
 import subprocess
 import sys
 import tempfile
 import threading
 import types
+import zlib
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qsl, urlsplit
 
@@ -42,7 +45,7 @@ CLI = os.path.join(ROOT, "skills", "continuity-forge", "forge.py")
 package = types.ModuleType("forgepkg")
 package.__path__ = [os.path.join(layout.PY_ROOT, "forge")]
 sys.modules["forgepkg"] = package
-for name in ("problems", "kinds", "targets", "style", "project", "manifest", "api"):
+for name in ("problems", "kinds", "targets", "style", "project", "manifest", "pose", "api"):
     spec = importlib.util.spec_from_file_location(f"forgepkg.{name}",
                                                   os.path.join(layout.PY_ROOT, "forge", f"{name}.py"))
     module = importlib.util.module_from_spec(spec)
@@ -57,6 +60,7 @@ spec.loader.exec_module(cli)
 # ---- coverage ---------------------------------------------------------------------
 
 served = {path for _, path, _ in api.ROUTES}
+check("a tab's routes are not a client's", served & {path for _, path, _ in api.TAB_ROUTES}, set())
 called = {route for routes in cli.COMMANDS.values() for route in routes}
 check("every route has a command", sorted(served - called), [])
 check("every command calls a route that exists", sorted(called - served), [])
@@ -86,7 +90,46 @@ def resolve(filename):
     return path
 
 
-host = api.Host(base, resolve, lambda: [{"id": "qwen21", "still": True}])
+class Tab:
+    """A browser tab, as far as a pose job can tell: it hears the announcement,
+    claims the job, and answers with what it drew (blank PNGs of the asked size)
+    or the poses it retargeted (one per tenth of a second of a pretend clip)."""
+
+    def __init__(self):
+        self.open = False
+        self.heard = []
+
+    def count(self):
+        return 1 if self.open else 0
+
+    def announce(self, event, data):
+        self.heard.append(event)
+        threading.Thread(target=self._work, args=(data["job"],), daemon=True).start()
+
+    def _work(self, job):
+        status, task = api.call(host, "POST", api.PREFIX + "/pose/claim", {"job": job, "tab": "t1"})
+        if status != 200:
+            return
+        if task["kind"] == "render":
+            answer = {"frames": ["data:image/png;base64," + base64.b64encode(
+                png(task["width"], task["height"])).decode() for _ in task["frames"]]}
+        else:
+            answer = {"poses": [{"bones": {"thigh_l": [i * 10, 0, 0]}, "camera": {"posX": 1}}
+                                for i in range(3)]}
+        api.call(host, "POST", api.PREFIX + "/pose/done", {"job": job, "tab": "t1", **answer})
+
+
+def png(width, height):
+    """A white PNG, written by hand: this suite runs without PIL."""
+    def chunk(kind, data):
+        return struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data))
+    rows = b"".join(b"\0" + b"\xff" * width for _ in range(height))
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 0, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(rows)) + chunk(b"IEND", b""))
+
+
+tab = Tab()
+host = api.Host(base, resolve, lambda: [{"id": "qwen21", "still": True}], tab.count, tab.announce)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -255,6 +298,63 @@ code, out, err = forge("status", "nothere", json_out=True)
 check("a missing project", (code, out["code"]), (1, "project.missing"))
 code, out, err = forge("import", "mygame", "hero", "not-a-file.png", json_out=True)
 check("an import of nothing", (code, out["code"]), (1, "import.missing"))
+
+# ---- poses ------------------------------------------------------------------------
+
+check("pose new prints the set", ok("pose new", "pose", "mygame", "new", "stand").strip(), "stand")
+check("a new set is one rest pose", json.loads(ok("pose show", "pose", "mygame", "show", "stand"))["poses"],
+      [{"bones": {}, "bonePositions": {}, "modelRotation": [0.0, 0.0, 0.0]}])
+ok("pose set", "pose", "mygame", "set", "stand", "0", "upperarm_l=0,0,-60", "head=10,0,0")
+check("pose set turns those bones", json.loads(ok("pose show", "pose", "mygame", "show", "stand"))["poses"][0]["bones"],
+      {"head": [10.0, 0.0, 0.0], "upperarm_l": [0.0, 0.0, -60.0]})
+code, out, err = forge("pose", "mygame", "set", "stand", "0", "tail=1,2,3", json_out=True)
+check("a bone the mannequin lacks is refused", (code, out["code"], out["bones"]), (1, "pose.bone", ["tail"]))
+code, out, err = forge("pose", "mygame", "set", "stand", "4", "head=1,2,3", json_out=True)
+check("a frame the set lacks is refused", (code, out["code"]), (1, "pose.frame"))
+
+studio = {"schema_version": 3, "mesh": {"age": 30, "gender": 1, "show_genitals": False},
+          "poses": [{"bones": {"head": [5, 0, 0]}, "camera": {"posX": 0}, "ikEffectorPositions": {}}],
+          "timeline": {"fps": 24}}
+with open(os.path.join(work, "studio.json"), "w") as handle:
+    json.dump(studio, handle)
+pasted = ok("pose paste", "pose", "mygame", "paste", "nod", "studio.json", json_out=True)["set"]
+check("a paste keeps Pose Studio's body and rate, and only what draws the figure",
+      (pasted["body"]["age"], pasted["body"]["gender"], pasted["fps"], pasted["poses"]),
+      (30, 1, 24, [{"bones": {"head": [5.0, 0.0, 0.0]}, "bonePositions": {}, "modelRotation": [0.0, 0.0, 0.0]}]))
+code, out, err = forge("pose", "mygame", "paste", "nod", "studio.json", json_out=True)
+check("a paste over a set is refused without --replace", (code, out["code"]), (1, "set.exists"))
+ok("pose paste --replace", "pose", "mygame", "paste", "nod", "studio.json", "--replace")
+ok("pose new --from", "pose", "mygame", "new", "nod2", "--from", "nod/0")
+check("poses lists the sets", [line.split()[0] for line in ok("poses", "poses", "mygame").splitlines()],
+      ["nod", "nod2", "stand"])
+
+code, out, err = forge("pose", "mygame", "render", "stand", json_out=True)
+check("a render with no tab open is refused at once", (code, out["code"]), (1, "pose.no_tab"))
+tab.open = True
+drawn = ok("pose render", "pose", "mygame", "render", "stand", "--width", "64", "--height", "128",
+           "--out", "stand").split()
+check("render downloads a PNG per frame", drawn, [os.path.join("stand", "000.png")])
+with open(os.path.join(work, drawn[0]), "rb") as handle:
+    check("of the size asked for", struct.unpack(">II", handle.read()[16:24]), (64, 128))
+heard = len(tab.heard)
+again = ok("pose render again", "pose", "mygame", "render", "stand", "--width", "64", "--height", "128",
+           "--out", "stand", json_out=True)
+check("a frame already drawn is not drawn again", (len(tab.heard), again["job"], again["drawn"]), (heard, None, []))
+turned = ok("pose render turned", "pose", "mygame", "render", "stand", "--width", "64", "--height", "128",
+            "--yaw", "90", "--out", "side", json_out=True)
+check("another direction is another drawing", (len(tab.heard), len(turned["drawn"])), (heard + 1, 1))
+
+with open(os.path.join(work, "walk.fbx"), "wb") as handle:
+    handle.write(b"Kaydara FBX Binary  stand-in")
+check("pose import prints the set", ok("pose import", "pose", "mygame", "import", "walk", "walk.fbx").strip(), "walk")
+walk = json.loads(ok("pose show walk", "pose", "mygame", "show", "walk"))
+check("an import keeps a pose per frame, and where it came from",
+      (len(walk["poses"]), walk["poses"][2]["bones"], walk["source"]),
+      (3, {"thigh_l": [20.0, 0.0, 0.0]}, {"clip": "walk.fbx"}))
+code, out, err = forge("pose", "mygame", "import", "walk", "walk.fbx", json_out=True)
+check("an import over a set is refused without --replace", (code, out["code"]), (1, "set.exists"))
+check("pose rm", ok("pose rm", "pose", "mygame", "rm", "nod2").strip(), "nod2")
+tab.open = False
 
 # ---- post, check, sheet, export (these need numpy and PIL on the server) ----------
 

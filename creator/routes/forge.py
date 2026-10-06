@@ -2,7 +2,8 @@
 
 The routes are not written out here one by one: they are `forge/api.py`'s
 `ROUTES`, registered in a loop, so the list the CLI is held against is the list
-that is served (spec §11.6). This module is only the aiohttp half — reading the
+that is served (spec §11.6), with `TAB_ROUTES` beside it: the half of a pose
+job a browser tab calls. This module is only the aiohttp half — reading the
 request, running the handler off the event loop, and answering with JSON, a
 refusal, or a file.
 
@@ -33,9 +34,18 @@ def _families():
             for family in registry.FAMILIES]
 
 
+def _tabs():
+    return len(PromptServer.instance.sockets)
+
+
+def _announce(event, data):
+    # No sid: every tab hears it, and the first to claim the job does it.
+    PromptServer.instance.send_sync(event, data)
+
+
 def _host():
     base = os.path.join(folder_paths.get_output_directory(), *outputs.FORGE.split("/"))
-    return api.Host(base, _resolve, _families)
+    return api.Host(base, _resolve, _families, _tabs, _announce)
 
 
 async def _answer(method, path, params):
@@ -66,5 +76,5 @@ def _register(method, path):
         return await _answer("POST", path, body)
 
 
-for _method, _path, _ in api.ROUTES:
+for _method, _path, _ in api.ROUTES + api.TAB_ROUTES:
     _register(_method, api.PREFIX + _path)

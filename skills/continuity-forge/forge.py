@@ -7,6 +7,8 @@
     python3 skills/continuity-forge/forge.py status mygame
     python3 skills/continuity-forge/forge.py import mygame hero hero.png
     python3 skills/continuity-forge/forge.py pull mygame --out ./mygame
+    python3 skills/continuity-forge/forge.py pose mygame import walk walk.fbx --fps 12
+    python3 skills/continuity-forge/forge.py pose mygame render walk --out ./walk
 
 The client half of `/continuity/forge/*` (`creator/forge/api.py`, served by
 `creator/routes/forge.py`). The bench is the other client, and neither can do
@@ -30,6 +32,7 @@ import json
 import mimetypes
 import os
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -63,6 +66,9 @@ COMMANDS = {
     "import": ["/import"],
     "files": ["/files"],
     "pull": ["/files", "/file"],
+    "poses": ["/poses"],
+    "pose": ["/pose/show", "/pose/new", "/pose/paste", "/pose/set", "/pose/rm", "/pose/import",
+             "/pose/render", "/pose/job", "/file"],
 }
 
 
@@ -213,6 +219,87 @@ def _local(root, rel):
     if not rel or rel.startswith("/") or any(p in ("", ".", "..") or ":" in p for p in parts):
         raise Refused({"problem": f"the server named a file outside the project: {rel!r}", "code": "client.path"})
     return os.path.join(root, *parts)
+
+
+def _wait(server, answer):
+    """Poll a pose job until a tab has done it. A job a tab never takes fails on
+    the server's side within seconds, so this needs no clock of its own."""
+    said = None
+    while answer["state"] in ("waiting", "claimed"):
+        if answer["state"] != said:
+            said = answer["state"]
+            say("waiting for a ComfyUI tab to take it" if said == "waiting" else "a tab is drawing it")
+        time.sleep(0.5)
+        answer = server.get_json("/pose/job", job=answer["job"])
+    if answer["state"] == "failed":
+        raise Refused(answer)
+    return answer
+
+
+def _pose(server, args):
+    project, op = args.project, args.op
+    if op == "show":
+        return server.get_json("/pose/show", project=project, set=args.set), \
+            lambda a: print(json.dumps(a["set"], indent=2))
+
+    def named(a):
+        print(a["set"]["name"])
+    if op == "new":
+        body = {"project": project, "set": args.set}
+        if getattr(args, "from"):
+            body["from"] = getattr(args, "from")
+        return server.post("/pose/new", body), named
+    if op == "paste":
+        body = {"project": project, "set": args.set, "data": _read_json_file(args.file),
+                "replace": args.replace}
+        if args.fps is not None:
+            body["fps"] = args.fps
+        return server.post("/pose/paste", body), named
+    if op == "set":
+        bones = {}
+        for spec in args.bones:
+            bone, sep, value = spec.partition("=")
+            numbers = value.split(",")
+            if not sep or len(numbers) != 3 or not all(_is_number(n) for n in numbers):
+                raise Refused({"problem": f"a bone is BONE=X,Y,Z in degrees; got {spec!r}", "code": "client.usage"})
+            bones[bone] = [float(n) for n in numbers]
+        return server.post("/pose/set", {"project": project, "set": args.set, "frame": args.frame,
+                                         "bones": bones}), named
+    if op == "rm":
+        answer = server.post("/pose/rm", {"project": project, "set": args.set})
+
+        def show(a):
+            say(f"it is kept in {a['kept']}")
+            print(a["removed"])
+        return answer, show
+    if op == "import":
+        name = args.clip
+        if os.path.isfile(name):
+            say(f"uploading {name}")
+            name = server.upload(name)
+        answer = _wait(server, server.post("/pose/import", {
+            "project": project, "set": args.set, "file": name, "fps": args.fps, "replace": args.replace}))
+
+        def show(a):
+            say(f"{a['frames']} frames")
+            print(args.set)
+        return answer, show
+    if op == "render":
+        body = {"project": project, "set": args.set}
+        for key in ("width", "height", "yaw"):
+            if getattr(args, key) is not None:
+                body[key] = getattr(args, key)
+        if args.frame:
+            body["frames"] = args.frame
+        answer = server.post("/pose/render", body)
+        if answer["state"] != "done":
+            say(f"drawing {len(answer['drawn'])} of {len(answer['frames'])} frames")
+            answer = _wait(server, answer)
+        out = args.out or f"{args.set}-poses"
+        answer["local"] = [_download(server, project, f["path"], os.path.join(out, f"{f['frame']:03d}.png"))
+                           for f in answer["frames"]]
+        return answer, lambda a: _lines(*a["local"])
+    raise AssertionError(op)
 
 
 def problem_count(command, answer):
@@ -418,6 +505,11 @@ def run(server, args):
             written.append(path)
         say(f"{len(written)} files into {out}")
         return {"files": written}, lambda a: _lines(*a["files"])
+    if command == "poses":
+        return server.get_json("/poses", project=args.project), lambda a: _lines(
+            *(f"{p['name']:<20} {p['frames']:>4} frames  {p['fps']} fps" for p in a["sets"]))
+    if command == "pose":
+        return _pose(server, args)
     raise AssertionError(command)
 
 
@@ -544,6 +636,39 @@ def parser():
     p.add_argument("project")
     p.add_argument("--under", help="only this folder, e.g. build/godot4")
     p.add_argument("--out", help="where to write (default ./<project>)")
+
+    command("poses", "a project's pose sets").add_argument("project")
+
+    p = command("pose", "make, change and draw pose sets; import and render need an open ComfyUI tab")
+    p.add_argument("project")
+    ops = p.add_subparsers(dest="op", required=True, metavar="op")
+
+    def op(name, help):
+        q = ops.add_parser(name, help=help, description=help, parents=[common])
+        q.add_argument("set")
+        return q
+
+    op("show", "a set as JSON: body, fps, one pose per frame")
+    q = op("new", "a set of one rest pose, or a copy")
+    q.add_argument("--from", metavar="SET[/FRAME]", help="copy a whole set, or one frame of it")
+    q = op("paste", "a set from Pose Studio's pose_data, or poses as JSON")
+    q.add_argument("file")
+    q.add_argument("--fps", type=float)
+    q.add_argument("--replace", action="store_true", help="paste over a set that exists")
+    q = op("set", "turn bones of one frame, in degrees")
+    q.add_argument("frame", type=int)
+    q.add_argument("bones", nargs="+", metavar="BONE=X,Y,Z")
+    op("rm", "remove a set; it moves to .versions/")
+    q = op("import", "an FBX clip (Mixamo) retargeted onto the mannequin, a pose per sampled frame")
+    q.add_argument("clip", help="a local .fbx (uploaded) or a name already on the server")
+    q.add_argument("--fps", type=float, default=12, help="the rate the clip is sampled at (default 12)")
+    q.add_argument("--replace", action="store_true", help="import over a set that exists")
+    q = op("render", "mannequin PNGs of a set's frames, downloaded")
+    q.add_argument("--frame", action="append", type=int, help="only this frame; repeat for more")
+    q.add_argument("--width", type=int, help="pixels (default 484, a cell of the 4-frame grid)")
+    q.add_argument("--height", type=int, help="pixels (default 1088)")
+    q.add_argument("--yaw", type=float, help="turn the figure this many degrees, for another direction")
+    q.add_argument("--out", help="where to save them (default ./<set>-poses)")
     return top
 
 

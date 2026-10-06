@@ -13,6 +13,7 @@ the handlers that need it.
 - `style.py`     what every asset in a project must agree on.
 - `project.py`   storage: names, versioned writes, the plan merge, status.
 - `manifest.py`  `MANIFEST.md`, written from the project.
+- `pose.py`      pose sets, and the jobs a browser tab does to draw them.
 - `build.py`     an asset's masters through its post-chain, for one target.
 - `review.py`    the constraint check, the contact sheet, a post preview.
 - `post/`        the post-steps, one module each (spec §6).

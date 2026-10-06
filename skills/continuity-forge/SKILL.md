@@ -124,7 +124,39 @@ forge.py post mygame hero-walk baseline --target generic   # one step, frames ke
   the style's `grid` (master pixels per art pixel), or `targets.<target>.size`
   on the asset.
 
-## 5. Output and refusals
+## 5. Poses
+
+A pose set is a project's mannequin poses for one animation or one shot:
+`poses/<set>.json`, the body sliders, a frame rate, and a pose per frame in
+VNCCS Pose Studio's `pose_data` shape. They are what characters will be drawn
+into; for now you make them and look at them.
+
+```
+forge.py pose mygame import walk ~/Downloads/walk.fbx --fps 12   # a Mixamo clip, one pose per sample
+forge.py pose mygame render walk --out ./walk                    # mannequin PNGs; look at them
+forge.py pose mygame render walk --yaw 90 --frame 0 --frame 3    # from the side, two frames
+forge.py pose mygame new stand                                   # one rest pose
+forge.py pose mygame set stand 0 upperarm_l=0,0,-60 head=10,0,0  # turn bones, degrees
+forge.py pose mygame paste nod pose_data.json                    # from Pose Studio's node
+forge.py poses mygame
+```
+
+- **`import` and `render` are done by an open ComfyUI tab**, because the
+  mannequin is drawn with WebGL in a browser. With no tab open they refuse at
+  once with `pose.no_tab`: ask the user to open ComfyUI in a browser and keep
+  the tab open, then try again. Frames already drawn come back without a tab.
+- Imports come in **in place**: every frame is retargeted onto the standing
+  rig, so a walk walks on the spot.
+- `render` draws at 484x1088 by default, one cell of the four-frame grid a
+  sprite's frames will be rendered in. `--yaw` turns the figure for another
+  direction.
+- Bone names are the mannequin's (`pelvis`, `spine_01`…`03`, `neck_01`,
+  `head`, `clavicle_l`, `upperarm_l`, `lowerarm_l`, `hand_l`, `thigh_l`,
+  `calf_l`, `foot_l`, `ball_l`, fingers as `index_01_l`…, and `_r` for the
+  right); an unknown one is refused with `pose.bone`.
+- Mixamo clips are the user's own download: never fetch or redistribute them.
+
+## 6. Output and refusals
 
 - stdout is data: names or paths one per line. Add `--json` to any command for
   the server's whole answer; sentences and progress go to stderr.
@@ -137,7 +169,7 @@ forge.py post mygame hero-walk baseline --target generic   # one step, frames ke
 - A server that cannot be reached exits 3: say so and ask for the address
   again rather than trying others.
 
-## 6. Etiquette
+## 7. Etiquette
 
 - Report seeds with anything made, so it can be made again.
 - Don't hand-edit `project.json` or `MANIFEST.md` on the server; change the
