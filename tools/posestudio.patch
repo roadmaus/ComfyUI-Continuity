@@ -1,0 +1,18 @@
+diff --git a/web/creator/vendor/posestudio/vnccs_mixamo_import.mjs b/web/creator/vendor/posestudio/vnccs_mixamo_import.mjs
+index 0b4af56..20fe336 100644
+--- a/web/creator/vendor/posestudio/vnccs_mixamo_import.mjs
++++ b/web/creator/vendor/posestudio/vnccs_mixamo_import.mjs
+@@ -184,8 +184,11 @@ function normalizeBoneName(name) {
+ async function loadMixamoModules() {
+     if (!loaderPromise) {
+         loaderPromise = Promise.all([
+-            import(`https://esm.sh/three@${THREE_VERSION}`),
+-            import(`https://esm.sh/three@${THREE_VERSION}/examples/jsm/loaders/FBXLoader.js`),
++            // MMC: the core's own three and an FBXLoader vendored beside it, not
++            // esm.sh: FBX import works offline, nothing reaches a third-party host,
++            // and the clip is built on the same three instance the mannequin uses.
++            import("./three.module.mjs"),
++            import("./FBXLoader.mjs"),
+         ]).then(([threeModule, loaderModule]) => ({
+             THREE: threeModule,
+             FBXLoader: loaderModule.FBXLoader,

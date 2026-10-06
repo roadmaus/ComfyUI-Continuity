@@ -5,6 +5,9 @@ Written 2026-10-05 against `main` at `6347afe`, after the research in §3 and
 §4. Revised 2026-10-06 against `00a9a8f`: posing through VNCCS Pose Studio
 (§3.9, §7.9): a pose stage on VNCCS Pose Studio's vendored viewer and
 its pose LoRAs, and Qwen Image Edit dropped in favour of Qwen Image 2.1 throughout.
+Corrected the same day after vendoring at VNCCS Utils `eedaed7`: the pose
+library is not vendored, the modules are copied as `.mjs`, and the mannequin
+is loaded by the core's client.
 
 ## 1. Summary
 
@@ -288,12 +291,20 @@ them is tied to ComfyUI's graph:
 - the mannequin `web/assets/pose_studio_makehuman.v2.bin.gz` (38 MB:
   MakeHuman mesh, morphs, rig, weights, **CC0**) and the skins
   `web/textures/skin.png`, `skin_marks.png`, `skin_dummy.png` (10 MB, under
-  the repo's **MIT**);
-- `PoseLibrary/`, ready poses.
+  the repo's **MIT**).
+
+The mannequin reaches the core through the widget, not the core itself:
+`PoseStudioWidget` decodes the pack (`loadMorphPack`), solves the body
+sliders in the morph worker (`solveMorph`) and hands the result to
+`PoseViewerCore.loadData`. A client of the core does those two steps itself.
+
+Ready poses are not in the repo. Upstream's server downloads them from the
+Hugging Face dataset `MIUProject/VNCCS_PoseLibrary_Main` (and a second user's
+dataset), and neither declares a licence.
 
 **So the forge vendors it** (§7.9), the way the pack carries `h3lora`,
 `mlxdlss` and `vdnh3`: copied by a script, local fixes held as a patch and
-marked `# MMC:`, the upstream revision stamped in, credited in the README.
+marked `# MMC:` (`// MMC:` in JavaScript), the upstream revision stamped in, credited in the README.
 Everything VNCCS Utils is MIT and its mesh CC0, so this is allowed with the
 notices kept. Using the installed pack instead was rejected: its updates
 could break the forge without a change on our side, and installing it brings
@@ -346,7 +357,7 @@ What this means for the forge:
   fitted on, and the 2.1 tokenizer adds its own picture markers regardless.
 - **The render is theirs, unchanged.** The LoRAs learned Pose Studio's
   captures, and the vendored `PoseViewerCore` makes exactly those: same
-  mesh, skins, lights and background. The `# MMC:` patches touch loading and
+  mesh, skins, lights and background. The `// MMC:` patches touch loading and
   wiring, never the look.
 - **`pose_data` schema 3 is the pose format**, because it is their code's
   own. A pose made in Pose Studio pastes into the forge and back.
@@ -628,21 +639,30 @@ pack installed.
 **Vendored, not rewritten.** `tools/vendor_posestudio.py` copies from a
 VNCCS Utils checkout into `web/creator/vendor/posestudio/`: the core, the
 animation, Mixamo and OpenPose import modules, the hand presets, characters
-and morph runtime, their `three.module.js` r160 with `OrbitControls` and
-`TransformControls`, the mannequin, the three skins and `PoseLibrary/`, plus
-`LICENSE` (MIT), the CC0 text and the mesh's licence note. Not taken:
+and morph runtime with its worker, their `three.module.js` r160 with
+`OrbitControls` and `TransformControls`, the mannequin and the three skins,
+plus `LICENSE` (MIT), the CC0 text and the mesh's licence note. Not taken:
 `PoseStudioWidget` and its node, UniCanvas, the 3D factory, SAM 3D Body,
-the model manager. The upstream revision is stamped into the copy's README.
+the model manager, and the pose library, which has no licence (§3.9). The
+upstream revision is stamped into the copy's README.
 
-The `# MMC:` patches (`tools/posestudio.patch`, `--save` to regenerate), each
+**Every module is copied as `.mjs`.** ComfyUI imports every `.js` file under
+an extension's web directory on every page load. As `.js`, the morph worker's
+top-level `self.onmessage = …` would take over `window.onmessage` on every
+ComfyUI page, and about 2 MB of three and core would be parsed for users who
+never open the forge. The script renames the files and the names inside them
+mechanically as it copies, the way `vendor_three.py` re-roots imports; no
+patch hunk is involved.
+
+The `// MMC:` patches (`tools/posestudio.patch`, `--save` to regenerate), each
 small and each explained at its site:
 
-- **Asset paths.** `EXTENSION_URL` points at our folder instead of
-  `/extensions/ComfyUI_VNCCS_Utils/`.
 - **`FBXLoader` from a file, not a CDN.** Upstream imports three and
-  `FBXLoader` from esm.sh at run time; we vendor `FBXLoader.js` r160 (and
-  its `fflate` and `NURBSCurve` imports) beside their three, so FBX works
-  offline and nothing on the page reaches a third-party host.
+  `FBXLoader` from esm.sh at run time; the script fetches `FBXLoader.js`
+  r160 and its `fflate`, `NURBSCurve` and `NURBSUtils` imports from the npm
+  package, re-rooted onto their three, and the importer loads those. FBX
+  works offline, nothing on the page reaches a third-party host, and the
+  clip is built on the same three instance as the mannequin.
 - Nothing that changes how a pose is solved or how a frame looks.
 
 **Their three r160 stays theirs.** The lift stage runs our three 0.170.
@@ -655,9 +675,10 @@ rest of the forge PNGs and JSON.
 than Pose Studio:
 
 - **The bench page.** A `PoseViewerCore` in a forge panel with our own small
-  UI: body sliders, joint gizmos, pose library, a frame strip with onion
-  skin, FBX drop, in-place or root motion, FPS. It is a client of their
-  core, not a copy of their widget.
+  UI: body sliders, joint gizmos, a frame strip with onion skin, FBX drop,
+  in-place or root motion, FPS. It is a client of their core, not a copy of
+  their widget, so it does the widget's mannequin step itself: decode the
+  pack, solve the sliders in the vendored worker, `loadData` the result.
 - **Rendering from any tab.** A frame render is a forge job: the server
   sends `continuity.pose.render` with the pose set and sizes, and *any*
   ComfyUI tab with the pack loaded builds an offscreen `PoseViewerCore`,
@@ -676,8 +697,9 @@ than Pose Studio:
   the pose is flagged, not shipped.
 
 Mixamo clips are the user's to import, never shipped: Adobe's terms allow
-using them in a game, not redistributing them. `PoseLibrary/` poses are
-VNCCS's and ship under its MIT.
+using them in a game, not redistributing them. The same goes for VNCCS's
+pose library until it declares a licence: a user who has it can paste a pose
+from it (`pose_data` is the format), and the forge ships none of it.
 
 **Credits.** The README's *Thanks* gets
 `[ComfyUI_VNCCS_Utils](https://github.com/AHEKOT/ComfyUI_VNCCS_Utils) by
@@ -820,7 +842,7 @@ Every route has a command; these are the groups.
 | Making | `make <asset…>`, `make --missing`, `make --stale`, `vary <asset> --n`, `post <asset> <step…>` |
 | Looking | `sheet <asset>` (contact sheet PNG), `check` (overlay PNG + JSON), `sound-report` (loudness, peak, loop seam error, waveform PNG) |
 | 3D | `lift <asset>`, `retopo <asset> --mode tris\|quads\|keep --faces N`, `lod <asset>`, `collision <asset>`, `texture <mesh> <recipe>`, `views <mesh>` (the depth and normal renders it will condition on) |
-| Poses | `poses` (sets, library), `pose new <set> [--from <library pose>]`, `pose import <set> <clip.fbx> [--fps 12] [--in-place]`, `pose set <set> <frame> <bone>=<x,y,z>…`, `pose paste <set> <pose_data.json>`, `pose render <set> [--frame N]` (mannequin PNGs — the agent's eyes on a pose), `pose rm`. `import` and `render` run in an open ComfyUI tab (§7.9) and refuse when there is none. |
+| Poses | `poses`, `pose new <set> [--from <set>/<frame>]`, `pose import <set> <clip.fbx> [--fps 12] [--in-place]`, `pose set <set> <frame> <bone>=<x,y,z>…`, `pose paste <set> <pose_data.json>`, `pose render <set> [--frame N]` (mannequin PNGs — the agent's eyes on a pose), `pose rm`. `import` and `render` run in an open ComfyUI tab (§7.9) and refuse when there is none. |
 | Moving files | `import` (pictures, meshes, sounds into the project), `export <target>`, `pull` (download `build/<target>/` or the whole project) |
 | Jobs | `jobs`, `wait <id>`, `cancel <id>` |
 

@@ -189,6 +189,8 @@ This pack is glue. The work underneath it belongs to other people:
 - [ComfyUI-H3-PowerLoraStack](https://github.com/cicalooo/ComfyUI-H3-PowerLoraStack) by cicalooo - the H3-safe LoRA loader, vendored (Apache-2.0)
 - [MLX-DLSS](https://github.com/iamwavecut/MLX-DLSS) by iamwavecut - the DLSS 5 refiner's inference and weight extraction, vendored (Apache-2.0)
 - [ComfyUI-VDN-H3](https://github.com/Saganaki22/ComfyUI-VDN-H3) by Saganaki22 - the port behind the VDN-H3 pill, vendored (Apache-2.0)
+- [ComfyUI_VNCCS_Utils](https://github.com/AHEKOT/ComfyUI_VNCCS_Utils) by AHEKOT (MIUProject) - Pose Studio's viewer, FBX import and animation behind the forge's pose stage, vendored (MIT); MIUProject also trained the pose LoRAs the stage feeds
+- [MakeHuman](http://www.makehumancommunity.org/) - the mannequin Pose Studio poses (CC0)
 - [ComfyUI-PlagueKind-Nodes](https://github.com/PlagueKind/ComfyUI-PlagueKind-Nodes) by PlagueKind - SLA sparse attention on the attention pill
 - [OpenVDN](https://github.com/OpenVDN/vdn-minimax-h3) - Video Delta Net itself: the hybrid attention, the training and the stages the pill loads
 - NVIDIA - the DLSS 5 neural renderer itself. Nothing of theirs ships here; the weights are extracted from your own driver DLL
@@ -207,7 +209,7 @@ This pack is glue. The work underneath it belongs to other people:
 Every node pack on that list is optional: if one is installed, the matching
 pills light up, and if it is not, they say what is missing. The models are
 optional in the same way — none of them is downloaded for you, and nothing on
-this list ships inside the pack except the three vendored libraries it names.
+this list ships inside the pack except the four vendored libraries it names.
 
 ## License
 
