@@ -1403,3 +1403,40 @@ export async function blockoutWrite(body) {
   invalidate("input");
   return answer;
 }
+
+// ---- Game Forge -------------------------------------------------------------
+
+/** A forge route's refusal: the server's sentence, and the code an agent (or
+ *  this bench) branches on. See `creator/forge/problems.py`. */
+export class ForgeRefusal extends Error {
+  constructor(answer, status) {
+    super(answer?.problem || answer?.error || t("the forge refused ({status})", { status }));
+    this.code = answer?.code ?? `http.${status}`;
+    this.answer = answer ?? {};
+  }
+}
+
+/**
+ * Call `/continuity/forge/<route>`. Reads are GETs with a query, everything
+ * that writes is a JSON POST — the same table `creator/forge/api.py` serves
+ * and the CLI is held against, so the bench can do nothing the CLI cannot.
+ */
+export async function forgeCall(route, params = {}, { get = false } = {}) {
+  const query = new URLSearchParams(Object.entries(params).filter(([, v]) => v != null));
+  const response = get
+    ? await api.fetchApi(`/continuity/forge${route}?${query}`)
+    : await api.fetchApi(`/continuity/forge${route}`, {
+        method: "POST", headers: JSON_HEADERS, body: JSON.stringify(params),
+      });
+  const body = await response.json().catch(() => null);
+  if (!response.ok) throw new ForgeRefusal(body, response.status);
+  return body;
+}
+
+/** A project file as a URL for an `<img>`. `version` busts the cache: a
+ *  contact sheet is rewritten under the same name every time it is drawn. */
+export function forgeFileUrl(project, path, version = null) {
+  const query = new URLSearchParams({ project, path });
+  if (version != null) query.set("v", String(version));
+  return api.apiURL(`/continuity/forge/file?${query}`);
+}

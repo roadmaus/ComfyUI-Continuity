@@ -1728,6 +1728,28 @@ export const css = `
   .mmc-dash-cube, .mmc-dash-rays line { transition: none; }
 }
 
+/* The forge card, drawn: a soft figure and the same figure as whole pixels.
+   The amber is the tile grid only, and only under the pointer — the grid is
+   the conversion, and the conversion is what the card is pressed for. */
+.mmc-dash-forge {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(110% 90% at 70% 50%,
+                    color-mix(in srgb, var(--mmc-ink) 12%, transparent), transparent 72%),
+    var(--mmc-surface-3);
+}
+.mmc-dash-forge svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mmc-dash-soft { fill: color-mix(in srgb, var(--mmc-ink) 34%, transparent); }
+.mmc-dash-px { fill: color-mix(in srgb, var(--mmc-ink) 72%, transparent); shape-rendering: crispEdges; }
+.mmc-dash-tiles line {
+  stroke: var(--mmc-accent); stroke-width: .35; opacity: 0;
+  shape-rendering: crispEdges; transition: opacity 220ms ease;
+}
+.mmc-dash-card:hover .mmc-dash-tiles line, .mmc-dash-card:focus-visible .mmc-dash-tiles line { opacity: .85; }
+@media (prefers-reduced-motion: reduce) {
+  .mmc-dash-tiles line { transition: none; }
+}
+
 /* The first day, and the fallback everywhere else: no picture on the piece, so
  * the card wears its own glyph at poster size, anchored to the plate's lower
  * left and cropped by its bottom edge. Cropped deliberately — a glyph centred

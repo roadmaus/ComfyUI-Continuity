@@ -245,6 +245,50 @@ shot.
 
 Files: [models.md](models.md#image-to-3d).
 
+## Game Forge
+
+Keeps a game's art in one **project**: its look, the engines it exports to,
+and the list of assets, each a recipe plus the pictures it was made from.
+Projects live in `output/continuity/forge/<project>/`, with a `MANIFEST.md`
+the forge writes from the asset list. Everything the bench does can also be
+done from a shell with the `continuity-forge` skill's `forge.py`, which is how
+an agent plans and builds a game's assets.
+
+Making a project asks for a **Look** (painted, flat, toon, pixel or pbr) and
+where it **Exports to**: Generic (PNG + Aseprite JSON), Godot 4, Tiled, LÖVE,
+Game Boy, Game Boy Color, GB Studio, glTF. A pixel project for a Game Boy
+starts on the Game Boy's four greens. The **Style** sentence is added to the
+end of every prompt in the project.
+
+The **Assets** list is the manifest. The mark beside each says where it
+stands: a ring is planned, a dot is made, a square is exported to every
+target, a dashed ring is stale (its recipe changed after its pictures were
+made). A name in bold is one nobody has looked at since it was made.
+
+Pick an asset to work on it:
+
+- **Import files**, **From ComfyUI**, or drop pictures anywhere on the bench:
+  they become the asset's masters. The set they replace is kept in
+  `.versions/`. Sprites, characters and icons need transparency in the picture.
+  One picture can hold a whole set: a sprite sheet with a row per animation,
+  or a grid of icons or tiles.
+- **Recipe** is the asset's fields as JSON: frame size, animations, tile size
+  and the rest. Saving a change marks the asset stale until it is exported
+  again.
+- **Contact sheet** shows the masters, then what each target makes of them,
+  at a whole-number zoom so pixel art is not blurred.
+
+In the foot, pick a target. **Check** tests every made asset against that
+target's limits (colours per tile, unique tiles, sprites per line, sheet
+size) and lists what breaks; **Problems** shows the converted picture with
+the broken tiles outlined in red. **Export** writes the engine files into
+`build/<target>/`: PNG sheets with Aseprite JSON everywhere, plus Godot
+`SpriteFrames` and `TileSet`, Tiled `.tsx` and `.tmj`, a LÖVE Lua table, and
+indexed PNGs for the Game Boy tools and GB Studio's `assets/` folders.
+
+Generating assets from prompts is not in the forge yet: make pictures with
+the node or the render skill and import them.
+
 ## Neural refiner (DLSS 5)
 
 NVIDIA's DLSS 5 neural renderer, run outside a game through the open-source

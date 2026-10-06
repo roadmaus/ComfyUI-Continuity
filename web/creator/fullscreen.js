@@ -62,6 +62,7 @@ import { openBlockout } from "./blockout.js";
 import { openControl } from "./control.js";
 import { openUpscale } from "./upscale.js";
 import { openLift } from "./lift.js";
+import { openForge } from "./forge.js";
 import { openChat } from "./chat.js";
 import { openLoupe } from "./loupe.js";
 import { openPresetLibrary } from "./presetlib.js";
@@ -946,6 +947,13 @@ class Fullscreen {
           sub: t("Lift a picture into a textured mesh you can stage and shoot around"),
           art: { kind: "lift" },
           go: () => openLift({ source: this.stillTake(), back: () => this.openDash() }) },
+        // A room of its own and not attached to the piece: a game's assets
+        // are a project that outlives any one shot, kept on a shelf beside the
+        // renders and exported to engines rather than handed to a card.
+        { label: t("Game Forge"), glyph: "cube",
+          sub: t("Keep a game's assets in one project, check them against an engine, export them"),
+          art: { kind: "forge" },
+          go: () => openForge({ back: () => this.openDash() }) },
       ] },
     ];
   }

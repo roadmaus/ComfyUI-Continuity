@@ -130,7 +130,23 @@ function plate(item) {
  *  exchange is the exchange. So one kind is drawn here in the same vocabulary
  *  the rest of the plate is styled in, rather than a photograph being found for
  *  it that would be a picture of something else. */
-const DRAWN = new Set(["chat", "lift"]);
+const DRAWN = new Set(["chat", "lift", "forge"]);
+
+/** The forge card's sprite, eight pixels wide: the soft figure beside it,
+ *  made whole. */
+const SPRITE = [
+  "..####..",
+  ".######.",
+  ".######.",
+  "..####..",
+  ".######.",
+  "########",
+  "########",
+  "#.####.#",
+  "..####..",
+  "..#..#..",
+  "..#..#..",
+];
 
 /** A picture, at the plate's size and cropped to it. */
 const frame = (url, cls = "") =>
@@ -250,6 +266,33 @@ const TREATMENTS = {
         <path d="M112 25l17 9.5v19L112 63l-17-9.5v-19z"/>
         <path d="M112 44.5L95 34.5M112 44.5l17-10M112 44.5V63"/>
       </g>
+    </svg>`;
+    return plate;
+  },
+
+  /** A figure, and the same figure as a sprite.
+   *
+   *  Drawn, for the reason the lift card is: what the forge does is a
+   *  conversion, and the honest picture of a conversion is both ends of it.
+   *  On the left the soft master an image model draws; on the right what the
+   *  forge makes of it — whole pixels on a tile grid. Under the pointer the
+   *  grid lights in amber, which is the conversion being made. */
+  forge: () => {
+    const plate = el("div", { class: "mmc-dash-forge" });
+    const cells = SPRITE.flatMap((row, y) => [...row].map((on, x) => on === "#"
+      ? `<rect x="${100 + x * 5}" y="${18 + y * 5}" width="5" height="5"/>` : "")).join("");
+    const lines = [];
+    for (let x = 0; x <= 8; x += 1) lines.push(`<line x1="${100 + x * 5}" y1="18" x2="${100 + x * 5}" y2="73"/>`);
+    for (let y = 0; y <= 11; y += 1) lines.push(`<line x1="100" y1="${18 + y * 5}" x2="140" y2="${18 + y * 5}"/>`);
+    // Built from the constant below and nothing else: no outside text reaches it.
+    plate.innerHTML = `<svg viewBox="0 0 160 90" aria-hidden="true">
+      <g class="mmc-dash-soft">
+        <circle cx="46" cy="27" r="9"/>
+        <rect x="33" y="39" width="26" height="23" rx="10"/>
+        <rect x="37" y="58" width="7" height="15" rx="3.5"/><rect x="48" y="58" width="7" height="15" rx="3.5"/>
+      </g>
+      <g class="mmc-dash-px">${cells}</g>
+      <g class="mmc-dash-tiles">${lines.join("")}</g>
     </svg>`;
     return plate;
   },
