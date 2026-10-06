@@ -206,6 +206,15 @@ def _download(server, project, rel, dest):
     return dest
 
 
+def _local(root, rel):
+    """`root/rel` for a path the server named, refused if it would leave `root`.
+    The server is trusted to answer, not to choose where this machine writes."""
+    parts = rel.replace("\\", "/").split("/")
+    if not rel or rel.startswith("/") or any(p in ("", ".", "..") or ":" in p for p in parts):
+        raise Refused({"problem": f"the server named a file outside the project: {rel!r}", "code": "client.path"})
+    return os.path.join(root, *parts)
+
+
 def problem_count(command, answer):
     if command == "check":
         return answer.get("count", 0)
@@ -370,7 +379,7 @@ def run(server, args):
             listing = server.get_json("/files", project=args.project, under=prefix.rstrip("/"))
             answer["pulled"] = [
                 _download(server, args.project, item["path"],
-                          os.path.join(args.pull, *item["path"][len(prefix):].split("/")))
+                          _local(args.pull, item["path"][len(prefix):]))
                 for item in listing["files"]
                 if item["path"].startswith(prefix) and "/check/" not in item["path"]
                 and not item["path"].rsplit("/", 1)[-1].startswith(".")]
@@ -402,7 +411,7 @@ def run(server, args):
         written = []
         for item in listing["files"]:
             data = server.get("/file", project=args.project, path=item["path"])
-            path = os.path.join(out, *item["path"].split("/"))
+            path = _local(out, item["path"])
             os.makedirs(os.path.dirname(path), exist_ok=True)
             with open(path, "wb") as handle:
                 handle.write(data)

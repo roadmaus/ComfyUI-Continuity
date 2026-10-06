@@ -188,3 +188,11 @@ with open(os.path.join(base, "mygame", "MANIFEST.md"), encoding="utf-8") as hand
 check("the manifest lists the assets", "**hero-walk**" in manifest and "**grass**" in manifest, True)
 check("with their full prompts", "short grass. 8-colour pixel art" in manifest, True)
 check("and their status", "| stale |" in manifest, True)
+
+# An animation name is written into a Godot .tres, a Lua key and file names,
+# so it is held to a plain word rather than escaped by every writer.
+for bad in ('walk"\n[resource]', "", "a" * 33, "../up"):
+    refused(f"animation name {bad!r}", lambda bad=bad: kinds.normalise(
+        {"kind": "sprite", "name": "x", "animations": [{"name": bad}]}), "recipe.field")
+refused("an fps that is not a number", lambda: kinds.normalise(
+    {"kind": "sprite", "name": "x", "animations": [{"name": "walk", "fps": "8"}]}), "recipe.field")

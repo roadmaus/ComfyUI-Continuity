@@ -62,6 +62,13 @@ check("every route has a command", sorted(served - called), [])
 check("every command calls a route that exists", sorted(called - served), [])
 check("the CLI's prefix is the server's", cli.PREFIX, api.PREFIX)
 commands = set(cli.parser()._subparsers._group_actions[0].choices)
+for rel in ("../x", "a/../../b", "/etc/x", "c:/x", ""):
+    try:
+        cli._local("out", rel)
+        FAILURES.append(f"the CLI wrote outside its folder for {rel!r}")
+    except cli.Refused as refusal:
+        check(f"a server path {rel!r} is refused", refusal.answer["code"], "client.path")
+check("a server path inside is joined", cli._local("out", "a/b.png"), os.path.join("out", "a", "b.png"))
 check("every command in the table is a command", sorted(set(cli.COMMANDS) ^ commands), [])
 
 # ---- a stand-in ComfyUI ---------------------------------------------------------------

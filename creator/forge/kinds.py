@@ -12,7 +12,11 @@ validation and the schema are both generated from it; writing the schema by
 hand would be a second copy to drift.
 """
 
+import re
+
 from .problems import ForgeError
+
+_ANIMATION = re.compile(r"\A[A-Za-z0-9_-]{1,32}\Z")
 
 
 class Field:
@@ -306,8 +310,19 @@ def normalise(entry, where=None):
         raise ForgeError(f"{where}: directions must be 1, 4 or 8", "recipe.field", field="directions")
     if kind == "sprite":
         for animation in out["animations"]:
-            if not isinstance(animation.get("name"), str) or not animation["name"]:
-                raise ForgeError(f"{where}: every animation needs a name", "recipe.field", field="animations")
+            # The name becomes a frame tag in Aseprite JSON, a string in a Godot
+            # .tres and a Lua key, and part of file names: held to a plain word so
+            # no writer has to escape it.
+            if not isinstance(animation.get("name"), str) or not _ANIMATION.match(animation["name"]):
+                raise ForgeError(f"{where}: every animation needs a name of letters, digits, - and _ "
+                                 "(at most 32)", "recipe.field", field="animations")
+            fps = animation.get("fps", 12)
+            if isinstance(fps, bool) or not isinstance(fps, (int, float)) or not 1 <= fps <= 120:
+                raise ForgeError(f"{where}: animation {animation['name']!r} needs an fps from 1 to 120",
+                                 "recipe.field", field="animations")
+            if not isinstance(animation.get("loop", True), bool):
+                raise ForgeError(f"{where}: animation {animation['name']!r}: loop must be true or false",
+                                 "recipe.field", field="animations")
             frames = animation.get("frames", 1)
             if isinstance(frames, bool) or not isinstance(frames, int) or not 1 <= frames <= 64:
                 raise ForgeError(f"{where}: animation {animation['name']!r} needs 1 to 64 frames",

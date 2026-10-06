@@ -157,8 +157,9 @@ def _override_size(recipe, target):
     if size is None:
         return None
     if (not isinstance(size, list) or len(size) != 2
-            or any(isinstance(v, bool) or not isinstance(v, int) or v < 1 for v in size)):
-        _refuse(recipe, f"targets.{target}.size must be [width, height]", "recipe.field", field="targets")
+            or any(isinstance(v, bool) or not isinstance(v, int) or not 1 <= v <= 8192 for v in size)):
+        _refuse(recipe, f"targets.{target}.size must be [width, height], each 1 to 8192", "recipe.field",
+                field="targets")
     return size
 
 
