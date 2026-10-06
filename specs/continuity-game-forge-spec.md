@@ -361,7 +361,7 @@ What this means for the forge:
 | Need | Where it is |
 |---|---|
 | Stills, references, edits | The still families (`creator/families/*/still.py`, `creator/compile_image.py`): Qwen Image 2.1 up to 10 references cited as `<imageN>`, Qwen Image Edit and Flux 2 Klein up to 3, Krea 2 by reference LoRA, Ideogram 4.0 none. Canvas on a /16 grid, short edge 512–2048. |
-| **Transparency** | **Qwen Image 2.1 generates a full alpha channel itself**: its VAE is 64 channels with alpha in and out (`families/qwen21/still.py:34-38`, `manifest.py:45`). BiRefNet in `creator/cutout.py` is the cleanup, and the fallback for families without alpha. |
+| **Transparency** | **Qwen Image 2.1 generates a full alpha channel itself**: its VAE is 64 channels with alpha in and out (`families/qwen21/still.py:34-38`, `manifest.py:45`). The pack's save node writes the decoded picture as it is, so a 2.1 still lands as an RGBA PNG. BiRefNet in `creator/cutout.py` is the cleanup, and the fallback for families without alpha. |
 | Guides | The tracing bench, `creator/control.py`: edges, lines, blocks, depth (Depth Anything 3), pose, matte (SAM3). Qwen Image 2.1 follows edges, lines, depth, pose and luma through the Fun ControlNet-Union branch (`families/qwen21/still.py`). No normal tracing. |
 | Poses | Nothing yet; VNCCS Pose Studio's viewer, FBX import and animation are vendored for the pose stage (§7.9). Not dependent on VNCCS being installed. The pose LoRAs load through the core LoRA stack on 2.1 and `h3lora` on H3; both paths are checked with the VNCCS files before they are wired. |
 | Style | Preset scopes including `style` and `cast` (`web/creator/presets.js`), the 941-style atlas (`presets/atlas.js`, cast by `atlas:` address), RefMod for Klein (`creator/refmod.py`), LoRA stacks. |
@@ -375,19 +375,15 @@ What this means for the forge:
 **What is missing**, and is built here as general capability the rest of the
 pack can use too:
 
-1. **Alpha that survives to the file.** The 2.1 VAE carries it; the pack's
-   save path (`MiniMaxH3SaveImage`, `prestage.py`) writes RGB. Find where the
-   fourth channel is dropped and carry it through for 2.1. Then BiRefNet
-   tightens it (§6.1).
-2. **Seamless tiling** (§3.4), as a model wrapper any still family can take.
-3. **Masked inpainting on stills.** No still family takes a mask. Seam
+1. **Seamless tiling** (§3.4), as a model wrapper any still family can take.
+2. **Masked inpainting on stills.** No still family takes a mask. Seam
    repair, hole fill and layer cleanup all want one.
-4. **Texturing an existing UV-mapped mesh** (§7.4).
-5. **Sound without picture** (§8).
-6. **A normal tracing**, for 2D lighting and as a control image.
-7. **Quad retopology** and the rest of making a mesh game-ready: LODs,
+3. **Texturing an existing UV-mapped mesh** (§7.4).
+4. **Sound without picture** (§8).
+5. **A normal tracing**, for 2D lighting and as a control image.
+6. **Quad retopology** and the rest of making a mesh game-ready: LODs,
    collision, scale and pivot (§3.8, §7.6).
-8. **A pose stage** (§7.9): Pose Studio's viewer vendored, frames rendered
+7. **A pose stage** (§7.9): Pose Studio's viewer vendored, frames rendered
    in any open tab on request, and the render used as a recipe input that routes the family's pose LoRA, puts
    itself first among the references and sets the canvas. Any still render
    can take one, not only the forge's.
@@ -866,7 +862,7 @@ contract stable for agents that have learned it.
 ## 12. Sequencing
 
 1. **Foundation.** Project storage and manifest, targets, the dashboard card,
-   alpha carried to the file for 2.1, post-steps 6.1–6.7, exports 1–5. Works
+   post-steps 6.1–6.7, exports 1–5. Works
    on pictures made anywhere — immediately useful for a Game Boy project.
    The CLI and its skill ship in this step, not after: every route lands
    with its command, and the parity test from day one.
