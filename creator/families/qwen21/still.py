@@ -27,8 +27,29 @@ import sys
 ARCH = "qwen21"
 
 # Which weights fields this architecture has. One DiT: the speed axis is a
-# Lightning LoRA or nothing, so there is nothing to route between.
-FIELDS = ("model", "clip", "vae")
+# Lightning LoRA or nothing, so there is nothing to route between. `control`
+# is the Fun ControlNet branch below, optional: loaded only where a guide is
+# attached.
+FIELDS = ("model", "clip", "vae", "control")
+
+# The guide, through a loaded branch rather than a picture slot. Unlike Qwen
+# Image Edit 2509/2511 these weights were never post-trained to follow a
+# tracing arriving among the references — fed to the encoder, an edge map is
+# read as a picture *of* an edge map. What does follow one is alibaba-pai's
+# Qwen-Image-2.1-Fun-Controlnet-Union: a 16-block control branch beside the
+# DiT, one block injected at every second base layer, its input the guide's
+# VAE latent. Core loads it with `ModelPatchLoader` (from models/model_patches,
+# not models/controlnet — it is a model patch, not a ControlNet core's
+# conditioning path knows) and applies it with `ZImageFunControlnet`, whose
+# description names Qwen Image 2.1 alongside Z-Image: both branches patch the
+# *model*, so the guide is a model wrapper and the conditioning is untouched.
+#
+# The tracings the card lists — canny, depth, gray, HED, line art, MLSD, pose,
+# scribble — in the bench's vocabulary: Edges is the canny, Lines covers HED,
+# line art and scribble, Luma is the grey. MLSD the bench does not trace.
+CONTROL_LOADER = "ModelPatchLoader"
+CONTROL_NODE = "ZImageFunControlnet"
+CONTROL_TRACINGS = ("edges", "lines", "depth", "pose", "luma")
 
 # Which VAE the `vae` field has to hold, checked off the file's header before
 # the render is queued — see `vaekind`. Not the Qwen image VAE: 2.1 ships its
@@ -194,6 +215,54 @@ def require_support():
         )
 
 
+def control_supported():
+    """Whether this core's `ModelPatchLoader` can load the 2.1 Fun branch.
+
+    Not a node probe: `ZImageFunControlnet` is older than the 2.1 branch and
+    sits on cores that would load the file as nothing they know. What arrived
+    with it (Comfy-Org/ComfyUI#16519) is the module class the loader builds,
+    so that is what is asked. No ComfyUI is a probe that says no, which keeps
+    the manifest importable in the pure-Python suites.
+    """
+    try:
+        from comfy.ldm.qwen_image21 import model
+    except Exception:      # noqa: BLE001
+        return False
+    return hasattr(model, "QwenImage21FunControl")
+
+
+def require_control():
+    """Refuse a guide on a core that cannot load the branch — see above."""
+    if not control_supported():
+        raise ValueError(
+            "This ComfyUI cannot load the Qwen Image 2.1 Fun ControlNet yet. "
+            "Update ComfyUI and restart, or take the guide off."
+        )
+
+
+def emit_control(graph, payload, weights, model, vae):
+    """The Fun ControlNet over `model`, aimed at the payload's guide.
+
+    The guide is cropped to the canvas here, centred, because the patch only
+    stretches it: core resizes the hint to the latent's size with no crop, so
+    a 4:3 tracing under a 16:9 canvas would come back as a squashed room.
+    Lanczos, as the init is scaled.
+    """
+    from ... import render_image
+
+    control = payload.control
+    image = render_image.load_picture(graph, payload, "guide", control["filename"])
+    image = graph.node("ImageScale", image=image, upscale_method="lanczos",
+                       width=payload.width, height=payload.height,
+                       crop="center").out(0)
+    patch = graph.node(CONTROL_LOADER, name=weights.get("control")).out(0)
+    return graph.node(
+        CONTROL_NODE, model=model, model_patch=patch, vae=vae,
+        strength=control["strength"], image=image,
+        start_percent=control["start"], end_percent=control["end"],
+    ).out(0)
+
+
 def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
                filename_prefix):
     """The sampler branch over the shared prologue's loaders."""
@@ -231,6 +300,9 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
         latent = graph.node("EmptyLatentImage", width=payload.width,
                             height=payload.height, batch_size=1).out(0)
         denoise = 1.0
+
+    if payload.control is not None:
+        model = emit_control(graph, payload, weights, model, vae)
 
     sampled = graph.node(
         "KSampler", model=model, positive=positive, negative=negative,

@@ -1132,6 +1132,73 @@ expect_error("the turbo pill refuses to engage without a Lightning LoRA",
              lambda: ci.compile_prestage(qwen21_blob(turbo={"qwen21": {"on": True}}), q21),
              "Lightning LoRA")
 
+# ---- the guide, through the Fun ControlNet ----------------------------------
+#
+# A picture attached with `role: "guide"` is lifted out of the pool: it never
+# reaches the encoder, takes no `<imageN>`, and patches the *model* through
+# core's `ModelPatchLoader` + `ZImageFunControlnet`, cropped to the canvas
+# first because the patch only stretches. The core probe is forced here — the
+# graph is inspected, not sampled, and the local core may predate the branch.
+
+check("no guide, no branch", ("ModelPatchLoader" in qt2i, "ZImageFunControlnet" in qt2i),
+      (False, False))
+Q21_GUIDED = ri.ImageWeights(arch="qwen21", files={
+    **MODELS["qwen21"], "control": "Qwen-Image-2.1-Fun-Controlnet-Union.safetensors"})
+GUIDE = {"filename": "edges.png", "handle": "img-2", "role": "guide", "guide": "edges"}
+
+
+def guided_graph(data, weights=Q21_GUIDED, supported=True):
+    probe = q21.control_supported
+    q21.control_supported = lambda: supported
+    try:
+        payload = ci.compile_prestage(data, q21)
+        return payload, by_class(ri.emit(payload, weights, sampling_mod.Sampling(
+            seed=11, steps=25, cfg=1.0, sampler_name="euler", scheduler="simple"),
+            NODE_ID, q21).finalize())
+    finally:
+        q21.control_supported = probe
+
+
+gp, gg = guided_graph(qwen21_blob(prompt="a room like @img-1",
+                                  refs=[{"filename": "room.png", "handle": "img-1"}, GUIDE]))
+g_encode = gg["TextEncodeQwenImage21"][0][1]
+g_loads = {node_id: inputs["image"] for node_id, inputs in gg["LoadImage"]}
+check("the guide is not one of the encoder's pictures",
+      ([g_loads[g_encode[k][0]] for k in g_encode if k.startswith("images.")], g_encode["prompt"],
+       gp.refs), (["room.png"], "a room like <image1>", ["room.png"]))
+g_apply = gg["ZImageFunControlnet"][0]
+g_scale = dict(gg["ImageScale"])[g_apply[1]["image"][0]]
+check("the branch loads from the control field and patches the model the sampler reads",
+      (gg["ModelPatchLoader"][0][1]["name"], g_apply[1]["model_patch"][0],
+       gg["KSampler"][0][1]["model"]),
+      (Q21_GUIDED.get("control"), gg["ModelPatchLoader"][0][0], [g_apply[0], 0]))
+check("the drawing is cropped to the canvas before the patch stretches it",
+      (g_loads[g_scale["image"][0]], g_scale["width"], g_scale["height"], g_scale["crop"]),
+      ("edges.png", gp.width, gp.height, "center"))
+check("full strength over the whole schedule by default",
+      (g_apply[1]["strength"], g_apply[1]["start_percent"], g_apply[1]["end_percent"]),
+      (1.0, 0.0, 1.0))
+check("...and the blob's guide block where it says otherwise, clamped",
+      guided_graph(qwen21_blob(refs=[GUIDE], guide={"strength": 3, "start": 0.2}))[0].control,
+      {"filename": "edges.png", "strength": 1.0, "start": 0.2, "end": 1.0})
+check("a guide takes no reference slot — ten pictures and a guide still render",
+      len(guided_graph(qwen21_blob(refs=ten + [GUIDE]))[0].refs), 10)
+check("an edit in place never edits the guide",
+      guided_graph(qwen21_blob(refs=[GUIDE, "room.png"], edit_first=True))[0].init["filename"],
+      "room.png")
+expect_error("a sentence citing the guide is refused for that",
+             lambda: ci.compile_prestage(qwen21_blob(prompt="like @img-2", refs=[GUIDE]), q21),
+             "is the guide")
+expect_error("two guides are one too many",
+             lambda: ci.compile_prestage(qwen21_blob(refs=[GUIDE, {**GUIDE, "handle": "img-3"}]), q21),
+             "one guide at a time")
+expect_error("a guide with no branch picked names the weights control",
+             lambda: guided_graph(qwen21_blob(refs=[GUIDE]), weights=Q21_WEIGHTS),
+             "models/model_patches")
+expect_error("a core that cannot load the branch says so",
+             lambda: guided_graph(qwen21_blob(refs=[GUIDE]), supported=False),
+             "cannot load the Qwen Image 2.1 Fun ControlNet")
+
 # ---- an edit never starts from the noise that made its picture ---------------
 #
 # On the three edit families the render is the seed's noise plus the pictures

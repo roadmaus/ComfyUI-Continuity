@@ -46,6 +46,8 @@ import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { blobIO, samplingBar, seedPill } from "./sampling.js";
 import { clearButton } from "./clear.js";
 import { loadLoraNames, loraNames, refreshLoraNames } from "./turbo.js";
+import { STOP_TITLE } from "./guide.js";
+import { openControl } from "./control.js";
 import { Stage, stageSource } from "./stage.js";
 import { loadCatalog, refreshCatalog, catalogByFolder, rememberedWeights,
          rememberStillWeights } from "./models.js";
@@ -137,7 +139,8 @@ export class PreStageEditor {
     // `{handle, filename}` rows under a name this state does not use, so it is
     // handed a view rather than being made to carry a second list.
     this.prompt = new PromptBox({
-      getState: () => ({ ...this.state, assets: this.state.refs ?? [] }),
+      // A guide a branch reads is not citable, so it is not offered after @.
+      getState: () => ({ ...this.state, assets: S.preStageCountedRefs(this.state) }),
       onInput: (text) => {
         this.state.prompt = text;
         // The whole commit, not just the write-out: the rail's Clear reads
@@ -291,7 +294,7 @@ export class PreStageEditor {
              + "one that reads pictures.", { arch: S.PRESTAGE_ARCH_LABEL[this.state.arch] });
     }
     const max = S.preStageMaxRefs(this.state);
-    if ((this.state.refs?.length ?? 0) >= max) {
+    if (S.preStageCountedRefs(this.state).length >= max) {
       // Two different caps wearing one number. The encoder has three image
       // slots on every family; what a checkpoint was post-trained to *read* is
       // its own answer, and the first Qwen-Image-Edit weights read one picture.
@@ -428,12 +431,12 @@ export class PreStageEditor {
   async attachOneRef() {
     const blocked = this.refBlocked();
     if (blocked) { this.notice = blocked; this.render(); return null; }
-    const room = S.preStageMaxRefs(this.state) - this.state.refs.length;
+    const room = S.preStageMaxRefs(this.state) - S.preStageCountedRefs(this.state).length;
     const chosen = await openPicker({
       kinds: ["image", "renders", "refmods"], kind: "image",
       aspect: this.pickerAspect(),
       plate: this.plateSpec(),
-      capacity: () => ({ used: this.state.refs.length, max: S.preStageMaxRefs(this.state), filesLeft: room }),
+      capacity: () => ({ used: S.preStageCountedRefs(this.state).length, max: S.preStageMaxRefs(this.state), filesLeft: room }),
     });
     if (!chosen?.length) return null;
     const ref = applyPick({ handle: S.nextPreStageHandle(this.state), kind: "image", role: "reference" }, chosen[0]);
@@ -529,7 +532,7 @@ export class PreStageEditor {
     // this door was pressed rather than typed into.
     const blocked = this.refBlocked();
     if (blocked) return this.flash(blocked);
-    const room = S.preStageMaxRefs(this.state) - this.state.refs.length;
+    const room = S.preStageMaxRefs(this.state) - S.preStageCountedRefs(this.state).length;
     if (fromVideo) {
       const clip = await openPicker({
         kinds: ["video", "renders"], kind: "video", single: true,
@@ -547,7 +550,7 @@ export class PreStageEditor {
       kinds: ["image", "renders"], kind: "image",
       aspect: this.pickerAspect(),
       plate: this.plateSpec(),
-      capacity: () => ({ used: this.state.refs.length, max: S.preStageMaxRefs(this.state), filesLeft: room }),
+      capacity: () => ({ used: S.preStageCountedRefs(this.state).length, max: S.preStageMaxRefs(this.state), filesLeft: room }),
     });
     if (!chosen) return;
     for (const asset of chosen.slice(0, room)) {
@@ -581,7 +584,12 @@ export class PreStageEditor {
     // Everywhere else that is still the right slot, because the init image is
     // the only thing those families have that means "start from this
     // arrangement".
-    if (S.preStageReadsGuides(this.state)) return this.takeGuideAsPicture(path, opId);
+    // And on Qwen Image 2.1 the guide is a picture *slot* without being a
+    // picture: the chip and the framing are the same, the compile hands it to
+    // the Fun ControlNet the weights pill loads instead of to the encoder.
+    if (S.preStageReadsGuides(this.state) || S.preStageLoadsBranch(this.state)) {
+      return this.takeGuideAsPicture(path, opId);
+    }
     this.state.init = {
       filename: path,
       denoise: this.state.init?.denoise ?? S.PRESTAGE_DEFAULT_DENOISE,
@@ -604,7 +612,8 @@ export class PreStageEditor {
       S.dropMods(standing);
       standing.guide = opId;
     } else {
-      const blocked = this.refBlocked();
+      // A branch's guide takes no picture slot, so no cap refuses it.
+      const blocked = !S.preStageLoadsBranch(this.state) && this.refBlocked();
       if (blocked) return this.flash(blocked);
       this.state.refs.push({
         handle: S.nextPreStageHandle(this.state), filename: path,
@@ -613,6 +622,102 @@ export class PreStageEditor {
     }
     this.commit();
     this.probeInit();
+  }
+
+  /** The Guide tool: a tracing already made, or a picture to trace now. */
+  addGuide(anchor) {
+    const PICK = t("Pick a tracing");
+    const TRACE = t("Trace a picture");
+    openChoicePopover(anchor, {
+      title: t("Guide"),
+      options: [PICK, TRACE],
+      sub: (option) => (option === PICK
+        ? t("One the ControlNet bench already wrote")
+        : t("Choose any picture, then its edges, lines, depth or pose")),
+      onPick: (option) => (option === PICK ? this.pickGuide() : this.traceGuide()),
+    });
+  }
+
+  /** The picker on its Guides tab, stills only — a still is aimed at one
+   *  drawing, and a traced clip would be a question this render cannot ask. */
+  async pickGuide() {
+    const chosen = await openPicker({
+      kinds: ["guides", "image"], kind: "guides", only: "image", single: true,
+      aspect: this.pickerAspect(),
+      capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
+    });
+    const row = chosen?.[0];
+    if (row) this.takeGuideAsPicture(row.path, S.tracingOf(row.path));
+  }
+
+  /** A picture, then the bench on it; the bench's send puts the tracing here.
+   *  The same door the bench offers when it is opened from the dashboard, so
+   *  a tracing arrives by one path whichever way the errand started. */
+  async traceGuide() {
+    const chosen = await openPicker({
+      kinds: ["image", "renders"], kind: "image", only: "image", single: true,
+      aspect: this.pickerAspect(),
+      capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
+    });
+    const row = chosen?.[0];
+    if (!row) return;
+    openControl({
+      source: { path: row.path, kind: "image" },
+      targets: [{
+        id: "pre", kinds: ["image"],
+        label: t("Aim the still at it"),
+        does: t("Loads the ControlNet branch that reads it."),
+        closeOnSend: true,
+        take: (result) => this.takeGuideAsPicture(result.path, result.opId ?? null),
+      }],
+    });
+  }
+
+  /** The guide a loaded branch reads, drawn as what it is: not a picture.
+   *
+   *  No `@handle` — the prompt cannot cite it, and a handle on the chip would
+   *  invite exactly the sentence the compile refuses. It says which tracing it
+   *  is instead, and where the branch file has not been picked it says that,
+   *  with the weights popover one click away rather than a refusal at Render. */
+  renderGuideChip(ref) {
+    const control = S.PRESTAGE_REFS[this.state.arch]?.control ?? {};
+    const tracing = ref.guide ?? S.tracingOf(ref.filename);
+    const untrained = tracing && !(control.tracings ?? []).includes(tracing);
+    const unloaded = !this.state.models[this.state.arch]?.control;
+    return el("div", {
+      class: `mmc-asset${unloaded || untrained ? " mmc-asset-offshape" : ""}`,
+      title: unloaded
+        ? t("No ControlNet file is picked, so this guide cannot load. Click the label "
+          + "to choose it in the weights.")
+        : untrained
+          ? t("The ControlNet was trained on {list} — this tracing is none of them, "
+            + "so the render will follow it loosely if at all.",
+            { list: (control.tracings ?? []).join(", ") })
+          : t("The render is aimed at this drawing. The prompt says what things are; "
+            + "the guide says where they go."),
+    }, [
+      swappable(
+        el("img", { class: "mmc-asset-thumb", alt: ref.filename,
+                    src: viewUrl(ref.filename, { preview: true, crop: ref.crop ?? null }) }),
+        { title: t("Pick a different tracing"), onclick: () => this.pickGuide() },
+      ),
+      el("span", { class: "mmc-asset-handle", text: t("guide") }),
+      this.cropMark(ref),
+      unloaded
+        ? el("button", {
+            class: "mmc-asset-role mmc-asset-role-pick",
+            text: t("pick ControlNet"),
+            onclick: (event) => this.row.openWeights(event.currentTarget),
+          })
+        : el("span", { class: "mmc-asset-role", text: tracing ? t(tracing) : t("drawing") }),
+      el("button", {
+        class: "mmc-asset-x", text: "✕", title: t("Remove the guide"),
+        onclick: () => {
+          this.state.refs = this.state.refs.filter((r) => r !== ref);
+          this.commit();
+        },
+      }),
+    ]);
   }
 
   /** Point a style reference at a different image, keeping its handle — the
@@ -808,7 +913,9 @@ export class PreStageEditor {
     this.renderExpand();
     const chips = [
       ...(state.init ? [this.renderInitChip()] : []),
-      ...state.refs.map((ref, slot) => this.renderRefChip(ref, slot)),
+      // Numbered among the pictures the render counts, so a guide a branch
+      // reads takes no `<imageN>` from the ones after it.
+      ...state.refs.map((ref) => this.renderRefChip(ref, S.preStageCountedRefs(state).indexOf(ref))),
     ];
     // A still's screens, under its pictures — see the Creator's row.
     const screens = screenChips({ state, commit: () => this.commit(),
@@ -965,6 +1072,13 @@ export class PreStageEditor {
         tool(t(refs.editsFirst ? "Pictures" : "Style refs"), "image",
              this.refsTitle(refs),
              () => this.addRefs(false)),
+        // The drawing this still is aimed at, where the weights load a branch
+        // to read one. Beside Pictures because it is the same gesture — a file
+        // lands on the strip — though it is not one of them.
+        ...(S.preStageLoadsBranch(this.state) ? [tool(t("Guide"), "pen",
+             t("Aim the still at a tracing — its edges, lines, depth or pose. Pick one "
+             + "you traced, or trace a picture now."),
+             (event) => this.addGuide(event.currentTarget))] : []),
         tool(t("From video"), "video",
              t("Pull a single frame off a video's playhead — as the init image, saved as a PNG in the input folder."),
              () => this.setInit(true)),
@@ -1046,6 +1160,7 @@ export class PreStageEditor {
   }
 
   renderRefChip(ref, slot = 0) {
+    if (ref === S.preStageBranchGuide(this.state)) return this.renderGuideChip(ref);
     const refs = S.PRESTAGE_REFS[this.state.arch] ?? {};
     // What this picture is *for*, in the family's own words. On an edit family
     // nothing here is a style input: the first slot is the picture being
@@ -1316,6 +1431,25 @@ export class PreStageEditor {
         format: (n) => t("img {value}", { value: n.toFixed(2) }),
         onChange: (next) => { state.init.denoise = next; this.commit(); },
       }));
+    }
+
+    // How hard the ControlNet branch pulls, while a guide is on the still.
+    // The Shot's guide pill (`guide.js`) in shape — a lit "guide" head and the
+    // stops — so the two read as one control; the head is not a switch here,
+    // because the drawing is: taking it off renders without the branch.
+    if (S.preStageBranchGuide(state)) {
+      const strength = state.guide?.strength ?? S.PRESTAGE_GUIDE_STRENGTH;
+      pills.push(el("div", {
+        class: "mmc-pill mmc-guide-on",
+        title: t("The render is aimed at the guide on the strip. Remove it there to "
+               + "render without the ControlNet."),
+      }, [icon("pen", 16), el("span", { text: t("guide") })]));
+      pills.push(el("div", { class: "mmc-pill mmc-pill-set" }, S.preStageGuideStops(state).map(([stop, value]) => el("button", {
+        class: `mmc-pill-seg${strength === value ? " mmc-guide-on" : ""}`,
+        "aria-pressed": strength === value,
+        title: t(STOP_TITLE[stop] ?? "Strength {value}.", { value }),
+        onclick: () => { state.guide = { strength: value }; this.commit(); },
+      }, [el("span", { text: t(stop) })]))));
     }
 
     // The seed, for the simple view, where the sampler row is folded away —
@@ -1694,11 +1828,6 @@ export class PreStageRow {
 
     const render = () => {
       const byFolder = catalogByFolder();
-      const lists = {
-        model: byFolder.diffusion_models ?? [], turbo_model: byFolder.diffusion_models ?? [],
-        uncond_model: byFolder.diffusion_models ?? [],
-        clip: byFolder.text_encoders ?? [], vae: byFolder.vae ?? [],
-      };
       const side = state.models[state.arch];
       const missing = new Set(S.missingPreStageModels(state));
 
@@ -1713,7 +1842,7 @@ export class PreStageRow {
           onclick: (event) => openChoicePopover(event.currentTarget, {
             title: t(S.PRESTAGE_FIELD_LABEL[field]),
             find: true,
-            options: [NONE, ...lists[field]],
+            options: [NONE, ...S.preStageFieldFiles(state.arch, field, byFolder)],
             value: side[field] || NONE,
             onPick: (picked) => {
               side[field] = picked === NONE ? "" : picked;
@@ -2215,7 +2344,7 @@ export class PreStageBody {
       S.dropMods(this.state.init);
     } else {
       const first = S.preStageEditableRef(this.state);
-      if (!first && this.state.refs.length >= S.preStageMaxRefs(this.state)) {
+      if (!first && S.preStageCountedRefs(this.state).length >= S.preStageMaxRefs(this.state)) {
         // The pool may be entirely cast pictures or guides. Keep them intact
         // and refuse explicitly instead of inserting an unrenderable slot.
         this.reveal();

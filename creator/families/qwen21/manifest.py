@@ -3,7 +3,7 @@ and the shared image-still constants; this module only puts controls behind
 them.
 """
 
-from ... import compile_image, render_image
+from ... import compile_image, guide, render_image
 from .. import manifest as m
 from . import declare, still
 
@@ -32,7 +32,9 @@ _UI = {
         "title": "Checkpoint",
         "help": "Qwen-Image-2.1 — the DiT, one file for drawing and editing. bf16 or the int8 convrot cut Comfy-Org publishes.",
         "hints": ["qwen_image_2.1", "qwen_image_2_1", "qwen-image-2.1"],
-        "avoid": ["qwen_image_edit", "qwen_image_2512"],
+        # ...and the Fun ControlNet, whose published name starts with the
+        # checkpoint's and which people drop into the same folder.
+        "avoid": ["qwen_image_edit", "qwen_image_2512", "controlnet"],
     },
     "clip": {
         "title": "Text encoder",
@@ -46,6 +48,17 @@ _UI = {
         "hints": ["qwen_image_2.1_vae", "qwen_image_2_1_vae"],
         "avoid": ["qwen_image_vae"],
     },
+    "control": {
+        "title": "ControlNet branch",
+        "help": "Optional. Qwen-Image-2.1-Fun-Controlnet-Union, from models/model_patches — "
+                "what a guide on this still loads to aim the render at a tracing. One "
+                "file covers edges, lines, depth, pose and grey. Loaded only when a "
+                "guide is attached.",
+        "hints": ["qwen-image-2.1-fun-controlnet", "qwen_image_2.1_fun", "qwen_image_2_1_fun"],
+        # Z-Image's and the 2512 Qwen-Image's Fun branches sit in the same
+        # folder under the same words and are not this DiT's.
+        "avoid": ["z-image", "z_image", "2512"],
+    },
 }
 
 
@@ -58,6 +71,9 @@ def _weights():
         # One DiT and no second branch to route a generation between.
         "routed": False,
         "audio": False,
+        # The branch is a pass, not a component: a still without a guide
+        # renders without it (`render_image.check`).
+        "required": name != "control",
         "gguf": name in ("model", "clip"),
         "device": False,
         "title": _UI[name]["title"],
@@ -112,6 +128,21 @@ def manifest():
                       "checkpoint": False,
                       # The LoRA names a headless render takes for it (`creator/headless.py`).
                       "hints": {"family": r"qwen.?image.?2|qwen.?2\.?1"}},
+            # The guide: a Fun ControlNet branch loaded beside the DiT and aimed
+            # at the drawing attached as the still's guide — `still.CONTROL_*`.
+            # Absent, not False, on a core that cannot load the branch, so the
+            # bench's tracing keeps going to the init slot there rather than to
+            # a guide the render would refuse.
+            **({"control": {
+                "method": "branch",
+                "slot": "control",
+                "tracings": list(still.CONTROL_TRACINGS),
+                "kind": "image",
+                "default_strength": guide.DEFAULT_STRENGTH,
+                "max_strength": guide.MAX_STRENGTH,
+                # `control_context_scale` on the card, where 1.0 is full control.
+                "stops": {"loose": 0.5, "firm": 0.8, "locked": 1.0},
+            }} if still.control_supported() else {}),
             # References with no adapter and no layout to pick: the base weights
             # read them. `edits_first` is what makes this an edit family:
             # `Picture 1` can be the picture being changed in place, which the
@@ -119,8 +150,8 @@ def manifest():
             # too. Off — the default — the attached pictures are only cited
             # and the render is a new picture on the aspect pill's canvas,
             # which is what these weights do natively. No editions and no
-            # native-control table: one release, and a guide is a picture
-            # like any other here.
+            # native-control table: one release, and a guide is not a picture
+            # here — it goes to the branch above.
             "refs": {"methods": [], "default_method": None,
                      "needs_lora": False, "edits_first": True,
                      "noun": list(still.REFS_NOUN),

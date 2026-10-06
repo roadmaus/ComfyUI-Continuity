@@ -56,6 +56,11 @@ python3 <skill dir>/render.py h3 "@pic-1 turns and walks out of frame" --image c
   `person`; with nothing given, the first picture opens the shot. To reuse an
   earlier render, pass its name with ComfyUI's annotation:
   `--image "H3_00012_.png [output]"`.
+- **Guides (Qwen Image 2.1 stills):** `--image edges.png:guide` aims the still
+  at a tracing from the ControlNet bench. It is not cited and takes no
+  `@pic-N`; `--guide-strength 0.5|0.8|1` sets how hard it pulls (1 decides what
+  things are as well as where; 0.8 leaves the prompt room). It needs the Fun
+  ControlNet file in the family's `control` slot.
 - **Other flags:** `--seconds`, `--aspect 16:9|9:16|1:1|4:5|...`, `--edge`
   (short edge in px), `--seed`, `--model SLOT=FILE`, `--device SLOT=DEVICE`,
   `--attention default|sage|kitchen|sla`, `--low-vram`, `--fast-math`, `--out DIR` (default

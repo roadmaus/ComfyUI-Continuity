@@ -466,8 +466,13 @@ def available():
         except Exception:  # noqa: BLE001 — an unconfigured folder is an empty one
             return []
 
+    # The still families pick from folders rather than slots, and one of theirs
+    # — `model_patches`, the image DiTs' Fun ControlNet branches — is no video
+    # slot's, so `by_folder` would browse nothing there without it.
+    from . import render_image
+
     listings = {}
-    for folder in set(fields.values()):
+    for folder in set(fields.values()) | set(render_image.FOLDERS.values()):
         # Core's listing filters on its own extensions, which leave `.gguf` out;
         # ComfyUI-GGUF registers keys over the same directories filtered to
         # exactly those. Merged into one list because the pick is one question —

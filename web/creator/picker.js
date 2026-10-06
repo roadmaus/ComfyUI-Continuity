@@ -27,20 +27,21 @@ import { queueState, watch as watchQueue, dropQueued } from "./queue.js";
 const KIND_LABEL = { image: "Image", video: "Video", audio: "Audio",
                      renders: "Renders", guides: "Guide", refmods: "RefMod", meshes: "Meshes" };
 const ACCEPT = { image: "image/*", video: "video/*", audio: "audio/*",
-                 guides: "video/*", refmods: ".safetensors" };
+                 guides: "image/*,video/*", refmods: ".safetensors" };
 
 // Where the ControlNet bench writes, and so the whole of what the guide tab
 // shows. Mirrors `control.SUBFOLDER`.
 //
 // A tab and not a kind, exactly as "renders" is one: that tab browses a
 // different *folder* while its files keep their own kinds, and this browses a
-// different *corner* of the input folder while its files stay videos. Both are
+// different *corner* of the input folder while its files stay clips and stills. Both are
 // the same idea — a tab is a place to look, a kind is what a file is — and
 // making the guide a fourth kind would have meant teaching the caps, the
 // grammar and compile.py about a kind that does not exist.
 const GUIDE_SUBFOLDER = "continuity/control";
 const isGuide = (asset) =>
-  asset.kind === "video" && (asset.subfolder || "").startsWith(GUIDE_SUBFOLDER);
+  (asset.kind === "video" || asset.kind === "image")
+  && (asset.subfolder || "").startsWith(GUIDE_SUBFOLDER);
 // What a configured video cell says about itself, short enough for the badge.
 const TRACK_BADGE = { "picture+sound": "sound", "picture": "silent", "sound": "sound only" };
 // How many cells the grid materialises per batch. A folder of hundreds of
@@ -520,7 +521,8 @@ export class Picker {
     // its grid is showing.
     const scoped = this.kind === "renders"
       ? (this.options.only ? this.renders.filter((a) => a.kind === this.options.only) : this.renders)
-      : this.kind === "guides" ? this.assets.filter(isGuide)
+      : this.kind === "guides" ? this.assets.filter((a) => isGuide(a)
+                                 && (!this.options.only || a.kind === this.options.only))
       : this.kind === "meshes" ? this.meshes
       : this.assets.filter((a) => a.kind === this.kind);
     const count = (test) => scoped.filter(test).length;
@@ -894,13 +896,16 @@ export class Picker {
     // the caller is replacing one file with another, where anything but that
     // kind is a pick it would have to refuse.
     const only = this.options.only;
-    const onKind = only ? (asset) => asset.kind === only
+    // The guide tab stays the bench's folder with `only` set — a pre-stage asks
+    // for still tracings, not for every picture in the input folder.
+    const onKind = only && this.kind === "guides" ? (asset) => isGuide(asset) && asset.kind === only
+      : only ? (asset) => asset.kind === only
       : this.kind === "renders" ? () => true
       // Mods are a place too, and every one is a reference of its own kind.
       : this.kind === "refmods" ? () => true
       : this.kind === "meshes" ? () => true
-      // The guide tab is a place, not a kind: every clip the bench has traced,
-      // and nothing else in the input folder.
+      // The guide tab is a place, not a kind: everything the bench has traced,
+      // clips and stills, and nothing else in the input folder.
       : this.kind === "guides" ? isGuide
       : (asset) => asset.kind === this.kind;
     return this.activeAssets().filter((asset) =>

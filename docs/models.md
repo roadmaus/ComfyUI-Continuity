@@ -163,6 +163,11 @@ Published by [Comfy-Org/Qwen-Image-2.1](https://huggingface.co/Comfy-Org/Qwen-Im
 | Checkpoint | `qwen_image_2.1_bf16.safetensors` or `qwen_image_2.1_int8_convrot.safetensors` | `diffusion_models` |
 | Text encoder | `qwen3vl_8b_bf16.safetensors` or `qwen3vl_8b_int8_convrot.safetensors` | `text_encoders` |
 | VAE | `qwen_image_2.1_vae_bf16.safetensors` | `vae` |
+| ControlNet branch (optional) | [`Qwen-Image-2.1-Fun-Controlnet-Union.safetensors`](https://huggingface.co/alibaba-pai/Qwen-Image-2.1-Fun-Controlnet-Union) | `model_patches` |
+
+The ControlNet branch is about 7 GB and is loaded only when a guide is on the
+still. It goes in `model_patches`, not `controlnet`: ComfyUI loads it as a
+model patch. Your ComfyUI has to be from late September 2026 or newer to load it.
 
 The text encoder is the same Qwen3-VL 8B file Ideogram 4.0 loads. The VAE is
 2.1's own — not the `qwen_image_vae` file Qwen Image Edit and Krea 2 decode

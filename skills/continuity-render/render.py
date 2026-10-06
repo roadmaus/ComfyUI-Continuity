@@ -199,8 +199,12 @@ def main():
     parser.add_argument("family", help="a family id (h3, ltx25, krea2, ...), or `families` to list them")
     parser.add_argument("prompt", nargs="?", help="what to render")
     parser.add_argument("--image", action="append", default=[], metavar="PATH[:AS]",
-                        help="a picture, clip or sound to attach; cite it as @pic-1, @clip-1, @snd-1")
+                        help="a picture, clip or sound to attach; cite it as @pic-1, @clip-1, @snd-1. "
+                             "AS guide makes a still's tracing the drawing it is aimed at "
+                             "(Qwen Image 2.1), not cited")
     parser.add_argument("--still", action="store_true", help="a picture rather than a clip")
+    parser.add_argument("--guide-strength", type=float, metavar="N",
+                        help="how hard a guide pulls, 0-1: 0.5 loose, 0.8 firm, 1 locked (the default)")
     parser.add_argument("--seconds", type=float, help="clip length (the family's default otherwise)")
     parser.add_argument("--aspect", help="16:9, 9:16, 1:1, 4:5, ...")
     parser.add_argument("--edge", type=int, help="short edge in pixels (the family's native otherwise)")
@@ -263,7 +267,7 @@ def main():
         body["accel"] = accel
     for key, value in (("seconds", args.seconds), ("aspect", args.aspect),
                        ("short_edge", args.edge), ("quality", args.quality),
-                       ("turbo_lora", args.turbo_lora)):
+                       ("turbo_lora", args.turbo_lora), ("guide_strength", args.guide_strength)):
         if value is not None:
             body[key] = value
 

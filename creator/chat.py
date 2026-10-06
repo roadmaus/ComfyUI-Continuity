@@ -1700,6 +1700,11 @@ def still_piece(action, ledger, rail, base=None, cast=None):
             canvas.pop("aspect", None)
 
     piece = json.loads(json.dumps(base)) if isinstance(base, dict) else {}
+    # A guide already on the blob stays: it is not a picture the turn cites but
+    # the drawing the node is aimed at (`compile_image._take_guide`), and the
+    # turn's references replace only the pictures.
+    guides = [r for r in piece.get("refs") or []
+              if isinstance(r, dict) and r.get("role") == "guide"]
     piece.update({
         "version": piece.get("version") or 1,
         "arch": arch,
@@ -1708,7 +1713,7 @@ def still_piece(action, ledger, rail, base=None, cast=None):
         # action's, for the conversation and the card.
         "prompt": action.get("caption") or prompt,
         "init": None,
-        "refs": refs,
+        "refs": refs + guides,
         # The stack, then what the cited members wear on this family — the
         # order `compile.cast_loras` merges them in, so a member's entry for
         # a file the stack names is the more specific and wins.

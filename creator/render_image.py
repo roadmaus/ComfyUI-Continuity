@@ -62,6 +62,9 @@ FOLDERS = {
     "uncond_model": "diffusion_models",
     "clip": "text_encoders",
     "vae": "vae",
+    # A model patch rather than a ControlNet: core's `ModelPatchLoader` browses
+    # this folder, and the Fun branches for the image DiTs load through it.
+    "control": "model_patches",
 }
 
 LABEL = {
@@ -70,6 +73,7 @@ LABEL = {
     "uncond_model": "the unconditional checkpoint",
     "clip": "the text encoder",
     "vae": "the VAE",
+    "control": "the ControlNet branch",
 }
 
 @dataclass(frozen=True)
@@ -132,6 +136,17 @@ def check(weights, payload, family):
             f"pre-stage node's 'weights' control and choose a file from "
             f"models/{FOLDERS[name]}."
         )
+    if payload.control is not None:
+        # Before the VAE header read, for `check`'s own reason: everything the
+        # blob alone can refuse is refused before anything is read off disk.
+        family.require_control()
+        if not weights.get("control"):
+            raise ValueError(
+                "This still has a guide on it and no ControlNet branch has been "
+                "picked. Open the pre-stage node's 'weights' control and choose a "
+                f"file from models/{FOLDERS['control']} — the family's Fun "
+                "ControlNet-Union — or take the guide off."
+            )
     import folder_paths
 
     from . import vaekind

@@ -36,8 +36,11 @@ so you press **Trace** and the written file is what plays back. The preview is
 one rectangle with a draggable seam: footage on the left, tracing on the
 right.
 
-**Send to pre-stage** makes the guide the still's init image; **Send to the
-shot** attaches it as a reference you can cite with `@`. Neither is required;
+**Send to pre-stage** aims the still at the guide where its model can follow
+one (Qwen Image Edit 2509/2511 read it as a picture, Qwen Image 2.1 through
+its Fun ControlNet, H3 through its own) and makes it the init image
+everywhere else; **Send to the shot** attaches it as a reference you can cite
+with `@`. Neither is required;
 the file is in the picker either way.
 
 ## Blockout bench

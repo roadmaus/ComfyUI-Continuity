@@ -185,6 +185,9 @@ check("...and Qwen Image 2.1's own", reflected["base_rows"]["qwen21"], q21.QWEN2
 
 # What an attached picture means, per arch. Three families, three answers, and
 # the pill copy turns on all four of these fields.
+# `control` is None on every arch here: Qwen Image 2.1 declares its Fun
+# ControlNet branch only on a core that can load it, and this suite runs
+# without one.
 check("what a reference is on each arch", reflected["refs"],
       {"krea2": {"reads": True, "methods": list(k2.REF_METHODS),
                  "needsLora": True, "editsFirst": False,
@@ -193,7 +196,7 @@ check("what a reference is on each arch", reflected["refs"],
                  "adapter": k2.REF_LORA_FIELD,
                  "adapterHints": list(k2.REF_LORA_HINTS),
                  "editions": None, "defaultEdition": None, "editionHints": [],
-                 "max": ci.MAX_STYLE_REFS},
+                 "max": ci.MAX_STYLE_REFS, "control": None},
        "ideogram4": {"reads": False, "methods": [],
                      "needsLora": False, "editsFirst": False,
                      "noun": list(ci.REFS_NOUN), "editFirst": None,
@@ -201,7 +204,7 @@ check("what a reference is on each arch", reflected["refs"],
                      "adapter": None, "adapterHints": [],
                      "editions": None, "defaultEdition": None, "editionHints": [],
                      # Reads none, and says so as a cap too.
-                     "max": 0},
+                     "max": 0, "control": None},
        "qwenedit": {"reads": True, "methods": [],
                     "needsLora": False, "editsFirst": True,
                     "noun": list(qe.REFS_NOUN),
@@ -212,7 +215,7 @@ check("what a reference is on each arch", reflected["refs"],
                     "editions": dict(qe.EDITIONS),
                     "defaultEdition": qe.DEFAULT_EDITION,
                     "editionHints": [list(pair) for pair in qe.EDITION_HINTS],
-                    "max": ci.MAX_STYLE_REFS},
+                    "max": ci.MAX_STYLE_REFS, "control": None},
        "flux2klein": {"reads": True, "methods": [],
                       "needsLora": False, "editsFirst": True,
                       "noun": list(kl.REFS_NOUN),
@@ -220,7 +223,7 @@ check("what a reference is on each arch", reflected["refs"],
                       "nativeControl": [], "controlEditions": [],
                       "adapter": None, "adapterHints": [],
                       "editions": None, "defaultEdition": None,
-                      "editionHints": [], "max": kl.REFS_LIMIT},
+                      "editionHints": [], "max": kl.REFS_LIMIT, "control": None},
        "qwen21": {"reads": True, "methods": [],
                   "needsLora": False, "editsFirst": True,
                   "noun": list(q21.REFS_NOUN),
@@ -228,7 +231,7 @@ check("what a reference is on each arch", reflected["refs"],
                   "nativeControl": [], "controlEditions": [],
                   "adapter": None, "adapterHints": [],
                   "editions": None, "defaultEdition": None,
-                  "editionHints": [], "max": q21.REFS_LIMIT}})
+                  "editionHints": [], "max": q21.REFS_LIMIT, "control": None}})
 
 # The cap is the render's, not a constant: the encoder has three image slots on
 # every family, and what the checkpoint was post-trained to read is its own

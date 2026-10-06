@@ -30,12 +30,18 @@ Request (POST, JSON):
      "fast": true, "turbo_lora": null, "merged": false, "quality": null,
      "models": {"clip": "..."},      # a slot's file, over this machine's picks
      "devices": {"clip": "cuda:1"},  # where a slot loads, over this machine's pins
-     "accel": {"attention": "kitchen"}}  # how the card runs it, over this machine's row
+     "accel": {"attention": "kitchen"},  # how the card runs it, over this machine's row
+     "guide_strength": 0.8}          # how hard a guide pulls (a still's, below)
 
 A picture is cited in the prompt as `@pic-1` (`@clip-1`, `@snd-1` for video and
 sound), numbered in the order sent; one that is not cited rides anyway. `as` is
 `start`, `end`, `ref` or a reference scope (`style`, `person`, ...); left out,
 the first picture opens the shot — the room's rule, `chat.video_piece`.
+
+`as: "guide"` is a still's tracing for a family that loads a ControlNet branch
+to read one (Qwen Image 2.1): it is not a picture the prompt cites — it takes no
+`@pic-N` — and goes onto the blob the way the pre-stage's Guide tool puts it
+there, with `guide_strength` as the stop pressed beside it.
 
 A clip samples on the machine's half of the row (`settings.accel`: attention,
 low VRAM, fast math), the one the node last set, because the node is where a
@@ -112,7 +118,7 @@ def _request(body, accel=None):
     if not still and "video" not in produces:
         raise headless.HeadlessError(f"{family['label']} draws pictures, not clips — send still: true.")
 
-    ledger, cited, counts = [], [], {}
+    ledger, cited, counts, guides = [], [], {}, []
     for item in body.get("pictures") or []:
         item = {"filename": item} if isinstance(item, str) else dict(item or {})
         filename = str(item.get("filename") or "").strip()
@@ -122,6 +128,9 @@ def _request(body, accel=None):
         prefix, kind = KINDS.get(os.path.splitext(filename.split(" [")[0])[1].lower(), (None, None))
         if prefix is None:
             raise headless.HeadlessError(f"{filename!r} is not a picture, a clip or a sound.")
+        if str(item.get("as") or "").strip() == "guide":
+            guides.append(_guide(family, still, prefix, filename))
+            continue
         counts[prefix] = counts.get(prefix, 0) + 1
         handle = f"{prefix}-{counts[prefix]}"
         ledger.append({"handle": handle, "kind": kind, "filename": filename})
@@ -146,6 +155,12 @@ def _request(body, accel=None):
                 "accel is for a video family; a picture family's row has no attention to pick.")
         piece = {"version": 1, "arch": rail["still_arch"], "loras": [], "turbo": {},
                  "models": {rail["still_arch"]: overrides}}
+        if guides:
+            # `chat.still_piece` writes the cited pictures over the blob and
+            # keeps a guide already on it, as a pre-stage node's would be.
+            piece["refs"] = guides
+            if body.get("guide_strength") is not None:
+                piece["guide"] = {"strength": body.get("guide_strength")}
     else:
         devices = {k: v for k, v in (body.get("devices") or {}).items()
                    if isinstance(k, str) and isinstance(v, str)}
@@ -160,6 +175,22 @@ def _request(body, accel=None):
     seed = body.get("seed")
     widgets = {"seed": int(seed)} if isinstance(seed, int) and not isinstance(seed, bool) else {}
     return action, ledger, rail, (piece, widgets), family, still
+
+
+def _guide(family, still, prefix, filename):
+    """One `as: "guide"` picture -> the pre-stage's guide entry, or a refusal."""
+    if not still:
+        raise headless.HeadlessError(
+            "a guide here is a still's — a clip is aimed through the Creator's "
+            "guide, which this route does not drive yet.")
+    if (family.get("capabilities", {}).get("control") or {}).get("method") != "branch":
+        raise headless.HeadlessError(
+            f"{family['label']} loads no ControlNet here, so it has nothing to read a "
+            f"guide with (on Qwen Image 2.1 the branch also needs a core that can load "
+            f"it).")
+    if prefix != "pic":
+        raise headless.HeadlessError(f"{filename!r}: a still's guide is one picture.")
+    return {"handle": "guide", "filename": filename, "role": "guide"}
 
 
 def _render(body):
