@@ -4191,8 +4191,20 @@ export const PRESTAGE_REFS = Object.fromEntries(
       // loads — the served cap, which is the compile's. Qwen Image 2.1 reads
       // ten where the Qwen-edit encoder has three slots.
       max: IMAGE_FAMILY[arch].prompt.max_refs ?? PRESTAGE_MAX_REFS,
+      // The ControlNet branch a guide loads, where the family has one and this
+      // core can load it — `capabilities.control`, absent otherwise.
+      control: IMAGE_FAMILY[arch].capabilities.control ?? null,
     }];
   }));
+
+/** A guide's strength where nobody has pressed a stop — `guide.DEFAULT_STRENGTH`,
+ *  off whichever image family declares a branch, the same number on all. */
+export const PRESTAGE_GUIDE_STRENGTH = Object.values(PRESTAGE_REFS)
+  .find((refs) => refs.control)?.control.default_strength ?? 1;
+
+/** The stop names and their strengths for this arch's branch, in order. */
+export const preStageGuideStops = (state) =>
+  Object.entries(PRESTAGE_REFS[state?.arch]?.control?.stops ?? {});
 
 /** Qwen Image Edit's releases and the reference count each reads. */
 const QWEN_REFS = PRESTAGE_REFS.qwenedit ?? {};
@@ -4303,6 +4315,23 @@ export const PRESTAGE_FIELD_HINT = Object.fromEntries(
 const PRESTAGE_HINTS = Object.fromEntries(
   PRESTAGE_IMAGE_ARCHES.map((arch) => [arch,
     Object.fromEntries(IMAGE_FAMILY[arch].weights.map((w) => [w.id, w.hints]))]));
+/** The manifest's exclusions per field — patterns, as `chat.guess_weights`
+ *  reads them: a name that matches a hint and one of these is not the file. */
+const PRESTAGE_AVOID = Object.fromEntries(
+  PRESTAGE_IMAGE_ARCHES.map((arch) => [arch,
+    Object.fromEntries(IMAGE_FAMILY[arch].weights.map((w) => [w.id, w.avoid ?? []]))]));
+
+/** The folder each arch's field browses, off its manifest — `render_image.FOLDERS`.
+ *  Read rather than written out per field, so a field a family adds (Qwen
+ *  Image 2.1's ControlNet branch, in model_patches) is a row that lists its
+ *  own folder instead of one that throws. */
+const PRESTAGE_FIELD_FOLDER = Object.fromEntries(
+  PRESTAGE_IMAGE_ARCHES.map((arch) => [arch,
+    Object.fromEntries(IMAGE_FAMILY[arch].weights.map((w) => [w.id, w.folder]))]));
+
+/** The files a pre-stage field can be pointed at, out of `catalogByFolder()`. */
+export const preStageFieldFiles = (arch, field, byFolder) =>
+  byFolder?.[PRESTAGE_FIELD_FOLDER[arch]?.[field]] ?? [];
 
 export function emptyPreStage() {
   return {
@@ -4340,6 +4369,10 @@ export function emptyPreStage() {
     // canvas. Only an edit family reads it; see `preStageEditsFirst`. Off by
     // default: a picture dropped on the node is a reference until asked.
     edit_first: false,
+    // How hard a loaded ControlNet branch pulls toward the guide —
+    // `guide.Guide`'s strength, written as the blob's `guide` block. The
+    // attachment is the switch: a still has one drawing, put there on purpose.
+    guide: { strength: PRESTAGE_GUIDE_STRENGTH },
     // Which Qwen-Image-Edit release the checkpoint is, which decides how many
     // pictures it reads — nothing in the file says, so it is declared here and
     // guessed from the filename. See `PRESTAGE_EDITIONS`.
@@ -4465,9 +4498,9 @@ export function parsePreStage(raw) {
         .filter((ref) => ref && typeof ref.filename === "string")
         // `guide` is the only role a picture can have beyond being one: it says
         // this slot holds a tracing the weights follow rather than a picture
-        // they read. Nothing in the graph changes — the guide is Picture N like
-        // any other — so this is carried for the chip and for the one refusal
-        // that depends on it.
+        // they read. On a family that reads it natively it is Picture N like
+        // any other; on one that loads a branch for it (Qwen Image 2.1) the
+        // compile lifts it out of the pictures and hands it to the ControlNet.
         .map((ref) => (ref.role === "guide"
           ? { handle: ref.handle, filename: ref.filename, ...preStageFraming(ref), role: "guide",
               guide: typeof ref.guide === "string" ? ref.guide : null }
@@ -4521,6 +4554,10 @@ export function parsePreStage(raw) {
       // keeps them in its request, which `parseState` reads.
       state.screens = parseScreens(state.screens);
       if (!state.screens.length) delete state.screens;
+      // The branch's strength, clamped as `guide.Guide.of` clamps it.
+      const strength = Number(state.guide?.strength);
+      state.guide = { strength: Number.isFinite(strength)
+        ? Math.min(1, Math.max(0, strength)) : PRESTAGE_GUIDE_STRENGTH };
       const models = state.models && typeof state.models === "object" ? state.models : {};
       state.models = emptyPreStageModels();
       for (const arch of PRESTAGE_IMAGE_ARCHES) {
@@ -4598,6 +4635,8 @@ export function serializePreStage(state) {
     ...(state.ref_method !== PRESTAGE_DEFAULT_REF_METHOD ? { ref_method: state.ref_method } : {}),
     ...(state.ref_lora ? { ref_lora: state.ref_lora } : {}),
     ...(state.edit_first ? { edit_first: true } : {}),
+    ...(state.guide && state.guide.strength !== PRESTAGE_GUIDE_STRENGTH
+      ? { guide: { strength: state.guide.strength } } : {}),
     ...(state.edition !== PRESTAGE_DEFAULT_EDITION ? { edition: state.edition } : {}),
     [PRESTAGE_STILL_ARCH]: serializeStill(state[PRESTAGE_STILL_ARCH]),
     ...serializeSampling(state.sampling),
@@ -4657,18 +4696,15 @@ export function adoptRememberedPreStage(models, remembered) {
 export const preStageFamilyId = (arch) => stillFamily(arch).id;
 
 export function guessPreStageModels(models, byFolder) {
-  const lists = {
-    model: byFolder?.diffusion_models ?? [], turbo_model: byFolder?.diffusion_models ?? [],
-    uncond_model: byFolder?.diffusion_models ?? [],
-    clip: byFolder?.text_encoders ?? [], vae: byFolder?.vae ?? [],
-  };
   let changed = false;
   for (const arch of PRESTAGE_IMAGE_ARCHES) {
     for (const field of PRESTAGE_FIELDS[arch]) {
       if (models[arch][field]) continue;
       const needles = PRESTAGE_HINTS[arch][field];
-      let matched = lists[field].filter((name) =>
-        needles.some((needle) => name.toLowerCase().includes(needle)));
+      const avoid = PRESTAGE_AVOID[arch][field];
+      let matched = preStageFieldFiles(arch, field, byFolder).filter((name) =>
+        needles.some((needle) => name.toLowerCase().includes(needle))
+        && !avoid.some((pattern) => new RegExp(pattern, "i").test(name)));
       // RAW vs Turbo vs unconditional share stems; whichever says the more
       // specific word belongs to the more specific field.
       if (field === "model" && arch === "ideogram4") {
@@ -4731,11 +4767,44 @@ export function preStageReadsGuides(state) {
  *  ControlNet the video path does — a drawing attaches as a guide and the pill
  *  loads the branch. Qwen-Image-Edit 2509 and 2511 were post-trained to follow
  *  a tracing that simply arrives as `Picture 1`, so there is nothing to load.
- *  Everywhere else a drawing has no reader at all and belongs in the init slot,
+ *  Qwen Image 2.1 is the first kind again on an image arch: its Fun ControlNet
+ *  is a file the guide loads (`capabilities.control`), there only on a core
+ *  that can load it. Everywhere else a drawing has no reader at all and belongs in the init slot,
  *  the way every guide went before either of these existed. */
 export function preStageLoadsBranch(state) {
-  if (state?.arch !== PRESTAGE_STILL_ARCH) return false;
+  if (state?.arch !== PRESTAGE_STILL_ARCH) return PRESTAGE_REFS[state?.arch]?.control?.method === "branch";
   return Boolean(controlOf(pieceFamily(state?.[PRESTAGE_STILL_ARCH]?.request)));
+}
+
+/** The attached pictures that are pictures to the render: every one, less a
+ *  guide a loaded branch reads. On Qwen Image 2.1 the drawing goes to the
+ *  ControlNet and never to the encoder, so it takes no `<imageN>` and counts
+ *  against no cap — `compile_image._take_guide`. */
+export function preStageCountedRefs(state) {
+  const refs = state?.refs ?? [];
+  return preStageBranchGuide(state) ? refs.filter((ref) => ref.role !== "guide") : refs;
+}
+
+/** The bench's tracing ids — `control.TRACINGS`, less "as_shot", which
+ *  draws nothing. */
+const BENCH_TRACINGS = ["edges", "lines", "blocks", "luma", "blur", "depth", "pose", "matte"];
+
+/** Which tracing a bench file is, off its name, or null. `bench.stem` writes
+ *  `<source>-<op>[-<span or mark>]` before the counter, so the op is the last
+ *  dash-separated word that is one; a file the bench did not write says none. */
+export function tracingOf(path) {
+  const base = String(path ?? "").split("/").pop().replace(/\.[^.]+$/, "");
+  const words = base.split(/[-_ ]/);
+  for (let i = words.length - 1; i >= 0; i -= 1) {
+    if (BENCH_TRACINGS.includes(words[i])) return words[i];
+  }
+  return null;
+}
+
+/** The guide a loaded branch reads on an image arch, or null. */
+export function preStageBranchGuide(state) {
+  if (state?.arch === PRESTAGE_STILL_ARCH || !preStageLoadsBranch(state)) return null;
+  return (state.refs ?? []).find((ref) => ref.role === "guide") ?? null;
 }
 
 /** Is this render editing its first picture in place?
@@ -4828,7 +4897,9 @@ export function missingPreStageModels(state) {
   const turbo = state.turbo[state.arch];
   const dit = IMAGE_FAMILY[state.arch]?.capabilities.turbo && turbo?.on && !turbo.lora
     ? "turbo_model" : "model";
-  return [dit, "clip", "vae"].filter((field) => !side[field]);
+  // The branch only where a guide will load it — `render_image.check`.
+  const control = preStageBranchGuide(state) ? ["control"] : [];
+  return [dit, "clip", "vae", ...control].filter((field) => !side[field]);
 }
 
 /** Which of the eight identity hues (--mmc-tag-0..7) a handle wears, everywhere

@@ -167,6 +167,11 @@ class ImagePayload:
     # the screen node between decode and save reads this. Empty on a still
     # without screens, which keeps every such payload the bytes it was.
     screens: tuple = ()
+    # The guide a loaded ControlNet branch aims this render at, on a family that
+    # declares one (`CONTROL_TRACINGS`): `{"filename", "strength", "start",
+    # "end"}`, its framing under `framing["guide"]`. None without one, which
+    # keeps every such payload the bytes it was.
+    control: dict = None
 
 
 def neural_block(data):
@@ -515,6 +520,56 @@ def cast_into_still(data, family_id, space=None, takes_pictures=True):
     return out
 
 
+def _take_guide(data, family):
+    """-> (the guide picture or None, `data` with it off the reference pool).
+
+    On a family that reads a guide through a loaded branch — Qwen Image 2.1's
+    Fun ControlNet — the drawing is not one of the pictures: it never reaches
+    the encoder, takes no `<imageN>`, counts against no reference cap and is
+    never the picture edited. The pre-stage still files it among `refs` with
+    `role: "guide"`, because that is where the chip, the framing and the bench's
+    door already are for the family that reads it *as* a picture (Qwen Image
+    Edit 2509/2511); this is where the two part ways. Everywhere else the entry
+    stays a picture, which is what it has always been there.
+    """
+    if not getattr(family, "CONTROL_TRACINGS", None):
+        return None, data
+    raw = data.get("refs") or []
+    guides = [r for r in raw if isinstance(r, dict) and r.get("role") == "guide"]
+    if not guides:
+        return None, data
+    if len(guides) > 1:
+        raise CompileError("one guide at a time — the ControlNet reads a single "
+                           "drawing; take the others off")
+    return guides[0], {**data, "refs": [r for r in raw if r is not guides[0]]}
+
+
+def _parse_control(guide, data, prompt):
+    """The guide picture and the blob's `guide` block -> `payload.control`.
+
+    The strength and the window are the switch's numbers (`guide.Guide`) under
+    the same names and clamps as on a video render; here the switch itself is
+    the attachment — a pre-stage has one drawing, put there on purpose, and
+    taking it off is the way to render without the branch.
+    """
+    from . import guide as guides
+
+    filename = guide.get("filename")
+    if not filename or not isinstance(filename, str):
+        raise CompileError("the guide must carry a filename")
+    handle = guide.get("handle")
+    if isinstance(handle, str) and handle in HANDLE_RE.findall(prompt):
+        raise CompileError(
+            f"@{handle} is the guide — the ControlNet reads it, the prompt cannot "
+            f"cite it. Take @{handle} out of the sentence and describe the picture "
+            f"instead")
+    block = data.get(guides.BLOCK)
+    switch = guides.Guide.of({guides.BLOCK: {**(block if isinstance(block, dict) else {}),
+                                             "on": True}})
+    return {"filename": filename, "strength": switch.strength,
+            "start": switch.start, "end": switch.end}
+
+
 def compile_prestage(data, family, image_size_lookup=None):
     """`prestage_data` dict -> `ImagePayload`, for `family`'s architecture.
 
@@ -541,6 +596,7 @@ def compile_prestage(data, family, image_size_lookup=None):
     # promote their attached photo only to refuse it below as a plain ref.
     data = cast_into_still(data, registry.STILL_ARCHES.get(getattr(family, "ARCH", None)),
                           space, takes_pictures=family.TAKES_REFS)
+    guide, data = _take_guide(data, family)
 
     prompt = str(data.get("prompt") or "").strip()
     if not prompt:
@@ -561,6 +617,9 @@ def compile_prestage(data, family, image_size_lookup=None):
     if format_prompt is not None:
         prompt = format_prompt(prompt)
 
+    # Before the citation below, so a sentence citing the guide is refused for
+    # that rather than for a picture that is not attached.
+    control = _parse_control(guide, data, prompt) if guide is not None else None
     refs = _parse_refs(data.get("refs"), *ref_limit(family, data), refs_noun(family), space)
     # The screens: one tracker per screen, after the user's own pictures so
     # theirs keep the numbers they were cited by, each cited where the prompt
@@ -641,6 +700,10 @@ def compile_prestage(data, family, image_size_lookup=None):
         entry = _framed("the init image", init["filename"], init.get("crop"), image_size_lookup)
         if entry:
             framed["init"] = entry
+    if control is not None:
+        entry = _framed("the guide", control["filename"], guide.get("crop"), image_size_lookup)
+        if entry:
+            framed["guide"] = entry
 
     if init is not None and image_size_lookup is not None:
         from . import crop as framing
@@ -696,4 +759,5 @@ def compile_prestage(data, family, image_size_lookup=None):
         schedule=schedule or {}, ratio_clamped=ratio_clamped,
         ref_resolution=ref_resolution, neural=neural_block(data),
         screens=tuple(screen.to_json() for screen in screens),
+        control=control,
     )

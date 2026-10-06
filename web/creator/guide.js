@@ -28,7 +28,7 @@ import { t } from "./i18n.js";
 /** What each stop means, in the words the tooltip uses. Keyed by the family's
  *  own stop names — a family that declares a fourth gets no line here and shows
  *  its number instead, which is honest rather than blank. */
-const STOP_TITLE = {
+export const STOP_TITLE = {
   loose: "Half strength. The drawing suggests the composition and the model is "
        + "free to disagree with it — the one to reach for when the tracing is "
        + "rougher than the shot needs to be.",

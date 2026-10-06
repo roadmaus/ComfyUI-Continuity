@@ -184,6 +184,56 @@ check("a still on H3 is pointed at the image families",
 check("a citation of a picture nobody sent is refused",
       "not in the ledger" in render(family="h3", prompt="@pic-2 runs").get("problem", ""), True)
 
+# ---- a still's guide ----------------------------------------------------------
+#
+# `as: "guide"` is not a cited picture: it takes no @pic-N and lands on the blob
+# as the pre-stage's Guide tool puts it, with the stop pressed beside it. The
+# core probe is forced, as the graph suites force it: the local core may predate
+# the Qwen Image 2.1 branch, and what is tested is the blob.
+q21 = importlib.import_module(f"{PACKAGE}.creator.families.qwen21.still")
+q21.control_supported = lambda: True
+FILES["diffusion_models"].append("qwen_image_2.1_int8.safetensors")
+FILES["text_encoders"].append("qwen3vl_8b.safetensors")
+FILES["vae"].append("qwen_image_2.1_vae.safetensors")
+FILES["model_patches"] = ["Qwen-Image-2.1-Fun-Controlnet-Union.safetensors"]
+STORED["qwen21"] = {"model": "qwen_image_2.1_int8.safetensors", "clip": "qwen3vl_8b.safetensors",
+                    "vae": "qwen_image_2.1_vae.safetensors",
+                    "control": "Qwen-Image-2.1-Fun-Controlnet-Union.safetensors"}
+built = render(family="qwen21", prompt="a castle like @pic-1", fast=False, guide_strength=0.8,
+               pictures=["castle.png", {"filename": "edges.png", "as": "guide"}])
+if "problem" in built:
+    FAILURES.append(f"a guided Qwen Image 2.1 still was refused: {built['problem']}")
+else:
+    _, _, blob = inputs(built)
+    check("the guide rides on the blob as the pre-stage's guide, after the cited picture",
+          [(r["handle"], r["filename"], r.get("role")) for r in blob["refs"]],
+          [("pic-1", "castle.png", None), ("guide", "edges.png", "guide")])
+    check("...with the stop asked for", blob["guide"], {"strength": 0.8})
+check("a guide on a family with no branch is refused",
+      "nothing to read a guide" in render(family="krea2", prompt="x", still=True, pictures=[
+          {"filename": "edges.png", "as": "guide"}]).get("problem", ""), True)
+check("...and on a clip, for now",
+      "a still's" in render(family="h3", prompt="x", pictures=[
+          {"filename": "edges.png", "as": "guide"}]).get("problem", ""), True)
+
+# ---- the caller's own LoRAs ----------------------------------------------------
+built = render(family="qwen21", prompt="a dancer mid-leap", fast=False,
+               loras=[{"name": "anna.safetensors", "strength": 0.7}])
+if "problem" in built:
+    FAILURES.append(f"a still with a LoRA was refused: {built['problem']}")
+else:
+    check("a requested LoRA is on the still's stack",
+          [(e["name"], e["strength"]) for e in inputs(built)[2]["loras"]], [("anna.safetensors", 0.7)])
+built = render(family="h3", prompt="a cat", loras=["anna.safetensors"])
+if "problem" in built:
+    FAILURES.append(f"a clip with a LoRA was refused: {built['problem']}")
+else:
+    check("...and on a clip it rides beside the turbo distill",
+          [e["name"] for e in inputs(built)[2]["loras"]], ["anna.safetensors", FL2V])
+check("a LoRA the machine does not have is refused with the near names",
+      "did you mean anna.safetensors" in render(family="h3", prompt="a cat",
+          loras=[{"name": "Anna"}]).get("problem", ""), True)
+
 route.server_routes._lora_names = lambda: []
 check("fast with no distill on the machine refuses rather than rendering slow",
       "fast: false" in render(family="h3", prompt="a cat").get("problem", ""), True)

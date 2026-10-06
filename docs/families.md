@@ -150,9 +150,25 @@ Stills, drawn from prose or edited from pictures, on one checkpoint.
   written. The pill is where one goes.
 - An edit inherits the *look* of the first picture: a stylised source comes
   back stylised. Feed edits a photo where you can.
+- **Guides** aim the still at a tracing (edges, lines, depth, pose, grey)
+  through alibaba-pai's Fun ControlNet-Union. Press **Guide** in the
+  pre-stage's tool row: *Pick a tracing* takes one the ControlNet bench
+  already wrote, *Trace a picture* opens the bench on any picture and its
+  **Aim the still at it** button brings the tracing back. It lands as a
+  *guide* chip: not one of the ten pictures, and the prompt does not cite it.
+  The prompt says what things are; the guide says where they go. Pick the
+  ControlNet file once in the weights pill (the chip says so until you do;
+  see [models.md](models.md#qwen-image-21-stills-drawn-or-edited-from-pictures)).
+  The loose / firm / locked stops beside the guide pill set how hard it
+  pulls: locked follows the drawing so closely that it decides what things
+  are too, firm leaves the prompt room. The branch
+  was trained on Edges, Lines, Depth, Pose and Luma; a guide of another
+  aspect than the canvas is cropped to the canvas from its centre. Needs a
+  ComfyUI from late September 2026 or newer; on an older one the tracing
+  goes to the init image as it does on Krea 2.
 - It is not an edition of Qwen Image Edit. Different DiT, different VAE,
-  different encoder file, no shift node, no editions pill, no built-in
-  ControlNet table — a guide attached here is a picture like any other.
+  different encoder file, no shift node, no editions pill, and no built-in
+  ControlNet: the guide is a separate file, as above.
 
 ## Editing a picture you just rendered
 

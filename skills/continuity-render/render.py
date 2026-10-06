@@ -199,14 +199,21 @@ def main():
     parser.add_argument("family", help="a family id (h3, ltx25, krea2, ...), or `families` to list them")
     parser.add_argument("prompt", nargs="?", help="what to render")
     parser.add_argument("--image", action="append", default=[], metavar="PATH[:AS]",
-                        help="a picture, clip or sound to attach; cite it as @pic-1, @clip-1, @snd-1")
+                        help="a picture, clip or sound to attach; cite it as @pic-1, @clip-1, @snd-1. "
+                             "AS guide makes a still's tracing the drawing it is aimed at "
+                             "(Qwen Image 2.1), not cited")
     parser.add_argument("--still", action="store_true", help="a picture rather than a clip")
+    parser.add_argument("--guide-strength", type=float, metavar="N",
+                        help="how hard a guide pulls, 0-1: 0.5 loose, 0.8 firm, 1 locked (the default)")
     parser.add_argument("--seconds", type=float, help="clip length (the family's default otherwise)")
     parser.add_argument("--aspect", help="16:9, 9:16, 1:1, 4:5, ...")
     parser.add_argument("--edge", type=int, help="short edge in pixels (the family's native otherwise)")
     parser.add_argument("--seed", type=int, help="random otherwise; printed either way")
     parser.add_argument("--native", action="store_true", help="the family's full step count, not turbo")
     parser.add_argument("--quality", help="turbo quality stop: draft, medium or good")
+    parser.add_argument("--lora", action="append", default=[], metavar="NAME[:STRENGTH]",
+                        help="a LoRA from models/loras to patch on, by its name there "
+                             "(subfolder included); repeatable, strength 1 otherwise")
     parser.add_argument("--turbo-lora", help="the turbo LoRA to use, when the server cannot tell")
     parser.add_argument("--merged", action="store_true",
                         help="the checkpoint has the distillation merged in: turbo steps, no LoRA")
@@ -245,10 +252,19 @@ def main():
         if not sep:
             parser.error(f"--device takes SLOT=DEVICE; got {item!r}")
         devices[slot] = device
+    loras = []
+    for item in args.lora:
+        name, sep, strength = item.rpartition(":")
+        try:
+            loras.append({"name": name, "strength": float(strength)} if sep else {"name": item})
+        except ValueError:
+            loras.append({"name": item})
     seed = args.seed if args.seed is not None else random.randrange(2 ** 32)
     body = {"family": args.family, "prompt": args.prompt,
             "pictures": [_picture(server, spec) for spec in args.image],
             "seed": seed, "fast": not args.native, "models": models}
+    if loras:
+        body["loras"] = loras
     if args.still:
         body["still"] = True
     if args.merged:
@@ -263,7 +279,7 @@ def main():
         body["accel"] = accel
     for key, value in (("seconds", args.seconds), ("aspect", args.aspect),
                        ("short_edge", args.edge), ("quality", args.quality),
-                       ("turbo_lora", args.turbo_lora)):
+                       ("turbo_lora", args.turbo_lora), ("guide_strength", args.guide_strength)):
         if value is not None:
             body[key] = value
 

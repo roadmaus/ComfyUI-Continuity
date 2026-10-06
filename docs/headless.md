@@ -88,6 +88,16 @@ and `end` the closing frame. `ref` makes it a reference the model draws from, an
 a scope such as `style` or `person` makes it a reference for that one thing.
 Without `AS`, the first picture opens the shot.
 
+On a Qwen Image 2.1 still, `AS` can also be `guide`: the picture is a tracing
+from the ControlNet bench and the render is aimed at it, the way the pre-stage's
+Guide tool does it. It is not cited in the prompt. `--guide-strength` sets how
+hard it pulls: 1 (the default) follows it line for line, 0.8 leaves the prompt
+room to change what things are, 0.5 only suggests the layout.
+
+```
+python3 skills/continuity-render/render.py qwen21 "a ruined castle tower on a snowy hill" --image tower-edges.png:guide --guide-strength 0.8
+```
+
 ## Other options
 
 | Option | Meaning |
@@ -97,6 +107,7 @@ Without `AS`, the first picture opens the shot.
 | `--edge N` | short edge in pixels; the family's native size otherwise |
 | `--seed N` | random otherwise; printed either way |
 | `--still` | a picture rather than a clip |
+| `--lora NAME[:N]` | a LoRA from `models/loras` (subfolder included) at strength N, 1 otherwise; repeatable, beside the turbo LoRA |
 | `--out DIR` | where to download; `./renders` by default |
 | `--no-wait` | queue it, print the prompt id, and return |
 
