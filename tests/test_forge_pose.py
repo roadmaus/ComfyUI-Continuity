@@ -116,6 +116,21 @@ check("the tab's answer completes the job", done["state"], "done")
 check("and the frame is on disk", os.path.isfile(os.path.join(base, "game", done["frames"][0]["path"])), True)
 check("under build/, where derived files go", done["frames"][0]["path"].startswith("build/poses/idle/000-"), True)
 
+# Pitch is part of a frame; level is the frame it always was.
+check("a level camera keeps the key frames had before pitch",
+      pose.frame_key(pose.rest_pose(), {}, 64, 64), pose.frame_key(pose.rest_pose(), {}, 64, 64, 0.0))
+check("and a pitched one does not", pose.frame_key(pose.rest_pose(), {}, 64, 64)
+      != pose.frame_key(pose.rest_pose(), {}, 64, 64, 30.0), True)
+refused("a pitch past straight down is refused",
+        lambda: call("/pose/render", project="game", set="idle", pitch=95), "pose.pitch")
+
+# The pose page saves by pasting the set back over itself; where it came from stays.
+call("/pose/paste", project="game", set="clip", data={"poses": [{}], "source": {"clip": "walk.fbx"}})
+again = call("/pose/paste", project="game", set="clip", replace=True,
+             data={**call("/pose/show", project="game", set="clip")["set"], "fps": 8})["set"]
+check("a set pasted over itself keeps its source and takes the edit", (again["source"], again["fps"]),
+      ({"clip": "walk.fbx"}, 8))
+
 # A changed pose redraws only the frame that changed.
 call("/pose/paste", project="game", set="two", data=[{}, {"bones": {"head": [5, 0, 0]}}])
 first = call("/pose/render", project="game", set="two", width=64, height=64)

@@ -343,6 +343,12 @@ check("a frame already drawn is not drawn again", (len(tab.heard), again["job"],
 turned = ok("pose render turned", "pose", "mygame", "render", "stand", "--width", "64", "--height", "128",
             "--yaw", "90", "--out", "side", json_out=True)
 check("another direction is another drawing", (len(tab.heard), len(turned["drawn"])), (heard + 1, 1))
+looked = ok("pose render pitched", "pose", "mygame", "render", "stand", "--width", "64", "--height", "128",
+            "--pitch", "30", "--out", "above", json_out=True)
+check("a camera looking down is another drawing, and says its pitch",
+      (len(tab.heard), len(looked["drawn"]), looked["pitch"]), (heard + 2, 1, 30.0))
+code, out, err = forge("pose", "mygame", "render", "stand", "--pitch", "90", json_out=True)
+check("straight down is refused", (code, out["code"]), (1, "pose.pitch"))
 
 with open(os.path.join(work, "walk.fbx"), "wb") as handle:
     handle.write(b"Kaydara FBX Binary  stand-in")

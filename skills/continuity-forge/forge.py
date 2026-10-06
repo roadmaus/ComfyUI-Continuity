@@ -286,7 +286,7 @@ def _pose(server, args):
         return answer, show
     if op == "render":
         body = {"project": project, "set": args.set}
-        for key in ("width", "height", "yaw"):
+        for key in ("width", "height", "yaw", "pitch"):
             if getattr(args, key) is not None:
                 body[key] = getattr(args, key)
         if args.frame:
@@ -668,6 +668,8 @@ def parser():
     q.add_argument("--width", type=int, help="pixels (default 484, a cell of the 4-frame grid)")
     q.add_argument("--height", type=int, help="pixels (default 1088)")
     q.add_argument("--yaw", type=float, help="turn the figure this many degrees, for another direction")
+    q.add_argument("--pitch", type=float, help="degrees the camera looks down on the figure: 0 side-on "
+                   "(default), ~30 a three-quarter RPG, up to 89 top-down; negative looks up")
     q.add_argument("--out", help="where to save them (default ./<set>-poses)")
     return top
 

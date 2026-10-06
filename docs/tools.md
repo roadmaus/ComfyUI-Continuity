@@ -254,37 +254,98 @@ the forge writes from the asset list. Everything the bench does can also be
 done from a shell with the `continuity-forge` skill's `forge.py`, which is how
 an agent plans and builds a game's assets.
 
-Making a project asks for a **Look** (painted, flat, toon, pixel or pbr) and
+Opening the forge shows **Your games** and **Start a new game**. A new game
+asks for a name, **How it looks** (painted, flat, toon, pixel or pbr) and
 where it **Exports to**: Generic (PNG + Aseprite JSON), Godot 4, Tiled, LÖVE,
 Game Boy, Game Boy Color, GB Studio, glTF. A pixel project for a Game Boy
-starts on the Game Boy's four greens. The **Style** sentence is added to the
-end of every prompt in the project.
+starts on the Game Boy's four greens. The project's name in the bar switches
+to another game.
 
-The **Assets** list is the manifest. The mark beside each says where it
-stands: a ring is planned, a dot is made, a square is exported to every
-target, a dashed ring is stale (its recipe changed after its pictures were
-made). A name in bold is one nobody has looked at since it was made.
+**Project** (top right) opens the game's settings in a drawer: the **Style
+sentence** added to the end of every description, the **Palette** (press a
+swatch to take it out, the last well to add one), the **Pixel size** of a
+pixel project, the look and the engines.
 
-Pick an asset to work on it:
+The bench has two pages, **Assets** and **Poses**.
 
-- **Import files**, **From ComfyUI**, or drop pictures anywhere on the bench:
-  they become the asset's masters. The set they replace is kept in
-  `.versions/`. Sprites, characters and icons need transparency in the picture.
-  One picture can hold a whole set: a sprite sheet with a row per animation,
-  or a grid of icons or tiles.
-- **Recipe** is the asset's fields as JSON: frame size, animations, tile size
-  and the rest. Saving a change marks the asset stale until it is exported
-  again.
-- **Contact sheet** shows the masters, then what each target makes of them,
-  at a whole-number zoom so pixel art is not blurred.
+### Assets
 
-In the foot, pick a target. **Check** tests every made asset against that
-target's limits (colours per tile, unique tiles, sprites per line, sheet
+The shelf down the left is the game's asset list, grouped into characters,
+sprites, tiles and so on, each with its picture. The mark at the end of a row
+says where it stands: a ring is planned, a dot is made, a square is exported
+to every engine, a dashed ring is stale (its recipe changed after its
+pictures were made). A name in bold is one nobody has looked at since it was
+made. **New** adds an asset: pick what it is, name it.
+
+Pick an asset to work on it. The glass in the middle shows its **Contact
+sheet**: the masters, then what each engine makes of them, at a whole-number
+zoom so pixel art is not blurred. The inspector on the right is the asset:
+
+- **Masters**: **From disk**, **From ComfyUI**, or drop pictures anywhere on
+  the bench, and they become the asset's masters. The set they replace is kept
+  in `.versions/`. Sprites, characters and icons need transparency in the
+  picture. One picture can hold a whole set: a sprite sheet with a row per
+  animation, or a grid of icons or tiles.
+- **Recipe**: the asset as a form. The description, then the kind's own
+  fields: which character a sprite animates, frame size, its animations (name,
+  frames, speed, loop), how many ways it faces, tile size, how a tile wraps.
+  **More settings** holds the rest (master size, seed, model, anchor, layer,
+  per-engine overrides, notes) and **Edit the whole recipe as JSON**. Each
+  field saves when you leave it; a change marks the asset stale until it is
+  exported again.
+
+In the foot, pick an engine. **Check** tests every made asset against that
+engine's limits (colours per tile, unique tiles, sprites per line, sheet
 size) and lists what breaks; **Problems** shows the converted picture with
 the broken tiles outlined in red. **Export** writes the engine files into
 `build/<target>/`: PNG sheets with Aseprite JSON everywhere, plus Godot
 `SpriteFrames` and `TileSet`, Tiled `.tsx` and `.tmj`, a LÖVE Lua table, and
 indexed PNGs for the Game Boy tools and GB Studio's `assets/` folders.
+
+### Poses
+
+A **pose set** is an animation before it has a character in it: one
+mannequin pose per frame, the body it is drawn on, and its speed. The sprite
+render draws your character into these poses. The mannequin, its posing and
+its FBX import are [VNCCS Pose Studio](https://github.com/AHEKOT/ComfyUI_VNCCS_Utils)'s,
+built into the pack; you do not need it installed.
+
+- **New** starts a set from a standing figure, or as a copy of the one open.
+  **Import an FBX clip** (or drop one on the page) brings in a whole Mixamo
+  animation, retargeted onto the mannequin in place, one frame per pose at 12
+  fps. **Paste from Pose Studio** takes its `pose_data`, a pose, or a list of
+  poses.
+- On the stage, click a joint and drag its rings to turn it. Right-drag
+  orbits, middle-drag pans, scroll zooms. Ctrl/⌘ Z undoes the last drag on
+  this frame, with Shift to redo.
+- **Symmetry** (or M) poses both sides at once: turn the left arm and the
+  right one turns with it, as in a mirror.
+- The view pad in the stage's corner is a cube unfolded: **Top**, **Front**,
+  **Left**, **Right**, **Back**, and **Sprite camera**, which shows exactly
+  what Draw frames will draw, with the frame drawn as a box. The number keys
+  do the same, as in Blender: 1 front, 3 right, 7 top, 9 the other side of
+  the view you are in, 0 the sprite camera.
+- The strip under the stage is the frames. The frames either side of the one
+  you are on are ghosted on the stage (blue before, green after; **Onion
+  skin** turns that off). **Play** or Space plays the set at its speed; the
+  arrow keys step through it. **Duplicate**, **Flip**, **Reset** and **Delete**
+  act on the frame you are on (Flip swaps left and right, so a walk's second
+  half is its first half flipped), and the **+** at the end of the strip adds a copy of
+  it.
+- **Body** sets the mannequin's build for every frame. Match it to the
+  character's proportions.
+- **Sprite camera** is how Draw frames sees the set. **Facing** turns the
+  whole set to draw another direction of the same animation (the ring is the
+  floor seen from above, with you at the bottom). **Looking down** tilts the
+  camera to the game's: Side-on (0°) for a platformer, Three-quarter (30°)
+  for an RPG, High (45°), Top-down (89°). Every sprite in a game shares one
+  camera. **Look through it** puts the stage's view there. **Draw frames** draws every frame as the sprite render will see it,
+  into the project's `build/poses/`; **Drawn frames** shows them. Drawing
+  needs a ComfyUI tab open in a browser, which the bench always is.
+
+Every edit is saved as you make it, to `poses/<set>.json` in the project.
+Mixamo clips are yours to import: Adobe's terms let you use them in a game,
+not share them, so the pack ships none.
 
 Generating assets from prompts is not in the forge yet: make pictures with
 the node or the render skill and import them.

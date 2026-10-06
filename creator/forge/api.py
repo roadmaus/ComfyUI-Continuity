@@ -277,12 +277,18 @@ def new_pose(host, params):
 
 
 def paste_pose(host, params):
-    """Pose Studio's `pose_data`, or poses written by hand, as a set."""
-    frames, body, fps = poses.from_paste(params.get("data"))
+    """Pose Studio's `pose_data`, or poses written by hand, as a set.
+
+    A set of ours pasted back over itself is how the bench's pose page saves
+    an edit, so the set's `source` (the clip it was imported from) comes
+    through with it rather than being forgotten on the first touch."""
+    data = params.get("data")
+    frames, body, fps = poses.from_paste(data)
     if params.get("fps") is not None:
         fps = params["fps"]
+    source = data.get("source") if isinstance(data, dict) else None
     return {"set": poses.create(host.base, _text(params, "project"), _text(params, "set"), frames,
-                                fps or 12, body, replace=_flag(params, "replace"))}
+                                fps or 12, body, source=source, replace=_flag(params, "replace"))}
 
 
 def set_pose(host, params):
@@ -325,12 +331,14 @@ def render_pose(host, params):
         frames = [f for f in frames.split(",") if f]
     if frames is not None and not isinstance(frames, list):
         raise ForgeError("frames is a list of frame numbers", "request.field", field="frames")
-    data, width, height, wanted, missing = poses.plan_render(
-        host.base, project, name, frames, params.get("width"), params.get("height"), params.get("yaw"))
-    answer = {"width": width, "height": height, "frames": wanted, "drawn": [m["path"] for m in missing]}
+    data, width, height, pitch, wanted, missing = poses.plan_render(
+        host.base, project, name, frames, params.get("width"), params.get("height"), params.get("yaw"),
+        params.get("pitch"))
+    answer = {"width": width, "height": height, "pitch": pitch, "frames": wanted,
+              "drawn": [m["path"] for m in missing]}
     if not missing:
         return {"job": None, "project": project, "set": name, "state": "done", **answer}
-    task = {"width": width, "height": height, "body": data["body"],
+    task = {"width": width, "height": height, "pitch": pitch, "body": data["body"],
             "frames": [{"frame": m["frame"], "pose": m["pose"]} for m in missing]}
     return poses.public(poses.start(host, "render", project, name, task, answer))
 

@@ -689,9 +689,26 @@ rest of the forge PNGs and JSON.
 **What we build around it** is the forge's half, and where it goes further
 than Pose Studio:
 
-- **The bench page.** A `PoseViewerCore` in a forge panel with our own small
-  UI: body sliders, joint gizmos, a frame strip with onion skin, FBX drop,
-  FPS. Not root motion: the vendored import retargets each sampled frame
+- **The bench page** (built, `web/creator/forge/posepage.js`). A
+  `PoseViewerCore` in a forge panel with our own small UI: body sliders, joint
+  gizmos, a frame strip with onion skin, FBX drop, FPS. The onion skins are
+  the core's passive characters, made translucent; the strip's thumbnails are
+  drawn by a second, hidden viewer in the same tab, not by a render job, so
+  looking at a set caches nothing into the project. An edit is saved by
+  pasting the set over itself (`/pose/paste` with `replace`, which keeps the
+  set's `source`), so the page needs no route the CLI lacks. Symmetry and
+  Flip are ours (`forge/mirror.js`): the rig's rest frames are all
+  world-aligned with the figure facing +Z, left at +X, so a twin's rotation
+  is `[x, -y, -z]` and its offset `[-x, y, z]` (checked: a mirrored arm and
+  leg draw 0.9 % asymmetric, the bare figure 0.5 %, the unmirrored copy
+  53 %). The view pad snaps the core's camera to its capture camera; the
+  sprite camera view zooms to the frame cell and leaves the core's capture
+  frame showing, so the box on the stage is the drawing.
+- **Pitch** (built). A render takes `pitch`, degrees the camera looks down
+  (-89 to 89; the core's own sign is the opposite and the tab negates it),
+  and it is part of a frame's cache key only when not level, so frames drawn
+  before it existed keep their names. Tilting the model instead (a
+  `modelRotation` x) also tilts the light, which the camera does not. Not root motion: the vendored import retargets each sampled frame
   onto the standing rig by keypoints, so a clip comes in place (seen on the
   walk: every frame centred, one baseline) and there is no travel to keep. It is a client of their core, not a copy of
   their widget, so it does the widget's set-up itself: decode the pack,
@@ -733,7 +750,9 @@ than Pose Studio:
   scaled after — then split, matte → baseline and pivot → pixelize →
   atlas → engine export, instead of a folder of PNGs. 2.1's own alpha came
   back clean on every spike render; BiRefNet stays the tightening pass.
-- **Directions as a property of a set.** Turn the whole walk to 4 or 8
+- **Directions as a property of a set.** (Built as the yaw a set is drawn
+  at, chosen on the page's compass and passed to the render job; not yet
+  stored on the set.) Turn the whole walk to 4 or 8
   azimuths in one go (`modelRotation` per pass).
 - **A pose check on the finished sprite.** The mannequin's silhouette
   against the sprite's matte, per frame, so a frame where the LoRA ignored
@@ -939,7 +958,11 @@ contract stable for agents that have learned it.
    tab of its ComfyUI: the Mixamo walk imported, 15 frames in about a second,
    four side frames drawn in two seconds and served from the cache after;
    with no listening tab the job failed with its sentence), then the pose
-   page. A tab loaded before the pack was updated counts as connected but
+   page (done, tested on a Mac against a real ComfyUI tab: the Mixamo walk
+   imported through it, a ring drag saved, the body re-solved, the walk drawn
+   at 90° from the page). The bench around it was reworked in the same change:
+   shelf, glass and inspector for assets, the project's settings in a drawer,
+   the recipe as a form. A tab loaded before the pack was updated counts as connected but
    has no listener, so it gets the 15-second failure rather than the
    immediate refusal: reload open tabs after an update.
 

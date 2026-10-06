@@ -26,7 +26,7 @@ honest about their lifetime — a render takes seconds and its pictures are on d
 before the job is answered.
 
 **Renders are a cache.** A frame's picture depends on its pose, the body, the
-size and the yaw, and on nothing else, so each frame is stored under
+size, the yaw and the camera's pitch, and on nothing else, so each frame is stored under
 `build/poses/<set>/` with a hash of those in its name. Asking again for what is
 already drawn answers at once without a tab; a changed frame redraws that frame
 only. `build/` is derived: none of it is kept as a version.
@@ -287,9 +287,18 @@ def turned(pose, yaw):
     return {**pose, "modelRotation": [x, (y + yaw) % 360, z]}
 
 
-def frame_key(pose, body, width, height):
-    text = json.dumps({"pose": pose, "body": body, "size": [width, height], "look": LOOK},
-                      sort_keys=True, separators=(",", ":"))
+# How far the camera may look down on (or up at) the figure. Straight down is
+# left out: the capture camera's up is the world's, and at 90° it has none.
+PITCH = 89
+
+
+def frame_key(pose, body, width, height, pitch=0):
+    what = {"pose": pose, "body": body, "size": [width, height], "look": LOOK}
+    # Only when it is not level, so frames drawn before pitch existed keep
+    # their names and stay cached.
+    if pitch:
+        what["pitch"] = pitch
+    text = json.dumps(what, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(text.encode()).hexdigest()[:12]
 
 
@@ -309,7 +318,19 @@ def _size(value, default):
     return number
 
 
-def plan_render(base, project, name, frames=None, width=None, height=None, yaw=0):
+def _pitch(value):
+    """Degrees the camera looks down on the figure: 0 level, as a side-on
+    platformer draws it; about 30 for a three-quarter RPG; negative looks up."""
+    try:
+        pitch = float(value or 0)
+    except (TypeError, ValueError):
+        raise ForgeError("pitch is a number of degrees", "pose.pitch") from None
+    if not -PITCH <= pitch <= PITCH:
+        raise ForgeError(f"pitch is from -{PITCH} to {PITCH} degrees", "pose.pitch")
+    return pitch
+
+
+def plan_render(base, project, name, frames=None, width=None, height=None, yaw=0, pitch=0):
     """What a render of these frames needs: every frame's file, and which of
     them are not drawn yet."""
     data = load(base, project, name)
@@ -319,18 +340,19 @@ def plan_render(base, project, name, frames=None, width=None, height=None, yaw=0
         yaw = float(yaw or 0)
     except (TypeError, ValueError):
         raise ForgeError("yaw is a number of degrees", "pose.yaw") from None
+    pitch = _pitch(pitch)
     indices = list(range(len(data["poses"]))) if frames in (None, "", []) else [_index(data, f) for f in frames]
     root = projects.folder(base, project)
     wanted, missing = [], []
     for index in indices:
         pose = turned(data["poses"][index], yaw)
-        rel = frame_rel(name, index, frame_key(pose, data["body"], width, height))
+        rel = frame_rel(name, index, frame_key(pose, data["body"], width, height, pitch))
         wanted.append({"frame": index, "path": rel})
         if not os.path.isfile(projects.inside(root, rel)):
             missing.append({"frame": index, "path": rel, "pose": pose})
     if len(missing) > MAX_RENDER:
         raise ForgeError(f"one render draws at most {MAX_RENDER} frames; ask for fewer", "pose.many")
-    return data, width, height, wanted, missing
+    return data, width, height, pitch, wanted, missing
 
 
 # ---- jobs a browser tab does ---------------------------------------------------

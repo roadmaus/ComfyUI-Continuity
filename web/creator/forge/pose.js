@@ -17,6 +17,9 @@
  * widget's two default lights go on, on white. Proven headless in the lab
  * spike with exactly these steps.
  *
+ * The pose page (`posepage.js`) builds its editing viewer from the same parts,
+ * so what an artist poses is lit and shaped as the job draws it.
+ *
  * Nothing here runs on import: `creator.js` calls `listenForPoseJobs` from
  * the extension's setup, and the 2 MB of three and core are imported only
  * when the first job arrives.
@@ -26,9 +29,9 @@ import { api } from "../../../../scripts/api.js";
 import { forgeCall } from "../api.js";
 
 const VENDOR = "../vendor/posestudio/";
-const WHITE = [255, 255, 255];
+export const WHITE = [255, 255, 255];
 // The widget's defaults (vnccs_pose_studio.js `lightParams`).
-const LIGHTS = [
+export const LIGHTS = [
   { type: "directional", color: "#ffffff", intensity: 2.0, x: 10, y: 20, z: 30 },
   { type: "ambient", color: "#505050", intensity: 1.0, x: 0, y: 0, z: 0 },
 ];
@@ -41,7 +44,7 @@ const TAB = crypto.randomUUID();
 let modules = null;
 let busy = Promise.resolve();
 
-function vendored() {
+export function vendored() {
   modules ??= Promise.all([
     import(`${VENDOR}vnccs_pose_studio_core.mjs`),
     import(`${VENDOR}vnccs_mixamo_import.mjs`),
@@ -51,7 +54,7 @@ function vendored() {
 
 /** The body sliders -> the mesh `loadData` takes, solved in the vendored
  *  worker the way the widget does it. */
-function solveBody(body) {
+export function solveBody(body) {
   const worker = new Worker(new URL(`${VENDOR}vnccs_pose_morph_worker.mjs`, import.meta.url), { type: "module" });
   return new Promise((resolve, reject) => {
     worker.onerror = (event) => { worker.terminate(); reject(new Error(event.message || "the morph worker failed")); };
@@ -75,8 +78,9 @@ function solveBody(body) {
   });
 }
 
-/** A ready viewer on an off-screen canvas, and how to put it away. */
-async function makeViewer(body, width, height) {
+/** A ready viewer on an off-screen canvas, and how to put it away. The pose
+ *  page keeps one for its frame strip's thumbnails. */
+export async function makeViewer(body, width, height) {
   const { PoseViewerCore } = await vendored();
   const holder = document.createElement("div");
   holder.style.cssText = "position:fixed;left:-10000px;top:0;opacity:0;pointer-events:none";
@@ -112,7 +116,9 @@ export async function drawFrames(task) {
     return task.frames.map(({ pose }) => {
       viewer.setPose(pose, true);
       viewer.updateLights(LIGHTS);
-      const png = viewer.capture(task.width, task.height, 1, WHITE);
+      // The core's pitch turns the camera below the figure for a positive
+      // angle; ours is how far it looks down, so it goes in negated.
+      const png = viewer.capture(task.width, task.height, 1, WHITE, 0, 0, 0, -(task.pitch || 0));
       if (!png) throw new Error("the viewer could not capture");
       return png;
     });

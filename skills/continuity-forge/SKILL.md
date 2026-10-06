@@ -135,6 +135,7 @@ into; for now you make them and look at them.
 forge.py pose mygame import walk ~/Downloads/walk.fbx --fps 12   # a Mixamo clip, one pose per sample
 forge.py pose mygame render walk --out ./walk                    # mannequin PNGs; look at them
 forge.py pose mygame render walk --yaw 90 --frame 0 --frame 3    # from the side, two frames
+forge.py pose mygame render walk --pitch 30                      # looking down, for a 3/4 RPG
 forge.py pose mygame new stand                                   # one rest pose
 forge.py pose mygame set stand 0 upperarm_l=0,0,-60 head=10,0,0  # turn bones, degrees
 forge.py pose mygame paste nod pose_data.json                    # from Pose Studio's node
@@ -149,7 +150,11 @@ forge.py poses mygame
   rig, so a walk walks on the spot.
 - `render` draws at 484x1088 by default, one cell of the four-frame grid a
   sprite's frames will be rendered in. `--yaw` turns the figure for another
-  direction.
+  direction. `--pitch` is how far the camera looks down on it, to match the
+  game's camera: 0 (the default) for a side-on platformer, about 30 for a
+  three-quarter RPG, up to 89 for top-down; negative looks up. Pick it from
+  the game the user describes, not per frame: every sprite in a game shares
+  one.
 - Bone names are the mannequin's (`pelvis`, `spine_01`…`03`, `neck_01`,
   `head`, `clavicle_l`, `upperarm_l`, `lowerarm_l`, `hand_l`, `thigh_l`,
   `calf_l`, `foot_l`, `ball_l`, fingers as `index_01_l`…, and `_r` for the
