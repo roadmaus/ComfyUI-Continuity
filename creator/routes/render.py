@@ -31,12 +31,18 @@ Request (POST, JSON):
      "models": {"clip": "..."},      # a slot's file, over this machine's picks
      "devices": {"clip": "cuda:1"},  # where a slot loads, over this machine's pins
      "accel": {"attention": "kitchen"},  # how the card runs it, over this machine's row
-     "guide_strength": 0.8}          # how hard a guide pulls (a still's, below)
+     "guide_strength": 0.8,          # how hard a guide pulls (a still's, below)
+     "loras": [{"name": "style.safetensors", "strength": 0.8}]}  # on the stack, under any turbo LoRA
 
 A picture is cited in the prompt as `@pic-1` (`@clip-1`, `@snd-1` for video and
 sound), numbered in the order sent; one that is not cited rides anyway. `as` is
 `start`, `end`, `ref` or a reference scope (`style`, `person`, ...); left out,
 the first picture opens the shot — the room's rule, `chat.video_piece`.
+
+`loras` are the caller's own, by their name under models/loras, patched as the
+node's stack would patch them; the turbo switch adds its distill beside them.
+On H3 an entry may say `"modes": ["ref2va"]` to claim one checkpoint, as the
+node's LoRA manager does; without it the LoRA rides every pass.
 
 `as: "guide"` is a still's tracing for a family that loads a ControlNet branch
 to read one (Qwen Image 2.1): it is not a picture the prompt cites — it takes no
@@ -172,9 +178,46 @@ def _request(body, accel=None):
         piece = {"version": 2, "family": family_id, "loras": [], "turbo": {},
                  "models": {**overrides, **({"devices": devices} if devices else {})},
                  **({"sampling": row} if row else {})}
+    piece["loras"] = _loras(body.get("loras"))
     seed = body.get("seed")
     widgets = {"seed": int(seed)} if isinstance(seed, int) and not isinstance(seed, bool) else {}
     return action, ledger, rail, (piece, widgets), family, still
+
+
+def _loras(raw):
+    """The request's `loras` -> stack entries, each a file this machine has.
+
+    Refused by name rather than dropped: a LoRA that is not on the disk is a
+    render that quietly lacks what it was asked for, and the caller is a script
+    that would never notice. The near names are said, because the usual cause
+    is a subfolder left off.
+    """
+    if raw in (None, []):
+        return []
+    if not isinstance(raw, list):
+        raise headless.HeadlessError('loras must be a list of {"name", "strength"}.')
+    names = server_routes._lora_names()
+    out = []
+    for item in raw:
+        item = {"name": item} if isinstance(item, str) else item
+        name = str((item or {}).get("name") or "").strip() if isinstance(item, dict) else ""
+        if not name:
+            raise headless.HeadlessError("every LoRA needs a name under models/loras.")
+        if name not in names:
+            stem = os.path.splitext(os.path.basename(name))[0].lower()
+            near = [n for n in names if stem and stem in n.lower()][:5]
+            raise headless.HeadlessError(
+                f"{name!r} is not in models/loras on this machine"
+                + (f" — did you mean {', '.join(near)}?" if near else "."))
+        try:
+            strength = float(item.get("strength", 1.0))
+        except (TypeError, ValueError):
+            raise headless.HeadlessError(f"LoRA {name}: strength must be a number.") from None
+        entry = {"name": name, "strength": strength}
+        if isinstance(item.get("modes"), list):
+            entry["modes"] = [str(m) for m in item["modes"]]
+        out.append(entry)
+    return out
 
 
 def _guide(family, still, prefix, filename):

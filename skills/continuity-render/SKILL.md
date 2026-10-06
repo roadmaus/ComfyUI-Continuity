@@ -61,6 +61,10 @@ python3 <skill dir>/render.py h3 "@pic-1 turns and walks out of frame" --image c
   `@pic-N`; `--guide-strength 0.5|0.8|1` sets how hard it pulls (1 decides what
   things are as well as where; 0.8 leaves the prompt room). It needs the Fun
   ControlNet file in the family's `control` slot.
+- **LoRAs:** `--lora NAME[:STRENGTH]`, repeatable, by the file's name under
+  `models/loras` with its subfolder (`GET /models/loras` on the server lists
+  them). It rides with the turbo LoRA, not instead of it; a name the server
+  does not have is refused with the near matches.
 - **Other flags:** `--seconds`, `--aspect 16:9|9:16|1:1|4:5|...`, `--edge`
   (short edge in px), `--seed`, `--model SLOT=FILE`, `--device SLOT=DEVICE`,
   `--attention default|sage|kitchen|sla`, `--low-vram`, `--fast-math`, `--out DIR` (default

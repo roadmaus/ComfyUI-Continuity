@@ -211,6 +211,9 @@ def main():
     parser.add_argument("--seed", type=int, help="random otherwise; printed either way")
     parser.add_argument("--native", action="store_true", help="the family's full step count, not turbo")
     parser.add_argument("--quality", help="turbo quality stop: draft, medium or good")
+    parser.add_argument("--lora", action="append", default=[], metavar="NAME[:STRENGTH]",
+                        help="a LoRA from models/loras to patch on, by its name there "
+                             "(subfolder included); repeatable, strength 1 otherwise")
     parser.add_argument("--turbo-lora", help="the turbo LoRA to use, when the server cannot tell")
     parser.add_argument("--merged", action="store_true",
                         help="the checkpoint has the distillation merged in: turbo steps, no LoRA")
@@ -249,10 +252,19 @@ def main():
         if not sep:
             parser.error(f"--device takes SLOT=DEVICE; got {item!r}")
         devices[slot] = device
+    loras = []
+    for item in args.lora:
+        name, sep, strength = item.rpartition(":")
+        try:
+            loras.append({"name": name, "strength": float(strength)} if sep else {"name": item})
+        except ValueError:
+            loras.append({"name": item})
     seed = args.seed if args.seed is not None else random.randrange(2 ** 32)
     body = {"family": args.family, "prompt": args.prompt,
             "pictures": [_picture(server, spec) for spec in args.image],
             "seed": seed, "fast": not args.native, "models": models}
+    if loras:
+        body["loras"] = loras
     if args.still:
         body["still"] = True
     if args.merged:

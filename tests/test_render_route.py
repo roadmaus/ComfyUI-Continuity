@@ -216,6 +216,24 @@ check("...and on a clip, for now",
       "a still's" in render(family="h3", prompt="x", pictures=[
           {"filename": "edges.png", "as": "guide"}]).get("problem", ""), True)
 
+# ---- the caller's own LoRAs ----------------------------------------------------
+built = render(family="qwen21", prompt="a dancer mid-leap", fast=False,
+               loras=[{"name": "anna.safetensors", "strength": 0.7}])
+if "problem" in built:
+    FAILURES.append(f"a still with a LoRA was refused: {built['problem']}")
+else:
+    check("a requested LoRA is on the still's stack",
+          [(e["name"], e["strength"]) for e in inputs(built)[2]["loras"]], [("anna.safetensors", 0.7)])
+built = render(family="h3", prompt="a cat", loras=["anna.safetensors"])
+if "problem" in built:
+    FAILURES.append(f"a clip with a LoRA was refused: {built['problem']}")
+else:
+    check("...and on a clip it rides beside the turbo distill",
+          [e["name"] for e in inputs(built)[2]["loras"]], ["anna.safetensors", FL2V])
+check("a LoRA the machine does not have is refused with the near names",
+      "did you mean anna.safetensors" in render(family="h3", prompt="a cat",
+          loras=[{"name": "Anna"}]).get("problem", ""), True)
+
 route.server_routes._lora_names = lambda: []
 check("fast with no distill on the machine refuses rather than rendering slow",
       "fast: false" in render(family="h3", prompt="a cat").get("problem", ""), True)

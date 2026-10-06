@@ -107,6 +107,7 @@ python3 skills/continuity-render/render.py qwen21 "a ruined castle tower on a sn
 | `--edge N` | short edge in pixels; the family's native size otherwise |
 | `--seed N` | random otherwise; printed either way |
 | `--still` | a picture rather than a clip |
+| `--lora NAME[:N]` | a LoRA from `models/loras` (subfolder included) at strength N, 1 otherwise; repeatable, beside the turbo LoRA |
 | `--out DIR` | where to download; `./renders` by default |
 | `--no-wait` | queue it, print the prompt id, and return |
 
