@@ -160,19 +160,22 @@ fn sliver_share(v: &[V3], f: &[[u32; 3]]) -> f64 {
     n as f64 / f.len().max(1) as f64
 }
 
-/// The input remeshed to edges of about `target`, keeping edges sharper
+/// The input remeshed to edges of about `target` (asked per point: the
+/// triangles follow the quad size where it varies), keeping edges sharper
 /// than `degrees`.
-pub fn remesh(input: &TriMesh, target: f64, degrees: f64, rounds: usize) -> (TriMesh, Report) {
-    let projector = Projector::new(input, target * 2.0);
+pub fn remesh(input: &TriMesh, target: &dyn Fn(V3) -> f64, degrees: f64, rounds: usize) -> (TriMesh, Report) {
+    let projector = Projector::new(input, crate::mesh::mean_edge(input) * 2.0);
     let mut v = input.v.clone();
     let mut f = input.f.clone();
     let mut sharp = features(input, degrees);
     let slivers_before = sliver_share(&v, &f);
-    let (hi, lo) = (target * 4.0 / 3.0, target * 4.0 / 5.0);
 
     for _ in 0..rounds {
-        split(&mut v, &mut f, &mut sharp, hi, &projector);
-        collapse(&mut v, &mut f, &mut sharp, lo, hi);
+        // The wanted edge at every vertex; an edge is judged against the
+        // mean of its two ends'.
+        let mut size: Vec<f64> = v.iter().map(|&p| target(p)).collect();
+        split(&mut v, &mut f, &mut sharp, &mut size, target, &projector);
+        collapse(&mut v, &mut f, &mut sharp, &size);
         flip(&v, &mut f, &sharp);
         relax(&mut v, &f, &sharp, &projector);
     }
@@ -210,13 +213,13 @@ fn feature_valence(nv: usize, sharp: &HashSet<Edge>) -> Vec<u8> {
     c
 }
 
-fn split(v: &mut Vec<V3>, f: &mut Vec<[u32; 3]>, sharp: &mut HashSet<Edge>, hi: f64, projector: &Projector) {
+fn split(v: &mut Vec<V3>, f: &mut Vec<[u32; 3]>, sharp: &mut HashSet<Edge>, size: &mut Vec<f64>, target: &dyn Fn(V3) -> f64, projector: &Projector) {
     for _ in 0..12 {
         let map = edge_tris(f);
         let mut long: Vec<(f64, Edge)> = map
             .keys()
-            .map(|&(a, b)| ((v[a as usize] - v[b as usize]).norm(), (a, b)))
-            .filter(|(l, _)| *l > hi)
+            .map(|&(a, b)| ((v[a as usize] - v[b as usize]).norm() / (0.5 * (size[a as usize] + size[b as usize])), (a, b)))
+            .filter(|(l, _)| *l > 4.0 / 3.0)
             .collect();
         if long.is_empty() {
             return;
@@ -235,6 +238,7 @@ fn split(v: &mut Vec<V3>, f: &mut Vec<[u32; 3]>, sharp: &mut HashSet<Edge>, hi: 
             // anywhere else the chord is pulled back onto it.
             let m = if on_feature { mid } else { projector.closest(mid).0 };
             v.push(m);
+            size.push(target(m));
             let mi = (v.len() - 1) as u32;
             for &t in tris {
                 touched[t] = true;
@@ -255,7 +259,7 @@ fn split(v: &mut Vec<V3>, f: &mut Vec<[u32; 3]>, sharp: &mut HashSet<Edge>, hi: 
     }
 }
 
-fn collapse(v: &mut [V3], f: &mut Vec<[u32; 3]>, sharp: &mut HashSet<Edge>, lo: f64, hi: f64) {
+fn collapse(v: &mut [V3], f: &mut Vec<[u32; 3]>, sharp: &mut HashSet<Edge>, size: &[f64]) {
     for _ in 0..12 {
         let map = edge_tris(f);
         let fv = feature_valence(v.len(), sharp);
@@ -270,8 +274,8 @@ fn collapse(v: &mut [V3], f: &mut Vec<[u32; 3]>, sharp: &mut HashSet<Edge>, lo: 
         };
         let mut short: Vec<(f64, Edge)> = map
             .keys()
-            .map(|&(a, b)| ((v[a as usize] - v[b as usize]).norm(), (a, b)))
-            .filter(|(l, _)| *l < lo)
+            .map(|&(a, b)| ((v[a as usize] - v[b as usize]).norm() / (0.5 * (size[a as usize] + size[b as usize])), (a, b)))
+            .filter(|(l, _)| *l < 4.0 / 5.0)
             .collect();
         if short.is_empty() {
             return;
@@ -317,7 +321,7 @@ fn collapse(v: &mut [V3], f: &mut Vec<[u32; 3]>, sharp: &mut HashSet<Edge>, lo: 
             if shared != map[&(a, b)].len() {
                 continue;
             }
-            if rr.iter().any(|&x| x != s && (v[x as usize] - at).norm() > hi) {
+            if rr.iter().any(|&x| x != s && (v[x as usize] - at).norm() > 4.0 / 3.0 * 0.5 * (size[x as usize] + size[s as usize])) {
                 continue;
             }
             // No triangle that survives may turn over or go flat.

@@ -13,6 +13,7 @@ use crate::mesh::TriMesh;
 use std::collections::{HashMap, HashSet};
 use std::f64::consts::PI;
 
+#[derive(Clone)]
 pub struct Arc {
     /// Node vertices (refined mesh) at each end, and the chain between
     /// them, ends included.
@@ -25,6 +26,7 @@ pub struct Arc {
     pub feature: bool,
 }
 
+#[derive(Clone)]
 pub struct Patch {
     /// Local vertex → refined vertex.
     pub verts: Vec<u32>,
@@ -52,6 +54,7 @@ impl Patch {
     }
 }
 
+#[derive(Clone)]
 pub struct Graph {
     pub arcs: Vec<Arc>,
     pub patches: Vec<Patch>,

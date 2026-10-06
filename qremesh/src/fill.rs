@@ -165,6 +165,8 @@ pub struct Output {
     pub faces: Vec<Vec<u32>>,
     /// Vertices held still when smoothing: on features and the boundary.
     pub fixed: Vec<bool>,
+    /// Vertices on the layout's arcs, the borders of its patches.
+    pub border: Vec<bool>,
     pub unfilled: usize,
     pub quantize_violations: usize,
     pub kites: usize,
@@ -175,6 +177,8 @@ pub struct Filler<'a> {
     m: &'a TriMesh,
     graph: &'a mut Graph,
     h: f64,
+    /// The quad side at each vertex of `m`.
+    size: &'a [f64],
     farcs: Vec<FArc>,
     /// Fill arc of each graph arc: the two numberings part once domain
     /// arcs are made.
@@ -227,7 +231,7 @@ fn on_side(n: usize, poly: &[(f64, f64)], c: usize, f: f64) -> (f64, f64) {
 }
 
 impl<'a> Filler<'a> {
-    pub fn new(m: &'a TriMesh, graph: &'a mut Graph, h: f64) -> Filler<'a> {
+    pub fn new(m: &'a TriMesh, graph: &'a mut Graph, h: f64, size: &'a [f64]) -> Filler<'a> {
         let farcs = graph
             .arcs
             .iter()
@@ -235,7 +239,7 @@ impl<'a> Filler<'a> {
             .map(|(i, a)| FArc { from: Node::Vertex(a.a), to: Node::Vertex(a.b), kind: Kind::Surface(i), target: a.length / h })
             .collect();
         let farc_of = (0..graph.arcs.len()).collect();
-        Filler { m, graph, h, farcs, farc_of, dpoints: Vec::new(), kites: Vec::new(), pending: Vec::new(), unfilled: 0, prelim: HashMap::new(), int: Vec::new(), templates: Vec::new() }
+        Filler { m, graph, h, size, farcs, farc_of, dpoints: Vec::new(), kites: Vec::new(), pending: Vec::new(), unfilled: 0, prelim: HashMap::new(), int: Vec::new(), templates: Vec::new() }
     }
 
     /// The outline vertex of patch `p` that is refined vertex `v`. A node
@@ -296,7 +300,10 @@ impl<'a> Filler<'a> {
     /// the solver to get stuck on.
     pub fn build_patches(&mut self) -> quantize::Solution {
         let na = self.graph.arcs.len();
-        let target: Vec<f64> = self.graph.arcs.iter().map(|a| (a.length / self.h).max(0.05)).collect();
+        // An arc's edges: its length in local quads, the integral of 1/size
+        // along it (here the length times the mean of 1/size on its chain).
+        let size = self.size;
+        let target: Vec<f64> = self.graph.arcs.iter().map(|a| (a.length * a.chain.iter().map(|&v| 1.0 / size[v as usize]).sum::<f64>() / a.chain.len() as f64).max(0.05)).collect();
         let weight: Vec<f64> = target.iter().map(|t| 1.0 / t.max(1.0)).collect();
         let ok: Vec<bool> = self.graph.patches.iter().map(|p| fillable(p) && (3..=6).contains(&p.corners.len())).collect();
         let side_arcs = |p: &crate::patches::Patch| -> Vec<Vec<usize>> { p.sides.iter().map(|s| s.iter().map(|&(a, _)| a).collect()).collect() };
@@ -340,7 +347,13 @@ impl<'a> Filler<'a> {
             let l: Vec<usize> = sides.iter().map(|s| s.iter().map(|&(a, _)| self.int[a].max(0) as usize).sum()).collect();
             let corners = polygon(l.len(), &l.iter().map(|&x| x as f64).collect::<Vec<_>>());
             match crate::pattern::build(&corners, &l) {
-                Some(t) => self.templates.push((p, sides, t)),
+                Some(t) => {
+                    if std::env::var("QREMESH_DEBUG").is_ok() {
+                        let want: Vec<String> = patch.sides.iter().map(|s| format!("{:.1}", s.iter().map(|&(a, _)| target[a]).sum::<f64>())).collect();
+                        eprintln!("    patch {p}: sides {l:?} (wanted {}) -> {} quads", want.join(" "), t.faces.len());
+                    }
+                    self.templates.push((p, sides, t))
+                }
                 None => {
                     if std::env::var("QREMESH_DEBUG").is_ok() {
                         eprintln!("    patch {p}: no pattern for sides {l:?}");
@@ -778,6 +791,7 @@ impl<'a> Filler<'a> {
     pub fn place(&self, lengths: &[i64]) -> Output {
         let mut v: Vec<V3> = Vec::new();
         let mut fixed: Vec<bool> = Vec::new();
+        let mut on_arcs: Vec<u32> = Vec::new();
         let mut faces: Vec<Vec<u32>> = Vec::new();
         let mut node_out: HashMap<Node, u32> = HashMap::new();
         let mut arc_out: HashMap<usize, Vec<u32>> = HashMap::new();
@@ -802,7 +816,7 @@ impl<'a> Filler<'a> {
                     let chain: Vec<u32> = if fwd { arc.chain.clone() } else { arc.chain.iter().rev().copied().collect() };
                     let mut cum = vec![0.0];
                     for w in chain.windows(2) {
-                        cum.push(cum.last().unwrap() + (self.m.v[w[1] as usize] - self.m.v[w[0] as usize]).norm());
+                        cum.push(cum.last().unwrap() + self.step(w[0], w[1]));
                     }
                     let len = *cum.last().unwrap();
                     for (k, _) in chain.iter().enumerate() {
@@ -867,6 +881,9 @@ impl<'a> Filler<'a> {
                     };
                     v.push(pos);
                     fixed.push(fix);
+                    if matches!(c, Node::Vertex(_)) {
+                        on_arcs.push((v.len() - 1) as u32);
+                    }
                     node_out.insert(c, (v.len() - 1) as u32);
                 }
             }
@@ -881,9 +898,10 @@ impl<'a> Filler<'a> {
                     match arc.kind {
                         Kind::Surface(ga) => {
                             let g = &self.graph.arcs[ga];
+                            // Even steps in local quads, not in length.
                             let mut cum = vec![0.0];
                             for w in g.chain.windows(2) {
-                                cum.push(cum.last().unwrap() + (self.m.v[w[1] as usize] - self.m.v[w[0] as usize]).norm());
+                                cum.push(cum.last().unwrap() + self.step(w[0], w[1]));
                             }
                             let len = *cum.last().unwrap();
                             for s in 1..n {
@@ -893,6 +911,7 @@ impl<'a> Filler<'a> {
                                 let (pa, pb) = (self.m.v[g.chain[j - 1] as usize], self.m.v[g.chain[j] as usize]);
                                 v.push(pa + (pb - pa) * f);
                                 fixed.push(g.feature);
+                                on_arcs.push((v.len() - 1) as u32);
                                 ids.push((v.len() - 1) as u32);
                             }
                         }
@@ -1000,10 +1019,19 @@ impl<'a> Filler<'a> {
                 faces.push(f.iter().map(|&x| out[x]).collect());
             }
         }
-        Output { v, faces, fixed, unfilled: self.unfilled, quantize_violations: 0, kites: self.kites.len() + self.templates.len(), arcs: self.farcs.len() }
+        let mut border = vec![false; v.len()];
+        for i in on_arcs {
+            border[i as usize] = true;
+        }
+        Output { v, faces, fixed, border, unfilled: self.unfilled, quantize_violations: 0, kites: self.kites.len() + self.templates.len(), arcs: self.farcs.len() }
     }
 
     /// Whether a refined vertex lies on a feature or boundary arc.
+    /// The mesh edge a → b in local quads.
+    fn step(&self, a: u32, b: u32) -> f64 {
+        (self.m.v[b as usize] - self.m.v[a as usize]).norm() / (0.5 * (self.size[a as usize] + self.size[b as usize]))
+    }
+
     fn vertex_fixed(&self, x: u32) -> bool {
         self.graph.arcs.iter().any(|a| a.feature && (a.a == x || a.b == x))
     }
@@ -1139,7 +1167,7 @@ fn tutte(m: &TriMesh, patch: &crate::patches::Patch, boundary: &HashMap<u32, (f6
 /// the inside of the curve it sits on, which on a limb a few quads round
 /// collapses the limb, and the closest point of the input then lies on the
 /// body instead.
-pub fn smooth(out: &mut Output, proj: &crate::proj::Projector, rounds: usize) {
+pub fn smooth(out: &mut Output, sizing: &crate::sizing::Sizing, rounds: usize) {
     let n = out.v.len();
     let mut adj: Vec<Vec<u32>> = vec![Vec::new(); n];
     for f in &out.faces {
@@ -1153,8 +1181,8 @@ pub fn smooth(out: &mut Output, proj: &crate::proj::Projector, rounds: usize) {
         list.sort_unstable();
         list.dedup();
     }
-    for _ in 0..rounds {
-        // Vertex normals from the faces round each vertex.
+    // Vertex normals from the faces round each vertex.
+    let normals = |out: &Output| -> Vec<V3> {
         let mut normal = vec![V3::ZERO; n];
         for f in &out.faces {
             for k in 0..f.len() {
@@ -1162,15 +1190,69 @@ pub fn smooth(out: &mut Output, proj: &crate::proj::Projector, rounds: usize) {
                 normal[b] += (out.v[c] - out.v[b]).cross(out.v[a] - out.v[b]);
             }
         }
+        normal
+    };
+    // Where vertex `i` goes: toward its neighbours' mean, along the surface
+    // only. Neighbours pull by one over the wanted edge between them: at
+    // rest every edge is then as long as the quad size there asks, where
+    // plain averaging would even a graded mesh out.
+    let pull = |out: &Output, normal: &[V3], size: &[f64], i: usize| -> V3 {
+        let (mut sum, mut weight) = (V3::ZERO, 0.0);
+        for &j in &adj[i] {
+            let w = 1.0 / (size[i] + size[j as usize]);
+            sum += out.v[j as usize] * w;
+            weight += w;
+        }
+        (sum / weight - out.v[i]).project_tangent(normal[i].normalized())
+    };
+
+    // First each patch's inside, its border held where the layout put it,
+    // until it is at rest. A patch comes off its flat domain badly spread:
+    // a strip thirty quads long with two singularities is laid out through
+    // a hexagon, rows crushed into a band, and the gentle rounds below
+    // never even that out. With the border held this has one answer (the
+    // patch's quads spread between its sides), so it can be run to the end,
+    // each vertex moving at once and the next seeing it there, each move
+    // taken 1.7 times over (successive over-relaxation: rounds by a patch's
+    // length in quads, not by its square).
+    //
+    // Not where the quads are too coarse for the surface (a tail one quad
+    // round): averaging there is not along the surface any more, the ring
+    // shrinks, and run to the end the tail is gone. Those vertices stay.
+    if rounds > 0 {
+        let held: Vec<bool> = (0..n).map(|i| out.fixed[i] || out.border[i] || adj[i].is_empty() || sizing.coarse(out.v[i])).collect();
+        let mut size: Vec<f64> = Vec::new();
+        for round in 0..400 {
+            let normal = normals(out);
+            if round % 10 == 0 {
+                size = out.v.iter().map(|&p| sizing.at(p)).collect();
+            }
+            let mut moved: f64 = 0.0;
+            for i in 0..n {
+                if held[i] {
+                    continue;
+                }
+                let step = pull(out, &normal, &size, i);
+                moved = moved.max(step.norm() / size[i]);
+                out.v[i] = sizing.closest(out.v[i] + step * 1.7).0;
+            }
+            if moved < 0.01 {
+                break;
+            }
+        }
+    }
+    // Then everything but features, a set number of gentle rounds: enough
+    // to ease the borders' zigzag and the kinks across them, not enough
+    // for anything to travel.
+    for _ in 0..rounds {
+        let normal = normals(out);
+        let size: Vec<f64> = out.v.iter().map(|&p| sizing.at(p)).collect();
         let mut next = out.v.clone();
         for i in 0..n {
             if out.fixed[i] || adj[i].is_empty() {
                 continue;
             }
-            let mean = adj[i].iter().fold(V3::ZERO, |a, &j| a + out.v[j as usize]) / adj[i].len() as f64;
-            let nn = normal[i].normalized();
-            let d = (mean - out.v[i]).project_tangent(nn);
-            next[i] = proj.closest(out.v[i] + d * 0.5).0;
+            next[i] = sizing.closest(out.v[i] + pull(out, &normal, &size, i) * 0.5).0;
         }
         out.v = next;
     }

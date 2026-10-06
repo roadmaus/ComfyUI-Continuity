@@ -117,8 +117,12 @@ struct Ctx<'a> {
     /// Angle defect (2π minus the angles round it) of each vertex off the
     /// boundary: the Gaussian curvature it carries.
     defect: Vec<f64>,
-    quad: f64,
+    /// The quad side at each vertex (`sizing`): every distance below that
+    /// is "half a quad" or "three quads" is so in the local quad.
+    h: &'a [f64],
     max_length: f64,
+    /// Rules switched off by name in QREMESH_OFF, to measure each alone.
+    off: Vec<String>,
 }
 
 enum End {
@@ -134,6 +138,10 @@ struct Walk {
 }
 
 impl<'a> Ctx<'a> {
+    fn is_off(&self, rule: &str) -> bool {
+        self.off.iter().any(|x| x == rule)
+    }
+
     fn label_at(&self, v: u32, d: V3) -> u8 {
         let a = &self.arms[v as usize];
         (0..4).max_by(|&i, &j| a[i].dot(d).total_cmp(&a[j].dot(d))).unwrap() as u8
@@ -245,7 +253,7 @@ impl<'a> Ctx<'a> {
                     }
                     // Back near the start going the same way: close the loop
                     // with a short hop rather than spiral past it.
-                    if close && length > 3.0 * self.quad && d.dot(dir) > 0.7 && (self.s.p[c as usize] - self.s.p[start as usize]).norm() < 0.7 * self.quad {
+                    if close && length > 3.0 * self.h[start as usize] && d.dot(dir) > 0.7 && (self.s.p[c as usize] - self.s.p[start as usize]).norm() < 0.7 * self.h[start as usize] {
                         if let Some(hop) = self.hop(c, start, &own, stop) {
                             chain.push(c);
                             labels.push(label);
@@ -290,7 +298,7 @@ impl<'a> Ctx<'a> {
             }
             for &w in cut_adj.get(&v).map_or(&[][..], |x| &x[..]) {
                 let nd = d + (self.s.p[w as usize] - self.s.p[v as usize]).norm();
-                if nd < 0.5 * self.quad && seen.get(&w).map_or(true, |&o| nd < o) {
+                if nd < 0.5 * self.h[c as usize] && seen.get(&w).map_or(true, |&o| nd < o) {
                     seen.insert(w, nd);
                     stack.push(w);
                 }
@@ -342,12 +350,65 @@ impl<'a> Ctx<'a> {
     }
 }
 
+fn add_path(path: &Path, cut: &mut HashSet<(u32, u32)>, label: &mut HashMap<(u32, u32), (u8, u8)>, on_cut: &mut [u32]) {
+    for (e, stored) in path_edges(path) {
+        if cut.insert(e) {
+            on_cut[e.0 as usize] += 1;
+            on_cut[e.1 as usize] += 1;
+        }
+        label.insert(e, stored);
+    }
+}
+
+/// The cuts so far.
+struct Cuts<'a> {
+    cut: &'a HashSet<(u32, u32)>,
+    label: &'a HashMap<(u32, u32), (u8, u8)>,
+    on_cut: &'a [u32],
+}
+
+impl Cuts<'_> {
+    /// The candidate that most lowers patch `r`'s badness with its gain (on
+    /// equal gain: one snapped to a junction, then the shorter), and the
+    /// candidates that leave it as it is.
+    fn best(&self, ctx: &Ctx, regions: &Regions, r: usize, eval: &(patches::Patch, usize)) -> (Option<(usize, Path)>, Vec<Path>) {
+        let before = eval.1;
+        let mut cut_adj: HashMap<u32, Vec<u32>> = HashMap::new();
+        for &(a, b) in self.cut {
+            cut_adj.entry(a).or_default().push(b);
+            cut_adj.entry(b).or_default().push(a);
+        }
+        let is_cut = |v: u32| self.on_cut[v as usize] > 0;
+        let mut best: Option<(usize, f64, Path)> = None;
+        let mut level = Vec::new();
+        for cand in candidates(ctx, regions, r, &eval.0, &cut_adj, self.label, &is_cut) {
+            let after = regions.split_badness(ctx, r, self.cut, self.label, &cand);
+            if std::env::var("QREMESH_WALKS").is_ok() {
+                eprintln!("    candidate {} of {} edges: badness {before} -> {after}", cand.kind, cand.chain.len() - 1);
+            }
+            if after == before {
+                level.push(cand);
+                continue;
+            }
+            if after > before {
+                continue;
+            }
+            let gain = before - after;
+            let len = cand.chain.len() as f64 + if cand.kind.ends_with("snapped") { 0.0 } else { 1e6 };
+            if best.as_ref().map_or(true, |(g, l, _)| gain > *g || (gain == *g && len < *l)) {
+                best = Some((gain, len, cand));
+            }
+        }
+        (best.map(|(g, _, p)| (g, p)), level)
+    }
+}
+
 /// What is wrong with a patch, counted: 0 for a valid one. Weighted so that
 /// every step toward valid counts even when it leaves the pieces invalid:
 /// a non-disk by the cuts still needed to open it into a disk (a sphere
 /// one, a torus two, an annulus one), a singularity too many twice (four
 /// split two and two is progress even though each half is a digon).
-fn badness(p: &patches::Patch, singular: usize, bending: f64) -> usize {
+fn badness(p: &patches::Patch, singular: usize, paired: bool, bending: f64) -> usize {
     let mut b = p.concave + overbent(bending);
     if !p.is_disk() {
         let holes = p.loops as i64;
@@ -355,7 +416,7 @@ fn badness(p: &patches::Patch, singular: usize, bending: f64) -> usize {
         let cuts = if holes == 0 { if genus == 0 { 1 } else { 2 * genus } } else { 2 * genus + holes - 1 };
         b += 3 * cuts.max(1) as usize;
     }
-    let allowed = if p.corners.len() == 6 { 2 } else { 1 };
+    let allowed = if p.corners.len() == 6 && paired { 2 } else { 1 };
     b += 2 * singular.saturating_sub(allowed);
     if p.is_disk() && p.concave == 0 && !(3..=6).contains(&p.corners.len()) {
         b += 1;
@@ -371,8 +432,50 @@ fn overbent(bending: f64) -> usize {
     (bending - 4.0).max(0.0).round() as usize
 }
 
-/// Side lengths of a patch, walked along its outline from corner to corner.
-fn side_lengths(s: &Surface, p: &patches::Patch) -> Vec<f64> {
+/// How many times over a disk holds more surface than its outline can
+/// carry. A patch is filled from its sides alone, and the most quads an
+/// outline of a given length can hold is a square's, (perimeter / 4)². A
+/// horn or an ear cut off at its base is a bag: a short outline round a
+/// long surface, which a fill stretches into a few huge quads. A flat
+/// square is 1, a cube's face blown onto a sphere 1.4, half a sphere 2.5;
+/// from 3.5 on the patch needs a ring cut round it.
+fn bagged(p: &patches::Patch, area: f64, perimeter: f64) -> usize {
+    if !p.is_disk() || perimeter <= 0.0 {
+        return 0;
+    }
+    let side = perimeter / 4.0;
+    ((area / (side * side) / 3.5).floor() as usize).min(4)
+}
+
+/// The quads a patch's sides can carry, from their lengths in quads: a
+/// grid's for four sides, and for three or five the midpoint pattern's,
+/// whose spokes t solve side_i = t_(i−1) + t_(i+1) and whose corner quads
+/// are t_(i−1) × t_i. None for other counts (a hexagon's spokes are not
+/// determined by its sides).
+fn capacity(e: &[f64]) -> Option<f64> {
+    let n = e.len();
+    match n {
+        4 => Some(0.25 * (e[0] + e[2]) * (e[1] + e[3])),
+        3 | 5 => {
+            // With c_j = side_(2j+1) the system is c_j = u_j + u_(j+1) round
+            // an odd cycle, u_j = t_(2j): u_0 is half the alternating sum.
+            let c = |j: usize| e[(2 * j + 1) % n];
+            let mut u = vec![0.0; n];
+            u[0] = 0.5 * (0..n).map(|j| if j % 2 == 0 { c(j) } else { -c(j) }).sum::<f64>();
+            for j in 0..n - 1 {
+                u[j + 1] = c(j) - u[j];
+            }
+            let t = |i: usize| -> f64 { (0..n).find(|&j| (2 * j) % n == i % n).map(|j| u[j].max(0.0)).unwrap() };
+            Some((0..n).map(|i| t(i) * t(i + 1)).sum())
+        }
+        _ => None,
+    }
+}
+
+/// Side lengths of a patch in local quads, walked along its outline from
+/// corner to corner.
+fn side_lengths(ctx: &Ctx, p: &patches::Patch) -> Vec<f64> {
+    let s = ctx.s;
     let n = p.outline.len();
     let k = p.corners.len();
     (0..k)
@@ -381,7 +484,8 @@ fn side_lengths(s: &Surface, p: &patches::Patch) -> Vec<f64> {
             let mut len = 0.0;
             loop {
                 let j = (i + 1) % n;
-                len += (s.p[p.verts[p.outline[j] as usize] as usize] - s.p[p.verts[p.outline[i] as usize] as usize]).norm();
+                let (a, b) = (p.verts[p.outline[i] as usize] as usize, p.verts[p.outline[j] as usize] as usize);
+                len += (s.p[b] - s.p[a]).norm() / (0.5 * (ctx.h[a] + ctx.h[b]));
                 i = j;
                 if i == end {
                     break;
@@ -395,9 +499,9 @@ fn side_lengths(s: &Surface, p: &patches::Patch) -> Vec<f64> {
 /// Whether a patch's sides can be filled without a strip being squeezed:
 /// the conditions under which the midpoint patterns exist (QuadWild's
 /// equation 1, after Takayama), with a quad's worth of slack.
-fn sides_fit(e: &[f64], quad: f64) -> bool {
+fn sides_fit(e: &[f64]) -> bool {
     let n = e.len();
-    let at = |i: usize| e[i % n] / quad;
+    let at = |i: usize| e[i % n];
     match n {
         3 => (0..3).all(|i| at(i) <= at(i + 1) + at(i + 2)),
         4 => (0..2).all(|i| (at(i) - at(i + 2)).abs() <= 1.0 + 0.3 * at(i).max(at(i + 2))),
@@ -407,7 +511,7 @@ fn sides_fit(e: &[f64], quad: f64) -> bool {
     }
 }
 
-pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32)], quad: f64, max_length: f64) -> Partition {
+pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32)], h: &[f64], max_length: f64) -> Partition {
     let nv = s.p.len();
     let topo = Topology::new(&s.tris);
     let arms: Vec<[V3; 4]> = (0..nv)
@@ -449,7 +553,7 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
             defect[e.1 as usize] = 0.0;
         }
     }
-    let ctx = Ctx { s, mesh: crate::mesh::TriMesh { v: s.p.clone(), f: s.tris.clone() }, z, topo, arms, vert_tris, edge_tris, blocked, sing_tri: sings.iter().map(|x| x.tri).collect(), defect, quad, max_length };
+    let ctx = Ctx { s, mesh: crate::mesh::TriMesh { v: s.p.clone(), f: s.tris.clone() }, z, topo, arms, vert_tris, edge_tris, blocked, sing_tri: sings.iter().map(|x| x.tri).collect(), defect, h, max_length, off: std::env::var("QREMESH_OFF").map(|s| s.split(',').map(str::to_string).collect()).unwrap_or_default() };
 
     // Feature lines that end in the open bound nothing; the field still
     // follows them, but as cuts they would only be slits, which the final
@@ -487,49 +591,68 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
         if bad.is_empty() || round > 400 {
             break;
         }
-        let mut cut_adj: HashMap<u32, Vec<u32>> = HashMap::new();
-        for &(a, b) in &cut {
-            cut_adj.entry(a).or_default().push(b);
-            cut_adj.entry(b).or_default().push(a);
-        }
         let mut progress = false;
         for &r in &bad {
             let before = evals[r].1;
-            let is_cut = |v: u32| on_cut[v as usize] > 0;
-            let mut best: Option<(usize, f64, Path)> = None;
-            for cand in candidates(&ctx, &regions, r, &evals[r].0, &cut_adj, &label, &is_cut) {
-                let after = regions.split_badness(&ctx, r, &cut, &label, &cand);
-                if std::env::var("QREMESH_WALKS").is_ok() {
-                    eprintln!("    candidate {} of {} edges: badness {before} -> {after}", cand.kind, cand.chain.len() - 1);
-                }
-                if after >= before {
-                    continue;
-                }
-                let gain = before - after;
-                // On equal gain: snapped first, then shorter.
-                let len = cand.chain.len() as f64 + if cand.kind.ends_with("snapped") { 0.0 } else { 1e6 };
-                if best.as_ref().map_or(true, |(g, l, _)| gain > *g || (gain == *g && len < *l)) {
-                    best = Some((gain, len, cand));
-                }
-            }
-            let Some((gain, _, path)) = best else {
+            let cuts = Cuts { cut: &cut, label: &label, on_cut: &on_cut };
+            let (best, level) = cuts.best(&ctx, &regions, r, &evals[r]);
+            let mut chosen: Vec<Path> = Vec::new();
+            if let Some((gain, path)) = best {
                 if debug {
-                    eprintln!("  patch {r} (badness {before}): no candidate helps");
+                    eprintln!("  patch {r} (badness {before}): {} path of {} edges, gain {gain}", path.kind, path.chain.len() - 1);
                 }
-                continue;
-            };
-            if debug {
-                eprintln!("  patch {r} (badness {before}): {} path of {} edges, gain {gain}", path.kind, path.chain.len() - 1);
-            }
-            for (e, stored) in path_edges(&path) {
-                if cut.insert(e) {
-                    on_cut[e.0 as usize] += 1;
-                    on_cut[e.1 as usize] += 1;
+                chosen.push(path);
+            } else {
+                // No one path helps. Some patches need two before they are
+                // any better: a band round the body is first opened into a
+                // disk with corners pointing in, then those are carried on.
+                // Try each path that at least does no harm, and take the
+                // one after which its pieces can be mended most.
+                let mut pair: Option<(usize, Vec<Path>)> = None;
+                for first in level.into_iter().take(if ctx.is_off("look") { 0 } else { 6 }) {
+                    let (mut cut2, mut label2, mut on_cut2) = (cut.clone(), label.clone(), on_cut.clone());
+                    add_path(&first, &mut cut2, &mut label2, &mut on_cut2);
+                    let regions2 = Regions::new(&ctx, &cut2);
+                    let mut pieces: Vec<u32> = regions.tris[r].iter().map(|&t| regions2.of[t as usize]).collect();
+                    pieces.sort_unstable();
+                    pieces.dedup();
+                    let cuts2 = Cuts { cut: &cut2, label: &label2, on_cut: &on_cut2 };
+                    let mut gain = 0;
+                    let mut both = vec![first];
+                    for &q in &pieces {
+                        let eval = regions2.eval(&ctx, q as usize, &cut2, &label2);
+                        if eval.1 == 0 {
+                            continue;
+                        }
+                        if let (Some((g, second)), _) = cuts2.best(&ctx, &regions2, q as usize, &eval) {
+                            gain += g;
+                            both.push(second);
+                        }
+                    }
+                    if gain > 0 && pair.as_ref().map_or(true, |(g, _)| gain > *g) {
+                        pair = Some((gain, both));
+                    }
                 }
-                label.insert(e, stored);
+                match pair {
+                    Some((gain, both)) => {
+                        if debug {
+                            eprintln!("  patch {r} (badness {before}): {} paths together, gain {gain}", both.len());
+                        }
+                        chosen = both;
+                    }
+                    None => {
+                        if debug {
+                            eprintln!("  patch {r} (badness {before}): no candidate helps");
+                        }
+                        continue;
+                    }
+                }
             }
-            paths.push(path);
-            added += 1;
+            for path in chosen {
+                add_path(&path, &mut cut, &mut label, &mut on_cut);
+                paths.push(path);
+                added += 1;
+            }
             progress = true;
         }
         if !progress {
@@ -552,8 +675,8 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
         };
         let before = {
             let regions = Regions::new(&ctx, &cut);
-            let evals: Vec<(patches::Patch, usize, f64)> = touched(&regions).iter().map(|&r| (regions.eval(&ctx, r as usize, &cut, &label).0, regions.singular(&ctx, r as usize), regions.bending(&ctx, r as usize, &cut))).collect();
-            score(s, &evals, quad)
+            let evals = scored(&ctx, &regions, &touched(&regions), &cut, &label);
+            score(&ctx, &evals)
         };
         let saved: Vec<((u32, u32), (u8, u8))> = edges.iter().map(|e| (*e, label[e])).collect();
         for e in &edges {
@@ -561,8 +684,8 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
             label.remove(e);
         }
         let regions = Regions::new(&ctx, &cut);
-        let evals: Vec<(patches::Patch, usize, f64)> = touched(&regions).iter().map(|&r| (regions.eval(&ctx, r as usize, &cut, &label).0, regions.singular(&ctx, r as usize), regions.bending(&ctx, r as usize, &cut))).collect();
-        if score(s, &evals, quad) <= before {
+        let evals = scored(&ctx, &regions, &touched(&regions), &cut, &label);
+        if score(&ctx, &evals) <= before {
             paths.remove(i);
             removed += 1;
         } else {
@@ -582,31 +705,49 @@ pub fn layout(s: &Surface, z: &[C], sings: &[Singularity], features: &[(u32, u32
                 eprintln!("  final patch {r}: {} triangles, concave {}, loops {}, euler {}, corners {}, badness {b}", regions.tris[r].len(), p.concave, p.loops, p.euler, p.corners.len());
             }
         }
-        let mut b: Vec<String> = (0..regions.tris.len()).map(|r| format!("{:.1}/{}", regions.bending(&ctx, r, &cut), regions.singular(&ctx, r))).collect();
+        let mut b: Vec<String> = (0..regions.tris.len()).map(|r| {
+            let p = regions.eval(&ctx, r, &cut, &label).0;
+            let (area, perimeter) = regions.girth(&ctx, r, &p);
+            let sides = side_lengths(&ctx, &p);
+            format!("{:.1}/{}/{:.1}/k{} area {:.0} holds {:.0}", regions.bending(&ctx, r, &cut), regions.singular(&ctx, r), 16.0 * area / (perimeter * perimeter).max(1e-300), p.corners.len(), area, capacity(&sides).unwrap_or(-1.0))
+        }).collect();
         b.sort();
-        eprintln!("bending/singularities per patch: {}", b.join(" "));
+        eprintln!("bending/singularities/bag per patch: {}", b.join("\n  "));
     }
     Partition { cut, feature, label, paths, invalid, added, removed }
 }
 
+/// What `score` reads of each of the patches `rs`.
+fn scored(ctx: &Ctx, regions: &Regions, rs: &[u32], cut: &HashSet<(u32, u32)>, label: &HashMap<(u32, u32), (u8, u8)>) -> Vec<(patches::Patch, usize, f64, usize)> {
+    rs.iter()
+        .map(|&r| {
+            let r = r as usize;
+            let p = regions.eval(ctx, r, cut, label).0;
+            let (area, perimeter) = regions.girth(ctx, r, &p);
+            let bag = if ctx.is_off("bag") { 0 } else { bagged(&p, area, perimeter) };
+            (p, regions.singular(ctx, r), regions.bending(ctx, r, cut), bag)
+        })
+        .collect()
+}
+
 /// How bad a set of patches is, compared lexicographically, worst first:
 /// non-disks, corners pointing in, corner counts out of range, curvature
-/// beyond a full turn (`overbent`), the most
+/// beyond a full turn (`overbent`) and bags (`bagged`), the most
 /// singularities in one patch (one is fine), fewer patches holding exactly
 /// one singularity, and sides that do not fit together. QuadWild's order
 /// for deciding whether a removal makes things worse.
-fn score(s: &Surface, evals: &[(patches::Patch, usize, f64)], quad: f64) -> [i64; 7] {
+fn score(ctx: &Ctx, evals: &[(patches::Patch, usize, f64, usize)]) -> [i64; 7] {
     let mut out = [0i64; 7];
-    for (p, singular, bending) in evals {
+    for (p, singular, bending, bag) in evals {
         let disk = p.is_disk();
         let convex = disk && p.concave == 0;
         out[0] += !disk as i64;
         out[1] += p.concave as i64;
         out[2] += (convex && !(3..=6).contains(&p.corners.len())) as i64;
-        out[3] += overbent(*bending) as i64;
+        out[3] += (overbent(*bending) + bag) as i64;
         out[4] = out[4].max((*singular).max(1) as i64);
         out[5] -= (*singular == 1) as i64;
-        out[6] += (convex && (3..=6).contains(&p.corners.len()) && !sides_fit(&side_lengths(s, p), quad)) as i64;
+        out[6] += (convex && (3..=6).contains(&p.corners.len()) && !sides_fit(&side_lengths(ctx, p))) as i64;
     }
     out
 }
@@ -671,22 +812,60 @@ impl Regions {
         ctx.sing_tri.iter().filter(|&&t| self.of[t] == r as u32).count()
     }
 
+    /// Patch `r`'s area and the length of its outline, in local quads.
+    fn girth(&self, ctx: &Ctx, r: usize, p: &patches::Patch) -> (f64, f64) {
+        let area: f64 = self.tris[r].iter().map(|&t| {
+            let tri = ctx.s.tris[t as usize];
+            let [a, b, c] = tri.map(|v| ctx.s.p[v as usize]);
+            let h = tri.iter().map(|&v| ctx.h[v as usize]).sum::<f64>() / 3.0;
+            (b - a).cross(c - a).norm() / 2.0 / (h * h)
+        }).sum();
+        let n = p.outline.len();
+        let perimeter: f64 = (0..n).map(|i| {
+            let (a, b) = (p.verts[p.outline[i] as usize] as usize, p.verts[p.outline[(i + 1) % n] as usize] as usize);
+            (ctx.s.p[b] - ctx.s.p[a]).norm() / (0.5 * (ctx.h[a] + ctx.h[b]))
+        }).sum();
+        (area, perimeter)
+    }
+
+    /// Whether patch `r` holds exactly two singularities within two quads
+    /// of each other. Such a pair may share a six-sided patch: no line fits
+    /// between them. Two far apart may not: the patterns put a hexagon's
+    /// two irregular vertices where its side counts say, not where the
+    /// surface bulges, and a long hexagon with one at each end came out
+    /// three quads wide across a rump ten quads wide.
+    fn paired(&self, ctx: &Ctx, r: usize) -> bool {
+        let at: Vec<(V3, f64)> = ctx.sing_tri.iter().filter(|&&t| self.of[t] == r as u32).map(|&t| {
+            let tri = ctx.s.tris[t];
+            ((ctx.s.p[tri[0] as usize] + ctx.s.p[tri[1] as usize] + ctx.s.p[tri[2] as usize]) / 3.0, ctx.h[tri[0] as usize])
+        }).collect();
+        at.len() == 2 && (ctx.is_off("paired") || (at[0].0 - at[1].0).norm() < 2.0 * 0.5 * (at[0].1 + at[1].1))
+    }
+
     /// The patch and its badness.
     fn eval(&self, ctx: &Ctx, r: usize, cut: &HashSet<(u32, u32)>, label: &HashMap<(u32, u32), (u8, u8)>) -> (patches::Patch, usize) {
         let turn = |u: u32, v: u32, w: u32| turn_of(label, u, v, w);
         let p = patches::patch(&ctx.mesh, &self.tris[r], cut, &ctx.edge_tris, &HashSet::new(), &HashMap::new(), Some(&turn));
-        let mut b = badness(&p, self.singular(ctx, r), self.bending(ctx, r, cut));
+        let mut b = badness(&p, self.singular(ctx, r), self.paired(ctx, r), self.bending(ctx, r, cut));
+        let (area, perimeter) = self.girth(ctx, r, &p);
+        if !ctx.is_off("bag") {
+            b += bagged(&p, area, perimeter);
+        }
+        // Sides no pattern can join evenly (a "triangle" round the whole
+        // body, a quad three times longer on one side than the other): the
+        // fill squeezes dozens of rows into a band. Another cut is needed.
+        if !ctx.is_off("unfit") && p.is_disk() && p.concave == 0 && (3..=6).contains(&p.corners.len()) && !sides_fit(&side_lengths(ctx, &p)) {
+            b += 1;
+        }
         // A sliver between two cuts running side by side: nothing can
         // mend it (a line across it is an edge long), so a path that would
         // make one must never be taken. Width ≈ twice the area over the
         // perimeter.
-        let area: f64 = self.tris[r].iter().map(|&t| {
-            let [a, bb, c] = ctx.s.tris[t as usize].map(|v| ctx.s.p[v as usize]);
-            (bb - a).cross(c - a).norm() / 2.0
-        }).sum();
-        let n = p.outline.len();
-        let perimeter: f64 = (0..n).map(|i| (ctx.s.p[p.verts[p.outline[(i + 1) % n] as usize] as usize] - ctx.s.p[p.verts[p.outline[i] as usize] as usize]).norm()).sum();
-        if n > 0 && 2.0 * area / perimeter < 0.3 * ctx.quad {
+        // The same for a strip that is wide enough but many times longer
+        // (16 · area / perimeter² is 4 · width / length for one): two lines
+        // a quad and a half apart for fifty quads, joined at a snapped end.
+        // Its corners come out wrong and the quantizer inflates it.
+        if perimeter > 0.0 && (2.0 * area / perimeter < 0.3 || (!ctx.is_off("thin") && 16.0 * area / (perimeter * perimeter) < 0.15)) {
             b += 10;
         }
         (p, b)
@@ -773,7 +952,7 @@ fn candidates(ctx: &Ctx, regions: &Regions, r: usize, p: &patches::Patch, cut_ad
     let mut seeds = Vec::new();
     for _ in 0..8 {
         let Some((&v, &d)) = dist.iter().filter(|(&v, _)| !is_cut(v) && !ctx.blocked[v as usize]).max_by(|a, b| a.1.total_cmp(b.1).then(b.0.cmp(a.0))) else { break };
-        if d < 0.5 * ctx.quad {
+        if d < 0.5 * ctx.h[v as usize] {
             break;
         }
         seeds.push(v);
@@ -788,10 +967,11 @@ fn candidates(ctx: &Ctx, regions: &Regions, r: usize, p: &patches::Patch, cut_ad
         let tri = s.tris[t];
         let c = (s.p[tri[0] as usize] + s.p[tri[1] as usize] + s.p[tri[2] as usize]) / 3.0;
         let arm = &ctx.arms[tri[0] as usize];
+        let quad = ctx.h[tri[0] as usize];
         for k in 0..4 {
-            let goal = c + (arm[k] + arm[(k + 1) % 4]).normalized() * (0.65 * ctx.quad);
+            let goal = c + (arm[k] + arm[(k + 1) % 4]).normalized() * (0.65 * quad);
             if let Some(&v) = free.iter().min_by(|&&a, &&b| (s.p[a as usize] - goal).norm2().total_cmp(&(s.p[b as usize] - goal).norm2())) {
-                if (s.p[v as usize] - goal).norm() < 0.4 * ctx.quad && !seeds.contains(&v) {
+                if (s.p[v as usize] - goal).norm() < 0.4 * quad && !seeds.contains(&v) {
                     seeds.push(v);
                 }
             }

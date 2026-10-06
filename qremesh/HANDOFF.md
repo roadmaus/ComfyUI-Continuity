@@ -1,6 +1,6 @@
 # Handoff: qremesh
 
-Branch `claude/game-forge-spec`, not pushed since `61c3e38`, no pull request. Last updated 2026-10-05.
+Branch `claude/game-forge-spec`, not pushed since `61c3e38`, no pull request. Last updated 2026-10-05 (second round, uncommitted).
 
 qremesh is the pack's own quad remesher: a ZRemesher-like tool written from
 scratch in Rust with no dependencies, a standalone binary the Python side will
@@ -27,6 +27,50 @@ midpoint, or Takayama 2014; `pattern.rs`), then **tangential** smoothing onto
 the input. Every test shape and both organic meshes come out closed with
 about the asked-for quad count. Edge flow on the organic meshes is acceptable,
 but they have many irregular vertices (45–55 on a cow at 600 quads).
+
+## Round of 2026-10-05, not committed (read this first)
+Working tree only; nothing below is in a commit. The measurements table further down is
+from before this round and no longer matches.
+
+What changed:
+- **Adaptive quad size** (`sizing.rs`, `--adapt N`, default 3, 1 = uniform): size follows
+  the tighter principal curvature (0.8 of the radius), kept within N× of the largest,
+  graded, scaled to the budget. Creases are ignored. The premesh, the partition's
+  distances, arc targets, arc vertex spacing and smoothing weights all read it.
+- **Count calibration** (`main.rs`): the fill is rerun up to five times with sizes scaled
+  by how far the count was off; the closest try is kept. Raw counts were 25–90% over.
+- **Partition rules** (`partition.rs`): a patch is also invalid when it is a bag
+  (`bagged`), when its sides cannot be joined (`sides_fit`, now in the add phase too),
+  when it is a strip many times longer than wide (+10 like a sliver), and when a hexagon
+  holds two singularities more than two quads apart (`paired`). When no single path
+  helps a patch, pairs of paths are tried (`Cuts::best`, two-step lookahead).
+- **Smoothing** (`fill.rs::smooth`): first each patch's inside with its border held, run
+  to rest (over-relaxed), skipped where quads are too coarse for the curvature
+  (`Sizing::coarse`); then the old gentle rounds, weighted by size.
+
+What was measured (Spot and creature × 600/2500 × adapt 1/3, each rule switched off in
+turn through `QREMESH_OFF=bag,unfit,thin,paired,look`, raw counts with `QREMESH_TRIES=1`):
+all rules on beats all off on edge evenness in 7 of 8 cases; irregular vertices go up
+about 4%. Without the lookahead Spot at 2500/adapt 3 lost a limb.
+
+What works: Spot and the creature at 2500 quads, adapt 3, are clean (renders in
+`out/png/now/`): Spot edge/size 1.00 ± 0.32, distance max 0.009; creature 0.98 ± 0.26,
+distance max 0.068 (one ear comes out a stub).
+
+What does not:
+- **600 quads with adapt 3**: the head's many small patches each need their minimum of
+  edges, the calibration pays for them by growing everything else, and body and legs
+  get huge quads. Not solved; adapt 2 is milder, and the default may want to be 2.
+- **Field singularities are real**, not noise: their count does not move over 250× of
+  `--align`. The earlier idea of a scale-aware field to remove them was wrong.
+- The creature at 600 uniform loses its tail (thinner than a quad) whatever the smoothing.
+- Converged smoothing with nothing held, and rest-length springs, were both tried and
+  dropped: the first slides quads off limbs, the second did not even the mesh out.
+- hemi is still over-cut (43 patches, 1316 quads for 600).
+- The layout takes 15–30 s at 2500 quads; it was 14 s before the extra rules.
+- `QREMESH_OFF` and `QREMESH_TRIES` are measuring aids and can go once defaults settle.
+- Not started: the flow quantizer (libsatsuma port) and a run on a real lifted mesh (none
+  is on this machine; `out/real/armadillo.obj` and `bunny.obj` are untried).
 
 ## Measurements (600 quads asked; distances are a share of the bounding diagonal)
 | mesh | quads | irregular vertices | distance from input mean / max | closed |

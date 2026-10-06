@@ -67,12 +67,18 @@ impl<'a> Projector<'a> {
 
     /// The closest point of the mesh to `p`, and its distance.
     pub fn closest(&self, p: V3) -> (V3, f64) {
+        let (q, d, _) = self.closest_tri(p);
+        (q, d)
+    }
+
+    /// The closest point, its distance, and the triangle it is on.
+    pub fn closest_tri(&self, p: V3) -> (V3, f64, u32) {
         let c = (((p.x - self.lo.x) / self.cell).floor() as i64, ((p.y - self.lo.y) / self.cell).floor() as i64, ((p.z - self.lo.z) / self.cell).floor() as i64);
-        let mut best: Option<(f64, V3)> = None;
+        let mut best: Option<(f64, V3, u32)> = None;
         // Rings of cells outward, until the nearest point found is closer
         // than anything a further ring could hold.
         for ring in 0..64i64 {
-            if let Some((d, _)) = best {
+            if let Some((d, _, _)) = best {
                 if d <= (ring as f64 - 1.0).max(0.0) * self.cell {
                     break;
                 }
@@ -89,14 +95,14 @@ impl<'a> Projector<'a> {
                             let [a, b, cc] = self.m.f[t as usize].map(|i| self.m.v[i as usize]);
                             let q = closest_on_triangle(p, a, b, cc);
                             let d = (q - p).norm();
-                            if best.map_or(true, |(bd, _)| d < bd) {
-                                best = Some((d, q));
+                            if best.map_or(true, |(bd, _, _)| d < bd) {
+                                best = Some((d, q, t));
                             }
                         }
                     }
                 }
             }
         }
-        best.map(|(d, q)| (q, d)).unwrap_or((p, f64::INFINITY))
+        best.map(|(d, q, t)| (q, d, t)).unwrap_or((p, f64::INFINITY, 0))
     }
 }

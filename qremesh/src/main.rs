@@ -23,6 +23,7 @@ mod quantize;
 mod refine;
 mod sdf;
 mod shapes;
+mod sizing;
 mod trace;
 
 use math::{Rng, V3};
@@ -99,22 +100,28 @@ fn remesh(args: &Args) -> Result<(), String> {
     let mut rng = Rng::new(args.num("--seed", 1)?);
 
     let clock = Instant::now();
-    let m = mesh::read_obj(input)?;
+    let input = mesh::read_obj(input)?;
+    // The quad size over the surface: small where it curves tightly, within
+    // `--adapt` times of the largest (1 is one size everywhere).
+    let sizing = sizing::Sizing::new(&input, quads, args.num("--adapt", 3.0)?, degrees);
+    let (smallest, largest) = sizing.range();
+    eprintln!("sizing: quads {:.2} to {:.2} of the uniform size", smallest / sizing.uniform, largest / sizing.uniform);
     // Unless asked not to, remesh the input to even triangles a few times
     // smaller than a quad first: everything downstream assumes it.
     let m = if args.words.iter().any(|w| w == "--no-premesh") {
-        m
+        input.clone()
     } else {
         let t = Instant::now();
-        let quad = (mesh::surface_area(&m) / quads).sqrt();
-        let (pm, r) = premesh::remesh(&m, quad * args.num("--premesh-edge", 0.4)?, degrees, args.num("--premesh-rounds", 6)?);
+        let share: f64 = args.num("--premesh-edge", 0.4)?;
+        let (pm, r) = premesh::remesh(&input, &|p| sizing.at(p) * share, degrees, args.num("--premesh-rounds", 6)?);
         eprintln!(
             "premesh: {} -> {} triangles, slivers {:.1}% -> {:.1}%, {} feature edges, {:.2}s",
-            m.f.len(), r.triangles, r.slivers_before * 100.0, r.slivers_after * 100.0, r.feature_edges, t.elapsed().as_secs_f64()
+            input.f.len(), r.triangles, r.slivers_before * 100.0, r.slivers_after * 100.0, r.feature_edges, t.elapsed().as_secs_f64()
         );
         let _ = r.vertices;
         pm
     };
+    let size: Vec<f64> = m.v.iter().map(|&p| sizing.at(p)).collect();
     let s = cross::Surface::new(&m);
     let diameter = {
         let lo = m.v.iter().fold(m.v[0], |a, p| math::v3(a.x.min(p.x), a.y.min(p.y), a.z.min(p.z)));
@@ -134,7 +141,7 @@ fn remesh(args: &Args) -> Result<(), String> {
     let edge = mesh::mean_edge(&m);
     let t = Instant::now();
     // The side of a quad, were the surface covered in `--quads` of them.
-    let quad = (mesh::surface_area(&m) / quads).sqrt();
+    let quad = sizing.uniform;
     // The layout: cuts on the mesh itself, read back as an exact graph.
     // `--legacy-layout` is the separatrix tracer, kept to compare against
     // until the partition does at least as well on every test shape.
@@ -159,7 +166,7 @@ fn remesh(args: &Args) -> Result<(), String> {
         n_traces = lay.traces.len();
         fill_mesh = refined.m;
     } else {
-        let part = partition::layout(&s, &field.z, &sings, &sharp, quad, diameter * 3.0);
+        let part = partition::layout(&s, &field.z, &sings, &sharp, &size, diameter * 3.0);
         t_trace = t.elapsed().as_secs_f64();
         eprintln!("layout: {} paths ({} added, {} removed), {} patches left invalid, {:.2}s", part.paths.len(), part.added, part.removed, part.invalid, t_trace);
         let t = Instant::now();
@@ -203,19 +210,45 @@ fn remesh(args: &Args) -> Result<(), String> {
 
     // Quads.
     let t = Instant::now();
-    let mut graph = graph;
-    let mut filler = fill::Filler::new(&fill_mesh, &mut graph, quad);
-    let q = if legacy { filler.build() } else { filler.build_patches() };
-    let mut output = filler.place(&q.x);
+    // The legacy layout's mesh has vertices of its own and knows one size.
+    let mut fill_size = if legacy { vec![quad; fill_mesh.v.len()] } else { size };
+    // Whole numbers of edges never add up to the count asked for: every
+    // arc shorter than a quad still gets one, and a layout of many small
+    // patches comes out a third over. The sizes are scaled by what the
+    // count was off by and the patches quantized again, a few times.
+    let mut tries = 0;
+    let mut best: Option<(f64, fill::Output, quantize::Solution)> = None;
+    let (mut output, q) = loop {
+        let mut g = graph.clone();
+        let mut filler = fill::Filler::new(&fill_mesh, &mut g, quad, &fill_size);
+        let q = if legacy { filler.build() } else { filler.build_patches() };
+        let output = filler.place(&q.x);
+        let off = output.faces.len() as f64 / quads;
+        tries += 1;
+        eprintln!("fill, try {tries}: {} faces for {quads} asked, {} unequal quads", output.faces.len(), q.violated);
+        // The count does not always follow the sizes (a pattern can
+        // jump by a strip): the closest try is kept, not the last.
+        let stop = legacy || tries == std::env::var("QREMESH_TRIES").ok().and_then(|s| s.parse().ok()).unwrap_or(5) || (off - 1.0).abs() < 0.04 || output.faces.is_empty();
+        if best.as_ref().map_or(true, |b| (off.ln()).abs() < b.0) {
+            best = Some((off.ln().abs(), output, q));
+        }
+        if stop {
+            let (_, output, q) = best.take().unwrap();
+            break (output, q);
+        }
+        for h in fill_size.iter_mut() {
+            *h *= off.sqrt();
+        }
+    };
     output.quantize_violations = q.violated;
     let t_fill = t.elapsed().as_secs_f64();
     eprintln!("fill: {} kites, {} arcs, {} quantize violations, {} unfilled patches, {} vertices, {} faces, {:.2}s", output.kites, output.arcs, q.violated, output.unfilled, output.v.len(), output.faces.len(), t_fill);
     let t = Instant::now();
     let projector = proj::Projector::new(&m, edge * 2.0);
-    fill::smooth(&mut output, &projector, args.num("--smooth", 60)?);
+    fill::smooth(&mut output, &sizing, args.num("--smooth", 60)?);
     let t_smooth = t.elapsed().as_secs_f64();
     mesh::write_obj(out, &output.v, &output.faces)?;
-    let metrics = metrics(&output, &m, &projector, quad);
+    let metrics = metrics(&output, &m, &projector, &sizing);
     eprintln!("quads: {metrics}");
 
     println!(
@@ -258,10 +291,11 @@ fn write_layout(path: &str, rm: &mesh::TriMesh, graph: &patches::Graph, s: &cros
 }
 
 /// What the result is like: how many faces are quads, the valences, how
-/// even the edges are against the wanted quad side `h`, and how far the
+/// even the edges are against the quad side wanted where they lie, and how far the
 /// result sits from the input (both ways, as a share of the bounding
 /// diagonal).
-fn metrics(out: &fill::Output, input: &mesh::TriMesh, proj: &proj::Projector, h: f64) -> String {
+fn metrics(out: &fill::Output, input: &mesh::TriMesh, proj: &proj::Projector, sizing: &sizing::Sizing) -> String {
+    let h = sizing.uniform;
     use std::collections::{BTreeMap, HashMap};
     let mut by_size: BTreeMap<usize, usize> = BTreeMap::new();
     let mut edges: HashMap<(u32, u32), usize> = HashMap::new();
@@ -282,7 +316,7 @@ fn metrics(out: &fill::Output, input: &mesh::TriMesh, proj: &proj::Projector, h:
             on_boundary[a as usize] = true;
             on_boundary[b as usize] = true;
         }
-        lengths.push((out.v[a as usize] - out.v[b as usize]).norm() / h);
+        lengths.push((out.v[a as usize] - out.v[b as usize]).norm() / sizing.at((out.v[a as usize] + out.v[b as usize]) * 0.5));
     }
     let mut hist: BTreeMap<usize, usize> = BTreeMap::new();
     let mut singular = 0;
@@ -346,7 +380,7 @@ fn premesh_only(args: &Args) -> Result<(), String> {
     let m = mesh::read_obj(input)?;
     let edge: f64 = args.num("--edge", mesh::mean_edge(&m))?;
     let t = Instant::now();
-    let (pm, r) = premesh::remesh(&m, edge, args.num("--features", 35.0)?, args.num("--rounds", 6)?);
+    let (pm, r) = premesh::remesh(&m, &|_| edge, args.num("--features", 35.0)?, args.num("--rounds", 6)?);
     let faces: Vec<Vec<u32>> = pm.f.iter().map(|t| t.to_vec()).collect();
     mesh::write_obj(out, &pm.v, &faces)?;
     eprintln!(

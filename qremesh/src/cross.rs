@@ -68,6 +68,37 @@ impl Surface {
 
 // ------------------------------------------------------------------ inputs
 
+/// The two principal curvatures at vertex `i` (the larger first) and the
+/// angle of the first one's direction in the vertex's frame. None where the
+/// fit has nothing to stand on (a vertex with collinear neighbours).
+pub fn principal(s: &Surface, i: usize) -> Option<(f64, f64, f64)> {
+    let (n, e1) = (s.n[i], s.e1[i]);
+    let e2 = n.cross(e1);
+    // Fit the shape operator S (symmetric 2×2: a b; b c) so that
+    // S · (edge) ≈ (change of normal along the edge), least squares.
+    let mut m = [[0.0f64; 3]; 3];
+    let mut r = [0.0f64; 3];
+    for &j in &s.adj[i] {
+        let j = j as usize;
+        let de = s.p[j] - s.p[i];
+        let dn = s.n[j] - s.n[i];
+        let (x, y) = (de.dot(e1), de.dot(e2));
+        let (u, w) = (dn.dot(e1), dn.dot(e2));
+        // Rows: [x y 0]·(a b c) = u and [0 x y]·(a b c) = w.
+        for (row, rhs) in [([x, y, 0.0], u), ([0.0, x, y], w)] {
+            for a in 0..3 {
+                for b in 0..3 {
+                    m[a][b] += row[a] * row[b];
+                }
+                r[a] += row[a] * rhs;
+            }
+        }
+    }
+    let [a, b, c] = solve3(m, r)?;
+    let anisotropy = ((a - c) * (a - c) + 4.0 * b * b).sqrt();
+    Some((0.5 * (a + c + anisotropy), 0.5 * (a + c - anisotropy), 0.5 * (2.0 * b).atan2(a - c)))
+}
+
 /// Per vertex: the principal curvature direction as a cross, weighted by how
 /// different the two curvatures are. Zero where the surface curves the same
 /// way in every direction (a sphere, a plane), which is where curvature has
@@ -75,39 +106,14 @@ impl Surface {
 pub fn curvature_target(s: &Surface) -> Vec<C> {
     (0..s.p.len())
         .map(|i| {
-            let (n, e1) = (s.n[i], s.e1[i]);
-            let e2 = n.cross(e1);
-            // Fit the shape operator S (symmetric 2×2: a b; b c) so that
-            // S · (edge) ≈ (change of normal along the edge), least squares.
-            let mut m = [[0.0f64; 3]; 3];
-            let mut r = [0.0f64; 3];
-            for &j in &s.adj[i] {
-                let j = j as usize;
-                let de = s.p[j] - s.p[i];
-                let dn = s.n[j] - s.n[i];
-                let (x, y) = (de.dot(e1), de.dot(e2));
-                let (u, w) = (dn.dot(e1), dn.dot(e2));
-                // Rows: [x y 0]·(a b c) = u and [0 x y]·(a b c) = w.
-                for (row, rhs) in [([x, y, 0.0], u), ([0.0, x, y], w)] {
-                    for a in 0..3 {
-                        for b in 0..3 {
-                            m[a][b] += row[a] * row[b];
-                        }
-                        r[a] += row[a] * rhs;
-                    }
-                }
-            }
-            let Some([a, b, c]) = solve3(m, r) else { return C::ZERO };
+            let Some((k1, k2, direction)) = principal(s, i) else { return C::ZERO };
             // |k1 − k2|, and how much of the curvature it is. A sphere's
             // difference is pure noise from the triangulation; a cylinder's
             // is all of it. Only a clear difference earns a pull.
-            let anisotropy = ((a - c) * (a - c) + 4.0 * b * b).sqrt();
-            let k1 = 0.5 * (a + c + anisotropy);
-            let k2 = 0.5 * (a + c - anisotropy);
+            let anisotropy = k1 - k2;
             let share = anisotropy / (k1.abs() + k2.abs() + 1e-12);
             let trust = ((share - 0.25) / 0.35).clamp(0.0, 1.0);
             let trust = trust * trust * (3.0 - 2.0 * trust);
-            let direction = 0.5 * (2.0 * b).atan2(a - c);
             C::polar(anisotropy * trust, 4.0 * direction)
         })
         .collect()
