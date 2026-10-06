@@ -7,7 +7,8 @@ Written 2026-10-05 against `main` at `6347afe`, after the research in §3 and
 its pose LoRAs, and Qwen Image Edit dropped in favour of Qwen Image 2.1 throughout.
 Corrected the same day after vendoring at VNCCS Utils `eedaed7`: the pose
 library is not vendored, the modules are copied as `.mjs`, and the mannequin
-is loaded by the core's client.
+is loaded by the core's client. Then the lab spike of the QI2.1 pose LoRA
+(§12): frames are rendered as one grid, not one render per pose (§7.1).
 
 ## 1. Summary
 
@@ -319,7 +320,7 @@ trigger words; strength 1.0 in every workflow and in VNCCS's code.
 
 | Family | File | Where | How VNCCS drives it |
 |---|---|---|---|
-| **Qwen Image 2.1** | `VNCCS_QI2_PoseStudioV1.1.safetensors` | `MIUProject/VNCCS_PoseStudio_QI2.1` (no licence in the card); Civitai 2957080 (commercial use allowed) | `TextEncodeQwenImage21` with images `(pose, character)`, an empty latent at the pose's size scaled to ~1 MP, cfg 1, euler/simple. Prompt, verbatim: `Replace the pose of <image 2> with the pose of <image 1>. Keep the character of <image 2>. ` + the per-pose prompt + `Transparent background with alpha channel.` |
+| **Qwen Image 2.1** | `VNCCS_QI2_PoseStudioV1.1.safetensors` | `MIUProject/VNCCS_PoseStudio_QI2.1` (no licence in the card); Civitai 2957080 (commercial use allowed) | `TextEncodeQwenImage21` with images `(pose, character)`, an empty latent at the pose's size scaled to ~1 MP, cfg 1, euler/simple; in UniCanvas with the Viggle turbo LoRA (`Qwen-Image-2.1-viggle-turbo-v0.2.1-6step`) at 6 steps. Prompt, verbatim: `Replace the pose of <image 2> with the pose of <image 1>. Keep the character of <image 2>. ` + the per-pose prompt + `Transparent background with alpha channel.` |
 | **MiniMax H3** | `VNCCS_PoseStudioH3_V1.safetensors` | `MIUProject/VNCCS_v3.0`, `models/loras/MiniMaxH3/VNCCS/` (Apache-2.0). VNCCS's own catalogue points at a path that 404s. | `MiniMaxH3ReferenceToVideo`, `ref_image_1` = pose, `ref_image_2` = character, 5 frames at the pose's aspect, ~1.5 MP, /32; frame 0 kept. Needs the audio VAE too. |
 | Flux 2 Klein 9B | `VNCCS_PoseStudioKlein9b_V2.2` | `MIUProject/VNCCS_v3.0` | Not used here. |
 | Qwen Image Edit 2511 | `VNCCS_QIE2511_PoseStudio_ART_*` | `MIUProject/VNCCS_PoseStudio` | Not used: retired in VNCCS itself, and the forge does not use Qwen Image Edit. |
@@ -493,19 +494,31 @@ so; both carry a VNCCS pose LoRA (§3.9).
 2. **Poses.** A pose set made on the pose stage (§7.9), or written as
    JSON by an agent, or pasted from Pose Studio.
 3. **Posed variants.** Sheet + mannequin render → the character in that
-   pose, one render per pose, pose LoRA at 1.0, VNCCS's sentence plus the
-   style clause. Same seed across a set.
+   pose, pose LoRA at 1.0, VNCCS's sentence plus the style clause. Same
+   seed across a set. A single pose (a model sheet's A-pose, a portrait) is
+   one render; a set of frames is a grid (step 6).
 4. **Variants** are edits of the sheet or a posed variant on the same
    canvas: costumes (ClothesCore when installed), expressions (face-only
    crop, edit, feathered paste-back — VNCCS's method, our code), held items.
 5. **Directions**: 4 or 8 — one pose, the model rotation stepped per
    azimuth on the stage, through step 3; or the 3D route (§3.5) when consistency matters
-   more than time.
+   more than time. A direction shows only what faces the camera: a lantern
+   on the far hip is correctly absent from a side view, so the sheet must
+   show what each side carries, or the opposite direction invents it.
+   Untested: whether the mirrored walk draws the far side's items from a
+   front-only sheet.
 6. **Frames**: walk, idle, attack and the rest, as a pose set with one pose
-   per frame, through step 3. Whether a grid render (all frames' mannequins
-   in one image, so the frames share one render's identity) survives the
-   LoRA is the spike in §12; until it is proven, frames are per pose with
-   a shared seed and the colour match (§6) holds them together.
+   per frame, rendered as **one grid**: the frames' mannequins side by side
+   in one canvas, the sheet as the second reference, one render, split
+   back into frames by cell. Proven on the lab (§12): one render per frame
+   follows each pose but not its framing — the LoRA reframes compact poses
+   (a walk's passing frames) to fill the canvas, so scale jumps from frame to
+   frame. The grid keeps one scale, one baseline and one identity, and
+   follows the poses more closely. The canvas is the large one, about 2 MP
+   for four frames (1936×1088 at 16:9, cells ~470 px wide): at 1280×720 a
+   busy costume loses detail (a cape shrank to a collar). Longer sets are
+   split into grids of four sharing seed and sheet, held together by the
+   colour match (§6).
 7. Post-chain, then the animation's metadata (durations, tags, pivots).
 
 For HD cutout characters (the skill's rig): parts with joint overlap, nine
@@ -677,8 +690,14 @@ than Pose Studio:
 - **The bench page.** A `PoseViewerCore` in a forge panel with our own small
   UI: body sliders, joint gizmos, a frame strip with onion skin, FBX drop,
   in-place or root motion, FPS. It is a client of their core, not a copy of
-  their widget, so it does the widget's mannequin step itself: decode the
-  pack, solve the sliders in the vendored worker, `loadData` the result.
+  their widget, so it does the widget's set-up itself: decode the pack,
+  solve the sliders in the vendored worker, `loadData` the result, turn the
+  directional skydome off (`setDirectionalSkydomeVisible(false)`: the
+  core's default is on and draws a grid behind the figure; the widget's
+  `directional_skydome_enabled` defaults to off), and light it with the
+  widget's two default lights (directional 2.0 at (10, 20, 30), ambient
+  `#505050` 1.0) on white. Proven headless in the spike: Chromium,
+  SwiftShader, `capture(w, h, 1, [255, 255, 255], 0, 0, yaw, 0)`.
 - **Rendering from any tab.** A frame render is a forge job: the server
   sends `continuity.pose.render` with the pose set and sizes, and *any*
   ComfyUI tab with the pack loaded builds an offscreen `PoseViewerCore`,
@@ -687,9 +706,11 @@ than Pose Studio:
   job refuses with that sentence. This is how the CLI and agents pose.
 - **Sets as project data.** `poses/<set>.json` holds `pose_data` per pose
   and the clip's FPS; the PNGs are derived and cached under `build/`.
-- **Straight into the sprite pipeline.** Frames go to the posed-variant
-  render (§7.1 step 3), then matte → baseline and pivot → pixelize → atlas
-  → engine export, instead of a folder of PNGs.
+- **Straight into the sprite pipeline.** Frames go to the grid render
+  (§7.1 step 6) at the grid's canvas — captured at each cell's size, not
+  scaled after — then split, matte → baseline and pivot → pixelize →
+  atlas → engine export, instead of a folder of PNGs. 2.1's own alpha came
+  back clean on every spike render; BiRefNet stays the tightening pass.
 - **Directions as a property of a set.** Turn the whole walk to 4 or 8
   azimuths in one go (`modelRotation` per pass).
 - **A pose check on the finished sprite.** The mannequin's silhouette
@@ -890,11 +911,22 @@ contract stable for agents that have learned it.
    with its command, and the parity test from day one.
 2. **2D generation.** Style, characters and sprites, tiles with seamless
    tiling, icons, masked inpainting. The pose stage (§7.9) is part of this
-   step: the vendor script first, then a lab spike (your Mixamo walk
-   through the vendored import, the frames through the QI2.1 LoRA on the
-   pack's 2.1 graph and the H3 LoRA through `h3lora`, against VNCCS's own
-   output for the same sheet and pose, per pose and as a grid), then the
+   step: the vendor script (done, `c03334b`), then a lab spike, then the
    render job, then the pose page.
+
+   **The spike, 2026-10-06, QI2.1 half.** A Mixamo walk through the vendored
+   import, captured headless (side view, frames 0/3/6/9 of 15 at 12 fps),
+   two sheets (a painted adventurer; an ink-and-hatching plague doctor with
+   a one-shoulder cape, vial bandolier, lantern and satchel) and the frames
+   through the pack's existing 2.1 still route: pose as picture 1, sheet as
+   picture 2, VNCCS's sentence verbatim, the LoRA at 1.0, the base row (20
+   steps, cfg 1, euler/simple). Nothing new was needed in the pack: it kept
+   both uncited pictures in order and left `<image 2>` alone. Results: the
+   poses, identity and style hold on both characters; per-frame renders
+   jump in scale and the grid does not (§7.1 step 6); about 21 s per render
+   at 1280×720, 78 s at 1936×1088. Not done: the H3 half (its LoRA is not
+   on the lab), a side-by-side with VNCCS's own output, and its Viggle
+   6-step setup against our base row.
 3. **Audio.**
 4. **3D.** Materials, model texturing, and 3D models (§7.6) with
    triangle retopology and Q-Remesh on the optional and external backends.
@@ -933,6 +965,9 @@ contract stable for agents that have learned it.
   shipped a catalogue entry pointing at a path that 404s. The needle is
   loose (`PoseStudio` + family marker), and the refusal names the file and
   URL so a mismatch is one sentence, not a silent unposed render.
+- **Hidden-side items.** A direction draws only what faces it (§7.1
+  step 5). A character whose sheet shows one side may get the other side
+  invented. Multi-view sheets are the likely answer; untested.
 - **Pixel conversion** is only as good as the 1024 picture. The constraint
   check makes failure visible; a pixel touch-up editor may be wanted later.
 - **Agents acting blind.** An agent that never looks will ship a sheet
