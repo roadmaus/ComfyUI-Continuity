@@ -935,8 +935,13 @@ contract stable for agents that have learned it.
    tiling, icons, masked inpainting. The pose stage (§7.9) is part of this
    step: the vendor script (done, `c03334b`), then a lab spike (QI2.1 half
    done), then the render job (done: pose sets, the tab job, the CLI's
-   `pose` commands; tested headless in Chromium against the vendored core,
-   not yet in a tab of a running ComfyUI), then the pose page.
+   `pose` commands; tested on the lab 2026-10-06 with a headless Chromium
+   tab of its ComfyUI: the Mixamo walk imported, 15 frames in about a second,
+   four side frames drawn in two seconds and served from the cache after;
+   with no listening tab the job failed with its sentence), then the pose
+   page. A tab loaded before the pack was updated counts as connected but
+   has no listener, so it gets the 15-second failure rather than the
+   immediate refusal: reload open tabs after an update.
 
    **The spike, 2026-10-06, QI2.1 half.** A Mixamo walk through the vendored
    import, captured headless (side view, frames 0/3/6/9 of 15 at 12 fps),
