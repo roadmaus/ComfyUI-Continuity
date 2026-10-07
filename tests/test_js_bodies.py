@@ -493,6 +493,45 @@ try {
   out.errors.push(`castFromMention: ${error.message}`);
 }
 
+// ---- an image pre-stage keeps its cast the way a shot does ------------------
+//
+// The same three rules as the shot's face, because two faces of one node pack
+// that disagree about where somebody's pictures are is the confusing part: the
+// row is the pictures you attached, the shelf is folded until asked for and
+// holds hers, and the Cast tool's count goes amber when she leaves the prompt.
+try {
+  const node = fakeNode("MiniMaxH3PreStage", "prestage_data", JSON.stringify({
+    prompt: "@anna by @img-2",
+    refs: [{ handle: "img-1", filename: "anna.png" }, { handle: "img-2", filename: "chair.png" }],
+    subjects: [{ handle: "anna", takes: "person", from: ["img-1"] }],
+  }));
+  await ext.nodeCreated(node);
+  const editor = node.mmcBody.editor;
+  const find = (root, cls) => {
+    const hits = [];
+    const walk = (n) => {
+      if (String(n.className ?? "").split(" ").includes(cls)) hits.push(n);
+      (n.children ?? []).forEach(walk);
+    };
+    walk(root);
+    return hits;
+  };
+  const look = () => String(find(editor.root, "mmc-tool-count")[0]?.className ?? "")
+    .split(" ").includes("look");
+  const tiles = () => find(editor.castHost, "mmc-cast-ref").map((tile) =>
+    `${tile.dataset.handle}${String(tile.className).split(" ").includes("asleep") ? "!" : ""}`);
+  const row = find(editor.assetsHost, "mmc-asset-handle").map((n) => n.text);
+  const folded = (editor.castHost.children ?? []).length;
+  const plain = look();
+  editor.toggleCast();
+  const named = tiles();
+  editor.state.prompt = "a chair";
+  editor.commit();
+  out.prestageCast = { row, folded, plain, named, away: tiles(), look: look() };
+} catch (error) {
+  out.errors.push(`prestage cast: ${error.stack}`);
+}
+
 // …and her name is written into the sentence by string surgery rather than by
 // caret surgery, because casting her rebuilds the box the caret was in. This is
 // the bug: the "@" was typed, she was cast, and the name never arrived.
@@ -561,14 +600,13 @@ try {
   box.setValue(`@${anna} at @${door}, lit by @${lamp}`);
   editor.state.prompt = box.getValue();
   editor.render();
-  // The row says whose a cast file is, in words, and says nothing of the sort
-  // about a file you attached yourself.
-  const owners = [...editor.assetsHost.querySelectorAll(".mmc-asset")]
-    .map((chip) => chip.querySelector(".mmc-asset-owner")?.text ?? "");
+  // The row is the files you attached; hers are on the shelf, under her.
+  const row = [...editor.assetsHost.querySelectorAll(".mmc-asset")]
+    .map((chip) => chip.querySelector(".mmc-asset-handle")?.text ?? "");
   // The lamp is written in the soundscape too, so cutting it out of the prompt
   // is the deletion of one occurrence and not of the reference.
   editor.state.soundscape = `a hum off @${lamp}`;
-  out.reap = { chips: box.chipped.size, refs: refs(), cast: cast(), owners };
+  out.reap = { chips: box.chipped.size, refs: refs(), cast: cast(), row };
 
   // Her picture written beside her, then the picture's own chip cut: she is
   // still in the sentence and compile still sends the file through her name,
@@ -622,10 +660,11 @@ try {
   });
   const anna = piece.subjects.find((s) => s.handle === "anna");
   anna.triggers = { "img-2": "hat" };
-  editor.render();
-  const dark = () => [...editor.assetsHost.querySelectorAll(".mmc-asset")]
-    .map((chip) => `${chip.querySelector(".mmc-asset-handle")?.text}${
-      String(chip.className).split(" ").includes("asleep") ? "!" : ""}`).join(",");
+  // Her files are on the shelf, so that is where they go dark and light.
+  editor.toggleCast();
+  const dark = () => [...editor.castHost.querySelectorAll(".mmc-cast-ref")]
+    .map((tile) => `@${tile.dataset.handle}${
+      String(tile.className).split(" ").includes("asleep") ? "!" : ""}`).join(",");
   out.lit = { untouched: dark(), mode: S.mode(shot, piece) };
   // Typed, not rendered: the row has to move under the caret.
   box.setValue("@anna waits");
@@ -635,6 +674,26 @@ try {
   box.onEdit();
   out.lit.worded = dark();
   out.lit.modeWorded = S.mode(shot, piece);
+
+  // Her file muted from its tile's menu — the row's switch is not there for
+  // her files any more, so the shelf has to carry it. Then brought back.
+  const textOf = (n) => (n.text ?? n.textContent ?? "") + (n.children ?? []).map(textOf).join("");
+  const pickOnTile = (handle, label) => {
+    const tile = editor.castHost.querySelectorAll(".mmc-cast-ref")
+      .find((n) => n.dataset.handle === handle);
+    tile.listeners.click[0]({ currentTarget: tile });
+    const menu = document.body.children.at(-1);
+    const rows = menu.querySelectorAll(".mmc-opt");
+    rows.find((n) => textOf(n).includes(label))?.listeners.click[0]();
+  };
+  const her = () => shot.assets.find((a) => a.handle === "img-1");
+  const tileOff = () => String(editor.castHost.querySelectorAll(".mmc-cast-ref")
+    .find((n) => n.dataset.handle === "img-1")?.className ?? "").split(" ").includes("off");
+  pickOnTile("img-1", "Mute @img-1");
+  out.lit.mutedFromTile = { enabled: her().enabled ?? true, tileOff: tileOff(),
+                            look: editor.castNeedsLook() !== "" };
+  pickOnTile("img-1", "Bring @img-1 back");
+  out.lit.backFromTile = { enabled: her().enabled ?? true, look: editor.castNeedsLook() !== "" };
 } catch (error) {
   out.errors.push(`lit: ${error.stack}`);
 }
@@ -1856,9 +1915,11 @@ try {
 // One shelf, every view. It used to be hidden outright in the simple
 // fullscreen view and summoned by a press on a name, with a chevron to send it
 // away again — and a member whose chip was deleted (#52 keeps them) sat in
-// the piece with nothing on screen to say so. Now the view starts it folded,
-// a press on a name brings it up on them, and nothing takes it away but the
-// rail's own tool.
+// the piece with nothing on screen to say so. Then it came up whenever there
+// was a cast, which on a face with four people was four rows of shelf between
+// the rail and the sentence. Now every view starts it folded, the Cast tool's
+// count turns amber when somebody is not in the sentence, a press on a name
+// brings it up on them, and nothing takes it away but the rail's own tool.
 try {
   const node = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
     version: 2, models: {},
@@ -1877,14 +1938,24 @@ try {
     walk(editor.castHost);
     return hit;
   };
-  // On the canvas the shelf is up whenever there is a cast.
+  // Folded, with somebody cast, on the canvas as everywhere.
   const faceRows = rows();
-  // The simple view starts it folded — the shell stamps the body, and the body
-  // stamps the editor. Driven the way the shell does it.
-  editor.castDefaultOpen = false;
-  editor.castOpen = null;
+  const countLook = () => {
+    let hit = null;
+    const walk = (n) => {
+      if (!hit && String(n.className ?? "").split(" ").includes("mmc-tool-count")) hit = n;
+      (n.children ?? []).forEach(walk);
+    };
+    walk(editor.root);
+    return String(hit?.className ?? "").split(" ").includes("look");
+  };
+  // She is in the sentence, so the count is plain; take her out and it says so.
+  const plain = countLook();
+  editor.state.prompt = "somebody waits";
   editor.render();
-  const foldedRows = rows();
+  const look = countLook();
+  editor.state.prompt = "@vera waits";
+  editor.render();
   editor.openCastMember("vera");
   const opened = { rows: rows(), onThem: editor.castShelf?.opened?.handle === "vera",
                    hasShut: !!shut() };
@@ -1894,16 +1965,16 @@ try {
   await new Promise((done) => setTimeout(done, 0));
   const afterShut = { rows: rows(), open: editor.castShelf?.opened ?? null };
   // A name nobody answers to leaves the shelf exactly as it was.
-  editor.castOpen = null;
+  editor.castOpen = false;
   editor.render();
   editor.openCastMember("nobody");
-  const strangerIgnored = rows() === 0 && editor.castOpen === null;
+  const strangerIgnored = rows() === 0 && editor.castOpen === false;
   // The tool is the way back up and back down.
   editor.toggleCast();
   const toggledUp = rows();
   editor.toggleCast();
   const toggledDown = rows();
-  out.castFold = { faceRows, foldedRows, opened, afterShut, strangerIgnored,
+  out.castFold = { faceRows, plain, look, opened, afterShut, strangerIgnored,
                    toggledUp, toggledDown };
 } catch (error) {
   out.errors.push(`cast fold: ${error.stack}`);
@@ -1962,10 +2033,10 @@ try {
 
 // ---- ...and the fold survives the editor being rebuilt under the shell ------
 //
-// The view's default lives on the body, not the editor: the face's editor is
-// rebuilt whenever the segment object under it changes — a preset carrying a
-// strip, Clear, a re-read of the blob — and a replacement that answered from
-// the canvas's default would put the shelf up in a view that starts it folded.
+// The face's editor is rebuilt whenever the segment object under it changes —
+// a preset carrying a strip, Clear, a re-read of the blob. The view used to
+// stamp a folded default onto each one; folded is the default everywhere now,
+// and this keeps the replacement honest about it.
 try {
   const fs = await import("./web/creator/fullscreen.js");
   globalThis.localStorage = { getItem: (k) => (k === "mmc.fullscreen.view" ? "simple" : null),
@@ -1980,7 +2051,6 @@ try {
   app.graph = node.graph;
   fs.openFullscreen(node);
   const simple = String(document.body.children.at(-1)?.className ?? "").includes("simple");
-  const told = node.mmcBody.editor?.castDefaultOpen === false;
   const foldedRows = (node.mmcBody.editor?.castHost.children ?? []).length;
   // The tool is still on the rail in this view, wearing the count.
   const rail = node.mmcBody.editor?.root;
@@ -2002,9 +2072,8 @@ try {
     preventDefault() {}, stopPropagation() {},
   }));
   out.castRebuilt = {
-    simple, told, foldedRows, rebuiltFolded,
+    simple, foldedRows, rebuiltFolded,
     toolOnRail: !!tool, toolCount: tool?.text?.includes("1") ?? false,
-    fresh: editor.castDefaultOpen === false,
     pressedUp: (editor.castHost.children ?? []).length,
     onThem: editor.castShelf?.opened?.handle ?? null,
   };
@@ -3426,6 +3495,15 @@ check("an image pre-stage is offered the roster too, and she lands on its refs",
 check("...her picture among them, under the still's own handle",
       on_image.get("attached"), "img-1=anna/face.png")
 
+pre = report.get("prestageCast", {})
+check("an image pre-stage's row is the pictures you attached, not hers",
+      pre.get("row"), ["@img-2"])
+check("...its shelf starts folded", pre.get("folded"), 0)
+check("...with a plain count while she is in the prompt", pre.get("plain"), False)
+check("...and her picture is under her on the shelf", pre.get("named"), ["img-1"])
+check("...greyed once the prompt stops naming her", pre.get("away"), ["img-1!"])
+check("...and the count goes amber", pre.get("look"), True)
+
 wrote = report.get("wroteName", {})
 check("her name lands where the @ was typed, not on a lost caret",
       wrote.get("state"), "a woman at the door, @anna ")
@@ -3443,8 +3521,8 @@ reap = report.get("reap", {})
 check("the box knows which chips it is showing", reap.get("chips"), 3)
 check("...over the shot's own references", reap.get("refs"), "img-1,img-2,img-3")
 check("...and the piece's cast", reap.get("cast"), "anna")
-check("a cast file's chip says whose it is, and a picked one says nothing",
-      reap.get("owners"), ["anna's", "", ""])
+check("the row draws the files you attached and leaves hers to the shelf",
+      reap.get("row"), ["@img-2", "@img-3"])
 # One occurrence deleted is not the reference deleted: the soundscape still
 # writes the lamp, so the lamp stays.
 check("a member's file loses its own mention and stays live, since she is still written",
@@ -3467,13 +3545,16 @@ check("writing her name back wakes her picture", reap.get("writtenBack"), "img-1
 
 # The row is drawn off the sentence, and moves with it.
 lit = report.get("lit", {})
-check("a member nobody has written yet is dark on the row", lit.get("untouched"), "@img-1!,@img-2!")
+check("a member nobody has written yet is dark on the shelf", lit.get("untouched"), "@img-1!,@img-2!")
 check("...and the card reads as text-only, which is what compile sends", lit.get("mode"), "T2VA")
 check("writing her name lights her picture and leaves the plate waiting for its word",
       lit.get("named"), "@img-1,@img-2!")
 check("...and saying the word lights the plate, without closing the card",
       lit.get("worded"), "@img-1,@img-2")
 check("...and the card is a reference generation now", lit.get("modeWorded"), "REF2VA")
+check("her file mutes from its tile on the shelf, and the Cast tool says so",
+      lit.get("mutedFromTile"), {"enabled": False, "tileOff": True, "look": True})
+check("...and comes back the same way", lit.get("backFromTile"), {"enabled": True, "look": False})
 
 # The same switch by hand: the glyph beside the ✕, which is where the other
 # thing you can do to a whole file already lives.
@@ -3943,8 +4024,9 @@ check("...but a card's editor does not — there is no node to draw over",
 check("the node's own menu carries it too", door.get("inTheMenu"), True)
 
 fold = report.get("castFold", {})
-check("a face draws the shelf whenever there is a cast", fold.get("faceRows"), 1)
-check("...the simple view starts it folded", fold.get("foldedRows"), 0)
+check("a face starts the shelf folded, cast or not", fold.get("faceRows"), 0)
+check("...with a plain count while everybody is in the sentence", fold.get("plain"), False)
+check("...and an amber one when somebody is not", fold.get("look"), True)
 check("a press on a name brings it up", (fold.get("opened") or {}).get("rows"), 1)
 check("...on that member, and nobody else", (fold.get("opened") or {}).get("onThem"), True)
 check("...with the chevron that shuts them", (fold.get("opened") or {}).get("hasShut"), True)
@@ -3964,16 +4046,14 @@ check("...and a name pressed in it opens them on the window's shelf",
       card.get("onWindow"), ["vera"])
 
 # The same fold, after the face's editor was rebuilt under the open shell —
-# which is what applying a preset that carries a strip does. The default lives
-# on the body, so the replacement starts where the view says.
+# which is what applying a preset that carries a strip does. Folded is every
+# editor's default, so the replacement starts folded with nothing to be told.
 rebuilt = report.get("castRebuilt", {})
 check("the shell opens on the simple view", rebuilt.get("simple"), True)
-check("...and tells the body's editor to start folded", rebuilt.get("told"), True)
 check("...so the shelf is folded", rebuilt.get("foldedRows"), 0)
 check("...with the Cast tool still on the rail", rebuilt.get("toolOnRail"), True)
 check("...wearing the head count", rebuilt.get("toolCount"), True)
-check("an editor rebuilt under it is told the same", rebuilt.get("fresh"), True)
-check("...and starts folded too", rebuilt.get("rebuiltFolded"), 0)
+check("an editor rebuilt under it starts folded too", rebuilt.get("rebuiltFolded"), 0)
 check("...and a press on a name brings the shelf up", rebuilt.get("pressedUp"), 1)
 check("...on the member whose name was pressed", rebuilt.get("onThem"), "vera")
 

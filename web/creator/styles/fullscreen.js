@@ -1453,19 +1453,13 @@ export const css = `
  * the blob they are drawing has not moved.
  */
 /* The cast is the same shelf in both views, and the Cast tool is on both
-   rails. The simple view starts with it folded (fullscreen.js sets the body's
-   castDefaultOpen) rather than hidden: a member is in the piece whether or
-   not the sentence still writes them (#52 keeps them), and a view with no
-   shelf had no way to say so — the @ menu stopped offering the library's copy
-   because the piece already held one, and nothing on screen explained why.
-   Folded, the tool wears the head count; one press and it is the shelf. */
-/* The reference row is the same row in both views. It used to hide the cast's
-   own pictures here, on the grounds that a chip for @vera's photo says what the
-   @vera in the sentence already says — which was true until a file could be
-   muted. A muted picture is a thing you go and look for, and a row that draws
-   only some of what is attached is a row you cannot trust to be the answer. So
-   both views show everything on the shot, and the chip that is out of the run
-   says so where the file is rather than only in the sentence. */
+   rails. It starts folded everywhere (CreatorEditor.shelfShown) rather than
+   hidden: a member is in the piece whether or not the sentence still writes
+   them (#52 keeps them), so the tool wears the head count, turns amber when
+   one of them needs a look, and one press is the shelf. */
+/* The reference row is the same row in both views: the files you attached.
+   A cast member's own are on the shelf under them, muted ones included, in
+   both views alike (CreatorEditor.renderAssets). */
 /* --- the face's caps, lifted ---------------------------------------------- */
 /*
  * Two rows of chips then scroll; ten lines of prompt then scroll. Both bounds

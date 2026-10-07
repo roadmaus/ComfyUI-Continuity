@@ -12,7 +12,7 @@
 // commits *while the user is typing in it*.
 
 import { el, icon, ICONS, dismissable, keepScroll, placeNear, svg, swappable } from "./dom.js";
-import { CastShelf } from "./cast.js";
+import { CastShelf, castLook } from "./cast.js";
 import { isVisualReference, previewable, openReferencePreview } from "./reference-preview.js";
 import { castFamilies, keepAsMod } from "./refmod.js";
 import { t } from "./i18n.js";
@@ -245,10 +245,9 @@ export class CreatorEditor {
     // its strip — takes a name pressed in the sentence and opens it there.
     // Null everywhere the shelf is a row of this body; see `renderCastShelf`.
     this.openCast = openCast;
-    // Folded or up, as the Cast tool last set it; null until it is pressed,
-    // which is "up whenever there is a cast" unless the host says otherwise
-    // (`castDefaultOpen`, stamped by the body for the shell's simple view).
-    this.castOpen = null;
+    // Up only when somebody asked for it — the Cast tool, or a name pressed in
+    // the sentence. See `shelfShown`.
+    this.castOpen = false;
     this.piece = piece ?? state;
     // Where the sampler row is kept, which is not always where the piece is.
     // The pre-stage's H3 branch mounts this body on a *nested* creator request
@@ -322,6 +321,10 @@ export class CreatorEditor {
         this.onCommit?.();
         this.renderNotices();   // dangling-handle warning, without disturbing the caret
         this.renderAssetsRow(); // which chips are lit is a fact about the sentence
+        // ...and so is who is in it: the shelf's "in the prompt" and its
+        // sleeping files, and the Cast tool's amber.
+        if (this.castTool?.parentNode) this.castTool.replaceWith(this.renderCastTool());
+        if (this.shelfShown()) this.castShelf?.render();
         // Citing a pool reference is what attaches it, so the finished prompt
         // moves on keystrokes that never touch the sentence's own words.
         this.prompt.refreshCompiled();
@@ -346,13 +349,13 @@ export class CreatorEditor {
       // to `state.cast`, mirrored down by `syncTimeline` beside the pool.
       getCast: () => this.castPiece?.subjects ?? this.state.cast ?? [],
       // Typing `@ann` into the sentence offers the roster, and picking somebody
-      // out of it casts them here with their files. The shelf opens with them: they
-      // have just arrived, and the card that says what they are made of is the
-      // thing to look at next.
+      // out of it casts them here with their files. The shelf stays where it
+      // was: the chip that lands in the sentence is them arriving, and the
+      // Cast tool's count goes up by one — which is what the render is for.
       castFromLibrary: this.castFromLibrary
         ? (member) => {
             const handle = this.castFromLibrary(member);
-            if (handle) { this.castOpen = true; this.render(); }
+            if (handle) this.render();
             return handle;
           }
         : null,
@@ -1605,9 +1608,6 @@ export class CreatorEditor {
     const geometry = S.resolved(state, source ? this.sizeOf(source) : null, this.piece);
 
     this.railHost.replaceChildren(this.renderRail());
-    // The piece's cited references are rows of this one now — see
-    // `renderAssets` — so it is built whenever either list has something in it.
-    // Reading only `assets` is what emptied the row on every card of a strip.
     this.renderAssetsRow();
     this.renderCastShelf();
     // The family's pins go on before the row is read: a stack that does not
@@ -1900,24 +1900,24 @@ export class CreatorEditor {
    * thing. That host passes `openCast`, and a name pressed in the card opens
    * the window's shelf instead.
    *
-   * Folded or unfolded is the one thing the body remembers about it, and the
-   * rail's Cast tool is the switch. Untouched, the shelf is up whenever there
-   * is a cast, because a member you cannot see is a member you forget you
-   * have — the simple view used to hide it outright, and a name deleted from
-   * the sentence left somebody in the piece with nothing on screen to say so
-   * (#52 keeps them; the shelf is what shows them). The shell folds it there
-   * by default (`castDefaultOpen`) rather than hiding it: one press and it is
-   * the same shelf as everywhere else.
+   * Folded until asked for, in every view. It used to come up whenever there
+   * was a cast, on the grounds that a member you cannot see is one you forget
+   * you have (#52 keeps somebody whose name left the sentence). On a node
+   * with four people that was four rows of shelf between the rail and the
+   * sentence, on every face, all the time. The names in the sentence are the
+   * cast you are using, and the Cast tool carries the rest: its count says how
+   * many are in the piece, and it turns amber when one of them is not in the
+   * sentence or has a file muted (`castNeedsLook`) — the two things the open
+   * shelf was standing guard over. One press, or a press on a name, and it is
+   * the shelf with everything on it.
    */
   /** Whether the shelf is a row of this body — false only where the host has
    *  one of its own to open instead. */
   castResidentHere() { return !this.openCast; }
 
-  /** Whether the shelf is up: as the tool last set it, else whenever there is
-   *  somebody on it — unless the view this body is drawn in starts folded. */
+  /** Whether the shelf is up: only when the tool or a name put it there. */
   shelfShown() {
-    if (this.castOpen != null) return this.castOpen;
-    return this.castDefaultOpen !== false && (this.castPiece.subjects ?? []).length > 0;
+    return this.castOpen;
   }
 
   renderCastShelf() {
@@ -2003,6 +2003,15 @@ export class CreatorEditor {
         this.state.assets = (this.state.assets ?? []).filter(
           (asset) => !handles.includes(asset.handle) || S.handleWritten(texts, asset.handle));
       },
+      // A member's files are muted on their tile now that the row above the
+      // sentence leaves them to the shelf. This shot's own references only, as
+      // the row's switch always was: a pool file is the piece's, and muting it
+      // from one card would mute it on every other.
+      canMute: (asset) => asset.role === "reference" && (this.state.assets ?? []).includes(asset),
+      // Files out of this render without anybody pressing anything: their
+      // owner is not in the sentence, or their word is not (#92).
+      asleep: () => S.asleepHere(this.state, this.varies?.() ?? null),
+      mute: (asset) => this.toggleMute(asset),
       touch: () => this.onCommit?.(),
       commit: () => this.commit(),
     });
@@ -2040,8 +2049,35 @@ export class CreatorEditor {
    *  press that also cast `@subject_3` was the commonest way to grow a cast of
    *  strangers, and adding somebody is the shelf's own button. */
   toggleCast() {
-    this.castOpen = !this.shelfShown();
+    this.castOpen = !this.castOpen;
     this.render();
+  }
+
+  /** The rail's Cast tool. Lit while the shelf is up, and wearing the head
+   *  count either way — a folded shelf with two people on it must not read as
+   *  "nobody cast". Its own method because the sentence repaints it: deleting
+   *  a name is what turns the count amber, and that happens on a keystroke. */
+  renderCastTool() {
+    const count = (this.castPiece.subjects ?? []).length;
+    const look = this.castNeedsLook();
+    this.castTool = el("button", {
+      class: `mmc-tool mmc-tool-cast${this.shelfShown() ? " on" : ""}`,
+      title: (look ? `${look}\n` : "") + (this.shelfShown()
+        ? t("Fold the cast shelf away. Who is in the piece stays as it is.")
+        : t("Who is in the video: a person, an object, a place or a look that "
+          + "comes back shot after shot. Name them once, write @anna in the "
+          + "prompt, and whatever is behind them rides in with them.")),
+      onclick: () => this.toggleCast(),
+    }, [el("span", { class: "mmc-tool-icon" }, [icon("face")]), el("span", { text: t("Cast") }),
+        ...(count ? [el("span", { class: `mmc-tool-count${look ? " look" : ""}`, text: String(count) })] : [])]);
+    return this.castTool;
+  }
+
+  /** What the folded shelf would have shown you — see `cast.castLook`. */
+  castNeedsLook() {
+    return castLook(this.castPiece.subjects ?? [],
+                    new Set(S.citedCast(this.state).map((subject) => subject.handle)),
+                    this.state.assets ?? []);
   }
 
   /** One file, attached to this shot, for the cast shelf's "attach a file…".
@@ -2150,21 +2186,8 @@ export class CreatorEditor {
         // — and gating this on having attached something is what made the
         // feature invisible to exactly the prompt that needed it most.
         // Wherever the shelf is this body's to draw (`castResidentHere`); a
-        // card in the Timeline window has the window's shelf and no tool. Lit
-        // while the shelf is up, and wearing the head count either way — a
-        // folded shelf with two people on it must not read as "nobody cast".
-        ...(this.castResidentHere() ? [el("button", {
-          class: `mmc-tool mmc-tool-cast${this.shelfShown() ? " on" : ""}`,
-          title: this.shelfShown()
-            ? t("Fold the cast shelf away. Who is in the piece stays as it is.")
-            : t("Who is in the video: a person, an object, a place or a look that "
-              + "comes back shot after shot. Name them once, write @anna in the "
-              + "prompt, and whatever is behind them rides in with them."),
-          onclick: () => this.toggleCast(),
-        }, [el("span", { class: "mmc-tool-icon" }, [icon("face")]), el("span", { text: t("Cast") }),
-            ...((this.castPiece.subjects ?? []).length ? [el("span", {
-              class: "mmc-tool-count", text: String((this.castPiece.subjects ?? []).length),
-            })] : [])])] : []),
+        // card in the Timeline window has the window's shelf and no tool.
+        ...(this.castResidentHere() ? [this.renderCastTool()] : []),
         // With the adds because they are one: the PreStage's frame grab puts an
         // init image on this generation, whatever tool the host lends the rail.
         ...(this.extraTools?.() ?? []),
@@ -2298,39 +2321,34 @@ export class CreatorEditor {
     // compiler, and the chip is where it is taken off.
     const screens = screenChips({ state, commit: () => this.commit(),
                                   pick: (kind) => this.pickScreenContent(kind) });
-    this.assetsHost.replaceChildren(
-      ...(state.assets.length || S.citedPool(state).length ? [this.renderAssets()] : []),
-      ...(screens ? [screens] : []));
+    const assets = this.renderAssets();
+    this.assetsHost.replaceChildren(...(assets ? [assets] : []), ...(screens ? [screens] : []));
   }
 
   renderAssets() {
     // This editor also serves Prestage. Change the thumbnail gesture only for
     // timeline shots; other callers keep their existing file-replacement door.
     const previewReferences = this.piece.segments?.includes(this.state) ?? false;
-    // Whose files these are. Casting somebody attaches their pictures — the
-    // roster does it, `presets.addSubjectToPiece` does it — so some of this row
-    // is there because a name in the sentence put it there rather than because
-    // you picked it. Marked, not filtered: the simple view used to leave them
-    // out on the grounds that the @name says it already, and a row drawing only
-    // some of what is attached is a row you cannot trust to be the answer —
-    // which matters now that a file can be sitting there muted.
-    const cast = new Set();
-    for (const subject of this.castPiece.subjects ?? []) {
-      for (const handle of S.subjectFiles(subject)) cast.add(handle);
-      for (const handle of S.replacesOf(subject)) cast.add(handle);
-    }
+    // The files you attached, and none of the cast's. Casting somebody attaches
+    // their pictures — the roster does it, `presets.addSubjectToPiece` does it —
+    // and this row used to draw them too, marked "Veranul's RefMod", on the
+    // grounds that a row showing only some of what is attached cannot be
+    // trusted (a file can sit there muted). With four people cast that was a
+    // second copy of the cast above the sentence, on every face. They are on
+    // the shelf now, under the member they belong to, mute and all — the shelf
+    // is the answer to "what is attached", and the Cast tool says when it is
+    // hiding something to act on (`castNeedsLook`).
+    //
+    // `replaces` is not theirs in that sense: the clip somebody stands in is
+    // the shot, not a file they brought (554cc6f), so it stays on the row.
+    const theirs = new Set((this.castPiece.subjects ?? []).flatMap((subject) => S.subjectFiles(subject)));
+    const own = (this.state.assets ?? []).filter((asset) => !theirs.has(asset.handle));
+    const pooled = S.citedPool(this.state).filter((asset) => !theirs.has(asset.handle));
+    if (!own.length && !pooled.length) return null;
     // Files a `{day|night}` leaves out under the seed on the node. Greyed like
     // a muted one, because for this render that is what they are — see
     // `compile.varied_piece` — and the box has already dimmed the name.
     const passed = S.passedOver(this.state, this.varies?.() ?? null);
-    // Files a member holds back until the sentence says their word. Greyed the
-    // same way, because for this render that is what they are — see
-    // `compile_request`'s cut and `state.asleepHere`. The un-chosen words are
-    // read for the counters; the chosen ones here, since the box lights those.
-    const asleep = S.asleepHere(this.state, this.varies?.() ?? null);
-    // Which members the sentence writes, for the two reasons a file can be
-    // out: their owner is not in the shot at all, or is and left it behind.
-    const named = new Set(S.citedCast(this.state).map((subject) => subject.handle));
     const chip = (asset) => {
       // A guide shows its own frame, where every other clip shows a glyph. That
       // is not a flourish: the only question anybody has about a guide is
@@ -2376,11 +2394,9 @@ export class CreatorEditor {
       });
 
       const parts = [thumb, handle];
-      // Who is built out of this file: the ✕ says what the press costs them,
-      // and the chip says whose it is.
+      // Who stands in this clip: the ✕ says what the press costs them.
       const owners = (this.castPiece.subjects ?? []).filter(
-        (subject) => S.subjectFiles(subject).includes(asset.handle)
-                     || S.replacesOf(subject).includes(asset.handle));
+        (subject) => S.replacesOf(subject).includes(asset.handle));
 
       // What a plate is, in the one number that says it. Before the narrowing
       // summary, because it is what the picture *is* rather than something
@@ -2437,44 +2453,10 @@ export class CreatorEditor {
       // ordinary says nothing at all, and the row stays as short as the files
       // in it are plain; a clip trimmed to eight seconds still says so, on the
       // face and in both fullscreen views alike.
-      // Whose it is, in words, before what was set on it. The rule down the
-      // left edge said "the cast put this here" in the abstract, and next to a
-      // name in the sentence that was read as a second picture of the same
-      // person attached twice — a saved reference most of all, whose thumbnail
-      // is decoded from its latent and looks exactly like the photo it was made
-      // of. So the chip says "Veranul's RefMod", in Veranul's own hue, and the
-      // words are the door onto them. A mod nobody is built out of still says
-      // what it is: the one fact about a file the thumbnail cannot show.
-      const owner = owners.find((subject) => S.subjectFiles(subject).includes(asset.handle));
-      const mod = S.isRefMod(asset);
-      // What the owner said the file shows of them, and the words it waits
-      // for. Both are theirs, so both sit on their tag: the row was "img-4,
-      // img-5, img-6" with the one fact that tells them apart a click away.
-      const note = owner ? S.subjectNotes(owner)[asset.handle] ?? "" : "";
-      const wake = owner ? S.subjectTriggers(owner)[asset.handle] ?? "" : "";
-      if (owner) {
-        parts.push(el("button", {
-          class: `mmc-asset-owner mmc-tag-${S.tagIndex(owner.handle)}`,
-          text: mod ? t("{who}'s RefMod", { who: owner.handle }) : t("{who}'s", { who: owner.handle }),
-          title: (note ? `${note}\n` : "")
-            + (mod
-              ? t("@{who} is built out of this saved reference — encoded once, read off the "
-                + "file on every render. Click to open them.", { who: owner.handle })
-              : t("@{who} is built out of this picture. Click to open them.", { who: owner.handle })),
-          onclick: () => this.openCastMember(owner.handle),
-        }));
-        if (note) parts.push(el("span", { class: "mmc-asset-note", text: note }));
-        if (wake) {
-          parts.push(el("span", {
-            class: `mmc-asset-wake${asleep.has(asset.handle) ? "" : " on"}`,
-            text: t("wakes on {words}", { words: wake }),
-            title: asleep.has(asset.handle)
-              ? t("Not in this shot: the sentence says none of these words. Write one, "
-                + "or name @{handle} outright.", { handle: asset.handle })
-              : t("In this shot: the sentence says one of these words."),
-          }));
-        }
-      } else if (mod) {
+      // A saved reference says what it is: the one fact about a file the
+      // thumbnail cannot show, since that is decoded from its latent and looks
+      // exactly like the photo it was made of.
+      if (S.isRefMod(asset)) {
         parts.push(el("span", {
           class: "mmc-asset-owner",
           text: t("RefMod"),
@@ -2508,20 +2490,14 @@ export class CreatorEditor {
       }));
       return el("div", {
         class: `mmc-asset mmc-tag-${S.tagIndex(asset.handle)}${
-          cast.has(asset.handle) ? " mmc-asset-cast" : ""}${S.muted(asset) ? " off" : ""}${
-          passed.has(asset.handle) ? " passed" : ""}${asleep.has(asset.handle) ? " asleep" : ""}`,
-        // The rule down the edge in the owner's hue, so it joins the chip to
-        // their name in the sentence rather than to its own handle.
-        ...(owner ? { style: { "--owner": `var(--mmc-tag-${S.tagIndex(owner.handle)})` } } : {}),
+          owners.length ? " mmc-asset-cast" : ""}${S.muted(asset) ? " off" : ""}${
+          passed.has(asset.handle) ? " passed" : ""}`,
+        // The rule down the edge in the hue of who stands in it, so it joins
+        // the chip to their name in the sentence rather than to its own handle.
+        ...(owners.length ? { style: { "--owner": `var(--mmc-tag-${S.tagIndex(owners[0].handle)})` } } : {}),
         title: passed.has(asset.handle)
           ? t("Not in this take: the sentence names it only in an alternative this seed passes over.")
-          : asleep.has(asset.handle)
-            ? owner && !named.has(owner.handle)
-              ? t("Not in this shot: @{who} is built out of it, and the sentence does not "
-                + "write their name.", { who: owner.handle })
-              : t("Not in this shot: it wakes on {words}, and the sentence says none of them.",
-                  { words: wake })
-            : asset.filename,
+          : asset.filename,
       }, parts);
     };
 
@@ -2547,9 +2523,12 @@ export class CreatorEditor {
      * mute and the sheet would change what all of them send. So it carries
      * none of them — "a citation of it in a segment has nothing to open", which
      * is the rule the Timeline's own pool chip is written to — and says where
-     * it is set instead. What it does keep is whose it is, because that is the
-     * fact the row exists to show and the door onto them is the cast's, not
-     * this file's.
+     * it is set instead.
+     *
+     * A cast member's files are not drawn here, pooled or not, for the reason
+     * the card's own are not (see the top of this method): the shelf holds
+     * them under the member. What #91 lost was the answer to "what is this
+     * shot made of", and the shelf is that answer now; this row is the rest.
      *
      * Only the cited entries. An uncited one rides into nothing, and this row
      * is about this shot; the piece's shelf is where the rest are reported,
@@ -2572,30 +2551,10 @@ export class CreatorEditor {
       // to the piece. Opening it here would offer a card-shaped edit to
       // something every other card is reading.
       const parts = [thumb, el("span", { class: "mmc-asset-handle", text: `@${asset.handle}` })];
+      // Who stands in this clip, where somebody does — see the card's chip.
       const owner = (this.castPiece.subjects ?? []).find(
-        (subject) => S.subjectFiles(subject).includes(asset.handle)
-                     || S.replacesOf(subject).includes(asset.handle));
-      const mod = S.isRefMod(asset);
-      const note = owner ? S.subjectNotes(owner)[asset.handle] ?? "" : "";
-      const wake = owner ? S.subjectTriggers(owner)[asset.handle] ?? "" : "";
-      if (owner) {
-        parts.push(el("button", {
-          class: `mmc-asset-owner mmc-tag-${S.tagIndex(owner.handle)}`,
-          text: mod ? t("{who}'s RefMod", { who: owner.handle }) : t("{who}'s", { who: owner.handle }),
-          title: (note ? `${note}\n` : "")
-            + t("@{who} is built out of this, and this shot writes their name. "
-              + "Click to open them.", { who: owner.handle }),
-          onclick: () => this.openCastMember(owner.handle),
-        }));
-        if (note) parts.push(el("span", { class: "mmc-asset-note", text: note }));
-        // Lit, always: `citedPool` drops a plate whose word the sentence does
-        // not say, so one that reached this row is one that woke.
-        if (wake) parts.push(el("span", {
-          class: "mmc-asset-wake on",
-          text: t("wakes on {words}", { words: wake }),
-          title: t("In this shot: the sentence says one of these words."),
-        }));
-      } else if (mod) {
+        (subject) => S.replacesOf(subject).includes(asset.handle));
+      if (S.isRefMod(asset)) {
         parts.push(el("span", { class: "mmc-asset-owner", text: t("RefMod") }));
       }
       const said = referenceSummary(asset);
@@ -2626,10 +2585,7 @@ export class CreatorEditor {
     // The card's own files lead: they are the ones this shot can act on, and a
     // row that opened with three chips nothing here can change would read as a
     // row of dead controls.
-    return keepScroll(el("div", { class: "mmc-assets" }, [
-      ...this.state.assets.map(chip),
-      ...S.citedPool(this.state).map(pooledChip),
-    ]));
+    return keepScroll(el("div", { class: "mmc-assets" }, [...own.map(chip), ...pooled.map(pooledChip)]));
   }
 
   /**
@@ -2692,21 +2648,24 @@ export class CreatorEditor {
             { handle: asset.handle })
         : t("Mute @{handle}: out of the run, but the file, the handle and the narrowing all stay.",
             { handle: asset.handle }),
-      onclick: () => {
-        if (off) delete asset.enabled;
-        else asset.enabled = false;
-        // A muted reference is not a reference of this render, so bringing one
-        // back can overrun a limit that was legal while it was off — the same
-        // check a track change answers to, and the same rollback.
-        const problem = off ? S.overflow(this.state, this.piece) : null;
-        if (problem) {
-          asset.enabled = false;
-          return this.flash(t("@{handle} stays muted — {problem}",
-                              { handle: asset.handle, problem }));
-        }
-        this.commit();
-      },
+      onclick: () => this.toggleMute(asset),
     }, [svg(ICONS.mute, 13)]);
+  }
+
+  toggleMute(asset) {
+    const off = S.muted(asset);
+    if (off) delete asset.enabled;
+    else asset.enabled = false;
+    // A muted reference is not a reference of this render, so bringing one
+    // back can overrun a limit that was legal while it was off — the same
+    // check a track change answers to, and the same rollback.
+    const problem = off ? S.overflow(this.state, this.piece) : null;
+    if (problem) {
+      asset.enabled = false;
+      return this.flash(t("@{handle} stays muted — {problem}",
+                          { handle: asset.handle, problem }));
+    }
+    this.commit();
   }
 
   /**

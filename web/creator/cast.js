@@ -205,6 +205,23 @@ export function openMenu(anchor, { title, lead = null, sections, onClose = null 
   pop.querySelector('[aria-checked="true"]')?.scrollIntoView({ block: "center" });
 }
 
+/** What a folded shelf is hiding that wants acting on: somebody cast and not
+ *  in the sentence, or a file of somebody's muted. The Cast tool's count turns
+ *  amber on it and says it on hover, so the shelf can stay down without hiding
+ *  either — the one rule every face with a shelf answers to (the Creator's
+ *  editor and the PreStage's). `named` is the handles the sentence cites;
+ *  `assets` the files a mute could be on. -> "" when there is nothing. */
+export function castLook(cast, named, assets) {
+  if (!cast.length) return "";
+  const away = cast.filter((subject) => !named.has(subject.handle)).length;
+  const theirs = new Set(cast.flatMap((subject) => S.subjectFiles(subject)));
+  const muted = assets.filter((asset) => theirs.has(asset.handle) && S.muted(asset)).length;
+  return [
+    away ? t("{count} not in the prompt", { count: away }) : "",
+    muted ? t("{count} of their files muted", { count: muted }) : "",
+  ].filter(Boolean).join(", ");
+}
+
 /** Hand a mod's file to the browser under its own name. An anchor rather than
  *  a fetch, so the page never holds the bytes; exported for the library's
  *  panel, which offers the same file. */
@@ -486,12 +503,23 @@ function weightField({ entry, touch, done }) {
  * `family`               the piece's video family, as a getter — what the LoRA
  *                       manager needs to say which checkpoint a LoRA on
  *                       somebody claims. Defaults to the pack's default family.
+ * `asleep`               the handles out of this render because the sentence
+ *                       does not name their owner or say their word, as a
+ *                       getter returning a Set (`state.asleepHere`). Dimmed on
+ *                       the tiles; absent, nothing is.
+ * `canMute`, `mute`      whether a file is the host's to mute, and the switch
+ *                       itself, which answers the reference cap. The tile's
+ *                       menu offers it where `canMute` says yes; absent, never.
  */
 export class CastShelf {
   constructor({ getCast, setCast, getAssets, addAsset, whereCited, cite, touch, commit,
                 keep = null, library = null, mod = null, vae = null, families = null, rename = null,
-                dropAssets = null, canvas = null, family = null, disclosure = false }) {
+                dropAssets = null, canvas = null, family = null, disclosure = false,
+                canMute = null, mute = null, asleep = null }) {
     this.getCast = getCast;
+    this.asleep = asleep;
+    this.canMute = canMute;
+    this.mute = mute;
     this.family = family ?? (() => S.DEFAULT_VIDEO_FAMILY);
     this.dropAssets = dropAssets;
     this.setCast = setCast;
@@ -741,7 +769,8 @@ export class CastShelf {
 
     return el("div", {
       class: `mmc-cast-card ${hue}${state}${open ? " open" : ""}`,
-    }, open ? this.openCard(subject, problem, where) : [this.shutRow(subject, problem, where)]);
+    }, open ? this.openCard(subject, problem, where)
+       : [this.shutRow(subject, problem, where), ...this.shutFiles(subject)]);
   }
 
   /** Their line opens the member for editing. The representative face keeps
@@ -764,7 +793,11 @@ export class CastShelf {
           ]),
           el("span", { class: "mmc-cast-line-takes", text: t(subject.takes ?? "person") }),
         ]),
-        this.miniRefs(subject),
+        ...(ROLES.some((role) => inRole(subject, role.key).length) ? [] : [el("span", {
+          class: "mmc-cast-line-words",
+          text: String(subject.description ?? "").trim()
+            ? t("in words") : t("nothing behind them"),
+        })]),
         ...this.wearsMark(subject),
         ...this.costMark(subject),
         // What is wrong with them outranks where they walk on: a card that
@@ -794,29 +827,24 @@ export class CastShelf {
     ]);
   }
 
-  /** Their files at a glance, small enough to be a texture rather than a row of
-   *  controls: what a shut line has to say is "two pictures and a voice", and
-   *  the three that are not their looks wear their colour to say which. */
-  miniRefs(subject) {
+  /** Everything behind them, as the open card's own tiles, under their line.
+   *  The shelf is where a member's files live — the reference row above the
+   *  sentence leaves them out (`CreatorEditor.renderAssets`) — so a shut member
+   *  shows all of them, muted ones dimmed, each tile the menu that mutes it,
+   *  changes what it lends them or takes it off. It used to be five 22px
+   *  thumbnails on the line, which was a texture and not an answer to what is
+   *  attached. */
+  shutFiles(subject) {
+    const tiles = this.fileTiles(subject);
+    return tiles.length ? [el("div", { class: "mmc-cast-refs mmc-cast-shut-refs" }, tiles)] : [];
+  }
+
+  /** One tile per file on them, in role order — both strips draw from this. */
+  fileTiles(subject) {
     const assets = this.getAssets();
-    const tiles = [];
-    for (const role of ROLES) {
-      for (const handle of inRole(subject, role.key)) tiles.push([handle, role.key]);
-    }
-    if (!tiles.length) {
-      return el("span", {
-        class: "mmc-cast-line-words",
-        text: String(subject.description ?? "").trim()
-          ? t("in words") : t("nothing behind them"),
-      });
-    }
-    return el("span", { class: "mmc-cast-minis" }, tiles.slice(0, 5).map(([handle, role]) => {
-      const asset = assets.find((a) => a.handle === handle);
-      const tile = el("span", {
-        class: `mmc-cast-mini${asset ? "" : " missing"} mmc-cast-mini-${role}`,
-      }, [assetThumb(asset, "mmc-cast-mini-thumb")]);
-      return tile;
-    }));
+    const asleep = this.asleep?.() ?? new Set();
+    return ROLES.flatMap((role) => inRole(subject, role.key)
+      .map((handle) => this.refTile(subject, handle, role.key, assets, asleep.has(handle))));
   }
 
   /** The editor, which is the card this shelf always drew — with the way out of
@@ -1550,13 +1578,7 @@ export class CastShelf {
    *  take. A handle in two slots gets two tiles, which is honest — it is
    *  lending them two different things. */
   refStrip(subject) {
-    const assets = this.getAssets();
-    const tiles = [];
-    for (const role of ROLES) {
-      for (const handle of inRole(subject, role.key)) {
-        tiles.push(this.refTile(subject, handle, role.key, assets));
-      }
-    }
+    const tiles = this.fileTiles(subject);
     return el("div", { class: "mmc-cast-refs" }, [
       ...tiles,
       el("button", {
@@ -1573,15 +1595,22 @@ export class CastShelf {
     ]);
   }
 
-  refTile(subject, handle, role, assets) {
+  refTile(subject, handle, role, assets, asleep = false) {
     const asset = assets.find((a) => a.handle === handle);
     const off = asset && S.muted(asset);
     const note = S.subjectNotes(subject)[handle] ?? "";
     const wake = S.subjectTriggers(subject)[handle] ?? "";
     return el("button", {
-      class: `mmc-cast-ref${asset ? "" : " missing"}${off ? " off" : ""}${wake ? " wakes" : ""}`,
+      class: `mmc-cast-ref${asset ? "" : " missing"}${off ? " off" : ""}${wake ? " wakes" : ""}${
+        asleep && !off ? " asleep" : ""}`,
+      "data-handle": handle,
       title: asset
         ? (off ? t("{name} — muted, and kept as it was set up.\n", { name: `@${handle}` }) : "")
+          + (asleep && !off
+            ? (this.whereCited(subject).cited
+                ? t("Not in this shot: the sentence says none of its words.\n")
+                : t("Not in this shot: the sentence does not write @{who}.\n", { who: subject.handle }))
+            : "")
           + (note ? `@${handle} — ${note}\n` : "")
           + (wake ? t("Wakes on {words}\n", { words: wake }) : "")
           + t("@{handle} — {what}. Click to say what it shows of them, change what it "
@@ -1593,9 +1622,8 @@ export class CastShelf {
     }, [
       assetThumb(asset, "mmc-cast-ref-thumb"),
       ...sizeMark(asset, this.ownFamily?.()?.space ?? DEFAULT_SPACE),
-      // The shelf shares these files with the reference row, including mute.
-      // Keep the role/wake marks and the menu usable; waking a file still goes
-      // through the host's reference-cap checks in the reference row.
+      // Muted from the tile's own menu, through the host (`canMute`/`mute`),
+      // which answers the reference cap the way the row's switch always did.
       ...(off ? [el("span", {
         class: "mmc-cast-badge mmc-cast-muted", title: t("muted"),
       }, [icon("mute", 11)])] : []),
@@ -1627,6 +1655,19 @@ export class CastShelf {
         checked: role.key === current,
         onPick: () => { this.setRole(subject, handle, current, role.key); },
       }));
+    // Out of the run and kept as it is, the switch the reference row carries
+    // for a file you attached — here, because a member's files are not on that
+    // row. Only where the host says this file is its to mute: a pool file
+    // belongs to the whole piece.
+    if (asset && this.canMute?.(asset)) {
+      const off = S.muted(asset);
+      rows.push({
+        label: off ? t("Bring @{handle} back", { handle }) : t("Mute @{handle}", { handle }),
+        note: off ? t("Back into the run, as it was set up.")
+                  : t("Out of the run, and kept exactly as it is."),
+        onPick: () => { this.mute(asset); this.renderSoon(); },
+      });
+    }
     rows.push({
       label: t("Take it off @{handle}", { handle: subject.handle }),
       onPick: () => { this.clearRole(subject, handle, current); this.save(); },

@@ -12,6 +12,11 @@ is this shot made of", on every card at once, with no error anywhere near it.
 The reference was still bound the whole time — which is what made it look like
 a dead div rather than a lost file.
 
+The row has since stopped drawing a member's files at all: they are on the
+cast shelf, under the member, and the row is the files you attached. So the
+answer to "what is this shot made of" is the row and the shelf together, and
+this suite reads both — what #91 lost must not be lost from either.
+
 The second is not cosmetic. `motion` became a *list* of clips, and the two
 places that rename a member's handles as their files move carried on reading it
 as a single handle — so the clip went into the pool under `ref-N` and the
@@ -71,7 +76,7 @@ const row = (timeline, index) => {
     nodeId: () => 1,
   });
   editor.pieceRef = timeline;
-  editor.render();
+  editor.toggleCast();
   const host = editor.assetsHost;
   return {
     // The chip's title is its filename, which is the one thing that says which
@@ -86,8 +91,8 @@ const row = (timeline, index) => {
     pooled: all(host, "mmc-asset-pooled").length,
     // The door onto a reference's own card, which a pool entry does not open.
     doors: all(host, "mmc-asset-door").length,
-    // Whose it is stays a door, because that one opens the *member*.
-    owners: all(host, "mmc-asset-owner").length,
+    // Her files, which the shelf holds rather than the row.
+    shelf: all(editor.castHost, "mmc-cast-ref").map((tile) => tile.dataset.handle),
   };
 };
 
@@ -121,6 +126,16 @@ both.segments[1].prompt = "@anna sits by @img-1";
 both.segments[1].assets = [image("img-1", "chair.png")];
 S.syncTimeline(both);
 out.both = row(both, 1);
+
+// A piece file nobody is built out of, cited by its own handle: the row still
+// draws it as the piece's, since no shelf holds it.
+const loose = piece([card1()]);
+loose.segments.push(S.continuingSegment(loose));
+S.syncTimeline(loose);
+loose.assets.push(image("ref-5", "lamp.png"));
+loose.segments[1].prompt = "@anna by @ref-5";
+S.syncTimeline(loose);
+out.loose = row(loose, 1);
 
 // The shelf's own readout of her picture, when a card cites the *file* and
 // not her. "in shots 1, 2" was read off the shots that write her name alone,
@@ -202,31 +217,34 @@ with layout.pack(skip=["atlas"]) as target:
 # ---- the row ----------------------------------------------------------------
 
 lone = got["lone"]
-check("one shot: her picture is on the card", lone["files"], ["anna.png"])
-check("...as the card's own, with both of its buttons",
-      {"remove": lone["removes"], "mute": lone["mutes"], "pooled": lone["pooled"]},
-      {"remove": 1, "mute": 1, "pooled": 0})
+check("one shot: her picture is on the shelf, under her", lone["shelf"], ["img-1"])
+check("...and not on the row, which is the files you attached", lone["files"], [])
 
 check("the strip keeps her picture on the piece", got["grownPool"], ["ref-1:anna.png"])
 for name in ("grown1", "grown2"):
     card = got[name]
-    check(f"{name}: the card draws it anyway — this is the bug", card["files"], ["anna.png"])
-    check(f"{name}: marked as the piece's", card["pooled"], 1)
-    check(f"{name}: and carries neither button, which would reach every other card",
-          {"remove": card["removes"], "mute": card["mutes"]}, {"remove": 0, "mute": 0})
-    check(f"{name}: no door onto a card-shaped edit of a piece-wide file",
-          card["doors"], 0)
-    check(f"{name}: whose it is is still a door — that one opens her", card["owners"], 1)
+    check(f"{name}: the card still shows her picture — on the shelf, under her (#91)",
+          card["shelf"], ["ref-1"])
+    check(f"{name}: and not on the row", card["files"], [])
+
+loose = got["loose"]
+check("a piece file nobody is built out of is drawn on the card that cites it",
+      loose["files"], ["lamp.png"])
+check("...marked as the piece's", loose["pooled"], 1)
+check("...carrying neither button, which would reach every other card",
+      {"remove": loose["removes"], "mute": loose["mutes"]}, {"remove": 0, "mute": 0})
+check("...and no door onto a card-shaped edit of a piece-wide file", loose["doors"], 0)
 
 check("a card that never names her draws nothing of hers", got["quiet"]["files"], [])
 check("the shelf counts a card that cites the file and not her (#91)",
       got["shelf"], ["in shots 1, 3"])
 
 both = got["both"]
-check("the card's own file leads, the piece's follows", both["files"], ["chair.png", "anna.png"])
-check("...and only the card's own carries the two buttons",
+check("the card's own file is on the row, hers on the shelf",
+      {"row": both["files"], "shelf": both["shelf"]}, {"row": ["chair.png"], "shelf": ["ref-1"]})
+check("...and the card's own carries the two buttons",
       {"remove": both["removes"], "mute": both["mutes"], "pooled": both["pooled"]},
-      {"remove": 1, "mute": 1, "pooled": 1})
+      {"remove": 1, "mute": 1, "pooled": 0})
 
 # ---- the member's action ----------------------------------------------------
 

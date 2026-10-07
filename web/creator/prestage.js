@@ -38,7 +38,7 @@ import { openChoicePopover, stepperPill, aspectGlyph, aspectGrid, edgeSlider, PI
          neuralPill } from "./pills.js";
 import { revealPreStage } from "./fullscreen.js";
 import { CreatorEditor } from "./editor.js";
-import { CastShelf } from "./cast.js";
+import { CastShelf, castLook } from "./cast.js";
 import { castFamilies, keepAsMod } from "./refmod.js";
 import { openPresetLibrary } from "./presetlib.js";
 import * as P from "./presets.js";
@@ -159,7 +159,6 @@ export class PreStageEditor {
       castFromLibrary: (member) => {
         const subject = P.addSubjectToPiece(member, this.castPiece());
         if (!subject) return null;
-        this.castOpen = true;
         this.commit();
         return subject.handle;
       },
@@ -193,7 +192,7 @@ export class PreStageEditor {
     // The cast shelf, mounted once and folded like the shot's — see
     // `CreatorEditor.renderCastShelf`.
     this.castHost = el("div", { class: "mmc-cast-host" });
-    this.castOpen = null;
+    this.castOpen = false;
     this.loraHost = el("div");
     this.pillsHost = el("div");
     this.noticeHost = el("div");
@@ -340,13 +339,13 @@ export class PreStageEditor {
     return this.state.models?.[this.state.arch]?.vae ?? "";
   }
 
+  /** Folded until the tool or a name asks for it — see `CreatorEditor.shelfShown`. */
   shelfShown() {
-    if (this.castOpen != null) return this.castOpen;
-    return this.castDefaultOpen !== false && (this.state.subjects ?? []).length > 0;
+    return this.castOpen;
   }
 
   toggleCast() {
-    this.castOpen = !this.shelfShown();
+    this.castOpen = !this.castOpen;
     this.render();
   }
 
@@ -363,6 +362,13 @@ export class PreStageEditor {
         return { cited, text: cited ? t("in the prompt") : "" };
       },
       cite: (subject) => this.citeName(subject.handle),
+      // A member the prompt does not name sends none of their pictures
+      // (`compile_image.cast_into_still`), so their tiles grey as a shot's do.
+      asleep: () => {
+        const named = new Set(S.citedCast(this.state).map((subject) => subject.handle));
+        return new Set((this.state.subjects ?? []).filter((subject) => !named.has(subject.handle))
+          .flatMap((subject) => S.subjectFiles(subject)));
+      },
       keep: (subject, assets) => P.keepSubject(subject, assets),
       library: this.presetTarget
         ? (options = {}) => openPresetLibrary({ target: this.presetTarget(), scope: "cast", ...options })
@@ -911,11 +917,15 @@ export class PreStageEditor {
     this.prompt.root.dataset.openings = ghost.openings;
     this.railHost.replaceChildren(this.renderRail());
     this.renderExpand();
+    // The pictures you attached, and none of the cast's: a member's are on the
+    // shelf under them, as on the shot's row — see `CreatorEditor.renderAssets`.
+    const theirs = new Set((state.subjects ?? []).flatMap((subject) => S.subjectFiles(subject)));
     const chips = [
       ...(state.init ? [this.renderInitChip()] : []),
       // Numbered among the pictures the render counts, so a guide a branch
       // reads takes no `<imageN>` from the ones after it.
-      ...state.refs.map((ref) => this.renderRefChip(ref, S.preStageCountedRefs(state).indexOf(ref))),
+      ...state.refs.filter((ref) => !theirs.has(ref.handle))
+        .map((ref) => this.renderRefChip(ref, S.preStageCountedRefs(state).indexOf(ref))),
     ];
     // A still's screens, under its pictures — see the Creator's row.
     const screens = screenChips({ state, commit: () => this.commit(),
@@ -1054,6 +1064,9 @@ export class PreStageEditor {
   }
 
   renderRail() {
+    const look = castLook(this.state.subjects ?? [],
+                          new Set(S.citedCast(this.state).map((subject) => subject.handle)),
+                          this.state.refs ?? []);
     const refs = S.PRESTAGE_REFS[this.state.arch] ?? { reads: false };
     const tool = (label, iconName, title, onclick) => el("button", {
       class: "mmc-tool", title, onclick,
@@ -1095,18 +1108,19 @@ export class PreStageEditor {
              + "frames. Hand it a clip to lay one, or a sheet to split one."),
              () => this.contactSheet()),
         // Who is in the picture, as on the video rail: lit while the shelf is
-        // up, wearing the head count either way.
+        // up, wearing the head count either way, amber when it needs a look.
         el("button", {
           class: `mmc-tool mmc-tool-cast${this.shelfShown() ? " on" : ""}`,
-          title: this.shelfShown()
+          title: (look ? `${look}\n` : "") + (this.shelfShown()
             ? t("Fold the cast shelf away. Who is in the picture stays as it is.")
             : t("Who is in the picture: somebody from the cast library, or cast here — "
               + "name them once, write @anna in the prompt, and their picture and what "
-              + "they wear on this model ride in with them."),
+              + "they wear on this model ride in with them.")),
           onclick: () => this.toggleCast(),
         }, [el("span", { class: "mmc-tool-icon" }, [icon("face")]), el("span", { text: t("Cast") }),
             ...((this.state.subjects ?? []).length ? [el("span", {
-              class: "mmc-tool-count", text: String((this.state.subjects ?? []).length),
+              class: `mmc-tool-count${look ? " look" : ""}`,
+              text: String((this.state.subjects ?? []).length),
             })] : [])]),
         tool(t("Add LoRA"), "effect",
              t("Manage the LoRAs patched onto the image model. Krea LoRAs train on RAW and apply on Turbo too."),
@@ -1180,20 +1194,13 @@ export class PreStageEditor {
     // where the drawing is.
     const untrained = guide && ref.guide
       && !(refs.nativeControl ?? []).includes(ref.guide);
-    // A cast member's picture is theirs, whatever slot it sits in: the
-    // compile puts it after what was cited plain and never edits it
-    // (`compile_image.cast_into_still`), so the chip says whose it is
-    // rather than a slot number that is not where it will land.
-    const owner = (this.state.subjects ?? []).find((subject) => S.subjectFiles(subject).includes(ref.handle));
     // The first plain picture on an edit family carries the switch: cited like
     // the rest, or the one edited in place.
     const edits = refs.editsFirst && ref === S.preStageEditableRef(this.state) && !this.state.init;
     const editing = S.preStageEditsFirst(this.state);
     const role = guide
       ? t("guide")
-      : owner
-        ? t("{who}'s", { who: owner.handle })
-        : refs.editsFirst
+      : refs.editsFirst
           ? (edits && editing ? t("editing") : t("Picture {n}", { n: slot + 1 }))
           : t(refs.noun?.[0] ?? "style reference");
     // Past the cap, and drawn rather than dropped: the blob keeps every
@@ -1953,10 +1960,6 @@ export class PreStageBody {
   mount() {
     this.editor?.destroy();
     this.editor = S.isStill(this.state) ? this.mountStill() : this.mountImage();
-    // Same hand-off the piece's face makes: the view this body is drawn in is
-    // the body's to remember, because swapping architectures builds a new
-    // editor that was never told. See `Fullscreen.setCastDefault`.
-    this.editor.castDefaultOpen = this.castDefaultOpen;
     this.host.replaceChildren(this.editor.root);
     // The architecture decides the canvas, so swapping editors is exactly when
     // a host drawing the frame has to redraw it.
