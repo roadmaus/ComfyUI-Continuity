@@ -8,6 +8,8 @@
         recipe.json        the recipe the files below were made from
         masters/           the large originals, with alpha
         variants/          directions, frames, expressions, costumes, maps, takes
+      takes/<name>/<take>/ what a make queued and the renders it got back
+                           (`make.py`); collected into masters when they land
       build/<target>/      engine-ready output, regenerated from masters
       .versions/           every set a later write replaced
 
@@ -463,9 +465,14 @@ def status(base, name):
     return {"project": name, "counts": counts, "assets": rows}
 
 
-def put_masters(base, name, asset, sources, source="import"):
+def put_masters(base, name, asset, sources, source="import", made_from=None):
     """Make `sources` (`{filename: absolute path}`) the asset's masters, as one
-    versioned swap, with the recipe they now stand for beside them."""
+    versioned swap, with the recipe they now stand for beside them.
+
+    `made_from` is `(recipe, style)` when the files were made from a recipe
+    and style other than the project's current ones — a render queued before
+    either was edited (`make.py`). They are what the files stand for, so the
+    asset comes back stale rather than passing for the edit it never saw."""
     if not sources:
         raise ForgeError("nothing to put in the masters", "import.empty", asset=asset)
     for filename in sources:
@@ -476,11 +483,16 @@ def put_masters(base, name, asset, sources, source="import"):
         recipe = find(project, asset)
         root = folder(base, name)
         where = asset_dir(base, project, recipe)
-        made = {"recipe": recipe, "source": source, "at": now(),
-                "hash": fingerprint(project, recipe, source), "files": sorted(sources)}
+        made_recipe, made_style = made_from or (recipe, project["style"])
+        if made_recipe["kind"] != recipe["kind"]:
+            raise ForgeError(f"{asset} is a {recipe['kind']} now, not the {made_recipe['kind']} these files "
+                             "were made for", "asset.kind", asset=asset)
+        made_project = {**project, "style": made_style}
+        made = {"recipe": made_recipe, "source": source, "at": now(),
+                "hash": fingerprint(made_project, made_recipe, source), "files": sorted(sources)}
         if source != "import":
-            made["style"] = project["style"]
-            made["prompt"] = styles.prompt(recipe, project["style"])
+            made["style"] = made_style
+            made["prompt"] = styles.prompt(made_recipe, made_style)
 
         def fill(staging):
             masters = os.path.join(staging, "masters")

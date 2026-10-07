@@ -281,8 +281,18 @@ Pick an asset to work on it. The glass in the middle shows its **Contact
 sheet**: the masters, then what each engine makes of them, at a whole-number
 zoom so pixel art is not blurred. The inspector on the right is the asset:
 
-- **Masters**: **From disk**, **From ComfyUI**, or drop pictures anywhere on
-  the bench, and they become the asset's masters. The set they replace is kept
+- **Masters**: **Make** renders the asset on ComfyUI from its recipe and the
+  project's look, on the project's still model (Qwen Image 2.1 by default),
+  and the result becomes its masters when it lands; the row's mark spins while
+  it is on the queue. **Make again** renders a fresh set; the old one is kept.
+  **Make N** at the top of the shelf renders every planned asset that can be
+  made. Characters come out as a model sheet (neutral pose, arms away from the
+  body), and anything with alpha is asked for a transparent background, which
+  Qwen Image 2.1 draws itself. An icon or interface set is one render per
+  name, on one seed. Sprites, seamless tiles, parallax layers, materials and
+  sounds are not made here yet.
+  Or bring pictures in: **From disk**, **From ComfyUI**, or drop pictures
+  anywhere on the bench, and they become the asset's masters. The set they replace is kept
   in `.versions/`. Sprites, characters and icons need transparency in the
   picture. One picture can hold a whole set: a sprite sheet with a row per
   animation, or a grid of icons or tiles.
@@ -361,8 +371,8 @@ keys; the skill's `forge.py joints` lists the words.
 Mixamo clips are yours to import: Adobe's terms let you use them in a game,
 not share them, so the pack ships none.
 
-Generating assets from prompts is not in the forge yet: make pictures with
-the node or the render skill and import them.
+Drawing a character into a pose set is not in the forge yet: render it with
+the node or the render skill and import the frames.
 
 ## Neural refiner (DLSS 5)
 

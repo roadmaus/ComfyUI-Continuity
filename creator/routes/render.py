@@ -32,7 +32,8 @@ Request (POST, JSON):
      "devices": {"clip": "cuda:1"},  # where a slot loads, over this machine's pins
      "accel": {"attention": "kitchen"},  # how the card runs it, over this machine's row
      "guide_strength": 0.8,          # how hard a guide pulls (a still's, below)
-     "loras": [{"name": "style.safetensors", "strength": 0.8}]}  # on the stack, under any turbo LoRA
+     "loras": [{"name": "style.safetensors", "strength": 0.8}],  # on the stack, under any turbo LoRA
+     "output_prefix": "my-game/hero"}  # where a still lands under output/, over this machine's folder
 
 A picture is cited in the prompt as `@pic-1` (`@clip-1`, `@snd-1` for video and
 sound), numbered in the order sent; one that is not cited rides anyway. `as` is
@@ -63,7 +64,7 @@ from aiohttp import web
 
 from server import PromptServer
 
-from .. import chat, headless, jobs, models as core_models, sampling, server_routes, settings
+from .. import chat, headless, jobs, models as core_models, outputs, sampling, server_routes, settings
 from ..families import manifest, registry
 from ..guard import same_origin
 from . import chat as room
@@ -161,6 +162,15 @@ def _request(body, accel=None):
                 "accel is for a video family; a picture family's row has no attention to pick.")
         piece = {"version": 1, "arch": rail["still_arch"], "loras": [], "turbo": {},
                  "models": {rail["still_arch"]: overrides}}
+        if body.get("output_prefix"):
+            # The blob's own key, which the save node reads over the machine's
+            # folder (`outputs.image`). Game Forge sends one so a take's renders
+            # land in its project; cleaned here so a bad one is refused before
+            # anything is sampled.
+            try:
+                piece["output_prefix"] = outputs.clean(body["output_prefix"], "")
+            except outputs.PrefixError as problem:
+                raise headless.HeadlessError(str(problem)) from None
         if guides:
             # `chat.still_piece` writes the cited pictures over the blob and
             # keeps a guide already on it, as a pre-stage node's would be.
@@ -168,6 +178,9 @@ def _request(body, accel=None):
             if body.get("guide_strength") is not None:
                 piece["guide"] = {"strength": body.get("guide_strength")}
     else:
+        if body.get("output_prefix"):
+            raise headless.HeadlessError("output_prefix is for a still here; a clip lands in "
+                                         "this machine's renders folder.")
         devices = {k: v for k, v in (body.get("devices") or {}).items()
                    if isinstance(k, str) and isinstance(v, str)}
         try:

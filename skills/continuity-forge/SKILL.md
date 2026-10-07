@@ -1,6 +1,6 @@
 ---
 name: continuity-forge
-description: Plan and keep a game's assets (characters, sprites, tiles, tilesets, backgrounds, icons, UI, materials, textures, sounds) in a Game Forge project on a ComfyUI server that has the Continuity node pack, with the forge.py bundled in this skill. Use whenever the user asks to set up, plan, list, import, check, look at, export to an engine, check the status of, or download a game's art or sound assets "on ComfyUI", "in the forge" or "with Continuity", for any engine (Godot, LÖVE, Tiled, Game Boy, GB Studio, Unity, Unreal, glTF). Never write project.json or MANIFEST.md by hand; this client keeps them.
+description: Plan, make and keep a game's assets (characters, sprites, tiles, tilesets, backgrounds, icons, props, UI, materials, textures, sounds) in a Game Forge project on a ComfyUI server that has the Continuity node pack, with the forge.py bundled in this skill. Use whenever the user asks to set up, plan, generate, make, list, import, check, look at, export to an engine, check the status of, or download a game's art or sound assets "on ComfyUI", "in the forge" or "with Continuity", for any engine (Godot, LÖVE, Tiled, Game Boy, GB Studio, Unity, Unreal, glTF). Never write project.json or MANIFEST.md by hand; this client keeps them.
 ---
 
 # Game Forge
@@ -89,9 +89,46 @@ forge.py pull mygame --out ./mygame-art
   input folder. The import replaces the asset's masters as one set; the set it
   replaces is kept and listed by `history`.
 
-Generation (`make`) is coming in a later step; `capabilities` will list it
-when the server has it. Until then, make pictures with the `continuity-render`
-skill and `import` them. A picture that should have transparency (sprites,
+## 3a. Make
+
+```
+forge.py make mygame hero               # render one asset from its recipe; waits, prints the masters
+forge.py make mygame --missing --dry-run    # the renders it would queue, and what it would skip
+forge.py make mygame --missing          # every planned asset that can be made
+forge.py make mygame --stale --no-wait  # queue and return; `wait` resumes
+forge.py jobs mygame                    # every take: queued / done / failed, seeds
+forge.py wait mygame
+```
+
+- `make` renders on the project's still family (`style.family`, Qwen Image 2.1
+  by default) with the asset's seed, the style clause, the style's LoRAs and
+  reference pictures (cited for you, after the recipe's own references, so
+  `@pic-1` in a prompt is the recipe's first reference). Native by default;
+  `--fast` throws the family's turbo switch.
+- What it asks for per kind: a **character** is a model sheet (neutral pose,
+  arms away from the body). Anything with `alpha` (characters, icons, props, UI)
+  is asked for a transparent background, and Qwen Image 2.1 draws real alpha
+  (RGBA), so it needs no matting. An icon or UI `set` is one render per name on
+  one seed. A background is a scene. Props are icons (or 1-frame sprites)
+  with their own `size`.
+- **Not made yet**, refused with a code and skipped by `--missing`: sprites
+  (`make.kind`; draw them by the recipe in section 5), seamless tiles
+  (`make.seamless`; set `seamless` to `none`, or import), parallax layers
+  (`make.layers`), materials, textures, sounds.
+- A make is a **take** (`takes/<asset>/<take>/` in the project): the request
+  and the raw renders. When they land, each is fitted to the recipe's `size`
+  (padded with transparency for alpha kinds, cropped for scenes) and becomes
+  the masters; the old set goes to `.versions/`. A recipe edited while its
+  take was on the queue comes back **stale**.
+- `make` and `wait` exit 2 when a take failed; the queue's sentence is on
+  stderr (`make.failed`, `make.lost`, `make.refused`). A take whose picture
+  came back opaque where alpha was asked for carries a `make.opaque` warning.
+- **Look at what came back** (`sheet`) before making more of the same.
+
+## 3b. Pictures made elsewhere
+
+Pictures made with the `continuity-render` skill (or anything else) come in
+with `import`. A picture that should have transparency (sprites,
 characters, icons) must be imported **with** alpha: matting an opaque picture
 runs on the GPU and is not in the forge yet, so the build refuses it with
 `matte.opaque`.
@@ -129,7 +166,7 @@ forge.py post mygame hero-walk baseline --target generic   # one step, frames ke
 A pose set is a project's mannequin poses for one animation or one shot:
 `poses/<set>.json`, the body sliders, a frame rate, and a pose per frame in
 VNCCS Pose Studio's `pose_data` shape. They are what characters are drawn
-into: until the forge has `make`, by the recipe at the end of this section.
+into: until `make` draws sprites, by the recipe at the end of this section.
 
 ```
 forge.py pose mygame import walk ~/Downloads/walk.fbx --fps 12   # a Mixamo clip, one pose per sample
@@ -245,7 +282,7 @@ forge.py pose mygame keys walk --clear                           # every frame i
   right); an unknown one is refused with `pose.bone`. Prefer joints.
 - Mixamo clips are the user's own download: never fetch or redistribute them.
 
-**Drawing a character into a set, until `make`** (proven on a 15-frame walk):
+**Drawing a character into a set, until `make` draws sprites** (proven on a 15-frame walk):
 render the set's frames, then for each frame run the `continuity-render`
 skill with Qwen Image 2.1, the mannequin frame as the first picture, the
 character's sheet as a reference, the LoRA `VNCCS_QI2_PoseStudioV1.1` at 1.0,

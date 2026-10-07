@@ -18,25 +18,45 @@ are connected and how to tell them something. On a running ComfyUI
 `routes/forge.py` builds it from `folder_paths`, `media` and the PromptServer;
 the suites build one on a temporary folder.
 
+`make` and `jobs` put renders on ComfyUI's queue and ask after them; the host
+does both (`render`, `prompt_state`), so the handlers stay free of ComfyUI.
+
 `TAB_ROUTES` are the other half of a pose job (`pose.py`): what a browser tab
 calls to take a job and hand back what it drew. They are served like the rest
 but are not a capability a client has, so the parity test does not ask the CLI
 for a command that calls them.
 """
 
-from . import joints, kinds, pose as poses, project as projects, targets
+from . import joints, kinds, make as making, pose as poses, project as projects, targets
 from .problems import ForgeError
 
 PREFIX = "/continuity/forge"
 
 
 class Host:
-    def __init__(self, base, resolve=None, families=None, tabs=None, announce=None):
+    def __init__(self, base, resolve=None, families=None, tabs=None, announce=None, render=None,
+                 prompt_state=None):
         self.base = base
         self._resolve = resolve
         self._families = families
         self._tabs = tabs
         self._announce = announce
+        self._render = render
+        self._prompt_state = prompt_state
+
+    def render(self, body):
+        """Queue one `/continuity/render` request. -> `{prompt_id, speed}`;
+        a refusal is a ForgeError carrying the render route's sentence."""
+        if self._render is None:
+            raise ForgeError("this server cannot render", "host.render")
+        return self._render(body)
+
+    def prompt_state(self, prompt_id):
+        """-> `(state, message)`: queued, running, done, failed (with the
+        error), or unknown when the queue has no record of it."""
+        if self._prompt_state is None:
+            return "unknown", None
+        return self._prompt_state(prompt_id)
 
     def tabs(self):
         """How many ComfyUI tabs are connected to the websocket."""
@@ -101,7 +121,7 @@ def capabilities(host, params):
     """What this machine can make: the kinds, the modes, the targets and the
     still families. Engines and optional packs join this as they land."""
     return {"kinds": [{"id": k, "help": v["help"]} for k, v in kinds.KINDS.items()],
-            **targets.catalogue(), "families": host.families()}
+            **targets.catalogue(), "families": host.families(), "makes": list(making.MAKEABLE)}
 
 
 def list_targets(host, params):
@@ -134,8 +154,8 @@ def new_project(host, params):
 
 def show(host, params):
     name = _text(params, "project")
-    project = projects.load(host.base, name)
-    return {"project": project, "status": projects.status(host.base, name)}
+    answer = status(host, params)
+    return {"project": projects.load(host.base, name), "status": answer}
 
 
 def set_style(host, params):
@@ -171,7 +191,15 @@ def remove_asset(host, params):
 
 
 def status(host, params):
-    return projects.status(host.base, _text(params, "project"))
+    """Every asset's state, after collecting any take that has landed; a row
+    whose asset is on the queue says which take."""
+    name = _text(params, "project")
+    making.collect(host, host.base, name)
+    answer = projects.status(host.base, name)
+    queued = {t["asset"]: t["take"] for t in making.takes(host.base, name) if t["state"] == "queued"}
+    for row in answer["assets"]:
+        row["making"] = queued.get(row["name"])
+    return answer
 
 
 def history(host, params):
@@ -260,6 +288,33 @@ def export(host, params):
 
     return exporting.export(host.base, _text(params, "project"), _text(params, "target"),
                             _names(params, "assets"))
+
+
+# ---- making -------------------------------------------------------------------------
+
+
+def make(host, params):
+    """Queue the renders that make assets: the named ones, or every planned
+    (`missing`) or stale (`stale`) one. `dry_run` says what would be queued.
+    Renders are native unless `fast`, which throws the family's turbo switch."""
+    return making.start(host, host.base, _text(params, "project"), _names(params, "assets"),
+                        _flag(params, "missing"), _flag(params, "stale"), _flag(params, "dry_run"),
+                        _flag(params, "fast"), _text(params, "quality", required=False))
+
+
+def jobs(host, params):
+    """A project's takes (or one asset's, or the named ones), each collected
+    into its asset first if its renders have landed."""
+    name = _text(params, "project")
+    making.collect(host, host.base, name)
+    wanted = _names(params, "takes")
+    found = making.takes(host.base, name, _text(params, "asset", required=False))
+    if wanted:
+        missing = sorted(set(wanted) - {t["take"] for t in found})
+        if missing:
+            raise ForgeError(f"{name} has no take {missing[0]}", "take.missing", status=404, take=missing[0])
+        found = [t for t in found if t["take"] in wanted]
+    return {"project": name, "takes": found}
 
 
 # ---- poses --------------------------------------------------------------------------
@@ -435,6 +490,8 @@ ROUTES = (
     ("POST", "/rm", remove_asset),
     ("GET", "/status", status),
     ("GET", "/history", history),
+    ("POST", "/make", make),
+    ("GET", "/jobs", jobs),
     ("POST", "/post", post),
     ("POST", "/check", check),
     ("POST", "/sheet", sheet),

@@ -94,6 +94,7 @@ export const css = `
 .mmc-fg-inline { display: flex; align-items: center; gap: 6px; }
 .mmc-fg-unit { font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim); }
 .mmc-fg-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.mmc-fg-make { width: 100%; justify-content: center; gap: 8px; margin-bottom: 6px; }
 .mmc-fg-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 /* JSON is read by its columns. The one place the forge sets type in mono. */
 .mmc-fg-json {

@@ -5,6 +5,7 @@
     python3 skills/continuity-forge/forge.py new mygame --mode pixel --target gbstudio --target godot4
     python3 skills/continuity-forge/forge.py plan mygame plan.json
     python3 skills/continuity-forge/forge.py status mygame
+    python3 skills/continuity-forge/forge.py make mygame --missing
     python3 skills/continuity-forge/forge.py import mygame hero hero.png
     python3 skills/continuity-forge/forge.py pull mygame --out ./mygame
     python3 skills/continuity-forge/forge.py pose mygame import walk walk.fbx --fps 12
@@ -59,6 +60,9 @@ COMMANDS = {
     "rm": ["/rm"],
     "status": ["/status"],
     "history": ["/history"],
+    "make": ["/make", "/jobs"],
+    "jobs": ["/jobs"],
+    "wait": ["/jobs"],
     "post": ["/post"],
     "check": ["/check"],
     "sheet": ["/sheet", "/file"],
@@ -237,6 +241,48 @@ def _wait(server, answer):
     return answer
 
 
+def _take_line(take):
+    renders = take["renders"]
+    # The render route says "native" in words and a turbo throw as a dict.
+    speed = renders[0].get("speed") if renders else None
+    if speed and not isinstance(speed, str):
+        speed = "turbo"
+    seeds = sorted({r["seed"] for r in renders})
+    return (f"{take['state']:<7} {take['asset']:<20} {take['take']}  {len(renders)} render"
+            f"{'s' if len(renders) != 1 else ''}, seed {', '.join(map(str, seeds))}"
+            + (f", {speed}" if speed else ""))
+
+
+def _await_takes(server, project, ids):
+    """Poll until none of the takes `ids` is queued. Asking is what collects a
+    take into its asset (the server has no other moment to do it), so this is
+    also what puts the renders into the masters."""
+    said = set()
+    start = time.time()
+    next_word = start + 30
+    while True:
+        answer = server.get_json("/jobs", project=project, takes=",".join(ids))
+        for take in answer["takes"]:
+            if take["state"] != "queued" and take["take"] not in said:
+                said.add(take["take"])
+                say(f"{take['asset']}: {take['state']}" + (f" — {take['problem']}" if take.get("problem") else ""))
+                for warning in take.get("warnings") or []:
+                    say(f"{take['asset']}: warning: {warning['problem']} [{warning['code']}]")
+        if all(t["state"] != "queued" for t in answer["takes"]):
+            return answer
+        time.sleep(2)
+        if time.time() >= next_word:
+            next_word += 30
+            say(f"rendering ({int(time.time() - start)}s)")
+
+
+def _print_takes(answer):
+    for take in answer["takes"]:
+        print(_take_line(take))
+        for path in take.get("masters") or []:
+            print(f"  assets/{take['kind']}/{take['asset']}/masters/{path}")
+
+
 def _angles(frame, table):
     """One frame's joints, a line each: `elbow_l    bend 46.9  side 0  twist 0`."""
     return [f"{frame:>3} {joint:<11} " + "  ".join(f"{m} {v:g}" for m, v in motions.items())
@@ -390,6 +436,8 @@ def _pose(server, args):
 def problem_count(command, answer):
     if command == "check":
         return answer.get("count", 0)
+    if command in ("make", "wait"):
+        return sum(1 for t in answer.get("takes", []) if t.get("state") == "failed")
     if command in ("export", "post"):
         return len(answer.get("problems", []))
     return 0
@@ -505,6 +553,37 @@ def run(server, args):
     if command == "history":
         return server.get_json("/history", project=args.project, asset=args.asset), lambda a: _lines(
             *(f"{v['version']:>4}  {v['at'] or '—':<25} {v['source'] or '—':<7} {v['path']}" for v in a["versions"]))
+    if command == "make":
+        body = {"project": args.project, "assets": args.assets, "missing": args.missing,
+                "stale": args.stale, "dry_run": args.dry_run, "fast": args.fast}
+        if args.quality:
+            body["quality"] = args.quality
+        answer = server.post("/make", body)
+        for skip in answer["skipped"]:
+            say(f"{skip['asset']}: skipped, {skip['why']} [{skip['code']}]")
+        if answer.get("dry_run"):
+            def show(a):
+                for take in a["takes"]:
+                    for r in take["renders"]:
+                        print(f"{take['asset']}\t{r['stem']}\t{r['family']}\t{r['aspect']}\t{r['short_edge']}\t"
+                              f"seed {r['seed']}\t{r['prompt']}")
+                say(f"{sum(len(t['renders']) for t in a['takes'])} renders would be queued")
+            return answer, show
+        for take in answer["takes"]:
+            say(f"queued {take['asset']}: {len(take['renders'])} render(s), take {take['take']}")
+        if answer["takes"] and not args.no_wait:
+            answer = {**_await_takes(server, args.project, [t["take"] for t in answer["takes"]]),
+                      "skipped": answer["skipped"]}
+        return answer, _print_takes
+    if command == "jobs":
+        return server.get_json("/jobs", project=args.project, asset=args.asset), _print_takes
+    if command == "wait":
+        ids = args.takes or [t["take"] for t in server.get_json("/jobs", project=args.project)["takes"]
+                             if t["state"] == "queued"]
+        if not ids:
+            say("nothing is being made")
+            return {"project": args.project, "takes": []}, _print_takes
+        return _await_takes(server, args.project, ids), _print_takes
     if command == "post":
         body = {"project": args.project, "asset": args.asset, "steps": args.steps}
         if args.target:
@@ -693,6 +772,24 @@ def parser():
     p = command("history", "the versions an asset has been through")
     p.add_argument("project")
     p.add_argument("asset")
+
+    p = command("make", "render assets from their recipes into their masters; waits unless --no-wait")
+    p.add_argument("project")
+    p.add_argument("assets", nargs="*", help="the assets to make (or --missing / --stale)")
+    p.add_argument("--missing", action="store_true", help="every planned asset")
+    p.add_argument("--stale", action="store_true", help="every asset whose recipe or style changed since")
+    p.add_argument("--dry-run", action="store_true", help="print the renders that would be queued; queue nothing")
+    p.add_argument("--fast", action="store_true", help="the family's turbo switch instead of its native row")
+    p.add_argument("--quality", choices=("draft", "medium", "good"), help="with --fast, the turbo step count")
+    p.add_argument("--no-wait", action="store_true", help="queue and print the takes; `wait` resumes")
+
+    p = command("jobs", "a project's takes: what each make queued and how it went")
+    p.add_argument("project")
+    p.add_argument("--asset", help="only this asset's takes")
+
+    p = command("wait", "wait for takes to land (default: every queued one) and put them in their assets")
+    p.add_argument("project")
+    p.add_argument("takes", nargs="*", help="take ids, as make printed them")
 
     p = command("post", "run post-steps on an asset for one target; the frames go to variants/post/")
     p.add_argument("project")

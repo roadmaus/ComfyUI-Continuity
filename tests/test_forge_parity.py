@@ -128,8 +128,29 @@ def png(width, height):
             + chunk(b"IDAT", zlib.compress(rows)) + chunk(b"IEND", b""))
 
 
+class Queue:
+    """ComfyUI's queue, as far as a make can tell. Nothing ever lands — this
+    suite has no PIL to collect with (`test_forge_make.py` does that) — so a
+    render stays queued until the suite says how it ended."""
+
+    def __init__(self):
+        self.bodies = []
+        self.states = {}
+
+    def render(self, body):
+        self.bodies.append(body)
+        prompt_id = f"p{len(self.bodies)}"
+        self.states[prompt_id] = ("queued", None)
+        return {"prompt_id": prompt_id, "speed": "native"}
+
+    def state(self, prompt_id):
+        return self.states.get(prompt_id, ("unknown", None))
+
+
 tab = Tab()
-host = api.Host(base, resolve, lambda: [{"id": "qwen21", "still": True}], tab.count, tab.announce)
+queue = Queue()
+host = api.Host(base, resolve, lambda: [{"id": "qwen21", "still": True}], tab.count, tab.announce,
+                queue.render, queue.state)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -293,6 +314,29 @@ with open(os.path.join(work, "pulled", "assets", "character", "hero", "masters",
 ok("import again", "import", "mygame", "hero", "hero.png")
 check("history lists the replaced set", len(ok("history", "history", "mygame", "hero").splitlines()), 1)
 check("rm prints the asset", ok("rm", "rm", "mygame", "coin").strip(), "coin")
+
+# ---- making ------------------------------------------------------------------------
+
+code, out, err = forge("make", "mygame", "--missing", "--dry-run")
+check("a dry run of nothing makeable still succeeds", (code, out), (0, ""))
+check("a dry run skips what cannot be made, and says why",
+      ("hero-walk: skipped" in err, "make.kind" in err, "grass: skipped" in err), (True, True, True))
+check("a dry run queues nothing", queue.bodies, [])
+code, out, err = forge("make", "mygame", "grass", json_out=True)
+check("a named asset that cannot be made", (code, out["code"]), (1, "make.seamless"))
+ok("edit a tile to be made", "edit", "mygame", "grass", "--set", "seamless=none")
+queued = ok("make --no-wait", "make", "mygame", "grass", "--no-wait", json_out=True)
+check("make queues one take", [t["asset"] for t in queued["takes"]], ["grass"])
+check("...as one render", len(queue.bodies), 1)
+take = queued["takes"][0]["take"]
+check("jobs lists it as queued", ok("jobs", "jobs", "mygame").split()[:3], ["queued", "grass", take])
+check("status says it is being made", ok("status for making", "status", "mygame", json_out=True)
+      ["assets"][2]["making"], take)
+queue.states["p1"] = ("failed", "KSampler: out of memory")
+code, out, err = forge("wait", "mygame", take)
+check("wait on a failed take exits 2", code, 2)
+check("and prints the queue's sentence", "grass: failed — KSampler: out of memory" in err, True)
+check("wait with nothing out", ok("wait idle", "wait", "mygame").strip(), "")
 
 code, out, err = forge("status", "nothere", json_out=True)
 check("a missing project", (code, out["code"]), (1, "project.missing"))

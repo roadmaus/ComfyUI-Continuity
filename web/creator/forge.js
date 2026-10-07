@@ -39,8 +39,11 @@
 // true here — the sheet is on the glass — and it is the same call the CLI's
 // `sheet` makes for an agent.
 //
-// Nothing here runs a model: building, checking and exporting are arithmetic
-// on the masters, so no press waits for the queue.
+// Making is the one press that runs a model. It queues the asset's renders on
+// ComfyUI's queue (`/make`) and the bench asks after them (`/jobs`) every few
+// seconds while any are out: asking is what brings a finished take into its
+// asset, so nothing waits on a socket the CLI would not have. Building,
+// checking and exporting are arithmetic on the masters, and wait for nothing.
 
 import { el, icon, mark, spinner, dragsFiles, mountOverlay, keepScroll, dismissable, placeNear } from "./dom.js";
 import { forgeCall, forgeFileUrl, upload } from "./api.js";
@@ -175,6 +178,7 @@ class Forge {
     this.removing = false;     // the first press of Remove
     this.drawer = false;       // the project's settings, open
     this.poses = null;         // the pose page, while it is mounted
+    this.takesTimer = null;    // the next look at takes on the queue
   }
 
   // ---- the room ---------------------------------------------------------------
@@ -250,6 +254,7 @@ class Forge {
 
   close() {
     if (open === this) open = null;
+    clearTimeout(this.takesTimer);
     this.poses?.unmount();
     this.poses = null;
     this.watcher?.disconnect();
@@ -311,6 +316,7 @@ class Forge {
     await this.loadSchemas();
     this.render();
     if (this.asset) this.look();
+    this.watchTakes();
   }
 
   /** Each kind's recipe schema, once: the inspector's form is drawn from it. */
@@ -329,6 +335,47 @@ class Forge {
     this.rows = answer.status.assets;
     await this.loadSchemas();
     this.render();
+    this.watchTakes();
+  }
+
+  // ---- making -------------------------------------------------------------------
+
+  /** Whether `kind` is one `/make` renders, as the server says. */
+  makes(kind) {
+    return (this.catalogue?.makes ?? []).includes(kind);
+  }
+
+  /** Queue renders: `{assets}` or `{missing: true}`. What could not be made
+   *  is said, not dropped. */
+  async make(body, sentence) {
+    const answer = await this.run(sentence, () => forgeCall("/make", { project: this.name, ...body }));
+    if (!answer) return;
+    if (answer.skipped.length) {
+      this.error = t("Skipped: {list}", { list: answer.skipped.map((s) => `${s.asset} (${s.why})`).join("; ") });
+    }
+    await this.refresh();
+  }
+
+  /** While a take is out, look again in a few seconds. */
+  watchTakes() {
+    clearTimeout(this.takesTimer);
+    if (!this.alive() || !this.rows.some((row) => row.making)) return;
+    this.takesTimer = setTimeout(() => this.pollTakes(), 3000);
+  }
+
+  async pollTakes() {
+    const out = this.rows.filter((row) => row.making).map((row) => row.making);
+    const answer = await forgeCall("/jobs", { project: this.name, takes: out.join(",") }, { get: true }).catch(() => null);
+    if (!this.alive()) return;
+    const ended = (answer?.takes ?? []).filter((take) => take.state !== "queued");
+    if (!ended.length) { this.watchTakes(); return; }
+    const said = ended.flatMap((take) => [
+      ...(take.state === "failed" ? [`${take.asset}: ${take.problem}`] : []),
+      ...(take.warnings ?? []).map((warning) => `${take.asset}: ${warning.problem}`),
+    ]);
+    if (said.length) this.error = said.join(" ");
+    await this.refresh();
+    if (ended.some((take) => take.asset === this.asset && take.state === "done")) this.look();
   }
 
   leaveProject() {
@@ -773,10 +820,16 @@ class Forge {
     const order = [...Object.keys(KINDS), ...groups.keys()];
     const kinds = [...new Set(order)].filter((kind) => groups.has(kind));
     const made = this.rows.filter((row) => row.status !== "planned").length;
+    const missing = this.rows.filter((row) => row.status === "planned" && !row.making && this.makes(row.kind)).length;
     this.shelf.replaceChildren(
       el("div", { class: "mmc-fg-shelfhead" }, [
         el("span", { class: "mmc-fg-count", text: this.rows.length
           ? t("{made} of {n} made", { made, n: this.rows.length }) : t("Nothing yet") }),
+        missing ? el("button", {
+          class: "mmc-fg-add", disabled: Boolean(this.working),
+          title: t("Render every planned asset that can be made from its recipe"),
+          onclick: () => this.make({ missing: true }, t("Queueing what is missing")),
+        }, [t("Make {n}", { n: missing })]) : null,
         el("button", { class: "mmc-fg-add", onclick: (event) => this.newAssetMenu(event.currentTarget) },
           [icon("plus", 14), el("span", { text: t("New") })]),
       ]),
@@ -810,7 +863,7 @@ class Forge {
       el("span", { class: "mmc-fg-itemname", text: row.name }),
       count ? el("span", { class: "mmc-fg-bad", text: String(count),
         title: t("{n} problems for {target}", { n: count, target: this.targetLabel(this.report.target) }) }) : null,
-      el("span", { class: `mmc-fg-mark ${row.status}`, "aria-hidden": "true" }),
+      row.making ? spinner() : el("span", { class: `mmc-fg-mark ${row.status}`, "aria-hidden": "true" }),
     ]);
   }
 
@@ -878,6 +931,15 @@ class Forge {
         t("Press New to add its first asset."));
     } else if (!row) {
       content = this.invite("gallery", t("Pick something from the shelf"), null);
+    } else if (row.making && row.status === "planned") {
+      content = el("div", { class: "mmc-bn-drop" }, [
+        spinner(),
+        el("p", { class: "mmc-bn-dropline", text: t("Rendering {name}", { name: row.name }) }),
+        el("p", { class: "mmc-bn-dropnote", text: t("On ComfyUI's queue. It lands here when it is done.") }),
+      ]);
+    } else if (row.status === "planned" && this.makes(row.kind)) {
+      content = this.invite("star", t("Press Make to render {name} from its recipe", { name: row.name }),
+        t("Or drop pictures here."));
     } else if (row.status === "planned") {
       content = this.invite("download", t("Drop pictures here to make {name}", { name: row.name }),
         t("Characters, sprites and icons need a transparent background."));
@@ -1047,7 +1109,15 @@ class Forge {
               el("img", { alt: file, draggable: false, loading: "lazy",
                 src: forgeFileUrl(this.name, `assets/${row.kind}/${row.name}/masters/${file}`, row.made) }),
             ])))
-          : el("p", { class: "mmc-fg-hint", text: t("No pictures yet. Drop them anywhere on the bench, or bring them in:") }),
+          : el("p", { class: "mmc-fg-hint", text: this.makes(recipe.kind)
+              ? t("No pictures yet. Make them from the recipe, or bring them in:")
+              : t("No pictures yet. Drop them anywhere on the bench, or bring them in:") }),
+        this.makes(recipe.kind) ? el("button", {
+          class: "mmc-bn-run mmc-fg-make", disabled: Boolean(this.working || row.making),
+          title: t("Render it on ComfyUI from the recipe and the project's look"),
+          onclick: () => this.make({ assets: [recipe.name] }, t("Queueing {name}", { name: recipe.name })),
+        }, row.making ? [spinner(), el("span", { text: t("Rendering") })]
+           : [row.status === "planned" ? t("Make") : t("Make again")]) : null,
         el("div", { class: "mmc-fg-pair" }, [
           el("button", { class: "mmc-bn-verb", onclick: () => picker.click() },
             [icon("download", 15), el("span", { text: t("From disk") })]),

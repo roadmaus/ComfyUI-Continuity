@@ -9,6 +9,11 @@ refusal, or a file.
 
 Every handler does disk work, so each runs on the executor. Every POST goes
 through `same_origin`, like every other route in the pack that writes.
+
+A make renders through `/continuity/render`'s own builder (`render._render`),
+so a forge asset is built, weighted and refused exactly like a scripted still;
+the prompt goes on the queue from the executor thread by handing `jobs.enqueue`
+back to the server's loop.
 """
 
 import asyncio
@@ -19,10 +24,12 @@ import folder_paths
 from aiohttp import web
 from server import PromptServer
 
-from .. import media, outputs
-from ..families import registry
+from .. import chat, headless, jobs, media, outputs, server_routes
+from ..families import manifest, registry
 from ..forge import api
+from ..forge.problems import ForgeError
 from ..guard import same_origin
+from . import render as rendering
 
 
 def _resolve(filename):
@@ -30,8 +37,53 @@ def _resolve(filename):
 
 
 def _families():
-    return [{"id": family, "still": family in registry.STILL_ARCHES.values()}
-            for family in registry.FAMILIES]
+    """Every family; a still one with the canvas a make picks its shape from."""
+    out = []
+    for family in registry.FAMILIES:
+        entry = {"id": family, "still": family in registry.STILL_ARCHES.values()}
+        if entry["still"]:
+            canvas = manifest.describe(family).get("canvas") or {}
+            entry["canvas"] = {k: canvas[k] for k in ("aspects", "min_short_edge", "max_short_edge")
+                               if k in canvas}
+        out.append(entry)
+    return out
+
+
+def _render(body):
+    """One render request, built and queued. Runs on the executor."""
+    try:
+        built = rendering._render(body)
+    except (headless.HeadlessError, chat.ActionError, *server_routes.COMPILE_FAILURES) as problem:
+        raise ForgeError(str(problem), "make.refused") from None
+    if "problem" in built:
+        raise ForgeError(built["problem"], "make.refused")
+    try:
+        prompt_id = asyncio.run_coroutine_threadsafe(jobs.enqueue(built["prompt"]),
+                                                     PromptServer.instance.loop).result()
+    except jobs.JobError as problem:
+        raise ForgeError(str(problem), "make.queue") from None
+    return {"prompt_id": prompt_id, "speed": built["speed"]}
+
+
+def _prompt_state(prompt_id):
+    queue = PromptServer.instance.prompt_queue
+    running, pending = queue.get_current_queue_volatile()
+    if any(item[1] == prompt_id for item in running):
+        return "running", None
+    if any(item[1] == prompt_id for item in pending):
+        return "queued", None
+    record = queue.get_history(prompt_id=prompt_id).get(prompt_id)
+    if record is None:
+        return "unknown", None
+    status = record.get("status") or {}
+    if status.get("status_str") != "error":
+        return "done", None
+    for event, data in status.get("messages") or []:
+        if event == "execution_error":
+            return "failed", f"{data.get('node_type')}: {data.get('exception_message', '').strip()}"
+        if event == "execution_interrupted":
+            return "failed", "the render was cancelled"
+    return "failed", "the render failed"
 
 
 def _tabs():
@@ -45,7 +97,7 @@ def _announce(event, data):
 
 def _host():
     base = os.path.join(folder_paths.get_output_directory(), *outputs.FORGE.split("/"))
-    return api.Host(base, _resolve, _families, _tabs, _announce)
+    return api.Host(base, _resolve, _families, _tabs, _announce, _render, _prompt_state)
 
 
 async def _answer(method, path, params):

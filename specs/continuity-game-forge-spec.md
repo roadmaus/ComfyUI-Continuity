@@ -417,6 +417,8 @@ output/continuity/forge/<project>/
     recipe.json        what, from what, how, through which family, which post-steps
     masters/           the large originals, with alpha
     variants/          directions, frames, expressions, costumes, maps, takes
+  takes/<name>/<take>/ what one make queued (take.json) and the raw renders,
+                       written there by the save node; collected into masters
   build/<target>/      engine-ready output, regenerated from masters
   .versions/           sets replaced by a later write
 ```
@@ -1051,6 +1053,20 @@ contract stable for agents that have learned it.
    at 1280×720, 78 s at 1936×1088. Not done: the H3 half (its LoRA is not
    on the lab), a side-by-side with VNCCS's own output, and its Viggle
    6-step setup against our base row.
+   **Make, for stills** (`creator/forge/make.py`, 2026-10-07). `make`
+   renders a recipe through `/continuity/render`'s own builder, so it is
+   weighted and refused like any scripted still: one render per asset, or
+   per name of an icon or UI set on one seed, the character as a model
+   sheet, the style's pictures cited after the recipe's own, and "Transparent
+   background with alpha channel." for anything with alpha — Qwen Image 2.1
+   draws real RGBA, and the save node keeps it, so 2.1 masters need no
+   matting. The request names the take's folder as its output prefix; a take
+   is collected when every render is on disk (whenever anyone asks: `/jobs`,
+   `/status`), fitted to the recipe's size and swapped in with the recipe as
+   it was when queued, so an edit made while it rendered comes back stale.
+   `jobs` and `wait` are the CLI's half; the bench polls. Not made yet, and
+   refused with a code: sprites (the grid route above), seamless tiles,
+   parallax layers. `vary` is not built.
 3. **Audio.**
 4. **3D.** Materials, model texturing, and 3D models (§7.6) with
    triangle retopology and Q-Remesh on the optional and external backends.
