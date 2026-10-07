@@ -138,6 +138,11 @@ def matrix_euler(m):
     return math.atan2(m[2][1], m[1][1]), y, 0.0
 
 
+def _wrap(degrees):
+    """An angle into (-180, 180]."""
+    return degrees - 360 * math.ceil((degrees - 180) / 360)
+
+
 def degrees_matrix(rotation):
     return euler_matrix(*(math.radians(v) for v in rotation))
 
@@ -309,10 +314,12 @@ def _wrist_axes():
 class Joint:
     """One joint: the bone(s) it turns, its motions, their axes and limits.
 
-    `axes` are three orthonormal unit vectors, in motion order. The first
-    motion turns furthest (to ±180), the middle one only to ±90 — an Euler
-    triple's middle angle cannot go further — so a motion that must pass 90
-    (an arm raised overhead, a knee bent double) is never the middle one.
+    `axes` are three orthonormal unit vectors, in motion order. Every turn
+    has two Euler triples, `(x, y, z)` and `(x+180, 180-y, z+180)`; a reading
+    takes the one whose outer two angles are smaller, so the middle motion
+    reads past 90 when the others are modest (an arm on all fours swung
+    forward to 110 reads as that, not as raised 180, forward 70, twisted 180).
+    Where both are large the reading is still the same turn, in other words.
     Axes that make a left-handed basis are fine: in a mirror basis every turn
     runs the other way, so the angles' signs are flipped to match (`sense`).
     `zero` is the bone's direction in the zero configuration, or None
@@ -336,7 +343,11 @@ class Joint:
     def read(self, rotation):
         """A left bone's stored rotation (degrees) -> this joint's angles."""
         m = _mul(_mul(_mul(_t(self.basis), degrees_matrix(rotation)), _t(self.to_zero)), self.basis)
-        return {motion: self.sense * v for motion, v in zip(self.motions, matrix_degrees(m))}
+        x, y, z = matrix_degrees(m)
+        other = (_wrap(x + 180), _wrap(180 - y), _wrap(z + 180))
+        if abs(other[0]) + abs(other[2]) < abs(x) + abs(z) - 1e-9:
+            x, y, z = other
+        return {motion: self.sense * v for motion, v in zip(self.motions, (x, y, z))}
 
     def write(self, angles):
         """This joint's angles (degrees, all three) -> the left bone's stored rotation."""
@@ -362,9 +373,10 @@ def _joints():
               ((-15, 40), (-25, 30), (-20, 20)),
               words="the collarbone: shrug the shoulder up (+), bring it forward (+)"),
         Joint("shoulder", ("upperarm",), ("raise", "forward", "twist"), arm,
-              ((-20, 180), (-70, 90), (-90, 90)), zero=DOWN, rest=REST["upperarm_l"],
+              ((-20, 180), (-70, 180), (-90, 90)), zero=DOWN, rest=REST["upperarm_l"],
               words="raise 0, forward 0 is the arm hanging straight down (standing, it is raised 40). "
-                    "raise 90: out to the side, level; 180: overhead. forward 90: pointing ahead, level; "
+                    "raise 90: out to the side, level; 180: overhead. forward 90: pointing ahead, level, "
+                    "180: overhead by the front; "
                     "with raise 90, forward swings the level arm round to the front. twist (+) turns it outward"),
         Joint("elbow", ("lowerarm",), ("bend", "side", "twist"), elbow,
               ((0, 150), (-15, 15), (-90, 90)), zero=REST["upperarm_l"], rest=REST["lowerarm_l"],

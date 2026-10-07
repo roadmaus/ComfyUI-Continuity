@@ -91,6 +91,11 @@ check("to the degree", all(abs(a - b) < 1e-9 for k in right["bones"]
 check("--mirror sends the twin too", joints.mirrored_keys({"elbow_l.bend": 90, "head.turn": 10}),
       {"elbow_l.bend": 90, "elbow_r.bend": 90, "head.turn": 10})
 
+reach = joints.set_joints(REST, {"shoulder_l.raise": 0, "shoulder_l.forward": 120})
+check("an arm swung past level in front reads as that, not as its other Euler triple",
+      {m: v for m, v in joints.joint_angles(reach, "shoulder_l").items() if m != "twist"},
+      {"raise": 0.0, "forward": 120.0})
+
 spine = joints.set_joints(REST, {"spine.bend": 30})["bones"]
 check("the spine's bend is shared by its three bones", [round(spine[b][0], 6) for b in
                                                         ("spine_01", "spine_02", "spine_03")], [10.0] * 3)

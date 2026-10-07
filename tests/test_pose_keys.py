@@ -185,6 +185,9 @@ task = call("/pose/claim", job=job["job"], tab="t")
 picture = "data:image/png;base64," + base64.b64encode(png(64, 96)).decode()
 call("/pose/done", job=job["job"], tab="t", frames=[picture] * len(task["frames"]))
 sheet = call("/pose/sheet", project="game", set="wave", frames=[0, 1], width=64, height=96, views=[0, 90])["path"]
+refused("a sheet of more pictures than a render draws",
+        lambda: pose.contact_sheet(base, "game", "wave", [{"frame": 0, "path": "x.png"}] * (pose.MAX_RENDER + 1)),
+        "pose.many")
 from PIL import Image  # noqa: E402 — only the sheet needs it
 
 with Image.open(os.path.join(base, "game", sheet)) as drawn:

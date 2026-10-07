@@ -637,10 +637,15 @@ def contact_sheet(base, project, name, frames):
     """Drawn frames -> one PNG, a row per yaw, a column per frame, each labelled:
     the agent's single look at a pose from several sides. Every frame must be
     drawn already (`render` first); the sheet is derived and cached by what is
-    in it."""
+    in it. At most `MAX_RENDER` pictures, as a render: cached frames cost no
+    tab, so without the cap one request could ask for every frame of a long
+    set at eight yaws, full size, in memory at once."""
     from PIL import Image, ImageDraw  # ComfyUI has it; the storage half stays standard library
 
     root = projects.folder(base, project)
+    if len(frames) > MAX_RENDER:
+        raise ForgeError(f"a sheet holds at most {MAX_RENDER} pictures; ask for fewer frames or views",
+                         "pose.many")
     missing = [f["frame"] for f in frames if not os.path.isfile(projects.inside(root, f["path"]))]
     if missing:
         raise ForgeError(f"frames {', '.join(map(str, missing))} are not drawn yet; render them first",
