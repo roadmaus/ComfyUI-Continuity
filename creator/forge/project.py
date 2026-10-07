@@ -200,6 +200,9 @@ def load(base, name):
     if not isinstance(data, dict) or data.get("format") != FORMAT:
         raise ForgeError(f"{name}/project.json is not a forge project this version can read",
                          "project.format", project=name)
+    # Every recipe as this version keeps it: a field added since it was
+    # written takes its default, so no reader has to ask whether it is there.
+    data["assets"] = [kinds.normalise(recipe) for recipe in data.get("assets", [])]
     return data
 
 

@@ -3211,4 +3211,5 @@ export const ko = {
   "Queueing {name}": "{name}을(를) 대기열에 넣는 중",
   "Make": "만들기",
   "Make again": "다시 만들기",
+  "Style pictures": "스타일 그림",
 };

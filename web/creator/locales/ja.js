@@ -3210,4 +3210,5 @@ export const ja = {
   "Queueing {name}": "{name} をキューに入れています",
   "Make": "作る",
   "Make again": "作り直す",
+  "Style pictures": "スタイル画像",
 };

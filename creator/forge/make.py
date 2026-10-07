@@ -11,14 +11,22 @@ cannot know: what a *kind* of asset asks of the picture, where the files land,
 and how they become masters.
 
 **What a kind asks for.** The prompt is the recipe's words, then a sentence the
-kind needs (a character is a model sheet: the neutral pose with the arms away
-from the body, spec §7.1 step 1), then the style clause, then the style's
-pictures cited by number, then — for anything with alpha — the sentence that
-asks Qwen Image 2.1 for a transparent background. 2.1 draws alpha itself
+kind needs (a character is a model sheet: the neutral pose with the limbs held
+clear of the body, spec §7.1 step 1, said so it fits a wolf as well as a
+person; an icon or interface piece is one thing alone, because a style board
+that holds a wolf otherwise comes back whole when a wolf icon cites it), then
+the style clause, then the style's pictures cited by number for their look
+only, then — for anything with alpha — the sentence that asks Qwen Image 2.1
+for a transparent background. 2.1 draws alpha itself
 through its RGBA VAE, and the save node keeps all four channels, so an asset
 made on 2.1 needs no matting (§6.1). A family without alpha draws an opaque
 picture, which the build refuses as it refuses an opaque import
 (`matte.opaque`); the take says so the moment it lands rather than at export.
+
+**A family that cannot read the style's pictures** refuses the render in its
+own words (Krea 2 reads references only through a reference LoRA). The forge
+does not drop them quietly — that would be an asset made without the look the
+project says it has — so the recipe says `style_references: false` instead.
 
 **A set is one render per name**, every one on the asset's seed and its style,
 so the set shares a look without needing a grid the model has to lay out
@@ -62,10 +70,21 @@ TAKE_FILE = "take.json"
 FORGE_SHELF = "continuity/forge"
 
 # What a kind's picture needs that its recipe's words do not say.
-SHEET = ("A full-body character model sheet: one figure standing in a neutral pose, arms held "
-         "away from the body, mouth closed, eyes open, the whole figure in frame.")
+SHEET = ("A full-body character model sheet: one figure in a neutral standing pose with its limbs "
+         "held clear of the body, mouth closed, eyes open, the whole body in frame, nothing else in "
+         "the picture.")
+ALONE = {
+    "icon": "One single object, alone and centred, the only thing in the picture.",
+    "ui": "One single interface piece, alone and centred, the only thing in the picture.",
+}
 ALPHA = "Transparent background with alpha channel."
-STYLE_REFS = "Draw it in the art style of {cites}."
+STYLE_REFS = "Draw it in the art style of {cites}: take only their style, not what they show."
+
+# Qwen Image 2.1's RGBA VAE decodes what should be clear as alpha 1 to 3 over a
+# third to a half of the canvas (measured on its renders), so the picture's
+# alpha box is the whole frame and every crop or baseline read off it is wrong.
+# Below this it is the decoder's noise, not the picture's edge, and is cleared.
+ALPHA_FLOOR = 4
 
 # The kinds a still render makes, and why each of the others waits.
 MAKEABLE = ("character", "background", "icon", "ui", "tile", "tileset")
@@ -145,7 +164,7 @@ def plan(host, base, project, recipe, fast=False, quality=None):
     edge = max(canvas.get("min_short_edge", 512), min(canvas.get("max_short_edge", 2048), min(size)))
 
     own = [_picture(base, project, r) for r in recipe["references"]]
-    looks = [_picture(base, project, r) for r in style["references"]]
+    looks = [_picture(base, project, r) for r in style["references"]] if recipe["style_references"] else []
     pictures = [{"filename": f, "as": "ref"} for f in own + looks]
 
     tail = [_sentence(style["clause"])]
@@ -153,7 +172,12 @@ def plan(host, base, project, recipe, fast=False, quality=None):
         tail.append(STYLE_REFS.format(cites=_cite(range(len(own) + 1, len(own) + len(looks) + 1))))
     if recipe["alpha"]:
         tail.append(ALPHA)
-    lead = [SHEET] if kind == "character" else []
+    if kind == "character":
+        lead = [SHEET]
+    elif kind in ALONE:
+        lead = [ALONE[kind]]
+    else:
+        lead = []
 
     items = recipe.get("set") or recipe.get("tiles") or []
     subjects = [(f"{i + 1:02d}-{item}", f"{_words(item)}.") for i, item in enumerate(items)] \
@@ -212,14 +236,21 @@ def _new_id():
 
 
 def start(host, base, project_name, names=None, missing=False, stale=False, dry_run=False,
-          fast=False, quality=None):
+          fast=False, quality=None, new_seed=False):
     """Queue renders for the named assets, or every planned (`missing`) or stale
     one. -> `{takes, skipped}`; with `dry_run`, what would be queued instead.
 
     Named assets are all checked before anything is queued, so a request with
     one asset that cannot be made queues nothing. Assets picked by `missing`
     or `stale` that cannot be made are skipped and said, so one sound in a
-    plan does not stop the pictures."""
+    plan does not stop the pictures. A render the render route refuses (a
+    family that cannot read the style's pictures, a missing weight) fails its
+    take with that sentence and the rest go on: the refusal is about that
+    asset, not the batch.
+
+    `new_seed` is "make it again, differently": each asset gets a fresh seed,
+    written into its recipe first, so the take is still the recipe made and
+    can be made again. Without it a make is the recipe's seed, every time."""
     collect(host, base, project_name)
     project = projects.load(base, project_name)
     rows = {row["name"]: row for row in projects.status(base, project_name)["assets"]}
@@ -236,6 +267,8 @@ def start(host, base, project_name, names=None, missing=False, stale=False, dry_
 
     planned, skipped = [], []
     for recipe in chosen:
+        if new_seed:
+            recipe = {**recipe, "seed": secrets.randbelow(2 ** 32)}
         try:
             if recipe["name"] in busy:
                 raise ForgeError(f"{recipe['name']} is already being made; wait for its take",
@@ -251,6 +284,11 @@ def start(host, base, project_name, names=None, missing=False, stale=False, dry_
                 "takes": [{"asset": r["name"], "renders": [{"stem": p["stem"], **p["body"]} for p in renders]}
                           for r, renders in planned]}
 
+    # Written only once everything is planned, so a request refused for one
+    # asset changes no recipe.
+    if new_seed:
+        for recipe, _ in planned:
+            projects.edit_asset(base, project_name, recipe["name"], {"seed": recipe["seed"]})
     out = []
     for recipe, renders in planned:
         take_id = _new_id()
@@ -271,14 +309,10 @@ def start(host, base, project_name, names=None, missing=False, stale=False, dry_
                                         "speed": queued.get("speed"), "seed": body["seed"],
                                         "prompt": body["prompt"], "family": body["family"]})
         except ForgeError as problem:
-            # What was queued before the refusal still runs; the take says what
-            # it asked for and why the rest is not coming.
+            # What was queued before the refusal still runs and still lands in
+            # this folder; the take says what it asked for and why the rest is
+            # not coming.
             take.update(state="failed", problem=problem.problem, code=problem.code)
-            _write(where, take)
-            if not take["renders"]:
-                raise
-            out.append(take)
-            break
         _write(where, take)
         out.append(take)
     return {"takes": out, "skipped": skipped}
@@ -314,6 +348,8 @@ def _finish(host, base, project_name, where, take):
     os.makedirs(fitted, exist_ok=True)
     for render in take["renders"]:
         rgba = image.read(os.path.join(where, render["file"]))
+        if recipe["alpha"]:
+            rgba[..., 3][rgba[..., 3] < ALPHA_FLOOR] = 0
         if recipe["alpha"] and int(rgba[..., 3].min()) == 255:
             take["warnings"].append({"stem": render["stem"], "code": "make.opaque",
                                      "problem": f"{render['file']} came back with no transparency; "

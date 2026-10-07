@@ -96,6 +96,7 @@ forge.py make mygame hero               # render one asset from its recipe; wait
 forge.py make mygame --missing --dry-run    # the renders it would queue, and what it would skip
 forge.py make mygame --missing          # every planned asset that can be made
 forge.py make mygame --stale --no-wait  # queue and return; `wait` resumes
+forge.py make mygame hero --new-seed    # again, differently: a fresh seed, written into the recipe
 forge.py jobs mygame                    # every take: queued / done / failed, seeds
 forge.py wait mygame
 ```
@@ -105,8 +106,17 @@ forge.py wait mygame
   reference pictures (cited for you, after the recipe's own references, so
   `@pic-1` in a prompt is the recipe's first reference). Native by default;
   `--fast` throws the family's turbo switch.
+- **Seeds are per asset** and fixed: a recipe's `seed`, or one derived from the
+  project seed and the asset's name. Making an unchanged recipe again renders
+  the same picture; `--new-seed` (the bench's **Make again**) picks a new one
+  and writes it into the recipe.
 - What it asks for per kind: a **character** is a model sheet (neutral pose,
-  arms away from the body). Anything with `alpha` (characters, icons, props, UI)
+  limbs clear of the body; it suits creatures too). An **icon** or **UI** piece
+  is one thing alone, the only thing in the picture. The style's pictures are
+  cited "for their style, not what they show"; a style board that holds a wolf
+  can still leak into a wolf icon, so look. Set `"style_references": false` on
+  an asset that should not get them, or whose family refuses them (Krea 2).
+  Anything with `alpha` (characters, icons, props, UI)
   is asked for a transparent background, and Qwen Image 2.1 draws real alpha
   (RGBA), so it needs no matting. An icon or UI `set` is one render per name on
   one seed. A background is a scene. Props are icons (or 1-frame sprites)
@@ -121,9 +131,15 @@ forge.py wait mygame
   the masters; the old set goes to `.versions/`. A recipe edited while its
   take was on the queue comes back **stale**.
 - `make` and `wait` exit 2 when a take failed; the queue's sentence is on
-  stderr (`make.failed`, `make.lost`, `make.refused`). A take whose picture
+  stderr (`make.failed`, `make.lost`, `make.refused`). A refusal fails only
+  that asset's take; the rest of the batch is still queued. A take whose picture
   came back opaque where alpha was asked for carries a `make.opaque` warning.
-- **Look at what came back** (`sheet`) before making more of the same.
+- **Look at what came back** (`sheet --size 768` to judge faces and bodies)
+  before making more of the same.
+- **People on Qwen Image 2.1** come out glamorised (fitted bodices, made-up
+  faces) even when the prompt says loose or plain. Saying what covers them,
+  with volume, works: "a monk's-habit cloak closed to the floor", "a
+  sheepskin vest and a shawl crossed over the chest".
 
 ## 3b. Pictures made elsewhere
 

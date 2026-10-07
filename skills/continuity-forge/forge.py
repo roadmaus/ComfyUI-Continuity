@@ -457,6 +457,8 @@ def run(server, args):
             _lines(*(f"mode    {m['id']:<11} {m['help']}" for m in a["modes"]))
             _lines(*(f"target  {t['id']:<11} {t['label']}" for t in a["targets"]))
             _lines(*(f"family  {f['id']:<11} {'still' if f.get('still') else 'video'}" for f in a["families"]))
+            pack = a.get("pack") or {}
+            say(f"Continuity {pack.get('version') or '?'}" + (f" at {pack['commit']}" if pack.get("commit") else ""))
         return answer, show
     if command == "targets":
         return server.get_json("/targets"), lambda a: _lines(
@@ -497,7 +499,9 @@ def run(server, args):
         if args.palette is not None:
             style["palette"] = [c if c.startswith("#") else f"#{c}" for c in args.palette.replace(",", " ").split()]
         if args.reference:
-            style["references"] = args.reference
+            # A local picture is uploaded, as `import` does; anything else is a
+            # name the server already has (a project file or an input name).
+            style["references"] = [server.upload(r) if os.path.isfile(r) else r for r in args.reference]
         if args.lora:
             loras = []
             for spec in args.lora:
@@ -541,13 +545,14 @@ def run(server, args):
         return server.post("/edit", {"project": args.project, "asset": args.asset, "changes": changes}), \
             lambda a: print(a["asset"]["name"])
     if command == "rm":
-        answer = server.post("/rm", {"project": args.project, "asset": args.asset})
+        answers = [server.post("/rm", {"project": args.project, "asset": asset}) for asset in args.assets]
 
         def show(a):
-            if a["kept"]:
-                say(f"its files are kept in {a['kept']}")
-            print(a["removed"])
-        return answer, show
+            for one in a["removed"]:
+                if one["kept"]:
+                    say(f"{one['removed']}: its files are kept in {one['kept']}")
+                print(one["removed"])
+        return {"removed": answers}, show
     if command == "status":
         return server.get_json("/status", project=args.project), _print_status
     if command == "history":
@@ -555,7 +560,7 @@ def run(server, args):
             *(f"{v['version']:>4}  {v['at'] or '—':<25} {v['source'] or '—':<7} {v['path']}" for v in a["versions"]))
     if command == "make":
         body = {"project": args.project, "assets": args.assets, "missing": args.missing,
-                "stale": args.stale, "dry_run": args.dry_run, "fast": args.fast}
+                "stale": args.stale, "dry_run": args.dry_run, "fast": args.fast, "new_seed": args.new_seed}
         if args.quality:
             body["quality"] = args.quality
         answer = server.post("/make", body)
@@ -617,7 +622,10 @@ def run(server, args):
             say(f"{a['count']} problem{'s' if a['count'] != 1 else ''}")
         return answer, show
     if command == "sheet":
-        answer = server.post("/sheet", {"project": args.project, "asset": args.asset})
+        body = {"project": args.project, "asset": args.asset}
+        if args.size:
+            body["size"] = args.size
+        answer = server.post("/sheet", body)
         answer["local"] = _download(server, args.project, answer["path"], args.out or f"{args.asset}-sheet.png")
         return answer, lambda a: print(a["local"])
     if command == "export":
@@ -737,7 +745,8 @@ def parser():
     p.add_argument("--grid", type=int, help="master pixels per art pixel (pixel mode)")
     p.add_argument("--palette", help="colours as hex, comma or space separated")
     p.add_argument("--texel-density", type=float)
-    p.add_argument("--reference", action="append", help="a style reference picture; repeat for more")
+    p.add_argument("--reference", action="append",
+                   help="a style reference picture (a local file is uploaded); repeat for more")
     p.add_argument("--lora", action="append", metavar="NAME[:STRENGTH]")
     p.add_argument("--set", action="append", metavar="FIELD=VALUE", help="any style field; VALUE may be JSON")
 
@@ -763,9 +772,9 @@ def parser():
     p.add_argument("file", nargs="?", help="the changes as JSON")
     p.add_argument("--set", action="append", metavar="FIELD=VALUE")
 
-    p = command("rm", "remove an asset; its files move to .versions/")
+    p = command("rm", "remove assets; their files move to .versions/")
     p.add_argument("project")
-    p.add_argument("asset")
+    p.add_argument("assets", nargs="+")
 
     command("status", "planned / made / exported / stale, per asset").add_argument("project")
 
@@ -780,6 +789,8 @@ def parser():
     p.add_argument("--stale", action="store_true", help="every asset whose recipe or style changed since")
     p.add_argument("--dry-run", action="store_true", help="print the renders that would be queued; queue nothing")
     p.add_argument("--fast", action="store_true", help="the family's turbo switch instead of its native row")
+    p.add_argument("--new-seed", action="store_true",
+                   help="make it differently: a fresh seed, written into the recipe (default: the recipe's seed)")
     p.add_argument("--quality", choices=("draft", "medium", "good"), help="with --fast, the turbo step count")
     p.add_argument("--no-wait", action="store_true", help="queue and print the takes; `wait` resumes")
 
@@ -806,6 +817,7 @@ def parser():
     p.add_argument("project")
     p.add_argument("asset")
     p.add_argument("--out", help="where to save it (default ./<asset>-sheet.png)")
+    p.add_argument("--size", type=int, help="each picture's long side in pixels, 64 to 2048 (default 192)")
 
     p = command("export", "write a target's engine files into build/<target>/")
     p.add_argument("project")

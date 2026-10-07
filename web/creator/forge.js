@@ -85,6 +85,7 @@ const LABELS = {
   prompt: () => t("Description"),
   size: () => t("Master size"),
   references: () => t("Made from"),
+  style_references: () => t("Style pictures"),
   seed: () => t("Seed"),
   family: () => t("Model"),
   post: () => t("Post-steps"),
@@ -114,7 +115,7 @@ const LABELS = {
 
 /** Fields every kind has that an artist seldom touches: folded under More.
  *  The description and the kind's own fields stay out in the open. */
-const MORE = new Set(["size", "references", "seed", "family", "post", "pivot", "layer", "alpha", "targets", "notes"]);
+const MORE = new Set(["size", "references", "style_references", "seed", "family", "post", "pivot", "layer", "alpha", "targets", "notes"]);
 
 /** What cannot be changed on an asset once it is made. */
 const FIXED = new Set(["name", "kind"]);
@@ -1115,7 +1116,10 @@ class Forge {
         this.makes(recipe.kind) ? el("button", {
           class: "mmc-bn-run mmc-fg-make", disabled: Boolean(this.working || row.making),
           title: t("Render it on ComfyUI from the recipe and the project's look"),
-          onclick: () => this.make({ assets: [recipe.name] }, t("Queueing {name}", { name: recipe.name })),
+          // Again means differently: a fresh seed, which the server writes into
+          // the recipe so what comes back can still be made again.
+          onclick: () => this.make({ assets: [recipe.name], new_seed: row.status !== "planned" },
+            t("Queueing {name}", { name: recipe.name })),
         }, row.making ? [spinner(), el("span", { text: t("Rendering") })]
            : [row.status === "planned" ? t("Make") : t("Make again")]) : null,
         el("div", { class: "mmc-fg-pair" }, [

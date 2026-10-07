@@ -95,6 +95,11 @@
       "minItems": 2,
       "type": "array"
     },
+    "style_references": {
+      "default": true,
+      "description": "whether the project's style pictures go into this asset's render; off for an asset whose family cannot read them, or that should not borrow what they show",
+      "type": "boolean"
+    },
     "targets": {
       "default": {},
       "description": "per-target overrides, {target: {...}}; export only",

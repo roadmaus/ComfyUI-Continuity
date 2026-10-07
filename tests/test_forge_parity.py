@@ -313,7 +313,8 @@ with open(os.path.join(work, "pulled", "assets", "character", "hero", "masters",
 
 ok("import again", "import", "mygame", "hero", "hero.png")
 check("history lists the replaced set", len(ok("history", "history", "mygame", "hero").splitlines()), 1)
-check("rm prints the asset", ok("rm", "rm", "mygame", "coin").strip(), "coin")
+ok("add another", "add", "mygame", "--kind", "icon", "--name", "coin2")
+check("rm takes several assets", ok("rm", "rm", "mygame", "coin", "coin2").split(), ["coin", "coin2"])
 
 # ---- making ------------------------------------------------------------------------
 

@@ -27,6 +27,9 @@ but are not a capability a client has, so the parity test does not ask the CLI
 for a command that calls them.
 """
 
+import os
+import re
+
 from . import joints, kinds, make as making, pose as poses, project as projects, targets
 from .problems import ForgeError
 
@@ -117,11 +120,39 @@ def _object(params, key):
 # ---- discovery -------------------------------------------------------------------
 
 
+def _pack():
+    """The pack's version and, in a git checkout, its commit: what a client on
+    another machine needs to say which code answered it. Read off the files,
+    because a server with no shell is exactly where nobody can run `git`."""
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    out = {"version": None, "commit": None}
+    try:
+        with open(os.path.join(root, "pyproject.toml"), encoding="utf-8") as handle:
+            found = re.search(r'^version\s*=\s*"([^"]+)"', handle.read(), re.M)
+        out["version"] = found.group(1) if found else None
+        with open(os.path.join(root, ".git", "HEAD"), encoding="utf-8") as handle:
+            head = handle.read().strip()
+        if head.startswith("ref: "):
+            ref = head[5:]
+            path = os.path.join(root, ".git", *ref.split("/"))
+            if os.path.isfile(path):
+                with open(path, encoding="utf-8") as handle:
+                    head = handle.read().strip()
+            else:
+                with open(os.path.join(root, ".git", "packed-refs"), encoding="utf-8") as handle:
+                    head = next((line.split()[0] for line in handle if line.strip().endswith(" " + ref)), "")
+        out["commit"] = head[:12] or None
+    except OSError:
+        pass
+    return out
+
+
 def capabilities(host, params):
     """What this machine can make: the kinds, the modes, the targets and the
     still families. Engines and optional packs join this as they land."""
     return {"kinds": [{"id": k, "help": v["help"]} for k, v in kinds.KINDS.items()],
-            **targets.catalogue(), "families": host.families(), "makes": list(making.MAKEABLE)}
+            **targets.catalogue(), "families": host.families(), "makes": list(making.MAKEABLE),
+            "pack": _pack()}
 
 
 def list_targets(host, params):
@@ -280,7 +311,10 @@ def check(host, params):
 def sheet(host, params):
     from . import review
 
-    return review.sheet(host.base, _text(params, "project"), _text(params, "asset"))
+    size = params.get("size")
+    if isinstance(size, str) and size.isdigit():
+        size = int(size)
+    return review.sheet(host.base, _text(params, "project"), _text(params, "asset"), size)
 
 
 def export(host, params):
@@ -296,10 +330,12 @@ def export(host, params):
 def make(host, params):
     """Queue the renders that make assets: the named ones, or every planned
     (`missing`) or stale (`stale`) one. `dry_run` says what would be queued.
-    Renders are native unless `fast`, which throws the family's turbo switch."""
+    Renders are native unless `fast`, which throws the family's turbo switch.
+    `new_seed` gives each asset a fresh seed, written into its recipe."""
     return making.start(host, host.base, _text(params, "project"), _names(params, "assets"),
                         _flag(params, "missing"), _flag(params, "stale"), _flag(params, "dry_run"),
-                        _flag(params, "fast"), _text(params, "quality", required=False))
+                        _flag(params, "fast"), _text(params, "quality", required=False),
+                        _flag(params, "new_seed"))
 
 
 def jobs(host, params):

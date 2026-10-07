@@ -124,6 +124,7 @@ hero = make.plan(host, base, keep, find("hero"))
 check("a character is one render", len(hero), 1)
 words = hero[0]["body"]["prompt"]
 check("a character is a model sheet", make.SHEET in words, True)
+check("...said so it fits a creature with four legs", "arms" in make.SHEET, False)
 check("its words come first", words.startswith("a lantern-bearer in a green cloak."), True)
 check("the style clause is in it", "Hand-painted, warm light." in words, True)
 check("a character with alpha asks for it", words.endswith(make.ALPHA), True)
@@ -135,6 +136,7 @@ check("a still", hero[0]["body"]["still"], True)
 hall = make.plan(host, base, keep, find("hall"))[0]["body"]
 check("a background has no alpha sentence", make.ALPHA in hall["prompt"], False)
 check("a background is not a sheet", make.SHEET in hall["prompt"], False)
+check("a background is not one thing alone", make.ALONE["icon"] in hall["prompt"], False)
 check("1920x1080 is 16:9", hall["aspect"], "16:9")
 check("its short edge is its height", hall["short_edge"], 1080)
 
@@ -143,6 +145,7 @@ check("a set is one render per name", [r["stem"] for r in potions], ["01-red-pot
 check("each render names its item first", potions[1]["body"]["prompt"].startswith("blue potion. a glass potion"),
       True)
 check("a set shares one seed", len({r["body"]["seed"] for r in potions}), 1)
+check("an icon is one thing alone", make.ALONE["icon"] in potions[0]["body"]["prompt"], True)
 check("a 256x320 master is the nearest aspect, 4:5",
       make.plan(host, base, keep, find("chest"))[0]["body"]["aspect"], "4:5")
 check("a small master renders at the family's smallest edge",
@@ -168,9 +171,15 @@ check("pictures in order, all references",
       body["pictures"], [{"filename": "hero-face.png", "as": "ref"},
                          {"filename": "continuity/forge/keep/style/look.png [output]", "as": "ref"},
                          {"filename": "board.png", "as": "ref"}])
-check("the style pictures are cited after the recipe's", "the art style of @pic-2 and @pic-3." in body["prompt"],
+check("the style pictures are cited after the recipe's", "the art style of @pic-2 and @pic-3:" in body["prompt"],
       True)
 check("the style's LoRAs ride", body["loras"], [{"name": "painted.safetensors", "strength": 0.6}])
+check("the style pictures lend their look only", "take only their style, not what they show" in body["prompt"],
+      True)
+body = make.plan(host, base, keep, {**find("hero"), "references": ["hero-face.png"], "style_references": False})[0]["body"]
+check("an asset can leave the style's pictures out", [p["filename"] for p in body["pictures"]], ["hero-face.png"])
+check("...and is not told to copy them", "art style of" in body["prompt"], False)
+check("...but keeps the style's LoRAs", len(body["loras"]), 1)
 project.set_style(base, "keep", {"references": [], "loras": []})
 keep = project.load(base, "keep")
 
@@ -258,10 +267,65 @@ stand.states["p9"] = ("done", None)
 check("a render that finished elsewhere is astray",
       api.jobs(host, {"project": "keep", "asset": "hero"})["takes"][-1]["code"], "make.astray")
 
-stand.refuse = "Qwen Image 2.1 is missing its VAE."
-refusal = refused("the render route's refusal", lambda: make.start(host, base, "keep", ["hero"]), "make.refused")
-check("...in its own words", refusal.problem if refusal else None, "Qwen Image 2.1 is missing its VAE.")
-stand.refuse = None
+# A refusal from the render route fails that asset's take and the batch goes
+# on: one family that cannot read the style board does not stop the others.
+real_render = host._render
+host._render = lambda body: (_ for _ in ()).throw(ForgeError("Krea 2 reads style references only through "
+                                                              "a reference LoRA.", "make.refused")) \
+    if body["prompt"].startswith("a lantern") else real_render(body)
+answer = make.start(host, base, "keep", ["hero", "chest"])
+check("a refused render fails its take, in the route's words",
+      [(t["asset"], t["state"], t.get("code")) for t in answer["takes"]],
+      [("hero", "failed", "make.refused"), ("chest", "queued", None)])
+check("...and the next asset is still queued", stand.bodies[-1]["prompt"].startswith("an iron-bound chest"), True)
+host._render = real_render
+stand.land(len(stand.bodies) - 1, cutout(1024, 1280))
+api.jobs(host, {"project": "keep"})
+
+# Make again, differently: a fresh seed, in the recipe before the render.
+before = project.find(project.load(base, "keep"), "chest")["seed"]
+make.start(host, base, "keep", ["chest"], new_seed=True)
+after = project.find(project.load(base, "keep"), "chest")["seed"]
+check("a new seed is written into the recipe", after is not None and after != before, True)
+check("...and is the one rendered", stand.bodies[-1]["seed"], after)
+seeds = {r["name"]: r["seed"] for r in project.load(base, "keep")["assets"]}
+refused("a refused new-seed make", lambda: make.start(host, base, "keep", ["hero", "grass"], new_seed=True),
+        "make.seamless")
+check("...changes no recipe", {r["name"]: r["seed"] for r in project.load(base, "keep")["assets"]}, seeds)
+check("without it, the recipe's seed again",
+      make.start(host, base, "keep", ["hall"])["takes"][0]["renders"][0]["seed"],
+      style.seed(project.find(project.load(base, "keep"), "hall"), project.load(base, "keep")["style"]))
+
+# The 2.1 VAE's alpha noise floor is cleared, so the alpha box is the subject.
+noisy = cutout(1024, 1280)
+noisy[..., 3][noisy[..., 3] == 0] = 2
+stand.land(len(stand.bodies) - 2, noisy)
+api.jobs(host, {"project": "keep"})
+master = np.asarray(Image.open(os.path.join(base, "keep", "assets", "icon", "chest", "masters", "chest.png")))
+box = np.argwhere(master[..., 3] > 0)
+check("decoder noise in the alpha is cleared", (box.min(0).tolist(), box.max(0).tolist()) != ([0, 0], [319, 255]),
+      True)
 
 refused("an unknown take", lambda: api.jobs(host, {"project": "keep", "takes": "nope"}), "take.missing")
 check("takes by id", len(api.jobs(host, {"project": "keep", "takes": hero_take["take"]})["takes"]), 1)
+
+# A project written before `style_references` existed: its recipes load with
+# the field at its default, and what was made from them is not stale for it.
+import json  # noqa: E402
+
+project.create(base, "older")
+project.add_asset(base, "older", {"kind": "icon", "name": "coin", "prompt": "a coin"})
+make.start(host, base, "older", ["coin"])
+stand.land(len(stand.bodies) - 1, cutout(1024, 1024))
+api.jobs(host, {"project": "older"})
+for path in (os.path.join(base, "older", "project.json"),
+             os.path.join(base, "older", "assets", "icon", "coin", "recipe.json")):
+    with open(path, encoding="utf-8") as handle:
+        data = json.load(handle)
+    for recipe in data.get("assets", []) + ([data["recipe"]] if "recipe" in data else []):
+        recipe.pop("style_references", None)
+    with open(path, "w", encoding="utf-8") as handle:
+        json.dump(data, handle)
+check("an older recipe loads with the field", project.find(project.load(base, "older"), "coin")["style_references"],
+      True)
+check("...and is not stale for it", project.status(base, "older")["assets"][0]["status"], "made")

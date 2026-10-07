@@ -3211,4 +3211,5 @@ export const zh = {
   "Queueing {name}": "正在把 {name} 加入队列",
   "Make": "制作",
   "Make again": "重新制作",
+  "Style pictures": "风格图片",
 };

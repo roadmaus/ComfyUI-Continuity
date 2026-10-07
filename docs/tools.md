@@ -284,11 +284,15 @@ zoom so pixel art is not blurred. The inspector on the right is the asset:
 - **Masters**: **Make** renders the asset on ComfyUI from its recipe and the
   project's look, on the project's still model (Qwen Image 2.1 by default),
   and the result becomes its masters when it lands; the row's mark spins while
-  it is on the queue. **Make again** renders a fresh set; the old one is kept.
+  it is on the queue. **Make again** renders it on a new seed, written into the
+recipe so it can be made again; the old set is kept in `.versions/`.
   **Make N** at the top of the shelf renders every planned asset that can be
-  made. Characters come out as a model sheet (neutral pose, arms away from the
-  body), and anything with alpha is asked for a transparent background, which
-  Qwen Image 2.1 draws itself. An icon or interface set is one render per
+  made. Characters come out as a model sheet (neutral pose, limbs clear of the
+  body), icons and interface pieces as one thing alone, and anything with
+  alpha is asked for a transparent background, which Qwen Image 2.1 draws
+  itself. The project's style pictures are passed for their look only; turn
+  **Style pictures** off on an asset whose model cannot read them (Krea 2
+  refuses them without a reference LoRA). An icon or interface set is one render per
   name, on one seed. Sprites, seamless tiles, parallax layers, materials and
   sounds are not made here yet.
   Or bring pictures in: **From disk**, **From ComfyUI**, or drop pictures

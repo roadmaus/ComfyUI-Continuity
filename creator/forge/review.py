@@ -87,30 +87,36 @@ def _side_by_side(pictures, gap=8, background=(255, 255, 255)):
     return out
 
 
-def _thumb(rgba, pixel=False):
+def _thumb(rgba, pixel=False, edge=None):
+    edge = edge or THUMB
     height, width = rgba.shape[:2]
     if pixel:
-        factor = max(1, THUMB // max(width, height))
+        factor = max(1, edge // max(width, height))
         big = image.upscale_nearest(rgba, factor)
     else:
-        scale = min(1.0, THUMB / max(width, height))
+        scale = min(1.0, edge / max(width, height))
         big = image.resize(rgba, (max(1, round(width * scale)), max(1, round(height * scale))))
     return image.over(image.checker(*big.shape[:2]), big)
 
 
-def sheet(base, name, asset):
-    """One PNG: the masters, then each target's frames. -> {path, rows}."""
+def sheet(base, name, asset, edge=None):
+    """One PNG: the masters, then each target's frames, each drawn no larger
+    than `edge` pixels on its long side (`THUMB` unless asked: a face is not
+    judged at 192). -> {path, rows}."""
+    if edge is not None and (isinstance(edge, bool) or not isinstance(edge, int) or not 64 <= edge <= 2048):
+        raise ForgeError("a sheet's size is the long side of each picture, 64 to 2048 pixels",
+                         "request.field", field="size")
     project = projects.load(base, name)
     recipe = projects.find(project, asset)
     masters = build.read_masters(base, project, recipe)
-    rows = [("masters", [_thumb(p) for _, p in masters], [])]
+    rows = [("masters", [_thumb(p, edge=edge) for _, p in masters], [])]
     for t in project["targets"]:
         try:
             built = build.run(base, project, recipe, t)
         except ForgeError as problem:
             rows.append((t, [], [problem.problem]))
             continue
-        rows.append((t, [_thumb(f, built.palette is not None) for f in built.frames],
+        rows.append((t, [_thumb(f, built.palette is not None, edge) for f in built.frames],
                      [p["problem"] for p in built.problems]))
     label_h, gap = 16, 8
     strips = []

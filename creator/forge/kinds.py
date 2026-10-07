@@ -27,9 +27,14 @@ class Field:
     of strings), `object` (a JSON object, passed through), `objects` (a list
     of them). `cost` is false for fields that do not change what is made —
     notes, export overrides — so editing them never marks an asset stale.
+    `added` marks a field that arrived after recipes were first written: at
+    its default it means what a recipe without it meant, so it stays out of
+    the fingerprint there, and assets made before it existed do not all turn
+    stale the day it lands.
     """
 
-    def __init__(self, name, type, default, help, choices=None, low=None, high=None, cost=True):
+    def __init__(self, name, type, default, help, choices=None, low=None, high=None, cost=True,
+                 added=False):
         self.name = name
         self.type = type
         self.default = default
@@ -38,6 +43,7 @@ class Field:
         self.low = low
         self.high = high
         self.cost = cost
+        self.added = added
 
     def schema(self):
         base = {
@@ -129,6 +135,8 @@ COMMON = (
     Field("size", "size", None, "the master's size in pixels, [width, height]; the kind's default if left out",
           high=8192),
     Field("references", "names", [], "pictures this asset is made from, by name (project files or ComfyUI input/)"),
+    Field("style_references", "bool", True, "whether the project's style pictures go into this asset's render; "
+          "off for an asset whose family cannot read them, or that should not borrow what they show", added=True),
     Field("seed", "int", None, "fixed seed; derived from the project seed and the name if left out", low=0,
           high=2 ** 32 - 1),
     Field("family", "str", None, "the still family that makes it; the project's default if left out"),
@@ -332,5 +340,6 @@ def normalise(entry, where=None):
 
 def costly(recipe):
     """The part of a recipe that decides what is made: what staleness is about."""
-    free = {f.name for f in fields(recipe["kind"]) if not f.cost}
+    free = {f.name for f in fields(recipe["kind"])
+            if not f.cost or (f.added and recipe.get(f.name, f.default) == f.default)}
     return {k: v for k, v in recipe.items() if k not in free}
