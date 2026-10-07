@@ -167,6 +167,11 @@ forge.py pose mygame render wave --views 0,90 --sheet --out ./wave   # one pictu
   `shoulder_l.forward=90` alone points the arm ahead *and* 40° out. Say
   `shoulder_l.raise=0` too for straight ahead. `show --joints` prints what a
   frame is, every joint a line, when in doubt.
+- `body.*` turns the whole figure about its middle: `body.bend=90` lays it
+  face down (crawling, swimming), `-90` on its back, `body.lean=90` on its
+  side. Use it, not the raw `Root` bone, which pivots at the floor and carries
+  the figure out of frame. A sprite's direction is still the render's `--yaw`,
+  which turns a lying figure on the floor.
 - `spine.*` is shared by the three spine bones, a natural curve. `hand_l` and
   `hand_r` take a shape: `fist`, `open`, `chop` (Pose Studio's own) or `rest`.
 - A value past a joint's limits is refused with the range (`pose.limit`),

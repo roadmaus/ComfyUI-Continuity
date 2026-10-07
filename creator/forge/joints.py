@@ -59,6 +59,11 @@ rotation is read by reflecting it into the left (`[x, -y, -z]`, the rule
 `shoulder_r.raise=90` lifts the right arm to its own side and every sign means
 the same on both sides.
 
+**The whole figure is a joint too.** `body` turns the model itself (the
+pose's `modelRotation`, about the figure's middle): `body.bend=90` lays it
+face down, as for a crawl. Tipping the `Root` bone instead pivots at the floor
+under the feet and carries the figure out of the capture's frame.
+
 **Hands are shapes.** Pose Studio ships three hand presets (open, chop, fist)
 as finger quaternions in `vnccs_hand_presets.mjs`; `HANDS` is the left half of
 that table, copied, and `tests/test_pose_joints.py` holds it against the
@@ -274,6 +279,10 @@ PINKY_BASE = (4.745, 1.764, 2.124)
 X, Y, Z = (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0)
 DOWN = (0.0, -1.0, 0.0)
 
+# `body`'s one "bone": the model's own rotation, kept beside the bones while a
+# pose is read or written so the joint maths need not know it is not a bone.
+MODEL = "modelRotation"
+
 
 def _neg(v):
     return tuple(-x for x in v)
@@ -361,6 +370,10 @@ def _joints():
     limb = (_neg(X), Z, Y)          # forward, raise (outward), twist (outward)
     arm = (Z, _neg(X), Y)           # raise first, so it reaches overhead
     return [
+        Joint("body", (MODEL,), ("bend", "lean", "turn"), centre, ((-180, 180), (-90, 90), (-180, 180)),
+              words="the whole figure, about its middle: bend 90 lays it face down (a crawl), -90 on its back; "
+                    "lean 90 on its own left side; turn faces it to its own left. Directions for a sprite "
+                    "are the render's yaw, not this"),
         Joint("spine", ("spine_01", "spine_02", "spine_03"), ("bend", "lean", "turn"), centre,
               ((-40, 90), (-45, 45), (-70, 70)),
               words="the back, shared by its three bones: bend forward (+) or back (-), lean to its "
@@ -399,7 +412,7 @@ def _joints():
 
 
 JOINTS = {j.name: j for j in _joints()}
-SIDED = frozenset(n for n, j in JOINTS.items() if not j.bones[0].startswith(("spine", "neck", "head")))
+SIDED = frozenset(n for n, j in JOINTS.items() if not j.bones[0].startswith(("spine", "neck", "head", MODEL)))
 
 # ---- hands -----------------------------------------------------------------------
 
@@ -494,6 +507,10 @@ def _bone_names(joint, side):
     return [f"{b}_{side}" if side else b for b in joint.bones]
 
 
+def _table(pose):
+    return {**pose["bones"], MODEL: pose.get("modelRotation") or [0.0, 0.0, 0.0]}
+
+
 def _angles(bones, joint, side):
     """A joint's angles in `{bone: rotation}`, unrounded; a shared joint's
     bones add up."""
@@ -508,7 +525,7 @@ def _angles(bones, joint, side):
 def joint_angles(pose, name):
     """One joint's three angles in a pose, in degrees, rounded to a tenth."""
     joint, side = _parts(name)
-    return {m: round(v, 1) + 0.0 for m, v in _angles(pose["bones"], joint, side).items()}
+    return {m: round(v, 1) + 0.0 for m, v in _angles(_table(pose), joint, side).items()}
 
 
 def read(pose):
@@ -534,7 +551,7 @@ def set_joints(pose, motions):
     if not isinstance(motions, dict) or not motions:
         raise ForgeError("joints is an object of joint.motion: degrees, or hand_l/hand_r: a shape",
                          "pose.shape")
-    bones = dict(pose["bones"])
+    bones = _table(pose)
     wanted = {}
     for key, value in motions.items():
         if key in ("hand_l", "hand_r"):
@@ -562,7 +579,9 @@ def set_joints(pose, motions):
         rotation = joint.write(share)
         for bone in _bone_names(joint, side):
             bones[bone] = mirror_rotation(rotation) if side == "r" else rotation
-    return {**pose, "bones": {k: [v + 0.0 for v in r] for k, r in sorted(bones.items()) if not _resting(r)}}
+    model = [v + 0.0 for v in bones.pop(MODEL)]
+    return {**pose, "modelRotation": model,
+            "bones": {k: [v + 0.0 for v in r] for k, r in sorted(bones.items()) if not _resting(r)}}
 
 
 def mirrored_keys(motions):

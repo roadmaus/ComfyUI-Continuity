@@ -46,6 +46,7 @@ import base64
 import hashlib
 import io
 import json
+import math
 import os
 import struct
 import threading
@@ -474,12 +475,21 @@ def remove(base, project, name):
 
 
 def turned(pose, yaw):
-    """The pose with the model turned `yaw` degrees more about its up axis —
-    how a set is drawn from another direction (spec §7.9)."""
+    """The pose with the model turned `yaw` degrees more about the world's up
+    axis — how a set is drawn from another direction (spec §7.9).
+
+    A standing figure's turn is its Euler Y, so adding to it is the turn, and
+    the numbers (and so the frame cache's names) stay as they always were. A
+    figure tipped over (`body.bend=90`, a crawl) is not: adding to its Y would
+    roll it about its own length. Then the turn is composed in front of its
+    rotation instead."""
     if not yaw:
         return pose
     x, y, z = pose["modelRotation"]
-    return {**pose, "modelRotation": [x, (y + yaw) % 360, z]}
+    if not x and not z:
+        return {**pose, "modelRotation": [x, (y + yaw) % 360, z]}
+    world = rig.axis_angle((0.0, 1.0, 0.0), math.radians(yaw))
+    return {**pose, "modelRotation": rig.matrix_degrees(rig._mul(world, rig.degrees_matrix([x, y, z])))}
 
 
 # How far the camera may look down on (or up at) the figure. Straight down is
@@ -633,7 +643,7 @@ def plan_render(base, project, name, frames=None, width=None, height=None, yaw=0
     return data, width, height, pitch, wanted, missing
 
 
-def contact_sheet(base, project, name, frames):
+def contact_sheet(base, project, name, frames, yaw=0.0):
     """Drawn frames -> one PNG, a row per yaw, a column per frame, each labelled:
     the agent's single look at a pose from several sides. Every frame must be
     drawn already (`render` first); the sheet is derived and cached by what is
@@ -652,7 +662,7 @@ def contact_sheet(base, project, name, frames):
                          "pose.undrawn", frames=missing)
     rows = {}
     for f in frames:
-        rows.setdefault(f.get("yaw", 0.0), []).append(f)
+        rows.setdefault(f.get("yaw", yaw), []).append(f)
     key = hashlib.sha256("|".join(f["path"] for f in frames).encode()).hexdigest()[:12]
     rel = f"{CACHE}/{name}/sheet-{key}.png"
     if not os.path.isfile(projects.inside(root, rel)):

@@ -96,6 +96,10 @@ check("an arm swung past level in front reads as that, not as its other Euler tr
       {m: v for m, v in joints.joint_angles(reach, "shoulder_l").items() if m != "twist"},
       {"raise": 0.0, "forward": 120.0})
 
+lying = joints.set_joints(REST, {"body.bend": 90})
+check("body turns the model itself, not a bone", (lying["modelRotation"], lying["bones"]), ([90.0, 0.0, 0.0], {}))
+check("and reads back", joints.joint_angles(lying, "body")["bend"], 90.0)
+
 spine = joints.set_joints(REST, {"spine.bend": 30})["bones"]
 check("the spine's bend is shared by its three bones", [round(spine[b][0], 6) for b in
                                                         ("spine_01", "spine_02", "spine_03")], [10.0] * 3)

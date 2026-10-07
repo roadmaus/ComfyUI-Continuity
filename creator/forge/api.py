@@ -397,7 +397,8 @@ def sheet_pose(host, params):
     *_, wanted, _ = poses.plan_render(host.base, project, name, frames, params.get("width"),
                                       params.get("height"), params.get("yaw"), params.get("pitch"),
                                       params.get("views"))
-    return {"project": project, "set": name, "path": poses.contact_sheet(host.base, project, name, wanted)}
+    return {"project": project, "set": name,
+            "path": poses.contact_sheet(host.base, project, name, wanted, poses._yaw(params.get("yaw")))}
 
 
 def pose_job(host, params):

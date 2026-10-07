@@ -772,7 +772,12 @@ than Pose Studio:
   with — an agent cannot know which of three numbers bends an elbow, or that
   the standing figure's elbows are already bent 47°. So a pose can be set in
   words: `elbow_l.bend=90`, `shoulder_r.raise=150`, `spine.lean=-10`,
-  `hand_l=fist`. A joint is a bone and three named motions, each a turn about
+  `hand_l=fist`, `body.bend=90` (the whole figure, through its
+  `modelRotation`, laid face down for a crawl: tipping the `Root` bone
+  instead pivots at the floor and leaves the capture's frame, as the first
+  crawl on the lab showed; a tipped figure's render yaw is composed in front
+  of its rotation, so it turns on the floor rather than rolling). A joint is a
+  bone and three named motions, each a turn about
   an axis fixed in the rig with its sign chosen so + means what the name says
   (`raise` away from the body, `bend` closing, `turn`/`lean` to the figure's
   own left, the forearm's `twist` palm up — each checked by drawing it on the

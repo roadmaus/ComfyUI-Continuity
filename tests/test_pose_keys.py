@@ -117,6 +117,15 @@ refused("a key past the end", lambda: pose.make_set("nod", poses, timing={"keys"
 refused("an ease nobody knows", lambda: pose.make_set("nod", poses, timing={"keys": [{"frame": 0, "ease": "bounce"}]}),
         "pose.ease")
 
+# ---- directions of a figure that is not standing ---------------------------------
+
+standing = pose.turned(frame({}), 90)
+check("a standing figure is turned by its yaw, numbers as before", standing["modelRotation"], [0.0, 90.0, 0.0])
+crawling = pose.turned({**frame({}), "modelRotation": [90.0, 0.0, 0.0]}, 90)
+facing = joints._apply(joints.degrees_matrix(crawling["modelRotation"]), (0.0, 1.0, 0.0))
+check("a figure lying face down is turned on the floor, not rolled", [round(v, 6) + 0.0 for v in facing],
+      [1.0, 0.0, 0.0])
+
 # ---- through the routes ----------------------------------------------------------
 
 call("/pose/new", project="game", set="wave")
