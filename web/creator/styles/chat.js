@@ -86,7 +86,7 @@ export const css = `
 .mmc-ch-bot .mmc-ch-said { max-width: 100%; color: var(--mmc-text); }
 .mmc-ch-said {
   font-size: calc(14px * var(--mmc-type)); line-height: 1.55;
-  white-space: pre-wrap; word-break: break-word;
+  white-space: pre-wrap; word-break: break-word; user-select: text;
 }
 .mmc-ch-bad .mmc-ch-said, .mmc-ch-note.mmc-ch-bad { color: var(--mmc-bad); }
 .mmc-ch-thinking { display: flex; align-items: center; gap: 10px; color: var(--mmc-faint); }
