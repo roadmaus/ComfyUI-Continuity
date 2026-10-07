@@ -2,8 +2,9 @@
 
     python3 tests/test_pose_symmetry.py
 
-`web/creator/forge/mirror.js` has no Python twin (the server never mirrors a
-pose), so this runs it in node against the cases that matter: every bone's twin
+`web/creator/forge/mirror.js` mirrors as the bench poses; `joints.py` has the
+server's half (`pose flip`, `set --mirror`), and the two must flip a pose the
+same way. This runs the JS in node against the cases that matter: every bone's twin
 is a bone the server accepts, a flip twice is the pose it started as, and a
 drag on one side is copied, reflected, onto the other and onto nothing else.
 The reflection itself, `[x, -y, -z]`, rests on the rig's world-aligned rest
@@ -25,13 +26,14 @@ layout.skip_without_node()
 package = types.ModuleType("forgepkg")
 package.__path__ = [os.path.join(layout.PY_ROOT, "forge")]
 sys.modules["forgepkg"] = package
-for name in ("problems", "kinds", "targets", "style", "project", "manifest", "pose"):
+for name in ("problems", "kinds", "targets", "style", "project", "manifest", "joints", "pose"):
     spec = importlib.util.spec_from_file_location(f"forgepkg.{name}",
                                                   os.path.join(layout.PY_ROOT, "forge", f"{name}.py"))
     module = importlib.util.module_from_spec(spec)
     sys.modules[f"forgepkg.{name}"] = module
     spec.loader.exec_module(module)
 pose = sys.modules["forgepkg.pose"]
+joints = sys.modules["forgepkg.joints"]
 
 from harness import check, passed
 
@@ -73,6 +75,8 @@ check("a flip swaps the sides and reflects them", got["once"]["bones"],
 check("an offset reflects across the centre", got["once"]["bonePositions"], {"Root": [-0.5, 1.0, 0.25]})
 check("a figure turned one way is turned the other", got["once"]["modelRotation"], [0, 270, 0])
 check("two flips are the pose it was", got["twice"], WALK)
+check("the server flips a pose as the bench does", joints.flip_pose(WALK), got["once"])
+check("and twins a bone as the bench does", [joints.twin(b) for b in bones], got["twins"])
 check("under symmetry, the arm posed on the left is posed on the right",
       got["edit"]["bones"], {"head": [5.0, 0.0, 0.0], "lowerarm_l": [0.0, -40.0, 0.0], "lowerarm_r": [0.0, 40.0, 0.0]})
 check("and put back to rest, both sides rest", got["back"]["bones"], {"head": [5.0, 0.0, 0.0]})

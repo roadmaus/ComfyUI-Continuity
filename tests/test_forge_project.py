@@ -24,7 +24,7 @@ from harness import FAILURES, check
 package = types.ModuleType("forgepkg")
 package.__path__ = [os.path.join(layout.PY_ROOT, "forge")]
 sys.modules["forgepkg"] = package
-for name in ("problems", "kinds", "targets", "style", "project", "manifest", "pose", "api"):
+for name in ("problems", "kinds", "targets", "style", "project", "manifest", "joints", "pose", "api"):
     spec = importlib.util.spec_from_file_location(f"forgepkg.{name}",
                                                   os.path.join(layout.PY_ROOT, "forge", f"{name}.py"))
     module = importlib.util.module_from_spec(spec)

@@ -24,7 +24,7 @@ from harness import FAILURES, check
 package = types.ModuleType("forgepkg")
 package.__path__ = [os.path.join(layout.PY_ROOT, "forge")]
 sys.modules["forgepkg"] = package
-for name in ("problems", "kinds", "targets", "style", "project", "manifest", "pose", "api"):
+for name in ("problems", "kinds", "targets", "style", "project", "manifest", "joints", "pose", "api"):
     spec = importlib.util.spec_from_file_location(f"forgepkg.{name}",
                                                   os.path.join(layout.PY_ROOT, "forge", f"{name}.py"))
     module = importlib.util.module_from_spec(spec)
@@ -86,7 +86,7 @@ refused("a body slider out of range", lambda: pose.normalise_body({"age": 120}),
 check("the male-only sliders are dropped, not refused",
       pose.normalise_body({"penis_len": 0.5, "age": 40})["age"], 40)
 check("a set of ours pastes as itself",
-      pose.from_paste({"name": "x", "fps": 8, "body": {"age": 30}, "poses": [{"bones": {}}]})[1:], ({"age": 30}, 8))
+      pose.from_paste({"name": "x", "fps": 8, "body": {"age": 30}, "poses": [{"bones": {}}]})[1:], ({"age": 30}, 8, None))
 check("Pose Studio in animation mode keeps its frames in image_poses",
       len(pose.from_paste({"poses": [], "image_poses": [{}, {}]})[0]), 2)
 check("a turn wraps", pose.turned(pose.rest_pose(), 450)["modelRotation"], [0.0, 90.0, 0.0])

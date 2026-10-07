@@ -333,6 +333,16 @@ built into the pack; you do not need it installed.
   act on the frame you are on (Flip swaps left and right, so a walk's second
   half is its first half flipped), and the **+** at the end of the strip adds a copy of
   it.
+- **Keys** let the bench draw frames for you. A key is a frame you pose;
+  every frame between two keys is drawn between them, and moves when you
+  change either key. A new set has every frame as a key. Press **This frame
+  is a key** (or K) on a frame to un-key it, and it is drawn from its
+  neighbours from then on; keyed frames carry a diamond on the strip, drawn
+  ones are paler. In a set with keys, the **+** adds an in-between, and
+  posing an in-between makes it a key. **Into the next key** is how a key
+  moves on: Even, Ease in, Ease out, Ease in and out, or Hold (stay until
+  the next key, for held frames). **Loop** carries the last key back into
+  the first, for a cycle such as a walk.
 - **Body** sets the mannequin's build for every frame. Match it to the
   character's proportions.
 - **Sprite camera** is how Draw frames sees the set. **Facing** turns the
@@ -345,6 +355,9 @@ built into the pack; you do not need it installed.
   needs a ComfyUI tab open in a browser, which the bench always is.
 
 Every edit is saved as you make it, to `poses/<set>.json` in the project.
+Agents pose the same sets from the command line, by joint and in words
+(`elbow_l.bend=90`, `shoulder_r.raise=150`, `hand_l=fist`), with the same
+keys; the skill's `forge.py joints` lists the words.
 Mixamo clips are yours to import: Adobe's terms let you use them in a game,
 not share them, so the pack ships none.
 

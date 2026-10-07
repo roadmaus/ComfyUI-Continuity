@@ -44,6 +44,7 @@ the CLI's stand-in server run this module on a bare Python.
 
 import base64
 import hashlib
+import io
 import json
 import os
 import struct
@@ -51,7 +52,7 @@ import threading
 import time
 import uuid
 
-from . import project as projects
+from . import joints as rig, project as projects
 from .problems import ForgeError
 
 FORMAT = 1
@@ -158,7 +159,7 @@ def _fps(value):
     return value
 
 
-def make_set(name, poses, fps=12, body=None, source=None):
+def make_set(name, poses, fps=12, body=None, source=None, timing=None):
     projects.check_name(name, "set")
     if not isinstance(poses, list) or not poses:
         raise ForgeError("a pose set needs at least one pose", "pose.empty", set=name)
@@ -168,28 +169,157 @@ def make_set(name, poses, fps=12, body=None, source=None):
            "poses": [normalise_pose(p) for p in poses]}
     if source:
         out["source"] = source
+    timing = timing or {}
+    if timing.get("keys"):
+        out["keys"] = _keys(timing["keys"], len(out["poses"]))
+        out["loop"] = bool(timing.get("loop"))
+        tween(out)
     return out
 
 
+# ---- keys and in-betweens ---------------------------------------------------------
+#
+# A set may name some of its frames as keys. Then those are the frames somebody
+# posed, and every other frame is drawn between the keys either side of it —
+# recomputed here whenever the set is written, so an edited key moves its
+# neighbours with it and nobody keeps in-betweens up to date by hand. A set
+# without `keys` is what it always was: every frame its own pose (an import, a
+# frame-by-frame set). The in-betweens are worked out on the server, not in the
+# vendored animation module, so an agent with no browser tab open gets them too,
+# and the bench and the CLI cannot disagree about them.
+#
+# Each key carries the ease of the stretch that starts at it. With `loop`, the
+# stretch after the last key runs on into the first, so a walk's last frames
+# lead back into its first; without it the frames past the last key hold it,
+# as the frames before the first hold that.
+#
+# Rotations are turned the short way between keys (quaternion slerp), never
+# blended as Euler numbers, which swing a limb through poses neither key has.
+# Bone translations are blended straight; a translation one key has and the
+# other does not cannot be, because the server does not know the bone's rest
+# position (it depends on the body), so that is refused with both frames named.
+
+EASES = ("linear", "ease-in", "ease-out", "ease-in-out", "hold")
+
+
+def ease(name, t):
+    if name == "ease-in":
+        return t * t
+    if name == "ease-out":
+        return 1 - (1 - t) * (1 - t)
+    if name == "ease-in-out":
+        return t * t * (3 - 2 * t)
+    if name == "hold":
+        return 0.0
+    return t
+
+
+def _keys(value, count):
+    """`[{"frame": 0, "ease": "linear"}, …]`, or bare frame numbers -> checked and sorted."""
+    if not isinstance(value, list) or not value:
+        raise ForgeError("keys is a list of frames, each {frame, ease}", "pose.keys")
+    out = {}
+    for item in value:
+        entry = item if isinstance(item, dict) else {"frame": item}
+        frame = entry.get("frame")
+        if isinstance(frame, bool) or not isinstance(frame, int) or not 0 <= frame < count:
+            raise ForgeError(f"a key is a frame from 0 to {count - 1}; got {frame!r}", "pose.keys", frame=frame)
+        how = entry.get("ease") or "linear"
+        if how not in EASES:
+            raise ForgeError(f"an ease is one of {', '.join(EASES)}; got {how!r}", "pose.ease", eases=list(EASES))
+        out[frame] = how
+    return [{"frame": f, "ease": out[f]} for f in sorted(out)]
+
+
+def _blend(a, b, t):
+    """Pose `a` -> pose `b` at `t` (0..1)."""
+    if t <= 0:
+        return a
+    if t >= 1:
+        return b
+    bones = {}
+    for name in sorted(set(a["bones"]) | set(b["bones"])):
+        qa = rig.matrix_quaternion(rig.degrees_matrix(a["bones"].get(name, [0.0, 0.0, 0.0])))
+        qb = rig.matrix_quaternion(rig.degrees_matrix(b["bones"].get(name, [0.0, 0.0, 0.0])))
+        value = rig.matrix_degrees(rig.quaternion_matrix(rig.slerp(qa, qb, t)))
+        if any(abs(v) > 1e-9 for v in value):
+            bones[name] = value
+    positions = {}
+    for name in sorted(set(a["bonePositions"]) | set(b["bonePositions"])):
+        pa, pb = a["bonePositions"].get(name), b["bonePositions"].get(name)
+        if pa is None or pb is None:
+            raise ForgeError(f"one key moves {name} and the other leaves it where the body puts it, and the "
+                             "server cannot blend between those; give both keys a position for it, or neither",
+                             "pose.tween_position", bone=name)
+        positions[name] = [x + (y - x) * t for x, y in zip(pa, pb)]
+    if a["modelRotation"] == b["modelRotation"]:
+        model = list(a["modelRotation"])
+    else:
+        qa = rig.matrix_quaternion(rig.degrees_matrix(a["modelRotation"]))
+        qb = rig.matrix_quaternion(rig.degrees_matrix(b["modelRotation"]))
+        model = rig.matrix_degrees(rig.quaternion_matrix(rig.slerp(qa, qb, t)))
+    return {"bones": bones, "bonePositions": positions, "modelRotation": model}
+
+
+def tween(data):
+    """Draw every frame that is not a key between the keys either side of it, in place."""
+    keys = data.get("keys")
+    if not keys:
+        return data
+    poses = data["poses"]
+    count = len(poses)
+    frames = [k["frame"] for k in keys]
+    eases = {k["frame"]: k["ease"] for k in keys}
+    first, last = frames[0], frames[-1]
+    for f in range(count):
+        if f in eases:
+            continue
+        before = max((k for k in frames if k < f), default=None)
+        after = min((k for k in frames if k > f), default=None)
+        if data.get("loop") and len(frames) > 1 and (before is None or after is None):
+            # The stretch from the last key round the end into the first.
+            span = count - last + first
+            into = f - last if f > last else count - last + f
+            poses[f] = _blend(poses[last], poses[first], ease(eases[last], into / span))
+        elif before is None or after is None:
+            poses[f] = dict(poses[after if before is None else before])
+        else:
+            poses[f] = _blend(poses[before], poses[after], ease(eases[before], (f - before) / (after - before)))
+    return data
+
+
+def _keyed(data, frame):
+    """A frame somebody just posed becomes a key, taking the ease of the stretch
+    it falls in, so editing an in-between keeps the edit."""
+    keys = data.get("keys")
+    if keys and frame not in [k["frame"] for k in keys]:
+        before = [k for k in keys if k["frame"] < frame]
+        how = (before[-1] if before else keys[-1])["ease"]
+        data["keys"] = _keys(keys + [{"frame": frame, "ease": how}], len(data["poses"]))
+
+
 def from_paste(data):
-    """What a person might paste -> `(poses, body, fps)`.
+    """What a person might paste -> `(poses, body, fps, timing)`.
 
     One pose (`{"bones": …}`), a list of them, a set of ours, or what Pose
     Studio keeps in its node's `pose_data` widget: its `poses` (or, in animation
-    mode, `image_poses`), its `mesh` sliders, and its timeline's rate.
+    mode, `image_poses`), its `mesh` sliders, and its timeline's rate. A set
+    of ours brings its keys and loop (`timing`), so the in-betweens are
+    worked out again from the pasted keys.
     """
     if isinstance(data, list):
-        return data, None, None
+        return data, None, None, None
     if not isinstance(data, dict):
         raise ForgeError("paste a pose, a list of poses, or Pose Studio's pose_data", "pose.shape")
     if "bones" in data and "poses" not in data:
-        return [data], None, None
+        return [data], None, None, None
     poses = data.get("poses") or data.get("image_poses")
     if not isinstance(poses, list) or not poses:
         raise ForgeError("that pose_data has no poses in it", "pose.empty")
     timeline = data.get("timeline") if isinstance(data.get("timeline"), dict) else {}
     fps = data.get("fps") or timeline.get("fps")
-    return poses, data.get("body") or data.get("mesh"), fps if isinstance(fps, (int, float)) else None
+    timing = {"keys": data["keys"], "loop": data.get("loop")} if data.get("keys") else None
+    return poses, data.get("body") or data.get("mesh"), fps if isinstance(fps, (int, float)) else None, timing
 
 
 # ---- storage --------------------------------------------------------------------
@@ -234,8 +364,8 @@ def exists(base, project, name):
     return os.path.exists(projects.inside(projects.folder(base, project), _rel(name)))
 
 
-def create(base, project, name, poses=None, fps=12, body=None, source=None, replace=False):
-    data = make_set(name, poses or [rest_pose()], fps, body, source)
+def create(base, project, name, poses=None, fps=12, body=None, source=None, replace=False, timing=None):
+    data = make_set(name, poses or [rest_pose()], fps, body, source, timing)
     with projects.LOCK:
         if exists(base, project, name) and not replace:
             raise ForgeError(f"{project} already has a pose set called {name!r}", "set.exists",
@@ -244,11 +374,13 @@ def create(base, project, name, poses=None, fps=12, body=None, source=None, repl
 
 
 def copy_from(base, project, ref):
-    """`walk/3` -> that frame's pose; `walk` -> the whole set, body and rate."""
+    """`walk/3` -> that frame's pose; `walk` -> the whole set, body, rate and keys."""
     name, _, frame = ref.partition("/")
     source = load(base, project, name)
-    chosen = [source["poses"][_index(source, frame)]] if frame else source["poses"]
-    return chosen, source["body"], source["fps"]
+    if frame:
+        return [source["poses"][_index(source, frame)]], source["body"], source["fps"], None
+    timing = {"keys": source["keys"], "loop": source.get("loop")} if source.get("keys") else None
+    return source["poses"], source["body"], source["fps"], timing
 
 
 def _index(data, frame):
@@ -262,16 +394,72 @@ def _index(data, frame):
     return index
 
 
-def set_bones(base, project, name, frame, rotations):
-    """Turn some bones of one frame, in degrees; the rest of the pose stays."""
+def set_bones(base, project, name, frame, rotations=None, joints=None, mirror=False):
+    """Turn some bones of one frame — raw (`rotations`, degrees on the bone's
+    own axes) or by joint (`joints`, `joints.set_joints`'s words) — the rest of
+    the pose stays. `mirror` does the same to the other side. In a set with
+    keys the frame becomes a key, and the in-betweens are drawn again."""
+    if not rotations and not joints:
+        raise ForgeError("say which bones or joints to turn", "pose.shape")
     with projects.LOCK:
         data = load(base, project, name)
         index = _index(data, frame)
         pose = data["poses"][index]
-        pose["bones"] = {**pose["bones"], **_bones(rotations, "rotation")}
+        turns = _bones(rotations, "rotation")
+        if mirror:
+            turns = {**{rig.twin(k): rig.mirror_rotation(v) for k, v in turns.items()}, **turns}
+        pose["bones"] = {**pose["bones"], **turns}
+        if joints:
+            pose = rig.set_joints(pose, rig.mirrored_keys(joints) if mirror else joints)
         # A zero rotation is the rest pose; Pose Studio leaves those out too.
         pose["bones"] = {k: v for k, v in sorted(pose["bones"].items()) if any(v)}
-        return save(base, project, data)
+        data["poses"][index] = pose
+        _keyed(data, index)
+        return save(base, project, tween(data))
+
+
+def flip(base, project, name, frame, to=None):
+    """Frame `frame` seen in a mirror, written over itself or over frame `to`:
+    a walk's second half is its first half flipped."""
+    with projects.LOCK:
+        data = load(base, project, name)
+        source = _index(data, frame)
+        target = source if to in (None, "") else _index(data, to)
+        data["poses"][target] = rig.flip_pose(data["poses"][source])
+        _keyed(data, target)
+        return save(base, project, tween(data))
+
+
+def set_timing(base, project, name, keys=None, length=None, loop=None, clear=False):
+    """A set's keys, its length and whether it loops. Growing a set adds frames
+    after its last (in-betweens when it has keys, copies of the last pose when
+    it has none); shrinking drops frames from the end, and their keys."""
+    with projects.LOCK:
+        data = load(base, project, name)
+        if length is not None:
+            if isinstance(length, bool) or not isinstance(length, int) or not 1 <= length <= MAX_FRAMES:
+                raise ForgeError(f"a set is 1 to {MAX_FRAMES} frames long", "pose.many", set=name)
+            poses = data["poses"]
+            data["poses"] = poses[:length] + [dict(poses[-1]) for _ in range(length - len(poses))]
+            if data.get("keys"):
+                kept = [k for k in data["keys"] if k["frame"] < length]
+                if not kept:
+                    raise ForgeError(f"{name} would lose every key; keep frame {data['keys'][0]['frame']} "
+                                     "or clear the keys", "pose.keys", set=name)
+                data["keys"] = kept
+        if clear:
+            data.pop("keys", None)
+            data.pop("loop", None)
+        elif keys is not None:
+            data["keys"] = _keys(keys, len(data["poses"]))
+        if loop is not None:
+            if not data.get("keys"):
+                raise ForgeError("only a set with keys loops: the loop is how its in-betweens wrap",
+                                 "pose.keys", set=name)
+            data["loop"] = bool(loop)
+        elif data.get("keys"):
+            data.setdefault("loop", False)
+        return save(base, project, tween(data))
 
 
 def remove(base, project, name):
@@ -404,31 +592,81 @@ def _pitch(value):
     return pitch
 
 
-def plan_render(base, project, name, frames=None, width=None, height=None, yaw=0, pitch=0):
+def _yaw(value):
+    try:
+        return float(value or 0)
+    except (TypeError, ValueError):
+        raise ForgeError("yaw is a number of degrees", "pose.yaw") from None
+
+
+def plan_render(base, project, name, frames=None, width=None, height=None, yaw=0, pitch=0, views=None):
     """What a render of these frames needs: every frame's file, and which of
-    them are not drawn yet."""
+    them are not drawn yet.
+
+    `views` draws each frame at several yaws in one job — front and side, so
+    one look shows a pose in depth — and tags every frame with its yaw."""
     data = load(base, project, name)
     width = _size(width, DEFAULT_SIZE[0])
     height = _size(height, DEFAULT_SIZE[1])
-    try:
-        yaw = float(yaw or 0)
-    except (TypeError, ValueError):
-        raise ForgeError("yaw is a number of degrees", "pose.yaw") from None
+    if views not in (None, "", []):
+        if not isinstance(views, list) or len(views) > 8:
+            raise ForgeError("views is a list of up to eight yaws, in degrees", "pose.yaw")
+        yaws, tagged = [_yaw(v) for v in views], True
+    else:
+        yaws, tagged = [_yaw(yaw)], False
     pitch = _pitch(pitch)
     indices = list(range(len(data["poses"]))) if frames in (None, "", []) else [_index(data, f) for f in frames]
     root = projects.folder(base, project)
     wanted, missing = [], []
-    for index in indices:
-        pose = turned(data["poses"][index], yaw)
-        rel = frame_rel(name, index, frame_key(pose, data["body"], width, height, pitch))
-        if os.path.isfile(projects.inside(root, rel)):
-            wanted.append({"frame": index, "path": rel, "marks": read_marks(root, rel)})
-        else:
-            wanted.append({"frame": index, "path": rel, "marks": None})
-            missing.append({"frame": index, "path": rel, "pose": pose})
+    for turn in yaws:
+        for index in indices:
+            pose = turned(data["poses"][index], turn)
+            rel = frame_rel(name, index, frame_key(pose, data["body"], width, height, pitch))
+            tag = {"yaw": turn} if tagged else {}
+            if os.path.isfile(projects.inside(root, rel)):
+                wanted.append({"frame": index, **tag, "path": rel, "marks": read_marks(root, rel)})
+            else:
+                wanted.append({"frame": index, **tag, "path": rel, "marks": None})
+                missing.append({"frame": index, "path": rel, "pose": pose})
     if len(missing) > MAX_RENDER:
         raise ForgeError(f"one render draws at most {MAX_RENDER} frames; ask for fewer", "pose.many")
     return data, width, height, pitch, wanted, missing
+
+
+def contact_sheet(base, project, name, frames):
+    """Drawn frames -> one PNG, a row per yaw, a column per frame, each labelled:
+    the agent's single look at a pose from several sides. Every frame must be
+    drawn already (`render` first); the sheet is derived and cached by what is
+    in it."""
+    from PIL import Image, ImageDraw  # ComfyUI has it; the storage half stays standard library
+
+    root = projects.folder(base, project)
+    missing = [f["frame"] for f in frames if not os.path.isfile(projects.inside(root, f["path"]))]
+    if missing:
+        raise ForgeError(f"frames {', '.join(map(str, missing))} are not drawn yet; render them first",
+                         "pose.undrawn", frames=missing)
+    rows = {}
+    for f in frames:
+        rows.setdefault(f.get("yaw", 0.0), []).append(f)
+    key = hashlib.sha256("|".join(f["path"] for f in frames).encode()).hexdigest()[:12]
+    rel = f"{CACHE}/{name}/sheet-{key}.png"
+    if not os.path.isfile(projects.inside(root, rel)):
+        pictures = {f["path"]: Image.open(projects.inside(root, f["path"])).convert("RGB") for f in frames}
+        width = max(p.width for p in pictures.values())
+        height = max(p.height for p in pictures.values())
+        label = 18
+        columns = max(len(r) for r in rows.values())
+        sheet = Image.new("RGB", (width * columns, (height + label) * len(rows)), "white")
+        draw = ImageDraw.Draw(sheet)
+        for r, (turn, row) in enumerate(rows.items()):
+            for c, f in enumerate(row):
+                x, y = c * width, r * (height + label)
+                sheet.paste(pictures[f["path"]], (x, y + label))
+                draw.text((x + 4, y + 3), f"frame {f['frame']}  yaw {turn:g}", fill=(40, 40, 40))
+        out = io.BytesIO()
+        sheet.save(out, "PNG")
+        projects.write_derived(root, rel, out.getvalue())
+    return rel
 
 
 # ---- jobs a browser tab does ---------------------------------------------------

@@ -137,11 +137,72 @@ forge.py pose mygame render walk --out ./walk                    # mannequin PNG
 forge.py pose mygame render walk --yaw 90 --frame 0 --frame 3    # from the side, two frames
 forge.py pose mygame render walk --pitch 30                      # looking down, for a 3/4 RPG
 forge.py pose mygame render sneak --yaw 90 --fit --json          # wider if a frame is cut off; marks per frame
-forge.py pose mygame new stand                                   # one rest pose
-forge.py pose mygame set stand 0 upperarm_l=0,0,-60 head=10,0,0  # turn bones, degrees
 forge.py pose mygame paste nod pose_data.json                    # from Pose Studio's node
 forge.py poses mygame
 ```
+
+### Posing by joint
+
+Pose a frame in words, not bone numbers. `forge.py joints` lists every joint,
+its motions and their limits; read it once before posing.
+
+```
+forge.py joints                                                  # the vocabulary
+forge.py pose mygame new wave                                    # one standing pose
+forge.py pose mygame set wave 0 shoulder_l.raise=150 elbow_l.bend=30 hand_l=open
+forge.py pose mygame set wave 0 hip_l.forward=60 knee_l.bend=80 --mirror   # both sides
+forge.py pose mygame show wave --joints --frame 0                # read a frame back as joints
+forge.py pose mygame render wave --views 0,90 --sheet --out ./wave   # one picture: front and side
+```
+
+- Angles are **anatomical**: `elbow.bend=0` is a straight arm, `90` a right
+  angle; `shoulder.raise=90` is the arm out level, `180` overhead;
+  `shoulder.forward=90` points it ahead; `hip.forward=90` lifts the thigh
+  level. Spine, neck, head, wrist, ankle and toes are 0 when standing. Signs
+  read as the names say, the same on both sides: `raise` lifts away from the
+  body, `bend` closes, `twist` (+) turns outward (the forearm: palm up),
+  `turn`/`lean` (+) go to the figure's **own** left.
+- **The standing figure is not at zero**: its arms are raised 40° and its
+  elbows bent 47°. A motion you do not name keeps its value, so
+  `shoulder_l.forward=90` alone points the arm ahead *and* 40° out. Say
+  `shoulder_l.raise=0` too for straight ahead. `show --joints` prints what a
+  frame is, every joint a line, when in doubt.
+- `spine.*` is shared by the three spine bones, a natural curve. `hand_l` and
+  `hand_r` take a shape: `fist`, `open`, `chop` (Pose Studio's own) or `rest`.
+- A value past a joint's limits is refused with the range (`pose.limit`),
+  never clamped. Raw bones still work: `set wave 0 head=10,0,0` is degrees
+  on the bone's own X, Y, Z, for what the words cannot say.
+- `--mirror` sets the twin joint the same; `pose flip <set> <frame> --to
+  <frame>` writes a frame's mirror image over another frame (a walk's second
+  half is its first half flipped).
+- **Look before you go on.** Pose a frame, render it with `--views 0,90
+  --sheet`, look at the sheet, then correct. One side alone hides what a pose
+  does in depth.
+
+### Animating with keys
+
+Pose a few frames; the forge draws the frames between them.
+
+```
+forge.py pose mygame keys walk 0 4 8 12 --length 16 --loop       # keys, 16 frames, a cycle
+forge.py pose mygame set walk 0 hip_l.forward=25 hip_r.forward=-20 shoulder_l.forward=-20 shoulder_r.forward=20
+forge.py pose mygame flip walk 0 --to 8                          # the other step
+forge.py pose mygame keys walk 0:ease-in-out 4 8:ease-in-out 12  # an ease per key
+forge.py pose mygame keys walk --clear                           # every frame its own again
+```
+
+- A set with keys draws every other frame between the keys either side of it,
+  each time the set is written, so editing a key moves its in-betweens with it.
+  Posing an in-between (`set`, `flip --to`) makes it a key.
+- The ease is how a key leaves for the next: `linear` (the default),
+  `ease-in`, `ease-out`, `ease-in-out`, `hold` (stays on the key until the
+  next: pixel art's held frames). `--loop` runs the last key back into the
+  first, for cycles; without it the ends hold.
+- `--length N` grows the set (new frames are in-betweens, or copies of the
+  last pose without keys) or shrinks it (dropping keys past the end).
+- A key that moves a bone's position (an import's hips) and a key that does
+  not cannot be blended; that is refused as `pose.tween_position`. Key frames
+  of an imported clip against each other, not against frames made here.
 
 - **`import` and `render` are done by an open ComfyUI tab**, because the
   mannequin is drawn with WebGL in a browser. With no tab open they refuse at
@@ -173,10 +234,10 @@ forge.py poses mygame
   all; `--fit` draws again at it. Frames sit on one ground in the world; with
   the camera at chest height, a foot nearer the camera lands a few pixels
   lower in the picture, which `feet` reports as it is.
-- Bone names are the mannequin's (`pelvis`, `spine_01`…`03`, `neck_01`,
+- Raw bone names are the mannequin's (`pelvis`, `spine_01`…`03`, `neck_01`,
   `head`, `clavicle_l`, `upperarm_l`, `lowerarm_l`, `hand_l`, `thigh_l`,
   `calf_l`, `foot_l`, `ball_l`, fingers as `index_01_l`…, and `_r` for the
-  right); an unknown one is refused with `pose.bone`.
+  right); an unknown one is refused with `pose.bone`. Prefer joints.
 - Mixamo clips are the user's own download: never fetch or redistribute them.
 
 **Drawing a character into a set, until `make`** (proven on a 15-frame walk):

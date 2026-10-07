@@ -767,6 +767,54 @@ than Pose Studio:
   scaled after — then split, matte → baseline and pivot → pixelize →
   atlas → engine export, instead of a folder of PNGs. 2.1's own alpha came
   back clean on every spike render; BiRefNet stays the tightening pass.
+- **Posing by joint** (built, `creator/forge/joints.py`). Raw `pose_data`
+  is Euler degrees on each bone's own axes: exact, and useless to reason
+  with — an agent cannot know which of three numbers bends an elbow, or that
+  the standing figure's elbows are already bent 47°. So a pose can be set in
+  words: `elbow_l.bend=90`, `shoulder_r.raise=150`, `spine.lean=-10`,
+  `hand_l=fist`. A joint is a bone and three named motions, each a turn about
+  an axis fixed in the rig with its sign chosen so + means what the name says
+  (`raise` away from the body, `bend` closing, `turn`/`lean` to the figure's
+  own left, the forearm's `twist` palm up — each checked by drawing it on the
+  mannequin). Angles are anatomical, read against a zero configuration (the
+  limb straight down, the forearm in line with the upper arm), not against
+  the A-pose, so `bend=0` is a straight arm and `raise=180` overhead; the
+  axes come from the rest directions measured once from the pack's base mesh,
+  so they hold to a degree or two across body sliders. A motion not named
+  keeps its value. Limits refuse, never clamp. The right side is the left
+  reflected, so every word means the same on both. `spine` spreads over its
+  three bones; hands take Pose Studio's own three presets (copied, held
+  against the vendored file by a test) rather than a guessed finger curl.
+  `--mirror` sets the twin too, `pose flip` writes a frame's mirror image
+  over another (`joints.flip_pose`, held against `mirror.js`), and `pose show
+  --joints` reads any frame back in the same words, imports included. The
+  bench keeps its rings: the words are for agents and scripts; a person drags.
+  Not built: IK goals ("right hand on the hip"). The core's solver runs only
+  in a tab and the server does not know a body's bone lengths, so it would be
+  a tab job; it waits until an agent posing with the words and the two-view
+  sheet below shows where they fall short.
+- **Keys and in-betweens** (built). A set may name its `keys`, each with the
+  ease that leaves it (`linear`, `ease-in`, `ease-out`, `ease-in-out`,
+  `hold`), and `loop`. Every other frame is drawn between the keys either side
+  of it by `pose.py`'s `tween`, which runs whenever the set is written, so an
+  edited key moves its in-betweens and nobody keeps them up to date by hand.
+  Rotations turn the short way (quaternion slerp), never as averaged Euler
+  numbers; positions blend straight, and a position one key has and the other
+  lacks is refused (`pose.tween_position`), because the server does not know
+  a bone's rest position. Posing an in-between makes it a key, on the bench as
+  in the CLI. It is done on the server rather than with the vendored
+  `vnccs_pose_animation.mjs`, which stays unused: an agent with no tab open
+  gets in-betweens too, and the bench and the CLI cannot disagree about them.
+  On the bench a set without keys shows every frame as a key; un-keying a
+  frame (K) is how an artist starts letting frames be drawn. The bench drops
+  bone positions equal to the bone's rest before saving, since the core
+  reports the root's on every pose and that would make every bench frame
+  "move" the root against every CLI frame.
+- **Front and side in one look** (built). A render takes `views`, yaws to
+  draw each frame at in one job (`--views 0,90`), and `/pose/sheet` puts
+  drawn frames into one picture, a row per view, a column per frame
+  (`--sheet`). One view hides what a pose does in depth; the sheet is the
+  agent's single look before it corrects a pose.
 - **Directions as a property of a set.** (Built as the yaw a set is drawn
   at, chosen on the page's compass and passed to the render job; not yet
   stored on the set.) Turn the whole walk to 4 or 8
@@ -921,7 +969,7 @@ Every route has a command; these are the groups.
 | Making | `make <asset…>`, `make --missing`, `make --stale`, `vary <asset> --n`, `post <asset> <step…>` |
 | Looking | `sheet <asset>` (contact sheet PNG), `check` (overlay PNG + JSON), `sound-report` (loudness, peak, loop seam error, waveform PNG) |
 | 3D | `lift <asset>`, `retopo <asset> --mode tris\|quads\|keep --faces N`, `lod <asset>`, `collision <asset>`, `texture <mesh> <recipe>`, `views <mesh>` (the depth and normal renders it will condition on) |
-| Poses | `poses <project>`, and `pose <project>` with `new <set> [--from <set>[/<frame>]]`, `import <set> <clip.fbx> [--fps 12] [--replace]`, `set <set> <frame> <bone>=<x,y,z>…`, `paste <set> <pose_data.json> [--replace]`, `render <set> [--frame N…] [--width] [--height] [--yaw]` (mannequin PNGs — the agent's eyes on a pose), `show <set>`, `rm <set>`. `import` and `render` run in an open ComfyUI tab (§7.9) and refuse when there is none. |
+| Poses | `joints` (the joint vocabulary), `poses <project>`, and `pose <project>` with `new <set> [--from <set>[/<frame>]]`, `import <set> <clip.fbx> [--fps 12] [--replace]`, `set <set> <frame> <joint.motion>=<deg>… <hand_l>=<shape> <bone>=<x,y,z>… [--mirror]`, `flip <set> <frame> [--to <frame>]`, `keys <set> [<frame>[:<ease>]…] [--length N] [--loop\|--no-loop] [--clear]`, `paste <set> <pose_data.json> [--replace]`, `render <set> [--frame N…] [--width] [--height] [--yaw] [--pitch] [--views 0,90] [--sheet]` (mannequin PNGs — the agent's eyes on a pose), `show <set> [--joints [--frame N…]]`, `rm <set>`. `import` and `render` run in an open ComfyUI tab (§7.9) and refuse when there is none. |
 | Moving files | `import` (pictures, meshes, sounds into the project), `export <target>`, `pull` (download `build/<target>/` or the whole project) |
 | Jobs | `jobs`, `wait <id>`, `cancel <id>` |
 
@@ -977,7 +1025,9 @@ contract stable for agents that have learned it.
    with no listening tab the job failed with its sentence), then the pose
    page (done, tested on a Mac against a real ComfyUI tab: the Mixamo walk
    imported through it, a ring drag saved, the body re-solved, the walk drawn
-   at 90° from the page). The bench around it was reworked in the same change:
+   at 90° from the page), then posing by joint, keys with in-betweens, flip
+   and the two-view sheet (done; every joint motion drawn on the mannequin
+   through a real ComfyUI tab to check its direction and sign). The bench around it was reworked in the same change:
    shelf, glass and inspector for assets, the project's settings in a drawer,
    the recipe as a form. A tab loaded before the pack was updated counts as connected but
    has no listener, so it gets the 15-second failure rather than the

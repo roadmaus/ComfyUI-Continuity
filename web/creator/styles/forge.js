@@ -406,6 +406,16 @@ export const css = `
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--mmc-fg-prev);
 }
 .mmc-fg-frame.next::after { background: var(--mmc-fg-next); }
+/* With keys: the frames somebody posed carry a diamond, and the in-betweens
+   the server drew are fainter, so the strip reads as an animator's chart. */
+.mmc-fg-frame.key::before {
+  content: ""; position: absolute; right: 5px; top: 5px; width: 6px; height: 6px; z-index: 1;
+  background: var(--mmc-accent); transform: rotate(45deg); border-radius: 1px;
+}
+.mmc-fg-frame.tween img { opacity: 0.55; }
+.mmc-fg-keybutton.on { border-color: var(--mmc-accent); color: var(--mmc-strong); }
+.mmc-fg-easerow { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.mmc-fg-easerow span { color: var(--mmc-dim); }
 .mmc-fg-framewait { position: absolute; inset: 0; background: linear-gradient(#0000, #0000 60%, #00000010); }
 .mmc-fg-framenum {
   position: absolute; left: 4px; top: 2px; font-size: 10px; font-weight: 600; color: #6b6b66;

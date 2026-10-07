@@ -67,8 +67,9 @@ COMMANDS = {
     "files": ["/files"],
     "pull": ["/files", "/file"],
     "poses": ["/poses"],
-    "pose": ["/pose/show", "/pose/new", "/pose/paste", "/pose/set", "/pose/rm", "/pose/import",
-             "/pose/render", "/pose/job", "/file"],
+    "joints": ["/pose/joints"],
+    "pose": ["/pose/show", "/pose/new", "/pose/paste", "/pose/set", "/pose/flip", "/pose/keys", "/pose/rm",
+             "/pose/import", "/pose/render", "/pose/sheet", "/pose/job", "/file"],
 }
 
 
@@ -236,11 +237,36 @@ def _wait(server, answer):
     return answer
 
 
+def _angles(frame, table):
+    """One frame's joints, a line each: `elbow_l    bend 46.9  side 0  twist 0`."""
+    return [f"{frame:>3} {joint:<11} " + "  ".join(f"{m} {v:g}" for m, v in motions.items())
+            for joint, motions in table.items()]
+
+
+def _print_keys(a):
+    data = a["set"]
+    if data.get("keys"):
+        say(f"{len(data['poses'])} frames, keys " + ", ".join(f"{k['frame']}:{k['ease']}" for k in data["keys"])
+            + (", looping" if data.get("loop") else ""))
+    print(data["name"])
+
+
 def _pose(server, args):
     project, op = args.project, args.op
     if op == "show":
-        return server.get_json("/pose/show", project=project, set=args.set), \
-            lambda a: print(json.dumps(a["set"], indent=2))
+        if not args.joints:
+            return server.get_json("/pose/show", project=project, set=args.set), \
+                lambda a: print(json.dumps(a["set"], indent=2))
+        answer = server.get_json("/pose/show", project=project, set=args.set, joints=1)
+        chosen = args.frame if args.frame else range(len(answer["joints"]))
+
+        def angles(a):
+            for frame in chosen:
+                if not 0 <= frame < len(a["joints"]):
+                    raise Refused({"problem": f"{args.set} has frames 0 to {len(a['joints']) - 1}",
+                                   "code": "pose.frame"})
+                _lines(*_angles(frame, a["joints"][frame]))
+        return answer, angles
 
     def named(a):
         print(a["set"]["name"])
@@ -256,15 +282,46 @@ def _pose(server, args):
             body["fps"] = args.fps
         return server.post("/pose/paste", body), named
     if op == "set":
-        bones = {}
+        # Three kinds of word: JOINT.MOTION=DEG, hand_l=SHAPE, and a raw BONE=X,Y,Z.
+        bones, moves = {}, {}
         for spec in args.bones:
-            bone, sep, value = spec.partition("=")
+            name, sep, value = spec.partition("=")
             numbers = value.split(",")
-            if not sep or len(numbers) != 3 or not all(_is_number(n) for n in numbers):
-                raise Refused({"problem": f"a bone is BONE=X,Y,Z in degrees; got {spec!r}", "code": "client.usage"})
-            bones[bone] = [float(n) for n in numbers]
-        return server.post("/pose/set", {"project": project, "set": args.set, "frame": args.frame,
-                                         "bones": bones}), named
+            if sep and "." in name and _is_number(value):
+                moves[name] = float(value)
+            elif sep and name in ("hand_l", "hand_r"):
+                moves[name] = value
+            elif sep and len(numbers) == 3 and all(_is_number(n) for n in numbers):
+                bones[name] = [float(n) for n in numbers]
+            else:
+                raise Refused({"problem": f"say JOINT.MOTION=DEGREES (elbow_l.bend=90), hand_l=fist, or a raw "
+                                          f"BONE=X,Y,Z; got {spec!r}", "code": "client.usage"})
+        body = {"project": project, "set": args.set, "frame": args.frame, "mirror": args.mirror}
+        if bones:
+            body["bones"] = bones
+        if moves:
+            body["joints"] = moves
+        return server.post("/pose/set", body), _print_keys
+    if op == "flip":
+        body = {"project": project, "set": args.set, "frame": args.frame}
+        if args.to is not None:
+            body["to"] = args.to
+        return server.post("/pose/flip", body), _print_keys
+    if op == "keys":
+        body = {"project": project, "set": args.set, "clear": args.clear}
+        if args.frames:
+            keys = []
+            for spec in args.frames:
+                frame, _, how = spec.partition(":")
+                if not frame.isdigit():
+                    raise Refused({"problem": f"a key is FRAME or FRAME:EASE; got {spec!r}", "code": "client.usage"})
+                keys.append({"frame": int(frame), **({"ease": how} if how else {})})
+            body["keys"] = keys
+        if args.length is not None:
+            body["length"] = args.length
+        if args.loop is not None:
+            body["loop"] = args.loop
+        return server.post("/pose/keys", body), _print_keys
     if op == "rm":
         answer = server.post("/pose/rm", {"project": project, "set": args.set})
 
@@ -292,6 +349,12 @@ def _pose(server, args):
                 body[key] = getattr(args, key)
         if args.frame:
             body["frames"] = args.frame
+        if args.views:
+            try:
+                body["views"] = [float(v) for v in args.views.split(",") if v.strip()]
+            except ValueError:
+                raise Refused({"problem": f"--views is yaws in degrees, such as 0,90; got {args.views!r}",
+                               "code": "client.usage"}) from None
         def draw(body):
             answer = server.post("/pose/render", body)
             if answer["state"] != "done":
@@ -311,7 +374,14 @@ def _pose(server, args):
             say(f"the canvas cuts the figure off in frames {', '.join(map(str, answer['clipped']))}"
                 + (f"; --width {size[0]} --height {size[1]} (or --fit) holds every frame" if size else ""))
         out = args.out or f"{args.set}-poses"
-        answer["local"] = [_download(server, project, f["path"], os.path.join(out, f"{f['frame']:03d}.png"))
+        if args.sheet:
+            answer["sheet"] = server.post("/pose/sheet", body)["path"]
+            answer["local"] = [_download(server, project, answer["sheet"], os.path.join(out, "sheet.png"))]
+            return answer, lambda a: _lines(*a["local"])
+
+        def name(f):
+            return f"{f['frame']:03d}" + (f"-yaw{f['yaw']:g}" if "yaw" in f else "") + ".png"
+        answer["local"] = [_download(server, project, f["path"], os.path.join(out, name(f)))
                            for f in answer["frames"]]
         return answer, lambda a: _lines(*a["local"])
     raise AssertionError(op)
@@ -520,6 +590,15 @@ def run(server, args):
             written.append(path)
         say(f"{len(written)} files into {out}")
         return {"files": written}, lambda a: _lines(*a["files"])
+    if command == "joints":
+        def words(a):
+            for j in a["joints"]:
+                if "shapes" in j:
+                    print(f"{j['joint']:<14} {' | '.join(j['shapes'])} — {j['means']}")
+                    continue
+                motions = "  ".join(f"{m} {lo}..{hi}" for m, (lo, hi) in j["motions"].items())
+                print(f"{j['joint']:<14} {motions} — {j['means']}")
+        return server.get_json("/pose/joints"), words
     if command == "poses":
         return server.get_json("/poses", project=args.project), lambda a: _lines(
             *(f"{p['name']:<20} {p['frames']:>4} frames  {p['fps']} fps" for p in a["sets"]))
@@ -652,6 +731,7 @@ def parser():
     p.add_argument("--under", help="only this folder, e.g. build/godot4")
     p.add_argument("--out", help="where to write (default ./<project>)")
 
+    command("joints", "the joints a pose is set by, their motions and limits")
     command("poses", "a project's pose sets").add_argument("project")
 
     p = command("pose", "make, change and draw pose sets; import and render need an open ComfyUI tab")
@@ -663,16 +743,33 @@ def parser():
         q.add_argument("set")
         return q
 
-    op("show", "a set as JSON: body, fps, one pose per frame")
+    q = op("show", "a set as JSON: body, fps, keys, one pose per frame; --joints reads each frame as joint angles")
+    q.add_argument("--joints", action="store_true", help="each frame's joints and their angles, a line per joint")
+    q.add_argument("--frame", action="append", type=int, help="with --joints, only this frame; repeat for more")
     q = op("new", "a set of one rest pose, or a copy")
     q.add_argument("--from", metavar="SET[/FRAME]", help="copy a whole set, or one frame of it")
     q = op("paste", "a set from Pose Studio's pose_data, or poses as JSON")
     q.add_argument("file")
     q.add_argument("--fps", type=float)
     q.add_argument("--replace", action="store_true", help="paste over a set that exists")
-    q = op("set", "turn bones of one frame, in degrees")
+    q = op("set", "pose one frame by joint (elbow_l.bend=90, hand_r=fist) or raw bone (BONE=X,Y,Z); "
+                  "see `joints` for the words")
     q.add_argument("frame", type=int)
-    q.add_argument("bones", nargs="+", metavar="BONE=X,Y,Z")
+    q.add_argument("bones", nargs="+", metavar="JOINT.MOTION=DEG|hand_l=SHAPE|BONE=X,Y,Z")
+    q.add_argument("--mirror", action="store_true", help="set the other side the same, mirrored")
+    q = op("flip", "a frame mirrored left for right: in place, or written over another frame")
+    q.add_argument("frame", type=int)
+    q.add_argument("--to", type=int, help="write the mirrored pose over this frame instead")
+    q = op("keys", "say which frames are keys; every other frame is drawn between them")
+    q.add_argument("frames", nargs="*", metavar="FRAME[:EASE]",
+                   help="the keys (replacing any), each with the ease out of it: linear (default), "
+                        "ease-in, ease-out, ease-in-out, hold")
+    q.add_argument("--length", type=int, help="make the set this many frames long")
+    loop = q.add_mutually_exclusive_group()
+    loop.add_argument("--loop", dest="loop", action="store_true", default=None,
+                      help="the frames after the last key lead back into the first (a cycle)")
+    loop.add_argument("--no-loop", dest="loop", action="store_false", help="the last key holds to the end")
+    q.add_argument("--clear", action="store_true", help="no keys: every frame is its own pose again")
     op("rm", "remove a set; it moves to .versions/")
     q = op("import", "an FBX clip (Mixamo) retargeted onto the mannequin, a pose per sampled frame")
     q.add_argument("clip", help="a local .fbx (uploaded) or a name already on the server")
@@ -691,6 +788,8 @@ def parser():
                    help="if the canvas cuts the figure off in any frame, draw again at a size that holds every frame")
     q.add_argument("--pitch", type=float, help="degrees the camera looks down on the figure: 0 side-on "
                    "(default), ~30 a three-quarter RPG, up to 89 top-down; negative looks up")
+    q.add_argument("--views", metavar="YAW,YAW", help="draw each frame at these yaws, e.g. 0,90 for front and side")
+    q.add_argument("--sheet", action="store_true", help="download one contact sheet (a row per view) instead of the frames")
     q.add_argument("--out", help="where to save them (default ./<set>-poses)")
     return top
 

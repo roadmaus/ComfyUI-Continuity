@@ -27,6 +27,15 @@
  * starts, so it is claimed by whichever tab gets there first — usually this
  * one — and its PNGs land in the project's cache where the sprite render
  * reads them.
+ *
+ * **Keys are the server's.** A set may name the frames somebody posed (its
+ * `keys`); every other frame is drawn between them by `pose.py`'s `tween`,
+ * which runs whenever the set is written. So this page never interpolates: it
+ * says which frames are keys, saves, and takes the in-betweens the answer
+ * carries — the same ones an agent gets from the CLI. A set without keys is
+ * shown as one where every frame is a key, so un-keying a frame is how an
+ * artist starts letting frames be drawn. Posing an in-between keys it, as the
+ * server does for `pose set`, or the next save would draw over the edit.
  */
 
 import { el, icon, spinner, dismissable, placeNear, keepScroll } from "../dom.js";
@@ -104,6 +113,15 @@ function slug(text) {
 function cleanPose(pose) {
   return { bones: pose.bones ?? {}, bonePositions: pose.bonePositions ?? {}, modelRotation: pose.modelRotation ?? [0, 0, 0] };
 }
+
+/** The eases a key can leave by (`pose.EASES`), as the inspector names them. */
+const EASES = [
+  { id: "linear", label: () => t("Even") },
+  { id: "ease-in", label: () => t("Ease in") },
+  { id: "ease-out", label: () => t("Ease out") },
+  { id: "ease-in-out", label: () => t("Ease in and out") },
+  { id: "hold", label: () => t("Hold") },
+];
 
 function translucent(mesh) {
   for (const material of [].concat(mesh?.material ?? [])) {
@@ -326,6 +344,7 @@ export class PosePage {
     // not rebuild the strip's pictures or the sliders under the pointer.
     this.markStrip();
     if (this.frameLabel) this.frameLabel.textContent = t("Frame {n} of {count}", { n: this.frame + 1, count });
+    if (!this.playing) this.paintKeys();
   }
 
   ghosts() {
@@ -344,19 +363,132 @@ export class PosePage {
     }
   }
 
+  /** A pose without the translations that only say where the body already
+   *  puts a bone. The core reports the root's position on every pose, moved or
+   *  not; kept, it would make every frame posed here "move" the root and every
+   *  frame made by the CLI not, and the server cannot blend between the two
+   *  (`pose.tween_position`). A position equal to the bone's rest is the same
+   *  picture without it. */
+  restless(pose) {
+    const viewer = this.viewer;
+    const clean = cleanPose(pose);
+    if (!viewer?.isInitialized()) return clean;
+    const positions = {};
+    for (const [name, value] of Object.entries(clean.bonePositions)) {
+      const rest = viewer.shapedBoneRestPositions?.[name] ?? viewer.initialBoneStates?.[name]?.position;
+      if (rest && Math.abs(rest.x - value[0]) < 1e-6 && Math.abs(rest.y - value[1]) < 1e-6
+          && Math.abs(rest.z - value[2]) < 1e-6) continue;
+      positions[name] = value;
+    }
+    return { ...clean, bonePositions: positions };
+  }
+
+  // ---- keys -------------------------------------------------------------------
+
+  /** Whether a frame is a key: every frame is, in a set without keys. */
+  isKey(i) {
+    return !this.set.keys || this.set.keys.some((k) => k.frame === i);
+  }
+
+  /** Make frame `i` a key, leaving with the ease of the stretch it falls in
+   *  (as `pose.py _keyed` does for the CLI). */
+  keyFrame(i) {
+    const keys = this.set.keys;
+    if (!keys || keys.some((k) => k.frame === i)) return;
+    const before = keys.filter((k) => k.frame < i);
+    const ease = (before.at(-1) ?? keys.at(-1)).ease;
+    this.set.keys = [...keys, { frame: i, ease }].sort((a, b) => a.frame - b.frame);
+  }
+
+  /** K: the frame you are on stops or starts being a key. */
+  toggleKey() {
+    if (!this.set) return;
+    this.stop();
+    const count = this.set.poses.length;
+    let keys = this.set.keys ? [...this.set.keys] : this.set.poses.map((_, i) => ({ frame: i, ease: "linear" }));
+    const at = keys.findIndex((k) => k.frame === this.frame);
+    if (at >= 0) {
+      if (keys.length === 1) {
+        this.forge.error = t("A set keeps at least one key.");
+        this.forge.paintStatus();
+        return;
+      }
+      keys.splice(at, 1);
+    } else {
+      this.keyFrame(this.frame);
+      keys = this.set.keys;
+    }
+    if (keys.length === count) { delete this.set.keys; delete this.set.loop; }
+    else { this.set.keys = keys; this.set.loop = Boolean(this.set.loop); }
+    this.saveSoon();
+    this.paintStrip();
+    this.paintInspector();
+  }
+
+  setEase(ease) {
+    const key = this.set.keys?.find((k) => k.frame === this.frame);
+    if (!key) return;
+    key.ease = ease;
+    this.saveSoon();
+    this.paintInspector();
+  }
+
+  setLoop(loop) {
+    if (!this.set.keys) return;
+    this.set.loop = loop;
+    this.saveSoon();
+  }
+
+  /** Frame numbers after `at` move by `by`; a key on a removed frame goes. */
+  shiftKeys(at, by) {
+    if (!this.set.keys) return;
+    this.set.keys = this.set.keys
+      .filter((k) => !(by < 0 && k.frame === at))
+      .map((k) => (k.frame >= at ? { ...k, frame: k.frame + by } : k));
+  }
+
+  /** The server's answer to a save: the keys as it keeps them, and the
+   *  in-betweens it drew. Frames whose pose changed get a new thumbnail, and
+   *  the one on the stage is put on the viewer again if it was one of them. */
+  adopt(fresh) {
+    const set = this.set;
+    if (!set || set.name !== fresh.name || this.saveTimer || fresh.poses.length !== set.poses.length) return;
+    set.keys = fresh.keys;
+    set.loop = fresh.loop;
+    const changed = [];
+    fresh.poses.forEach((pose, i) => {
+      if (JSON.stringify(pose) !== JSON.stringify(set.poses[i])) { set.poses[i] = pose; changed.push(i); }
+    });
+    if (changed.length) {
+      this.queueThumbs(changed);
+      if (changed.includes(this.frame)) this.showFrame(this.frame);
+      else this.ghosts();
+    }
+    this.markStrip();
+  }
+
   /** The viewer committed a pose: a drag ended, or an undo. */
   edited(pose) {
     if (this.applying || this.playing || !this.set) return;
-    let next = cleanPose(pose);
+    let next = this.restless(pose);
     if (this.symmetry) {
       next = mirrorEdit(this.set.poses[this.frame], next, sideOf(this.viewer.selectedBone?.name ?? ""));
       this.applying = true;
       try { this.viewer.setPose(next, true); } finally { this.applying = false; }
     }
     this.set.poses[this.frame] = next;
+    this.posed(this.frame);
     this.queueThumbs([this.frame]);
     this.saveSoon();
     if (this.drawn) { this.drawn = null; this.paintStagebar(); }
+  }
+
+  /** Frame `i` was posed by hand: in a set with keys it is one now. */
+  posed(i) {
+    if (!this.set.keys || this.isKey(i)) return;
+    this.keyFrame(i);
+    this.markStrip();
+    this.paintInspector();
   }
 
   saveSoon() {
@@ -372,12 +504,14 @@ export class PosePage {
     this.saveTimer = null;
     const set = this.set;
     if (!set) return;
-    const { name, poses, body, fps, source } = set;
+    const { name, body, fps, source, keys, loop } = set;
+    const poses = set.poses.map((pose) => this.restless(pose));
     try {
-      await forgeCall("/pose/paste", { project: this.project, set: name, replace: true,
-                                       data: { poses, body, fps, source } });
+      const answer = await forgeCall("/pose/paste", { project: this.project, set: name, replace: true,
+                                                      data: { poses, body, fps, source, keys, loop } });
       const row = this.sets.find((s) => s.name === name);
       if (row) { row.frames = poses.length; row.fps = fps; }
+      if (this.set === set) this.adopt(answer.set);
       this.paintShelf();
     } catch (error) {
       this.forge.error = t("{name} was not saved: {why}", { name, why: error.message || String(error) });
@@ -444,33 +578,45 @@ export class PosePage {
     this.paintStrip();
   }
 
+  /** A copy of this frame after it; in a set with keys, an in-between
+   *  instead, drawn by the server between this frame and the next key. */
   duplicateFrame() {
     if (!this.set) return;
     this.stop();
     const at = this.frame + 1;
+    this.shiftKeys(at, 1);
     this.set.poses.splice(at, 0, structuredClone(this.set.poses[this.frame]));
     this.thumbs.splice(at, 0, this.thumbs[this.frame]);
     this.saveSoon();
     this.showFrame(at);
     this.paintStrip();
     this.paintInspector();
+    this.paintFoot();
   }
 
   deleteFrame() {
     if (!this.set || this.set.poses.length < 2) return;
+    if (this.set.keys?.length === 1 && this.isKey(this.frame)) {
+      this.forge.error = t("A set keeps at least one key.");
+      this.forge.paintStatus();
+      return;
+    }
     this.stop();
+    this.shiftKeys(this.frame, -1);
     this.set.poses.splice(this.frame, 1);
     this.thumbs.splice(this.frame, 1);
     this.saveSoon();
     this.showFrame(Math.min(this.frame, this.set.poses.length - 1));
     this.paintStrip();
     this.paintInspector();
+    this.paintFoot();
   }
 
   /** The frame as its mirror image: left and right swapped. */
   flipFrame() {
     if (!this.set) return;
     this.set.poses[this.frame] = flipPose(this.set.poses[this.frame]);
+    this.posed(this.frame);
     this.queueThumbs([this.frame]);
     this.saveSoon();
     this.showFrame(this.frame);
@@ -538,6 +684,7 @@ export class PosePage {
   resetFrame() {
     if (!this.set) return;
     this.set.poses[this.frame] = { bones: {}, bonePositions: {}, modelRotation: [0, 0, 0] };
+    this.posed(this.frame);
     this.queueThumbs([this.frame]);
     this.saveSoon();
     this.showFrame(this.frame);
@@ -675,6 +822,7 @@ export class PosePage {
     } else if (!mod && this.view === "pose" && event.key === "9" && OPPOSITE[this.angle]) this.look(OPPOSITE[this.angle]);
     else if (!mod && this.view === "pose" && event.key === "0") this.look("sprite");
     else if (!mod && event.key.toLowerCase() === "m") this.toggleSymmetry();
+    else if (!mod && event.key.toLowerCase() === "k") this.toggleKey();
     else if (mod && event.key.toLowerCase() === "z" && this.view === "pose") {
       if (event.shiftKey) this.viewer?.redo(); else this.viewer?.undo();
     } else handled = false;
@@ -837,7 +985,8 @@ export class PosePage {
     ]));
     const reel = el("div", { class: "mmc-fg-reel" }, [
       ...this.cells,
-      el("button", { class: "mmc-fg-frame mmc-fg-addframe", title: t("Add a frame after this one, as a copy of it"),
+      el("button", { class: "mmc-fg-frame mmc-fg-addframe",
+        title: this.set.keys ? t("Add an in-between after this frame") : t("Add a frame after this one, as a copy of it"),
         "aria-label": t("Add a frame"), onclick: () => this.duplicateFrame() }, [icon("plus", 16)]),
     ]);
     this.strip.replaceChildren(
@@ -861,6 +1010,9 @@ export class PosePage {
     const ghosts = this.onion && !this.playing && count > 1;
     this.cells.forEach((cell, i) => {
       cell.classList.toggle("on", i === this.frame);
+      // Marked only when the set has keys: without, every frame is one.
+      cell.classList.toggle("key", Boolean(this.set.keys) && this.isKey(i));
+      cell.classList.toggle("tween", !this.isKey(i));
       cell.setAttribute("aria-current", String(i === this.frame));
       cell.classList.toggle("prev", ghosts && i === (this.frame - 1 + count) % count);
       cell.classList.toggle("next", ghosts && count > 2 && i === (this.frame + 1) % count);
@@ -914,6 +1066,7 @@ export class PosePage {
             [el("span", { text: t("Delete") })]),
         ]),
       ]),
+      this.keysBox = this.keysSection(),
       el("section", { class: "mmc-fg-insection" }, [
         el("h3", { class: "mmc-fg-subhead", text: t("Speed") }),
         this.dial(t("Frames a second"), set.fps, 1, 60, 1, (value) => this.setFps(value), (v) => String(v)),
@@ -945,6 +1098,40 @@ export class PosePage {
                          : t("Remove {name}", { name: set.name })]),
       ]),
     );
+  }
+
+  /** The keys section again, for the frame now on the stage. */
+  paintKeys() {
+    if (!this.keysBox?.isConnected || !this.set) return;
+    const fresh = this.keysSection();
+    this.keysBox.replaceWith(fresh);
+    this.keysBox = fresh;
+  }
+
+  /** Which frames are keys, how a key leaves for the next, and the loop. */
+  keysSection() {
+    const set = this.set;
+    const keyed = this.isKey(this.frame);
+    const key = set.keys?.find((k) => k.frame === this.frame);
+    return el("section", { class: "mmc-fg-insection" }, [
+      el("h3", { class: "mmc-fg-subhead", text: t("Keys") }),
+      el("p", { class: "mmc-fg-hint", text: set.keys
+        ? t("Frames between keys are drawn for you. Pose one and it becomes a key.")
+        : t("Every frame is posed by hand. Un-key a frame to have it drawn between its neighbours.") }),
+      el("button", { class: `mmc-bn-verb mmc-fg-keybutton${keyed ? " on" : ""}`, "aria-pressed": keyed,
+        title: t("A key is a frame you pose; the frames between keys are drawn for you (K)"),
+        onclick: () => this.toggleKey() },
+        [el("span", { text: keyed ? t("This frame is a key") : t("Make this frame a key") })]),
+      key ? el("label", { class: "mmc-fg-easerow" }, [
+        el("span", { text: t("Into the next key") }),
+        el("select", { class: "mmc-bn-text", onchange: (event) => this.setEase(event.target.value) },
+          EASES.map((e) => el("option", { value: e.id, selected: e.id === key.ease, text: e.label() }))),
+      ]) : null,
+      set.keys ? el("label", { class: "mmc-fg-onion", title: t("The frames after the last key lead back into the first") }, [
+        el("input", { type: "checkbox", checked: Boolean(set.loop), onchange: (event) => this.setLoop(event.target.checked) }),
+        el("span", { text: t("Loop") }),
+      ]) : null,
+    ].filter(Boolean));
   }
 
   dial(label, value, low, high, step, onchange, format) {

@@ -45,7 +45,7 @@ CLI = os.path.join(ROOT, "skills", "continuity-forge", "forge.py")
 package = types.ModuleType("forgepkg")
 package.__path__ = [os.path.join(layout.PY_ROOT, "forge")]
 sys.modules["forgepkg"] = package
-for name in ("problems", "kinds", "targets", "style", "project", "manifest", "pose", "api"):
+for name in ("problems", "kinds", "targets", "style", "project", "manifest", "joints", "pose", "api"):
     spec = importlib.util.spec_from_file_location(f"forgepkg.{name}",
                                                   os.path.join(layout.PY_ROOT, "forge", f"{name}.py"))
     module = importlib.util.module_from_spec(spec)
@@ -359,6 +359,35 @@ check("an import keeps a pose per frame, and where it came from",
       (3, {"thigh_l": [20.0, 0.0, 0.0]}, {"clip": "walk.fbx"}))
 code, out, err = forge("pose", "mygame", "import", "walk", "walk.fbx", json_out=True)
 check("an import over a set is refused without --replace", (code, out["code"]), (1, "set.exists"))
+views = ok("pose render views", "pose", "mygame", "render", "stand", "--width", "64", "--height", "128",
+           "--views", "0,90", "--out", "views").split()
+check("views draw each frame from each side, named by yaw",
+      views, [os.path.join("views", "000-yaw0.png"), os.path.join("views", "000-yaw90.png")])
+
+# ---- posing by joint, keys, flip ------------------------------------------------------
+
+words = ok("joints", "joints")
+check("joints lists the vocabulary, a line a joint", any(line.startswith("shoulder_l/_r") for line in words.splitlines()),
+      True)
+ok("pose keys", "pose", "mygame", "keys", "stand", "0", "4:ease-in-out", "--length", "8", "--loop")
+ok("pose set by joint", "pose", "mygame", "set", "stand", "4", "shoulder_l.raise=150", "elbow_l.bend=20",
+   "hand_l=fist", "--mirror")
+angles = ok("pose show --joints", "pose", "mygame", "show", "stand", "--joints", "--frame", "4").splitlines()
+check("show --joints reads a frame back in the same words",
+      [line.split()[1:4] for line in angles if line.split()[1] in ("shoulder_l", "shoulder_r")],
+      [["shoulder_l", "raise", "150"], ["shoulder_r", "raise", "150"]])
+stand = json.loads(ok("pose show stand", "pose", "mygame", "show", "stand"))
+check("keys, a length and a loop", (len(stand["poses"]), [k["frame"] for k in stand["keys"]], stand["loop"]),
+      (8, [0, 4], True))
+code, out, err = forge("pose", "mygame", "set", "stand", "0", "elbow_l.bend=200", json_out=True)
+check("a joint past its limit is refused with its range", (code, out["code"], out["high"]), (1, "pose.limit", 150))
+code, out, err = forge("pose", "mygame", "set", "stand", "0", "elbow_l", json_out=True)
+check("a word that is none of the three is refused by the client", (code, out["code"]), (1, "client.usage"))
+ok("pose flip", "pose", "mygame", "flip", "stand", "4", "--to", "6")
+stand = json.loads(ok("pose show stand", "pose", "mygame", "show", "stand"))
+check("flip writes the mirrored frame, which becomes a key", [k["frame"] for k in stand["keys"]], [0, 4, 6])
+ok("pose keys --clear", "pose", "mygame", "keys", "stand", "--clear")
+
 check("pose rm", ok("pose rm", "pose", "mygame", "rm", "nod2").strip(), "nod2")
 tab.open = False
 

@@ -24,7 +24,7 @@ but are not a capability a client has, so the parity test does not ask the CLI
 for a command that calls them.
 """
 
-from . import kinds, pose as poses, project as projects, targets
+from . import joints, kinds, pose as poses, project as projects, targets
 from .problems import ForgeError
 
 PREFIX = "/continuity/forge"
@@ -270,15 +270,26 @@ def list_poses(host, params):
 
 
 def show_pose(host, params):
-    return {"set": poses.load(host.base, _text(params, "project"), _text(params, "set"))}
+    """A set; with `joints`, also every frame read as joint angles
+    (`joints.read`), which is how an agent sees what a pose is without a
+    picture."""
+    data = poses.load(host.base, _text(params, "project"), _text(params, "set"))
+    if not _flag(params, "joints"):
+        return {"set": data}
+    return {"set": data, "joints": [joints.read(p) for p in data["poses"]]}
+
+
+def joint_words(host, params):
+    """The joint vocabulary: every joint, its motions, their limits, what they mean."""
+    return {"joints": joints.vocabulary()}
 
 
 def new_pose(host, params):
     """A new set: one rest pose, or copied from `from` (`walk`, or `walk/3`)."""
     project = _text(params, "project")
     source = _text(params, "from", required=False)
-    frames, body, fps = poses.copy_from(host.base, project, source) if source else (None, None, 12)
-    return {"set": poses.create(host.base, project, _text(params, "set"), frames, fps, body)}
+    frames, body, fps, timing = poses.copy_from(host.base, project, source) if source else (None, None, 12, None)
+    return {"set": poses.create(host.base, project, _text(params, "set"), frames, fps, body, timing=timing)}
 
 
 def paste_pose(host, params):
@@ -288,17 +299,37 @@ def paste_pose(host, params):
     an edit, so the set's `source` (the clip it was imported from) comes
     through with it rather than being forgotten on the first touch."""
     data = params.get("data")
-    frames, body, fps = poses.from_paste(data)
+    frames, body, fps, timing = poses.from_paste(data)
     if params.get("fps") is not None:
         fps = params["fps"]
     source = data.get("source") if isinstance(data, dict) else None
     return {"set": poses.create(host.base, _text(params, "project"), _text(params, "set"), frames,
-                                fps or 12, body, source=source, replace=_flag(params, "replace"))}
+                                fps or 12, body, source=source, replace=_flag(params, "replace"), timing=timing)}
 
 
 def set_pose(host, params):
+    """Turn bones of one frame: raw (`bones`, BONE: [x, y, z]) or by joint
+    (`joints`, "elbow_l.bend": 90, "hand_r": "fist"), `mirror` for both sides."""
+    bones = _object(params, "bones") if params.get("bones") is not None else None
+    moves = _object(params, "joints") if params.get("joints") is not None else None
     return {"set": poses.set_bones(host.base, _text(params, "project"), _text(params, "set"),
-                                   params.get("frame"), _object(params, "bones"))}
+                                   params.get("frame"), bones, moves, _flag(params, "mirror"))}
+
+
+def flip_pose(host, params):
+    """A frame mirrored left for right, in place or onto frame `to`."""
+    return {"set": poses.flip(host.base, _text(params, "project"), _text(params, "set"),
+                              params.get("frame"), params.get("to"))}
+
+
+def key_pose(host, params):
+    """A set's keys (frames somebody posed, each with the ease that leaves it),
+    its length and whether it loops; the in-betweens follow."""
+    keys = params.get("keys")
+    loop = params.get("loop")
+    return {"set": poses.set_timing(host.base, _text(params, "project"), _text(params, "set"),
+                                    keys, params.get("length"), None if loop is None else _flag(params, "loop"),
+                                    _flag(params, "clear"))}
 
 
 def remove_pose(host, params):
@@ -345,7 +376,7 @@ def render_pose(host, params):
         raise ForgeError("frames is a list of frame numbers", "request.field", field="frames")
     data, width, height, pitch, wanted, missing = poses.plan_render(
         host.base, project, name, frames, params.get("width"), params.get("height"), params.get("yaw"),
-        params.get("pitch"))
+        params.get("pitch"), params.get("views"))
     answer = {"width": width, "height": height, "pitch": pitch, "drawn": [m["path"] for m in missing],
               **poses.summary(wanted, width, height)}
     if not missing:
@@ -353,6 +384,20 @@ def render_pose(host, params):
     task = {"width": width, "height": height, "pitch": pitch, "body": data["body"],
             "frames": [{"frame": m["frame"], "pose": m["pose"]} for m in missing]}
     return poses.public(poses.start(host, "render", project, name, task, answer))
+
+
+def sheet_pose(host, params):
+    """Frames already drawn, in one picture: a row per yaw. Takes the same
+    frames, size, pitch and views as `/pose/render`, which must have drawn them."""
+    project = _text(params, "project")
+    name = _text(params, "set")
+    frames = params.get("frames")
+    if frames is not None and not isinstance(frames, list):
+        raise ForgeError("frames is a list of frame numbers", "request.field", field="frames")
+    *_, wanted, _ = poses.plan_render(host.base, project, name, frames, params.get("width"),
+                                      params.get("height"), params.get("yaw"), params.get("pitch"),
+                                      params.get("views"))
+    return {"project": project, "set": name, "path": poses.contact_sheet(host.base, project, name, wanted)}
 
 
 def pose_job(host, params):
@@ -397,13 +442,17 @@ ROUTES = (
     ("GET", "/files", list_files),
     ("GET", "/file", read_file),
     ("GET", "/poses", list_poses),
+    ("GET", "/pose/joints", joint_words),
     ("GET", "/pose/show", show_pose),
     ("POST", "/pose/new", new_pose),
     ("POST", "/pose/paste", paste_pose),
     ("POST", "/pose/set", set_pose),
+    ("POST", "/pose/flip", flip_pose),
+    ("POST", "/pose/keys", key_pose),
     ("POST", "/pose/rm", remove_pose),
     ("POST", "/pose/import", import_pose),
     ("POST", "/pose/render", render_pose),
+    ("POST", "/pose/sheet", sheet_pose),
     ("GET", "/pose/job", pose_job),
 )
 
