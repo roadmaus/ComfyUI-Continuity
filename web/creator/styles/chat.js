@@ -78,6 +78,47 @@ export const css = `
 .mmc-ch-act:hover:not(:disabled) { background: var(--mmc-surface-2); color: var(--mmc-text); }
 .mmc-ch-act:disabled { opacity: .35; cursor: default; }
 .mmc-ch-act:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
+
+/* The versions of the conversation from one split, under the message that
+   changed. Always shown once there are two: unlike the verbs above it, this
+   says something about the transcript — that there is more of it. The strip
+   is the last picture each version made, so a version is found by what it
+   looks like; the one on screen wears the accent. Pushed down past the verbs'
+   margin so the two never sit on each other. */
+.mmc-ch-versions { margin-top: 6px; }
+.mmc-ch-vbar {
+  display: flex; align-items: center; gap: 3px;
+  font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim);
+  font-variant-numeric: tabular-nums;
+}
+.mmc-ch-vstep {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 6px; border: 0; padding: 0;
+  background: none; color: var(--mmc-dim); cursor: pointer;
+}
+.mmc-ch-vstep svg { transform: rotate(-90deg); stroke: currentColor; fill: none; stroke-width: 2; }
+.mmc-ch-vstep.back svg { transform: rotate(90deg); }
+.mmc-ch-vstep:hover:not(:disabled) { background: var(--mmc-surface-2); color: var(--mmc-text); }
+.mmc-ch-vstep:disabled { opacity: .3; cursor: default; }
+.mmc-ch-vcount { min-width: 34px; text-align: center; }
+.mmc-ch-vtakes { display: flex; gap: 4px; margin-left: 4px; }
+.mmc-ch-vtake {
+  width: 26px; height: 26px; padding: 0; border: 0; border-radius: 6px; overflow: hidden;
+  line-height: 0; cursor: pointer; background: var(--mmc-media-bg);
+  box-shadow: 0 0 0 1px var(--mmc-line); opacity: .55; transition: opacity .12s ease;
+}
+.mmc-ch-vtake img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mmc-ch-vtake.words {
+  display: inline-flex; align-items: center; justify-content: center; line-height: 1;
+  background: var(--mmc-surface-2); color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type));
+}
+.mmc-ch-vtake:hover:not(:disabled) { opacity: .9; }
+.mmc-ch-vtake.on { opacity: 1; box-shadow: 0 0 0 2px var(--mmc-accent); }
+.mmc-ch-vtake:disabled { cursor: default; }
+.mmc-ch-vtake:focus-visible, .mmc-ch-vstep:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
+/* From the message being edited on: still the conversation until the edit is
+   sent, so dimmed rather than gone. */
+.mmc-ch-revised { opacity: .4; }
 .mmc-ch-flip { max-width: 78%; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
 .mmc-ch-user .mmc-ch-said {
   padding: 10px 15px; border-radius: 18px 18px 6px 18px;
@@ -305,6 +346,12 @@ export const css = `
 .mmc-ch-compose .mmc-prompt.mmc-ch-box:empty::before { color: var(--mmc-faint); }
 .mmc-ch-compose .mmc-prompt.mmc-ch-off { opacity: .55; }
 .mmc-ch-foot { display: flex; align-items: center; gap: 6px; }
+/* Over the box while a message is being edited: what sending does, and Cancel. */
+.mmc-ch-revising {
+  display: flex; align-items: center; gap: 10px; padding: 0 6px 4px;
+  font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim);
+}
+.mmc-ch-revising[hidden] { display: none; }
 .mmc-ch-tool, .mmc-ch-send {
   flex: none; display: inline-flex; align-items: center; justify-content: center;
   width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 0;

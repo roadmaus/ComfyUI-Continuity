@@ -491,6 +491,18 @@ to the same refiner settings the Refine button reads — so a node dropped on
 the canvas afterwards opens set up, and a file picked on a node is what the
 room renders with next.
 
+**Nothing said is thrown away.** The pencil under one of your messages takes
+it back into the box; the message and everything after it are dimmed until you
+send, and *Cancel* over the box leaves the conversation as it was. The arrow
+under a reply asks for it again. Either way, what came before is kept as a
+version: under the message that changed, the arrows and a count (*2 / 3*) step
+between versions, and a small picture per version — the last thing it made —
+jumps straight to it, with what it asked on hover. Each version takes along
+everything after it, renders and further versions included. Only the version on
+screen is the conversation: it is what the model reads, and only its pictures
+can be cited. Chats saved before this kept only the version on screen; their
+other renders are still files in your output folder.
+
 **Conversations are kept.** Every chat is saved as you go, and the panel on
 the left lists them under the day they were last touched, each row carrying
 the last thing it made as a small picture. Press one to reopen it — the

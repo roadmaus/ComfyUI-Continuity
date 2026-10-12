@@ -122,6 +122,11 @@ const state = {
   // for the life of the page even after it scrolls out of the ledger block.
   counts: { pic: 0, clip: 0, snd: 0 },
   turn: 0,
+  // Where the conversation was taken back and said again — see "versions"
+  // below. Each is `{index, versions, at}`: the place in `messages` it split
+  // at, every continuation from there, and which one is on screen (its slot
+  // holds null; the live one is `messages` itself).
+  forks: [],
   // The chat's own piece: who is cast here and the files they are built
   // from. Everything else a render needs — the family, the row, the stack —
   // is assembled from the rail and the LoRA pins when it is asked for, so
@@ -168,7 +173,8 @@ const home = () => {
     state.chat = { id: newId(), title: "", created: Date.now() };
   }
   return { messages: state.messages, ledger: state.ledger, strip: state.strip,
-           counts: state.counts, chat: state.chat, piece: state.piece, turn: state.turn };
+           counts: state.counts, chat: state.chat, piece: state.piece, turn: state.turn,
+           forks: state.forks };
 };
 
 /** Whether the sidebar starts open: what was chosen last, else the width. */
@@ -269,8 +275,10 @@ function reset() {
   state.strip = [];
   state.counts = { pic: 0, clip: 0, snd: 0 };
   state.turn = 0;
+  state.forks = [];
   state.piece = { subjects: [], assets: [] };
   state.chat = null;
+  open?.dropRevision();
   state.error = null;
   state.editing = null;
   state.confirming = null;
@@ -306,7 +314,9 @@ async function openSaved(id) {
   state.strip = body.strip;
   state.counts = body.counts;
   state.turn = body.turn;
+  state.forks = body.forks;
   state.piece = body.piece ?? { subjects: [], assets: [] };
+  open?.dropRevision();
   state.chat = { id, title: line?.title ?? "", created: line?.created ?? Date.now() };
   state.error = null;
   state.editing = null;
@@ -489,6 +499,116 @@ function remember({ media, kind, aspect, filename, text, turn = state.turn }, wh
                   turn, filename, text: text || "" };
   where.ledger.push(entry);
   return entry;
+}
+
+// ---- versions -----------------------------------------------------------------
+//
+// Taking a message back and saying it again, or asking for a reply again, used
+// to cut the conversation there: everything after went, the ledger lines and
+// the strip with it, and the renders were left in the output folder with
+// nothing pointing at them. Now the cut is kept. What followed becomes one
+// version of the conversation from that point, the new answer another, and
+// the transcript shows one at a time with a way to step between them (the
+// row under the message that changed — see `Room.versionsRow`).
+//
+// Only the version on screen is the conversation: it is what `forServer`
+// sends and what the ledger offers, so a picture made in a version you
+// stepped away from is never cited by the model. A version takes with it the
+// ledger lines made on its turns, the strip as it left it, its turn counter
+// and the splits further down it; handles are never reused, so putting one
+// back can collide with nothing.
+//
+// Everything here works on the live arrays in place. A render in flight holds
+// on to them (`home`) and files its picture into them when it lands; a
+// replaced array would take the picture somewhere nobody draws. A split above
+// a render in flight is refused (`Room.cuttable`), so a render never lands in
+// a version that is not on screen.
+
+/** The first turn a stretch of the transcript was said on, or null. */
+function firstTurn(messages) {
+  const turns = messages.map((message) => message.turn ?? message.card?.turn).filter(Boolean);
+  return turns.length ? Math.min(...turns) : null;
+}
+
+/** Keep only what `keep` passes, in the same array. */
+function keepIn(list, keep) {
+  const kept = list.filter(keep);
+  list.splice(0, list.length, ...kept);
+}
+
+/** Lift the conversation from `index` on off the live state, with what was
+ *  made in it. -> the version, ready to be kept or put back. */
+function takeTail(index) {
+  const messages = state.messages.splice(index);
+  const forks = state.forks.filter((fork) => fork.index > index);
+  keepIn(state.forks, (fork) => fork.index <= index);
+  const version = { messages, ledger: [], strip: [...state.strip], turn: state.turn, forks };
+  const first = firstTurn(messages);
+  if (first !== null) {
+    version.ledger = state.ledger.filter((entry) => entry.turn >= first);
+    keepIn(state.ledger, (entry) => entry.turn < first);
+    const kept = new Set(state.ledger.map((entry) => entry.handle));
+    keepIn(state.strip, (segment) => kept.has(segment.chat_handle));
+    state.turn = first - 1;
+  }
+  return version;
+}
+
+/** Put a kept version back on the end of the live state. */
+function putTail(version) {
+  state.messages.push(...version.messages);
+  // By handle: an edit re-attaches a message's files under the handles they
+  // had, so the same line can be on both sides of a switch.
+  const have = new Set(state.ledger.map((entry) => entry.handle));
+  state.ledger.push(...version.ledger.filter((entry) => !have.has(entry.handle)));
+  state.strip.splice(0, state.strip.length, ...version.strip);
+  state.turn = version.turn;
+  state.forks.push(...version.forks);
+}
+
+/** Keep everything from `index` on as a version, and leave the place empty
+ *  for the next one. Nothing to keep past the end, so nothing happens there. */
+function branch(index) {
+  if (index >= state.messages.length) return;
+  let fork = state.forks.find((entry) => entry.index === index);
+  if (!fork) {
+    fork = { index, versions: [null], at: 0 };
+    state.forks.push(fork);
+  }
+  fork.versions[fork.at] = takeTail(index);
+  fork.versions.push(null);
+  fork.at = fork.versions.length - 1;
+}
+
+/** Show version `to` of a split. The one on screen is kept in its place —
+ *  unless it is empty (an ask that failed, a message never sent), which is
+ *  not a version of anything and is dropped. */
+function switchTo(fork, to) {
+  const live = takeTail(fork.index);
+  if (live.messages.length) {
+    fork.versions[fork.at] = live;
+  } else {
+    fork.versions.splice(fork.at, 1);
+    if (to > fork.at) to -= 1;
+  }
+  putTail(fork.versions[to]);
+  fork.versions[to] = null;
+  fork.at = to;
+  if (fork.versions.length < 2) keepIn(state.forks, (entry) => entry !== fork);
+  // A version kept while one of its renders was mid-flight on a reload comes
+  // back the way a reopened chat does: asked about against the queue.
+  for (const message of state.messages.slice(fork.index)) {
+    if (message.card?.state === "left") settle(message.card, home());
+  }
+}
+
+/** The last thing a stretch of the transcript made that has a picture. */
+function lastPicture(messages) {
+  for (let i = messages.length - 1; i >= 0; i -= 1) {
+    const entry = messages[i]?.card?.entry;
+    if (entry?.filename && !entry.handle.startsWith(PREFIX.audio)) return entry;
+  }
+  return null;
 }
 
 // ---- talking to the server --------------------------------------------------
@@ -863,6 +983,8 @@ class Room {
     // way an attachment does on any chat surface: shown in the composer, gone
     // from it on Enter, and in the transcript under the words they went with.
     this.pending = [];
+    // The index of the message being edited, while it is — see `edit`.
+    this.revising = null;
     this.firstRun = new FirstRun({
       setup: () => state.setup,
       rail, setRail, sides: this.sync,
@@ -911,12 +1033,19 @@ class Room {
     }, [icon("arrowUp", 18)]);
     this.chips = el("div", { class: "mmc-ch-chips" });
     this.pills = el("div", { class: "mmc-ch-pills" });
+    // Shown while a message is being edited: what sending will do, and the
+    // way out that changes nothing.
+    this.revisingBar = el("div", { class: "mmc-ch-revising", hidden: true }, [
+      el("span", { text: t("Editing your message. Sending keeps the old version as well.") }),
+      el("button", { class: "mmc-ch-door", text: t("Cancel"), onclick: () => this.cancelRevision() }),
+    ]);
     // Built once and never rebuilt. A repaint that replaced the box would take
     // the caret out of it, and the queue's `status` arrives on every step of
     // every render — which is to say, in the middle of every sentence anybody
     // types while something is sampling. The pills and chips inside it are
     // hosts that repaint on their own.
     this.composer = el("div", { class: "mmc-ch-compose" }, [
+      this.revisingBar,
       this.chips,
       this.box.root,
       el("div", { class: "mmc-ch-foot" }, [
@@ -1254,6 +1383,23 @@ class Room {
       this.rows.set(message, { key, nodes });
       rows.push(...nodes);
     });
+    // Dimmed from the message being edited on: still the conversation until
+    // the edit is sent. Toggled on every paint, since the rows are kept.
+    state.messages.forEach((message, index) => {
+      for (const node of this.rows.get(message)?.nodes ?? []) {
+        node.classList.toggle("mmc-ch-revised", this.revising !== null && index >= this.revising);
+      }
+    });
+    // Each split's row goes under the message that changed; one whose version
+    // on screen is still empty — asked again and not answered — goes last.
+    for (const fork of [...state.forks].sort((a, b) => b.index - a.index)) {
+      const message = state.messages[fork.index];
+      const row = this.versionsRow(fork, message?.role ?? "assistant", flight);
+      if (!message) { rows.push(row); continue; }
+      const after = rows.lastIndexOf(this.rows.get(message)?.nodes.at(-1));
+      if (after < 0) rows.push(row);
+      else rows.splice(after + 1, 0, row);
+    }
     for (const message of this.rows.keys()) if (!seen.has(message)) this.rows.delete(message);
     if (state.setup) rows.push(this.firstRun.render());
     if (state.busy) rows.push(this.thinkingRow());
@@ -1276,6 +1422,53 @@ class Room {
     }
     this.log.replaceChildren(...rows);
     if (bottom) this.log.scrollTop = this.log.scrollHeight;
+  }
+
+  /**
+   * The versions of the conversation from one split: the arrows, the count,
+   * and a strip of what each version made, so "the snowy one" is found by
+   * its picture rather than by stepping through. A version that made no
+   * picture shows its number. Hovering one says what it asked.
+   *
+   * Kept between paints by what it shows, like a message's rows: the strip is
+   * images, and rebuilding them on every step of a render reloads them.
+   */
+  versionsRow(fork, role, flight) {
+    const can = this.cuttable(fork.index, flight);
+    const takes = fork.versions.map((version) => {
+      const messages = version ? version.messages : state.messages.slice(fork.index);
+      const first = messages[0];
+      return { picture: lastPicture(messages),
+               said: (first?.role === "user" ? first.text : first?.say) ?? "" };
+    });
+    const key = JSON.stringify([fork.at, can, takes.map((take) => [take.picture?.filename, take.said])]);
+    this.forkRows ??= new WeakMap();
+    const kept = this.forkRows.get(fork);
+    if (kept?.key === key) return kept.node;
+    const count = fork.versions.length;
+    const step = (delta, title) => el("button", {
+      class: `mmc-ch-vstep${delta < 0 ? " back" : ""}`, title,
+      disabled: can && fork.at + delta >= 0 && fork.at + delta < count ? null : true,
+      onclick: () => this.switchVersion(fork, fork.at + delta),
+    }, [icon("chevron", 13)]);
+    const node = el("div", { class: `mmc-ch-msg mmc-ch-versions${role === "user" ? " mmc-ch-user" : ""}` }, [
+      el("div", { class: "mmc-ch-vbar" }, [
+        step(-1, t("The version before")),
+        el("span", { class: "mmc-ch-vcount", text: t("{at} / {count}", { at: fork.at + 1, count }) }),
+        step(1, t("The version after")),
+        el("span", { class: "mmc-ch-vtakes" }, takes.map((take, index) => el("button", {
+          class: `mmc-ch-vtake${index === fork.at ? " on" : ""}${take.picture ? "" : " words"}`,
+          title: t("Version {n}", { n: index + 1 }) + (take.said ? ` — ${take.said}` : ""),
+          disabled: can ? null : true,
+          onclick: () => this.switchVersion(fork, index),
+        }, [take.picture
+          ? el("img", { src: viewUrl(take.picture.filename, { preview: true }), alt: "",
+                        loading: "lazy", draggable: false })
+          : el("span", { text: String(index + 1) })]))),
+      ]),
+    ]);
+    this.forkRows.set(fork, { key, node });
+    return node;
   }
 
   /** The verbs under a message, shown under the pointer. Disabled rather
@@ -1680,6 +1873,7 @@ class Room {
     // Closed while the first run is being answered: a message sent before the
     // room has a model to think with is a message answered with a refusal.
     const asking = Boolean(state.setup);
+    this.revisingBar.hidden = this.revising === null;
     this.box.root.contentEditable = state.busy || asking ? "false" : "true";
     this.box.root.classList.toggle("mmc-ch-off", state.busy || asking);
     this.box.root.dataset.placeholder = asking ? t("Answer above first") : t("Ask for a picture or a shot…");
@@ -2111,6 +2305,13 @@ class Room {
   async send() {
     const text = this.box.getValue().trim();
     if ((!text && !this.pending.length) || state.busy || state.setup) return;
+    // An edit is sent as a new version from where the edited message stood.
+    if (this.revising !== null) {
+      const at = this.revising;
+      this.revising = null;
+      if (!this.cuttable(at)) return this.paint();
+      branch(at);
+    }
     this.box.setValue("");
     state.turn += 1;
     state.error = null;
@@ -2178,11 +2379,10 @@ class Room {
   //
   // A conversation is not all or nothing. A message can be taken back and
   // said differently, a reply can be asked for again, a render that failed
-  // can be tried again — each from where it happened, with what came after
-  // it dropped, because what came after was an answer to what is being
-  // changed. The ledger goes with it: a picture made on a turn that is no
-  // longer in the conversation is not a picture the model should be offered.
-  // Handles are never reused, so nothing that was cited elsewhere goes stale.
+  // can be tried again — each from where it happened. What came after is not
+  // dropped but kept as a version (see "versions" above): it was an answer to
+  // what is being changed, so it leaves the conversation the model reads, and
+  // stays a step away on screen.
 
   /** Whether the transcript can be cut at `index`: not while the model is
    *  writing, and not above a render still in flight. `flight` is
@@ -2198,47 +2398,63 @@ class Room {
       message.card && !["done", "failed"].includes(message.card.state));
   }
 
-  /** Cut the conversation back to before `index`. */
-  truncate(index) {
-    const cut = state.messages.slice(index);
-    state.messages.length = index;
-    const turns = cut.map((message) => message.turn ?? message.card?.turn).filter(Boolean);
-    if (turns.length) {
-      const first = Math.min(...turns);
-      state.ledger = state.ledger.filter((entry) => entry.turn < first);
-      const kept = new Set(state.ledger.map((entry) => entry.handle));
-      state.strip = state.strip.filter((segment) => kept.has(segment.chat_handle));
-      state.turn = first - 1;
-    }
-    state.error = null;
-  }
-
-  /** Take a message back into the composer, with what went with it, and
-   *  drop everything from it on. Sending is what commits the change. */
+  /** Take a message back into the composer, with what went with it. Nothing
+   *  is cut yet: the message and what followed it are dimmed until it is
+   *  sent, which keeps them as a version and starts a new one (`branch`), or
+   *  until Cancel, which leaves the conversation as it was. */
   edit(index) {
     if (!this.cuttable(index)) return;
     const message = state.messages[index];
-    this.truncate(index);
+    this.revising = index;
     // The attachments come back under the handles they had — the sentence
-    // cites them by those — and into the ledger, so the chips resolve; the
-    // turn is the message's again when it is sent.
+    // cites them by those, and they are still in the ledger until the send
+    // cuts. Copies, because sending stamps its turn and words onto an entry,
+    // and the originals belong to the version being kept.
     const media = Object.fromEntries(Object.entries(PREFIX).map(([kind, prefix]) => [prefix, kind]));
-    this.pending = (message.attached ?? []).map((entry) => {
-      if (!state.ledger.includes(entry)) state.ledger.push(entry);
-      return { path: entry.filename, name: entry.filename.split("/").pop(),
-               kind: media[entry.handle.split("-")[0]] ?? "image", entry };
-    });
+    this.pending = (message.attached ?? []).map((entry) => ({
+      path: entry.filename, name: entry.filename.split("/").pop(),
+      kind: media[entry.handle.split("-")[0]] ?? "image", entry: { ...entry },
+    }));
     this.box.setValue(message.text ?? "");
     this.paint();
     this.box.root.focus();
   }
 
-  /** Ask again from the reply at `index`: it and everything after it go, and
-   *  the model answers the same message afresh. */
+  /** Leave an edit without sending it: the composer empties and the
+   *  conversation is as it was. */
+  cancelRevision() {
+    if (this.revising === null) return;
+    this.dropRevision();
+    this.box.setValue("");
+    this.paint();
+  }
+
+  /** Forget an edit in progress, writing nothing — the conversation under it
+   *  changed (another chat opened, a version switched). */
+  dropRevision() {
+    if (this.revising === null) return;
+    this.revising = null;
+    this.pending = [];
+  }
+
+  /** Ask again from the reply at `index`: it and what followed it are kept
+   *  as a version, and the model answers the same message afresh. */
   async again(index) {
     if (!this.cuttable(index)) return;
-    this.truncate(index);
+    this.dropRevision();
+    branch(index);
+    state.error = null;
     await this.ask();
+  }
+
+  /** Show another version of the conversation from a split. */
+  switchVersion(fork, to) {
+    if (to < 0 || to >= fork.versions.length || to === fork.at) return;
+    if (!this.cuttable(fork.index)) return;
+    this.dropRevision();
+    switchTo(fork, to);
+    state.error = null;
+    notify();
   }
 
   /** The same action on the same reply, after a render that failed. */
