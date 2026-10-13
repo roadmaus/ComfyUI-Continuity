@@ -44,7 +44,7 @@ import { resolvedPreStage, PRESTAGE_CANVAS_MULTIPLE, PRESTAGE_MIN_EDGE, PRESTAGE
          PRESTAGE_DEFAULT_EDGE } from "./state.js";
 import { openPicker } from "./picker.js";
 import { loadLoraPrefs, outputUrl, upload, uiSetting, patchSettings, primeSettings,
-         viewUrl } from "./api.js";
+         viewUrl, download } from "./api.js";
 import { settings as refinerSettings, chosenModel, listSkills } from "./refine.js";
 import { openThinker, thinkerName } from "./chatmodel.js";
 import { openWeightsPopover, adoptWeights, rememberedWeights } from "./models.js";
@@ -1729,6 +1729,13 @@ class Room {
           send("end", "→ end", "Cite this still as the next clip's end frame"),
           send("ref", "→ ref", "Cite this still as a reference"),
         ]),
+        // The render to this machine's Downloads, which is the only way it
+        // reaches a laptop driving a box through a tunnel. Under the path
+        // the loupe reads, so the file is the one on screen.
+        card.saved && el("button", {
+          class: "mmc-ch-door mmc-ch-save", title: t("Download this render."),
+          onclick: () => download(this.sourceOf(card).path),
+        }, [icon("download", 14)]),
         el("button", {
           class: "mmc-ch-door", text: t("Retake"),
           title: t("The same request again, on a new seed."),

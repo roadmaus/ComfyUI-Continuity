@@ -46,7 +46,7 @@
 // checking and exporting are arithmetic on the masters, and wait for nothing.
 
 import { el, icon, mark, spinner, dragsFiles, mountOverlay, keepScroll, dismissable, placeNear } from "./dom.js";
-import { forgeCall, forgeFileUrl, upload } from "./api.js";
+import { download, forgeCall, forgeFileUrl, forgePath, upload } from "./api.js";
 import { openPicker } from "./picker.js";
 import { PosePage } from "./forge/posepage.js";
 import { t } from "./i18n.js";
@@ -747,6 +747,10 @@ class Forge {
           el("span", { text: t("Kept in") }),
           el("span", { class: "mmc-bn-path", text: `${SHELF}${project.name}/` }),
         ]),
+        // The folder above, zipped to the machine the browser is on — which is
+        // the only way it reaches a laptop driving a remote ComfyUI.
+        el("button", { class: "mmc-bn-verb", onclick: () => download(forgePath(project.name)) },
+          [icon("download", 15), el("span", { text: t("Download the project") })]),
       ]),
     );
   }
@@ -1079,6 +1083,16 @@ class Forge {
       ]),
       el("span", { class: "mmc-bn-gap" }),
       el("span", { class: "mmc-bn-path", text: `${SHELF}${this.name}/build/${done.target}/` }),
+      el("div", { class: "mmc-bn-doors" }, [
+        el("button", {
+          class: "mmc-bn-door",
+          onclick: () => download(forgePath(this.name, `build/${done.target}`),
+            { name: `${this.name}-${done.target}` }),
+        }, [
+          el("span", { class: "mmc-bn-doorname", text: t("Download export") }),
+          el("span", { class: "mmc-bn-doordoes", text: t("The build folder as a zip, to this computer") }),
+        ]),
+      ]),
     );
   }
 
@@ -1113,6 +1127,7 @@ class Forge {
           : el("p", { class: "mmc-fg-hint", text: this.makes(recipe.kind)
               ? t("No pictures yet. Make them from the recipe, or bring them in:")
               : t("No pictures yet. Drop them anywhere on the bench, or bring them in:") }),
+        row.masters.length ? this.mastersDownload(row) : null,
         this.makes(recipe.kind) ? el("button", {
           class: "mmc-bn-run mmc-fg-make", disabled: Boolean(this.working || row.making),
           title: t("Render it on ComfyUI from the recipe and the project's look"),
@@ -1152,6 +1167,19 @@ class Forge {
                          : t("Remove {name}", { name: recipe.name })]),
       ]),
     ].filter(Boolean));
+  }
+
+  /** An asset's masters to the machine the browser is on: one master arrives
+   *  as itself, more as one zip named for the asset. */
+  mastersDownload(row) {
+    const several = row.masters.length > 1;
+    const paths = row.masters.map((file) =>
+      forgePath(this.name, `assets/${row.kind}/${row.name}/masters/${file}`));
+    return el("button", {
+      class: "mmc-bn-verb",
+      onclick: () => download(paths, several ? { name: `${this.name}-${row.name}` } : {}),
+    }, [icon("download", 15),
+        el("span", { text: several ? t("Download the masters") : t("Download the master") })]);
   }
 
   rawEditor(recipe) {

@@ -218,6 +218,17 @@ export const css = `
 .mmc-cell-star.on svg { fill: currentColor; }
 .mmc-cell-star svg { width: 13px; height: 13px; }
 .mmc-cell[aria-selected="true"] .mmc-cell-star { right: 36px; }
+/* Download, the star's neighbour on the star's terms, one place further in. */
+.mmc-cell-save {
+  position: absolute; top: 8px; right: 36px; width: 24px; height: 24px;
+  display: none; align-items: center; justify-content: center;
+  border: 0; border-radius: 50%; background: var(--mmc-scrim-2);
+  color: var(--mmc-text); cursor: pointer; padding: 0;
+}
+.mmc-cell:hover .mmc-cell-save,
+.mmc-cell:focus-visible .mmc-cell-save { display: flex; }
+.mmc-cell-save svg { width: 13px; height: 13px; }
+.mmc-cell[aria-selected="true"] .mmc-cell-save { right: 64px; }
 /* Where a file lives — worth a caption only on the All shelf, where everything
    is mixed together. Sits above the name gradient. */
 .mmc-cell-home {

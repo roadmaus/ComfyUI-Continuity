@@ -47,7 +47,7 @@
 
 import { el, icon, mark, spinner, heldNote, drawFrame, dragsFiles, mountOverlay,
          keepScroll, placeNear, dismissable } from "./dom.js";
-import { upscaleBackends, upscalePreviewUrl, upscaleRun, probe, viewUrl,
+import { download, upscaleBackends, upscalePreviewUrl, upscaleRun, probe, viewUrl,
          upload, uiSetting, patchSettings, primeSettings, neuralOf } from "./api.js";
 import { openChoicePopover } from "./pills.js";
 import { openPicker } from "./picker.js";
@@ -1452,6 +1452,13 @@ class Bench {
           onclick: () => openLoupe({
             source: { path: `${this.result.path} [output]`, kind: this.result.kind },
           }),
+        }),
+        // Written on the machine ComfyUI runs on; this brings it to the one
+        // the browser is on, which through a tunnel is a different computer.
+        el("button", {
+          class: "mmc-up-open", text: t("Download"),
+          title: t("Save it to this computer's Downloads folder."),
+          onclick: () => download(`${this.result.path} [output]`),
         }),
       ]),
     );

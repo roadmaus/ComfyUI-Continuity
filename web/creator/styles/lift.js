@@ -310,6 +310,8 @@ export const css = `
 .mmc-lf-reveal:hover:not(:disabled) { color: var(--mmc-strong); background: var(--mmc-surface-2); }
 .mmc-lf-reveal:disabled { opacity: .45; cursor: default; }
 .mmc-lf-reveal:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
+/* Download sits beside Show in folder: only the first is pushed right. */
+.mmc-lf-reveal + .mmc-lf-reveal { margin-left: 0; }
 .mmc-lf-doors { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .mmc-lf-door {
   display: flex; flex-direction: column; gap: 1px; text-align: left; cursor: pointer;

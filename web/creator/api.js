@@ -415,6 +415,47 @@ export function outputUrl({ filename, subfolder = "", type = "output" }) {
   return api.apiURL(`/view?${new URLSearchParams({ filename, subfolder, type })}`);
 }
 
+/** A forge project's file as a picker path, for `download`: the forge keeps
+ *  its projects under output/ (`outputs.FORGE`), so a `project/path` pair is
+ *  one more output path. `path` "" is the whole project. */
+export function forgePath(project, path = "") {
+  return `${["continuity/forge", project, path].filter(Boolean).join("/")} [output]`;
+}
+
+/**
+ * Save files to the browser's own Downloads folder — the machine the browser
+ * is on, which is not always the one ComfyUI writes to (`creator/downloads.py`).
+ * `paths` is one picker path or several, files or folders; one file arrives as
+ * itself, anything more as a zip, named `name` when given.
+ *
+ * Always by ticket, even for one file: the POST checks every path resolves, so
+ * a file that has gone since it was drawn is a toast here rather than a saved
+ * JSON error the browser named `download`. The GET then goes on an anchor, so
+ * the browser streams the bytes to disk and the page never holds them.
+ */
+export async function download(paths, { name } = {}) {
+  try {
+    const response = await api.fetchApi("/continuity/download", {
+      method: "POST",
+      headers: JSON_HEADERS,
+      body: JSON.stringify({ paths: [paths].flat(), name }),
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(body.error || t("download failed ({status})", { status: response.status }));
+    const anchor = document.createElement("a");
+    anchor.href = api.apiURL(`/continuity/download?${new URLSearchParams({ ticket: body.ticket })}`);
+    anchor.download = "";
+    anchor.click();
+  } catch (error) {
+    // Reported here rather than at each of the buttons that call this: a
+    // download has nowhere of its own to fail into, and every caller would
+    // say the same sentence.
+    globalThis.app?.extensionManager?.toast?.add({
+      severity: "error", summary: t("Download"), detail: String(error.message || error), life: 6000,
+    });
+  }
+}
+
 // Keyed by folder: switching between two folders and back is a normal thing to
 // do while hunting for a LoRA, and re-walking a few thousand files for it is not.
 const loraCache = new Map();   // folder -> {at, body}

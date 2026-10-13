@@ -310,6 +310,8 @@ export const css = `
 }
 .mmc-ch-door:hover:not(:disabled) { background: var(--mmc-lift); }
 .mmc-ch-door:disabled { opacity: .45; cursor: default; }
+/* The download door is an icon, not a word: square-ish, the glyph centred. */
+.mmc-ch-save { display: inline-flex; align-items: center; padding: 4px 8px; }
 /* The two that send a still on, in the pre-stage chip's own colours; and the
    one that stops a render, in the colour of stopping. */
 .mmc-ch-sendon:hover:not(:disabled) { background: none; border-color: var(--mmc-accent); color: var(--mmc-accent); }

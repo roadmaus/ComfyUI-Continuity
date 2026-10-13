@@ -93,6 +93,7 @@ MODULES = {
     "screen_composite": "screens.composite",
     # Route modules. Importing one registers its handlers on `PromptServer`,
     # which `stub_server()` stands in for.
+    "download_route": "routes.download",
     "neural_route": "routes.neural",
     "plate_route": "routes.plate",
     "reveal_route": "routes.reveal",

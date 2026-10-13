@@ -49,7 +49,8 @@
 
 import { el, icon, spinner, mountOverlay, drawFrame } from "./dom.js";
 import { viewUrl, upscalePreviewUrl, probe, primeSettings, neuralOf,
-         neuralTwin } from "./api.js";
+         neuralTwin, download, isRefMod } from "./api.js";
+import { isAtlasRef } from "./presets/atlasref.js";
 import { api } from "../../../scripts/api.js";
 import { NEURAL } from "./manifest.js";
 import { NEURAL_RANGES, emptyNeural, neuralEstimateGb, parseNeural } from "./state.js";
@@ -166,6 +167,13 @@ class Loupe {
       el("div", { class: "mmc-lp-bar" }, [
         this.name, this.meta,
         el("span", { class: "mmc-lp-gap" }),
+        // The file as it is on disk, to wherever the browser is — the loupe is
+        // where a render is judged, and the keeper is decided here. Not for a
+        // style frame or a saved reference: neither is a file in a media root.
+        !isAtlasRef(this.source.path) && !isRefMod(this.source.path) && el("button", {
+          class: "mmc-lp-step", title: t("Download"), "aria-label": t("Download"),
+          onclick: () => download(this.source.path),
+        }, [icon("download", 15)]),
         el("button", {
           class: "mmc-close", text: "✕", title: t("Close"),
           onclick: () => this.close(),

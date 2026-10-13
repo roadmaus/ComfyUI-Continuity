@@ -19,6 +19,7 @@ from .creator.creator_node import comfy_entrypoint  # noqa: F401
 from .creator.routes import blockout  # noqa: F401  (registers /continuity/blockout)
 from .creator.routes import chat  # noqa: F401  (registers /continuity/chat)
 from .creator.routes import control  # noqa: F401  (registers /continuity/control)
+from .creator.routes import download  # noqa: F401  (registers /continuity/download)
 from .creator.routes import families  # noqa: F401  (registers /continuity/families)
 from .creator.routes import forge  # noqa: F401  (registers /continuity/forge)
 from .creator.routes import lift  # noqa: F401  (registers /continuity/lift)

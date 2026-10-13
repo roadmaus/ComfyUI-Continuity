@@ -36,7 +36,7 @@
 
 import { el, icon, mark, spinner, heldNote, drawFrame, dragsFiles, mountOverlay,
          keepScroll, placeNear, dismissable } from "./dom.js";
-import { controlPreviewUrl, controlRun, controlTracings, probe, viewUrl, upload,
+import { controlPreviewUrl, controlRun, download, controlTracings, probe, viewUrl, upload,
          uiSetting, patchSettings, primeSettings } from "./api.js";
 import { openChoicePopover } from "./pills.js";
 import { openPicker } from "./picker.js";
@@ -1378,13 +1378,25 @@ class Bench {
         el("span", { class: "mmc-bn-outnote", text: this.outLine() }),
       ]),
       el("span", { class: "mmc-bn-gap" }),
-      doors.length
-        ? el("div", { class: "mmc-bn-doors" }, doors.map((door) => this.door(door, door === lead)))
-        // No piece to send to — the bench was opened without targets. Not a
-        // failure and not worth a warning: the file is on the disk under a name
-        // the picker lists, which is the whole of what happened.
-        : el("span", { class: "mmc-bn-outnote", text:
-            t("Pick it up from the picker whenever you want it.") }),
+      el("div", { class: "mmc-bn-doors" }, [
+        ...(doors.length
+          ? doors.map((door) => this.door(door, door === lead))
+          // No piece to send to — the bench was opened without targets. Not a
+          // failure and not worth a warning: the file is on the disk under a
+          // name the picker lists, which is the whole of what happened.
+          : [el("span", { class: "mmc-bn-outnote", text:
+              t("Pick it up from the picker whenever you want it.") })]),
+        // A door out of the install rather than into a card: the drawing is on
+        // the machine ComfyUI runs on, and through a tunnel that is not the
+        // machine the browser is on.
+        el("button", {
+          class: "mmc-bn-door",
+          onclick: () => download(this.result.path),
+        }, [
+          el("span", { class: "mmc-bn-doorname", text: t("Download") }),
+          el("span", { class: "mmc-bn-doordoes", text: t("Save it to this computer's Downloads folder.") }),
+        ]),
+      ]),
     );
   }
 
