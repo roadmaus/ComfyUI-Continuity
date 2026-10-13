@@ -73,6 +73,10 @@ check("a missing file is refused", _refused("gone.png"), True)
 os.symlink(os.path.join(BASE, "secret.txt"), os.path.join(DIRS["input"], "link.txt"))
 check("a symlink out of the root is refused", _refused("link.txt"), True)
 
+os.symlink(os.path.join(BASE, "secret.txt"), os.path.join(DIRS["output"], "mesh", "leak.txt"))
+check("a symlink out of a zipped folder is left out",
+      _names(["mesh [output]"]), ["mesh/model.glb", "mesh/tex/albedo.png"])
+
 check("one folder zips under its own name, hidden files left out",
       _names(["mesh [output]"]), ["mesh/model.glb", "mesh/tex/albedo.png"])
 check("files off one shelf come out flat", _names(["shelf/b.png"]), ["b.png"])

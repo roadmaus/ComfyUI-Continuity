@@ -2,14 +2,17 @@
 own Downloads folder — see `downloads.py` for why the pack needs one.
 
 A GET, so the frontend can hand the URL to an `<a download>` and the browser
-streams it to disk: a 2 GB render never passes through the page. One `path`
-naming a file is served as itself; anything more is zipped into a temporary
+streams it to disk: a 2 GB render never passes through the page. One file is
+served as itself; anything more is zipped into a temporary
 file first (a zip's central directory is written last, so it cannot be
 streamed as it is built without a seekable target), sent, and removed.
 
-A selection from the picker can be a few hundred paths, which is past what a
-URL holds. Those are POSTed first and come back as a ticket: a short-lived
-handle on the path list that the GET then names instead.
+The paths are POSTed first and come back as a ticket, a short-lived handle on
+the path list that the GET then names. The GET takes nothing else, for two
+reasons: a picker selection can be a few hundred paths, past what a URL
+holds; and a GET cannot be guarded (`guard.py`), so one that took paths
+would let any page an `<img>` loads on zip the whole output folder to temp
+as often as it liked. A ticket only comes from the guarded POST.
 """
 
 import asyncio
@@ -70,12 +73,9 @@ async def download_ticket(request):
 
 @PromptServer.instance.routes.get("/continuity/download")
 async def download(request):
-    """?path=…[&path=…][&name=…] or ?ticket=… -> the file, or a zip of them."""
+    """?ticket=… -> the file, or a zip of them."""
     try:
-        if "ticket" in request.query:
-            paths, name = _take_ticket(request.query["ticket"])
-        else:
-            paths, name = request.query.getall("path", []), request.query.get("name")
+        paths, name = _take_ticket(request.query.get("ticket", ""))
         if len(paths) == 1 and os.path.isfile(target := downloads.resolve(paths[0])):
             return web.FileResponse(target, headers={
                 "Content-Disposition": _disposition(name or os.path.basename(target))})

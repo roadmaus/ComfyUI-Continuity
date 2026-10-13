@@ -54,12 +54,18 @@ def resolve(path):
 
 def _walk(folder):
     """Every file under a folder, hidden ones and hidden folders left out —
-    `.DS_Store` and a build's marker are not things anybody asked for."""
+    `.DS_Store` and a build's marker are not things anybody asked for.
+
+    `resolve` held the folder inside its root, but a symlink inside it can
+    still point anywhere, and the zip would follow it. So each file is held
+    inside the folder too; `os.walk` already declines to descend a linked
+    directory."""
     for here, dirs, files in os.walk(folder):
         dirs[:] = sorted(d for d in dirs if not d.startswith("."))
         for name in sorted(files):
-            if not name.startswith("."):
-                yield os.path.join(here, name)
+            file = os.path.join(here, name)
+            if not name.startswith(".") and folder_paths.is_within_directory(folder, os.path.realpath(file)):
+                yield file
 
 
 def plan(paths):
