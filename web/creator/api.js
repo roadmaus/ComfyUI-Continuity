@@ -426,7 +426,7 @@ export function forgePath(project, path = "") {
  * Save files to the browser's own Downloads folder — the machine the browser
  * is on, which is not always the one ComfyUI writes to (`creator/downloads.py`).
  * `paths` is one picker path or several, files or folders; one file arrives as
- * itself, anything more as a zip, named `name` when given.
+ * itself (`name` ignored), anything more as a zip named `name` when given.
  *
  * Always by ticket, even for one file: the POST checks every path resolves, so
  * a file that has gone since it was drawn is a toast here rather than a saved

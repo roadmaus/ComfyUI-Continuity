@@ -1172,14 +1172,13 @@ class Forge {
   /** An asset's masters to the machine the browser is on: one master arrives
    *  as itself, more as one zip named for the asset. */
   mastersDownload(row) {
-    const several = row.masters.length > 1;
     const paths = row.masters.map((file) =>
       forgePath(this.name, `assets/${row.kind}/${row.name}/masters/${file}`));
     return el("button", {
       class: "mmc-bn-verb",
-      onclick: () => download(paths, several ? { name: `${this.name}-${row.name}` } : {}),
+      onclick: () => download(paths, { name: `${this.name}-${row.name}` }),
     }, [icon("download", 15),
-        el("span", { text: several ? t("Download the masters") : t("Download the master") })]);
+        el("span", { text: paths.length > 1 ? t("Download the masters") : t("Download the master") })]);
   }
 
   rawEditor(recipe) {

@@ -32,7 +32,7 @@ from ..guard import same_origin
 # browser that asks where to save before it starts the request.
 TICKET_SECONDS = 600
 _tickets = {}   # ticket -> (made at, paths, name)
-CHUNK = 1 << 20
+CHUNK = 1 << 20   # bytes per read when streaming a zip back
 
 
 def _disposition(filename):
@@ -76,9 +76,10 @@ async def download(request):
     """?ticket=… -> the file, or a zip of them."""
     try:
         paths, name = _take_ticket(request.query.get("ticket", ""))
+        # `name` is the zip's: one file keeps its own, extension and all.
         if len(paths) == 1 and os.path.isfile(target := downloads.resolve(paths[0])):
             return web.FileResponse(target, headers={
-                "Content-Disposition": _disposition(name or os.path.basename(target))})
+                "Content-Disposition": _disposition(os.path.basename(target))})
         entries = downloads.plan(paths)
         filename = downloads.zip_name(paths, entries, name)
     except downloads.DownloadError as exc:
