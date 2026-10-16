@@ -21,7 +21,7 @@ from harness import FAILURES, check, passed
 _pkg = layout.load("canvas", "accel", "sampling", "contextir", "compile",
                    "compile_image", "models", "registry", "manifest",
                    "still", "krea2_still", "ideogram4_still", "flux2klein_still",
-                   "qwen21_still",
+                   "qwen21_still", "moss_still", "visionweights",
                    "grammar", "h3_declare", "h3_models", "h3_grammar",
                    "ltx25_declare",
                    "ltx25_models", "ltx25_sampling")
@@ -40,6 +40,7 @@ k2 = _pkg.krea2_still
 i4 = _pkg.ideogram4_still
 kl = _pkg.flux2klein_still
 q21 = _pkg.qwen21_still
+ms = _pkg.moss_still
 lx = _pkg.ltx25_models
 lxs = _pkg.ltx25_sampling
 
@@ -516,5 +517,51 @@ check("qwen21 cites pictures the way its tokenizer spells them",
 check("qwen21 canvas is the shared /16 grid",
       (qwen21["canvas"]["multiple"], qwen21["canvas"]["max_pixels"]),
       (ci.CANVAS_MULTIPLE, ci.MAX_PIXELS))
+
+# ---- MOSS-Image -------------------------------------------------------------
+
+moss = manifest.describe("moss")
+mwidgets = {w["id"]: w for w in moss["widgets"]}
+for name in ("steps", "cfg", "sampler_name", "scheduler"):
+    check(f"moss {name} default is the card's row",
+          mwidgets[name]["default"], ms.MOSS_BASE[name])
+check("moss weight slots are the family's fields — one DiT, no turbo file",
+      [w["id"] for w in moss["weights"]], ["model", "clip", "vae"])
+check("moss decodes with the Flux 2 VAE and loads its encoder as moss_image",
+      (ms.VAE_KIND, ms.CLIP_TYPE), ("flux2", "moss_image"))
+check("moss offers no turbo pill and reads no pictures",
+      ("turbo" in moss["capabilities"], "refs" in moss["capabilities"],
+       ms.TAKES_REFS, moss["prompt"]["max_refs"]), (False, False, False, 0))
+check("moss is a still family on the pill",
+      (registry.STILL_ARCHES.get("moss"), "moss" in ci.ARCHES), ("moss", True))
+
+
+def _header_file(name, keys):
+    """A safetensors file that is nothing but a header naming `keys`."""
+    import struct
+    import tempfile
+    body = json.dumps({k: {"dtype": "BF16", "shape": [1], "data_offsets": [0, 0]}
+                       for k in keys}).encode()
+    path = os.path.join(tempfile.mkdtemp(), name)
+    with open(path, "wb") as handle:
+        handle.write(struct.pack("<Q", len(body)) + body)
+    return path
+
+
+def _clip_refusal(keys):
+    try:
+        ms.check_clip(_header_file("te.safetensors", keys), "te.safetensors")
+    except ValueError as err:
+        return str(err)
+    return None
+
+
+check("moss takes an encoder core detects as Qwen3.5",
+      _clip_refusal([ms.QWEN35_KEY, "model.language_model.layers.0.input_layernorm.weight"]), None)
+check("...and refuses one saved without the model. prefix, by name",
+      "te.safetensors saves its weights without the 'model.' key prefix" in
+      (_clip_refusal([ms.QWEN35_KEY_BARE]) or ""), True)
+check("...and leaves an encoder it cannot place to the loader",
+      _clip_refusal(["text_model.encoder.layers.0.mlp.fc1.weight"]), None)
 
 passed("the registry serves every family and the manifests hold their sources")

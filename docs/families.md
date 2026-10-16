@@ -14,6 +14,7 @@ same node on all of them; the model pill picks which one a render lands on.
 | Qwen Image Edit | stills | up to three; click the first to edit it in place |
 | Flux 2 Klein | stills | up to three; click the first to edit it in place |
 | Qwen Image 2.1 | stills | up to ten; click the first to edit it in place |
+| MOSS-Image | stills | none, prose only |
 
 Every render files into a folder named after its family
 (`output/continuity/renders/ltx25/`, `output/continuity/stills/krea2/`) and
@@ -169,6 +170,28 @@ Stills, drawn from prose or edited from pictures, on one checkpoint.
 - It is not an edition of Qwen Image Edit. Different DiT, different VAE,
   different encoder file, no shift node, no editions pill, and no built-in
   ControlNet: the guide is a separate file, as above.
+
+## MOSS-Image
+
+Stills from prose, and only from prose.
+
+- OpenMOSS's 5B DiT (Apache 2.0), behind a Qwen3.5 9B text encoder and the
+  Flux 2 VAE. Its strength is rendered text — signs, notes, labels, in
+  English and Chinese — so quote the words you want drawn.
+- No references: it has no picture input at all, and attaching one is
+  refused. An init image still works, the same as on Krea 2.
+- The row is the model card's: 50 steps at cfg 3, euler/simple. The card
+  calls 30 the bottom of the useful range. On the unconditional pass layer 22
+  is skipped, which is the card's own guidance; the pack adds it for you and
+  leaves it off at cfg 1, where that pass never runs.
+- **No turbo.** The published 8-step distillations need their own sampler
+  loop, which ComfyUI does not have; on the ordinary sampler they are not
+  the same model.
+- A JSON layout pasted as the prompt (`summary.caption`, `items` with boxes)
+  places text and objects where the boxes say. See the
+  [MOSS-Image user guide](https://github.com/OpenMOSS/MOSS-Image/blob/main/USERGUIDE.md#layout-prompts-experimental)
+  for the format. Use the same canvas size the boxes were written for.
+- Needs a ComfyUI from 16 October 2026 or newer.
 
 ## Editing a picture you just rendered
 

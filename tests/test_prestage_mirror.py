@@ -231,7 +231,15 @@ check("what a reference is on each arch", reflected["refs"],
                   "nativeControl": [], "controlEditions": [],
                   "adapter": None, "adapterHints": [],
                   "editions": None, "defaultEdition": None,
-                  "editionHints": [], "max": q21.REFS_LIMIT, "control": None}})
+                  "editionHints": [], "max": q21.REFS_LIMIT, "control": None},
+       # Reads none, like Ideogram: text to image only.
+       "moss": {"reads": False, "methods": [],
+                "needsLora": False, "editsFirst": False,
+                "noun": list(ci.REFS_NOUN), "editFirst": None,
+                "nativeControl": [], "controlEditions": [],
+                "adapter": None, "adapterHints": [],
+                "editions": None, "defaultEdition": None,
+                "editionHints": [], "max": 0, "control": None}})
 
 # The cap is the render's, not a constant: the encoder has three image slots on
 # every family, and what the checkpoint was post-trained to read is its own
@@ -261,10 +269,11 @@ check("which renders read a guide as one of their pictures",
 # It is one pill and it does not mean one thing: Krea ships the distillation as
 # a checkpoint *and* as a LoRA, Ideogram and Qwen Image Edit only as a LoRA.
 # Both halves have to agree about which, or the pill offers a route the compiler
-# will refuse.
+# will refuse. MOSS-Image has none: its distillations need a sampler loop core
+# does not have (`moss.still.FIELDS`).
 
-check("every image arch has a turbo pill", reflected["turbo_arches"],
-      sorted(ci.ARCHES))
+check("every image arch but MOSS-Image has a turbo pill", reflected["turbo_arches"],
+      sorted(set(ci.ARCHES) - {"moss"}))
 check("which routes each arch offers",
       reflected["turbo_routes"], {"krea2": [True, True], "ideogram4": [False, True],
                                   "qwenedit": [False, True],

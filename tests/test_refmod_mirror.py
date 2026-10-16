@@ -358,7 +358,8 @@ check("every family a member can be sent to is listed, the piece's first, with w
       [["h3", True, True, True, True, False, True], ["ltx25", False, True, True, False, False, False],
        ["krea2", False, False, True, False, True, False], ["ideogram4", False, False, False, False, False, False],
        ["qwenedit", False, False, True, False, False, False], ["flux2klein", False, False, True, False, False, True],
-       ["qwen21", False, False, True, False, False, False]])
+       ["qwen21", False, False, True, False, False, False],
+       ["moss", False, False, False, False, False, False]])
 check("a new frame forgets the renditions", got["dropped"], None)
 check("with two families ready the menu leads with one row for all of them, per-picture modes only",
       got["everyRow"],

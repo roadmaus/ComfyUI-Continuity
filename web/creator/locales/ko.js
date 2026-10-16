@@ -3222,4 +3222,8 @@ export const ko = {
   "The build folder as a zip, to this computer": "빌드 폴더를 zip으로 이 컴퓨터에",
   "Download the masters": "마스터 다운로드",
   "Download the master": "마스터 다운로드",
+  "MOSS-Image — OpenMOSS's open-weights 5B DiT (Apache 2.0). Text to image only, strong on rendered text in English and Chinese; a JSON layout pasted as the prompt places text and objects by box.": "MOSS-Image — OpenMOSS의 오픈 웨이트 5B DiT(Apache 2.0). 텍스트에서 이미지 생성만 지원하며, 영어와 중국어 글자 렌더링에 강합니다. 프롬프트에 JSON 레이아웃을 붙여 넣으면 박스로 글자와 사물의 위치를 지정합니다.",
+  "MOSS-Image SFT (or Base) — the 5B DiT. bf16 or the int8 convrot cut; ~50 steps at cfg 3.": "MOSS-Image SFT(또는 Base) — 5B DiT. bf16 또는 int8 convrot 버전. cfg 3에서 약 50스텝.",
+  "Qwen3.5 9B, loaded as CLIPLoader type 'moss_image' — Comfy-Org's qwen3.5_9b file, int8 convrot or w4a8.": "Qwen3.5 9B, CLIPLoader 타입 'moss_image'로 로드 — Comfy-Org의 qwen3.5_9b 파일(int8 convrot 또는 w4a8).",
+  "The Flux 2 VAE — the same file Klein and Ideogram load.": "Flux 2 VAE — Klein과 Ideogram이 로드하는 것과 같은 파일입니다.",
 };

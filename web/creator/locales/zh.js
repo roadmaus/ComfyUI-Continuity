@@ -3222,4 +3222,8 @@ export const zh = {
   "The build folder as a zip, to this computer": "将构建文件夹打包为 zip，下载到这台电脑",
   "Download the masters": "下载母版",
   "Download the master": "下载母版",
+  "MOSS-Image — OpenMOSS's open-weights 5B DiT (Apache 2.0). Text to image only, strong on rendered text in English and Chinese; a JSON layout pasted as the prompt places text and objects by box.": "MOSS-Image — OpenMOSS 的开放权重 5B DiT（Apache 2.0）。仅支持文生图，擅长绘制中英文文字；把 JSON 布局粘贴为提示词，即可用框指定文字和物体的位置。",
+  "MOSS-Image SFT (or Base) — the 5B DiT. bf16 or the int8 convrot cut; ~50 steps at cfg 3.": "MOSS-Image SFT（或 Base）— 5B DiT。bf16 或 int8 convrot 版本。cfg 3 约 50 步。",
+  "Qwen3.5 9B, loaded as CLIPLoader type 'moss_image' — Comfy-Org's qwen3.5_9b file, int8 convrot or w4a8.": "Qwen3.5 9B，以 CLIPLoader 类型 'moss_image' 加载 — Comfy-Org 的 qwen3.5_9b 文件（int8 convrot 或 w4a8）。",
+  "The Flux 2 VAE — the same file Klein and Ideogram load.": "Flux 2 VAE — 与 Klein 和 Ideogram 加载的是同一个文件。",
 };

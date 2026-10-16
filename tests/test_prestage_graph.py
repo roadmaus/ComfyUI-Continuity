@@ -1229,6 +1229,62 @@ check("a different widget seed is a different derived seed",
 check("Krea 2's style references are not the subject, so its seed stands",
       refs_graph(seed=5)["KSampler"][0][1]["seed"], 5)
 
+# ---- MOSS-Image --------------------------------------------------------------
+#
+# Krea 2's text-to-image shape on the Flux 2 latent: an encode, an empty-prompt
+# encode for the negative, `KSampler`. No shift node — core detects the card's
+# shift 5 at multiplier 1, and `ModelSamplingSD3` would restate it at 1000 —
+# and the card's guidance as `SkipLayerGuidanceDiTSimple` on layer 22, emitted
+# only where the unconditional is evaluated. Only on a core that has the model
+# (Comfy-Org/ComfyUI#17095); an older one says so and the section is skipped.
+
+ms = importlib.import_module(f"{PACKAGE}.creator.families.moss.still")
+MODELS["moss"] = {
+    "model": "moss_image_sft_int8_convrot.safetensors",
+    "clip": "qwen3.5_9b_int8_convrot.safetensors",
+    "vae": "flux2-vae.safetensors",
+}
+MOSS_WEIGHTS = ri.ImageWeights(arch="moss", files=MODELS["moss"])
+_clip_types = comfy_nodes.NODE_CLASS_MAPPINGS["CLIPLoader"].INPUT_TYPES()["required"]["type"][0]
+
+
+def moss_graph(data=None, **row):
+    settings = dict(seed=11, steps=50, cfg=3.0, sampler_name="euler", scheduler="simple")
+    settings.update(row)
+    payload = ci.compile_prestage(data if data is not None else {
+        "arch": "moss", "prompt": "a red room", "aspect": "16:9",
+        "short_edge": 1024, "refs": [], "loras": []}, ms)
+    return by_class(ri.emit(payload, MOSS_WEIGHTS, sampling_mod.Sampling(**settings),
+                            NODE_ID, ms).finalize())
+
+
+if "moss_image" not in _clip_types:
+    print("MOSS-Image section skipped: this core predates it")
+else:
+    mt2i = moss_graph()
+    check("moss loads its encoder typed moss_image and samples on the Flux 2 latent",
+          (mt2i["UNETLoader"][0][1]["unet_name"], mt2i["CLIPLoader"][0][1]["type"],
+           "EmptyFlux2LatentImage" in mt2i),
+          (MODELS["moss"]["model"], "moss_image", True))
+    check("moss's negative is the empty prompt, encoded",
+          sorted(n[1]["text"] for n in mt2i["CLIPTextEncode"]), ["", "a red room"])
+    check("moss skips layer 22 on the uncond pass and emits no shift node",
+          ([(n[1]["double_layers"], n[1]["single_layers"]) for n in mt2i["SkipLayerGuidanceDiTSimple"]],
+           "ModelSamplingSD3" in mt2i, "ModelSamplingAuraFlow" in mt2i),
+          ([("", "22")], False, False))
+    m_sampler = mt2i["KSampler"][0][1]
+    check("moss samples the card's row",
+          (m_sampler["steps"], m_sampler["cfg"], m_sampler["sampler_name"],
+           m_sampler["scheduler"], m_sampler["denoise"]),
+          (50, 3.0, "euler", "simple", 1.0))
+    mcfg1 = moss_graph(cfg=1.0)
+    check("at cfg 1 neither the uncond encode nor the layer skip is emitted",
+          (len(mcfg1["CLIPTextEncode"]), "SkipLayerGuidanceDiTSimple" in mcfg1,
+           "ConditioningZeroOut" in mcfg1), (1, False, True))
+    expect_error("moss with references is refused with directions",
+                 lambda: build(blob(arch="moss", refs=["a.png"])),
+                 "MOSS-Image draws from the prompt alone")
+
 # ---- refusals ----------------------------------------------------------------
 
 expect_error("Ideogram with references is refused with directions",

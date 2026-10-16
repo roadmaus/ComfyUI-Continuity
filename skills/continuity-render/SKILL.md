@@ -1,6 +1,6 @@
 ---
 name: continuity-render
-description: Render videos and pictures on a ComfyUI server that has the Continuity node pack (MiniMax H3, LTX 2.5, Krea 2, Ideogram 4, Qwen Image, Flux 2 Klein) with one command, the render.py bundled in this skill. Use whenever the user asks to render, generate or make a clip, video, shot, still, picture or image "on ComfyUI", "on the lab", "with H3/Hailuo/MiniMax", "with LTX", "with Krea" and so on, or to test a render. Never hand-write ComfyUI workflow JSON or POST to /prompt for these models; this client builds the render correctly.
+description: Render videos and pictures on a ComfyUI server that has the Continuity node pack (MiniMax H3, LTX 2.5, Krea 2, Ideogram 4, Qwen Image, Flux 2 Klein, MOSS-Image) with one command, the render.py bundled in this skill. Use whenever the user asks to render, generate or make a clip, video, shot, still, picture or image "on ComfyUI", "on the lab", "with H3/Hailuo/MiniMax", "with LTX", "with Krea" and so on, or to test a render. Never hand-write ComfyUI workflow JSON or POST to /prompt for these models; this client builds the render correctly.
 ---
 
 # Rendering with Continuity
