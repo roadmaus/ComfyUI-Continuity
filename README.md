@@ -156,6 +156,7 @@ for a render in plain words.
 | Qwen Image Edit | stills, edited from a picture | [Comfy-Org/Qwen-Image-Edit_ComfyUI](https://huggingface.co/Comfy-Org/Qwen-Image-Edit_ComfyUI) |
 | Flux 2 Klein | stills, edited from a picture | [Black Forest Labs](https://huggingface.co/black-forest-labs) |
 | Qwen Image 2.1 | stills, drawn or edited from pictures | [Comfy-Org/Qwen-Image-2.1](https://huggingface.co/Comfy-Org/Qwen-Image-2.1) |
+| MOSS-Image | stills, from prose only | [Comfy-Org/MOSS-Image](https://huggingface.co/Comfy-Org/MOSS-Image) |
 
 See [docs/models.md](docs/models.md) for which files you need and where they go.
 

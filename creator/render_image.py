@@ -153,6 +153,12 @@ def check(weights, payload, family):
 
     vaekind.check(folder_paths.get_full_path(FOLDERS["vae"], weights.get("vae")),
                   family.VAE_KIND, weights.get("vae"))
+    # A family whose encoder ships in cuts core cannot all load says which by
+    # the header, the same way the VAE is refused above (`moss.still.check_clip`).
+    check_clip = getattr(family, "check_clip", None)
+    if check_clip:
+        check_clip(folder_paths.get_full_path(FOLDERS["clip"], weights.get("clip")),
+                   weights.get("clip"))
 
 
 def check_vision(weights, payload, family):

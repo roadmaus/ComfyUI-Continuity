@@ -6,6 +6,23 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**MOSS-Image arrives as a still family: text to image, strong on rendered
+text.** OpenMOSS's 5B DiT behind a Qwen3.5 9B encoder and the Flux 2 VAE, on
+the pre-stage's model pill as `moss`, built from what core shipped for it on
+16 October 2026. The graph is Krea 2's text-to-image shape on the Flux 2
+latent, at the model card's 50 steps and cfg 3, with the card's guidance:
+layer 22 is skipped on the unconditional pass through
+`SkipLayerGuidanceDiTSimple`, and left off at cfg 1 where that pass never
+runs. There is no shift node. Core already sets the card's shift of 5, and the
+`ModelSamplingSD3` the community workflows add would set it at a timestep
+multiplier of 1000, which only the third-party plugin's DiT reads correctly.
+The family reads no pictures and refuses them, and has no turbo pill, because
+the 8-step distillations need a sampler loop core does not have. Some
+community repacks of the text encoder are saved without the `model.` prefix
+core's loader detects Qwen3.5 by. Core would then load the file as a CLIP-L
+and fail inside the DiT, so the render is refused by the file's header first,
+naming Comfy-Org's encoder as the fix.
+
 **A remote refine or chat turn longer than a minute no longer comes back as
 "Fetch timeout" (issue #120).** The remote backend used to answer inside the
 request that asked, and frontend 1.55 aborts any request after 60 seconds, as a

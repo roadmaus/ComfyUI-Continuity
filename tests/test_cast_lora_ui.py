@@ -387,7 +387,7 @@ check("a LoRA with a word stands behind a name; one without does not",
 check("the sheet draws them as a row on the family's tab", report.get("sheetRow"),
       {"drawn": True, "name": "anna_v3", "note": "trigger words ohwx anna", "weight": "0.85 weight"})
 check("...with a tab per family and a way to hang one",
-      (report.get("sheetTabs"), report.get("sheetOffers")), (7, True))
+      (report.get("sheetTabs"), report.get("sheetOffers")), (8, True))
 check("the row's menu writes the words to the member on disk",
       report.get("sheetStored"),
       {"h3": {"loras": [{"name": "people/anna_v3.safetensors", "strength": 0.85, "triggers": ["ohwx anna", "portrait"]}]}})

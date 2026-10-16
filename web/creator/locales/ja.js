@@ -2945,4 +2945,8 @@ export const ja = {
   "What a render with a screen in it writes.": "画面を含むレンダリングが書き出すもの。",
   "For finding out why a screen came out wrong. Read when a render is queued.": "画面がおかしくなった理由を調べるためのもの。レンダリングをキューに入れた時点で読み込まれます。",
   "plain": "無地",
+  "MOSS-Image — OpenMOSS's open-weights 5B DiT (Apache 2.0). Text to image only, strong on rendered text in English and Chinese; a JSON layout pasted as the prompt places text and objects by box.": "MOSS-Image — OpenMOSS のオープンウェイト 5B DiT（Apache 2.0）。テキストからの画像生成のみ。英語と中国語の文字描画に強く、プロンプトに JSON レイアウトを貼るとボックスで文字や物の配置を指定できます。",
+  "MOSS-Image SFT (or Base) — the 5B DiT. bf16 or the int8 convrot cut; ~50 steps at cfg 3.": "MOSS-Image SFT（または Base）— 5B の DiT。bf16 か int8 convrot 版。cfg 3 で約 50 ステップ。",
+  "Qwen3.5 9B, loaded as CLIPLoader type 'moss_image' — Comfy-Org's qwen3.5_9b file, int8 convrot or w4a8.": "Qwen3.5 9B を CLIPLoader タイプ 'moss_image' で読み込みます — Comfy-Org の qwen3.5_9b ファイル（int8 convrot または w4a8）。",
+  "The Flux 2 VAE — the same file Klein and Ideogram load.": "Flux 2 の VAE — Klein と Ideogram が読み込むのと同じファイルです。",
 };

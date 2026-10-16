@@ -175,6 +175,28 @@ with, which sits one row away in the picker and is refused by name. One
 checkpoint draws and edits; the turbo pill takes a Lightning LoRA when one is
 published for 2.1, and refuses to engage until then.
 
+## MOSS-Image (stills)
+
+Published by [Comfy-Org/MOSS-Image](https://huggingface.co/Comfy-Org/MOSS-Image).
+
+| Slot | File | Folder |
+|---|---|---|
+| Checkpoint | `moss_image_sft_bf16.safetensors` or `moss_image_sft_int8_convrot.safetensors` (or the `base` pair) | `diffusion_models` |
+| Text encoder | `qwen3.5_9b_int8_convrot.safetensors` or `qwen3.5_9b_w4a8_gptq.safetensors` | `text_encoders` |
+| VAE | `flux2-vae.safetensors` | `vae` |
+
+SFT is the fine-tuned model and the one to start with. Base is the model
+before fine-tuning, which is better for training LoRAs on. The VAE is the
+same file Klein and Ideogram load.
+
+Community repacks of the checkpoint (such as Abiray's INT8 ConvRot) load
+fine, and so does their VAE. Some of their text encoders do not: they are
+saved without the `model.` key prefix that ComfyUI's loader uses to recognise
+Qwen3.5, and they only load through the third-party MOSS-Image plugin. The
+pack names the file and refuses it before anything loads; use Comfy-Org's
+encoder instead. The 8-step "turbo" and DMD checkpoints need the same plugin's
+sampler and are not offered.
+
 ## Cutouts and the faces pass
 
 | For | File | Folder |
