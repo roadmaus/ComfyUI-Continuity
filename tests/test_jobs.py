@@ -21,7 +21,10 @@ renders.
 
 **The remote refiner is not a job.** It spends somebody else's GPU. If it ever
 drifts onto the queue it will start waiting for renders it has no reason to wait
-for, and nothing else in the suite would notice.
+for, and nothing else in the suite would notice. Nor is it answered inside its
+request any more: a refine that outlasted the frontend's 60-second fetch timeout
+came back as "Fetch timeout" with the server still working (issue #120). It
+answers with an id and the result follows on the socket — `answer_later`.
 """
 
 import asyncio
@@ -218,11 +221,21 @@ check("nothing reached the queue", len(queue.queue), before)
 # those are the kind of decision a later edit undoes without meaning to.
 
 refine_source = open(layout.py("refine_routes"), encoding="utf-8").read()
-check("the remote refiner answers in the request",
-      'if remote:' in refine_source and 'return web.json_response({"result": result})' in refine_source,
-      True)
+check("the remote refiner answers off the queue",
+      'if remote:' in refine_source and 'jobs.answer_later(' in refine_source, True)
+check("and not inside its request",
+      'json_response({"result": result})' in refine_source, False)
 check("and the local one is queued",
       'jobs.submit("refine"' in refine_source, True)
+
+chat_source = open(os.path.join(layout.PY_ROOT, "routes/chat.py"), encoding="utf-8").read()
+for route in ("chat_turn", "chat_again"):
+    body = chat_source[chat_source.index(f"def {route}("):]
+    body = body[:body.index("\n@PromptServer")]
+    check(f"{route}'s remote call answers off the queue", "jobs.answer_later(" in body, True)
+    check(f"{route} never waits on the backend inside its request",
+          "run_in_executor(None, _run" in body or "run_in_executor(None, _again, body)" in body,
+          False)
 
 for module, route in (("routes/control", "preview_frame"),
                       ("routes/upscale", "preview_tile"),
@@ -230,5 +243,66 @@ for module, route in (("routes/control", "preview_frame"),
     source = open(os.path.join(layout.PY_ROOT, f"{module}.py"), encoding="utf-8").read()
     body = source[source.index(f"def {route}("):]
     check(f"{route} is gated", "jobs.refuse_if_busy()" in body[:900], True)
+
+# ---- answering off the queue ------------------------------------------------
+#
+# What the remote calls use instead of holding their request open. The route
+# gets an id back at once; the work runs off the loop and the answer is sent to
+# the tab that asked, under the key `queue.run` filters on.
+
+sent_messages = []
+jobs.PromptServer.instance.send_sync = (
+    lambda event, data, sid=None: sent_messages.append((event, data, sid)))
+
+
+class Refused(ValueError):
+    """Stands in for a RefineError: a sentence for the person pressing."""
+
+
+def _answer(work, client_id, expected=()):
+    async def go():
+        answer_id = jobs.answer_later(work, client_id, expected)
+        replied = list(sent_messages)
+        while jobs._answering:
+            await asyncio.gather(*jobs._answering)
+        return answer_id, replied
+    sent_messages.clear()
+    return asyncio.run(go())
+
+
+answer_id, replied = _answer(lambda: {"text": "a rewrite"}, "tab-3")
+check("the id is back before the work has answered", replied, [])
+check("the answer goes out once", len(sent_messages), 1)
+event, data, sid = sent_messages[0]
+check("as our own event, not a fake `executed`", event, jobs.ANSWER)
+check("under the id the route replied with", data["prompt_id"], answer_id)
+check("carrying the result", data["result"], {"text": "a rewrite"})
+check("to the tab that asked", sid, "tab-3")
+check("and nothing is left running", len(jobs._answering), 0)
+check("nor anything put on the queue", len(queue.queue), before)
+
+
+def _refuses_politely():
+    raise Refused("the server at http://box:8080 did not answer")
+
+
+_answer(_refuses_politely, "tab-3", (Refused,))
+check("an expected refusal is said as it is",
+      sent_messages[0][1], {"prompt_id": sent_messages[0][1]["prompt_id"],
+                            "error": "the server at http://box:8080 did not answer"})
+
+
+def _breaks():
+    raise KeyError("model")
+
+
+_answer(_breaks, None, (Refused,))
+check("anything else is said with its type", sent_messages[0][1]["error"], "KeyError: 'model'")
+check("an unaddressed answer goes to every tab", sent_messages[0][2], None)
+
+first, _ = _answer(lambda: 1, None)
+second, _ = _answer(lambda: 2, None)
+check("two answers are two ids", first != second, True)
+check("and neither looks like a queue entry's", first.startswith("continuity-answer-"), True)
 
 passed("jobs queue, gate what should be gated, and leave the cloud alone")

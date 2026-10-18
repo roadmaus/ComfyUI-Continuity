@@ -19,15 +19,16 @@ queue. That is the same line `refine_routes.py` draws against
 `families/refine.py`, and it is why the whole protocol can be tested without a
 server and tuned on `tools/chat_bench.py` without a browser.
 
-**Two backends, one shape.** The remote refiner is answered inside the request,
-exactly as the refine button's is and for the same reason: it spends somebody
-else's GPU, so there is nothing for it to queue behind. The in-process one is a
-4B model on the card the render wants, so it rides the queue as a `chat` job and
-the reply arrives on `executed` under `ui.continuity`. The turn object is the
-same either way, and the remote one is wrapped in `{"result": …}` because that
-is the envelope `queue.run()` reads: it resolves with `answer.result` where the
-reply carries one and waits for `executed` where it does not, so one call site
-in the room covers both backends. `/continuity/refine` says it the same way.
+**Two backends, one shape.** The remote refiner stays off the queue, exactly
+as the refine button's does and for the same reason: it spends somebody else's
+GPU, so there is nothing for it to queue behind. It replies `{"answer_id": …}`
+at once and the turn follows on the socket as `mmc_answer`
+(`jobs.answer_later`), since a turn can outlast the frontend's fetch timeout.
+The in-process one is a 4B model on the card the render wants, so it rides the
+queue as a `chat` job and the reply arrives on `executed` under
+`ui.continuity`. The turn object is the same either way, and `queue.run()`
+waits for whichever of the two the reply names, so one call site in the room
+covers both backends. `/continuity/refine` says it the same way.
 
 **The re-ask is a second call inside the same job**, never a round trip to the
 browser. The room asked one question and is owed one answer; a correction the
@@ -857,11 +858,11 @@ async def chat_turn(request):
 
     Stateless: the browser sends the trimmed history, the ledger and the rail
     every time, and this builds one turn out of them. The remote backend answers
-    inside the request, as `{"result": turn}`; the in-process one is GPU work
-    and rides the queue, answering `{"prompt_id": id}` and putting the same turn
-    on `executed`. A local chat waits behind a running render — that is the cost
-    of one GPU, and the room shows the queue position rather than pretending
-    otherwise.
+    `{"answer_id": id}` and puts the turn on `mmc_answer`; the in-process one is
+    GPU work and rides the queue, answering `{"prompt_id": id}` and putting the
+    same turn on `executed`. A local chat waits behind a running render — that
+    is the cost of one GPU, and the room shows the queue position rather than
+    pretending otherwise.
     """
     try:
         body = await request.json()
@@ -875,21 +876,14 @@ async def chat_turn(request):
         return refused
 
     if remote:
-        # Off the event loop even so: the call to the server blocks, and this
-        # loop is also the prompt queue and the websocket.
-        loop = asyncio.get_running_loop()
-        try:
-            turn = await loop.run_in_executor(None, _run, body)
-            # Under `result`, which is the envelope `queue.run()` reads for a
-            # reply that did not need the queue. The queued path puts the same
-            # object on `executed` instead, so the room has one call site and
-            # one shape whichever backend it is pointed at.
-            return web.json_response({"result": turn})
-        except (refine.RefineError, chat.ActionError) as problem:
-            return web.json_response({"error": str(problem)}, status=400)
-        except Exception as problem:  # noqa: BLE001
-            return web.json_response({"error": f"{type(problem).__name__}: {problem}"},
-                                     status=500)
+        # Off the queue but not inside this request: a turn can outlast the
+        # frontend's fetch timeout (issue #120). The turn arrives on the socket
+        # as `mmc_answer`, which `queue.run()` waits for as it waits for the
+        # queued path's `executed`, so the room has one call site and one
+        # shape whichever backend it is pointed at.
+        answer_id = jobs.answer_later(lambda: _run(body), body.get("client_id"),
+                                      (refine.RefineError, chat.ActionError))
+        return web.json_response({"answer_id": answer_id})
 
     try:
         prompt_id = await jobs.submit("chat", body, body.get("client_id"))
@@ -903,12 +897,11 @@ async def chat_turn(request):
 async def chat_again(request):
     """An action a card already rendered, stamped for the rail as it is now.
 
-    -> `{"result": {action}}`, or a `prompt_id` whose `executed` carries the
-    same. What Retake and Try again ask before they queue: see `_stamp`. Most
-    of the time nothing has to be generated and the answer is inline, off the
-    loop for the disk reads; only a caption the magic prompt must write goes
-    to the backend, remote inside the request and local on the queue, as a
-    turn does.
+    -> `{"result": {action}}`, or an `answer_id` or `prompt_id` whose
+    `mmc_answer` or `executed` carries the same. What Retake and Try again ask
+    before they queue: see `_stamp`. Most of the time nothing has to be
+    generated and the answer is inline, off the loop for the disk reads; only a caption the magic prompt must write goes
+    to the backend, remote off the queue and local on it, as a turn does.
     """
     try:
         body = await request.json()
@@ -925,7 +918,12 @@ async def chat_again(request):
             if refused is not None:
                 return refused
             if remote:
-                action = await loop.run_in_executor(None, _again, body)
+                # The caption is a call to the backend, which can outlast the
+                # request as a turn can, so it is answered the same way.
+                answer_id = jobs.answer_later(
+                    lambda: {"action": _again(body)}, body.get("client_id"),
+                    (refine.RefineError, chat.ActionError))
+                return web.json_response({"answer_id": answer_id})
     except (refine.RefineError, chat.ActionError) as problem:
         return web.json_response({"error": str(problem)}, status=400)
     except Exception as problem:  # noqa: BLE001

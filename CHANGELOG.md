@@ -6,6 +6,15 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A remote refine or chat turn longer than a minute no longer comes back as
+"Fetch timeout" (issue #120).** The remote backend used to answer inside the
+request that asked, and frontend 1.55 aborts any request after 60 seconds, as a
+reverse proxy in front of ComfyUI would anyway: the browser hung up, the
+server finished regardless, and the rewrite went nowhere. The remote refine,
+chat turn and chat re-caption now reply with an id at once and send the result
+over the websocket when it is ready, the way a queued job's arrives, still
+without waiting behind a render on the local GPU.
+
 **Screens: a picture or clip put on a phone, tablet, laptop or TV in the shot,
 with its text as sharp as the file.** A shot can carry up to two screens, each
 a device and a file, and a handle the prompt cites it by where the screen is

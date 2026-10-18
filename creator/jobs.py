@@ -42,10 +42,17 @@ queue is not idle, the surface holds the `src` until it is, and the 409 those
 routes return is the enforcement under that — for the second tab, and for the
 tab that has not heard `status` yet.
 
-The remote refiner is not here either, and for the opposite reason: it spends
-somebody else's GPU, so there is nothing to queue behind.
+The remote refiner is not on the queue either, and for the opposite reason: it
+spends somebody else's GPU, so there is nothing to queue behind. It used to be
+answered inside its own request instead, and a refine of a whole timeline can
+take minutes — longer than the frontend's own fetch timeout (60 s from 1.55)
+and longer than a reverse proxy holds a quiet request open. The browser hung
+up, the server finished anyway, and the answer went nowhere (issue #120). So
+it is answered the way the queue answers, without the queue: `answer_later`
+below replies with an id at once and puts the result on the websocket.
 """
 
+import asyncio
 import json
 import logging
 import uuid
@@ -217,3 +224,54 @@ def refuse_if_busy():
     return web.json_response(
         {"error": "the queue is busy — this waits for the render ahead of it",
          "busy": True}, status=409)
+
+
+# ---- answering off the queue ------------------------------------------------
+
+# What an off-queue answer arrives as on the websocket. Not `executed`: the
+# frontend treats that and `execution_error` as reports about a prompt it can
+# look up — writes node outputs under the id, opens its errors panel — and an
+# answer that never was a prompt has nothing for either to find. A refused
+# remote call is a sentence for where the button was, not a dialog.
+ANSWER = "mmc_answer"
+
+# The tasks still running, held because the loop keeps only a weak reference
+# to a task and one collected mid-call would never answer.
+_answering = set()
+
+
+def answer_later(work, client_id=None, expected=()):
+    """Run `work()` off the event loop and answer on the websocket. -> its id.
+
+    For a job that spends somebody else's GPU and so has no reason to wait on
+    the queue, but runs too long to answer inside the request that asked. The
+    route replies `{"answer_id": id}` at once; the result follows as
+    `mmc_answer` with `{prompt_id: id, result}`, or `{prompt_id: id, error}`
+    when `work` raised — the message of one of the `expected` exceptions as it
+    is, anything else with its type in front, as the routes said it before.
+    Under `prompt_id` because that is the key `queue.run` already filters on.
+
+    `client_id` addresses the tab that asked, as `enqueue` does; with none the
+    answer goes to every tab and only the one waiting for this id hears it.
+
+    Must be called on the event loop, which is where a route runs.
+    """
+    answer_id = f"continuity-answer-{uuid.uuid4()}"
+    loop = asyncio.get_running_loop()
+
+    async def deliver():
+        try:
+            message = {"prompt_id": answer_id,
+                       "result": await loop.run_in_executor(None, work)}
+        except expected as problem:
+            message = {"prompt_id": answer_id, "error": str(problem)}
+        except Exception as problem:  # noqa: BLE001 — said to the tab, not swallowed
+            log.exception("[Continuity] an off-queue answer failed")
+            message = {"prompt_id": answer_id,
+                       "error": f"{type(problem).__name__}: {problem}"}
+        PromptServer.instance.send_sync(ANSWER, message, client_id)
+
+    task = loop.create_task(deliver())
+    _answering.add(task)
+    task.add_done_callback(_answering.discard)
+    return answer_id

@@ -108,6 +108,39 @@ const out = {};
   out.immediate = await settled(pending);
   out.immediateListeners = leftover();
 }
+// An off-queue answer (issue #120): the reply names an `answer_id` and the
+// result follows on `mmc_answer` — before the reply or after it.
+{
+  let queued = null;
+  const pending = queue.run("/continuity/refine", { kind: "refine" },
+                            { onQueued: (id) => { queued = id; } });
+  await tick();
+  globalThis.__say("mmc_answer", { prompt_id: "a1", result: "early text" });
+  globalThis.__say("mmc_answer", { prompt_id: "other", result: "not ours" });
+  globalThis.__release({ answer_id: "a1" });
+  out.answerEarly = await settled(pending);
+  out.answerQueued = queued;
+  out.answerListeners = leftover();
+}
+{
+  const pending = queue.run("/continuity/chat/turn", {});
+  await tick();
+  globalThis.__release({ answer_id: "a2" });
+  await tick();
+  globalThis.__say("mmc_answer", { prompt_id: "other", result: "not ours" });
+  out.answerForeign = await settled(pending);
+  globalThis.__say("mmc_answer", { prompt_id: "a2", result: { say: "hi" } });
+  out.answerLate = await settled(pending);
+}
+{
+  const pending = queue.run("/continuity/refine", {});
+  await tick();
+  globalThis.__release({ answer_id: "a3" });
+  await tick();
+  globalThis.__say("mmc_answer", { prompt_id: "a3", error: "the server did not answer" });
+  out.answerError = await settled(pending);
+  out.answerErrorListeners = leftover();
+}
 console.log(JSON.stringify(out));
 """
 
@@ -123,5 +156,15 @@ check("a refused post rejects", got["refused"], {"error": "no"})
 check("...leaving no listener behind", got["refusedListeners"], 0)
 check("an immediate answer is handed straight back", got["immediate"], {"value": "text"})
 check("...with nothing left listening", got["immediateListeners"], 0)
+
+check("an off-queue answer that lands before the reply is heard",
+      got["answerEarly"], {"value": "early text"})
+check("...without pretending it is a queue entry", got["answerQueued"], None)
+check("...and every listener comes off", got["answerListeners"], 0)
+check("somebody else's off-queue answer settles nothing", got["answerForeign"], {"pending": True})
+check("an off-queue answer after the reply is heard", got["answerLate"], {"value": {"say": "hi"}})
+check("an off-queue refusal rejects with its sentence",
+      got["answerError"], {"error": "the server did not answer"})
+check("...leaving no listener behind", got["answerErrorListeners"], 0)
 
 passed("a queued job's answer is heard whichever side of the reply it lands on")

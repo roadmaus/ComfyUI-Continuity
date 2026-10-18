@@ -2150,7 +2150,7 @@ class Room {
         settings: requestBlock(this.sync),
       }, {
         // The token counter the refine button already shows. Only the queued
-        // backend reports one — a remote call answers inside the request and
+        // backend reports one — a remote call answers off the queue and
         // ticks nothing — so its absence is the honest state rather than a bar
         // that sits at zero.
         onProgress: (_fraction, value, max) => {

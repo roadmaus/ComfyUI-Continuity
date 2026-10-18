@@ -980,10 +980,14 @@ async def refine_prompt(request):
     wants, so being *behind* the render rather than beside it is the point, and
     Cancel reaching a refine comes free.
 
-    The remote backend is the exception and is still answered inside this
-    request. It spends somebody else's GPU, so there is nothing for it to queue
-    behind, and making somebody wait for a render to finish before a cloud call
-    could start would be a rule with no reason under it.
+    The remote backend is the exception and stays off the queue. It spends
+    somebody else's GPU, so there is nothing for it to queue behind, and making
+    somebody wait for a render to finish before a cloud call could start would
+    be a rule with no reason under it. It is not answered inside this request
+    either, which it was until a refine longer than the frontend's 60-second
+    fetch timeout came back as "Fetch timeout" with the server still working
+    (issue #120): it replies `{"answer_id": id}` and the result follows on the
+    socket, through `jobs.answer_later`.
 
     What is knowable *now* still fails now: bad JSON and a missing model come
     back as 400 on this request, and the panel shows the message where the
@@ -1007,16 +1011,10 @@ async def refine_prompt(request):
         }, status=400)
 
     if remote:
-        # Off the event loop even so: the call to the server blocks, and this
-        # loop is also the prompt queue and the websocket.
-        loop = asyncio.get_running_loop()
-        try:
-            result = await loop.run_in_executor(None, _run, body)
-        except (refine.RefineError, compiler.CompileError, media.MediaError) as exc:
-            return web.json_response({"error": str(exc)}, status=400)
-        except Exception as exc:  # noqa: BLE001
-            return web.json_response({"error": f"{type(exc).__name__}: {exc}"}, status=500)
-        return web.json_response({"result": result})
+        answer_id = jobs.answer_later(
+            lambda: _run(body), body.get("client_id"),
+            (refine.RefineError, compiler.CompileError, media.MediaError))
+        return web.json_response({"answer_id": answer_id})
 
     try:
         prompt_id = await jobs.submit("refine", body, body.get("client_id"))

@@ -269,9 +269,15 @@ export function watch(listener) {
  * `client_id` goes in the body because `executed` is addressed to the tab that
  * queued the job, exactly as it is for a render.
  *
- * A refine on the remote backend answers with `{result}` in the reply itself —
- * no GPU here, nothing to queue behind — and this hands that straight back.
- * So does a plate with nothing cut out.
+ * A reply with `{result}` in it needed no waiting at all — a plate with
+ * nothing cut out — and this hands that straight back.
+ *
+ * A refine or a chat turn on the remote backend is neither: no GPU here and
+ * nothing to queue behind, but too long to answer inside the request, which
+ * the frontend aborts after 60 seconds (issue #120). Its reply names an
+ * `answer_id`, and the result follows on `mmc_answer` under that id
+ * (`jobs.answer_later`). The same wait, minus `onQueued`: there is no queue
+ * entry to take off.
  *
  * `onQueued(promptId)` fires once the reply names the queue entry, for a
  * caller that may want to take it off the queue again — a picker closed while
@@ -296,6 +302,7 @@ export async function run(route, body, { onProgress, onQueued } = {}) {
                                         { status: response.status }));
     }
     if (answer.result !== undefined) { pending.abandon(); return answer.result; }
+    if (answer.answer_id) { pending.expect(answer.answer_id); return await pending.promise; }
     if (!answer.prompt_id) throw new Error(t("the server queued nothing"));
     pending.expect(answer.prompt_id);
     onQueued?.(answer.prompt_id);
@@ -383,6 +390,13 @@ function collect(onProgress) {
 
     handlers.execution_error = on("execution_error", ({ detail }) => {
       fail(new Error(detail.exception_message || t("the job failed")));
+    });
+
+    // An answer that never went on the queue — see `run` — under the same id
+    // key, so it is gated and replayed exactly as `executed` is.
+    handlers.mmc_answer = on("mmc_answer", ({ detail }) => {
+      if (detail.error !== undefined) fail(new Error(detail.error || t("the job failed")));
+      else settle(detail.result);
     });
 
     handlers.execution_interrupted = on("execution_interrupted", ({ detail }) => {
