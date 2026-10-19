@@ -827,11 +827,42 @@ def ref_limit(family):
 def needs_adapter(family):
     """Whether this family reads references only through a LoRA in its stack.
 
-    `capabilities.refs.needs_lora` — Krea 2's arrangement, and the one thing in
-    the pre-stage blob this room cannot fill: the adapter is an entry in the
-    LoRA stack, and the chat has no stack and no way to offer one.
+    `capabilities.refs.needs_lora` — Krea 2's arrangement. The room has no stack
+    of its own to put one on, so it puts on the one the turn needs itself, off
+    the disk (`edit_adapters`), and where none is there the picture goes to the
+    edit family or is refused.
     """
     return bool(((family.get("capabilities") or {}).get("refs") or {}).get("needs_lora"))
+
+
+def edit_adapters(family, loras):
+    """`{kind: filename}` — the LoRAs on this disk that read this family's
+    pictures, by which of them each is. `{}` on a family that names none.
+
+    `capabilities.refs.edit` is Krea 2's: the filename needles that say which
+    of the Krea 2 Edit V2 pair a file is, and the pattern of the older weights
+    no render reads. `loras` is the `loras` folder's listing. Where a kind has
+    several files the full-rank V2 file is preferred, then its rank-reduced
+    cuts, then v1.2 — the same weights, smaller, then older.
+    """
+    edit = ((family.get("capabilities") or {}).get("refs") or {}).get("edit") or {}
+    kinds = edit.get("kinds") or []
+    legacy = re.compile(edit["legacy"]) if edit.get("legacy") else None
+    found = {}
+    for name in loras or []:
+        lowered = str(name).lower()
+        if legacy is not None and legacy.search(lowered):
+            continue
+        for needle, kind in kinds:
+            if needle in lowered:
+                found.setdefault(kind, []).append(str(name))
+                break
+
+    def rank(name):
+        lowered = name.lower()
+        return ("_v2" not in lowered, "_r128" in lowered, "_r64" in lowered, lowered)
+
+    return {kind: sorted(names, key=rank)[0] for kind, names in found.items()}
 
 
 def reads_refs(family):
@@ -915,8 +946,9 @@ def refs_refusal(family, instead=()):
     """
     label = family.get("label") or "this family"
     if needs_adapter(family):
-        why = ("reads an attached picture only through an adapter in the "
-               "pre-stage's LoRA stack, and this room has no stack to put one in")
+        why = ("reads an attached picture only through a Krea 2 Edit LoRA, and "
+               "there is none in models/loras — download krea2_identity_edit_v2 "
+               "or krea2_general_edit_v2 from conradlocke/krea2-identity-edit")
     else:
         why = "reads no attached picture at all"
     where = (f" {listed(list(instead))} do read pictures — switch the still "
@@ -936,7 +968,7 @@ def refs_families(catalog):
             if list(family.get("produces") or ()) == ["still"] and takes_refs(family)]
 
 
-def still_pictures(family, catalog):
+def still_pictures(family, catalog, loras=()):
     """What the rail tells the blob patch about this still family's pictures.
 
     The whole of the catalog's answer, reduced to the two things `still_piece`
@@ -946,7 +978,19 @@ def still_pictures(family, catalog):
     against a machine nobody has. See `DEFAULT_STILL_PICTURES`. `edits` is
     `edits_pictures` of the family: whether the first picture cited plain is
     the one being changed, which moves what `still_piece` writes.
+
+    `loras` is the disk's `loras` listing. On a family that reads pictures
+    through an edit LoRA (Krea 2) it decides the answer: with General Edit on
+    disk a picture cited plain is changed here, in place, and with Identity
+    Edit a person's picture is restaged here — `adapters` is which files, and
+    `still_piece` puts the one the turn needs on the stack.
     """
+    adapters = edit_adapters(family, loras)
+    if adapters and reads_refs(family):
+        general = "general" in adapters
+        kinds = (((family.get("capabilities") or {}).get("refs") or {}).get("edit") or {}).get("kinds")
+        return {"takes": True, "native": general, "refusal": "", "edits": general,
+                "adapters": adapters, "adapter_kinds": [list(pair) for pair in kinds or []]}
     native = takes_refs(family)
     if reads_refs(family):
         return {"takes": True, "native": native, "refusal": "", "edits": edits_pictures(family)}
@@ -989,7 +1033,7 @@ def _durations(family):
 
 
 def machine_card(still_family, video_family, catalog, available, weights,
-                 turbo=False, edit_family=None):
+                 turbo=False, edit_family=None, loras=()):
     """What this machine can make, in about a hundred and fifty tokens.
 
     The join nothing in the pack did before: the families route says what each
@@ -1018,6 +1062,10 @@ def machine_card(still_family, video_family, catalog, available, weights,
     Its turbo switch is not counted here — the card knows the still family's
     alone — and a Turbo checkpoint nobody picked is refused by the render's
     own check, in the same words, one turn later.
+
+    `loras` is the disk's `loras` listing, which decides what a still family
+    reading pictures through an edit LoRA (Krea 2) can do with one: change it
+    with General Edit on disk, restage the person in it with Identity Edit.
     """
     still = _find(catalog, still_family)
     video = _find(catalog, video_family)
@@ -1028,7 +1076,9 @@ def machine_card(still_family, video_family, catalog, available, weights,
     # family itself where it reads pictures, else the edit family, if it is
     # ready. What it is missing is said below, with the other readiness lines.
     edit_gone = []
-    if still and not takes_refs(still) and edit and edit["id"] != still["id"]:
+    adapters = edit_adapters(still, loras) if still else {}
+    native = bool(still) and (takes_refs(still) or GENERAL in adapters)
+    if still and not native and edit and edit["id"] != still["id"]:
         picked = {**guess_weights(edit, available),
                   **((weights or {}).get(edit["id"]) or {})}
         edit_gone = missing_weights(edit, picked, available)
@@ -1037,7 +1087,7 @@ def machine_card(still_family, video_family, catalog, available, weights,
 
     if still:
         lines.append(_sentences(f'"still" is {still["label"]}: one picture.',
-                                _attaches(still, None if edit_gone else edit)))
+                                _attaches(still, None if edit_gone else edit, adapters)))
     if video:
         sound = " with its own sound" if (video.get("capabilities") or {}).get("audio") else ""
         lines.append(_sentences(
@@ -1085,7 +1135,7 @@ def _sentences(*parts):
     return " ".join(part for part in parts if part)
 
 
-def _attaches(family, edit=None):
+def _attaches(family, edit=None, adapters=None):
     """What this family does with the handles cited in `from`, in one sentence.
 
     A count where it reads pictures, a plain refusal where it cannot be given
@@ -1097,17 +1147,31 @@ def _attaches(family, edit=None):
     `edit` is the ready edit family standing behind a still family that reads
     no picture: a picture cited then is changed on it, so the count and the
     rule are its — said as what a still *does*, never as a family's name.
+
+    `adapters` is the edit LoRAs on disk for a family that reads pictures
+    through one (`edit_adapters`): General Edit makes it change a picture in
+    place like an edit family, and Identity Edit restages a person — which
+    gets a sentence of its own, since the citation is what picks it.
     """
     limit = ref_limit(family)
     if limit is None:
         return ""
-    if not takes_refs(family):
+    adapters = adapters or {}
+    person = (' A person\'s picture cited :person, or a cast member named, is put '
+              'somewhere new — into the other picture cited, if there is one.'
+              if IDENTITY in adapters else "")
+    changes = edits_pictures(family) or GENERAL in adapters
+    if not takes_refs(family) and GENERAL not in adapters:
         if edit is None or not ref_limit(edit):
+            if person:
+                return (f'Up to {limit} pictures may be cited in "from", but it '
+                        "cannot change a picture — say so if you are asked to." + person)
             return ('It cannot be given the pictures in "from" — cite nothing '
                     "there, and say so if you are asked to change a picture.")
         family, limit = edit, ref_limit(edit)
+        changes = edits_pictures(family)
     said = f'Up to {limit} picture{"s" if limit != 1 else ""} may be cited in "from".'
-    if edits_pictures(family):
+    if changes:
         # `compile_prestage` starts the render from the first reference on these
         # families, so citing the thing being changed first is the difference
         # between changing a picture and drawing a new one beside it — and
@@ -1119,7 +1183,7 @@ def _attaches(family, edit=None):
         said += (" The first is the picture being changed and keeps its own "
                  'shape, so leave "aspect" out; one cited :style, :person, '
                  ":scene or :object is only drawn from.")
-    return said
+    return said + person
 
 
 def listed(items):
@@ -1375,7 +1439,12 @@ DEFAULT_SECONDS = 6
 # what a rail that says nothing means. `takes` is `takes_refs` of that family and
 # `refusal` is `refs_refusal` of it with the alternatives already named — both
 # are the catalog's answers, and the catalog is the route's.
-DEFAULT_STILL_PICTURES = {"takes": True, "native": True, "refusal": "", "edits": False}
+DEFAULT_STILL_PICTURES = {"takes": True, "native": True, "refusal": "", "edits": False,
+                          "adapters": {}}
+
+# Which Krea 2 Edit LoRA a turn's pictures want: the person in one restaged,
+# or a picture changed. `still_piece` picks between the files `adapters` names.
+IDENTITY, GENERAL = "identity", "general"
 
 # The blob field that makes an edit family's first picture the thing changed —
 # `compile_image.EDIT_FIRST_FIELD`, spelled here because that module imports
@@ -1690,11 +1759,33 @@ def still_piece(action, ledger, rail, base=None, cast=None):
                         scope))
 
     canvas = _canvas(action, rail, "still")
+    edits = pictures.get("edits")
+    adapter = {}
+    if entries and pictures.get("adapters"):
+        # The LoRA the turn's pictures want, put on the stack here because the
+        # room has no stack of its own (`edit_adapters`). Its pictures decide:
+        # a person in them — a cast member, or a picture cited :person — is
+        # restaged, and a picture cited plain is changed.
+        plain = {handle for handle, *_ in _cited(action, ledger)}
+        # One already on the stack — a pin, or what a cited member wears — is
+        # somebody's choice and is the one read; two on at once render noise.
+        worn = _worn_kind(stack, pictures.get("adapter_kinds") or [])
+        kind = worn or _edit_kind(pictures["adapters"], entries, plain)
+        edits = kind == GENERAL
+        if kind == IDENTITY:
+            # The scene first and the person last: the order the LoRA was
+            # trained to read a scene and a subject in.
+            person = [e for e, scope in entries if _is_person(e, scope, plain)]
+            entries = ([(e, scope) for e, scope in entries if e not in person]
+                       + [(e, scope) for e, scope in entries if e in person])
+        if not worn:
+            stack = [*stack, {"name": pictures["adapters"][kind], "strength": 1.0}]
+            adapter = {"ref_lora": pictures["adapters"][kind]}
     changed = [entry for entry, scope in entries if scope is None]
     drawn_from = [entry for entry, scope in entries if scope is not None]
-    refs = changed + drawn_from if pictures.get("edits") else [e for e, _ in entries]
+    refs = changed + drawn_from if edits else [e for e, _ in entries]
     edit = {}
-    if pictures.get("edits"):
+    if edits:
         if changed:
             edit[EDIT_FIRST_FIELD] = True
             canvas.pop("aspect", None)
@@ -1721,9 +1812,44 @@ def still_piece(action, ledger, rail, base=None, cast=None):
         "turbo": piece.get("turbo") or {},
         "models": piece.get("models") or {},
         **edit,
+        **adapter,
         **canvas,
     })
     return piece
+
+
+def _is_person(entry, scope, plain):
+    """Whether a still's picture is of somebody to restage: a cast member's,
+    or one cited :person."""
+    return scope == "person" or entry["handle"] not in plain
+
+
+def _edit_kind(adapters, entries, plain):
+    """Which edit LoRA a still's pictures want, of the ones on disk.
+
+    Identity Edit where there is a person to restage and it is there; else
+    General Edit; else whichever there is — a turn the edit family did not
+    take (`still_arch_for`) is drawn on what this disk has.
+    """
+    if IDENTITY in adapters and any(_is_person(e, scope, plain) for e, scope in entries):
+        return IDENTITY
+    if GENERAL in adapters:
+        return GENERAL
+    return IDENTITY
+
+
+def _worn_kind(stack, kinds):
+    """Which edit LoRA the stack already wears, by the manifest's filename
+    needles (`kinds`, `[needle, kind]` pairs), or None."""
+    for entry in stack or []:
+        if not isinstance(entry, dict) or entry.get("enabled", True) is False \
+                or entry.get("strength", 1.0) == 0:
+            continue
+        lowered = str(entry.get("name") or "").lower()
+        for needle, kind in kinds:
+            if needle in lowered:
+                return kind
+    return None
 
 
 def default_feather(family):

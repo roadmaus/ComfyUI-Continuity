@@ -23,7 +23,13 @@ at the model card's numbers for the LoRA. With two pictures the first is the
 scene and the second the person, cited as `image 1` and `image 2`. General
 Edit can edit its first picture in place. Refused, each with its reason: a
 third picture, a canvas past 2 MP, v1 and v1.1 weights, both LoRAs on at full
-strength, and a removal on Turbo.
+strength, and a removal on Turbo. In the chat, the room has no LoRA stack,
+so it reads `models/loras` and puts on the LoRA the turn needs: General Edit
+when you ask for a picture to be changed, in place on Krea 2 rather than
+handed to the edit model; Identity Edit when a cast member or a picture cited
+`:person` is put somewhere new, with the scene first and the person last. A
+LoRA pinned to Krea 2 is used instead, and the assistant is told what Krea 2
+can do with a picture on this disk.
 
 **A remote refine or chat turn longer than a minute no longer comes back as
 "Fetch timeout" (issue #120).** The remote backend used to answer inside the

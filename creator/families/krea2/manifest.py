@@ -143,6 +143,8 @@ def manifest():
                                     "place": still.REF_PLACE_FIELD},
                          "max_pixels": still.REFS_MAX_PIXELS,
                          "edits_first_kinds": list(still.EDITS_IN_PLACE),
+                         # The older weights' filenames, which no render reads.
+                         "legacy": still.LEGACY_EDIT_LORA.pattern,
                      }},
         },
         "prompt": {

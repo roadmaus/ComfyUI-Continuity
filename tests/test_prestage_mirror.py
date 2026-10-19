@@ -224,6 +224,7 @@ KREA_EDIT = {
     "fields": {"boost": k2.REF_BOOST_FIELD, "place": k2.REF_PLACE_FIELD},
     "max_pixels": k2.REFS_MAX_PIXELS,
     "edits_first_kinds": list(k2.EDITS_IN_PLACE),
+    "legacy": k2.LEGACY_EDIT_LORA.pattern,
 }
 
 # What an attached picture means, per arch. Three families, three answers, and

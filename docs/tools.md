@@ -395,9 +395,10 @@ What is the room's own is in the composer's foot and behind the gear:
 - **Which model.** *Pictures* is the image model a picture is drawn with,
   *Clips* the family a clip is made on — the room's two choices, remembered
   per machine and never the node's. A third pill, *Edits*, appears when the
-  image model cannot read a picture you cite (Krea 2 without a Krea 2 Edit
-  LoRA, Ideogram): a message that changes a picture — *bluer*, *make her
-  coat white*, *@pic-2 in the look of @pic-1* — is drawn on that model
+  image model cannot read a picture you cite (Krea 2 without Krea 2 General
+  Edit in `models/loras`, Ideogram): a message that changes a picture —
+  *bluer*, *make her coat white*, *@pic-2 in the look of @pic-1* — is drawn
+  on that model
   instead: Flux 2 Klein when your models folder is complete for it, else
   Qwen Image Edit when it is, unless you pick one on the pill. The
   assistant is told only that a
@@ -405,6 +406,12 @@ What is the room's own is in the composer's foot and behind the gear:
   keeps its own shape, and a picture cited for its look, its person, its
   scene or a thing in it is drawn from rather than changed. Where neither
   edit model has its files, the assistant says which are missing.
+- **Krea 2's pictures.** Krea 2 reads a picture only through a
+  [Krea 2 Edit V2](models.md#references-krea-2-edit-v2) LoRA, and the room
+  puts the right one on by itself when it is in `models/loras`: General Edit
+  for a picture you ask to change, Identity Edit for a person (a cast
+  member, or a picture cited `:person`) put somewhere new, into the other
+  picture if you cite one. A LoRA you pinned to Krea 2 is used instead.
 - **The shape, the seed and the two sizes.** A message names a shape; this
   is where one starts. The seed is the room's own — the simple view's
   die-and-mark pill beside the shape: roll one now, press the mark to type
@@ -552,8 +559,8 @@ the body's surface and whatever else the full-body views show — at 16:9. Repla
 character, in whatever medium you name (a photograph, an oil portrait). On
 Qwen Image 2.1 you can instead attach a picture of them and write `@` their
 handle there: the sheet then takes its face, outfit and style from the
-picture. On Krea 2 an attached picture is a look, not the character, so the
-character is prose there.
+picture. On Krea 2 the same works with Krea 2 Identity Edit on the stack,
+which was trained on character sheets; without it the character is prose.
 
 Two more put a **storyboard** on Qwen Image 2.1 — **Storyboard, 4 shots**
 and **Storyboard, 6 shots**: one character across that many 16:9 panels on
