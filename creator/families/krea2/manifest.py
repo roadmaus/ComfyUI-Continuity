@@ -113,24 +113,43 @@ def manifest():
                       "checkpoint": True,
                       # The LoRA names a headless render takes for it (`creator/headless.py`).
                       "hints": {"family": r"krea"}},
-            # What a reference render needs beyond the images: an adapter in the
-            # stack, and the layout that adapter was trained on.
-            # References, the adapter that reads them, and the layout that
-            # rides with it. `adapter` is the blob field the compile checks by
-            # name — the stack merely holding a LoRA is not the same question —
-            # and `hints` are the filename needles the picker pre-selects from.
-            "refs": {"methods": list(still.REF_METHODS),
-                     "default_method": still.DEFAULT_REF_METHOD,
-                     "needs_lora": True,
+            # References, the adapter that reads them, and its dials. Krea 2
+            # reads a picture only through one of the two Krea 2 Edit V2 LoRAs,
+            # so `adapter` is the blob field the compile checks by name — the
+            # stack merely holding a LoRA is not the same question — and
+            # `adapter_hints` / `edit.kinds` are the filename needles the picker
+            # pre-selects from and that say which of the pair a file is. No
+            # layout to pick any more: both were trained on the one the
+            # vendored nodes lay out. Not an edit family outright: only General
+            # Edit changes a picture in place, so `edit.edits_first_kinds` says
+            # when the frontend offers it (`preStageEditable`), and the compile
+            # honours `edit_first` whenever the blob asks.
+            "refs": {"methods": [], "default_method": None,
+                     "needs_lora": True, "edits_first": False,
+                     "edit_first": compile_image.EDIT_FIRST_FIELD,
                      "noun": list(still.REFS_NOUN),
                      "adapter": still.REF_LORA_FIELD,
-                     "adapter_hints": list(still.REF_LORA_HINTS)},
+                     "adapter_hints": list(still.REF_LORA_HINTS),
+                     "edit": {
+                         "kinds": [list(pair) for pair in still.EDIT_KINDS],
+                         "labels": dict(still.KIND_LABEL),
+                         # By picture count, as strings — JSON has no integer keys.
+                         "defaults": {kind: {str(n): dict(row) for n, row in rows.items()}
+                                      for kind, rows in still.EDIT_DEFAULTS.items()},
+                         "placements": list(still.PLACEMENTS),
+                         "boost": {"min": still.BOOST_MIN, "max": still.BOOST_MAX,
+                                   "step": still.BOOST_STEP},
+                         "fields": {"boost": still.REF_BOOST_FIELD,
+                                    "place": still.REF_PLACE_FIELD},
+                         "max_pixels": still.REFS_MAX_PIXELS,
+                         "edits_first_kinds": list(still.EDITS_IN_PLACE),
+                     }},
         },
         "prompt": {
-            # Plain prose; references are cited as the labels core's Qwen-edit
-            # encoder itself writes in front of each image slot.
+            # Plain prose; references are cited as the card writes them —
+            # the grounded encode puts no label in front of an image.
             "pipeline": "plain",
-            "ordinal": "Picture N",
-            "max_refs": compile_image.MAX_STYLE_REFS,
+            "ordinal": "image N",
+            "max_refs": still.REFS_LIMIT,
         },
     }

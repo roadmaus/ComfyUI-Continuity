@@ -24,7 +24,7 @@ krea, klein, qwen, ideogram = _pkg.krea2_still, _pkg.flux2klein_still, _pkg.qwen
 
 ANNA_KLEIN = {"name": "people/anna_klein.safetensors", "strength": 0.7, "triggers": ["ann4"]}
 ANNA_H3 = {"name": "people/anna_h3.safetensors", "strength": 0.8, "triggers": ["ohwx anna"]}
-ADAPTER = {"name": "krea2_identity_edit.safetensors", "strength": 1.0}
+ADAPTER = {"name": "krea2_identity_edit_v2.safetensors", "strength": 1.0}
 
 
 def anna(**extra):
@@ -113,11 +113,11 @@ krea_blob = {**blob("@anna at dusk", [anna(wears={"krea2": {"loras": [ADAPTER]}}
 adapted = ci.compile_prestage(krea_blob, krea)
 check("Krea 2 reads her picture through the adapter she wears, with no field naming it",
       (adapted.refs, [e["name"] for e in adapted.loras]),
-      (["anna_front.png"], ["style.safetensors", "krea2_identity_edit.safetensors"]))
+      (["anna_front.png"], ["style.safetensors", "krea2_identity_edit_v2.safetensors"]))
 try:
     ci.compile_prestage({**krea_blob, "subjects": [anna()]}, krea)
     FAILURES.append("Krea 2 read a picture with no adapter on the stack")
 except compiler.CompileError as exc:
-    check("...and without one on the stack, refuses in its own words", "reference LoRA" in str(exc), True)
+    check("...and without one on the stack, refuses in its own words", "Krea 2 Edit LoRA" in str(exc), True)
 
 passed("a still has the cast a shot has: pictures, words and what they wear, per family")

@@ -818,20 +818,13 @@ export class PreStageEditor {
     }
   }
 
-  /** Which pictures this editor needs the shape of.
-   *
-   *  The one the canvas follows, always. And on a family whose references do
-   *  *not* set the canvas, every reference as well: an adapter trained on pairs
-   *  that agreed about their aspect preserves visibly less from one that does
-   *  not, and nothing about the render says so. Where the first reference is
-   *  the canvas there is nothing to disagree with. */
+  /** Which pictures this editor needs the shape of: the one the canvas
+   *  follows. The references used to be measured too, to warn when one's shape
+   *  disagreed with the canvas — Krea 2's adapters were trained on pairs that
+   *  agreed — but the Krea 2 Edit V2 path fits each picture to the output's grid
+   *  the way its training did, so a mismatch is no longer worth a word. */
   measurable() {
-    const names = [S.preStageSource(this.state)];
-    const refs = S.PRESTAGE_REFS[this.state.arch];
-    if (refs?.reads && !refs.editsFirst) {
-      names.push(...(this.state.refs ?? []).map((ref) => ref.filename));
-    }
-    return names;
+    return [S.preStageSource(this.state)];
   }
 
   /** The measured size of that picture, or null while it is still loading. */
@@ -864,20 +857,21 @@ export class PreStageEditor {
   }
 
   /** What the empty prompt box says, which is not one sentence for every
-   *  family: what `@` names is a style reference on Krea 2 and the picture the
-   *  instruction is about on an edit family. Re-read on every render, because
-   *  the arch pill can move under it. */
+   *  family: what `@` names is a reference on Krea 2 and the picture the
+   *  instruction is about on an edit family — Krea 2 too, while General Edit
+   *  reads its pictures. Re-read on every render, because the arch pill and the
+   *  adapter can move under it. */
   placeholder() {
     const refs = S.PRESTAGE_REFS[this.state.arch] ?? {};
     if (!refs.reads) {
       return t("Describe the image. These models were trained on long, detailed "
              + "natural-language prompts.");
     }
-    return refs.editsFirst
+    return S.preStageEditable(this.state)
       ? t("Describe the image, naming the attached pictures with @. Click a "
         + "picture's label to edit that picture in place instead.")
       : t("Describe the image. These models were trained on long, detailed "
-        + "natural-language prompts. Use @ to name a style reference.");
+        + "natural-language prompts. Use @ to name a reference.");
   }
 
   /** The same placeholder in two halves for the simple view — the ask, then
@@ -893,11 +887,11 @@ export class PreStageEditor {
       return { ask: t("Describe the image"),
                openings: t("Long, detailed natural language — these models were trained on it") };
     }
-    return refs.editsFirst
+    return S.preStageEditable(this.state)
       ? { ask: t("Describe the image"),
           openings: t("@ names an attached picture · click its label to edit it in place · / brings in files") }
       : { ask: t("Describe the image"),
-          openings: t("@ names a style reference · / brings in files") };
+          openings: t("@ names a reference · / brings in files") };
   }
 
   render() {
@@ -1038,6 +1032,12 @@ export class PreStageEditor {
              + "one that reads pictures.", { arch: S.PRESTAGE_ARCH_LABEL[this.state.arch] });
     }
     const max = S.preStageMaxRefs(this.state);
+    if (refs.edit) {
+      return t("Up to {max} pictures read by a Krea 2 Edit LoRA, which the adapter pill "
+             + "names: Identity Edit puts the person in the last one somewhere new, "
+             + "General Edit changes a picture by the instruction. With two, the first "
+             + "is the scene and the second the person.", { max });
+    }
     if (refs.editsFirst) {
       return max === 1
         ? t("The picture the instruction is about, read by the model beside the "
@@ -1048,9 +1048,7 @@ export class PreStageEditor {
           + "The render is a new picture on the aspect pill's canvas; click the "
           + "first picture's label to edit that picture in place instead.", { max });
     }
-    return t("Up to {max} images whose look this render should carry. Encoded through "
-           + "the Qwen edit path Krea 2 was post-trained against — and only read at "
-           + "all through a reference LoRA, which the adapter pill names.", { max });
+    return t("Up to {max} images whose look this render should carry.", { max });
   }
 
   renderRail() {
@@ -1069,7 +1067,7 @@ export class PreStageEditor {
         tool(t("Init image"), "frameIn",
              t("Start from an image instead of noise — img2img. The strength pill says how much of it survives."),
              () => this.setInit(false)),
-        tool(t(refs.editsFirst ? "Pictures" : "Style refs"), "image",
+        tool(t(refs.editsFirst || refs.edit ? "Pictures" : "Style refs"), "image",
              this.refsTitle(refs),
              () => this.addRefs(false)),
         // The drawing this still is aimed at, where the weights load a branch
@@ -1187,30 +1185,30 @@ export class PreStageEditor {
     const owner = (this.state.subjects ?? []).find((subject) => S.subjectFiles(subject).includes(ref.handle));
     // The first plain picture on an edit family carries the switch: cited like
     // the rest, or the one edited in place.
-    const edits = refs.editsFirst && ref === S.preStageEditableRef(this.state) && !this.state.init;
+    const editable = S.preStageEditable(this.state);
+    const edits = editable && ref === S.preStageEditableRef(this.state) && !this.state.init;
     const editing = S.preStageEditsFirst(this.state);
     const role = guide
       ? t("guide")
       : owner
         ? t("{who}'s", { who: owner.handle })
-        : refs.editsFirst
-          ? (edits && editing ? t("editing") : t("Picture {n}", { n: slot + 1 }))
-          : t(refs.noun?.[0] ?? "style reference");
+        : edits && editing
+          ? t("editing")
+          // Cited the way the Krea 2 prompt writes it — see `still.REFS_CITATION`.
+          : refs.edit
+            ? t("image {n}", { n: slot + 1 })
+            : editable
+              ? t("Picture {n}", { n: slot + 1 })
+              : t(refs.noun?.[0] ?? "style reference");
     // Past the cap, and drawn rather than dropped: the blob keeps every
     // reference it was given so the compile is the one place that decides, and
     // a chip that vanished when the edition pill moved would take two pictures
     // with it and say nothing. See `parsePreStage`.
     const refused = slot >= S.preStageMaxRefs(this.state);
-    // ...and the softer one: a shape the adapter was not trained to hold
-    // against this canvas. A warning, because it is a worse render rather than
-    // an impossible one — see `S.preStageRefOffShape`.
-    const canvas = S.resolvedPreStage(this.state, this.sourceSize());
-    const offShape = !refused && !untrained && S.preStageRefOffShape(
-      this.state, S.framedSize(this.sizes.get(ref.filename), ref.crop), canvas.width / canvas.height);
     return el("div", {
       class: `mmc-asset mmc-tag-${S.tagIndex(ref.handle)}`
              + (refused ? " mmc-asset-refused"
-                : untrained || offShape ? " mmc-asset-offshape" : ""),
+                : untrained ? " mmc-asset-offshape" : ""),
       title: refused
         ? t("This render will be refused: {arch} reads {max} of these, and this is "
           + "the one past it. Remove it, or move the edition pill.",
@@ -1219,11 +1217,6 @@ export class PreStageEditor {
           ? t("These weights follow a depth, edge or pose map — this tracing is none "
             + "of the three, so it will be read as a picture of a drawing rather "
             + "than as a guide to aim at.")
-        : offShape
-          ? t("This picture's shape does not match the canvas. The reference adapters "
-            + "were trained on pairs that agreed, so what they hold on to falls off "
-            + "when it does not — press the crop mark and lock the window to the "
-            + "canvas, or set the aspect to match.")
           : ref.filename,
     }, [
       swappable(
@@ -1370,25 +1363,33 @@ export class PreStageEditor {
     // has to. Named and not counted: a stack holding a style LoRA and nothing
     // that reads pictures is the same silent failure as an empty one, and this
     // pill is where the difference is said out loud.
-    const adapterField = S.PRESTAGE_REFS[state.arch]?.adapter;
-    if (adapterField && state.refs.length) {
+    const refsDecl = S.PRESTAGE_REFS[state.arch];
+    if (refsDecl?.adapter && state.refs.length) {
       const stack = (state.loras ?? [])
         .filter((entry) => entry?.name && entry.enabled !== false)
         .map((entry) => entry.name);
       const named = state.ref_lora && stack.includes(state.ref_lora);
+      const kind = S.preStageRefKind(state);
+      const label = kind ? refsDecl.edit?.labels?.[kind] : null;
       pills.push(el("button", {
-        class: `mmc-pill${named ? "" : " missing"}`,
-        title: named
-          ? t("The LoRA that reads these references. Krea 2's base weights never "
-            + "learned to, so this is the only thing that makes the pictures render "
-            + "at all.")
-          : state.ref_lora
-            ? t("{name} is named as the reference adapter but is no longer in the "
-              + "stack. The render is refused until one is picked.", { name: state.ref_lora })
-            : t("These references will not render: Krea 2 reads them only through a "
-              + "reference LoRA, and none is named. Add one to the stack — "
-              + "krea2_style_reference for style, an ai-toolkit edit LoRA for edits — "
-              + "and pick it here."),
+        class: `mmc-pill${named && kind ? "" : " missing"}`,
+        title: named && kind
+          ? (kind === "identity"
+            ? t("Krea 2 Identity Edit reads these references: it puts the person in the "
+              + "last picture somewhere new. It is not a general editor — removals and "
+              + "recolours want General Edit.")
+            : t("Krea 2 General Edit reads these references: it changes a picture by the "
+              + "instruction. Click the first picture's label to edit it in place."))
+          : named
+            ? t("{name} is not a Krea 2 Edit LoRA by its name, and those are the only "
+              + "ones that read references here. The render is refused until one is "
+              + "picked.", { name: state.ref_lora })
+            : state.ref_lora
+              ? t("{name} is named as the reference adapter but is no longer in the "
+                + "stack. The render is refused until one is picked.", { name: state.ref_lora })
+              : t("These references will not render: Krea 2 reads them only through a "
+                + "Krea 2 Edit LoRA, and none is named. Add krea2_identity_edit_v2 or "
+                + "krea2_general_edit_v2 to the stack and pick it here."),
         onclick: (event) => openChoicePopover(event.currentTarget, {
           title: t("Reference adapter"),
           options: stack,
@@ -1397,30 +1398,41 @@ export class PreStageEditor {
         }),
       }, [icon("model", 16), el("span", {
         text: named ? loraBase({ name: state.ref_lora }) : t("no adapter"),
-      })]));
+      }), ...(named && label ? [el("span", { class: "mmc-pill-sub", text: t(label) })] : [])]));
     }
 
-    if (S.PRESTAGE_REFS[state.arch]?.methods.length && state.refs.length) {
-      const adapted = state.ref_lora
-        && (state.loras ?? []).some((entry) => entry?.name === state.ref_lora
-                                            && entry.enabled !== false);
+    // The last picture's two dials, once there is an edit LoRA to default
+    // them from: where it sits — pinned onto the output's layout, which is how
+    // both LoRAs were trained, or beside it, which keeps who is in it and lets
+    // go of where — and how hard it is held to. Both show the LoRA's own
+    // default for this many pictures until somebody moves them.
+    const dials = S.preStageRefDials(state);
+    if (dials && state.refs.length) {
+      const edit = refsDecl.edit;
+      const placeText = { aligned: t("pinned"), beside: t("beside") };
       pills.push(el("button", {
-        class: `mmc-pill${adapted ? "" : " missing"}`,
-        title: adapted
-          ? t("How the references are laid into the token sequence. The ai-toolkit edit "
-            + "LoRAs pin theirs at timestep zero; the identity-edit ones index them like "
-            + "any other frame. Match the adapter named beside this pill.")
-          : t("The layout only matters once an adapter reads the references — see the "
-            + "adapter pill."),
+        class: "mmc-pill",
+        title: t("Where the person — the last picture, or the only one — sits for the model. "
+               + "Pinned keeps the photo's framing and layout, how the LoRAs were trained; "
+               + "beside keeps who they are and lets the scene and pose go. With a scene "
+               + "and a person, the scene stays pinned."),
         onclick: (event) => openChoicePopover(event.currentTarget, {
-          title: t("Reference layout"),
-          options: [...S.PRESTAGE_REF_METHODS],
-          value: state.ref_method,
-          onPick: (picked) => { state.ref_method = picked; this.commit(); },
+          title: t("Reference placement"),
+          options: [...edit.placements],
+          label: (option) => placeText[option] ?? option,
+          value: dials.place,
+          onPick: (picked) => { state.ref_place = picked; this.commit(); },
         }),
-      }, [icon("image", 16), el("span", {
-        text: state.ref_method === "index" ? t("indexed") : t("t=0 refs"),
-      })]));
+      }, [icon("image", 16), el("span", { text: placeText[dials.place] ?? dials.place })]));
+      pills.push(stepperPill({
+        value: dials.boost, min: edit.boost.min, max: edit.boost.max, step: edit.boost.step,
+        width: "52px",
+        title: t("Likeness — how hard the render holds to the last picture. Higher pulls "
+               + "the face and look harder toward it; lower loosens it. The default is the "
+               + "Krea 2 Edit card's for this LoRA."),
+        format: (n) => t("likeness {value}", { value: n.toFixed(2) }),
+        onChange: (next) => { state.ref_boost = next; this.commit(); },
+      }));
     }
 
     if (state.init) {
@@ -2333,7 +2345,7 @@ export class PreStageBody {
       this.setStillFrame(filename);
       return this.reveal();
     }
-    if (!S.PRESTAGE_REFS[this.state.arch]?.editsFirst) {
+    if (!S.preStageEditable(this.state)) {
       this.editor?.takeGuide?.({ path: filename });
       return this.reveal();
     }
@@ -2410,7 +2422,7 @@ export class PreStageBody {
    *  your own still is a thing to want on a pre-stage nobody has attached to a
    *  shot yet, and it is the only chip here that does not need one. */
   renderAgainChip(filename) {
-    const edits = S.PRESTAGE_REFS[this.state.arch]?.editsFirst;
+    const edits = S.preStageEditable(this.state);
     return el("button", {
       class: "mmc-stage-chip mmc-stage-send",
       text: t(edits ? "↻ edit" : "↻ again"),

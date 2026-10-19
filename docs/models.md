@@ -111,6 +111,44 @@ From [Comfy-Org/Krea-2](https://huggingface.co/Comfy-Org/Krea-2):
 | Text encoder | `qwen3vl_4b_*.safetensors` | `text_encoders` |
 | VAE | `qwen_image_vae.safetensors` | `vae` |
 
+### References: Krea 2 Edit V2
+
+Krea 2 reads an attached picture only through one of the two
+[Krea 2 Edit V2](https://huggingface.co/conradlocke/krea2-identity-edit)
+LoRAs, in `loras`:
+
+| LoRA | File | What it does |
+|---|---|---|
+| Identity Edit | `krea2_identity_edit_v2.safetensors` | Puts the person in a photo somewhere new: scene, pose, outfit, light |
+| General Edit | `krea2_general_edit_v2.safetensors` | Changes a picture by the instruction: remove, recolour, relight, backgrounds, text |
+
+The `_r128` and `_r64` low-VRAM cuts work the same. Use one per task: the two
+together at full strength render noise, so the pre-stage refuses that and
+suggests about 0.6 each. The v1 and v1.1 files were trained on an older
+reference geometry and are refused; v1.2 still reads.
+
+Nothing else to install: the nodes the LoRAs were trained with
+([ComfyUI-Krea2Edit](https://github.com/lbouaraba/comfyui-krea2edit), 2.0.0)
+are built into the pack.
+
+- **Two pictures at most.** With two, the first is the scene and the second
+  the person. The prompt cites them as `image 1` and `image 2`, the way the
+  model card writes them.
+- **Placement and likeness** sit beside the adapter pill. *Beside* keeps who
+  the person is and lets the photo's framing go; *pinned* keeps the layout, for
+  edits and face-locked portraits. Likeness is how hard the render holds to the
+  picture. Both start at the card's numbers for the LoRA: Identity Edit beside
+  at 2 (2.5 with a scene, the scene pinned), General Edit pinned at 4.
+- **Edit in place** is offered while General Edit reads the pictures: click
+  the first picture's label and the canvas becomes that picture.
+- **Turbo at 8 steps** is the card's fast path for both. Removals need RAW, and
+  a removal asked of Turbo is refused (the card's row is 20 steps at cfg 3).
+- **2 MP at most** while references are attached; the LoRAs were not trained
+  past it.
+
+The weights are free for personal and non-commercial use; commercial use
+needs a licence from their author. See the model card.
+
 ## Ideogram 4.0 (stills)
 
 From [Comfy-Org/Ideogram-4](https://huggingface.co/Comfy-Org/Ideogram-4):

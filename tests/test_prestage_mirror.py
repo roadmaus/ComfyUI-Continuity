@@ -104,8 +104,39 @@ out.turbo_steps = Object.fromEntries(Object.entries(s.PRESTAGE_TURBO)
   .map(([arch, spec]) => [arch, spec.steps]));
 out.legacy_turbo = s.parsePreStageTurbo({ on: true, quality: "draft" });
 out.turbo_needs_lora = s.parsePreStageTurbo({ ideogram4: { on: true } }).ideogram4.on;
-out.ref_methods = [...s.PRESTAGE_REF_METHODS];
-out.default_ref_method = s.PRESTAGE_DEFAULT_REF_METHOD;
+// Which Krea 2 edit LoRA reads the pictures, the dials it defaults, and
+// whether the first picture can be the one changed — `still.kind_of`,
+// `still.edit_dials` and `still.EDITS_IN_PLACE`.
+const krea = (extra) => ({ arch: "krea2", refs: [{ filename: "a.png" }], loras: [], ...extra });
+const identity = { name: "krea2_identity_edit_v2.safetensors", strength: 1 };
+const general = { name: "krea2_general_edit_v2_r64.safetensors", strength: 1 };
+out.ref_edit = {
+  kinds: [s.preStageRefKind(krea({ ref_lora: identity.name })),
+          s.preStageRefKind(krea({ loras: [general] })),
+          s.preStageRefKind(krea({ loras: [{ name: "style.safetensors", strength: 1 }] })),
+          s.preStageRefKind({ arch: "qwenedit", refs: [], loras: [general] })],
+  dials: {
+    identity1: s.preStageRefDials(krea({ loras: [identity] })),
+    identity2: s.preStageRefDials(krea({ loras: [identity],
+                                         refs: [{ filename: "a.png" }, { filename: "b.png" }] })),
+    general1: s.preStageRefDials(krea({ loras: [general] })),
+    set: s.preStageRefDials(krea({ loras: [identity], ref_boost: 1.5, ref_place: "aligned" })),
+    none: s.preStageRefDials(krea({})),
+  },
+  editable: [s.preStageEditable(krea({ loras: [general] })),
+             s.preStageEditable(krea({ loras: [identity] })),
+             s.preStageEditable(krea({})),
+             s.preStageEditable({ arch: "qwenedit" })],
+  parsed: (() => {
+    const blob = s.parsePreStage(JSON.stringify({ arch: "krea2", ref_method: "index",
+                                                  ref_boost: 99, ref_place: "bag" }));
+    return [blob.ref_method ?? null, blob.ref_boost, blob.ref_place];
+  })(),
+  kept: (() => {
+    const blob = s.parsePreStage(JSON.stringify({ arch: "krea2", ref_boost: 3, ref_place: "beside" }));
+    return [blob.ref_boost, blob.ref_place];
+  })(),
+};
 console.log(JSON.stringify(out));
 """
 
@@ -183,25 +214,38 @@ check("...and Flux 2 Klein's, scheduler-less", reflected["base_rows"]["flux2klei
       kl.KLEIN_BASE)
 check("...and Qwen Image 2.1's own", reflected["base_rows"]["qwen21"], q21.QWEN21_BASE)
 
+KREA_EDIT = {
+    "kinds": [list(pair) for pair in k2.EDIT_KINDS],
+    "labels": dict(k2.KIND_LABEL),
+    "defaults": {kind: {str(n): dict(row) for n, row in rows.items()}
+                 for kind, rows in k2.EDIT_DEFAULTS.items()},
+    "placements": list(k2.PLACEMENTS),
+    "boost": {"min": k2.BOOST_MIN, "max": k2.BOOST_MAX, "step": k2.BOOST_STEP},
+    "fields": {"boost": k2.REF_BOOST_FIELD, "place": k2.REF_PLACE_FIELD},
+    "max_pixels": k2.REFS_MAX_PIXELS,
+    "edits_first_kinds": list(k2.EDITS_IN_PLACE),
+}
+
 # What an attached picture means, per arch. Three families, three answers, and
 # the pill copy turns on all four of these fields.
 # `control` is None on every arch here: Qwen Image 2.1 declares its Fun
 # ControlNet branch only on a core that can load it, and this suite runs
 # without one.
 check("what a reference is on each arch", reflected["refs"],
-      {"krea2": {"reads": True, "methods": list(k2.REF_METHODS),
+      {"krea2": {"reads": True, "methods": [],
                  "needsLora": True, "editsFirst": False,
-                 "noun": list(k2.REFS_NOUN), "editFirst": None,
+                 "noun": list(k2.REFS_NOUN), "editFirst": ci.EDIT_FIRST_FIELD,
                  "nativeControl": [], "controlEditions": [],
                  "adapter": k2.REF_LORA_FIELD,
                  "adapterHints": list(k2.REF_LORA_HINTS),
+                 "edit": KREA_EDIT,
                  "editions": None, "defaultEdition": None, "editionHints": [],
-                 "max": ci.MAX_STYLE_REFS, "control": None},
+                 "max": k2.REFS_LIMIT, "control": None},
        "ideogram4": {"reads": False, "methods": [],
                      "needsLora": False, "editsFirst": False,
                      "noun": list(ci.REFS_NOUN), "editFirst": None,
                      "nativeControl": [], "controlEditions": [],
-                     "adapter": None, "adapterHints": [],
+                     "adapter": None, "adapterHints": [], "edit": None,
                      "editions": None, "defaultEdition": None, "editionHints": [],
                      # Reads none, and says so as a cap too.
                      "max": 0, "control": None},
@@ -211,7 +255,7 @@ check("what a reference is on each arch", reflected["refs"],
                     "editFirst": ci.EDIT_FIRST_FIELD,
                     "nativeControl": list(qe.NATIVE_CONTROL),
                     "controlEditions": list(qe.CONTROL_EDITIONS),
-                    "adapter": None, "adapterHints": [],
+                    "adapter": None, "adapterHints": [], "edit": None,
                     "editions": dict(qe.EDITIONS),
                     "defaultEdition": qe.DEFAULT_EDITION,
                     "editionHints": [list(pair) for pair in qe.EDITION_HINTS],
@@ -221,7 +265,7 @@ check("what a reference is on each arch", reflected["refs"],
                       "noun": list(kl.REFS_NOUN),
                       "editFirst": ci.EDIT_FIRST_FIELD,
                       "nativeControl": [], "controlEditions": [],
-                      "adapter": None, "adapterHints": [],
+                      "adapter": None, "adapterHints": [], "edit": None,
                       "editions": None, "defaultEdition": None,
                       "editionHints": [], "max": kl.REFS_LIMIT, "control": None},
        "qwen21": {"reads": True, "methods": [],
@@ -229,7 +273,7 @@ check("what a reference is on each arch", reflected["refs"],
                   "noun": list(q21.REFS_NOUN),
                   "editFirst": ci.EDIT_FIRST_FIELD,
                   "nativeControl": [], "controlEditions": [],
-                  "adapter": None, "adapterHints": [],
+                  "adapter": None, "adapterHints": [], "edit": None,
                   "editions": None, "defaultEdition": None,
                   "editionHints": [], "max": q21.REFS_LIMIT, "control": None}})
 
@@ -239,7 +283,7 @@ check("what a reference is on each arch", reflected["refs"],
 # or the UI offers a fourth slot the compile will refuse (or refuses a second
 # the weights would have read).
 check("how many references each render may carry", reflected["max_refs"],
-      {"krea2": ci.MAX_STYLE_REFS,
+      {"krea2": k2.REFS_LIMIT,
        "qwenedit-2511": qe.EDITIONS["2511"],
        "qwenedit-2509": qe.EDITIONS["2509"],
        "qwenedit-base": qe.EDITIONS["base"],
@@ -281,24 +325,52 @@ check("a blob from before the split reads as Krea 2's",
       (True, "draft", False))
 check("...and a LoRA-only arch cannot be on without one",
       reflected["turbo_needs_lora"], False)
-check("the reference layouts are Krea's own",
-      (reflected["ref_methods"], reflected["default_ref_method"]),
-      (list(k2.REF_METHODS), k2.DEFAULT_REF_METHOD))
 
-# ---- citing a style reference -----------------------------------------------
+# ---- Krea 2's edit LoRA and its dials ------------------------------------------
 #
-# The prompt names a reference by handle and the compile turns it into the label
-# the encoder itself writes: core's `TextEncodeQwenImageEditPlus` builds
-# "Picture 1: <|vision_start|>..." per slot, so `Picture N` is the string the
-# model actually reads. Plain, not `<Picture N>` — the brackets are MiniMax H3's
-# convention and this is Qwen's.
+# Both halves read the same filename needles and the same defaults table, or the
+# pill shows one likeness and the render samples another.
+
+edit = reflected["ref_edit"]
+check("which edit LoRA a stack holds, named or found",
+      edit["kinds"], ["identity", "general", None, None])
+check("...and the same answer the compile gives",
+      [k2.kind_of("krea2_identity_edit_v2.safetensors"),
+       k2.kind_of("krea2_general_edit_v2_r64.safetensors"), k2.kind_of("style.safetensors")],
+      ["identity", "general", None])
+
+
+def dials(schedule, loras, count):
+    got = k2.edit_dials(schedule, loras, count)
+    return {"boost": got["boost"], "place": got["place"]}
+
+
+IDENTITY = [{"name": "krea2_identity_edit_v2.safetensors", "strength": 1.0}]
+GENERAL = [{"name": "krea2_general_edit_v2_r64.safetensors", "strength": 1.0}]
+check("the dials the pill shows are the ones the render samples",
+      {key: edit["dials"][key] for key in ("identity1", "identity2", "general1", "set")},
+      {"identity1": dials({}, IDENTITY, 1), "identity2": dials({}, IDENTITY, 2),
+       "general1": dials({}, GENERAL, 1),
+       "set": dials({"ref_boost": 1.5, "ref_place": "aligned"}, IDENTITY, 1)})
+check("...and none without an edit LoRA to default from", edit["dials"]["none"], None)
+check("only General Edit changes a picture in place",
+      edit["editable"], [True, False, False, True])
+check("the retired layout field is dropped, and dials off the range are reset",
+      edit["parsed"], [None, None, None])
+check("...while dials in range are kept", edit["kept"], [3, "beside"])
+
+# ---- citing a reference --------------------------------------------------------
+#
+# The prompt names a reference by handle and the compile turns it into the words
+# the family's model reads it by. On Krea 2 that is the model card's own: the
+# grounded encode writes no label in front of an image, and the card calls the
+# scene image 1 and the person image 2.
 
 
 def still(prompt, refs=(), arch="krea2"):
-    # Krea 2 refuses references unless the adapter that reads them is in the
-    # stack *and* named — see `test_prestage_graph.py` — so the citations below
-    # carry both.
-    adapter = "krea2_style_reference.safetensors"
+    # Krea 2 refuses references unless an edit LoRA that reads them is in the
+    # stack — see `test_prestage_graph.py` — so the citations below carry one.
+    adapter = "krea2_identity_edit_v2.safetensors"
     return {"arch": arch, "prompt": prompt, "width": 1024, "height": 1024,
             "refs": [{"handle": h, "filename": f} for h, f in refs], "models": {},
             "loras": [{"name": adapter, "strength": 1.0}] if refs else [],
@@ -307,12 +379,12 @@ def still(prompt, refs=(), arch="krea2"):
 
 REFS = (("ref-1", "plate.png"), ("ref-2", "coat.png"))
 
-check("a citation becomes the encoder's own label",
+check("a citation becomes the card's own words",
       ci.compile_prestage(still("the coat from @ref-2, lit like @ref-1", REFS), k2).prompt,
-      "the coat from Picture 2, lit like Picture 1")
+      "the coat from image 2, lit like image 1")
 check("...numbered by slot, not by handle",
       ci.compile_prestage(still("@ref-2", (("ref-2", "a.png"), ("ref-1", "b.png"))), k2).prompt,
-      "Picture 1")
+      "image 1")
 check("the payload still carries filenames in slot order",
       ci.compile_prestage(still("@ref-1 and @ref-2", REFS), k2).refs, ["plate.png", "coat.png"])
 check("an uncited reference still rides in as a slot",
@@ -340,6 +412,6 @@ except ci.CompileError as exc:
     if "Ideogram" not in str(exc):
         FAILURES.append(f"a citation on Ideogram is refused for the wrong reason: {exc}")
 else:
-    FAILURES.append("style references on Ideogram were not refused")
+    FAILURES.append("references on Ideogram were not refused")
 
 passed(f"state.js mirrors compile_image.py across {len(reflected['canvases'])} canvases")

@@ -5,11 +5,11 @@ is `compile_image.compile_prestage` and `render_image.emit`, which take this
 module as the `family` and read the declarations below. What stays here is
 what only Krea 2 knows: RAW is the base checkpoint and samples with real CFG;
 Turbo is an 8-step distillation at cfg 1; the two want different timestep shifts
-and this is where that is put right (`KREA_RAW_SHIFT`); and style references go
-through core's Qwen-edit encoder, which the model only reads with one of the
-reference LoRAs patched on — named rather than counted (`check_refs`), because
-a stack that merely holds a LoRA is not the same question as a stack that holds
-the one that reads pictures.
+and this is where that is put right (`KREA_RAW_SHIFT`); and references are read
+through the Krea 2 Edit V2 LoRAs and the conditioning they were trained on —
+the vendored Krea2Edit nodes (`edit.py`, `creator/krea2edit/`) — with the LoRA
+named rather than counted (`check_refs`), because a stack that merely holds a
+LoRA is not the same question as a stack that holds the one that reads pictures.
 """
 
 import re
@@ -28,18 +28,29 @@ VAE_KIND = "qwen_image"
 # What CLIPLoader calls the Qwen3-VL-4B encoder.
 CLIP_TYPE = "krea2"
 
-# Style references are read: core's Qwen-edit encoder conditions on up to three
-# images, which Krea 2 was post-trained against.
+# References are read — through an edit LoRA and nothing else; see below.
 TAKES_REFS = True
 
-# ...and *style reference* is the right words for them here, which is not true
-# of every family that reads pictures. Krea 2 carries a look across: what these
-# images contribute is their appearance, and the LoRA that reads them is the one
-# trained to hold identity or style. On an edit family the same slot holds a
-# picture the instruction is about, and calling that a style reference describes
-# it as the one thing it is not. So the noun is the family's, and every message
-# that counts references asks for it.
-REFS_NOUN = ("style reference", "style references")
+# What they are called. Not *style* references any more: what the Identity Edit
+# LoRA reads off a picture is the person in it, and what the General Edit one
+# reads is the picture being changed. "Reference" is true of both.
+REFS_NOUN = ("reference", "references")
+
+# How a cited picture is spelled in the prompt. The grounded encode writes no
+# label in front of an image — the training's template has none — so the words
+# are the model card's own: the scene is image 1, the person image 2.
+REFS_CITATION = "image {n}"
+
+# The first reference can be the picture changed: General Edit V2 is an editor,
+# and an edit in place wants the canvas to be that picture's. Asked for with the
+# blob's `edit_first`, read by the shared compile — see
+# `compile_image.EDIT_FIRST_FIELD`. Off, the pictures are references and the
+# aspect pill is the canvas, which is what restaging a person wants. Only
+# General Edit is offered it in the UI (`EDITS_IN_PLACE`): Identity Edit puts a
+# person somewhere new, and a Krea 2 node with no edit LoRA keeps "again" as
+# the img2img init it has always been.
+EDITS_FIRST_REF = True
+EDITS_IN_PLACE = ("general",)
 
 # What each checkpoint wants from the sampler row. RAW is undistilled and runs
 # real CFG; Turbo is distilled and runs at 1. These are what the turbo pill
@@ -69,38 +80,43 @@ DEFAULT_TURBO_QUALITY = "good"
 KREA_RAW_SHIFT = {"max_shift": 0.90625, "base_shift": 0.5}
 KREA_TURBO_SHIFT = 1.15
 
-# How reference latents are laid into the token sequence, and the reason this is
-# a choice rather than a constant.
+# How references reach the model, which is one way now.
 #
-# Krea 2 is detected with no default reference method at all: core reads the
-# attached images only when one is named, because the base weights never learned
-# to. What did learn to are the reference LoRAs trained against them, and they do
-# not agree on the layout — the ai-toolkit edit LoRAs condition their reference
-# tokens at timestep zero, the identity-edit ones index them like any other
-# frame. Picking the wrong one is not an error anywhere; it is a render that
-# quietly ignores half of what it was given.
+# Krea 2's base weights never learned to read a picture, so every way of doing
+# it is a LoRA, and the ones that matter are Lars Bouaraba's Krea 2 Edit V2
+# pair: Identity Edit (one photo of a person in, that person anywhere out) and
+# General Edit (an instruction applied to a picture). Both were trained on two
+# conditionings core does not build — the picture as clean tokens fitted to the
+# output's grid, and the instruction encoded with the picture in view — which is
+# what the vendored Krea2Edit nodes are. This family used to hand references to
+# core's Qwen-edit encoder with a layout pill beside it; that got the layout
+# roughly right and the rest of the recipe wrong, and is gone.
 #
-# So the method rides with the adapter, and the default is the one the two
-# published Krea 2 edit LoRAs use.
-REF_METHODS = ("index_timestep_zero", "index")
-DEFAULT_REF_METHOD = REF_METHODS[0]
+# Two pictures at most: the nodes have a scene slot and a subject slot.
+REFS_LIMIT = 2
+REFS_LIMIT_REASON = ("the Krea 2 edit LoRAs read a scene and a subject — put a "
+                     "group together one person at a time")
 
-# ...and the adapter that reads them is *named*, not merely present. Every way
-# of reading a reference on Krea 2 is a LoRA, so the stack has to hold one — but
-# "the stack is not empty" is not the same question, and answering the easy one
-# passes a render whose only LoRA is a style or a character and whose pictures
-# go nowhere. That is the exact failure the check exists to catch, so the blob
-# says which entry is the reference adapter and this refuses anything else.
-#
-# It is also the honest place for the layout: `REF_METHODS` above is a property
-# of the adapter, not of the render, so the two are picked together in the UI.
+# ...and at most 2 MP of canvas while they do. The card's own limit: above the
+# trained range the reference bleeds into the output and subjects duplicate.
+REFS_MAX_PIXELS = 2 * 1024 * 1024
+REFS_TOO_BIG = (
+    "A {width}x{height} canvas is {mp:.1f} MP, and the Krea 2 edit LoRAs were "
+    "trained up to 2 MP — past it the reference bleeds into the picture and "
+    "people duplicate. Lower the resolution pill, and upscale after"
+)
+
+# The adapter that reads them is *named*, not merely present: "the stack is not
+# empty" would pass a render whose only LoRA is a style or a character and whose
+# pictures go nowhere. So the blob says which entry it is, and a stack entry
+# whose filename names itself one of the pair stands in where the blob does not.
 REF_LORA_FIELD = "ref_lora"
 REFS_NEED_ADAPTER = (
-    "Krea 2 reads style references only through a reference LoRA — the base "
-    "weights were never trained to, so an unread picture is the only other "
-    "outcome. Add one to the stack (krea2_style_reference for style, an "
-    "ai-toolkit edit LoRA for edits) and name it as the reference adapter, or "
-    "clear the references"
+    "Krea 2 reads references only through a Krea 2 Edit LoRA — the base weights "
+    "were never trained to, so an unread picture is the only other outcome. Add "
+    "krea2_identity_edit_v2 (to put a person somewhere new) or "
+    "krea2_general_edit_v2 (to change a picture) to the stack and name it as the "
+    "reference adapter, or clear the references"
 )
 REFS_ADAPTER_GONE = (
     "{name} is named as the reference adapter but is not in this render's LoRA "
@@ -108,15 +124,76 @@ REFS_ADAPTER_GONE = (
     "adapter again, or clear the references"
 )
 
-# Filename needles the *frontend* fills an empty adapter field from — the
-# published Krea 2 reference LoRAs, spelled the ways they are actually
-# distributed. Deliberately only the names that identify themselves: a needle as
-# loose as "edit" would fill the field from a LoRA that merely had the word in
-# its title, which is the silent mis-read this field exists to prevent. A file
-# named anything else is picked by hand, and the compile reads the field and
-# nothing else either way.
-REF_LORA_HINTS = ("krea2_style_reference", "krea2_identity_edit", "krea2_edit",
-                  "identity_edit")
+# Which of the pair a file is, off its name — the filename needles the frontend
+# also fills an empty adapter field from. The published files are
+# `krea2_identity_edit_v2*` and `krea2_general_edit_v2*` (with `_r128` and `_r64`
+# low-VRAM cuts); a needle is the part a rename is least likely to lose.
+# Deliberately not "edit" alone, which a LoRA can have in its title for any
+# reason — that is the silent mis-read the field exists to prevent.
+EDIT_KINDS = (("identity_edit", "identity"), ("general_edit", "general"))
+REF_LORA_HINTS = tuple(needle for needle, _ in EDIT_KINDS)
+KIND_LABEL = {"identity": "Identity Edit", "general": "General Edit"}
+REFS_NOT_AN_EDIT_LORA = (
+    "{name} is named as the reference adapter, but it is not a Krea 2 Edit LoRA "
+    "by its name — and those are the only ones this pack reads references "
+    "through. Use krea2_identity_edit_v2 or krea2_general_edit_v2; a renamed copy "
+    "has to keep 'identity_edit' or 'general_edit' in its name, which is how the "
+    "render knows which of the two it is"
+)
+
+# v1 and v1.1 were trained on an older reference geometry (a centre-crop to the
+# canvas) that this pack does not wire. v1.2 and V2 share the current one.
+LEGACY_EDIT_LORA = re.compile(r"_v1(?:_1)?(?![\d_])")
+REFS_LEGACY_ADAPTER = (
+    "{name} is a v1 / v1.1 Krea 2 edit LoRA, trained on an older reference "
+    "geometry than this pack lays out. Use the V2 file — krea2_identity_edit_v2 "
+    "or krea2_general_edit_v2"
+)
+
+# The pair share a lineage, and at full strength together they make noise. The
+# card's way to have both is about 0.6 each; past this the refusal says so.
+BOTH_KINDS_MAX = 0.7
+REFS_BOTH_KINDS = (
+    "{a} and {b} are both on the stack, and the two Krea 2 edit LoRAs share a "
+    "lineage — together at this strength they render noise. Keep one per task, "
+    "or turn both down to about 0.6"
+)
+
+# Where a reference sits in the model's position space, by the id the blob and
+# the frontend use -> upstream's option. Pinned onto the output's layout is how
+# both LoRAs were trained; beside the canvas keeps who is in it and drops where
+# — what restaging a person wants. Upstream's third, `bag of features`, is
+# experimental with no recommended use and is not offered.
+PLACEMENTS = {"aligned": "aligned (trained)", "beside": "beside (right of target)"}
+
+# How hard the target attends to a reference — upstream's `ref_boost`, which
+# the card never recommends leaving at its 1.0 default. The bounds are the
+# dial's useful range rather than the node's.
+BOOST_MIN, BOOST_MAX, BOOST_STEP = 0.0, 10.0, 0.25
+
+# The longest side the text encoder sees each picture at. 768 in every row of
+# the card, so it is not offered.
+GROUNDING_PX = 768
+
+# What each LoRA wants by default, by how many pictures there are. The card's
+# recommended settings: Identity Edit restages one person at boost 2 and lets
+# the photo's framing go; with a scene, the scene is pinned at 1 and the person
+# placed beside at 2–3. General Edit runs at 4 and keeps the layout — an edit is
+# the same picture with something changed. `place_a` / `boost_a` are the first
+# picture's when there are two (the scene); the plain keys are the last's.
+EDIT_DEFAULTS = {
+    "identity": {1: {"boost": 2.0, "place": "beside"},
+                 2: {"boost": 2.5, "place": "beside", "boost_a": 1.0, "place_a": "aligned"}},
+    "general": {1: {"boost": 4.0, "place": "aligned"},
+                2: {"boost": 4.0, "place": "aligned", "boost_a": 4.0, "place_a": "aligned"}},
+}
+
+# The blob fields for the last picture's two dials. Absent is the LoRA's default
+# above, which is what a fresh node has; a value is somebody's choice and stays.
+# The first picture's are the defaults' alone — the card has no reason to move
+# a scene off them.
+REF_BOOST_FIELD = "ref_boost"
+REF_PLACE_FIELD = "ref_place"
 
 # Removal is the one edit the distilled checkpoint cannot do. At cfg 1 there is
 # no guidance to push the render away from what the reference latents are
@@ -138,8 +215,8 @@ REMOVAL_WORDS = (
 REMOVAL_NEEDS_RAW = (
     "Krea 2 Turbo cannot take something out of a picture: distilled at cfg 1 it "
     "has no guidance to push against the reference, so it re-renders the "
-    "subject instead of deleting it. Throw the turbo switch back and let RAW's "
-    "own row do the removal"
+    "subject instead of deleting it. Throw the turbo switch back and let RAW "
+    "do the removal — the General Edit card's row for it is 20 steps at cfg 3"
 )
 
 
@@ -148,10 +225,13 @@ def plan(data):
 
     Which file the DiT loads from is the turbo pill's call, and the shift the
     sampler runs on follows it: RAW takes the canvas-derived ramp, Turbo the
-    constant it was distilled against. See `KREA_RAW_SHIFT`.
+    constant it was distilled against. See `KREA_RAW_SHIFT`. The reference dials
+    ride along, read and checked here; which LoRA they default from is decided
+    off the stack at emit (`edit_dials`).
     """
     from ...compile_image import turbo_block
 
+    dials = _dials(data)
     turbo = turbo_block(data, ARCH)
     if turbo.get("on"):
         # Two ways to be fast, and they load different files. The distillation
@@ -161,48 +241,128 @@ def plan(data):
         # one 24 GB file resident when the pill is thrown back and forth. Either
         # way the schedule is the one the distillation was fitted to.
         field = "model" if turbo.get("lora") else "turbo_model"
-        return field, {"shift": KREA_TURBO_SHIFT, "ref_method": ref_method(data)}
-    return "model", {**KREA_RAW_SHIFT, "ref_method": ref_method(data)}
+        return field, {"shift": KREA_TURBO_SHIFT, **dials}
+    return "model", {**KREA_RAW_SHIFT, **dials}
 
 
-def ref_method(data):
-    """Which reference layout this render asks for. See `REF_METHODS`."""
+def _dials(data):
+    """The blob's reference adapter and last-picture dials, checked. -> the
+    schedule keys `edit_dials` reads; an absent dial is left out."""
     from ...compile import CompileError
 
-    method = data.get("ref_method") or DEFAULT_REF_METHOD
-    if method not in REF_METHODS:
-        raise CompileError(f"unknown Krea 2 reference method {method!r}")
-    return method
+    out = {}
+    adapter = data.get(REF_LORA_FIELD)
+    if isinstance(adapter, str) and adapter.strip():
+        out[REF_LORA_FIELD] = adapter.strip()
+    boost = data.get(REF_BOOST_FIELD)
+    if boost is not None:
+        if isinstance(boost, bool) or not isinstance(boost, (int, float)) \
+                or not BOOST_MIN <= boost <= BOOST_MAX:
+            raise CompileError(f"the reference likeness must be a number from "
+                               f"{BOOST_MIN:g} to {BOOST_MAX:g}, not {boost!r}")
+        out[REF_BOOST_FIELD] = float(boost)
+    place = data.get(REF_PLACE_FIELD)
+    if place is not None:
+        if place not in PLACEMENTS:
+            raise CompileError(f"unknown reference placement {place!r} — "
+                               f"{' or '.join(PLACEMENTS)}")
+        out[REF_PLACE_FIELD] = place
+    return out
+
+
+def kind_of(name):
+    """Which of the pair a LoRA file is by its name, or None."""
+    lowered = (name or "").lower()
+    for needle, kind in EDIT_KINDS:
+        if needle in lowered:
+            return kind
+    return None
+
+
+def adapter_of(named, loras):
+    """The reference adapter's filename: the one the blob names, else the first
+    entry on the stack that names itself an edit LoRA. None where neither is.
+
+    `loras` is the reduced stack — only entries that will be patched on.
+    """
+    if named:
+        return named
+    return next((entry["name"] for entry in loras if kind_of(entry["name"])), None)
 
 
 def check_refs(data, refs, loras):
     """What has to be true before Krea 2's references are worth sampling.
 
-    Two things, and neither is visible in the graph afterwards: the adapter that
-    reads them is actually in this render's stack, and the row this render will
-    sample can do what the instruction asks. See `REFS_NEED_ADAPTER` and
-    `REMOVAL_NEEDS_RAW` for why each is a refusal rather than a worse picture.
+    Each a refusal rather than a worse picture, and none of them visible in the
+    graph afterwards: the adapter that reads them is on this render's stack and
+    is one of the V2 pair; the pair are not both on at a strength that makes
+    noise; and the row this render will sample can do what the instruction
+    asks. See the messages above for why each.
     """
     from ...compile import CompileError
     from ...compile_image import turbo_block
 
-    adapter = data.get(REF_LORA_FIELD)
-    adapter = adapter.strip() if isinstance(adapter, str) else ""
+    named = data.get(REF_LORA_FIELD)
+    named = named.strip() if isinstance(named, str) else ""
     # `loras` has already been reduced to the entries that will be patched on,
     # so "not in it" covers removed, unticked and turned down to zero alike.
     names = {entry["name"] for entry in loras}
-    if adapter:
-        if adapter not in names:
-            raise CompileError(REFS_ADAPTER_GONE.format(name=adapter))
-    elif not any(hint in name.lower() for name in names for hint in REF_LORA_HINTS):
-        # Nothing named, and nothing on the stack that is one by its filename
-        # — the same needles the picker pre-selects from. A cast member who
-        # wears the adapter puts it on the stack without a field to name it
-        # in, and that is a reference read, not a picture going nowhere.
+    if named and named not in names:
+        raise CompileError(REFS_ADAPTER_GONE.format(name=named))
+    # Nothing named, and nothing on the stack that is one by its filename: a
+    # cast member who wears the adapter puts it on the stack without a field to
+    # name it in, and that is a reference read, not a picture going nowhere.
+    adapter = adapter_of(named, loras)
+    if adapter is None:
         raise CompileError(REFS_NEED_ADAPTER)
+    if kind_of(adapter) is None:
+        raise CompileError(REFS_NOT_AN_EDIT_LORA.format(name=adapter))
+    if LEGACY_EDIT_LORA.search(adapter.lower()):
+        raise CompileError(REFS_LEGACY_ADAPTER.format(name=adapter))
+
+    by_kind = {}
+    for entry in loras:
+        kind = kind_of(entry["name"])
+        if kind:
+            by_kind.setdefault(kind, []).append(entry)
+    if len(by_kind) > 1:
+        both = [entry for entries in by_kind.values() for entry in entries]
+        if any(entry["strength"] > BOTH_KINDS_MAX for entry in both):
+            first, second = (entries[0]["name"] for entries in by_kind.values())
+            raise CompileError(REFS_BOTH_KINDS.format(a=first, b=second))
 
     if turbo_block(data, ARCH).get("on") and asks_for_removal(data.get("prompt")):
         raise CompileError(REMOVAL_NEEDS_RAW)
+
+
+def max_refs(data):
+    """`(cap, why)` — the scene and subject slots, whatever is loaded."""
+    return REFS_LIMIT, REFS_LIMIT_REASON
+
+
+def check_canvas(width, height, refs):
+    """Refuse a reference render past the 2 MP the LoRAs were trained up to."""
+    from ...compile import CompileError
+
+    if refs and width * height > REFS_MAX_PIXELS:
+        raise CompileError(REFS_TOO_BIG.format(width=width, height=height,
+                                               mp=width * height / 1e6))
+
+
+def edit_dials(schedule, loras, count):
+    """What the two internal nodes are handed: the LoRA's defaults for this many
+    pictures under whatever the blob set. -> `{"kind", "boost", "place",
+    "boost_a", "place_a"}`; the `_a` pair is the neutral one for a single
+    picture, where the node never reads it."""
+    adapter = adapter_of(schedule.get(REF_LORA_FIELD), loras)
+    kind = kind_of(adapter) or "general"
+    dials = {"boost_a": 1.0, "place_a": "aligned",
+             **EDIT_DEFAULTS[kind][min(max(count, 1), REFS_LIMIT)]}
+    if REF_BOOST_FIELD in schedule:
+        dials["boost"] = schedule[REF_BOOST_FIELD]
+    if REF_PLACE_FIELD in schedule:
+        dials["place"] = schedule[REF_PLACE_FIELD]
+    return {"kind": kind, **dials}
 
 
 def asks_for_removal(prompt):
@@ -249,17 +409,23 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
                            max_shift=ramp["max_shift"],
                            base_shift=ramp["base_shift"]).out(0)
 
+    latent, denoise = render_image.emit_latent(graph, payload, vae,
+                                               "EmptySD3LatentImage")
+
     if payload.refs:
-        # The Qwen-edit encoder reads up to three references: it feeds them to
-        # the text encoder as vision tokens *and* VAE-encodes them into the
-        # conditioning's reference latents, which is the pair Krea 2 was
-        # post-trained against. The method node picks the variant the adapter in
-        # the stack was trained with.
-        images = {f"image{i + 1}": render_image.load_picture(graph, payload, f"ref:{i}", name)
-                  for i, name in enumerate(payload.refs)}
-        method = payload.schedule["ref_method"]
-        positive = _refs_encode(graph, clip, vae, payload.prompt, images, method)
-        negative = _refs_negative(graph, sampling, positive, clip, vae, images, method)
+        # The two halves of what the edit LoRAs were trained on, both from the
+        # vendored nodes: the pictures as clean tokens fitted to the latent the
+        # sampler starts from, and the instruction read with them in view. The
+        # first picture is the scene and the last the subject — see `edit.py`.
+        images = [render_image.load_picture(graph, payload, f"ref:{i}", name)
+                  for i, name in enumerate(payload.refs)]
+        pair = {"image": images[0], **({"image_b": images[1]} if len(images) > 1 else {})}
+        dials = edit_dials(payload.schedule, payload.loras, len(images))
+        model = graph.node("ContinuityKrea2EditPatch", model=model, vae=vae, target=latent,
+                           boost=dials["boost"], boost_a=dials["boost_a"],
+                           place=dials["place"], place_a=dials["place_a"], **pair).out(0)
+        positive = _refs_encode(graph, clip, payload.prompt, pair)
+        negative = _refs_negative(graph, sampling, positive, clip, pair)
     else:
         positive = graph.node("CLIPTextEncode", clip=clip, text=payload.prompt).out(0)
         # Nothing grounded to be unconditional *about*: with no pictures in the
@@ -267,8 +433,6 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
         # checkpoint wants, and at Turbo's cfg 1.0 it is skipped outright.
         negative = graph.node("ConditioningZeroOut", conditioning=positive).out(0)
 
-    latent, denoise = render_image.emit_latent(graph, payload, vae,
-                                               "EmptySD3LatentImage")
     sampled = graph.node(
         "KSampler", model=model, positive=positive, negative=negative,
         latent_image=latent, seed=sampling.seed, steps=sampling.steps,
@@ -279,27 +443,23 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
                            request=payload.neural, screens=payload.screens)
 
 
-def _refs_encode(graph, clip, vae, prompt, images, method):
-    """One grounded encode: the pictures as vision tokens and as reference
-    latents, laid into the sequence the way the adapter learned them."""
-    conditioning = graph.node("TextEncodeQwenImageEditPlus", clip=clip,
-                              prompt=prompt, vae=vae, **images).out(0)
-    return graph.node("FluxKontextMultiReferenceLatentMethod",
-                      conditioning=conditioning,
-                      reference_latents_method=method).out(0)
+def _refs_encode(graph, clip, prompt, pair):
+    """One grounded encode: the instruction, read by Qwen3-VL with the pictures
+    in view under the training's own template."""
+    return graph.node("ContinuityKrea2EditEncode", clip=clip, prompt=prompt,
+                      grounding_px=GROUNDING_PX, **pair).out(0)
 
 
-def _refs_negative(graph, sampling, positive, clip, vae, images, method):
+def _refs_negative(graph, sampling, positive, clip, pair):
     """The unconditional branch of a reference render, in the shape the row it
     is sampled against can use.
 
     At real CFG that is a second grounded encode — the same pictures, nothing
-    asked of them — because that is the unconditional these adapters were
-    trained against. A zeroed copy is *not* the same thing: `ConditioningZeroOut`
-    copies the conditioning dict, so the reference latents do ride along, but the
-    text stream it hands the DiT is a block of zeros rather than the encoder's
-    reading of the pictures, and the guidance is then a difference between two
-    things only one of which the model has seen before.
+    asked of them — because that is the unconditional these LoRAs were trained
+    against (the card: "ground the negative too"). A zeroed copy is not the
+    same thing: the text stream it hands the DiT is a block of zeros rather than
+    the encoder's reading of the pictures, and the guidance is then a difference
+    between two things only one of which the model has seen before.
 
     At cfg 1 the sampler never evaluates the negative, so the distilled path
     gets the zeroed copy instead of paying for a second VL encode that nothing
@@ -307,7 +467,7 @@ def _refs_negative(graph, sampling, positive, clip, vae, images, method):
     """
     if sampling.cfg == 1.0:
         return graph.node("ConditioningZeroOut", conditioning=positive).out(0)
-    return _refs_encode(graph, clip, vae, "", images, method)
+    return _refs_encode(graph, clip, "", pair)
 
 
 def compile_still(data, image_size_lookup=None):

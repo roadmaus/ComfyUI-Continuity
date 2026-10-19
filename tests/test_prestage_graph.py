@@ -308,19 +308,21 @@ check("scaled to the resolved canvas first",
 check("the sampler starts from the encode at the entry's strength",
       i2i["KSampler"][0][1]["denoise"], 0.6)
 
-# ---- style references (Krea 2) -----------------------------------------------
+# ---- references (Krea 2) ------------------------------------------------------
 #
-# The official reference workflow's wiring: the Qwen-edit encoder with the
-# references in its image slots and the method node on its conditioning,
-# neither of which appears without refs.
+# The Krea 2 Edit V2 LoRAs' own conditioning, from the vendored Krea2Edit nodes:
+# the pictures laid into the model as clean frames fitted to the latent the
+# sampler starts from, and the instruction read with them in view. Neither
+# appears without refs, and core's Qwen-edit encoder appears nowhere.
 
-ADAPTER = [{"name": "krea2_style_reference.safetensors", "strength": 1.0}]
+IDENTITY = {"name": "krea2_identity_edit_v2.safetensors", "strength": 1.0}
+GENERAL = {"name": "krea2_general_edit_v2.safetensors", "strength": 1.0}
 
 
 def refs_blob(**overrides):
     data = {"arch": "krea2", "prompt": "p", "aspect": "1:1", "short_edge": 1024,
             "refs": [{"filename": "a.png"}, {"filename": "b.png"}],
-            "loras": list(ADAPTER), "ref_lora": ADAPTER[0]["name"]}
+            "loras": [dict(IDENTITY)], "ref_lora": IDENTITY["name"]}
     data.update(overrides)
     return data
 
@@ -333,77 +335,151 @@ def refs_graph(data=None, **row):
                             sampling_mod.Sampling(**settings), NODE_ID, k2).finalize())
 
 
-refs_payload = ci.compile_prestage(refs_blob(), k2)
-refs = by_class(ri.emit(refs_payload, ri.ImageWeights(arch="krea2", files=MODELS["krea2"]),
-                        sampling_mod.Sampling(), NODE_ID, k2).finalize())
-encode = refs["TextEncodeQwenImageEditPlus"][0][1]
-check("both references sit in the encoder's image slots",
-      ("image1" in encode, "image2" in encode, "image3" in encode),
-      (True, True, False))
-check("the encoder also gets the VAE for the reference latents",
-      encode["vae"][0] in {nid for nid, _ in refs["VAELoader"]}, True)
-check("the reference method defaults to the edit LoRAs'",
-      refs["FluxKontextMultiReferenceLatentMethod"][0][1]["reference_latents_method"],
-      k2.DEFAULT_REF_METHOD)
+refs = refs_graph()
+check("the vendored nodes are what the graph builds",
+      ("ContinuityKrea2EditPatch" in refs, "ContinuityKrea2EditEncode" in refs), (True, True))
+_listed = asyncio.new_event_loop().run_until_complete(
+    importlib.import_module(f"{PACKAGE}.creator.creator_node").MiniMaxCreatorExtension().get_node_list())
+check("...and both are in the pack's node list",
+      {"ContinuityKrea2EditPatch", "ContinuityKrea2EditEncode"}
+      <= {node.define_schema().node_id for node in _listed}, True)
+check("core's Qwen-edit encoder and the layout node are gone",
+      ("TextEncodeQwenImageEditPlus" in refs, "FluxKontextMultiReferenceLatentMethod" in refs),
+      (False, False))
+patch = refs["ContinuityKrea2EditPatch"][0]
+encode = refs["ContinuityKrea2EditEncode"][0][1]
+loads = {nid: i["image"] for nid, i in refs["LoadImage"]}
+check("the scene is the first picture and the subject the second, in both halves",
+      ([loads[patch[1]["image"][0]], loads[patch[1]["image_b"][0]]],
+       [loads[encode["image"][0]], loads[encode["image_b"][0]]]),
+      (["a.png", "b.png"], ["a.png", "b.png"]))
+check("the patch is handed the latent the sampler starts from",
+      patch[1]["target"], refs["KSampler"][0][1]["latent_image"])
+check("...and the sampler reads the patched model",
+      refs["KSampler"][0][1]["model"][0], patch[0])
+check("...over the RAW ramp, which wraps it",
+      patch[1]["model"][0], refs["ModelSamplingFlux"][0][0])
+check("the encode sees the pictures at the card's grounding size",
+      encode["grounding_px"], k2.GROUNDING_PX)
+check("Identity Edit with a scene: the card's composite dials",
+      {k: patch[1][k] for k in ("boost", "boost_a", "place", "place_a")},
+      {"boost": 2.5, "boost_a": 1.0, "place": "beside", "place_a": "aligned"})
+check("no plain text encode on the reference branch", "CLIPTextEncode" in refs, False)
+check("the reference branch samples on the same RAW ramp as t2i",
+      (refs["ModelSamplingFlux"][0][1]["max_shift"], refs["ModelSamplingFlux"][0][1]["base_shift"]),
+      (k2.KREA_RAW_SHIFT["max_shift"], k2.KREA_RAW_SHIFT["base_shift"]))
 
-# The layout is the adapter's, not a constant: the identity-edit LoRAs index
-# their reference tokens like any other frame instead of pinning them at t=0,
-# and picking the wrong one is a silently weaker render rather than an error.
-indexed = by_class(ri.emit(ci.compile_prestage(refs_blob(ref_method="index"), k2),
-                           ri.ImageWeights(arch="krea2", files=MODELS["krea2"]),
-                           sampling_mod.Sampling(), NODE_ID, k2).finalize())
-check("...and follows the adapter when the blob names another",
-      indexed["FluxKontextMultiReferenceLatentMethod"][0][1]["reference_latents_method"],
-      "index")
-expect_error("an unknown reference method is refused by name",
-             lambda: ci.compile_prestage(refs_blob(ref_method="offset"), k2),
-             "offset")
+one = refs_graph(refs_blob(refs=[{"filename": "her.png"}]))
+check("one picture is the only slot",
+      "image_b" in one["ContinuityKrea2EditPatch"][0][1], False)
+check("...restaged at the card's single-reference dials",
+      {k: one["ContinuityKrea2EditPatch"][0][1][k] for k in ("boost", "place")},
+      {"boost": 2.0, "place": "beside"})
 
-# Core hands Krea 2 no default reference method because the base weights have
-# none — every way of reading a reference on this model is a LoRA. So an empty
-# stack is not a weaker render, it is the images going nowhere.
+edited = refs_graph(refs_blob(refs=[{"filename": "street.png"}],
+                              loras=[dict(GENERAL)], ref_lora=GENERAL["name"]))
+check("General Edit keeps the layout at boost 4",
+      {k: edited["ContinuityKrea2EditPatch"][0][1][k] for k in ("boost", "place")},
+      {"boost": 4.0, "place": "aligned"})
+dialled = refs_graph(refs_blob(ref_boost=1.5, ref_place="aligned"))
+check("a dial somebody set beats the LoRA's default",
+      {k: dialled["ContinuityKrea2EditPatch"][0][1][k] for k in ("boost", "place")},
+      {"boost": 1.5, "place": "aligned"})
+check("...and leaves the scene's alone",
+      {k: dialled["ContinuityKrea2EditPatch"][0][1][k] for k in ("boost_a", "place_a")},
+      {"boost_a": 1.0, "place_a": "aligned"})
+expect_error("an unknown placement is refused by name",
+             lambda: ci.compile_prestage(refs_blob(ref_place="bag"), k2), "bag")
+expect_error("a likeness off the dial is refused",
+             lambda: ci.compile_prestage(refs_blob(ref_boost=50), k2), "likeness")
+check("a blob saved with the retired layout field still compiles",
+      ci.compile_prestage(refs_blob(ref_method="index_timestep_zero"), k2).refs,
+      ["a.png", "b.png"])
+
+# Every way of reading a reference on this model is a LoRA, so an empty stack
+# is not a weaker render, it is the images going nowhere.
 expect_error("references with no adapter in the stack are refused",
              lambda: ci.compile_prestage(refs_blob(loras=[], ref_lora=None), k2),
-             "only through a reference LoRA")
+             "only through a Krea 2 Edit LoRA")
 expect_error("...and a muted adapter counts as no adapter",
              lambda: ci.compile_prestage(refs_blob(
-                 loras=[{**ADAPTER[0], "enabled": False}]), k2),
+                 loras=[{**IDENTITY, "enabled": False}]), k2),
              "not in this render's LoRA stack")
 # And the adapter is named rather than counted: a stack holding a style LoRA and
-# nothing that reads references is the same silent failure as an empty one, so
-# "there is a LoRA" is not the question being asked.
+# nothing that reads references is the same silent failure as an empty one.
 expect_error("a stack with no *reference* adapter in it is refused",
              lambda: ci.compile_prestage(refs_blob(
                  loras=[{"name": "some_painting_style.safetensors", "strength": 1.0}],
                  ref_lora=None), k2),
-             "only through a reference LoRA")
+             "only through a Krea 2 Edit LoRA")
 expect_error("...and an adapter named but never added is refused by name",
              lambda: ci.compile_prestage(refs_blob(
                  loras=[{"name": "some_painting_style.safetensors", "strength": 1.0}]), k2),
-             "krea2_style_reference.safetensors")
-check("a stack that carries the named adapter alongside others is fine",
-      ci.compile_prestage(refs_blob(loras=[
+             IDENTITY["name"])
+expect_error("a LoRA named as the adapter that is not one of the pair is refused",
+             lambda: ci.compile_prestage(refs_blob(
+                 loras=[{"name": "krea2_style_reference.safetensors", "strength": 1.0}],
+                 ref_lora="krea2_style_reference.safetensors"), k2),
+             "not a Krea 2 Edit LoRA")
+expect_error("v1 weights, trained on the older geometry, are refused",
+             lambda: ci.compile_prestage(refs_blob(
+                 loras=[{"name": "krea2_identity_edit_v1_1.safetensors", "strength": 1.0}],
+                 ref_lora="krea2_identity_edit_v1_1.safetensors"), k2),
+             "older reference geometry")
+check("...while v1.2 and the rank-reduced V2 cuts read",
+      [ci.compile_prestage(refs_blob(loras=[{"name": name, "strength": 1.0}], ref_lora=name),
+                           k2).arch
+       for name in ("krea2_identity_edit_v1_2.safetensors",
+                    "krea2_general_edit_v2_r64.safetensors")],
+      ["krea2", "krea2"])
+check("a stack that carries the adapter unnamed alongside others is fine",
+      ci.compile_prestage(refs_blob(ref_lora=None, loras=[
           {"name": "some_painting_style.safetensors", "strength": 0.6},
-          *ADAPTER]), k2).refs, ["a.png", "b.png"])
+          dict(IDENTITY)]), k2).refs, ["a.png", "b.png"])
+expect_error("both edit LoRAs at full strength render noise, so are refused",
+             lambda: ci.compile_prestage(refs_blob(loras=[dict(IDENTITY), dict(GENERAL)]), k2),
+             "share a lineage")
+check("...while about 0.6 each is the card's way to have both",
+      ci.compile_prestage(refs_blob(loras=[{**IDENTITY, "strength": 0.6},
+                                           {**GENERAL, "strength": 0.6}]), k2).arch, "krea2")
+
+expect_error("a third picture is refused",
+             lambda: ci.compile_prestage(
+                 refs_blob(refs=["a.png", "b.png", "c.png"]), k2),
+             "a scene and a subject")
+expect_error("a canvas past the 2 MP the LoRAs were trained to is refused",
+             lambda: ci.compile_prestage(refs_blob(short_edge=1536), k2), "2 MP")
+check("...while the same canvas without references is not",
+      ci.compile_prestage(refs_blob(short_edge=1536, refs=[]), k2).width, 1536)
+
+check("a cited picture is written the way the card writes it",
+      ci.compile_prestage(refs_blob(
+          prompt="put the woman from @ref-2 into @ref-1",
+          refs=[{"filename": "room.png", "handle": "ref-1"},
+                {"filename": "her.png", "handle": "ref-2"}]), k2).prompt,
+      "put the woman from image 2 into image 1")
 
 # The unconditional a reference render is guided against is the same pictures
-# with nothing asked of them — the row these adapters were trained against.
-# `ConditioningZeroOut` is not that: it copies the conditioning dict, so the
-# reference latents do ride along, but the text stream becomes a block of zeros
-# the model never saw in training.
-guided = refs_graph(cfg=3.5)
+# with nothing asked of them — the card's "ground the negative too".
+guided = refs_graph(cfg=3.0)
 check("at real CFG the negative is a second grounded encode",
-      len(guided["TextEncodeQwenImageEditPlus"]), 2)
+      len(guided["ContinuityKrea2EditEncode"]), 2)
 check("...over the same pictures, with nothing asked of them",
-      sorted(i["prompt"] for _, i in guided["TextEncodeQwenImageEditPlus"]), ["", "p"])
-check("...laid in the same way as the positive's",
-      {i["reference_latents_method"]
-       for _, i in guided["FluxKontextMultiReferenceLatentMethod"]},
-      {k2.DEFAULT_REF_METHOD})
+      sorted(i["prompt"] for _, i in guided["ContinuityKrea2EditEncode"]), ["", "p"])
 check("...and nothing is zeroed", "ConditioningZeroOut" in guided, False)
 check("at cfg 1 the negative is never evaluated, so it is not paid for",
-      (len(refs["TextEncodeQwenImageEditPlus"]), "ConditioningZeroOut" in refs),
+      (len(refs["ContinuityKrea2EditEncode"]), "ConditioningZeroOut" in refs),
       (1, True))
+
+# General Edit is an editor: asked to, its first picture is the one changed,
+# so it is the canvas and the latent the patch fits the pictures to.
+inplace = ci.compile_prestage(refs_blob(refs=[{"filename": "street.png"}],
+                                        loras=[dict(GENERAL)], ref_lora=GENERAL["name"],
+                                        edit_first=True), k2, lambda name: (1920, 1080))
+check("edit in place starts from the picture, at full denoise",
+      inplace.init, {"filename": "street.png", "denoise": 1.0})
+check("...on a canvas the picture's shape",
+      inplace.width > inplace.height, True)
 
 # Removal is the one edit the distilled checkpoint cannot do: at cfg 1 there is
 # no guidance to push against the reference, so Turbo re-draws what it was asked
@@ -424,15 +500,6 @@ check("...and the same removal on RAW is what the rule points at",
 check("a word that merely contains one is not a removal",
       ci.compile_prestage(refs_blob(prompt="a removable panel on a remote cabin",
                                     turbo=TURBO_ON), k2).arch, "krea2")
-check("the reference branch samples on the same RAW ramp as t2i",
-      (refs["ModelSamplingFlux"][0][1]["max_shift"], refs["ModelSamplingFlux"][0][1]["base_shift"]),
-      (k2.KREA_RAW_SHIFT["max_shift"], k2.KREA_RAW_SHIFT["base_shift"]))
-check("no plain text encode on the reference branch", "CLIPTextEncode" in refs, False)
-
-expect_error("a fourth reference is refused",
-             lambda: ci.compile_prestage(
-                 refs_blob(refs=["a.png", "b.png", "c.png", "d.png"]), k2),
-             "three image slots")
 
 # ---- turbo as a LoRA (Krea 2) ------------------------------------------------
 #
@@ -743,8 +810,9 @@ check("an explicit init beats the flag, since it is the only partial denoise",
                                     init={"filename": "plate.png", "denoise": 0.4}),
                           qe).init,
       {"filename": "plate.png", "denoise": 0.4})
-check("the flag means nothing on a family whose pictures are never the subject",
-      ci.compile_prestage(refs_blob(edit_first=True), k2).init, None)
+check("Krea 2 edits in place too, now that General Edit reads its pictures",
+      ci.compile_prestage(refs_blob(edit_first=True), k2).init,
+      {"filename": "a.png", "denoise": 1.0})
 check("the retired start_blank field is not read — its default is this one",
       ci.compile_prestage(edit_blob(start_blank=False), qe).init, None)
 
@@ -1226,8 +1294,8 @@ check("qwenedit's sampler takes the derived seed",
       seeded_qe["KSampler"][0][1]["seed"], derived(7, ["her.png", "coat.png"]))
 check("a different widget seed is a different derived seed",
       derived(7, ["her.png"]) != derived(8, ["her.png"]), True)
-check("Krea 2's style references are not the subject, so its seed stands",
-      refs_graph(seed=5)["KSampler"][0][1]["seed"], 5)
+check("Krea 2's sampler takes the derived seed too, now its pictures can be the subject",
+      refs_graph(seed=5)["KSampler"][0][1]["seed"], derived(5, ["a.png", "b.png"]))
 
 # ---- refusals ----------------------------------------------------------------
 

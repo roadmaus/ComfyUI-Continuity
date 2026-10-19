@@ -315,8 +315,8 @@ person walking by) stays in front of it. H3's own dynamic island stays on top
 of a phone screen; its home bar is covered.
 
 Screens work on MiniMax H3 and on every still model that takes reference
-pictures (Qwen Image Edit, Flux 2 Klein, Qwen Image 2.1, and Krea 2 with its
-reference adapter). Each screen takes one reference slot. They are not
+pictures (Qwen Image Edit, Flux 2 Klein, Qwen Image 2.1, and Krea 2 with a
+Krea 2 Edit LoRA). Each screen takes one reference slot. They are not
 available on LTX 2.5, whose references ride as one sheet, or on a pass that
 merges several cards.
 

@@ -395,8 +395,8 @@ What is the room's own is in the composer's foot and behind the gear:
 - **Which model.** *Pictures* is the image model a picture is drawn with,
   *Clips* the family a clip is made on — the room's two choices, remembered
   per machine and never the node's. A third pill, *Edits*, appears when the
-  image model cannot read a picture you cite (Krea 2 without its reference
-  adapter, Ideogram): a message that changes a picture — *bluer*, *make her
+  image model cannot read a picture you cite (Krea 2 without a Krea 2 Edit
+  LoRA, Ideogram): a message that changes a picture — *bluer*, *make her
   coat white*, *@pic-2 in the look of @pic-1* — is drawn on that model
   instead: Flux 2 Klein when your models folder is complete for it, else
   Qwen Image Edit when it is, unless you pick one on the pill. The

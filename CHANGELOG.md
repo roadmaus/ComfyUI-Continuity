@@ -6,6 +6,25 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Krea 2 reads references through the Krea 2 Edit V2 LoRAs, with nothing
+else to install.** Attach a photo of a person and put
+`krea2_identity_edit_v2` on the stack to restage them anywhere, or
+`krea2_general_edit_v2` to change a picture by the instruction. The LoRAs
+were trained on two conditionings core does not build: the picture as clean
+tokens fitted to the output's grid, and the instruction read by Qwen3-VL with
+the picture in view. Both come from the author's ComfyUI-Krea2Edit nodes
+(2.0.0, Apache-2.0), now vendored into the pack and called by two internal
+nodes, so nobody installs them. The Qwen-edit encoder and the layout pill
+that Krea 2's references used to go through are gone. That path got the
+layout roughly right and the rest of the recipe wrong, and a weaker likeness
+was the only sign. Beside the adapter pill are placement (*beside* to restage
+the person, *pinned* to keep the layout) and a likeness dial, both starting
+at the model card's numbers for the LoRA. With two pictures the first is the
+scene and the second the person, cited as `image 1` and `image 2`. General
+Edit can edit its first picture in place. Refused, each with its reason: a
+third picture, a canvas past 2 MP, v1 and v1.1 weights, both LoRAs on at full
+strength, and a removal on Turbo.
+
 **A remote refine or chat turn longer than a minute no longer comes back as
 "Fetch timeout" (issue #120).** The remote backend used to answer inside the
 request that asked, and frontend 1.55 aborts any request after 60 seconds, as a

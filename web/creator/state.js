@@ -4109,9 +4109,10 @@ const widgetDefaults = (family, ids) => Object.fromEntries(
  *  null on the families that keep the shared /16 canvas. */
 export const PRESTAGE_ENCODER_FIT = Object.fromEntries(
   PRESTAGE_IMAGE_ARCHES.map((arch) => [arch, IMAGE_FAMILY[arch].canvas?.encoder_fit ?? null]));
-/** How many style references Krea 2 takes — its encoder's own slot count,
- *  and what an arch that declares no cap of its own falls back to. */
-export const PRESTAGE_MAX_REFS = KREA.prompt.max_refs;
+/** What an arch that declares no reference cap of its own falls back to: the
+ *  Qwen-edit encoder's three image slots, `compile_image.MAX_STYLE_REFS`. Not
+ *  Krea 2's any more — its edit LoRAs read a scene and a subject. */
+export const PRESTAGE_MAX_REFS = 3;
 
 /** The sampler row each image arch runs with nothing distilled on it — the
  *  family's own widget defaults, which is what the arch pill writes into the
@@ -4142,11 +4143,12 @@ export const PRESTAGE_TURBO = Object.fromEntries(
     .map((arch) => [arch, IMAGE_FAMILY[arch].capabilities.turbo]));
 export const turboOfArch = (arch) => PRESTAGE_TURBO[arch] ?? null;
 
-/** How Krea 2 lays reference tokens into the sequence — the adapter's choice,
- *  because the published reference LoRAs disagree and neither layout errors.
- *  The blob's `ref_method` is that one family's field and stays Krea's. */
-export const PRESTAGE_REF_METHODS = KREA.capabilities.refs.methods;
-export const PRESTAGE_DEFAULT_REF_METHOD = KREA.capabilities.refs.default_method;
+/** Krea 2's reference dials: which of the two Krea 2 Edit V2 LoRAs a file is,
+ *  and what each wants by default for one picture or two — where the last one
+ *  sits (`place`) and how hard it is held to (`boost`). The blob's `ref_place`
+ *  and `ref_boost` are that one family's fields; absent is the LoRA's default.
+ *  Mirrors `families/krea2/still.EDIT_DEFAULTS`. */
+export const PRESTAGE_REF_EDIT = KREA.capabilities.refs.edit;
 
 /** What an attached picture *means* on each image arch. Four different answers
  *  across three families, none of them guessable from the file: Ideogram reads
@@ -4182,6 +4184,9 @@ export const PRESTAGE_REFS = Object.fromEntries(
       // one has to, and the filename needles the picker pre-selects from.
       adapter: refs?.adapter ?? null,
       adapterHints: refs?.adapter_hints ?? [],
+      // Krea 2's: which edit LoRA the adapter is and the dials that follow
+      // from it — see `PRESTAGE_REF_EDIT`.
+      edit: refs?.edit ?? null,
       // How many pictures each release of these weights was post-trained on,
       // where that is not one number for every file the family loads.
       editions: refs?.editions ?? null,
@@ -4223,28 +4228,45 @@ export function preStageEditionGuess(filename) {
   return null;
 }
 
-/** How far a reference's shape may sit from the canvas before it is worth
- *  saying so.
- *
- *  A reference whose aspect does not match the output's is out of distribution
- *  for the edit adapters — they were trained on pairs that agreed — and it
- *  shows up as preservation quietly getting worse rather than as anything
- *  failing. 6% lets 16:9 against 1.85:1 pass and catches 3:2 against 16:9,
- *  which is the gap that actually happens when a still is dropped onto a
- *  canvas somebody set for something else. A warning and not a refusal: it is a
- *  worse render, not an impossible one.
- *
- *  The families whose first reference *is* the canvas cannot disagree with it,
- *  so this is Krea 2's alone. */
-export const PRESTAGE_REF_RATIO_TOLERANCE = 0.06;
+/** Which Krea 2 edit LoRA reads this node's references — the named adapter,
+ *  else the first stack entry that names itself one — as `"identity"`,
+ *  `"general"` or null. Mirrors `families/krea2/still.adapter_of` / `kind_of`. */
+export function preStageRefKind(state) {
+  const edit = PRESTAGE_REFS[state?.arch]?.edit;
+  if (!edit) return null;
+  const kindOf = (name) => {
+    const lowered = (name ?? "").toLowerCase();
+    return edit.kinds.find(([needle]) => lowered.includes(needle))?.[1] ?? null;
+  };
+  if (state.ref_lora) return kindOf(state.ref_lora);
+  const stack = (state.loras ?? []).filter((entry) => entry?.name && entry.enabled !== false);
+  return stack.map((entry) => kindOf(entry.name)).find(Boolean) ?? null;
+}
 
-/** Is this reference's shape far enough from the canvas to warn about? */
-export function preStageRefOffShape(state, size, canvasRatio) {
+/** The last picture's dials as this render will use them: what the blob set,
+ *  else the LoRA's default for this many pictures. -> `{boost, place}`, or null
+ *  where there is no edit LoRA to default from. Mirrors `still.edit_dials`. */
+export function preStageRefDials(state) {
+  const edit = PRESTAGE_REFS[state?.arch]?.edit;
+  const kind = preStageRefKind(state);
+  if (!edit || !kind) return null;
+  const count = Math.min(Math.max(preStageCountedRefs(state).length, 1), 2);
+  const row = edit.defaults[kind][String(count)];
+  return {
+    boost: state.ref_boost ?? row.boost,
+    place: state.ref_place ?? row.place,
+  };
+}
+
+/** Does this arch change its first picture in place, when asked? An edit
+ *  family always can; Krea 2 can while General Edit is what reads its pictures
+ *  — Identity Edit restages a person rather than editing a picture, and with no
+ *  edit LoRA a picture sent back in would be one nothing reads. */
+export function preStageEditable(state) {
   const refs = PRESTAGE_REFS[state?.arch];
-  if (!refs?.reads || refs.editsFirst) return false;
-  if (!size?.width || !size?.height || !canvasRatio) return false;
-  const ratio = size.width / size.height;
-  return Math.abs(ratio - canvasRatio) / canvasRatio > PRESTAGE_REF_RATIO_TOLERANCE;
+  if (!refs) return false;
+  if (refs.editsFirst) return true;
+  return Boolean(refs.edit?.edits_first_kinds?.includes(preStageRefKind(state)));
 }
 
 /** Fill in the reference adapter and the Qwen edition where the blob can say
@@ -4356,9 +4378,10 @@ export function emptyPreStage() {
     // exactly on release — and `lora` is the entry in the ordinary stack the
     // switch owns, which is H3's arrangement too.
     turbo: emptyPreStageTurbo(),
-    // Which reference layout Krea 2's adapter was trained on. See
-    // `PRESTAGE_REF_METHODS`.
-    ref_method: PRESTAGE_DEFAULT_REF_METHOD,
+    // Krea 2's last-picture dials, null for the edit LoRA's own default. See
+    // `PRESTAGE_REF_EDIT`.
+    ref_place: null,
+    ref_boost: null,
     // Which entry in the stack is that adapter. Named rather than counted: the
     // compile checks this field, because "the stack is not empty" would pass a
     // render whose only LoRA is a style and whose pictures go nowhere. Krea 2's
@@ -4537,9 +4560,15 @@ export function parsePreStage(raw) {
       // here, the way `parseTimeline` asks for the piece's family's.
       state.sampling = parseSampling(state.sampling);
       state.sampling_spare = parsePreStageSamplingSpare(state.sampling_spare);
-      if (!PRESTAGE_REF_METHODS.includes(state.ref_method)) {
-        state.ref_method = PRESTAGE_DEFAULT_REF_METHOD;
-      }
+      // `ref_method` was the layout pill core's Qwen-edit path needed; the
+      // edit LoRAs have one layout, so a blob that carried it is read without.
+      delete state.ref_method;
+      const boost = Number(state.ref_boost);
+      state.ref_boost = state.ref_boost != null && Number.isFinite(boost)
+        && boost >= PRESTAGE_REF_EDIT.boost.min && boost <= PRESTAGE_REF_EDIT.boost.max
+        ? boost : null;
+      state.ref_place = PRESTAGE_REF_EDIT.placements.includes(state.ref_place)
+        ? state.ref_place : null;
       state.ref_lora = typeof state.ref_lora === "string" && state.ref_lora.trim()
         ? state.ref_lora.trim() : null;
       // The old `start_blank` field, the same switch upside down, is not read:
@@ -4632,9 +4661,12 @@ export function serializePreStage(state) {
     // "default" names a 20-step preset, not the family's current default.
     // Store the selection explicitly so a changed default cannot change it.
     quality: state.quality,
-    ...(state.ref_method !== PRESTAGE_DEFAULT_REF_METHOD ? { ref_method: state.ref_method } : {}),
     ...(state.ref_lora ? { ref_lora: state.ref_lora } : {}),
-    ...(state.edit_first ? { edit_first: true } : {}),
+    ...(state.ref_place ? { ref_place: state.ref_place } : {}),
+    ...(state.ref_boost != null ? { ref_boost: state.ref_boost } : {}),
+    // Only where the arch can do it now: Krea 2's switch stays set across an
+    // adapter change, and the compile would honour it on Identity Edit.
+    ...(state.edit_first && preStageEditable(state) ? { edit_first: true } : {}),
     ...(state.guide && state.guide.strength !== PRESTAGE_GUIDE_STRENGTH
       ? { guide: { strength: state.guide.strength } } : {}),
     ...(state.edition !== PRESTAGE_DEFAULT_EDITION ? { edition: state.edition } : {}),
@@ -4815,8 +4847,7 @@ export function preStageBranchGuide(state) {
  *  the attached pictures are references beside a new picture on the aspect
  *  pill's canvas, which is what a render with no init already does. */
 export function preStageEditsFirst(state) {
-  const refs = PRESTAGE_REFS[state?.arch];
-  if (!refs?.editsFirst || !state?.edit_first || state.init) return false;
+  if (!preStageEditable(state) || !state?.edit_first || state.init) return false;
   return preStagePlainRefs(state).length > 0;
 }
 

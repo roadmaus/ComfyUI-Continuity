@@ -747,6 +747,13 @@ def compile_prestage(data, family, image_size_lookup=None):
             family.check_refs(data, trackers, loras)
         refs = refs + trackers
 
+    # A canvas the family's reference reading was not trained to fill — Krea
+    # 2's edit LoRAs stop at 2 MP. After the trackers, which are read the same
+    # way the pictures are.
+    check_canvas = getattr(family, "check_canvas", None)
+    if check_canvas is not None:
+        check_canvas(width, height, refs)
+
     checkpoint_field, schedule = family.plan(data)
 
     return ImagePayload(

@@ -420,13 +420,16 @@ check("krea2 turbo capability carries the presets",
 check("krea2 declares both ways to be fast — the distilled file and the LoRA",
       (krea["capabilities"]["turbo"]["checkpoint"],
        krea["capabilities"]["turbo"]["lora"]), (True, True))
-check("krea2 reference methods are the family's, adapter first",
+check("krea2 reads references through an edit LoRA, with no layout to pick",
       (krea["capabilities"]["refs"]["methods"],
        krea["capabilities"]["refs"]["default_method"],
        krea["capabilities"]["refs"]["needs_lora"]),
-      (list(k2.REF_METHODS), k2.DEFAULT_REF_METHOD, True))
-check("krea2 reference cap is the encoder's",
-      krea["prompt"]["max_refs"], ci.MAX_STYLE_REFS)
+      ([], None, True))
+check("...and names the two V2 LoRAs it reads them through",
+      [kind for _, kind in krea["capabilities"]["refs"]["edit"]["kinds"]],
+      ["identity", "general"])
+check("krea2 reference cap is the scene and subject slots",
+      krea["prompt"]["max_refs"], k2.REFS_LIMIT)
 check("krea2 canvas is the shared /16 grid",
       (krea["canvas"]["multiple"], krea["canvas"]["max_pixels"]),
       (ci.CANVAS_MULTIPLE, ci.MAX_PIXELS))
