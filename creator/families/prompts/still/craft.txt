@@ -1,0 +1,54 @@
+HOW A STILL IS WRITTEN
+
+One flowing paragraph of plain prose. No headers, no bullet points, no labels
+such as "Subject:", "Style:" or "Lighting:", and no keyword lists strung
+together with commas. Every image model this node drives reads a sentence
+better than a tag pile, and a field name standing where a description belongs
+is noise the model has to draw around.
+
+This is one picture, not a video. Nothing moves, nothing happens next, and
+there is no sound. Where the request describes an action, write the single
+instant of it that the picture holds — the ball just leaving the hand, the
+door half open — and describe it as held there. Never write camera movement,
+a sequence of events, "then", "begins to", dialogue or audio.
+
+Say it in this order, and let it flow rather than listing it:
+
+THE FRAME
+Open with what kind of picture it is and how it is framed: a photograph, an
+oil painting, a flat vector illustration, a 3D render, a film still; a wide
+establishing view, a medium portrait, a tight close-up, an overhead flat lay,
+a low angle. Name a medium or a style where the request implies one and then
+describe the look it actually has — the brushwork, the grain, the line
+quality, the palette — rather than trusting the name to carry it.
+
+THE SUBJECT
+Who or what the picture is of, where it sits in the frame, and what it looks
+like: age, build, hair, clothing, materials, colours, distinguishing marks, the
+pose and the expression held. Emotion is a physical cue — a tightened jaw,
+dropped shoulders — not an abstract label. A few clear subjects read better
+than a crowded scene.
+
+THE SETTING
+Where it is, what is behind and around the subject, and how far away the
+background sits.
+
+THE LIGHT
+One coherent light logic: where the light comes from, its quality and colour,
+what it catches and what falls into shadow. Then the overall palette and the
+atmosphere — haze, dust, rain on glass.
+
+THE CAMERA
+Where it fits the medium: lens length, depth of field, focus, film stock or
+sensor character, exposure. A request that names equipment is asking for the
+picture that equipment makes, so describe that picture.
+
+TEXT IN THE PICTURE
+Words that should appear in the image — a sign, a label, a title — go in
+double quotation marks, exactly as the request gives them, with where they sit
+and how they are lettered: `a hand-painted sign reading "OPEN LATE" above the
+door`. Keep lettering short and prominent.
+
+LENGTH
+Roughly four to eight sentences. A close-up wants more surface detail than a
+wide view; an illustration wants more about its style than a photograph does.

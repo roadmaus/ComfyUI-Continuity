@@ -35,7 +35,7 @@ import re
 from dataclasses import dataclass, field
 
 from . import neural, refmod
-from .compile import HANDLE_RE, CompileError, collect_triggers, merge_loras
+from .compile import HANDLE_RE, CompileError, collect_triggers, merge_loras, refined_body
 from .families import registry
 from .families.h3 import subjects
 from .screens import spec as screen_spec
@@ -520,6 +520,30 @@ def cast_into_still(data, family_id, space=None, takes_pictures=True):
     return out
 
 
+def with_refined(data):
+    """The still's blob with the refiner's prose standing in for the prompt.
+
+    The video compile reads a rewrite through `compile.refined_body`, which
+    keeps `@handles` in it for the same reason this does: the citations are
+    written at queue time, so a rewrite stays right when a picture is added
+    ahead of the one it names. Here the rewrite simply *is* the prompt from
+    this point on — the cast expansion, the trigger words, the citations and
+    `format_prompt` all read `prompt`, and every one of them should read the
+    prose the user chose to queue. `refined` comes off the result, which is
+    what makes a second pass through this the same dict.
+
+    The panel's switch (`enabled: false`) leaves the typed sentence in place,
+    exactly as it does on a shot.
+    """
+    if not isinstance(data, dict) or "refined" not in data:
+        return data
+    body = refined_body(data)
+    out = {key: value for key, value in data.items() if key != "refined"}
+    if body:
+        out["prompt"] = body
+    return out
+
+
 def _take_guide(data, family):
     """-> (the guide picture or None, `data` with it off the reference pool).
 
@@ -588,6 +612,7 @@ def compile_prestage(data, family, image_size_lookup=None):
     if not isinstance(data, dict):
         raise CompileError("prestage_data must be a JSON object")
 
+    data = with_refined(data)
     space = (getattr(family, "REFMOD", None) or {}).get("space")
     # The cast, written into the still's own terms first: a member's picture
     # is a reference from here on, their name is its citation, and what they

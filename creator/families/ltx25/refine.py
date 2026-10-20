@@ -279,7 +279,7 @@ def reply_shape(shots, shown=(), piece=False, sheet=False):
     return "\n".join(lines)
 
 
-def system_prompt(mode, language="English", shape=None, extra=""):
+def system_prompt(mode, language="English", shape=None, extra="", still=False):
     """The whole instruction: rules, craft, cuts, the mode's template, the contract.
 
     Recency does the heavy lifting on a small model — whatever it read last is
@@ -296,6 +296,8 @@ def system_prompt(mode, language="English", shape=None, extra=""):
     parts.append(CRAFT)
     parts.append(MULTISHOT)
     parts.append(MODE_TEMPLATE[mode])
+    if still:
+        parts.append(harness.STILL_RULE)
     if (extra or "").strip():
         parts.append(harness.EXTRA_RULE.format(extra=extra.strip()))
     if shape:
@@ -602,8 +604,8 @@ class LTX25Prompting(harness.Prompting):
                            sheet=mode == self.modes_reference())
 
     def system_prompt(self, mode, language="English", shape=None, cuts=0, extra="",
-                      cast=()):
-        return system_prompt(mode, language, shape=shape, extra=extra)
+                      cast=(), still=False):
+        return system_prompt(mode, language, shape=shape, extra=extra, still=still)
 
     def user_message(self, shots, seconds=None, shown=(), mode=None, piece=None,
                      pool=None, footage=(), cast=()):

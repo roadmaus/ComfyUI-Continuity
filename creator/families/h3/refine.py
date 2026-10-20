@@ -472,7 +472,8 @@ def reply_shape(mode, shots, cuts=0, shown=(), piece=False, ref_shots=(), cast=(
     return "\n".join(lines)
 
 
-def system_prompt(mode, language="English", shape=None, cuts=0, extra="", cast=()):
+def system_prompt(mode, language="English", shape=None, cuts=0, extra="", cast=(),
+                  still=False):
     """The whole instruction: rules, craft, the mode's template, the contract.
 
     With a `cast`, the reference form's template and mode note are the cast
@@ -502,6 +503,8 @@ def system_prompt(mode, language="English", shape=None, cuts=0, extra="", cast=(
     parts.append(f"MODE\nThis request is {mode}. {note}")
     parts.append(CRAFT)
     parts.append(CAST_TEMPLATE if with_cast else MODE_TEMPLATE[mode])
+    if still:
+        parts.append(harness.STILL_RULE)
     if (extra or "").strip():
         parts.append(harness.EXTRA_RULE.format(extra=extra.strip()))
     if shape:
@@ -1169,9 +1172,9 @@ class H3Prompting(harness.Prompting):
                            ref_shots=ref_shots, cast=cast)
 
     def system_prompt(self, mode, language="English", shape=None, cuts=0, extra="",
-                      cast=()):
+                      cast=(), still=False):
         return system_prompt(mode, language, shape=shape, cuts=cuts, extra=extra,
-                             cast=cast)
+                             cast=cast, still=still)
 
     def user_message(self, shots, seconds=None, shown=(), mode=None, piece=None,
                      pool=None, footage=(), cast=()):

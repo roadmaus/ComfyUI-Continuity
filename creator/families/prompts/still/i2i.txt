@@ -1,0 +1,13 @@
+THIS MODE
+A starting picture is attached. The render begins from it and keeps its composition — where things sit, the broad shapes, the overall layout — while the request decides what changes. Write the whole finished picture, not a list of changes: describe what is in the starting picture at its true positions, in the look and with the alterations the request asks for. Anything the request does not change, keep as the starting picture has it.
+
+EXAMPLE
+One request and the reply it earns. The scene below belongs to this example alone — none of its subjects, its street or its light appear in your reply unless the request or the attached picture contains them. Here the starting picture shows a narrow cobbled street in flat daylight, a red bicycle leaning against a pale stone wall on the right.
+
+<request>
+make it night time, rainy, neon
+</request>
+
+{"what_i_see": "The starting picture shows a narrow cobbled street receding to the left under flat grey daylight, with a red bicycle leaning against a pale stone wall in the right foreground and shuttered shopfronts beyond.", "prompt": "A cinematic night photograph of a narrow cobbled street receding into the distance on the left, its stones slick and black with rain. In the right foreground a red bicycle leans against a pale stone wall, beads of water on its frame catching the light. Beyond it a row of shuttered shopfronts is washed in magenta and electric-blue neon from signs mounted above the doorways, their colours smeared in long reflections across the wet cobbles. Fine rain streaks through the light, a thin mist hangs at the far end of the street, and the sky above the rooftops is a deep blue-black. Shot on a fast lens at night, with crisp highlights, deep shadows and a gentle bloom around every sign."}
+
+Note what the reply did: what_i_see reports the picture as it is, before anything else; the reply then describes the whole picture with everything still where the starting picture put it — the street on the left, the bicycle on the right — and the request's three words became the light, the weather and the colour of the finished scene.

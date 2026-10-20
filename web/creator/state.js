@@ -136,7 +136,16 @@ export const refineOf = (id) => videoFamily(id).capabilities?.refine;
  *  form. What a rewrite looks like is a statement about what a checkpoint was
  *  trained to read, so the names and the copy travel in the manifest and the
  *  server resolves a pin against the same list. */
-export const templatesOf = (id) => videoFamily(id).prompt?.templates ?? [];
+export const templatesOf = (id) => templateFamily(id).prompt?.templates ?? [];
+
+/** Whose manifest a template pill reads. A pre-stage on an image family asks
+ *  by that family's own id, and the still prompting's templates are served on
+ *  it (`manifest.with_still_templates`) — forgiving it to the default video
+ *  family, as `videoFamily` would, put H3's five modes on a Krea still. An id
+ *  nobody declares still gets the video default, for `videoFamily`'s reason. */
+const templateFamily = (id) => {
+  try { return anyFamily(id); } catch { return videoFamily(id); }
+};
 export const widgetsOf = (id) => videoFamily(id).widgets;
 
 /** Whether a family declares a capability at all. Bidirectional by design: a
@@ -4338,6 +4347,10 @@ export function emptyPreStage() {
     version: 1,
     arch: DEFAULT_STILL_ARCH,
     prompt: "",
+    // The refiner's rewrite of `prompt`, in the shape a shot keeps one (see
+    // `emptyState`). Read by `compile_image.with_refined`, which stands it in
+    // for the sentence. The H3 branch keeps its own inside its request.
+    refined: null,
     aspect: PRESTAGE_DEFAULT_ASPECT,
     short_edge: PRESTAGE_DEFAULT_EDGE,
     // {"filename", "denoise"} for img2img, or null.
@@ -4404,11 +4417,11 @@ export function emptyPreStage() {
  *  canvas, LoRAs, turbo, the checkpoints — stays, the line the piece's Clear
  *  draws. `ref_lora` names a LoRA in the stack, so it is machine and stays;
  *  with no references it reads nothing. */
-const PRESTAGE_CLEARED_KEYS = ["prompt", "init", "refs", "subjects"];
+const PRESTAGE_CLEARED_KEYS = ["prompt", "refined", "init", "refs", "subjects"];
 const STILL_CLEARED_KEYS = ["prompt", "soundscape", "music", "refined", "assets"];
 
 export function preStageWritten(state) {
-  if ((state.prompt || "").trim() || state.init || state.refs?.length) return true;
+  if ((state.prompt || "").trim() || state.refined || state.init || state.refs?.length) return true;
   const request = state[PRESTAGE_STILL_ARCH]?.request;
   return Boolean(request && ((request.prompt || "").trim()
     || (request.soundscape || "").trim() || (request.music || "").trim()
@@ -4487,6 +4500,7 @@ export function parsePreStage(raw) {
       if (!PRESTAGE_ARCHES.includes(state.arch)) state.arch = DEFAULT_STILL_ARCH;
       // Blank is empty — see `parseState`.
       if (typeof state.prompt !== "string" || !state.prompt.trim()) state.prompt = "";
+      if (!state.refined || typeof state.refined !== "object") state.refined = null;
       if (!Array.isArray(state.refs)) state.refs = [];
       // Not truncated to the cap. The compile refuses a render carrying more
       // references than its weights read, and a blob quietly losing the fourth
@@ -4613,6 +4627,7 @@ export function serializePreStage(state) {
     version: 1,
     arch: state.arch,
     prompt: state.prompt ?? "",
+    ...serializeRefined(state.refined),
     aspect: state.aspect,
     short_edge: state.short_edge,
     ...(state.init ? { init: { filename: state.init.filename, denoise: round2(state.init.denoise),

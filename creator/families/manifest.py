@@ -252,7 +252,31 @@ def describe(family):
     author of one tree.
     """
     module = importlib.import_module(f".{family}.manifest", __package__)
-    return check({**module.manifest(), "output": output_block(family)})
+    return check(with_still_templates(
+        {**module.manifest(), "output": output_block(family)}))
+
+
+def with_still_templates(manifest):
+    """A still-only family's manifest with the refiner's template pill on it.
+
+    Added here rather than written into every image family's own manifest,
+    because the prompting it describes is not theirs: `refine.of` answers all
+    of them with `stillrefine`, so its templates are one list, and six copies
+    of it would be six things to keep in step. A family that ships its own
+    `refine.py` declares its own templates, as the video families do, and is
+    left alone.
+    """
+    prompt = manifest.get("prompt") or {}
+    if "video" in manifest["produces"] or prompt.get("templates"):
+        return manifest
+    from . import refine, stillrefine
+
+    if refine.of(manifest["id"]) is not stillrefine.PROMPTING:
+        return manifest
+    return {**manifest, "prompt": {**prompt, "templates": [
+        {"name": name, "help": stillrefine.TEMPLATE_HELP[name]}
+        for name in stillrefine.PROMPTING.templates
+    ]}}
 
 
 def catalog():

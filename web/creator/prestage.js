@@ -43,6 +43,7 @@ import { castFamilies, keepAsMod } from "./refmod.js";
 import { openPresetLibrary } from "./presetlib.js";
 import * as P from "./presets.js";
 import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
+import { RefinePanel, refineButton, refine } from "./refine.js";
 import { blobIO, samplingBar, seedPill } from "./sampling.js";
 import { clearButton } from "./clear.js";
 import { loadLoraNames, loraNames, refreshLoraNames } from "./turbo.js";
@@ -111,7 +112,11 @@ export class PreStageEditor {
    * @param {() => string|number} options.nodeId
    */
   constructor({ state, onCommit, samplingWidgets, onWidgetChange, nodeId,
-                stage = null, archPill = null, presetTarget = null, clearTool = null }) {
+                stage = null, archPill = null, presetTarget = null, clearTool = null,
+                refineTarget = null }) {
+    // The body's, like Clear: what the refine route is sent is the whole
+    // pre-stage blob, and the body is what serializes it.
+    this.refineTarget = refineTarget;
     // The body's, like the preset target: what Clear empties is the pre-stage
     // on both branches, and only the body knows both.
     this.clearTool = clearTool;
@@ -188,6 +193,15 @@ export class PreStageEditor {
     // frame is what gets mounted, because the box brings its own disclosure.
     this.promptBox = this.prompt.root;
 
+    // The Creator's panel, over this state: the rewrite is a draft under the
+    // box, switched off or reverted the same way. No audio fields — a picture
+    // has no sound — so a reply's empty soundscape writes nothing anywhere.
+    this.refinePanel = new RefinePanel({
+      getState: () => this.state,
+      onCommit: () => { this.onCommit?.(); this.syncPrompt(); },
+      audioFields: false,
+    });
+
     this.railHost = el("div");
     this.assetsHost = el("div");
     // The cast shelf, mounted once and folded like the shot's — see
@@ -214,7 +228,7 @@ export class PreStageEditor {
       this.loraHost,
       this.panel = el("div", { class: "mmc-panel" }, [
         ...(this.onFace ? [this.expandHost] : []),
-        this.prompt.frame, this.pillsHost,
+        this.prompt.frame, this.refinePanel.root, this.pillsHost,
       ]),
       this.noticeHost,
       this.samplingHost,
@@ -280,8 +294,29 @@ export class PreStageEditor {
     this.state = state;
     this.sizes.clear();
     this.prompt.setValue(this.state.prompt ?? "");
+    this.refinePanel.problems = [];
     this.render();
     this.probeInit();
+  }
+
+  /** Ask the refiner to rewrite this still's prompt. See `CreatorEditor.refine`
+   *  — the same reply, minus the audio a picture has nowhere to put. */
+  async refine(options) {
+    try {
+      const result = await refine(this.refineTarget(), options);
+      const shot = result.shots?.[0];
+      if (!shot?.body) throw new Error(t("the refiner returned nothing for this prompt"));
+      this.refinePanel.apply(result, shot);
+      this.commit();
+    } catch (error) {
+      this.refinePanel.fail(String(error.message || error));
+    }
+  }
+
+  /** Dim the box while a rewrite stands in for it. See `CreatorEditor.syncPrompt`. */
+  syncPrompt() {
+    const refined = this.state.refined;
+    this.prompt.setSuperseded(!!refined?.body?.trim() && refined.enabled !== false);
   }
 
   /** Why another style reference cannot be attached, or null. The menu asks
@@ -911,6 +946,8 @@ export class PreStageEditor {
     this.prompt.root.dataset.openings = ghost.openings;
     this.railHost.replaceChildren(this.renderRail());
     this.renderExpand();
+    this.syncPrompt();
+    this.refinePanel.render();
     const chips = [
       ...(state.init ? [this.renderInitChip()] : []),
       // Numbered among the pictures the render counts, so a guide a branch
@@ -1007,6 +1044,7 @@ export class PreStageEditor {
       state: this.state,
       onCommit: () => { this.onCommit?.(); this.render(); },
       archPill: this.archPill,
+      refineTarget: this.refineTarget,
     });
     // See `CreatorEditor.openEditor`: a control in the window that writes
     // through an owner's callback re-renders the *face*, so the face redraws
@@ -1111,6 +1149,14 @@ export class PreStageEditor {
         tool(t("Add LoRA"), "effect",
              t("Manage the LoRAs patched onto the image model. Krea LoRAs train on RAW and apply on Turbo too."),
              () => this.manageLoras()),
+        // After the adds, as on the video rail: the rewrite is written against
+        // the pictures, so it wants them settled first.
+        ...(this.refineTarget ? [refineButton({
+          run: (options) => this.refine(options),
+          family: () => this.refineTarget().family,
+          title: t("Rewrite this prompt into a full description of the picture, keeping "
+                 + "everything you wrote and expanding it."),
+        })] : []),
         // Last in the cluster, as on the video rail: everything to its left
         // writes the still, and this takes it back.
         ...(this.clearTool?.() ?? []),
@@ -1974,7 +2020,20 @@ export class PreStageBody {
       archPill: () => this.renderArchPill(),
       presetTarget: () => this.presetTarget(),
       clearTool: () => [this.clearTool()],
+      refineTarget: () => this.refineTarget(),
     });
+  }
+
+  /** What the refine route is sent, on either branch: the whole pre-stage
+   *  blob, which the server reads by its arch — an image family's still
+   *  through the shared still prompting, the H3 branch's request as the one
+   *  card it is, with the still rule on top. */
+  refineTarget() {
+    return {
+      kind: "still",
+      family: S.preStageFamilyId(this.state.arch),
+      data: JSON.parse(S.serializePreStage(this.state)),
+    };
   }
 
   /** The pre-stage's Clear, for either branch's rail. Remounts rather than
@@ -2050,6 +2109,10 @@ export class PreStageBody {
       // The still is one card, and a `{day|night}` on it chooses as card 1 on
       // the node's seed — what `prestage.py` chooses before it compiles.
       varies: () => ({ seed: Number(this.widgetIO().value("seed", 0)) || 0, card: 1 }),
+      // The request is a shot, but refining it as one would write a camera
+      // move into a picture: the route reads the arch off the pre-stage blob
+      // and refines the request with the still rule on.
+      refineTarget: () => this.refineTarget(),
     });
     // The box is the shot's and asks for a video; this one makes a picture.
     // The openings stay — cast, files and looks are all wired on this branch.

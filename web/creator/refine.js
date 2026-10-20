@@ -413,13 +413,15 @@ export function refineRequest(current = settings()) {
   };
 }
 
-export async function refine(payload, options) {
+export async function refine({ family = null, ...payload }, options) {
   const current = settings();
   // Read off the blob being sent rather than passed in, because it is a fact
   // about that blob: the server resolves the same field to decide which
   // family's refiner writes the rewrite, and a template pinned for another
-  // one must not ride along with it.
-  const template = chosenTemplate(pieceFamily(payload.data), current);
+  // one must not ride along with it. A pre-stage's blob is not a piece and
+  // names its family by arch, so its target says the id outright — the
+  // server reads the same arch.
+  const template = chosenTemplate(family ?? pieceFamily(payload.data), current);
   return await runJob("/continuity/refine", {
     ...payload, ...refineRequest(current), template,
   }, options);

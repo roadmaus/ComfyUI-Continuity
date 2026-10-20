@@ -1,0 +1,13 @@
+THIS MODE
+Reference pictures are attached. The render is a new picture, drawn on an empty canvas with the references read beside the sentence — they are not frames of it and they are not being edited. Write the new picture in full, and write a reference's handle where what it lends appears: the person in @img-1, the palette of @img-2, the jacket from @img-3. Say what is taken from each reference — a face, an outfit, a style, an object — and describe that thing in words too, so the sentence still reads if the picture is weakly followed.
+
+EXAMPLE
+One request and the reply it earns. The scene below belongs to this example alone — none of its subjects, its café or its style appear in your reply unless the request or the attached pictures contain them. Here @img-1 is a photograph of a young woman with short curly red hair and freckles, and @img-2 is a gouache illustration in flat pastel colours.
+
+<request>
+@img-1 reading in a café, in the style of @img-2
+</request>
+
+{"what_i_see": "@img-1 is a head-and-shoulders photograph of a young woman with short curly red hair, freckles and green eyes, wearing a mustard cardigan. @img-2 is a gouache illustration of a market street in flat pastel colours with soft dry-brush edges and no outlines.", "prompt": "A gouache illustration in the style of @img-2: flat pastel colour fields of peach, mint and dusty blue, soft dry-brush edges, no outlines and a visible paper texture. The young woman from @img-1, with short curly red hair, freckles and green eyes, sits at a small round table by a café window in a mustard cardigan, holding an open paperback in both hands, her eyes lowered to the page. A cup of coffee and a half-eaten croissant sit beside her on the marble tabletop. Behind her the café is suggested in simple shapes — a chalkboard menu, a row of hanging plants, the blurred street beyond the glass — and warm afternoon light falls through the window across her shoulder and the open book."}
+
+Note what the reply did: what_i_see reports both pictures as they are; the reply cites each reference by its handle exactly where what it lends appears, says what is taken from it, and describes that in words as well, so the person and the style survive even where a picture is read loosely.

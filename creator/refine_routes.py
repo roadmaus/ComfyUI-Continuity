@@ -25,6 +25,7 @@ button rewrote every family's prompt into Context-IR.
 import asyncio
 import functools
 import os
+import types
 
 from aiohttp import web
 
@@ -183,6 +184,123 @@ def _target(body):
     return {**body, "kind": "segment", "index": 0}
 
 
+def _plan_still(body):
+    """A pre-stage blob -> the same tuple `_plan` returns, for one still.
+
+    Two branches, as the node has. The video family's own still — H3's, whose
+    blob keeps a whole Creator request under the arch — is that request refined
+    as the one card it is, by that family's prompting: `_plan` already knows
+    everything about it, and `_run` adds the still rule on top. Every other
+    arch is an image family, whose blob has no `Asset`s and no compile this
+    route can borrow, so its attachments are read here off the same fields
+    `compile_image.compile_prestage` reads, in the same order, and handed to
+    `families/stillrefine.py`.
+
+    Read rather than compiled on purpose: a refine is asked *before* the still
+    is finished, and the compile refuses a great deal on the way to a render —
+    an empty prompt, a reference on a family whose adapter is missing — that
+    has nothing to do with what the sentence should say.
+    """
+    from . import compile_image, refmod
+    from .families import registry
+    from .families.h3 import subjects
+    from .screens import spec as screen_spec
+
+    data = body.get("data")
+    if not isinstance(data, dict):
+        raise compiler.CompileError("no state was sent")
+    arch = data.get("arch", registry.DEFAULT_STILL_ARCH)
+    family_id = registry.STILL_ARCHES.get(arch)
+    if family_id is None:
+        raise compiler.CompileError(f"unknown model architecture {arch!r}")
+
+    if family_id in registry.video_families():
+        block = data.get(arch)
+        request = block.get("request") if isinstance(block, dict) else None
+        if not isinstance(request, dict):
+            raise compiler.CompileError("this still has no request to refine")
+        return _plan({"kind": "segment", "index": 0, "data": request})
+
+    family = registry.still(arch)
+    prompting = refine.of(family_id)
+    from .families import stillrefine
+
+    guide, rest = compile_image._take_guide(data, family)
+    raw_refs = rest.get("refs") or []
+    space = (getattr(family, "REFMOD", None) or {}).get("space")
+    # No cap: how many pictures this family reads is the compile's refusal to
+    # make, and a refine that refused for it would hide the sentence too.
+    refs = compile_image._parse_refs(raw_refs, limit=len(raw_refs),
+                                     noun=compile_image.refs_noun(family), space=space)
+    init = compile_image._parse_init(rest.get("init"))
+    edits_first = bool(init is None and refs and getattr(family, "EDITS_FIRST_REF", False)
+                       and rest.get(compile_image.EDIT_FIRST_FIELD))
+
+    cast = []
+    raw_cast = [s for s in data.get("subjects") or []
+                if isinstance(s, dict) and s.get("handle")]
+    if raw_cast:
+        try:
+            cast = subjects.parse(raw_cast, family_id)
+        except subjects.SubjectError as exc:
+            raise compiler.CompileError(str(exc)) from exc
+    try:
+        screens = screen_spec.parse(data.get("screens"))
+    except screen_spec.ScreenError as exc:
+        raise compiler.CompileError(str(exc)) from exc
+
+    attached = []
+    if init is not None:
+        attached.append((stillrefine.INIT_HANDLE, init["filename"], "init"))
+    for slot, (handle, filename, _crop, _mods) in enumerate(refs):
+        attached.append((handle or f"picture-{slot + 1}", filename,
+                         "edited" if edits_first and slot == 0 else "reference"))
+    if guide is not None:
+        attached.append((guide.get("handle") or "guide", guide.get("filename"), "guide"))
+
+    slots, images = [], []
+    for handle, filename, role in attached:
+        asset = types.SimpleNamespace(handle=handle, filename=filename, role=role,
+                                      kind="image", track=None)
+        slot = prompting.slot_row(asset)
+        if refmod.is_mod(filename):
+            # A saved rendition standing in a slot outright has no picture
+            # behind it to show — it is latents in this family's space.
+            slot["note"] = "a saved rendition with no picture to show"
+            slots.append(slot)
+            continue
+        picture = _picture(asset)
+        if picture is not None:
+            images.append(picture)
+        slots.append(_sighted(slot, asset, picture))
+    for screen in screens:
+        slots.append(prompting.slot_row(types.SimpleNamespace(
+            handle=screen.handle, filename=None, role="screen")))
+
+    # What the rewrite may cite: the pictures, the screens and the cast. The
+    # init and the guide are shown and never cited — `compile_image` refuses a
+    # sentence that cites the guide, and the init has no handle at all.
+    citable = {handle for handle, _, role in attached if role in ("reference", "edited")}
+    citable |= {screen.handle for screen in screens}
+    mode = stillrefine.derive_mode(init is not None, edits_first, bool(citable - {
+        screen.handle for screen in screens}))
+    shot = {
+        "mode": mode,
+        "seconds": None,
+        "text": str(data.get("prompt") or ""),
+        "continues": False,
+        "slots": slots,
+        # No labels: the citation spelling is the family's, written at queue
+        # time off the stored handle. An empty map is what `normalize_handles`
+        # and `check` read as "handles only".
+        "labels": {},
+        "handles": citable | {subject.handle for subject in cast},
+        "cast": list(cast),
+        "refs": citable,
+    }
+    return prompting, mode, [shot], images, None, True, None, (), cast
+
+
 def _plan(body):
     """The request -> (prompting, mode, shots, images, piece, single, pool, footage).
 
@@ -206,6 +324,8 @@ def _plan(body):
     data = body.get("data")
     if not isinstance(data, dict):
         raise compiler.CompileError("no state was sent")
+    if kind == "still":
+        return _plan_still(body)
     if kind not in ("creator", "segment", "timeline"):
         raise compiler.CompileError(f"unknown refine target {kind!r}")
 
@@ -611,7 +731,11 @@ def _run(body):
     # hold one card, and a one-card strip has been getting no cuts asked for it
     # ever since. Whether the family has cut times to ask *for* is its own
     # answer: LTX writes its cuts as sentences and returns 1 here always.
-    lone = len(compiler.timeline_segments(body.get("data") or {})) == 1
+    #
+    # A still is never cut: it is one frame, whatever length of clip the H3
+    # branch samples to get it.
+    still = kind == "still"
+    lone = not still and len(compiler.timeline_segments(body.get("data") or {})) == 1
     cuts = prompting.shot_limit(seconds) if lone else 0
 
     # Who owns the global prompt. A whole-timeline refine rewrites it — it is
@@ -635,7 +759,8 @@ def _run(body):
     shape = prompting.reply_shape(mode, len(shots), cuts=cuts, shown=shown,
                                   piece=ask_piece, ref_shots=ref_shots, cast=cast)
     system = prompting.system_prompt(mode, body.get("language") or "English",
-                                     shape=shape, cuts=cuts, extra=extra, cast=cast)
+                                     shape=shape, cuts=cuts, extra=extra, cast=cast,
+                                     still=still)
     message = prompting.user_message(
         shots,
         seconds=seconds,

@@ -133,7 +133,8 @@ export class CreatorEditor {
    * @param {boolean} [options.continuePill]  true for a timeline segment after the
    *   first, which may start from the previous segment's last frame
    * @param {() => object} [options.refineTarget]  the payload the refine route
-   *   wants — `{kind, data, index}`. Supplied by the owner because only it knows
+   *   wants — `{kind, data, index}`, plus `family` where `data` is not a piece
+   *   (the pre-stage's blob). Supplied by the owner because only it knows
    *   whether this state is a whole `creator_data` or one card of a timeline;
    *   without it the Refine button is not drawn at all.
    * @param {(result: object) => void} [options.onRefined]  the parts of a reply
@@ -2175,7 +2176,10 @@ export class CreatorEditor {
           run: (options) => this.refine(options),
           // Off the same blob the press sends, so the templates the popover
           // offers cannot disagree with the refiner that will write the prose.
-          family: () => S.pieceFamily(this.refineTarget().data),
+          family: () => {
+            const target = this.refineTarget();
+            return target.family ?? S.pieceFamily(target.data);
+          },
         })] : []),
         // Then the end of the cluster, and the end of the piece: everything to
         // its left writes the scene, and this is the one that takes it back.

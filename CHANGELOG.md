@@ -6,6 +6,21 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The PreStage has a Refine button.** The refiner was only ever on the video
+bodies, because only the video families had a prompting of their own. The
+still-only families (Krea 2, Qwen Image 2.1, Flux 2 Klein, MOSS-Image, Qwen
+Image Edit, Ideogram 4) now share one, `families/stillrefine.py`. It has four
+templates read off the blob: T2I with nothing attached; I2I with an init
+image, which describes the whole finished picture in the start's composition;
+EDIT where an edit family changes its first picture in place, which writes an
+instruction rather than a description; and REF with pictures read beside the
+sentence, cited by handle. The rewrite is one paragraph with no sound and no
+time, kept with its `@handles` and stood in for the prompt by
+`compile_image.with_refined`, so the cast, the trigger words, the citations
+and Ideogram's caption wrapping all read it. The H3 branch refines its request
+with H3's own prompting plus a rule that the shot is one held frame, and its
+plain prompt mode now queues the rewrite too.
+
 **MOSS-Image arrives as a still family: text to image, strong on rendered
 text.** OpenMOSS's 5B DiT behind a Qwen3.5 9B encoder and the Flux 2 VAE, on
 the pre-stage's model pill as `moss`, built from what core shipped for it on

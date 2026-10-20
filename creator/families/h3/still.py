@@ -52,7 +52,7 @@ because they are the video model's.
 from dataclasses import dataclass
 
 from ... import canvas, models as core, neural, outputs, raylight, render_image
-from ...compile import CHECKPOINTS, CompileError, active_loras, collect_triggers
+from ...compile import CHECKPOINTS, CompileError, active_loras, collect_triggers, refined_body
 from . import declare, models as slots
 
 ARCH = "minimax"
@@ -203,8 +203,12 @@ def _plain_prompt(request, checkpoint):
     Same construction as the video body's prefix — a word only counts if its
     LoRA is actually in this run — because that is the one part of the composed
     prompt an override would otherwise drop on the floor.
+
+    The refiner's prose where the panel has it on, as the composed path reads
+    it: "verbatim" is about the Context-IR wrapping, not about which of the two
+    texts the user chose to queue.
     """
-    prompt = str(request.get("prompt") or "").strip()
+    prompt = (refined_body(request) or str(request.get("prompt") or "")).strip()
     triggers = collect_triggers(active_loras(request.get("loras"), checkpoint))
     if triggers:
         prompt = f"{', '.join(triggers)}, {prompt}" if prompt else ", ".join(triggers)

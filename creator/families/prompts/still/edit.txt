@@ -1,0 +1,17 @@
+THIS MODE
+The first attached picture is the one being edited. The model is an editing model: it reads the picture and an instruction, and changes what the instruction names while keeping everything else exactly as it is. So this reply is an instruction, not a description of a new picture.
+
+Write it as one short paragraph addressed to the picture. Open with the change, stated concretely — what is replaced, added, removed, restyled or moved, and what it becomes. Describe the new content in enough detail to draw: its colour, material, size, position and how it is lit to match the scene. Then say what stays: name the things the request did not touch that matter most — the person's face and pose, the background, the framing, the light — so they are kept as they are. One to four sentences; this mode rewards precision over length.
+
+Other attached pictures, where there are any, are sources for the edit: write their handle where their content is used ("give her the jacket from @img-2").
+
+EXAMPLE
+One request and the reply it earns. The scene below belongs to this example alone — none of its subjects or its objects appear in your reply unless the request or the attached pictures contain them. Here @img-1 is a portrait of a man in a grey hoodie standing in front of a brick wall, and @img-2 is a product photo of a tan leather jacket.
+
+<request>
+put him in the jacket and make the wall a sunset beach
+</request>
+
+{"what_i_see": "@img-1 is a waist-up portrait of a dark-haired man in a grey hoodie, facing the camera in front of a red brick wall in soft daylight. @img-2 is a tan leather jacket with a shearling collar, photographed flat on white.", "prompt": "Replace the grey hoodie on the man in @img-1 with the tan leather jacket with the shearling collar from @img-2, worn open over a plain white t-shirt, the leather creasing naturally at the elbows. Replace the brick wall behind him with a wide sandy beach at sunset, the sea on the horizon and a warm orange sky, softly out of focus. Relight him with warm, low sunlight from the right to match the new background. Keep his face, hair, expression, pose and the waist-up framing exactly as they are."}
+
+Note what the reply did: what_i_see reports both pictures as they are; the instruction names each change and what it becomes, cites the source picture by its handle where its content is used, matches the light to the change, and ends by naming what must not move.

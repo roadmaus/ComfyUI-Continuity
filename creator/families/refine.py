@@ -171,6 +171,25 @@ OUTPUT contract below is not theirs to move.
 {extra}"""
 
 
+# The video families' own prompting, turned on a still. The pre-stage's H3
+# branch is a video generation of a fraction of a second with one frame kept,
+# so it is refined with H3's prompting — the Context-IR form is what those
+# weights read whatever length the clip is — but a rewrite that wrote the
+# camera pushing in and a line of dialogue would describe a clip nobody will
+# see. Said once here because it is about the pack's pre-stage, not about any
+# model's training, and placed by each family after its template so it binds
+# over the worked example's movement.
+STILL_RULE = """\
+A STILL, NOT A VIDEO
+This request renders one picture: the video model samples a fraction of a \
+second and only a single frame of it is kept. Write the shot as that one held \
+instant — the subject, the pose, the expression, the setting, the light and \
+the framing exactly as they stand in that frame. Write no camera movement, no \
+sequence of events, no dialogue and nothing that happens next. Leave the score \
+empty, and keep the soundscape to a short phrase of the place's ambient sound \
+or leave it empty: neither is heard."""
+
+
 CONTINUES_NOTE = (
     "This shot continues straight out of the previous shot in the finished clip: "
     "its first frame is the previous one's last frame. Open in that same place, "
@@ -556,7 +575,7 @@ class Prompting:
         raise NotImplementedError(f"{self.id}.reply_shape")
 
     def system_prompt(self, mode, language="English", shape=None, cuts=0, extra="",
-                      cast=()):
+                      cast=(), still=False):
         """The whole instruction: rules, craft, the mode's template, the contract.
 
         `extra` is the user's own instructions, from a prompt file they put in
@@ -564,6 +583,9 @@ class Prompting:
         rather than replace it. It goes after the family's own craft and before
         the reply contract — late enough to bind, early enough that the shape
         of the reply is still the last thing read. `cast` as in `reply_shape`.
+        `still` is a video family refining the pre-stage's one kept frame, and
+        adds `STILL_RULE`; the still-only families' prompting ignores it,
+        because a picture is all it ever writes.
         """
         raise NotImplementedError(f"{self.id}.system_prompt")
 
@@ -591,5 +613,19 @@ class Prompting:
 
 
 def of(family):
-    """The prompting of `family`. Imported on demand and pure, like `grammar.of`."""
-    return importlib.import_module(f".{family}.refine", __package__).PROMPTING
+    """The prompting of `family`. Imported on demand and pure, like `grammar.of`.
+
+    A still-only family with no `refine.py` of its own is answered by
+    `stillrefine`, the one prompting every image family shares — see there for
+    why one serves them all. A video family without one is a bug and raises.
+    """
+    try:
+        return importlib.import_module(f".{family}.refine", __package__).PROMPTING
+    except ModuleNotFoundError as exc:
+        if exc.name != f"{__package__}.{family}.refine":
+            raise
+        from . import registry
+
+        if family not in registry.IMAGE_FAMILIES:
+            raise
+    return importlib.import_module(".stillrefine", __package__).PROMPTING

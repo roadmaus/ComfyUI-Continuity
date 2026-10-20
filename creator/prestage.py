@@ -226,6 +226,12 @@ class MiniMaxH3PreStage(io.ComfyNode):
         # on the blob; the H3 branch keeps the Creator's request under its own
         # block, and that request is chosen whole, `refined` and all.
         data = variations.vary_mapping(data, sampler.seed, 1, keys=("prompt",))
+        # Then the refiner's prose in the sentence's place, before anything
+        # reads the prompt — the cast's saved renditions below are looked up
+        # off the members it cites, and a rewrite may cite one the typed
+        # sentence did not. The H3 branch's request carries its own `refined`
+        # and its compile reads it there.
+        data = compile_image.with_refined(data)
         h3_block = data.get(still.ARCH)
         if isinstance(h3_block, dict) and isinstance(h3_block.get("request"), dict):
             request = variations.vary_mapping(h3_block["request"], sampler.seed, 1)
