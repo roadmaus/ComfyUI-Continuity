@@ -282,7 +282,7 @@ check("what a reference is on each arch", reflected["refs"],
                 "needsLora": False, "editsFirst": False,
                 "noun": list(ci.REFS_NOUN), "editFirst": None,
                 "nativeControl": [], "controlEditions": [],
-                "adapter": None, "adapterHints": [],
+                "adapter": None, "adapterHints": [], "edit": None,
                 "editions": None, "defaultEdition": None,
                 "editionHints": [], "max": 0, "control": None}})
 
