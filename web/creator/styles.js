@@ -29,6 +29,7 @@ import { css as loupe } from "./styles/loupe.js";
 import { css as blockout } from "./styles/blockout.js";
 import { css as chat } from "./styles/chat.js";
 import { css as lift } from "./styles/lift.js";
+import { css as forge } from "./styles/forge.js";
 
 const CSS = [
   base,
@@ -71,6 +72,8 @@ const CSS = [
   // The image-to-3D room borrows the benches' bar and overlay, so it comes
   // after them; nothing later reaches into it.
   lift,
+  // A bench, so after the room it adds to.
+  forge,
   // Last: the shell hosts every body in the pack and lifts the caps the node
   // face put on them, so its rules have to win over the sections that set them.
   fullscreen,

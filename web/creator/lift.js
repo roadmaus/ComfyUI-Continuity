@@ -42,7 +42,7 @@
 // button that does nothing the second time is a broken button.
 
 import { el, icon, mark, dragsFiles, mountOverlay, keepScroll } from "./dom.js";
-import { upload, viewUrl, outputUrl, liftModels, liftRun, revealFolder, invalidate,
+import { upload, viewUrl, outputUrl, liftModels, liftRun, revealFolder, invalidate, download,
          blockoutFrames, blockoutWrite } from "./api.js";
 import { openPicker } from "./picker.js";
 import { t } from "./i18n.js";
@@ -1135,6 +1135,12 @@ class Lift {
           onclick: () => revealFolder("output", final.mesh.subfolder)
             .catch((error) => this.toast(String(error.message || error))),
         }, [icon("folderOpen", 15)]),
+        // The GLB alone: its texture and PBR maps are embedded in it, and the
+        // swatches in `.lift/` beside it are copies the panel shows.
+        el("button", {
+          class: "mmc-lf-reveal", disabled: !final, title: t("Download"), "aria-label": t("Download"),
+          onclick: () => download(`${final.mesh.subfolder}/${final.mesh.filename} [output]`),
+        }, [icon("download", 15)]),
       ]),
       el("div", { class: "mmc-lf-doors" }, [
         el("button", {

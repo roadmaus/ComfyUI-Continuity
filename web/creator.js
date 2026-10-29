@@ -16,6 +16,7 @@ import { openPresetLibrary } from "./creator/presetlib.js";
 import { el } from "./creator/dom.js";
 import * as S from "./creator/state.js";
 import { t } from "./creator/i18n.js";
+import { listenForPoseJobs } from "./creator/forge/pose.js";
 
 const CREATOR = "MiniMaxH3Creator";
 // The retired Timeline id. One shot and twenty are the same node now, and this
@@ -409,6 +410,9 @@ app.registerExtension({
     // One hook for the whole canvas, installed once — every node's seed row
     // reads out of the same memory.
     rememberQueuedSeeds();
+    // Any tab draws the forge's mannequins, so the CLI can pose without the
+    // bench open (creator/forge/pose.py).
+    listenForPoseJobs();
   },
 
   async nodeCreated(node) {

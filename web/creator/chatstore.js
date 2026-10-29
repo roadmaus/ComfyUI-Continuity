@@ -155,8 +155,49 @@ function packMessage(message) {
   };
 }
 
+/** A split, with every version it keeps (`chat.js`, "versions"). The one on
+ *  screen is the live conversation and is written there; its slot stays null. */
+function packFork(fork) {
+  return {
+    index: fork.index,
+    at: fork.at,
+    versions: fork.versions.map((version) => version && {
+      messages: version.messages.filter((message) => !message.local).map(packMessage),
+      ledger: version.ledger ?? [],
+      strip: version.strip ?? [],
+      turn: version.turn ?? 0,
+      forks: (version.forks ?? []).map(packFork),
+    }),
+  };
+}
+
+/** A split back into the room's shape. A file that has a split in it has
+ *  nothing odd about it otherwise: a fork that does not parse is dropped,
+ *  which loses its other versions and nothing on screen. */
+function unpackForks(forks) {
+  return (Array.isArray(forks) ? forks : [])
+    .filter((fork) => Number.isInteger(fork?.index) && Array.isArray(fork.versions)
+                      && Number.isInteger(fork.at) && fork.versions[fork.at] === null)
+    .map((fork) => ({
+      index: fork.index,
+      at: fork.at,
+      versions: fork.versions.map((version) => version && {
+        messages: unpackMessages(version.messages),
+        ledger: Array.isArray(version.ledger) ? version.ledger : [],
+        strip: Array.isArray(version.strip) ? version.strip : [],
+        turn: Number.isFinite(version.turn) ? version.turn : 0,
+        forks: unpackForks(version.forks),
+      }),
+    }));
+}
+
+function unpackMessages(messages) {
+  return (Array.isArray(messages) ? messages : [])
+    .map((message) => ({ ...message, card: message.card ? { ...message.card } : undefined }));
+}
+
 /**
- * The conversation as a file. -> `{version, messages, ledger, counts, turn}`.
+ * The conversation as a file. -> `{version, messages, ledger, counts, turn, forks}`.
  *
  * The room's own bubbles — the first run's three questions — are marked
  * `local` and left out: they were the room's, not the conversation's, and
@@ -176,6 +217,7 @@ export function pack(state) {
     // Nothing else of a piece is the conversation's — the family, the row and
     // the stack are assembled at render time from the rail and the pins.
     piece: packPiece(state.piece),
+    forks: (state.forks ?? []).map(packFork),
   };
 }
 
@@ -190,8 +232,7 @@ export function packPiece(piece) {
 /** A file back into the room's shape. Cards come back without their
  *  listeners; `chat.js` settles any that were left mid-render. */
 export function unpack(body) {
-  const messages = (Array.isArray(body?.messages) ? body.messages : [])
-    .map((message) => ({ ...message, card: message.card ? { ...message.card } : undefined }));
+  const messages = unpackMessages(body?.messages);
   const ledger = Array.isArray(body?.ledger) ? body.ledger : [];
   return {
     messages,
@@ -204,6 +245,7 @@ export function unpack(body) {
       ...messages.map((message) => Number.isFinite(message.turn) ? message.turn : 0),
       ...ledger.map((entry) => Number.isFinite(entry.turn) ? entry.turn : 0)),
     piece: packPiece(body?.piece),
+    forks: unpackForks(body?.forks),
   };
 }
 

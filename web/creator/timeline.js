@@ -3831,11 +3831,6 @@ export class TimelineBody {
         add: () => this.growIntoStrip(),
       },
     });
-    // Whether the view this body is drawn in starts with the cast shelf
-    // folded, carried onto the editor that was just built for it — see
-    // `Fullscreen.setCastDefault`. Undefined on the canvas, which is the
-    // answer the face wants anyway.
-    this.faceEditor.castDefaultOpen = this.castDefaultOpen;
     return this.faceEditor;
   }
 

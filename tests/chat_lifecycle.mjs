@@ -69,7 +69,8 @@ for (let turn = 1; turn <= 2; turn++) {
     { role: "assistant", say: "Done", card: { state: "done", turn, entry } });
   history.ledger.push(entry);
 }
-for (const [id, state] of Object.entries({ history, saving: fixture(),
+const versions = JSON.parse(JSON.stringify(history));
+for (const [id, state] of Object.entries({ history, versions, saving: fixture(),
   ...Object.fromEntries(["active", "race", "pending", "refused", "deleted"].map(id =>
     [id, fixture(render(`${id}-prompt`))])),
 })) await store.saveChat({ id, title: id, created: 1 }, state);
@@ -97,6 +98,67 @@ await test("reopen, send and edit preserves earlier references", async () => {
   await save();
   assert.equal(body("history").messages[4].turn, 3);
   assert.deepEqual(body("history").ledger.map(entry => entry.handle), ["pic-1", "pic-2"]);
+});
+
+await test("editing and asking again keep the old version, and switching brings it back", async () => {
+  lifecycle.http = async route => route === "/continuity/chat/turn" ? response({ result: { say: "Done" } }) : undefined;
+  await enter("versions");
+  const all = selector => document.body.querySelectorAll(selector);
+  const count = () => one(".mmc-ch-vcount").textContent;
+
+  // An edit cuts nothing until it is sent, and Cancel leaves it as it was.
+  await click(all('[title="Edit and send again"]')[1]);
+  assert.ok(all(".mmc-ch-revised").length > 0, "what the edit replaces is dimmed");
+  assert.equal(one(".mmc-ch-revising").hidden, false);
+  await click(one(".mmc-ch-door", one(".mmc-ch-revising")));
+  assert.equal(all(".mmc-ch-revised").length, 0);
+  await save();
+  assert.equal(body("versions").messages.length, 4);
+  assert.equal(body("versions").forks.length, 0);
+
+  // Sent: the old message and its picture are a version, the new one is on screen.
+  await click(all('[title="Edit and send again"]')[1]);
+  await send("draw 2 differently");
+  await save();
+  let saved = body("versions");
+  assert.deepEqual(saved.messages.map(message => message.text ?? message.say),
+                   ["draw 1", "Done", "draw 2 differently", "Done"]);
+  assert.deepEqual(saved.ledger.map(entry => entry.handle), ["pic-1"], "the model is not offered pic-2");
+  assert.equal(saved.forks.length, 1);
+  assert.equal(saved.forks[0].index, 2);
+  assert.equal(saved.forks[0].at, 1);
+  assert.equal(saved.forks[0].versions[0].messages[0].text, "draw 2");
+  assert.deepEqual(saved.forks[0].versions[0].ledger.map(entry => entry.handle), ["pic-2"]);
+  assert.equal(count(), "2 / 2");
+  const takes = all(".mmc-ch-vtake");
+  assert.equal(takes.length, 2);
+  assert.ok(takes[0].querySelector("img"), "the old version shows the picture it made");
+
+  // Its picture brings it back, with its ledger line.
+  await click(takes[0]);
+  await save();
+  saved = body("versions");
+  assert.equal(count(), "1 / 2");
+  assert.equal(saved.messages[2].text, "draw 2");
+  assert.deepEqual(saved.ledger.map(entry => entry.handle), ["pic-1", "pic-2"]);
+  assert.equal(saved.forks[0].versions[1].messages[0].text, "draw 2 differently");
+
+  // Asked again inside it: a second split, which travels with its version.
+  await click(all('[title="Ask again from here"]')[1]);
+  await save();
+  assert.equal(body("versions").forks.length, 2);
+  await click(all(".mmc-ch-vtake")[1]);
+  await save();
+  saved = body("versions");
+  assert.equal(saved.forks.length, 1);
+  assert.equal(saved.forks[0].versions[0].forks.length, 1, "the split inside version 1 is kept with it");
+
+  // And it all comes back from the shelf.
+  await click(one(".mmc-ch-new"));
+  await click(one(".mmc-ch-sideopenbtn", row("versions")));
+  assert.equal(count(), "2 / 2");
+  await click(all(".mmc-ch-vtake")[0]);
+  assert.equal(all(".mmc-ch-vcount").length, 2, "both splits are on screen again");
 });
 
 await test("legacy turns use saved, ledger and message maxima without inference", async () => {

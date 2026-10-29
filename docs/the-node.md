@@ -103,6 +103,15 @@ shot 9.
 
 Hanging a file on a cast member sets its scope dial for you.
 
+The cast shelf starts folded - on the Creator and the PreStage alike, and in
+both fullscreen views - and nothing opens it but you: press Cast on the rail,
+or click a name in the prompt to open the shelf on that member. Folded, the Cast tool wears the
+number of people cast, and the number turns amber when one of them is not in
+the prompt or has a file muted - hover it for which. A member's files are
+listed on the shelf, under their name, and not on the reference row above the
+prompt: that row is the files you attached yourself. Open the shelf to see
+everything the shot carries.
+
 Each file on a member has its own menu, from its tile. At its head is a line
 for what the file shows of them - "her face, front-lit", "the green coat",
 "the golf swing" - which is written after that file's label in the subject
@@ -125,20 +134,21 @@ brings the face, the hat and the smoking sheet, and leaves the other
 twenty-seven out, under the nine-picture cap. A file the sentence names
 outright (`@img-3`) is awake whatever its words, a muted file stays muted
 whatever the sentence says, and a `{hat|cap}` wakes the plate the seed picks.
-On the card the chip says *wakes on hat, cap* behind a ring - filled while
-the file is in, hollow while it waits - the word that woke it is underlined
-in the member's hue in the sentence, and a member every one of whose plates
-is asleep is refused by name with the words that would wake one. The tile
-wears the ring hollow. The words are kept with the member in the cast
+On the shelf a waiting file's tile is greyed, and lights when the sentence
+says its word; the word that woke it is underlined in the member's hue in the
+sentence, and a member every one of whose plates is asleep is refused by name
+with the words that would wake one. The tile wears the ring hollow. The words are kept with the member in the cast
 library and follow a picture onto its RefMod.
 
-A muted file on the cast card has a dimmed thumbnail and a mute badge. Its
-claim stays on the member, but it is not sent to the model. Deleting the last
+A member's file is muted from its tile's menu (*Mute @img-1*, and *Bring
+@img-1 back*). A muted file on the shelf has a dimmed thumbnail and a mute
+badge. Its claim stays on the member, but it is not sent to the model. Deleting the last
 mention of a name mutes what it brought; writing the name back - typed, pasted,
 undone, picked from the prompt menu or pressed on the shelf - brings it live
 again, within the usual reference limits. A name still written whose file is
-muted was muted in the row on purpose, and a second mention leaves it so; the
-row's mute switch is the way back, there and for a shared pool file. Reopening
+muted was muted on purpose, and a second mention leaves it so; the tile's
+menu is the way back, and the row's mute switch for a file you attached or a
+shared pool file. Reopening
 a saved workflow changes no mute. If every source of a cited member is
 unavailable, untouched default rows such as face and hair do not count as a
 description: enable a source or give the member an actual description before

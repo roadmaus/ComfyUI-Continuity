@@ -34,7 +34,7 @@
 
 import { api } from "../../../scripts/api.js";
 import { el } from "./dom.js";
-import { outputUrl, uiSetting } from "./api.js";
+import { download, outputUrl, uiSetting } from "./api.js";
 import { openLoupe } from "./loupe.js";
 import { submission } from "./queue.js";
 import { t } from "./i18n.js";
@@ -960,7 +960,19 @@ export class Stage {
         onclick: () => this.onGallery(),
         onpointerdown: (event) => event.stopPropagation(),
       }));
-      if (this.result?.saved && this.resultChips) left.push(...this.resultChips(this.result.saved));
+      // The file itself, to the machine the browser is on — which, through a
+      // tunnel to a GPU box, is the only way the render reaches it at all.
+      // Here rather than in each owner, so the Creator and the PreStage get it
+      // alike.
+      const saved = this.result?.saved;
+      if (saved) left.push(el("button", {
+        class: "mmc-stage-chip mmc-stage-gallery",
+        text: t("Download"),
+        title: t("Save this render to this computer's Downloads folder."),
+        onclick: () => download(`${saved.subfolder ? `${saved.subfolder}/` : ""}${saved.filename} [${saved.type || "output"}]`),
+        onpointerdown: (event) => event.stopPropagation(),
+      }));
+      if (saved && this.resultChips) left.push(...this.resultChips(saved));
       // A look for this render: opens the library on the Style tab with this
       // frame in the wipe. Only where the owner has the pass to run it.
       if (this.onRestyle) left.push(el("button", {

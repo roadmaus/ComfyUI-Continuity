@@ -78,28 +78,6 @@ export const css = `
 }
 .mmc-cast-line-takes { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); flex: none; }
 
-/* Their files as a texture rather than a row of controls — the reading a shut
-   line owes is "two pictures and a voice", not "which picture". */
-.mmc-cast-minis { display: flex; gap: 3px; flex: none; }
-.mmc-cast-mini { position: relative; display: block; line-height: 0; }
-.mmc-cast-mini-thumb {
-  width: 22px; height: 22px; border-radius: 6px; object-fit: cover;
-  background: var(--mmc-surface-3); display: flex; align-items: center;
-  justify-content: center; color: var(--mmc-dim);
-}
-.mmc-cast-mini-thumb svg { width: 11px; height: 11px; }
-/* The three that are not their looks say so with the colour their badge wears on
-   the open card. A dot, because at 22px a glyph is a smudge. */
-.mmc-cast-mini-motion::after, .mmc-cast-mini-voice::after,
-.mmc-cast-mini-replaces::after {
-  content: ""; position: absolute; right: -1px; bottom: -1px;
-  width: 7px; height: 7px; border-radius: 999px;
-  box-shadow: 0 0 0 1.5px var(--mmc-surface);
-}
-.mmc-cast-mini-motion::after { background: var(--mmc-role-motion); }
-.mmc-cast-mini-voice::after { background: var(--mmc-role-voice); }
-.mmc-cast-mini-replaces::after { background: var(--mmc-role-replaces); }
-.mmc-cast-mini.missing .mmc-cast-mini-thumb { box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--mmc-bad) 50%, transparent); }
 .mmc-cast-line-words { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); flex: none; }
 /* What their looks cost a render, in the marker's monospace — it is a number
    the model is handed. Amber once every look is a saved file, which is the
@@ -335,6 +313,9 @@ img.mmc-cast-face { cursor: zoom-in; }
   display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
   padding-left: 58px; min-width: 0;
 }
+/* The same tiles under a shut member's line, lined up with their name: the
+   shelf is where a member's files are listed (see CastShelf.shutFiles). */
+.mmc-cast-shut-refs { padding: 0 8px 8px 52px; }
 .mmc-cast-ref {
   position: relative; padding: 0; border: 0; background: none; cursor: pointer;
   border-radius: 9px; line-height: 0; flex: none;
@@ -357,6 +338,10 @@ img.mmc-cast-face { cursor: zoom-in; }
 /* A file can still belong to them while being muted in the reference row.
    Keep it visible and editable, but do not present it as a live model input. */
 .mmc-cast-ref.off .mmc-cast-ref-thumb { filter: grayscale(1) brightness(.55); }
+/* Asleep: out of this render because the sentence does not name them or say
+   the file's word (state.asleepHere). Greyed like muted, a little lighter,
+   with no glyph — nothing was pressed, and writing the word brings it back. */
+.mmc-cast-ref.asleep .mmc-cast-ref-thumb { filter: grayscale(1) brightness(.75); }
 .mmc-cast-ref.off:hover .mmc-cast-ref-thumb,
 .mmc-cast-ref.off:focus-visible .mmc-cast-ref-thumb { filter: grayscale(1) brightness(.7); }
 .mmc-cast-missing { font-size: calc(15px * var(--mmc-type)); }
@@ -588,10 +573,15 @@ img.mmc-cast-face { cursor: zoom-in; }
 .mmc-tool-count {
   position: absolute; top: -4px; right: calc(50% - var(--mmc-tool-tile) / 2 - 6px);
   min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px;
-  background: var(--mmc-accent); color: var(--mmc-strong);
+  background: var(--mmc-surface-3); color: var(--mmc-text);
+  box-shadow: 0 0 0 1px var(--mmc-line-2);
   font-size: 10px; font-weight: 600; line-height: 16px; text-align: center;
   font-variant-numeric: tabular-nums;
 }
+/* Amber only when the folded shelf is hiding something to act on — somebody
+   not in the sentence, or a file of theirs muted (CreatorEditor.castNeedsLook).
+   A count that is always amber is a count that never says anything. */
+.mmc-tool-count.look { background: var(--mmc-accent); color: var(--mmc-on-accent); box-shadow: none; }
 
 /* --- the menus ------------------------------------------------------------- */
 

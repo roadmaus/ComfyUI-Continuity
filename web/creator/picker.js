@@ -5,7 +5,7 @@ import { el, ICONS, svg, icon, mountOverlay, dismissable } from "./dom.js";
 import { listAssets, listingTruncated, listedFolders, makeFolder, removeFolder,
          revealFolder, viewUrl, stillUrl, upload, moveAsset,
          deleteAsset, loadPickerPrefs, savePickerPrefs, buildPlate,
-         cutPanel, uploadRefMod } from "./api.js";
+         cutPanel, uploadRefMod, download } from "./api.js";
 import { openTrim, trimLabel } from "./trim.js";
 import { openPicture, cropLabel } from "./picture.js";
 import { greyField } from "./subject.js";
@@ -1230,6 +1230,15 @@ export class Picker {
       title: starred ? t("Remove from favorites") : t("Add to favorites"),
       onclick: (event) => { event.stopPropagation(); this.toggleFav(asset); },
     }, [icon("star", 13)]));
+    // Download beside it, on the star's terms: quiet until hovered. The one way
+    // a file on a remote box reaches the machine the browser is on. A mod is
+    // left out — its .safetensors is downloaded from its own row's menu.
+    if (!asset.mod) {
+      cell.appendChild(el("button", {
+        class: "mmc-cell-save", title: t("Download"),
+        onclick: (event) => { event.stopPropagation(); download(asset.path); },
+      }, [icon("download", 13)]));
+    }
 
     // A file's home is worth a caption whenever the row above does not already
     // say it: the full path out on All, and the part below here when the grid
@@ -2045,6 +2054,13 @@ export class Picker {
         el("button", {
           class: "mmc-ghost", text: t("Move to…"), disabled: !this.marked.length,
           onclick: () => this.moveMenu(),
+        }),
+        // One zip of the marked set, so a shelf of keepers comes off a remote
+        // box in one press rather than a click per file.
+        el("button", {
+          class: "mmc-ghost", text: t("Download {count}", { count: this.marked.length }),
+          disabled: !this.marked.length,
+          onclick: () => download(this.marked, { name: this.here().split("/").pop() || undefined }),
         }),
         this.deleteButton,
         el("button", { class: "mmc-add", text: t("Done"), onclick: () => this.setOrganize(false) }),

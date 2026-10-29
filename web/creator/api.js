@@ -415,6 +415,47 @@ export function outputUrl({ filename, subfolder = "", type = "output" }) {
   return api.apiURL(`/view?${new URLSearchParams({ filename, subfolder, type })}`);
 }
 
+/** A forge project's file as a picker path, for `download`: the forge keeps
+ *  its projects under output/ (`outputs.FORGE`), so a `project/path` pair is
+ *  one more output path. `path` "" is the whole project. */
+export function forgePath(project, path = "") {
+  return `${["continuity/forge", project, path].filter(Boolean).join("/")} [output]`;
+}
+
+/**
+ * Save files to the browser's own Downloads folder — the machine the browser
+ * is on, which is not always the one ComfyUI writes to (`creator/downloads.py`).
+ * `paths` is one picker path or several, files or folders; one file arrives as
+ * itself (`name` ignored), anything more as a zip named `name` when given.
+ *
+ * Always by ticket, even for one file: the POST checks every path resolves, so
+ * a file that has gone since it was drawn is a toast here rather than a saved
+ * JSON error the browser named `download`. The GET then goes on an anchor, so
+ * the browser streams the bytes to disk and the page never holds them.
+ */
+export async function download(paths, { name } = {}) {
+  try {
+    const response = await api.fetchApi("/continuity/download", {
+      method: "POST",
+      headers: JSON_HEADERS,
+      body: JSON.stringify({ paths: [paths].flat(), name }),
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(body.error || t("download failed ({status})", { status: response.status }));
+    const anchor = document.createElement("a");
+    anchor.href = api.apiURL(`/continuity/download?${new URLSearchParams({ ticket: body.ticket })}`);
+    anchor.download = "";
+    anchor.click();
+  } catch (error) {
+    // Reported here rather than at each of the buttons that call this: a
+    // download has nowhere of its own to fail into, and every caller would
+    // say the same sentence.
+    globalThis.app?.extensionManager?.toast?.add({
+      severity: "error", summary: t("Download"), detail: String(error.message || error), life: 6000,
+    });
+  }
+}
+
 // Keyed by folder: switching between two folders and back is a normal thing to
 // do while hunting for a LoRA, and re-walking a few thousand files for it is not.
 const loraCache = new Map();   // folder -> {at, body}
@@ -1402,4 +1443,41 @@ export async function blockoutWrite(body) {
   // this the guide is missing from the grid it was just written into.
   invalidate("input");
   return answer;
+}
+
+// ---- Game Forge -------------------------------------------------------------
+
+/** A forge route's refusal: the server's sentence, and the code an agent (or
+ *  this bench) branches on. See `creator/forge/problems.py`. */
+export class ForgeRefusal extends Error {
+  constructor(answer, status) {
+    super(answer?.problem || answer?.error || t("the forge refused ({status})", { status }));
+    this.code = answer?.code ?? `http.${status}`;
+    this.answer = answer ?? {};
+  }
+}
+
+/**
+ * Call `/continuity/forge/<route>`. Reads are GETs with a query, everything
+ * that writes is a JSON POST — the same table `creator/forge/api.py` serves
+ * and the CLI is held against, so the bench can do nothing the CLI cannot.
+ */
+export async function forgeCall(route, params = {}, { get = false } = {}) {
+  const query = new URLSearchParams(Object.entries(params).filter(([, v]) => v != null));
+  const response = get
+    ? await api.fetchApi(`/continuity/forge${route}?${query}`)
+    : await api.fetchApi(`/continuity/forge${route}`, {
+        method: "POST", headers: JSON_HEADERS, body: JSON.stringify(params),
+      });
+  const body = await response.json().catch(() => null);
+  if (!response.ok) throw new ForgeRefusal(body, response.status);
+  return body;
+}
+
+/** A project file as a URL for an `<img>`. `version` busts the cache: a
+ *  contact sheet is rewritten under the same name every time it is drawn. */
+export function forgeFileUrl(project, path, version = null) {
+  const query = new URLSearchParams({ project, path });
+  if (version != null) query.set("v", String(version));
+  return api.apiURL(`/continuity/forge/file?${query}`);
 }

@@ -45,6 +45,12 @@ UPSCALED = "continuity/upscaled"
 # its mesh itself (`liftnode.py`), so this is a directory rather than a prefix.
 MESHES = "continuity/meshes"
 
+# And the fifth: Game Forge's projects (`creator/forge/`). A project is a folder
+# of finished, engine-ready files somebody goes looking for, so it sits on a
+# shelf beside the renders — and like the two above it is written by the pack
+# itself, so this too is a directory and not a prefix.
+FORGE = "continuity/forge"
+
 # What the two shelves held before there was a second family: one folder each,
 # with H3's name on the files in both. Kept because `settings.py` has to be able
 # to recognise them — a machine that never typed a folder is on these, and

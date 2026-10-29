@@ -234,6 +234,29 @@ check("a LoRA the machine does not have is refused with the near names",
       "did you mean anna.safetensors" in render(family="h3", prompt="a cat",
           loras=[{"name": "Anna"}]).get("problem", ""), True)
 
+# ---- where a still lands -------------------------------------------------------
+#
+# Game Forge's shape: every picture a reference (`as: "ref"`), so the canvas is
+# the aspect asked for rather than the first picture's, and an output prefix
+# that puts the file in the take's folder.
+outputs = importlib.import_module(f"{PACKAGE}.creator.outputs")
+built = render(family="qwen21", prompt="a chest. Transparent background with alpha channel.", fast=False,
+               aspect="4:5", short_edge=512, pictures=[{"filename": "look.png", "as": "ref"}],
+               output_prefix="continuity/forge/keep/takes/chest/t1/chest")
+if "problem" in built:
+    FAILURES.append(f"a still with an output prefix was refused: {built['problem']}")
+else:
+    _, _, blob = inputs(built)
+    check("the prefix is on the blob, where the save node reads it",
+          outputs.image(blob, "elsewhere/x"), "continuity/forge/keep/takes/chest/t1/chest")
+    check("a reference is not an edit: the canvas is the aspect asked for",
+          (blob.get("edit_first"), blob.get("aspect")), (None, "4:5"))
+check("a prefix that leaves the output folder is refused before anything is sampled",
+      "'..' are not allowed" in render(family="qwen21", prompt="x", fast=False,
+                                       output_prefix="../x/y").get("problem", ""), True)
+check("...and a clip's is refused, for now",
+      "a still" in render(family="h3", prompt="x", output_prefix="a/b").get("problem", ""), True)
+
 route.server_routes._lora_names = lambda: []
 check("fast with no distill on the machine refuses rather than rendering slow",
       "fast: false" in render(family="h3", prompt="a cat").get("problem", ""), True)

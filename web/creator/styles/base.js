@@ -292,6 +292,20 @@ export const css = `
 [class^="mmc-"]::-webkit-scrollbar, [class*=" mmc-"]::-webkit-scrollbar { display: none; }
 /* The exceptions are the strips of cards that run sideways — each declares
    its own hairline in its own module (.mmc-tl-strip, .mmc-fs-strip). */
+/* Nothing in the pack is text to be selected unless it says so. Buttons, pills,
+   card labels and filenames are controls, and a drag across a grid of them or a
+   double-click on a chip painted a selection over the face. Matched on the
+   class prefix for the reason the scrollbar rule is. :where() keeps it at zero
+   specificity, so a module that wants a readout copyable (.mmc-refined-seen,
+   .mmc-ch-said) wins with a bare class wherever it sits in the cascade.
+
+   Fields are put back to auto rather than text: auto on an editing host is
+   contain, and the atomic chips inside the prompt box (contenteditable=false)
+   then inherit that from the box instead of being cut out of the caret's way. */
+:where([class^="mmc-"], [class*=" mmc-"]) { user-select: none; -webkit-user-select: none; }
+:where(input, textarea, [contenteditable="true"], [contenteditable="true"] *) {
+  user-select: auto; -webkit-user-select: auto;
+}
 .mmc-root > div:empty { display: none; }
 .mmc-root {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;

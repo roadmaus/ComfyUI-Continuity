@@ -49,7 +49,8 @@ export const css = `
   font-variant-numeric: tabular-nums;
 }
 .mmc-lp-gap { flex: 1; }
-.mmc-lp-bar .mmc-close { align-self: center; }
+.mmc-lp-bar .mmc-close,
+.mmc-lp-bar .mmc-lp-step { align-self: center; }
 
 .mmc-lp-room { flex: 1; min-height: 0; display: flex; }
 .mmc-lp-work {

@@ -214,20 +214,11 @@ export const css = `
 .mmc-asset-cast {
   border-left: 3px solid var(--owner, var(--tag, var(--mmc-accent))); padding-left: 9px;
 }
-/* Whose file it is, said: "Veranul's RefMod", in Veranul's hue, so the chip
-   joins to their name in the sentence and not to a second picture of them.
-   A button where there is somebody to open, plain text where a mod is simply
-   what the file is. Set like the footnote beside it — this is a fact about the
-   file, the handle is still what identifies the chip. */
-.mmc-asset-owner {
-  background: none; border: 0; padding: 0; font: inherit; line-height: inherit;
-  font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim);
-}
-button.mmc-asset-owner { cursor: pointer; color: var(--tag); }
-button.mmc-asset-owner:hover, button.mmc-asset-owner:focus-visible {
-  text-decoration: underline; text-underline-offset: 3px; outline: none;
-}
-.mmc-asset.off .mmc-asset-owner { color: var(--mmc-dim); }
+/* What the file is where the thumbnail cannot say it: "RefMod", a saved
+   reference whose picture is decoded from its latent and looks exactly like
+   the photo it was made of. Set like a footnote — the handle is still what
+   identifies the chip. */
+.mmc-asset-owner { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); }
 
 /* A LoRA set to the checkpoint this graph does not route to. Still listed —
    removing it on a mode change would throw the setting away — but visibly
@@ -255,12 +246,6 @@ button.mmc-asset-owner:hover, button.mmc-asset-owner:focus-visible {
 .mmc-asset.passed { opacity: .6; }
 .mmc-asset.passed .mmc-asset-handle { color: var(--mmc-dim); }
 .mmc-asset.passed .mmc-asset-thumb { filter: grayscale(1); }
-/* Asleep: the owner gave this file words to wake on and the sentence says none
-   of them (see state.asleepHere). Dimmed like passed-over, for the same reason
-   — nothing was pressed, and writing the word brings it back. */
-.mmc-asset.asleep { opacity: .6; }
-.mmc-asset.asleep .mmc-asset-handle { color: var(--mmc-dim); }
-.mmc-asset.asleep .mmc-asset-thumb { filter: grayscale(1); }
 
 /* A reference the piece holds, drawn on a card that cites it (see
    renderAssets in editor.js). Every other chip in this row can be muted and removed from
@@ -268,33 +253,12 @@ button.mmc-asset-owner:hover, button.mmc-asset-owner:focus-visible {
    edge is the whole tell — a chip you can read but not press — and the footnote
    beside it says where it *can* be pressed. Dashed rather than dimmed: the
    file is in this render at full strength, and dimming is already spent on
-   muted, passed-over and asleep, which are the three ways it might not be. */
+   muted and passed-over, which are the ways it might not be. */
 .mmc-asset-pooled-chip { border-style: dashed; }
 .mmc-asset-pooled {
   color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); white-space: nowrap;
   padding-left: 7px; border-left: 1px solid var(--mmc-line);
 }
-
-/* The owner's words on the file — "the red hat" — as a footnote in the said
-   style. Ellipsed, because a sentence on a chip is a chip nobody can scan. */
-.mmc-asset-note {
-  color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type));
-  max-width: 18ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-/* The words the file wakes on. A ring in front of them is the one device for
-   "this file has a rule" — the tile's hollow dot in the cast shelf is the same
-   ring — and it fills in the owner's hue while the rule holds, so the row
-   reads at a glance: filled rings are in, hollow ones are waiting. */
-.mmc-asset-wake {
-  display: inline-flex; align-items: center; gap: 5px;
-  color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); white-space: nowrap;
-}
-.mmc-asset-wake::before {
-  content: ""; width: 7px; height: 7px; border-radius: 999px; flex: none;
-  box-shadow: inset 0 0 0 1.5px var(--owner, var(--mmc-dim));
-}
-.mmc-asset-wake.on { color: var(--mmc-text); }
-.mmc-asset-wake.on::before { background: var(--owner, var(--mmc-accent)); box-shadow: none; }
 
 /* The swap button sits in the ✕'s row and wears its colours; the glyph needs
    the extra line-height reset a text button does not. */

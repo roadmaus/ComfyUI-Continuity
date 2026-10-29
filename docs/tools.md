@@ -245,6 +245,139 @@ shot.
 
 Files: [models.md](models.md#image-to-3d).
 
+## Game Forge
+
+Keeps a game's art in one **project**: its look, the engines it exports to,
+and the list of assets, each a recipe plus the pictures it was made from.
+Projects live in `output/continuity/forge/<project>/`, with a `MANIFEST.md`
+the forge writes from the asset list. Everything the bench does can also be
+done from a shell with the `continuity-forge` skill's `forge.py`, which is how
+an agent plans and builds a game's assets.
+
+Opening the forge shows **Your games** and **Start a new game**. A new game
+asks for a name, **How it looks** (painted, flat, toon, pixel or pbr) and
+where it **Exports to**: Generic (PNG + Aseprite JSON), Godot 4, Tiled, LÖVE,
+Game Boy, Game Boy Color, GB Studio, glTF. A pixel project for a Game Boy
+starts on the Game Boy's four greens. The project's name in the bar switches
+to another game.
+
+**Project** (top right) opens the game's settings in a drawer: the **Style
+sentence** added to the end of every description, the **Palette** (press a
+swatch to take it out, the last well to add one), the **Pixel size** of a
+pixel project, the look and the engines.
+
+The bench has two pages, **Assets** and **Poses**.
+
+### Assets
+
+The shelf down the left is the game's asset list, grouped into characters,
+sprites, tiles and so on, each with its picture. The mark at the end of a row
+says where it stands: a ring is planned, a dot is made, a square is exported
+to every engine, a dashed ring is stale (its recipe changed after its
+pictures were made). A name in bold is one nobody has looked at since it was
+made. **New** adds an asset: pick what it is, name it.
+
+Pick an asset to work on it. The glass in the middle shows its **Contact
+sheet**: the masters, then what each engine makes of them, at a whole-number
+zoom so pixel art is not blurred. The inspector on the right is the asset:
+
+- **Masters**: **Make** renders the asset on ComfyUI from its recipe and the
+  project's look, on the project's still model (Qwen Image 2.1 by default),
+  and the result becomes its masters when it lands; the row's mark spins while
+  it is on the queue. **Make again** renders it on a new seed, written into the
+recipe so it can be made again; the old set is kept in `.versions/`.
+  **Make N** at the top of the shelf renders every planned asset that can be
+  made. Characters come out as a model sheet (neutral pose, limbs clear of the
+  body), icons and interface pieces as one thing alone, and anything with
+  alpha is asked for a transparent background, which Qwen Image 2.1 draws
+  itself. The project's style pictures are passed for their look only; turn
+  **Style pictures** off on an asset whose model cannot read them (Krea 2
+  refuses them without a reference LoRA). An icon or interface set is one render per
+  name, on one seed. Sprites, seamless tiles, parallax layers, materials and
+  sounds are not made here yet.
+  Or bring pictures in: **From disk**, **From ComfyUI**, or drop pictures
+  anywhere on the bench, and they become the asset's masters. The set they replace is kept
+  in `.versions/`. Sprites, characters and icons need transparency in the
+  picture. One picture can hold a whole set: a sprite sheet with a row per
+  animation, or a grid of icons or tiles.
+- **Recipe**: the asset as a form. The description, then the kind's own
+  fields: which character a sprite animates, frame size, its animations (name,
+  frames, speed, loop), how many ways it faces, tile size, how a tile wraps.
+  **More settings** holds the rest (master size, seed, model, anchor, layer,
+  per-engine overrides, notes) and **Edit the whole recipe as JSON**. Each
+  field saves when you leave it; a change marks the asset stale until it is
+  exported again.
+
+In the foot, pick an engine. **Check** tests every made asset against that
+engine's limits (colours per tile, unique tiles, sprites per line, sheet
+size) and lists what breaks; **Problems** shows the converted picture with
+the broken tiles outlined in red. **Export** writes the engine files into
+`build/<target>/`: PNG sheets with Aseprite JSON everywhere, plus Godot
+`SpriteFrames` and `TileSet`, Tiled `.tsx` and `.tmj`, a LÖVE Lua table, and
+indexed PNGs for the Game Boy tools and GB Studio's `assets/` folders.
+
+### Poses
+
+A **pose set** is an animation before it has a character in it: one
+mannequin pose per frame, the body it is drawn on, and its speed. The sprite
+render draws your character into these poses. The mannequin, its posing and
+its FBX import are [VNCCS Pose Studio](https://github.com/AHEKOT/ComfyUI_VNCCS_Utils)'s,
+built into the pack; you do not need it installed.
+
+- **New** starts a set from a standing figure, or as a copy of the one open.
+  **Import an FBX clip** (or drop one on the page) brings in a whole Mixamo
+  animation, retargeted onto the mannequin in place, one frame per pose at 12
+  fps. Each frame is stood on the ground, so a crouch crouches instead of
+  floating, and the clip is turned to face forward. **Paste from Pose Studio** takes its `pose_data`, a pose, or a list of
+  poses.
+- On the stage, click a joint and drag its rings to turn it. Right-drag
+  orbits, middle-drag pans, scroll zooms. Ctrl/⌘ Z undoes the last drag on
+  this frame, with Shift to redo.
+- **Symmetry** (or M) poses both sides at once: turn the left arm and the
+  right one turns with it, as in a mirror.
+- The view pad in the stage's corner is a cube unfolded: **Top**, **Front**,
+  **Left**, **Right**, **Back**, and **Sprite camera**, which shows exactly
+  what Draw frames will draw, with the frame drawn as a box. The number keys
+  do the same, as in Blender: 1 front, 3 right, 7 top, 9 the other side of
+  the view you are in, 0 the sprite camera.
+- The strip under the stage is the frames. The frames either side of the one
+  you are on are ghosted on the stage (blue before, green after; **Onion
+  skin** turns that off). **Play** or Space plays the set at its speed; the
+  arrow keys step through it. **Duplicate**, **Flip**, **Reset** and **Delete**
+  act on the frame you are on (Flip swaps left and right, so a walk's second
+  half is its first half flipped), and the **+** at the end of the strip adds a copy of
+  it.
+- **Keys** let the bench draw frames for you. A key is a frame you pose;
+  every frame between two keys is drawn between them, and moves when you
+  change either key. A new set has every frame as a key. Press **This frame
+  is a key** (or K) on a frame to un-key it, and it is drawn from its
+  neighbours from then on; keyed frames carry a diamond on the strip, drawn
+  ones are paler. In a set with keys, the **+** adds an in-between, and
+  posing an in-between makes it a key. **Into the next key** is how a key
+  moves on: Even, Ease in, Ease out, Ease in and out, or Hold (stay until
+  the next key, for held frames). **Loop** carries the last key back into
+  the first, for a cycle such as a walk.
+- **Body** sets the mannequin's build for every frame. Match it to the
+  character's proportions.
+- **Sprite camera** is how Draw frames sees the set. **Facing** turns the
+  whole set to draw another direction of the same animation (the ring is the
+  floor seen from above, with you at the bottom). **Looking down** tilts the
+  camera to the game's: Side-on (0°) for a platformer, Three-quarter (30°)
+  for an RPG, High (45°), Top-down (89°). Every sprite in a game shares one
+  camera. **Look through it** puts the stage's view there. **Draw frames** draws every frame as the sprite render will see it,
+  into the project's `build/poses/`; **Drawn frames** shows them, and the bench says which frames cut the figure off. Drawing
+  needs a ComfyUI tab open in a browser, which the bench always is.
+
+Every edit is saved as you make it, to `poses/<set>.json` in the project.
+Agents pose the same sets from the command line, by joint and in words
+(`elbow_l.bend=90`, `shoulder_r.raise=150`, `hand_l=fist`), with the same
+keys; the skill's `forge.py joints` lists the words.
+Mixamo clips are yours to import: Adobe's terms let you use them in a game,
+not share them, so the pack ships none.
+
+Drawing a character into a pose set is not in the forge yet: render it with
+the node or the render skill and import the frames.
+
 ## Neural refiner (DLSS 5)
 
 NVIDIA's DLSS 5 neural renderer, run outside a game through the open-source
@@ -357,6 +490,18 @@ to the same memory a node fills its empty weight rows from, and the model goes
 to the same refiner settings the Refine button reads — so a node dropped on
 the canvas afterwards opens set up, and a file picked on a node is what the
 room renders with next.
+
+**Nothing said is thrown away.** The pencil under one of your messages takes
+it back into the box; the message and everything after it are dimmed until you
+send, and *Cancel* over the box leaves the conversation as it was. The arrow
+under a reply asks for it again. Either way, what came before is kept as a
+version: under the message that changed, the arrows and a count (*2 / 3*) step
+between versions, and a small picture per version — the last thing it made —
+jumps straight to it, with what it asked on hover. Each version takes along
+everything after it, renders and further versions included. Only the version on
+screen is the conversation: it is what the model reads, and only its pictures
+can be cited. Chats saved before this kept only the version on screen; their
+other renders are still files in your output folder.
 
 **Conversations are kept.** Every chat is saved as you go, and the panel on
 the left lists them under the day they were last touched, each row carrying

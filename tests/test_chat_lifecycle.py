@@ -17,7 +17,7 @@ script = DOM + (here / "chat_lifecycle.mjs").read_text(encoding="utf-8")
 with layout.pack(skip=["atlas"], extra_stubs={"api.js": api}) as target:
     results = layout.in_pack(script, target)
 
-check("every chat lifecycle scenario ran", len(results), 9)
+check("every chat lifecycle scenario ran", len(results), 10)
 for name, error in results.items():
     check(name, error, None)
-passed("all 9 chat lifecycle scenarios passed")
+passed("all 10 chat lifecycle scenarios passed")

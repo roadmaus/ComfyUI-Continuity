@@ -1453,19 +1453,13 @@ export const css = `
  * the blob they are drawing has not moved.
  */
 /* The cast is the same shelf in both views, and the Cast tool is on both
-   rails. The simple view starts with it folded (fullscreen.js sets the body's
-   castDefaultOpen) rather than hidden: a member is in the piece whether or
-   not the sentence still writes them (#52 keeps them), and a view with no
-   shelf had no way to say so — the @ menu stopped offering the library's copy
-   because the piece already held one, and nothing on screen explained why.
-   Folded, the tool wears the head count; one press and it is the shelf. */
-/* The reference row is the same row in both views. It used to hide the cast's
-   own pictures here, on the grounds that a chip for @vera's photo says what the
-   @vera in the sentence already says — which was true until a file could be
-   muted. A muted picture is a thing you go and look for, and a row that draws
-   only some of what is attached is a row you cannot trust to be the answer. So
-   both views show everything on the shot, and the chip that is out of the run
-   says so where the file is rather than only in the sentence. */
+   rails. It starts folded everywhere (CreatorEditor.shelfShown) rather than
+   hidden: a member is in the piece whether or not the sentence still writes
+   them (#52 keeps them), so the tool wears the head count, turns amber when
+   one of them needs a look, and one press is the shelf. */
+/* The reference row is the same row in both views: the files you attached.
+   A cast member's own are on the shelf under them, muted ones included, in
+   both views alike (CreatorEditor.renderAssets). */
 /* --- the face's caps, lifted ---------------------------------------------- */
 /*
  * Two rows of chips then scroll; ten lines of prompt then scroll. Both bounds
@@ -1726,6 +1720,43 @@ export const css = `
 .mmc-dash-card:hover .mmc-dash-cube, .mmc-dash-card:focus-visible .mmc-dash-cube { transform: rotate(-8deg) scale(1.06); }
 @media (prefers-reduced-motion: reduce) {
   .mmc-dash-cube, .mmc-dash-rays line { transition: none; }
+}
+
+/* The forge card, drawn: a walk in four cells on one ground, mannequin into
+   sprite. The amber is the playhead only, and only under the pointer, where
+   it steps a cell a beat (steps, not a slide: a sheet is played frame by
+   frame). Its travel is four cells of the drawing's 34 units; px inside an
+   SVG transform are user units, so it scales with the plate. */
+.mmc-dash-forge {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(110% 90% at 60% 48%,
+                    color-mix(in srgb, var(--mmc-ink) 12%, transparent), transparent 72%),
+    var(--mmc-surface-3);
+}
+.mmc-dash-forge svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mmc-dash-ground { stroke: color-mix(in srgb, var(--mmc-ink) 22%, transparent); stroke-width: .5; shape-rendering: crispEdges; }
+.mmc-dash-cell {
+  fill: none; stroke: color-mix(in srgb, var(--mmc-ink) 14%, transparent); stroke-width: .5;
+  shape-rendering: crispEdges;
+}
+/* One flat silhouette at the group's opacity, so overlapping limbs do not
+   darken at the joints; the far side is a step quieter, as on the sprite. */
+.mmc-dash-soft { opacity: .38; }
+.mmc-dash-soft line { stroke: var(--mmc-ink); stroke-linecap: round; }
+.mmc-dash-soft .mmc-dash-far { stroke: color-mix(in srgb, var(--mmc-ink) 55%, var(--mmc-surface-3)); }
+.mmc-dash-soft circle { fill: var(--mmc-ink); }
+.mmc-dash-px { fill: color-mix(in srgb, var(--mmc-ink) 72%, transparent); shape-rendering: crispEdges; }
+.mmc-dash-px-far { fill: color-mix(in srgb, var(--mmc-ink) 42%, transparent); shape-rendering: crispEdges; }
+.mmc-dash-play {
+  fill: none; stroke: var(--mmc-accent); stroke-width: .8; opacity: 0; shape-rendering: crispEdges;
+}
+.mmc-dash-card:hover .mmc-dash-play, .mmc-dash-card:focus-visible .mmc-dash-play {
+  opacity: 1; animation: mmc-dash-walk 1s steps(4) infinite;
+}
+@keyframes mmc-dash-walk { to { transform: translateX(136px); } }
+@media (prefers-reduced-motion: reduce) {
+  .mmc-dash-card:hover .mmc-dash-play, .mmc-dash-card:focus-visible .mmc-dash-play { animation: none; }
 }
 
 /* The first day, and the fallback everywhere else: no picture on the piece, so
