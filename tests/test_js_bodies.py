@@ -271,7 +271,7 @@ for (const [cls, widget, blob] of [
 
 // The pre-stage's arch-dependent rows, which the two blobs above do not reach:
 // Ideogram's turbo pill (a LoRA route with no distilled checkpoint behind it)
-// and Krea's reference layout pill, both of which draw only when the arch and
+// and Krea's reference adapter and dials, which draw only when the arch and
 // the attachments line up. A body that throws while drawing them is a body
 // nobody sees, so this mounts each one and reports the pills it got.
 try {
@@ -287,7 +287,12 @@ try {
                      loras: [{ name: "krea2_turbo_distill.safetensors", strength: 1 }] },
     kreaRefs: { arch: "krea2", prompt: "p",
                 refs: [{ handle: "ref-1", filename: "a.png" }],
-                loras: [{ name: "krea2_style_reference.safetensors", strength: 1 }] },
+                loras: [{ name: "krea2_identity_edit_v2.safetensors", strength: 1 }] },
+    // General Edit: the same one picture, held at its own default and kept
+    // where it is, because an edit is the same picture with something changed.
+    kreaGeneral: { arch: "krea2", prompt: "p",
+                   refs: [{ handle: "ref-1", filename: "a.png" }],
+                   loras: [{ name: "krea2_general_edit_v2.safetensors", strength: 1 }] },
     kreaRefsNoAdapter: { arch: "krea2", prompt: "p",
                          refs: [{ handle: "ref-1", filename: "a.png" }], loras: [] },
     // A stack with a LoRA in it and nothing in it that reads references. The
@@ -342,7 +347,7 @@ try {
     out.prestageRows[name] = text.join(" ");
     // The reference pill's own class, not the body's: the weights pill wears
     // `missing` too on a node with no files picked, which every one of these has.
-    const labels = ["t=0 refs", "indexed"];
+    const labels = ["no adapter", "Identity Edit", "General Edit"];
     // Deepest first: every ancestor up to the root "contains" the label, and
     // the one worth reading is the pill itself.
     const find = (n) => {
@@ -3274,8 +3279,14 @@ check("Ideogram's turbo pill draws its own step ladder and its LoRA route",
       (True, True, True))
 check("Krea's turbo pill names the route it is on",
       "krea2_turbo_distill" in rows.get("kreaTurboLora", ""), True)
-check("the reference layout pill draws with a reference attached",
-      "t=0 refs" in rows.get("kreaRefs", ""), True)
+check("Identity Edit's dials draw with a reference attached, at the card's defaults",
+      ("beside" in rows.get("kreaRefs", ""), "likeness 2.00" in rows.get("kreaRefs", "")),
+      (True, True))
+check("...and General Edit's at its own",
+      ("pinned" in rows.get("kreaGeneral", ""), "likeness 4.00" in rows.get("kreaGeneral", "")),
+      (True, True))
+check("...and neither draws with no edit LoRA to default from",
+      "likeness" in rows.get("kreaRefsNoAdapter", ""), False)
 pill = report.get("refPill", {})
 check("...and flags itself when nothing in the stack can read one",
       ("missing" in (pill.get("kreaRefsNoAdapter") or ""),
@@ -3287,8 +3298,9 @@ check("...and does not draw at all where there is no reference",
 # The adapter that reads the references, named on the pill. A stack holding one
 # unrelated LoRA has to read as having no adapter — that is the whole difference
 # between naming it and counting the stack.
-check("the adapter pill names the reference LoRA it found in the stack",
-      "krea2_style_reference" in rows.get("kreaRefs", ""), True)
+check("the adapter pill names the reference LoRA it found in the stack, and which it is",
+      ("krea2_identity_edit_v2" in rows.get("kreaRefs", ""),
+       "Identity Edit" in rows.get("kreaRefs", "")), (True, True))
 check("...and says there is none where the stack only holds a style",
       ("no adapter" in rows.get("kreaRefsStyleOnly", ""),
        "no adapter" in rows.get("kreaRefs", "")),
@@ -3319,8 +3331,9 @@ check("...and as the one being changed once asked",
 # on these weights that names the one property they are not read for.
 check("the edit family's pictures are not styles",
       "style" in rows.get("qwenEdit", ""), False)
-check("...while Krea 2's, which really are, still say so",
-      "style reference" in rows.get("kreaRefs", ""), True)
+check("...nor Krea 2's, which are cited the way its model card writes them",
+      ("style reference" in rows.get("kreaRefs", ""), "image 1" in rows.get("kreaRefs", "")),
+      (False, True))
 
 # A guide is never the picture being edited: it is the drawing the render is
 # aimed at, whichever slot it happens to sit in.

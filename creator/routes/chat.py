@@ -68,6 +68,18 @@ _CARDS = {}
 _CARDS_KEEP = 4
 
 
+def _loras():
+    """The `loras` folder's listing — what `chat.edit_adapters` reads to know
+    whether a still family that reads pictures through an edit LoRA (Krea 2)
+    has one on this disk. Core's listing is cached by `folder_paths`."""
+    import folder_paths
+
+    try:
+        return folder_paths.get_filename_list("loras")
+    except Exception:  # noqa: BLE001 — an unconfigured folder is an empty one
+        return []
+
+
 def machine(still_family, video_family, weights, turbo=False, edit=None):
     """What this machine can make, as the model reads it, and two answers the
     turn needs beside it -> `{card, edit_family, still_pictures}`.
@@ -96,14 +108,16 @@ def machine(still_family, video_family, weights, turbo=False, edit=None):
     if held is None:
         catalog = manifest.catalog()
         available = core_models.available()
+        loras = _loras()
         picked = chat.pick_edit_family(catalog, available, weights, edit)
         held = {
             "card": chat.machine_card(still_family, video_family, catalog, available,
                                       weights, turbo=bool(turbo),
-                                      edit_family=picked["id"] if picked else None),
+                                      edit_family=picked["id"] if picked else None,
+                                      loras=loras),
             "edit_family": picked["id"] if picked else None,
             "still_pictures": chat.still_pictures(
-                manifest.describe(still_family), catalog),
+                manifest.describe(still_family), catalog, loras),
         }
         while len(_CARDS) >= _CARDS_KEEP:
             _CARDS.pop(next(iter(_CARDS)))
@@ -365,7 +379,8 @@ def _build(action, ledger, rail, stored, base, strip=None, cast=None):
     # clip every handle is a reference or the first frame, and the video
     # families read both.
     if still:
-        rail = {**rail, "still_pictures": chat.still_pictures(family, manifest.catalog())}
+        rail = {**rail, "still_pictures": chat.still_pictures(family, manifest.catalog(),
+                                                              _loras())}
     node_id, field, piece = chat.piece_of(action, ledger, rail, piece_in, strip, cast)
 
     if still:

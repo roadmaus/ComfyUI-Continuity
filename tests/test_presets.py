@@ -448,7 +448,7 @@ try {
   P.applyToPreStage(shotBody, ["refs"], pre, fakeIO({}), { from: "shot" });
   out.refsIntoPreStage = {
     init: pre.init?.filename === "open.png",
-    capped: pre.refs.length === S.PRESTAGE_MAX_REFS,
+    capped: pre.refs.length === S.preStageMaxRefs(pre),
     everyHandled: pre.refs.every((r) => typeof r.handle === "string" && r.handle.length > 0),
     handlesUnique: new Set(pre.refs.map((r) => r.handle)).size === pre.refs.length,
     // A video reference has nowhere to go on an image model.
@@ -1004,7 +1004,7 @@ check("...without losing the still's frame settings", h3.get("framesKept"), True
 
 into = report.get("refsIntoPreStage", {})
 check("a card's start frame becomes the pre-stage's init", into.get("init"), True)
-check("references crossing in are capped at the encoder's three slots",
+check("references crossing in are capped at what the pre-stage's model reads",
       into.get("capped"), True)
 check("...and every one of them is handled", into.get("everyHandled"), True)
 check("...uniquely, so removing one chip removes one", into.get("handlesUnique"), True)

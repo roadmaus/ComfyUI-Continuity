@@ -1,0 +1,24 @@
+diff --git a/creator/krea2edit/nodes.py b/creator/krea2edit/nodes.py
+index e924efb..fab86ce 100644
+--- a/creator/krea2edit/nodes.py
++++ b/creator/krea2edit/nodes.py
+@@ -524,15 +524,10 @@ NODE_DISPLAY_NAME_MAPPINGS = {
+ 
+ 
+ def _pack_version():
+-    # single source of truth = pyproject.toml, so this never drifts from the release
+-    try:
+-        import os, re
+-        p = os.path.join(os.path.dirname(__file__), "pyproject.toml")
+-        with open(p) as f:
+-            m = re.search(r'^version\s*=\s*"([^"]+)"', f.read(), re.M)
+-        return m.group(1) if m else "unknown"
+-    except Exception:
+-        return "unknown"
++    # Continuity: upstream's pyproject.toml does not travel with the copy; the
++    # vendoring script stamps the release it read from it into the package.
++    from . import VERSION
++    return VERSION
+ 
+ 
+ print(f"[krea2edit] nodes v{_pack_version()} loaded", flush=True)

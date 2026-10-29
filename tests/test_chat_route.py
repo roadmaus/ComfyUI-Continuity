@@ -182,6 +182,44 @@ else:
     check("and her picture is on the piece's shelf",
           [a["handle"] for a in blob["assets"]], ["ref-1"])
 
+# ---- a Krea 2 still with a picture ------------------------------------------
+#
+# Krea 2 reads a picture only through a Krea 2 Edit LoRA and the room has no
+# stack, so the build reads the `loras` folder and wears the one the turn
+# wants — here Identity Edit, for a cast member put into a scene picture.
+
+KREA_FILES = {"diffusion_models": ["krea2_raw.safetensors"], "text_encoders": ["qwen3vl_4b.safetensors"],
+              "vae": ["qwen_image_vae.safetensors"]}
+KREA_STORED = {"krea2": {"model": "krea2_raw.safetensors", "clip": "qwen3vl_4b.safetensors",
+                         "vae": "qwen_image_vae.safetensors"}}
+KREA_LEDGER = [{"handle": "pic-1", "kind": "still", "filename": "anna.png", "text": "anna"},
+               {"handle": "pic-2", "kind": "still", "filename": "cafe.png", "text": "a cafe"}]
+KREA_CAST = [{"name": "anna", "takes": "person", "from": ["pic-1"], "description": "a red coat"}]
+_real_loras = route._loras
+core_models.available = lambda: {"by_folder": KREA_FILES, "files": {}, "installed": {}}
+route._loras = lambda: ["krea2_identity_edit_v2.safetensors", "krea2_general_edit_v2.safetensors"]
+try:
+    rail = route._rail({"aspect": "1:1", "still_edge": 1024, "still_family": "krea2"})
+    action = chat.validate({"act": "render", "kind": "still", "prompt": "put @anna into @pic-2",
+                            "from": ["pic-2"]}, KREA_LEDGER, cast=["anna"])
+    built = route._build(action, KREA_LEDGER, rail, KREA_STORED, (PRE, {"seed": 3}), cast=KREA_CAST)
+    route._loras = lambda: []
+    without = route._build(action, KREA_LEDGER, rail, KREA_STORED, (PRE, {"seed": 3}), cast=KREA_CAST)
+finally:
+    core_models.available = _real_available
+    route._loras = _real_loras
+if "problem" in built:
+    FAILURES.append(f"the Krea 2 still with a picture was refused: {built['problem']}")
+else:
+    blob = built["piece"]
+    check("a Krea 2 still with a picture wears Identity Edit, off the disk",
+          ([e["name"] for e in blob["loras"]], blob.get("ref_lora")),
+          (["krea2_identity_edit_v2.safetensors"], "krea2_identity_edit_v2.safetensors"))
+    check("...the scene first and the person last",
+          [r["filename"] for r in blob["refs"]], ["cafe.png", "anna.png"])
+check("with no edit LoRA on disk the same turn is refused in the compile's words",
+      "Krea 2 Edit LoRA" in (without.get("problem") or ""), True)
+
 # ---- the magic prompt ---------------------------------------------------------
 #
 # The second generation a still on Ideogram gets when the room's switch is on.
