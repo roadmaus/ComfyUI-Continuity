@@ -17,7 +17,7 @@ import { el, icon, mountOverlay, swappable, closeOwnedPopovers } from "./dom.js"
 import { createDisclosure } from "./disclosure.js";
 import { CreatorEditor, pickTakes, takesHelp } from "./editor.js";
 import { t } from "./i18n.js";
-import { openLoras, loraBlock, loraBase, settlePins } from "./loras.js";
+import { openLoras, loraBlock, loraBase, settlePins, watchPins } from "./loras.js";
 import { openPicker } from "./picker.js";
 import { openPresetLibrary, styleCastMember } from "./presetlib.js";
 import * as P from "./presets.js";
@@ -404,6 +404,13 @@ class Timeline {
     }
   }
 
+  /** A pin's record changed on another face — a mute in the chat, a strength
+   *  on another node: bring this stack's copy in line and write it out. */
+  pinsMoved() {
+    if (!this.loraHost?.isConnected) return;
+    if (settlePins(this.timeline, S.pieceFamily(this.timeline))) this.commit();
+  }
+
   commit() {
     S.syncTimeline(this.timeline);
     this.onCommit?.();
@@ -589,6 +596,7 @@ class Timeline {
     this.castHost = el("div", { class: "mmc-tl-cast" });
     this.barHost = el("div", { class: "mmc-tl-bar" });
     this.loraHost = el("div", { class: "mmc-tl-loras" });
+    watchPins(this, "pinsMoved");
     this.stripHost = el("div", { class: "mmc-tl-strip" });
     // A trackpad swipes sideways on its own; a wheel only ever sends deltaY,
     // and without this the strip is unreachable for anyone using one.

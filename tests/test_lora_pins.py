@@ -49,7 +49,7 @@ export const api = {
 """
 
 SCRIPT = domshim.DOM + """
-import { loraBlock, settlePins, isPinned } from "./web/creator/loras.js";
+import { loraBlock, settlePins, isPinned, pinsFor, setPinEnabled, watchPins } from "./web/creator/loras.js";
 import { loadLoraPrefs } from "./web/creator/api.js";
 import * as S from "./web/creator/state.js";
 
@@ -137,6 +137,44 @@ click(find("mmc-asset-pin", fourth.root));
 face(moved, "h3");
 out.moved = { record: Object.keys((await loadLoraPrefs()).wears), h3: moved.loras.map((e) => e.name) };
 
+// ---- the mute is the pin's: kept, carried, and shown everywhere --------------
+const INK = { name: "style/ink_v1.safetensors", strength: 0.7, enabled: true, triggers: [], modes: [] };
+const node = { loras: [{ ...INK }], assets: [] };
+const nodeFace = face(node, "krea2");
+click(all("mmc-asset-pin", nodeFace.root).find((b) => !String(b.className).includes(" on")));
+click(find("mmc-asset-name", all("mmc-tack", nodeFace.root).find((tack) => tack.text?.includes?.("ink")) ?? nodeFace.root));
+const inkOf = (state) => state.loras.find((e) => e.name === INK.name);
+out.inkMuted = { entry: inkOf(node)?.enabled,
+                 record: (await loadLoraPrefs()).wears.krea2.find((p) => p.name === INK.name)?.enabled };
+// The same stack, off to Flux and back: the pin comes off and goes back on muted.
+face(node, "flux2klein");
+out.inkAway = Boolean(inkOf(node));
+face(node, "krea2");
+out.inkBack = inkOf(node)?.enabled;
+// A second stack already holding the pin takes the mute made on the first.
+const other = { loras: [], assets: [] };
+face(other, "krea2");
+out.otherFresh = inkOf(other)?.enabled;
+inkOf(node).enabled = true;
+face(node, "krea2");
+out.recordUnmuted = (await loadLoraPrefs()).wears.krea2.find((p) => p.name === INK.name)?.enabled;
+out.otherFollows = { changed: settlePins(other, "krea2"), enabled: inkOf(other)?.enabled };
+// The chat's switch: on the record, read back by pinsFor, taken by every stack,
+// and every watching face told.
+let told = 0;
+const watcher = { pinsMoved() { told += 1; } };
+watchPins(watcher, "pinsMoved");
+out.chatBefore = pinsFor("krea2").find((p) => p.name === INK.name)?.enabled;
+setPinEnabled(INK.name, "krea2", false);
+await settle();
+out.chatAfter = pinsFor("krea2").find((p) => p.name === INK.name)?.enabled;
+out.told = told;
+settlePins(node, "krea2"); settlePins(other, "krea2");
+out.stacksFollowChat = [inkOf(node)?.enabled, inkOf(other)?.enabled];
+out.notPinned = setPinEnabled("style/nothing.safetensors", "krea2", false);
+// Settling twice in a row with nothing moved changes nothing.
+out.stable = [settlePins(node, "krea2"), settlePins(other, "krea2")];
+
 console.log(JSON.stringify(out));
 """
 
@@ -168,4 +206,18 @@ check("...and no record", got["unpinned"]["record"], {})
 check("pinning on another family moves the record", got["moved"]["record"], ["flux2klein"])
 check("...and a third family's stack drops it", got["moved"]["h3"], [])
 
+check("muting a pinned chip mutes the pin's record",
+      got["inkMuted"], {"entry": False, "record": False})
+check("...a stack switched to another family drops it", got["inkAway"], False)
+check("...and switched back takes it muted, not on", got["inkBack"], False)
+check("a new stack on the family takes the pin muted", got["otherFresh"], False)
+check("bringing it back on one chip clears the record's mute", got.get("recordUnmuted"), None)
+check("...and another stack holding it follows",
+      got["otherFollows"], {"changed": True, "enabled": True})
+check("the chat reads the pin's mute", got["chatBefore"], True)
+check("...its switch writes the record", got["chatAfter"], False)
+check("...and tells the faces watching", got["told"] >= 1, True)
+check("...and every stack holding the pin follows it", got["stacksFollowChat"], [False, False])
+check("...and a file that is not pinned is not", got["notPinned"], False)
+check("settling an unmoved stack changes nothing", got["stable"], [False, False])
 passed("a pin puts a LoRA on every stack of its family and takes it off every other")

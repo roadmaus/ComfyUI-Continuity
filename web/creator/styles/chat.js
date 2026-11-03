@@ -388,6 +388,25 @@ export const css = `
    group is a line below; here there is no line below. */
 .mmc-ch-pills .mmc-seed-pill { display: flex; padding: 0; height: 30px; margin-left: 4px; }
 .mmc-ch-pills .mmc-seed-cell { width: 30px; }
+/* A model pill's pinned LoRAs, counted: dim, and fainter still when every
+   one of them is muted. */
+.mmc-ch-pill .mmc-ch-pincount { color: var(--mmc-faint); font-variant-numeric: tabular-nums; }
+.mmc-ch-pill .mmc-ch-pincount::before { content: "· "; }
+.mmc-ch-pill .mmc-ch-pincount.off { text-decoration: line-through; }
+/* ...and listed under the model popover: one switch per pin. */
+.mmc-ch-pins-title { padding: 4px 10px 2px; }
+.mmc-ch-pin.off .mmc-opt-label > span:first-child { color: var(--mmc-dim); text-decoration: line-through; }
+.mmc-ch-switch {
+  flex: none; position: relative; width: 26px; height: 15px; border-radius: 8px;
+  background: var(--mmc-surface-3); border: 1px solid var(--mmc-line); margin-left: 12px;
+  transition: background .12s;
+}
+.mmc-ch-switch::after {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--mmc-dim); transition: transform .12s, background .12s;
+}
+.mmc-ch-pin[aria-checked="true"] .mmc-ch-switch { background: color-mix(in srgb, var(--mmc-blue) 40%, transparent); }
+.mmc-ch-pin[aria-checked="true"] .mmc-ch-switch::after { transform: translateX(11px); background: var(--mmc-text); }
 
 /* Files waiting to go. Square, small, with an × in the corner; they get their
    handle when they are sent, not before. */

@@ -31,7 +31,7 @@ import { el, icon, ICONS, svg, dismissable, keepScroll, placeNear, swappable } f
 import { DEFAULT_STILL_ARCH, stillFamily } from "./manifest.js";
 import { openPicker } from "./picker.js";
 import { screenChips, screenTool, screenMentions, uncitedScreens } from "./screens.js";
-import { openLoras, loraBlock, loraBase, settlePins } from "./loras.js";
+import { openLoras, loraBlock, loraBase, settlePins, watchPins } from "./loras.js";
 import { openFrameGrab } from "./framegrab.js";
 import { openContactSheet } from "./contact.js";
 import { openChoicePopover, stepperPill, aspectGlyph, aspectGrid, edgeSlider, PILL_GLYPH,
@@ -208,6 +208,7 @@ export class PreStageEditor {
     this.castHost = el("div", { class: "mmc-cast-host" });
     this.castOpen = false;
     this.loraHost = el("div");
+    watchPins(this, "pinsMoved");
     this.pillsHost = el("div");
     this.noticeHost = el("div");
     // Classed, because the fullscreen shell folds the sampler away in its simple
@@ -273,6 +274,13 @@ export class PreStageEditor {
   /** The seed this render samples on — a widget, never the blob's. */
   seed() {
     return Number(this.widgetIO().value("seed", 0)) || 0;
+  }
+
+  /** A pin's record changed on another face — a mute in the chat, a strength
+   *  on another node: bring this stack's copy in line and write it out. */
+  pinsMoved() {
+    if (!this.loraHost?.isConnected) return;
+    if (settlePins(this.state, S.preStageFamilyId(this.state.arch))) this.commit();
   }
 
   commit() {

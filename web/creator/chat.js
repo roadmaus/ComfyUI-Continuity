@@ -55,7 +55,7 @@ import { run, watch as watchQueue, promptQueueState, cancelPrompt } from "./queu
 import { openLoupe } from "./loupe.js";
 import { FirstRun, freshSetup, scanMachine } from "./chatsetup.js";
 import { Sync, PICTURE_ARCHES, EDIT_ARCHES } from "./chatnode.js";
-import { pinsFor } from "./loras.js";
+import { pinsFor, setPinEnabled, watchPins, loraBase } from "./loras.js";
 import * as S from "./state.js";
 import { castIntoPiece } from "./presets.js";
 import { styleCastMember } from "./presetlib.js";
@@ -896,6 +896,68 @@ function took(ms) {
 }
 
 /**
+ * The pinned LoRAs of one family, under the model popover that chose it.
+ *
+ * A pin goes on every chat render made on its family, and the room has no
+ * stack of its own to show it on — so without this a pin muted on a node
+ * was invisible here, and one wanted off for a single chat meant a trip to
+ * the canvas. One row per pin, the name its mute, the same switch the chip
+ * on every node face is: a mute here is the pin's, and every stack wearing
+ * it follows (`loras.setPinEnabled`). The popover stays up while it is
+ * flipped; `onChange` repaints whatever counts them. Null where the family
+ * wears none.
+ */
+function pinSection(family, onChange) {
+  if (!pinsFor(family).length) return null;
+  return () => {
+    const section = el("div", { class: "mmc-twopass mmc-ch-pins" });
+    const draw = () => {
+      const pins = pinsFor(family);
+      section.replaceChildren(
+        el("div", { class: "mmc-pop-title mmc-ch-pins-title", text: t("Pinned LoRAs") }),
+        ...pins.map((pin) => el("button", {
+          class: `mmc-opt mmc-ch-pin${pin.enabled ? "" : " off"}`,
+          role: "switch",
+          "aria-checked": pin.enabled,
+          title: pin.enabled
+            ? t("{name} — on every render on this model. Click to mute it.", { name: loraBase(pin) })
+            : t("{name} is muted — pinned, and out of every render on this model. Click to bring it back.",
+                { name: loraBase(pin) }),
+          onclick: (event) => {
+            event.stopPropagation();
+            setPinEnabled(pin.name, family, !pin.enabled);
+            draw();
+            onChange?.();
+          },
+        }, [
+          el("span", { class: "mmc-opt-label mmc-opt-col" }, [
+            el("span", { text: loraBase(pin) }),
+            el("span", { class: "mmc-opt-sub", text: pin.enabled
+              ? t("strength {s}", { s: Number(pin.strength ?? 1).toFixed(2) })
+              : t("muted") }),
+          ]),
+          el("span", { class: "mmc-ch-switch" }),
+        ])),
+      );
+    };
+    draw();
+    return section;
+  };
+}
+
+/** What a model pill says about its family's pins: "2 LoRAs", "1/2 LoRAs"
+ *  where some are muted, nothing where there are none. */
+function pinCount(family) {
+  const pins = pinsFor(family);
+  if (!pins.length) return null;
+  const on = pins.filter((pin) => pin.enabled).length;
+  const text = on === pins.length
+    ? (on === 1 ? t("1 LoRA") : t("{n} LoRAs", { n: on }))
+    : t("{on}/{n} LoRAs", { on, n: pins.length });
+  return el("span", { class: `mmc-ch-pincount${on ? "" : " off"}`, text });
+}
+
+/**
  * The blob a chat render is built over, and the node's widget values beside it.
  *
  * The chat's piece and nothing of the canvas: a blank blob of the room's
@@ -1175,7 +1237,9 @@ class Room {
     if (!state.indexRead) readIndex();
     // The family's pins go on every chat render; warm the store so the first
     // render wears them too.
-    loadLoraPrefs().catch(() => {});
+    loadLoraPrefs().then(() => this.pinsMoved()).catch(() => {});
+    // A pin muted on a node, or here, is said on the model pills at once.
+    watchPins(this, "pinsMoved");
 
     this.paint();
     this.box.root.focus();
@@ -1986,6 +2050,11 @@ class Room {
     ]));
   }
 
+  /** A pin's record changed — here or on a node: the pills count them. */
+  pinsMoved() {
+    if (this.overlay?.isConnected) this.paintPills();
+  }
+
   /** What a message is made against, in the composer's foot: which model
    *  draws a picture, which changes one where that model cannot, which makes
    *  a clip, and the shape — all the room's own. Size and the sampler rows
@@ -1998,6 +2067,7 @@ class Room {
     const arch = this.sync.stillArch();
     const edit = this.sync.editArch();
     const family = this.sync.videoFamily();
+    const repaint = () => this.paintPills();
     this.pills.replaceChildren(...[
       el("button", {
         class: "mmc-ch-pill", title: t("Which model draws a picture."),
@@ -2006,8 +2076,10 @@ class Room {
           options: PICTURE_ARCHES, value: arch,
           label: (which) => t(S.PRESTAGE_ARCH_LABEL[which]),
           onPick: (which) => this.sync.moveStill(which),
+          extra: pinSection(STILL_ARCHES[arch], repaint),
         }),
-      }, [icon("image", 14), el("span", { text: t(S.PRESTAGE_ARCH_LABEL[arch]) })]),
+      }, [icon("image", 14), el("span", { text: t(S.PRESTAGE_ARCH_LABEL[arch]) }),
+          pinCount(STILL_ARCHES[arch])].filter(Boolean)),
       // Only where the image model cannot read a cited picture: a model that
       // edits its own pictures has nothing to hand off, and the pill would be
       // a choice about nothing. "" is the pack's default edit family where
@@ -2023,8 +2095,12 @@ class Room {
             : t("Auto: {family} if ready",
                 { family: t(FAMILIES.find((entry) => entry.id === DEFAULT_EDIT_FAMILY)?.label ?? DEFAULT_EDIT_FAMILY) })),
           onPick: (which) => setRail({ edit_arch: which }),
+          // The auto edit family is the server's pick, per turn: there is no
+          // one family's pins to show until one is chosen.
+          extra: edit ? pinSection(STILL_ARCHES[edit], repaint) : null,
         }),
-      }, [icon("pen", 14), el("span", { text: edit ? t(S.PRESTAGE_ARCH_LABEL[edit]) : t("Edits: auto") })]),
+      }, [icon("pen", 14), el("span", { text: edit ? t(S.PRESTAGE_ARCH_LABEL[edit]) : t("Edits: auto") }),
+          edit ? pinCount(STILL_ARCHES[edit]) : null].filter(Boolean)),
       el("button", {
         class: "mmc-ch-pill", title: t("Which model makes a clip."),
         onclick: (event) => openChoicePopover(event.currentTarget, {
@@ -2032,8 +2108,10 @@ class Room {
           options: VIDEO_FAMILIES, value: family,
           label: (which) => t(S.FAMILY_LABEL[which] ?? which),
           onPick: (which) => this.sync.moveVideo(which),
+          extra: pinSection(family, repaint),
         }),
-      }, [icon("video", 14), el("span", { text: t(S.FAMILY_LABEL[family] ?? family) })]),
+      }, [icon("video", 14), el("span", { text: t(S.FAMILY_LABEL[family] ?? family) }),
+          pinCount(family)].filter(Boolean)),
       el("button", {
         class: "mmc-ch-pill", title: t("Aspect Ratio"),
         onclick: (event) => {

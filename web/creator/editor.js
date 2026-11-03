@@ -18,7 +18,7 @@ import { castFamilies, keepAsMod } from "./refmod.js";
 import { t } from "./i18n.js";
 import { openPicker } from "./picker.js";
 import { screenChips, screenTool, screenMentions, uncitedScreens } from "./screens.js";
-import { openLoras, loraBlock, settlePins } from "./loras.js";
+import { openLoras, loraBlock, settlePins, watchPins } from "./loras.js";
 import { openSettings } from "./settings.js";
 import { openPresetLibrary, styleCastMember } from "./presetlib.js";
 import { castIntoPiece, keepSubject } from "./presets.js";
@@ -430,6 +430,7 @@ export class CreatorEditor {
     // so the column pays it no gap; see `renderCastShelf`.
     this.castHost = el("div", { class: "mmc-cast-host" });
     this.loraHost = el("div");
+    watchPins(this, "pinsMoved");
     this.pillsHost = el("div");
     this.noticeHost = el("div");
     // Last, the way the Timeline puts it last: the panel says what the piece is
@@ -547,6 +548,13 @@ export class CreatorEditor {
       () => this.samplingStore.read(),
       (block) => { this.samplingStore.write(block); this.onCommit?.(); },
       () => this.onWidgetChange?.());
+  }
+
+  /** A pin's record changed on another face — a mute in the chat, a strength
+   *  on another node: bring this stack's copy in line and write it out. */
+  pinsMoved() {
+    if (!this.loraHost?.isConnected) return;
+    if (settlePins(this.state, this.pinFamily())) this.commit();
   }
 
   commit() {

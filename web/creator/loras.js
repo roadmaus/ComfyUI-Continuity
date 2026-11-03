@@ -282,16 +282,20 @@ let prefsLanding = null;
 /** The pins a family holds, from the loaded prefs. */
 const wornBy = (family) => loraPrefsNow()?.wears?.[family] ?? [];
 
+/** A pin as the stack entry it puts on a stack: the record's settings, the
+ *  record's mute. */
+const pinEntry = (pin, family) => ({
+  ...pin, enabled: pin.enabled !== false, triggers: [...(pin.triggers ?? [])],
+  modes: pin.modes ? [...pin.modes] : [...S.checkpointsOf(family)],
+});
+
 /** The pins a family wears, as the stack entries `settlePins` would put on
- *  an empty stack. The chat room builds its own piece's stack from these
- *  and from nothing else the LoRA manager holds. Empty until the prefs have
- *  loaded — see `loadLoraPrefs`. */
+ *  an empty stack — muted where the pin is muted. The chat room builds its
+ *  own piece's stack from these and from nothing else the LoRA manager
+ *  holds. Empty until the prefs have loaded — see `loadLoraPrefs`. */
 export function pinsFor(family) {
   if (!family) return [];
-  return wornBy(family).map((pin) => ({
-    ...pin, enabled: true, triggers: [...(pin.triggers ?? [])],
-    modes: pin.modes ? [...pin.modes] : [...S.checkpointsOf(family)],
-  }));
+  return wornBy(family).map((pin) => pinEntry(pin, family));
 }
 
 /** Whether this file is pinned to this family. */
@@ -304,11 +308,63 @@ function pinnedTo(name) {
   return Object.keys(wears).find((family) => wears[family].some((entry) => entry.name === name)) ?? null;
 }
 
-/** The record a pin keeps: the entry as the blob writes it, minus the mute —
- *  a pin muted today is not a pin muted forever. */
+/** The record a pin keeps: the entry as the blob writes it, mute and all.
+ *  A pin is one decision about a family, and whether it is in the run is
+ *  part of that decision: a mute that came undone on every trip to another
+ *  family and back was a mute nobody could keep. */
 function pinRecord(entry, family) {
-  const { enabled: _mute, ...record } = S.serializeLoras([entry], family)[0];
-  return record;
+  return S.serializeLoras([entry], family)[0];
+}
+
+/** A record as a string that does not care about key order. */
+const recordKey = (record) => JSON.stringify(Object.keys(record).sort()
+  .map((key) => [key, record[key]]));
+
+// ---- keeping every face on the record -----------------------------------------
+//
+// More than one stack can hold the same pin at once: two PreStages on Krea,
+// the Creator and the timeline on the same video family, the chat beside
+// them. The record is the one truth, so each stack has to know, when it is
+// settled, whether its copy of a pin is the one that changed (a mute clicked
+// on it, a strength dialled: the record follows) or the one left behind (a
+// mute clicked somewhere else: the copy follows). `seen` is what each copy
+// looked like the last time it agreed with the record. A copy never seen —
+// a fresh stack, a reloaded workflow — takes the record.
+
+const seen = new WeakMap();
+
+/** The faces to tell when a record changes, held weakly: a node taken off the
+ *  canvas is not kept alive by having once worn a pin. */
+const watchers = new Set();
+let telling = false;
+
+/**
+ * Ask to hear when a pin's record changes — a mute or a strength set on some
+ * other face, or in the chat. `owner[method]()` is called once per change,
+ * after the face that made it has finished drawing; it should settle its
+ * stack and commit if that changed anything.
+ */
+export function watchPins(owner, method) {
+  watchers.add({ ref: new WeakRef(owner), method });
+}
+
+function tellWatchers() {
+  if (telling) return;
+  telling = true;
+  queueMicrotask(() => {
+    telling = false;
+    for (const watcher of [...watchers]) {
+      const owner = watcher.ref.deref();
+      if (!owner) { watchers.delete(watcher); continue; }
+      try { owner[watcher.method]?.(); } catch (error) { console.warn("[continuity] pin refresh failed", error); }
+    }
+  });
+}
+
+/** Write the family's records, and tell every face. */
+function saveWears(prefs, wears) {
+  saveLoraPrefs({ ...prefs, wears });
+  tellWatchers();
 }
 
 /** Pin this entry to this family, moving it off any other. */
@@ -320,8 +376,10 @@ function pinLora(entry, family) {
     const kept = list.filter((held) => held.name !== entry.name);
     if (kept.length) wears[id] = kept;
   }
-  wears[family] = [...(wears[family] ?? []), pinRecord(entry, family)];
-  saveLoraPrefs({ ...prefs, wears });
+  const record = pinRecord(entry, family);
+  wears[family] = [...(wears[family] ?? []), record];
+  seen.set(entry, recordKey(record));
+  saveWears(prefs, wears);
 }
 
 /** Take the pin off; the chip stays in the stack as an ordinary one. */
@@ -331,7 +389,36 @@ function unpinLora(name, family) {
   const wears = { ...prefs.wears };
   const kept = (wears[family] ?? []).filter((held) => held.name !== name);
   if (kept.length) wears[family] = kept; else delete wears[family];
-  saveLoraPrefs({ ...prefs, wears });
+  saveWears(prefs, wears);
+}
+
+/**
+ * Mute or bring back a pin, on the record itself — for a face that shows the
+ * family's pins without holding a stack of them (the chat's model popovers).
+ * Every stack that holds the pin takes it at its next settle, and the faces
+ * watching are told now.
+ *
+ * @returns {boolean} whether there was such a pin
+ */
+export function setPinEnabled(name, family, enabled) {
+  const prefs = loraPrefsNow();
+  const list = prefs?.wears?.[family];
+  if (!list?.some((pin) => pin.name === name)) return false;
+  const next = list.map((pin) => {
+    if (pin.name !== name) return pin;
+    const { enabled: _was, ...rest } = pin;
+    return enabled ? rest : { ...rest, enabled: false };
+  });
+  saveWears(prefs, { ...prefs.wears, [family]: next });
+  return true;
+}
+
+/** Put a record's settings on the entry holding it, keeping what the record
+ *  does not speak for. */
+function adoptPin(entry, pin, family) {
+  const fresh = pinEntry(pin, family);
+  for (const key of ["audio", "uncond"]) if (!(key in pin)) delete entry[key];
+  Object.assign(entry, fresh);
 }
 
 /**
@@ -339,11 +426,12 @@ function unpinLora(name, family) {
  * it draws its row, and again by each edit it commits.
  *
  * Adds each of the family's pins the stack does not hold, as the pin recorded
- * it. Drops any file pinned to a *different* family — the one place the row
- * removes something on its own, and it is the family's own file coming off a
- * family it was never meant for. And writes back the pins the stack does
- * hold: a strength dialled on a pinned chip is the pin's new strength, so the
- * record follows the entry rather than the entry snapping back to the record.
+ * it — muted, if it was muted. Drops any file pinned to a *different* family
+ * — the one place the row removes something on its own, and it is the
+ * family's own file coming off a family it was never meant for. And keeps the
+ * pins the stack does hold in step with the record, whichever way the change
+ * went: a strength dialled or a mute clicked on a pinned chip is the pin's
+ * new setting, and one made anywhere else is this chip's (see `seen`).
  *
  * Synchronous on a warm cache, which is every call but the first. Cold, it
  * starts the load and hands `onLoaded` the moment there is something to
@@ -360,6 +448,7 @@ export function settlePins(state, family, onLoaded) {
     prefsLanding.then(() => onLoaded?.());
     return false;
   }
+  state.loras ??= [];
   let changed = false;
   const before = state.loras.length;
   state.loras = state.loras.filter((entry) => {
@@ -370,21 +459,35 @@ export function settlePins(state, family, onLoaded) {
   const held = new Set(state.loras.map((entry) => entry.name));
   const worn = wornBy(family);
   // Pins lead the row, in the order they were made.
-  const missing = worn.filter((pin) => !held.has(pin.name))
-    .map((pin) => ({ ...pin, enabled: true, triggers: [...(pin.triggers ?? [])],
-                     modes: pin.modes ? [...pin.modes] : [...S.checkpointsOf(family)] }));
+  const missing = worn.filter((pin) => !held.has(pin.name)).map((pin) => pinEntry(pin, family));
   if (missing.length) {
     state.loras.unshift(...missing);
     changed = true;
   }
-  // The record follows the entry.
+  let wrote = false;
   const next = worn.map((pin) => {
-    const entry = state.loras.find((held) => held.name === pin.name);
-    return entry ? pinRecord(entry, family) : pin;
+    const entry = state.loras.find((one) => one.name === pin.name);
+    if (!entry) return pin;
+    const mine = pinRecord(entry, family);
+    const was = seen.get(entry);
+    // The record as a copy of it would write it back, so that a record
+    // carrying something the blob does not keep is not a difference forever.
+    const theirs = recordKey(pinRecord(pinEntry(pin, family), family));
+    if (was !== undefined && recordKey(mine) !== was) {
+      // This copy is the one that changed: the record follows it.
+      seen.set(entry, recordKey(mine));
+      if (recordKey(mine) !== theirs) wrote = true;
+      return mine;
+    }
+    if (recordKey(mine) !== theirs) {
+      // Changed elsewhere, or never seen: the copy follows the record.
+      adoptPin(entry, pin, family);
+      changed = true;
+    }
+    seen.set(entry, recordKey(pinRecord(entry, family)));
+    return pin;
   });
-  if (JSON.stringify(next) !== JSON.stringify(worn)) {
-    saveLoraPrefs({ ...prefs, wears: { ...prefs.wears, [family]: next } });
-  }
+  if (wrote) saveWears(prefs, { ...prefs.wears, [family]: next });
   return changed;
 }
 

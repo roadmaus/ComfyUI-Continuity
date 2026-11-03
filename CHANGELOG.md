@@ -6,6 +6,18 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A pinned LoRA stays muted, everywhere, and the chat can mute one.** The
+pin's record dropped the mute on purpose, so a pinned LoRA came back on every
+time a stack was settled without it: switch a node to another family and back
+and every pin was live again, and the chat — which builds its stack from the
+records alone — ran every pin on every render whatever the node showed. The
+record now keeps the mute, and `settlePins` keeps each stack's copy of a pin
+in step with it in both directions: a mute or a strength set on a chip is the
+pin's, and one set anywhere else is the chip's at its next settle, with the
+open faces told at once (`watchPins`). The chat's image, edit and video model
+pills count their family's pins ("1/2 LoRAs" where some are muted), and their
+popovers list the pins with a switch each, written to the record itself.
+
 **The PreStage has a Refine button.** The refiner was only ever on the video
 bodies, because only the video families had a prompting of their own. The
 still-only families (Krea 2, Qwen Image 2.1, Flux 2 Klein, MOSS-Image, Qwen
