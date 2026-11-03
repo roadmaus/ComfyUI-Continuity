@@ -3214,4 +3214,11 @@ export const ja = {
   "MOSS-Image SFT (or Base) — the 5B DiT. bf16 or the int8 convrot cut; ~50 steps at cfg 3.": "MOSS-Image SFT（または Base）— 5B の DiT。bf16 か int8 convrot 版。cfg 3 で約 50 ステップ。",
   "Qwen3.5 9B, loaded as CLIPLoader type 'moss_image' — Comfy-Org's qwen3.5_9b file, int8 convrot or w4a8.": "Qwen3.5 9B を CLIPLoader タイプ 'moss_image' で読み込みます — Comfy-Org の qwen3.5_9b ファイル（int8 convrot または w4a8）。",
   "The Flux 2 VAE — the same file Klein and Ideogram load.": "Flux 2 の VAE — Klein と Ideogram が読み込むのと同じファイルです。",
+  "Pinned LoRAs": "固定した LoRA",
+  "{name} — on every render on this model. Click to mute it.": "{name} — このモデルのすべてのレンダーに適用。クリックでミュート。",
+  "{name} is muted — pinned, and out of every render on this model. Click to bring it back.": "{name} はミュート中 — 固定されたまま、このモデルのレンダーからは外れています。クリックで戻します。",
+  "strength {s}": "強度 {s}",
+  "1 LoRA": "LoRA 1 件",
+  "{n} LoRAs": "LoRA {n} 件",
+  "{on}/{n} LoRAs": "LoRA {on}/{n} 件",
 };

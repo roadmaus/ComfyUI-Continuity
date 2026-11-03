@@ -3215,4 +3215,11 @@ export const zh = {
   "MOSS-Image SFT (or Base) — the 5B DiT. bf16 or the int8 convrot cut; ~50 steps at cfg 3.": "MOSS-Image SFT（或 Base）— 5B DiT。bf16 或 int8 convrot 版本。cfg 3 约 50 步。",
   "Qwen3.5 9B, loaded as CLIPLoader type 'moss_image' — Comfy-Org's qwen3.5_9b file, int8 convrot or w4a8.": "Qwen3.5 9B，以 CLIPLoader 类型 'moss_image' 加载 — Comfy-Org 的 qwen3.5_9b 文件（int8 convrot 或 w4a8）。",
   "The Flux 2 VAE — the same file Klein and Ideogram load.": "Flux 2 VAE — 与 Klein 和 Ideogram 加载的是同一个文件。",
+  "Pinned LoRAs": "已固定的 LoRA",
+  "{name} — on every render on this model. Click to mute it.": "{name} — 用于此模型的每次渲染。点击可静音。",
+  "{name} is muted — pinned, and out of every render on this model. Click to bring it back.": "{name} 已静音 — 仍然固定，但不参与此模型的渲染。点击恢复。",
+  "strength {s}": "强度 {s}",
+  "1 LoRA": "1 个 LoRA",
+  "{n} LoRAs": "{n} 个 LoRA",
+  "{on}/{n} LoRAs": "{on}/{n} 个 LoRA",
 };

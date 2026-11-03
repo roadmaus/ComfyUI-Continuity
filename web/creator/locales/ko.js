@@ -3215,4 +3215,11 @@ export const ko = {
   "MOSS-Image SFT (or Base) — the 5B DiT. bf16 or the int8 convrot cut; ~50 steps at cfg 3.": "MOSS-Image SFT(또는 Base) — 5B DiT. bf16 또는 int8 convrot 버전. cfg 3에서 약 50스텝.",
   "Qwen3.5 9B, loaded as CLIPLoader type 'moss_image' — Comfy-Org's qwen3.5_9b file, int8 convrot or w4a8.": "Qwen3.5 9B, CLIPLoader 타입 'moss_image'로 로드 — Comfy-Org의 qwen3.5_9b 파일(int8 convrot 또는 w4a8).",
   "The Flux 2 VAE — the same file Klein and Ideogram load.": "Flux 2 VAE — Klein과 Ideogram이 로드하는 것과 같은 파일입니다.",
+  "Pinned LoRAs": "고정된 LoRA",
+  "{name} — on every render on this model. Click to mute it.": "{name} — 이 모델의 모든 렌더에 적용됩니다. 클릭하면 음소거합니다.",
+  "{name} is muted — pinned, and out of every render on this model. Click to bring it back.": "{name} 음소거됨 — 고정은 유지되고 이 모델의 렌더에서는 빠집니다. 클릭하면 되돌립니다.",
+  "strength {s}": "강도 {s}",
+  "1 LoRA": "LoRA 1개",
+  "{n} LoRAs": "LoRA {n}개",
+  "{on}/{n} LoRAs": "LoRA {on}/{n}개",
 };
