@@ -631,7 +631,7 @@ function loraTack(entry, { family = S.DEFAULT_VIDEO_FAMILY, targets = null, pinT
   const routes = Boolean(targets?.length) && S.routing(family);
   const idle = routes ? !modes.some((mode) => targets.includes(mode)) : false;
   const home = familyLabel(pinTo);
-  return el("div", { class: `mmc-tack${off ? " off" : ""}${idle ? " idle" : ""}` }, [
+  const tack = el("div", { class: `mmc-tack${off ? " off" : ""}${idle ? " idle" : ""}` }, [
     el("button", {
       class: "mmc-tack-stub",
       "aria-label": t("{name} — pinned to {family}", { name: baseName(entry.name), family: home }),
@@ -662,6 +662,39 @@ function loraTack(entry, { family = S.DEFAULT_VIDEO_FAMILY, targets = null, pinT
       }, [svg(ICONS.pin, 13)]),
     ]),
   ]);
+  // Unfolded from its own left edge, a tack near the end of a long row ran
+  // past the node's edge and its last buttons — the unpin among them — were
+  // clipped where nobody could click them. Slid back inside on every unfold.
+  const open = tack.lastChild;
+  const fit = () => requestAnimationFrame(() => fitInside(open, tack));
+  tack.addEventListener("pointerenter", fit);
+  tack.addEventListener("focusin", fit);
+  return tack;
+}
+
+/** The box an unfolded tack has to stay inside: the nearest ancestor that
+ *  clips, else the window. */
+function clipBox(node) {
+  for (let at = node.parentElement; at && at !== document.body; at = at.parentElement) {
+    const style = getComputedStyle(at);
+    if (/(auto|scroll|hidden|clip)/.test(`${style.overflowX}${style.overflow}`)) return at.getBoundingClientRect();
+  }
+  return { left: 0, right: window.innerWidth };
+}
+
+/** Shift `open` sideways so it sits inside its clip box, as far as it fits. */
+function fitInside(open, tack) {
+  open.style.transform = "";
+  if (!open.isConnected) return;
+  const box = clipBox(tack);
+  const rect = open.getBoundingClientRect();
+  // Folded again before the frame came round: nothing to fit.
+  if (!rect.width) return;
+  const pad = 4;
+  let shift = 0;
+  if (rect.right > box.right - pad) shift = box.right - pad - rect.right;
+  if (rect.left + shift < box.left + pad) shift = box.left + pad - rect.left;
+  if (shift) open.style.transform = `translateX(${Math.round(shift)}px)`;
 }
 
 /** Three letters of the filename, for the tile: the first three that are

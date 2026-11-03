@@ -18,6 +18,12 @@ open faces told at once (`watchPins`). The chat's image, edit and video model
 pills count their family's pins ("1/2 LoRAs" where some are muted), and their
 popovers list the pins with a switch each, written to the record itself.
 
+**A pinned LoRA near the end of a long row can be unpinned again.** A tack
+unfolds from its own left edge over the row, so the last ones ran past the
+node's edge and their trailing buttons, the unpin among them, were clipped out
+of reach. Each unfold now slides the chip back inside the nearest box that
+clips it.
+
 **The PreStage has a Refine button.** The refiner was only ever on the video
 bodies, because only the video families had a prompting of their own. The
 still-only families (Krea 2, Qwen Image 2.1, Flux 2 Klein, MOSS-Image, Qwen
