@@ -6,6 +6,19 @@
       "weight_dtype": "default"
     }
   },
+  "10": {
+    "class_type": "MiniMaxH3Save",
+    "inputs": {
+      "crf": 23,
+      "filename_prefix": "continuity/renders/h3/H3",
+      "fps": 24.0,
+      "reel": [
+        "9",
+        0
+      ],
+      "takes": "{\"cards\": [1], \"seeds\": [100]}"
+    }
+  },
   "2": {
     "class_type": "CLIPLoader",
     "inputs": {
@@ -54,6 +67,19 @@
     }
   },
   "7": {
+    "class_type": "ContinuityPreview",
+    "inputs": {
+      "fps": 24.0,
+      "max_frames": 1024,
+      "max_resolution": 640,
+      "model": [
+        "5",
+        0
+      ],
+      "quality": 80
+    }
+  },
+  "8": {
     "class_type": "KSampler",
     "inputs": {
       "cfg": 1.0,
@@ -63,7 +89,7 @@
         2
       ],
       "model": [
-        "5",
+        "7",
         0
       ],
       "negative": [
@@ -80,7 +106,7 @@
       "steps": 20
     }
   },
-  "8": {
+  "9": {
     "class_type": "MiniMaxH3Reel",
     "inputs": {
       "audio_vae": [
@@ -89,26 +115,13 @@
       ],
       "fps": 24.0,
       "samples": [
-        "7",
+        "8",
         0
       ],
       "vae": [
         "3",
         0
       ]
-    }
-  },
-  "9": {
-    "class_type": "MiniMaxH3Save",
-    "inputs": {
-      "crf": 23,
-      "filename_prefix": "continuity/renders/h3/H3",
-      "fps": 24.0,
-      "reel": [
-        "8",
-        0
-      ],
-      "takes": "{\"cards\": [1], \"seeds\": [100]}"
     }
   }
 }

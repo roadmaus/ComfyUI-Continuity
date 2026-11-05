@@ -80,6 +80,25 @@ media_mod.resolve = lambda filename: f"/input/{filename}"
 from harness import FAILURES, check
 
 
+def model_under(nodes, link):
+    """The model link under the built-in preview, if `link` is one.
+
+    Without KJNodes every sampler's model goes through `ContinuityPreview`
+    (`livepreview.py`), which adds nothing but a wrapper, so a check about the
+    model chain steps over it. `nodes` is either an emitted graph or one
+    grouped by class.
+    """
+    if "ContinuityPreview" in nodes and isinstance(nodes["ContinuityPreview"], list):
+        for nid, inputs in nodes["ContinuityPreview"]:
+            if nid == link:
+                return inputs["model"][0]
+        return link
+    node = nodes.get(link)
+    if isinstance(node, dict) and node.get("class_type") == "ContinuityPreview":
+        return node["inputs"]["model"][0]
+    return link
+
+
 def expect_error(label, fn, fragment):
     try:
         fn()
@@ -201,7 +220,7 @@ check("...carrying both clocks",
       {(6.0, 3.0)})
 shift_ids = {node_id for node_id, _ in shifted.get("MiniMaxH3SigmaShift", [])}
 check("each sampler runs on the shifted model",
-      all(i["model"][0] in shift_ids for _, i in shifted.get("KSampler", [])), True)
+      all(model_under(shifted, i["model"][0]) in shift_ids for _, i in shifted.get("KSampler", [])), True)
 
 def in_order(nodes, order):
     """The segment nodes sorted by which of `order`'s prompts they carry."""
@@ -240,7 +259,7 @@ check("...off the pass rather than the reel", last_frame_inputs["source"][1], 1)
 reel_node_id = last_frame_inputs["source"][0]
 sampler_id = graph[reel_node_id]["inputs"]["samples"][0]
 check("...which came from segment 1's sampler",
-      graph[sampler_id]["inputs"]["model"][0], segments[0][0])
+      model_under(graph, graph[sampler_id]["inputs"]["model"][0]), segments[0][0])
 
 # The seam restore (issue #41). Off, the graph above is what it always was: no
 # restore node, and the seam reads exactly `feather` frames. On, the seam reads
@@ -368,7 +387,8 @@ def _walk(graph, start, hops):
         node = graph[link[0]]
         if expected and node["class_type"] != expected:
             return f"<{expected} expected, found {node['class_type']}>"
-    return link[0]
+    # A walk ending on a sampler's model steps over the preview it samples through.
+    return model_under(graph, link[0])
 
 
 def source_segment(graph, prev_image):
@@ -687,7 +707,7 @@ fchain = in_order(
 trim_id = trimmed[0][0]
 trim_sampler = feathered[trimmed[0][1]["samples"][0]]
 check("the trim is on the feathered segment's own pass",
-      trim_sampler["inputs"]["model"][0], fchain[1][0])
+      model_under(feathered, trim_sampler["inputs"]["model"][0]), fchain[1][0])
 # ...and what segment 3's seam inherits is that same pass, which is the trimmed
 # one: there is only one spill and the overlap was dropped before it was
 # written, so the source's tail can neither play twice nor leak forward.
@@ -702,15 +722,16 @@ check("the next seam inherits from the trimmed pass",
 # classic single-frame seam is not: one frame is not a latent step.
 seg1_sampler = [node_id for node_id, n in feathered.items()
                 if n["class_type"] == "KSampler"
-                and n["inputs"]["model"][0] == fchain[0][0]][0]
+                and model_under(feathered, n["inputs"]["model"][0]) == fchain[0][0]][0]
 check("the blended seam is handed the source pass's sampler latent",
       fchain[1][1].get("prev_latent"), [seg1_sampler, 0])
 check("...and its frames still, for the text encoder and the fallback",
       "prev_image" in fchain[1][1], True)
 check("a classic seam is handed no latent", "prev_latent" in fchain[2][1], False)
 check("the reel decodes that same latent — the handoff is the delivered pass",
-      trim_sampler["inputs"]["model"][0] == fchain[1][0]
-      and feathered[fchain[1][1]["prev_latent"][0]]["inputs"]["model"][0] == fchain[0][0],
+      model_under(feathered, trim_sampler["inputs"]["model"][0]) == fchain[1][0]
+      and model_under(feathered, feathered[fchain[1][1]["prev_latent"][0]]["inputs"]["model"][0])
+      == fchain[0][0],
       True)
 
 # A restored blended seam hands over the *restore's* latent: that is the run the
@@ -834,7 +855,7 @@ _lv_chain = in_order([(n_id, n["inputs"]) for n_id, n in _lv.items()
                       if n["class_type"] == "MiniMaxH3TimelineSegment"],
                      ["one", "two", "three", "four"])
 _lv_first_sampler = [n_id for n_id, n in _lv.items() if n["class_type"] == "KSampler"
-                     and n["inputs"]["model"][0] == _lv_chain[0][0]][0]
+                     and model_under(_lv, n["inputs"]["model"][0]) == _lv_chain[0][0]][0]
 check("levelled: the seam off the first pass has the latent and no anchor",
       ("prev_latent" in _lv_chain[1][1], "anchor_latent" in _lv_chain[1][1]), (True, False))
 check("levelled: the next blended seam is anchored to the first pass's sampler",
@@ -1060,7 +1081,7 @@ check("no accelerator nodes by default",
 # Every KSampler must read straight off its own segment node when nothing is on.
 segments_by_id = {node_id for node_id, _ in by_type["MiniMaxH3TimelineSegment"]}
 check("samplers read the segment directly when off",
-      all(i["model"][0] in segments_by_id for _, i in by_type["KSampler"]), True)
+      all(model_under(by_type, i["model"][0]) in segments_by_id for _, i in by_type["KSampler"]), True)
 
 # The harness boots with `init_custom_nodes=False`, so neither pack is loaded
 # here even when both are installed — which is what makes a stand-in the only way
@@ -1099,7 +1120,7 @@ try:
     check("the patch reads a segment node",
           all(i["model"][0] in accel_segment_ids for _, i in patches), True)
     check("every sampler reads a patch",
-          all(i["model"][0] in patch_ids for _, i in accel_by_type["KSampler"]), True)
+          all(model_under(accel_by_type, i["model"][0]) in patch_ids for _, i in accel_by_type["KSampler"]), True)
 
     # The conditioning and latent still come from the segment, not the patch —
     # the accelerator is a MODEL patch and must not be in any other path.

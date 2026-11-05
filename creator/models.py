@@ -30,8 +30,10 @@ wires up the two accelerator packs: read the installed class's own defaults,
 override the handful we mean, never reimplement.
 
 Unlike an accelerator, though, a missing pack is not worth an error: the
-generation is identical either way, so `graph_preview` quietly returns the model
-untouched and the node body shows a step count and no picture.
+generation is identical either way. Nor is it worth an empty box, which is what
+it used to cost — `graph_preview` emits this pack's own latent2rgb previewer
+instead (`livepreview.py`), so every render on every install shows its steps,
+and KJNodes is what makes the picture sharp rather than what makes it exist.
 
 **A decoder is a quality setting inside that node, not the reason for it.** With
 none picked KJNodes decodes latent2rgb itself — animated across the clip, and on
@@ -70,6 +72,10 @@ from typing import Any, Optional
 from . import accel, raylight
 
 PREVIEW_NODE = "ModelPreviewOverrideKJ"
+# This pack's own stand-in for the node above (`livepreview.py`). Named here as
+# a string rather than imported, because this module is read by suites that run
+# without ComfyUI and that one is a node class.
+BUILTIN_PREVIEW_NODE = "ContinuityPreview"
 PREVIEW_SOURCE = "https://github.com/kijai/ComfyUI-KJNodes"
 
 MULTIGPU_SOURCE = "https://github.com/pollockjj/ComfyUI-MultiGPU"
@@ -606,7 +612,13 @@ class Links:
 
 
 def preview_available():
-    """Whether KJNodes' override node is installed."""
+    """Whether KJNodes' override node is installed.
+
+    Not whether a render previews — every render does now, through
+    `builtin_preview` when this is False. It is asked where KJNodes' node in
+    particular matters: the picked tiny decoder, which only that node can use,
+    and Raylight's bridge, whose import side reads that node's wrapper back.
+    """
     import nodes
 
     return PREVIEW_NODE in nodes.NODE_CLASS_MAPPINGS
@@ -642,6 +654,22 @@ def _preview_prefs():
     }
 
 
+def builtin_preview(graph, model, fps):
+    """Patch this pack's own latent2rgb preview onto a MODEL. Returns the new link.
+
+    What a render gets when KJNodes is not installed — see `livepreview.py` for
+    why core's previewer cannot be relied on to stand in. Sized by the same
+    settings as the override node and played at the family's rate; the frame
+    count is `PREVIEW_FRAMES` so a clip is drawn whole, which here is a ceiling
+    on the frames spread across the latent rather than a switch onto a path.
+    """
+    prefs = _preview_prefs()
+    return graph.node(BUILTIN_PREVIEW_NODE, model=model,
+                      max_resolution=prefs["max_resolution"],
+                      quality=prefs["jpeg_quality"], fps=float(fps),
+                      max_frames=PREVIEW_FRAMES).out(0)
+
+
 def graph_preview(graph, model, weights, fps):
     """Patch the preview override onto a MODEL link. Returns the new link.
 
@@ -664,13 +692,17 @@ def graph_preview(graph, model, weights, fps):
     which is why `suppress_default_preview` is on and why turning core's
     previews on instead is not the answer.
 
-    Returns `model` untouched, adding nothing to the graph, when the pack is not
-    installed. Deliberately not an error, unlike `accel.plan`: an accelerator
-    that cannot run changes what you asked for, and a preview that cannot run
+    Without the pack this emits the pack's own stand-in instead —
+    `builtin_preview`, which draws latent2rgb on any install whatever its
+    preview setting says. It used to return `model` untouched there, on the
+    reasoning that a preview changes only what you watch; but what you watched
+    was an empty box on every family, for every render, on a stock install.
+    Still deliberately not an error, unlike `accel.plan`: an accelerator that
+    cannot run changes what you asked for, and a preview that cannot run
     changes only what you watch while it happens.
     """
     if not preview_available():
-        return model
+        return builtin_preview(graph, model, fps)
 
     import nodes
 

@@ -28,6 +28,9 @@
 //   nothing, so listening in on it costs that pack nothing. **That id is not
 //   always this run's**, though — see `executing` below for why, and for the
 //   second way a frame is known to be ours.
+// - `mmc_preview` is this pack's own stand-in for that node when KJNodes is not
+//   installed (`livepreview.py`): the same payload under another name, read by
+//   the same handler. It names the display id — ours — rather than a raw one.
 // - `executing` and `executed` carry `display_node`, which core sets to the
 //   parent of every node in an expansion — our id — and which
 //   `render.emit_tail` has stamped on the save node besides.
@@ -48,7 +51,7 @@ import { ExecutionTiming } from "./timing.js";
  *  server turned a prompt away before it was queued (queue.js), which is the
  *  one failure the socket never carries. */
 const EVENTS = ["progress_state", "b_preview_with_metadata", "b_preview",
-                "kj_preview_override", "executing", "executed", "execution_error",
+                "kj_preview_override", "mmc_preview", "executing", "executed", "execution_error",
                 "execution_start", "execution_success", "execution_interrupted", "mmc_segment", "mmc_refused",
                 "reconnected", "status"];
 
@@ -368,9 +371,10 @@ export class Stage {
       }
 
       case "b_preview_with_metadata":
-        // Core's own previewer — latent2rgb unless somebody pointed the H3
-        // latent format at a decoder, which nothing does. This is the fallback
-        // when KJNodes is not installed, and it beats an empty box.
+        // Core's own previewer. Rarely seen any more: both of the previewers
+        // patched onto our renders — KJNodes' and the pack's own
+        // (`mmc_preview`) — switch core's off while they sample, so this is
+        // left for a sampler some pass reaches that neither wraps.
         if (!this.ours(detail.parentNodeId) && !this.ours(detail.nodeId)) break;
         if (!this.acceptPrompt(detail.promptId ?? detail.prompt_id)) break;
         this.news();
@@ -403,7 +407,8 @@ export class Stage {
         break;
       }
 
-      case "kj_preview_override": {
+      case "kj_preview_override":
+      case "mmc_preview": {
         // Ours by the id on the frame — or by the run, because the id is
         // whichever node first built this previewer, not the one sampling now.
         // ComfyUI caches a node's output by its inputs, and means to add the

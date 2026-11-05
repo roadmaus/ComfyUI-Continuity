@@ -119,6 +119,19 @@ def by_class(graph):
     return out
 
 
+def past_preview(kinds_, link):
+    """The model link under the built-in preview, if `link` is one.
+
+    Without KJNodes every sampler's model goes through `ContinuityPreview`
+    (`livepreview.py`), which changes what it is handed by nothing but a
+    wrapper. A check about the model chain steps over it.
+    """
+    for nid, inputs in kinds_.get("ContinuityPreview", []):
+        if nid == link:
+            return inputs["model"][0]
+    return link
+
+
 def expect_error(label, fn, fragment):
     try:
         fn()
@@ -297,7 +310,7 @@ check("...across the whole schedule",
 # Inside the sampling patch and outside nothing else: the guider samples the
 # model the hook was installed on, or the extra pass is bought and never used.
 check("...and it is what the guider guides",
-      stg["LTXVDualCFGGuider"][0][1]["model"][0],
+      past_preview(stg, stg["LTXVDualCFGGuider"][0][1]["model"][0]),
       stg["LTXVSpatioTemporalGuidance"][0][0])
 # On the trained curve there is no shift patch to sit after, so the hook goes
 # straight onto the segment node's model — which is the one the LoRAs are on.
@@ -576,7 +589,10 @@ class _FakePreview:
         }}
 
 
-check("nothing is emitted with the pack absent", "ModelPreviewOverrideKJ" in kinds, False)
+check("no override node with the pack absent", "ModelPreviewOverrideKJ" in kinds, False)
+check("...the pack's own preview instead, at the family's rate",
+      [i["fps"] for _, i in kinds.get("ContinuityPreview", [])][:1],
+      [float(importlib.import_module(f"{PACKAGE}.creator.families.ltx25.declare").RULES.fps)])
 
 _restore = dict(comfy_nodes.NODE_CLASS_MAPPINGS)
 comfy_nodes.NODE_CLASS_MAPPINGS["ModelPreviewOverrideKJ"] = _FakePreview

@@ -415,7 +415,7 @@ export const zh = {
  "auto": "auto",
  "{model} — device": "{model}——设备",
  "— auto —": "— auto —",
- "Needs KJNodes' Model Preview Override — the node that draws the live preview at all. Without the pack there is none; the render is unaffected either way.": "需要 KJNodes 的 Model Preview Override——实时预览就是由它绘制的。没有这个插件就没有实时预览；无论如何渲染本身不受影响。",
+ "Needs KJNodes' Model Preview Override — only that node can decode through this file. Without the pack the live preview is the rougher latent2rgb one; the render is unaffected either way.": "需要 KJNodes 的 Model Preview Override——只有该节点能通过此文件解码。没有这个插件时，实时预览是较粗糙的 latent2rgb 版本；无论如何渲染本身不受影响。",
  "Text-only, start/end frame and continuing shots run on these weights.": "纯文本、起始/结束帧以及延续镜头运行在这套权重上。",
  "Anything with an @ reference runs on these weights.": "带有 @ 参考的一切都运行在这套权重上。",
  "H3's text encoder. Loaded as CLIPLoader type 'minimax'.": "H3 的文本编码器。以 CLIPLoader 类型 'minimax' 加载。",

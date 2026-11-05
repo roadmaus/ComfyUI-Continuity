@@ -38,7 +38,11 @@ The same repo carries the turbo distillation LoRAs under `loras/`; the turbo
 switch on the sampler row finds them there.
 
 Optional: [`taeh3.safetensors`](https://github.com/madebyollin/taehv/blob/main/safetensors/taeh3.safetensors)
-in `vae_approx` gives H3 a properly decoded live preview.
+in `vae_approx`, together with
+[ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes), gives H3 a properly
+decoded live preview. Without either, every render still previews in the node:
+the pack draws a rougher latent2rgb picture itself, whatever ComfyUI's own
+preview setting says.
 
 Optional: a **guide LoRA** for the sampler row's guide pill — a file trained
 with the source clip as an aligned guide. Alissonerdx's

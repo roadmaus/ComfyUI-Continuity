@@ -153,6 +153,19 @@ def by_class(graph):
     return out
 
 
+def past_preview(kinds_, link):
+    """The model link under the built-in preview, if `link` is one.
+
+    Without KJNodes every sampler's model goes through `ContinuityPreview`
+    (`livepreview.py`), which changes what it is handed by nothing but a
+    wrapper. A check about the model chain steps over it.
+    """
+    for nid, inputs in kinds_.get("ContinuityPreview", []):
+        if nid == link:
+            return inputs["model"][0]
+    return link
+
+
 out = build()
 graph = out.expand
 kinds = by_class(graph)
@@ -555,10 +568,20 @@ expect_error("a .gguf VAE is refused as unloadable",
 # is the picture in the node body rather than anything sampled. The harness boots
 # with custom nodes off, so the absent path is the one that runs here unaided.
 
-check("no preview node when the pack is not installed",
+check("no override node when the pack is not installed",
       "ModelPreviewOverrideKJ" in kinds, False)
-check("the sampler reads the segment directly without it",
-      kinds["KSampler"][0][1]["model"][0], segment_id)
+# Not "no preview", which is what it used to mean: core's previewer is off on a
+# stock install, so the render sampled behind an empty box. The pack's own
+# stands in (`livepreview.py`), sized like the override and at the family's rate.
+builtin = kinds.get("ContinuityPreview", [])
+check("the pack's own preview stands in for it", len(builtin), 1)
+check("...between the segment and the sampler",
+      (builtin[0][1]["model"][0], kinds["KSampler"][0][1]["model"][0]),
+      (segment_id, builtin[0][0]))
+check("...drawing the whole clip at the render's rate",
+      (builtin[0][1]["max_frames"], builtin[0][1]["fps"]),
+      (models_mod.PREVIEW_FRAMES, float(importlib.import_module(
+          f"{PACKAGE}.creator.families.h3.declare").RULES.fps)))
 
 
 class _FakePreview:
@@ -660,7 +683,7 @@ check("no accelerator nodes by default",
       [k for k in kinds if k in (accel_mod.BLOCK_CACHE_NODE, accel_mod.SPECTRUM_NODE,
                                  accel_mod.SAGE_NODE)], [])
 check("the sampler reads the segment directly when off",
-      sampler["model"][0], segment_id)
+      past_preview(kinds, sampler["model"][0]), segment_id)
 
 expect_error("a missing pack is refused up front",
              lambda: build(spectrum=True),
@@ -695,7 +718,8 @@ try:
     check("one accelerator patch", len(patches), 1)
     check("the patch reads the segment", patches[0][1]["model"][0], accel_segment)
     check("the sampler reads the patch",
-          accel_kinds["KSampler"][0][1]["model"][0], patches[0][0])
+          past_preview(accel_kinds, accel_kinds["KSampler"][0][1]["model"][0]),
+          patches[0][0])
     check("conditioning still comes from the segment",
           accel_kinds["KSampler"][0][1]["positive"][0], accel_segment)
 
@@ -957,7 +981,8 @@ try:
     # model output, which is the stack with the distillation left off it.
     segment_id = lead_kinds["MiniMaxH3TimelineSegment"][0][0]
     check("the opening steps run on the lead model, the rest on the distilled one",
-          [(i["model"][0], i["model"][1]) for i in (opening, rest)],
+          [tuple(next((p["model"] for nid, p in lead_kinds.get("ContinuityPreview", [])
+                       if nid == i["model"][0]), i["model"])) for i in (opening, rest)],
           [(segment_id, 3), (segment_id, 0)])
     check("...and the segment node is told which file to hold off it",
           lead_kinds["MiniMaxH3TimelineSegment"][0][1]["hold_lora"],
@@ -1069,7 +1094,8 @@ check("a stage emits one VDN node per generation, on the segment's model",
       [(i["checkpoint"], i["turbo"], i["model"]) for _, i in kinds[accel_mod.VDN_NODE]],
       [("stage-x", False, [kinds["MiniMaxH3TimelineSegment"][0][0], 0])])
 check("...and the sampler runs on it",
-      model_chain(staged, kinds["KSampler"][0][1]["model"]),
+      [c for c in model_chain(staged, kinds["KSampler"][0][1]["model"])
+       if c != "ContinuityPreview"],
       [accel_mod.VDN_NODE, "MiniMaxH3TimelineSegment"])
 check("off is the ordinary graph", accel_mod.VDN_NODE in by_class(build(data=DATA).expand), False)
 
@@ -1092,11 +1118,13 @@ try:
     opening, rest = sorted((i for _, i in split["KSamplerAdvanced"]),
                            key=lambda i: i["start_at_step"])
     by_id = {nid: i for nid, i in split[accel_mod.VDN_NODE]}
+    opened, rested = (past_preview(split, opening["model"][0]),
+                      past_preview(split, rest["model"][0]))
     check("the opening sitting samples the stage with the adapter held off",
-          (by_id[opening["model"][0]]["turbo"], by_id[opening["model"][0]]["model"]),
+          (by_id[opened]["turbo"], by_id[opened]["model"]),
           (False, [segment_id, 3]))
     check("the rest of the schedule samples it with the adapter on",
-          (by_id[rest["model"][0]]["turbo"], by_id[rest["model"][0]]["model"]),
+          (by_id[rested]["turbo"], by_id[rested]["model"]),
           (True, [segment_id, 0]))
 
     settings_mod.turbo_lead_in = lambda: 0

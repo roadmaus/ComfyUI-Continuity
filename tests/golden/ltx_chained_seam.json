@@ -7,10 +7,16 @@
     }
   },
   "10": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "euler_ancestral"
+    }
+  },
+  "11": {
     "class_type": "SamplerCustomAdvanced",
     "inputs": {
       "guider": [
-        "7",
+        "8",
         0
       ],
       "latent_image": [
@@ -18,11 +24,11 @@
         2
       ],
       "noise": [
-        "8",
+        "9",
         0
       ],
       "sampler": [
-        "9",
+        "10",
         0
       ],
       "sigmas": [
@@ -31,20 +37,20 @@
       ]
     }
   },
-  "11": {
+  "12": {
     "class_type": "LTXVSeparateAVLatent",
     "inputs": {
       "av_latent": [
-        "10",
+        "11",
         0
       ]
     }
   },
-  "12": {
+  "13": {
     "class_type": "LTXVCropGuides",
     "inputs": {
       "latent": [
-        "11",
+        "12",
         0
       ],
       "negative": [
@@ -57,20 +63,20 @@
       ]
     }
   },
-  "13": {
+  "14": {
     "class_type": "LTXVConcatAVLatent",
     "inputs": {
       "audio_latent": [
-        "11",
+        "12",
         1
       ],
       "video_latent": [
-        "12",
+        "13",
         2
       ]
     }
   },
-  "14": {
+  "15": {
     "class_type": "MiniMaxH3Reel",
     "inputs": {
       "audio_vae": [
@@ -79,7 +85,7 @@
       ],
       "fps": 24.0,
       "samples": [
-        "13",
+        "14",
         0
       ],
       "vae": [
@@ -88,7 +94,7 @@
       ]
     }
   },
-  "15": {
+  "16": {
     "class_type": "ContinuityTake",
     "inputs": {
       "card": 1,
@@ -97,32 +103,32 @@
       "fps": 24.0,
       "seed": 100,
       "source": [
-        "14",
-        1
-      ]
-    }
-  },
-  "16": {
-    "class_type": "MiniMaxH3PassFrames",
-    "inputs": {
-      "count": 17,
-      "source": [
-        "14",
+        "15",
         1
       ]
     }
   },
   "17": {
-    "class_type": "MiniMaxH3PassAudio",
+    "class_type": "MiniMaxH3PassFrames",
     "inputs": {
-      "seconds": 0.7083333333333334,
+      "count": 17,
       "source": [
-        "14",
+        "15",
         1
       ]
     }
   },
   "18": {
+    "class_type": "MiniMaxH3PassAudio",
+    "inputs": {
+      "seconds": 0.7083333333333334,
+      "source": [
+        "15",
+        1
+      ]
+    }
+  },
+  "19": {
     "class_type": "MiniMaxLTX25Segment",
     "inputs": {
       "audio_vae": [
@@ -138,11 +144,11 @@
         0
       ],
       "prev_audio": [
-        "17",
+        "18",
         0
       ],
       "prev_image": [
-        "16",
+        "17",
         0
       ],
       "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 544, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 960}, \"continue\": true, \"continue_audio\": true, \"feather\": 17, \"progress\": {\"index\": 2}, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 5, \"loras\": [], \"music\": \"\", \"prompt\": \"a house at dusk\\ncloser\", \"short_edge\": 544, \"soundscape\": \"\"}}",
@@ -150,12 +156,6 @@
         "3",
         0
       ]
-    }
-  },
-  "19": {
-    "class_type": "ManualSigmas",
-    "inputs": {
-      "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
     }
   },
   "2": {
@@ -166,101 +166,120 @@
     }
   },
   "20": {
+    "class_type": "ManualSigmas",
+    "inputs": {
+      "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
+    }
+  },
+  "21": {
+    "class_type": "ContinuityPreview",
+    "inputs": {
+      "fps": 24.0,
+      "max_frames": 1024,
+      "max_resolution": 640,
+      "model": [
+        "19",
+        0
+      ],
+      "quality": 80
+    }
+  },
+  "22": {
     "class_type": "LTXVDualCFGGuider",
     "inputs": {
       "audio_cfg": 1.0,
       "model": [
-        "18",
+        "21",
         0
       ],
       "negative": [
-        "18",
+        "19",
         3
       ],
       "positive": [
-        "18",
+        "19",
         1
       ],
       "video_cfg": 1.0
     }
   },
-  "21": {
+  "23": {
     "class_type": "RandomNoise",
     "inputs": {
       "noise_seed": 100
     }
   },
-  "22": {
+  "24": {
     "class_type": "KSamplerSelect",
     "inputs": {
       "sampler_name": "euler_ancestral"
     }
   },
-  "23": {
+  "25": {
     "class_type": "SamplerCustomAdvanced",
     "inputs": {
       "guider": [
-        "20",
-        0
-      ],
-      "latent_image": [
-        "18",
-        2
-      ],
-      "noise": [
-        "21",
-        0
-      ],
-      "sampler": [
         "22",
         0
       ],
-      "sigmas": [
+      "latent_image": [
         "19",
-        0
-      ]
-    }
-  },
-  "24": {
-    "class_type": "LTXVSeparateAVLatent",
-    "inputs": {
-      "av_latent": [
+        2
+      ],
+      "noise": [
         "23",
         0
-      ]
-    }
-  },
-  "25": {
-    "class_type": "LTXVCropGuides",
-    "inputs": {
-      "latent": [
+      ],
+      "sampler": [
         "24",
         0
       ],
-      "negative": [
-        "18",
-        3
-      ],
-      "positive": [
-        "18",
-        1
+      "sigmas": [
+        "20",
+        0
       ]
     }
   },
   "26": {
-    "class_type": "LTXVConcatAVLatent",
+    "class_type": "LTXVSeparateAVLatent",
     "inputs": {
-      "audio_latent": [
-        "24",
-        1
-      ],
-      "video_latent": [
+      "av_latent": [
         "25",
-        2
+        0
       ]
     }
   },
   "27": {
+    "class_type": "LTXVCropGuides",
+    "inputs": {
+      "latent": [
+        "26",
+        0
+      ],
+      "negative": [
+        "19",
+        3
+      ],
+      "positive": [
+        "19",
+        1
+      ]
+    }
+  },
+  "28": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": {
+      "audio_latent": [
+        "26",
+        1
+      ],
+      "video_latent": [
+        "27",
+        2
+      ]
+    }
+  },
+  "29": {
     "class_type": "MiniMaxH3Reel",
     "inputs": {
       "audio_vae": [
@@ -270,11 +289,11 @@
       "fps": 24.0,
       "head": 17,
       "reel": [
-        "14",
+        "15",
         0
       ],
       "samples": [
-        "26",
+        "28",
         0
       ],
       "vae": [
@@ -283,7 +302,13 @@
       ]
     }
   },
-  "28": {
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "ltx/ltx-2.5-video-vae-bf16.safetensors"
+    }
+  },
+  "30": {
     "class_type": "ContinuityTake",
     "inputs": {
       "card": 2,
@@ -292,12 +317,12 @@
       "fps": 24.0,
       "seed": 100,
       "source": [
-        "27",
+        "29",
         1
       ]
     }
   },
-  "29": {
+  "31": {
     "class_type": "MiniMaxLTX25Segment",
     "inputs": {
       "audio_vae": [
@@ -319,145 +344,103 @@
       ]
     }
   },
-  "3": {
-    "class_type": "VAELoader",
-    "inputs": {
-      "vae_name": "ltx/ltx-2.5-video-vae-bf16.safetensors"
-    }
-  },
-  "30": {
+  "32": {
     "class_type": "ManualSigmas",
     "inputs": {
       "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
     }
   },
-  "31": {
+  "33": {
+    "class_type": "ContinuityPreview",
+    "inputs": {
+      "fps": 24.0,
+      "max_frames": 1024,
+      "max_resolution": 640,
+      "model": [
+        "31",
+        0
+      ],
+      "quality": 80
+    }
+  },
+  "34": {
     "class_type": "LTXVDualCFGGuider",
     "inputs": {
       "audio_cfg": 1.0,
       "model": [
-        "29",
+        "33",
         0
       ],
       "negative": [
-        "29",
+        "31",
         3
       ],
       "positive": [
-        "29",
+        "31",
         1
       ],
       "video_cfg": 1.0
     }
   },
-  "32": {
+  "35": {
     "class_type": "RandomNoise",
     "inputs": {
       "noise_seed": 100
     }
   },
-  "33": {
+  "36": {
     "class_type": "KSamplerSelect",
     "inputs": {
       "sampler_name": "euler_ancestral"
     }
   },
-  "34": {
+  "37": {
     "class_type": "SamplerCustomAdvanced",
     "inputs": {
       "guider": [
-        "31",
+        "34",
         0
       ],
       "latent_image": [
-        "29",
+        "31",
         2
       ],
       "noise": [
-        "32",
+        "35",
         0
       ],
       "sampler": [
-        "33",
+        "36",
         0
       ],
       "sigmas": [
-        "30",
+        "32",
         0
-      ]
-    }
-  },
-  "35": {
-    "class_type": "LTXVSeparateAVLatent",
-    "inputs": {
-      "av_latent": [
-        "34",
-        0
-      ]
-    }
-  },
-  "36": {
-    "class_type": "LTXVCropGuides",
-    "inputs": {
-      "latent": [
-        "35",
-        0
-      ],
-      "negative": [
-        "29",
-        3
-      ],
-      "positive": [
-        "29",
-        1
-      ]
-    }
-  },
-  "37": {
-    "class_type": "LTXVConcatAVLatent",
-    "inputs": {
-      "audio_latent": [
-        "35",
-        1
-      ],
-      "video_latent": [
-        "36",
-        2
       ]
     }
   },
   "38": {
-    "class_type": "MiniMaxH3Reel",
+    "class_type": "LTXVSeparateAVLatent",
     "inputs": {
-      "audio_vae": [
-        "4",
-        0
-      ],
-      "fps": 24.0,
-      "reel": [
-        "27",
-        0
-      ],
-      "samples": [
+      "av_latent": [
         "37",
-        0
-      ],
-      "vae": [
-        "3",
         0
       ]
     }
   },
   "39": {
-    "class_type": "ContinuityTake",
+    "class_type": "LTXVCropGuides",
     "inputs": {
-      "card": 3,
-      "crf": 23,
-      "filename_prefix": "continuity/renders/ltx25/LTX25",
-      "fps": 24.0,
-      "seed": 100,
-      "source": [
+      "latent": [
         "38",
+        0
+      ],
+      "negative": [
+        "31",
+        3
+      ],
+      "positive": [
+        "31",
         1
       ]
     }
@@ -469,13 +452,62 @@
     }
   },
   "40": {
+    "class_type": "LTXVConcatAVLatent",
+    "inputs": {
+      "audio_latent": [
+        "38",
+        1
+      ],
+      "video_latent": [
+        "39",
+        2
+      ]
+    }
+  },
+  "41": {
+    "class_type": "MiniMaxH3Reel",
+    "inputs": {
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "fps": 24.0,
+      "reel": [
+        "29",
+        0
+      ],
+      "samples": [
+        "40",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "42": {
+    "class_type": "ContinuityTake",
+    "inputs": {
+      "card": 3,
+      "crf": 23,
+      "filename_prefix": "continuity/renders/ltx25/LTX25",
+      "fps": 24.0,
+      "seed": 100,
+      "source": [
+        "41",
+        1
+      ]
+    }
+  },
+  "43": {
     "class_type": "MiniMaxH3Save",
     "inputs": {
       "crf": 23,
       "filename_prefix": "continuity/renders/ltx25/LTX25",
       "fps": 24.0,
       "reel": [
-        "38",
+        "41",
         0
       ],
       "takes": ""
@@ -510,11 +542,24 @@
     }
   },
   "7": {
+    "class_type": "ContinuityPreview",
+    "inputs": {
+      "fps": 24.0,
+      "max_frames": 1024,
+      "max_resolution": 640,
+      "model": [
+        "5",
+        0
+      ],
+      "quality": 80
+    }
+  },
+  "8": {
     "class_type": "LTXVDualCFGGuider",
     "inputs": {
       "audio_cfg": 1.0,
       "model": [
-        "5",
+        "7",
         0
       ],
       "negative": [
@@ -528,16 +573,10 @@
       "video_cfg": 1.0
     }
   },
-  "8": {
+  "9": {
     "class_type": "RandomNoise",
     "inputs": {
       "noise_seed": 100
-    }
-  },
-  "9": {
-    "class_type": "KSamplerSelect",
-    "inputs": {
-      "sampler_name": "euler_ancestral"
     }
   }
 }

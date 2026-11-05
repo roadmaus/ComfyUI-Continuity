@@ -55,7 +55,7 @@ import json
 from comfy_api.latest import ComfyExtension, io
 
 from . import (accel, canvas, compile as compiler, guide as guides, job_node, liftnode,
-               media, models, neural, neuralpass, outputs, prestage, redetail,
+               livepreview, media, models, neural, neuralpass, outputs, prestage, redetail,
                redetailpass, refmodnode, sampling, settings, timeline, vdn)
 from .core import emit as loop
 from .screens import node as screen_node, spec as screen_spec
@@ -428,7 +428,8 @@ class MiniMaxCreatorExtension(ComfyExtension):
                 *prestage.NODES, *hires.NODES, *facepass.NODES, *seamrestore.NODES,
                 *motionfix.NODES, *guidepass.NODES,
                 *redetailpass.NODES, *neuralpass.NODES, *screen_node.NODES, *vdn.NODES,
-                *refmodnode.NODES, *liftnode.NODES, *krea2edit.NODES]
+                *refmodnode.NODES, *liftnode.NODES, *krea2edit.NODES,
+                *livepreview.NODES]
 
 
 async def comfy_entrypoint() -> MiniMaxCreatorExtension:

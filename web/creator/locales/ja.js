@@ -414,7 +414,7 @@ export const ja = {
  "auto": "auto",
  "{model} — device": "{model} — デバイス",
  "— auto —": "— auto —",
- "Needs KJNodes' Model Preview Override — the node that draws the live preview at all. Without the pack there is none; the render is unaffected either way.": "KJNodes の Model Preview Override が必要です — ライブプレビューを描画するノードです。パックがなければプレビューはありません。レンダリング自体はどちらでも影響を受けません。",
+ "Needs KJNodes' Model Preview Override — only that node can decode through this file. Without the pack the live preview is the rougher latent2rgb one; the render is unaffected either way.": "KJNodes の Model Preview Override が必要です — このファイルでデコードできるのはそのノードだけです。パックがない場合、ライブプレビューは粗い latent2rgb 版になります。レンダリング自体はどちらでも影響を受けません。",
  "Text-only, start/end frame and continuing shots run on these weights.": "テキストのみ、開始/終了フレーム、継続ショットはこのウェイトで実行されます。",
  "Anything with an @ reference runs on these weights.": "@ リファレンスを持つ生成はこのウェイトで実行されます。",
  "H3's text encoder. Loaded as CLIPLoader type 'minimax'.": "H3 のテキストエンコーダー。CLIPLoader タイプ 'minimax' として読み込まれます。",

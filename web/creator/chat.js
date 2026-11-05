@@ -90,7 +90,7 @@ const EXCHANGES = 5;
  *  comes back as the route's own `{error}` or `{problem}` and is already a
  *  bubble by the time a card exists. */
 const CARD_EVENTS = ["progress_state", "b_preview_with_metadata", "b_preview",
-                     "kj_preview_override", "executed", "execution_error",
+                     "kj_preview_override", "mmc_preview", "executed", "execution_error",
                      "execution_interrupted"];
 
 /** Whether the sidebar is open, per browser. A choice about the window
@@ -729,7 +729,10 @@ function watchRender(card) {
         if (card.metaFrameAt && Date.now() - card.metaFrameAt < 2000) return;
         return frame(card, detail instanceof Blob ? detail : detail.blob);
       }
-      case "kj_preview_override": {
+      case "kj_preview_override":
+      // This pack's stand-in for it when KJNodes is not installed
+      // (`livepreview.py`) — the same payload under its own name.
+      case "mmc_preview": {
         // The pack's own previewer — `models.graph_preview` patches it onto
         // every render of ours and suppresses core's, so on a stock install
         // (previews off) this is the only frame that ever arrives. The queue

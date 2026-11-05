@@ -6,6 +6,20 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Every render previews, with or without KJNodes.** The live picture in the
+node came from KJNodes' Model Preview Override and nothing else, so an install
+without that pack sampled behind an empty box on every family, video and still,
+Creator and PreStage alike. Core could not stand in: its previewer is gated on
+`--preview-method`, which a fresh install ships as `none`, and the frontend's
+"default" setting sends no override. The step callback runs either way, so the
+pack now carries its own small previewer (`livepreview.py`, the internal
+`ContinuityPreview` node) that wraps sampling, draws each step through the
+latent format's latent2rgb factors (the whole clip as an animated WebP for
+video, guide frames cropped, the audio stream skipped), and broadcasts it as
+`mmc_preview` for the stage and the chat to show. `graph_preview` emits it
+wherever KJNodes is absent; with KJNodes installed nothing changes, and that
+pack remains the way to a tiny-VAE-decoded picture.
+
 **A pinned LoRA stays muted, everywhere, and the chat can mute one.** The
 pin's record dropped the mute on purpose, so a pinned LoRA came back on every
 time a stack was settled without it: switch a node to another family and back

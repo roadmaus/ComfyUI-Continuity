@@ -1254,7 +1254,7 @@ class SettingsPage {
           also: "It is a whole clip, re-encoded and sent every step, and a websocket "
               + "behind a proxy has a frame limit: a frame past it takes the "
               + "connection down mid-render rather than arriving late. Read when a "
-              + "render is queued; only KJNodes' preview override draws it.",
+              + "render is queued, by KJNodes' preview override or by the pack's own.",
           said: () => px > 768
             ? t("Larger than any box that shows it. Costs an encode and the bytes every step.")
             : px < 384

@@ -149,6 +149,19 @@ def by_class(graph):
     return out
 
 
+def past_preview(kinds_, link):
+    """The model link under the built-in preview, if `link` is one.
+
+    Without KJNodes every sampler's model goes through `ContinuityPreview`
+    (`livepreview.py`), which changes what it is handed by nothing but a
+    wrapper. A check about the model chain steps over it.
+    """
+    for nid, inputs in kinds_.get("ContinuityPreview", []):
+        if nid == link:
+            return inputs["model"][0]
+    return link
+
+
 # ---- Krea 2 t2i --------------------------------------------------------------
 #
 # The template shape: loaders, one text encode, a zeroed negative, an empty
@@ -272,7 +285,7 @@ check("model-only, at the entry's strength",
       (loras[0][1]["lora_name"], loras[0][1]["strength_model"]),
       ("krea2_darkbrush.safetensors", 0.8))
 check("the shift reads the patch, and the sampler reads the shift",
-      (with_lora["ModelSamplingFlux"][0][1]["model"][0],
+      (past_preview(with_lora, with_lora["ModelSamplingFlux"][0][1]["model"][0]),
        with_lora["KSampler"][0][1]["model"][0]),
       (loras[0][0], with_lora["ModelSamplingFlux"][0][0]))
 check("the trigger word rides in front of the prompt",
@@ -571,7 +584,8 @@ paired = by_class(build(blob(arch="ideogram4", loras=[
 patches = {i["strength_model"]: nid for nid, i in paired["LoraLoaderModelOnly"]}
 check("two patches of the same file", sorted(patches), [0.4, 0.9])
 check("the conditional patch feeds the shift",
-      paired["ModelSamplingAuraFlow"][0][1]["model"][0], patches[0.9])
+      past_preview(paired, paired["ModelSamplingAuraFlow"][0][1]["model"][0]),
+      patches[0.9])
 check("the unconditional patch is the guider's negative model",
       paired["DualModelGuider"][0][1]["model_negative"][0], patches[0.4])
 check("the unconditional patch sits on the unconditional checkpoint",
@@ -1766,9 +1780,20 @@ finally:
 # nowhere the fullscreen editor can show them. Optional in the same way too, so
 # the absent path is what runs unaided above.
 
-check("no preview node when the pack is not installed",
+check("no override node when the pack is not installed",
       ("ModelPreviewOverrideKJ" in kinds, "ModelPreviewOverrideKJ" in ideo),
       (False, False))
+# ...but a preview all the same: core's is off on a stock install, so without
+# the pack the still would sample behind an empty box (`livepreview.py`).
+check("the pack's own preview stands in for it, once per render",
+      (len(kinds.get("ContinuityPreview", [])), len(ideo.get("ContinuityPreview", []))),
+      (1, 1))
+# Under the family's own wrappers rather than over them — Krea's shift clones
+# the patcher and carries the wrapper along (`render_image.py`).
+check("...and the sampler samples through it",
+      (kinds["ModelSamplingFlux"][0][1]["model"][0],
+       kinds["KSampler"][0][1]["model"][0]),
+      (kinds["ContinuityPreview"][0][0], kinds["ModelSamplingFlux"][0][0]))
 
 
 class _FakePreview:

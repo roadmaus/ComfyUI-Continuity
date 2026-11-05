@@ -439,9 +439,9 @@ export function openWeightsPopover(anchor, { piece, models, checkpoints, onChang
         el("button", {
           class: `mmc-weight-file${chosen ? "" : " empty"}`,
           title: unavailable
-            ? t("Needs KJNodes' Model Preview Override — the node that draws the live "
-              + "preview at all. Without the pack there is none; the render is "
-              + "unaffected either way.")
+            ? t("Needs KJNodes' Model Preview Override — only that node can decode "
+              + "through this file. Without the pack the live preview is the rougher "
+              + "latent2rgb one; the render is unaffected either way.")
             : t(hint_[field]),
           // The tail of a folder-qualified name is the part that identifies it;
           // the button ellipsises from the left so that is what survives.

@@ -414,7 +414,7 @@ export const ko = {
  "auto": "auto",
  "{model} — device": "{model} — 디바이스",
  "— auto —": "— auto —",
- "Needs KJNodes' Model Preview Override — the node that draws the live preview at all. Without the pack there is none; the render is unaffected either way.": "KJNodes의 Model Preview Override가 필요합니다 — 실시간 프리뷰를 그리는 노드입니다. 팩이 없으면 프리뷰도 없습니다. 렌더 자체는 어느 쪽이든 영향이 없습니다.",
+ "Needs KJNodes' Model Preview Override — only that node can decode through this file. Without the pack the live preview is the rougher latent2rgb one; the render is unaffected either way.": "KJNodes의 Model Preview Override가 필요합니다 — 이 파일로 디코딩할 수 있는 것은 그 노드뿐입니다. 팩이 없으면 실시간 프리뷰는 거친 latent2rgb 버전이 됩니다. 렌더 자체는 어느 쪽이든 영향이 없습니다.",
  "Text-only, start/end frame and continuing shots run on these weights.": "텍스트 전용, 시작/끝 프레임, 이어지는 숏이 이 가중치에서 실행됩니다.",
  "Anything with an @ reference runs on these weights.": "@ 레퍼런스가 있는 생성은 모두 이 가중치에서 실행됩니다.",
  "H3's text encoder. Loaded as CLIPLoader type 'minimax'.": "H3의 텍스트 인코더. CLIPLoader 타입 'minimax'로 로드됩니다.",

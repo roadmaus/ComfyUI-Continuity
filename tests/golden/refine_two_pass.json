@@ -7,25 +7,47 @@
     }
   },
   "10": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "9",
+        1
+      ]
+    }
+  },
+  "11": {
+    "class_type": "ContinuityPreview",
+    "inputs": {
+      "fps": 24.0,
+      "max_frames": 1024,
+      "max_resolution": 640,
+      "model": [
+        "9",
+        0
+      ],
+      "quality": 80
+    }
+  },
+  "12": {
     "class_type": "MiniMaxH3RefinePass",
     "inputs": {
       "cfg": 1.0,
       "denoise": 0.5,
       "height": 1152,
       "latent": [
-        "7",
+        "8",
         0
       ],
       "model": [
-        "8",
+        "11",
         0
       ],
       "negative": [
-        "9",
+        "10",
         0
       ],
       "positive": [
-        "8",
+        "9",
         1
       ],
       "sampler_name": "res_multistep",
@@ -35,7 +57,7 @@
       "width": 2016
     }
   },
-  "11": {
+  "13": {
     "class_type": "MiniMaxH3Reel",
     "inputs": {
       "audio_vae": [
@@ -44,7 +66,7 @@
       ],
       "fps": 24.0,
       "samples": [
-        "10",
+        "12",
         0
       ],
       "vae": [
@@ -53,14 +75,14 @@
       ]
     }
   },
-  "12": {
+  "14": {
     "class_type": "MiniMaxH3Save",
     "inputs": {
       "crf": 23,
       "filename_prefix": "continuity/renders/h3/H3",
       "fps": 24.0,
       "reel": [
-        "11",
+        "13",
         0
       ],
       "takes": "{\"cards\": [1], \"seeds\": [100]}"
@@ -109,6 +131,19 @@
     }
   },
   "7": {
+    "class_type": "ContinuityPreview",
+    "inputs": {
+      "fps": 24.0,
+      "max_frames": 1024,
+      "max_resolution": 640,
+      "model": [
+        "5",
+        0
+      ],
+      "quality": 80
+    }
+  },
+  "8": {
     "class_type": "KSampler",
     "inputs": {
       "cfg": 1.0,
@@ -118,7 +153,7 @@
         2
       ],
       "model": [
-        "5",
+        "7",
         0
       ],
       "negative": [
@@ -135,7 +170,7 @@
       "steps": 20
     }
   },
-  "8": {
+  "9": {
     "class_type": "MiniMaxH3TimelineSegment",
     "inputs": {
       "clip": [
@@ -147,15 +182,6 @@
         0
       ],
       "segment_data": "{\"canvas\": {\"clamped\": false, \"from_image\": false, \"height\": 1152, \"label\": \"16:9\", \"ratio\": 1.7777777777777777, \"width\": 2016}, \"continue\": false, \"continue_audio\": false, \"request\": {\"aspect\": \"16:9\", \"audio_tail_s\": 1.0, \"duration_s\": 6, \"loras\": [], \"music\": \"\", \"prompt\": \"a red room\", \"short_edge\": 1152, \"soundscape\": \"\"}}"
-    }
-  },
-  "9": {
-    "class_type": "ConditioningZeroOut",
-    "inputs": {
-      "conditioning": [
-        "8",
-        1
-      ]
     }
   }
 }
