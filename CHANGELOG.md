@@ -18,7 +18,10 @@ latent format's latent2rgb factors (the whole clip as an animated WebP for
 video, guide frames cropped, the audio stream skipped), and broadcasts it as
 `mmc_preview` for the stage and the chat to show. `graph_preview` emits it
 wherever KJNodes is absent; with KJNodes installed nothing changes, and that
-pack remains the way to a tiny-VAE-decoded picture.
+pack remains the way to a tiny-VAE-decoded picture. An audio+video render (H3,
+LTX) is handed to the wrapper packed flat rather than nested, because core
+unpacks it for callbacks above the wrappers, so the picture half is unpacked
+against the sampler's own latent shapes before it is drawn.
 
 **A pinned LoRA stays muted, everywhere, and the chat can mute one.** The
 pin's record dropped the mute on purpose, so a pinned LoRA came back on every

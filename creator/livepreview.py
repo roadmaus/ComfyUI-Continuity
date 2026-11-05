@@ -105,15 +105,27 @@ class _Worker:
         self._thread.join(timeout=timeout)
 
 
-def video_part(x0):
+def video_part(x0, latent_shapes=None):
     """The picture stream of a step's x0.
 
-    An audio+video model samples a packed latent, and core hands callbacks the
-    nested view of it (`samplers.py`) — video first, audio after. Core's own
-    callback takes the first tensor for the same reason.
+    An audio+video model (H3, LTX AV) samples its streams packed flat into one
+    `[B, 1, N]` tensor, video first. Core unpacks that into a nested view for
+    callbacks (`samplers.py`, `sample`) — but it does so by wrapping the
+    callback *before* the `OUTER_SAMPLE` wrappers run, so a wrapper is handed
+    the nesting adapter as its `callback` and the callback it passes down is
+    called with the packed tensor. Reading that as a picture failed on the
+    first step and switched the preview off: every H3 render previewed nothing
+    while every still previewed fine. So the packed form is unpacked here with
+    core's own `unpack_latents` against the shapes the sampler packed it from,
+    and the nested form — what a callback above the adapter would see — is
+    taken as it comes.
     """
     if getattr(x0, "is_nested", False):
         return x0.tensors[0]
+    if latent_shapes and len(latent_shapes) > 1:
+        import comfy.utils
+
+        return comfy.utils.unpack_latents(x0, latent_shapes)[0]
     return x0
 
 
@@ -271,7 +283,7 @@ class PreviewWrapper:
         def step(index, x0, x, total_steps):
             if not failed:
                 try:
-                    latent = video_part(x0)
+                    latent = video_part(x0, latent_shapes)
                     cut = guide_frames(guider, latent)
                     if cut:
                         latent = latent[:, :, :-cut]

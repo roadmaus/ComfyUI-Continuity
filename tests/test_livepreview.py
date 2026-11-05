@@ -11,7 +11,8 @@ set to none, and then what the wrapper does with the callback it is handed:
 - every step's x0 reaches the wire as a picture, drawn through the latent
   format's own latent2rgb factors (core's real H3, LTX and Flux formats),
 - a video latent is drawn across its whole clip and a still as one frame,
-- LTX guide frames are cropped and an AV latent's audio half is never drawn,
+- LTX guide frames are cropped and an AV latent's audio half is never drawn —
+  in the packed form the sampler hands the wrapper, not only the nested one,
 - the sampler's own callback still runs, with the x0 it was always given,
 - core's previewer is silenced while ours samples and restored after, even
   when the sampler raises,
@@ -171,6 +172,30 @@ check("core's own picture was silenced while ours sampled", executor.silenced, N
 restored = latent_preview.Latent2RGBPreviewer(
     h3.latent_rgb_factors).decode_latent_to_preview_image("JPEG", clip)
 check("...and is back afterwards", restored[0], "JPEG")
+
+# What an H3 render actually hands the wrapper. Core packs an audio+video
+# latent flat before sampling and unpacks it for callbacks by wrapping the
+# callback *above* the OUTER_SAMPLE wrappers — so the callback a wrapper passes
+# down is called with the packed tensor. A preview that read that as a picture
+# failed on step one and went dark for the rest of every H3 render.
+import comfy.utils  # noqa: E402
+
+av_video = torch.randn(1, 24, 5, 6, 8)
+av_audio = torch.randn(1, 32, 2, 14)
+flat, shapes = comfy.utils.pack_latents([av_video, av_audio])
+check("an H3 latent is packed flat for sampling",
+      (flat.ndim, len(shapes)), (3, 2))
+check("...and the packed form is unpacked to its picture half",
+      lp.video_part(flat, shapes).shape, av_video.shape)
+sent.clear()
+owner["id"] = "42"
+wrapper(Executor(formats.MiniMaxH3AV(), x0=flat), None, None, None,
+        torch.linspace(1, 0, 3), None, None, False, 0, latent_shapes=shapes)
+h3_frames = [m for m in sent if "image" in m]
+check("a packed H3 render reaches the wire as pictures", len(h3_frames) >= 1, True)
+check("...the whole clip, at the latent's own size",
+      (h3_frames[-1]["mime"], h3_frames[-1]["w"], h3_frames[-1]["h"]),
+      ("image/webp", 8, 6))
 
 # A sampler that raises leaves core's previewer as it found it.
 sent.clear()
