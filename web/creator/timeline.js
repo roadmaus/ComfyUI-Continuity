@@ -3389,10 +3389,9 @@ class Timeline {
       // ...and the same answer to "whose cast is this". Without it the editor
       // looked the piece's subjects up on the segment, found none, and a name
       // clicked in a card opened nothing while deleting one took nobody out.
+      // It is also whose cast the card's own shelf draws: the window's shelf is
+      // behind the sheet, so the card carries one, and it is this one (#124).
       castPiece: this.timeline,
-      // The shelf is this window's, a few rows down — a card draws none of its
-      // own, and a name pressed in it opens the member there.
-      openCast: (handle) => this.openCastMember(handle),
       compiledPrompt: () => compiledFor(this.timeline, index, this.pieceSeed()),
       // What a `{day|night}` in this card is chosen on: the card's own seed
       // where it was retaken on one, the piece's otherwise — the sampler's

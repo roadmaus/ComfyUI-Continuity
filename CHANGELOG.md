@@ -6,6 +6,18 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A card in the Timeline window shows its cast's pictures again, and can
+change them (#124).** Since a member's files moved off the reference row and
+onto the cast shelf, a card drew no shelf of its own and no Cast tool, and
+handed a pressed name to the window's shelf — which sits behind the card's
+sheet. So a card of a cast piece showed nobody's picture and offered no way to
+see or change one, the same empty row as #91. The card now carries the Cast
+tool and the piece's shelf, folded until asked for like everywhere else, and a
+name pressed in the card opens the member right there. It is the piece's cast,
+not a copy, and the window's shelf is redrawn from the card's commits. The #91
+suite opens its cards through the Timeline window now rather than building
+them by hand, which is how it had missed this.
+
 **Saving a member again never overwrites another picture's RefMod, and a
 saved reference can be redone or forgotten (#121).** A make job named its
 mods `<member>`, `<member>-2`, ... counting from the first picture it was

@@ -224,8 +224,7 @@ export class CreatorEditor {
                 piece = null, castPiece = null, growShot = null, presetTarget = null,
                 samplingStore = null, pinFamily = null,
                 clearTool = null, seedTarget = null, compiledPrompt = null,
-                castFromLibrary = null, fullscreen = null, varies = null,
-                openCast = null }) {
+                castFromLibrary = null, fullscreen = null, varies = null }) {
     // The seed and card a `{day|night}` in this prompt is chosen on, for the
     // box to light the alternative the render will take. Null where there is
     // no node under the box to answer for it — see `PromptBox.paintVariations`.
@@ -242,10 +241,6 @@ export class CreatorEditor {
     // second one is a shot whose cast is owned a level up. See the `@` menu's
     // `castFromLibrary` hook.
     this.castFromLibrary = castFromLibrary;
-    // A host with a cast shelf of its own — the Timeline window, for a card of
-    // its strip — takes a name pressed in the sentence and opens it there.
-    // Null everywhere the shelf is a row of this body; see `renderCastShelf`.
-    this.openCast = openCast;
     // Up only when somebody asked for it — the Cast tool, or a name pressed in
     // the sentence. See `shelfShown`.
     this.castOpen = false;
@@ -426,8 +421,8 @@ export class CreatorEditor {
     this.assetsHost = el("div", { class: "mmc-assets-host" });
     // The cast, under the files it is built out of, because a subject is built
     // out of what is there and reads as nonsense above it. Left empty — not
-    // hidden — while the shelf is folded or the host has a shelf of its own,
-    // so the column pays it no gap; see `renderCastShelf`.
+    // hidden — while the shelf is folded, so the column pays it no gap; see
+    // `renderCastShelf`.
     this.castHost = el("div", { class: "mmc-cast-host" });
     this.loraHost = el("div");
     watchPins(this, "pinsMoved");
@@ -1903,11 +1898,14 @@ export class CreatorEditor {
    * one answer, this prompt.
    *
    * Every body draws it — the node face, the fullscreen shell's two views, the
-   * pre-stage's H3 branch, the editor sheet — except one whose host has a shelf
-   * of its own: a card in the Timeline window, where the piece's shelf is a few
-   * rows down and a second editable copy would be two places to change one
-   * thing. That host passes `openCast`, and a name pressed in the card opens
-   * the window's shelf instead.
+   * pre-stage's H3 branch, the editor sheet, and a card of the Timeline window.
+   * The card used to draw none and hand a pressed name to the window's shelf,
+   * so as not to be a second place to edit one person. But the card is a sheet
+   * *over* that window: the window's shelf is behind it, and with a member's
+   * files kept off the reference row the card showed no picture of anybody,
+   * no Cast tool and no way to change one — #91 again, as #124. The card's
+   * shelf is the piece's cast (`castPiece`), not a copy of it, and the window
+   * redraws its own from the card's commits, so there is still one cast.
    *
    * Folded until asked for, in every view. It used to come up whenever there
    * was a cast, on the grounds that a member you cannot see is one you forget
@@ -1920,10 +1918,6 @@ export class CreatorEditor {
    * shelf was standing guard over. One press, or a press on a name, and it is
    * the shelf with everything on it.
    */
-  /** Whether the shelf is a row of this body — false only where the host has
-   *  one of its own to open instead. */
-  castResidentHere() { return !this.openCast; }
-
   /** Whether the shelf is up: only when the tool or a name put it there. */
   shelfShown() {
     return this.castOpen;
@@ -1932,7 +1926,7 @@ export class CreatorEditor {
   renderCastShelf() {
     // Not built at all when it is down: a shelf hidden by a stylesheet is
     // still a row of the column, and the column pays it a gap.
-    if (!this.castResidentHere() || !this.shelfShown()) {
+    if (!this.shelfShown()) {
       this.castHost.replaceChildren(); return;
     }
     this.castShelf ??= new CastShelf({
@@ -2037,12 +2031,9 @@ export class CreatorEditor {
    * Somebody's name in the sentence was clicked: show what they are made of.
    *
    * The shelf comes up if it was folded and opens on them; pressing the same
-   * name again shuts their card and leaves the shelf where it is. A host with
-   * a shelf of its own — the Timeline window, for a card of the strip — is
-   * handed the press instead, and opens the member on that one.
+   * name again shuts their card and leaves the shelf where it is.
    */
   openCastMember(handle) {
-    if (this.openCast) return this.openCast(handle);
     const before = this.castOpen;
     this.castOpen = true;
     this.render();
@@ -2194,9 +2185,9 @@ export class CreatorEditor {
         // behind them at all, which is what a cast is in a text-only generation
         // — and gating this on having attached something is what made the
         // feature invisible to exactly the prompt that needed it most.
-        // Wherever the shelf is this body's to draw (`castResidentHere`); a
-        // card in the Timeline window has the window's shelf and no tool.
-        ...(this.castResidentHere() ? [this.renderCastTool()] : []),
+        // On every body, a Timeline card's included: the card is a sheet over
+        // the window's shelf, so its own is the only one in sight (#124).
+        this.renderCastTool(),
         // With the adds because they are one: the PreStage's frame grab puts an
         // init image on this generation, whatever tool the host lends the rail.
         ...(this.extraTools?.() ?? []),

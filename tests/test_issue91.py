@@ -69,16 +69,29 @@ const card1 = (extra = []) => ({
   assets: [image("img-1", "anna.png"), ...extra],
 });
 
-/** The card editor as the Timeline window mounts one. */
-const row = (timeline, index) => {
-  const editor = new CreatorEditor({
-    state: timeline.segments[index], piece: timeline, castPiece: timeline,
-    nodeId: () => 1,
-  });
-  editor.pieceRef = timeline;
-  editor.toggleCast();
-  const host = editor.assetsHost;
+/**
+ * A card, opened the way a person opens one: the Timeline window, its edit
+ * button, the sheet that comes up over the window — and the Cast tool on that
+ * sheet's rail, since the shelf is folded until asked for.
+ *
+ * Built by hand, this used to be a card the window never made: it left out
+ * what the window passed, so it drew a shelf the real card did not, and passed
+ * the whole time the real card showed nobody's picture (#124).
+ */
+const { openTimeline } = await import("./web/creator/timeline.js");
+const row = async (timeline, index) => {
+  openTimeline({ timeline, onCommit: () => {} });
+  await new Promise((done) => setTimeout(done, 0));
+  all(document.body.children.at(-1), "mmc-tl-edit")[index].listeners.click[0]();
+  const sheet = document.body.children.at(-1);
+  const tool = all(sheet, "mmc-tool-cast")[0];
+  tool?.listeners?.click?.[0]?.();
+  const host = all(sheet, "mmc-assets-host")[0];
+  const castHost = all(sheet, "mmc-cast-host")[0];
   return {
+    // The Cast tool is the card's door onto the shelf; without it the shelf
+    // below cannot be reached at all.
+    tool: !!tool,
     // The chip's title is its filename, which is the one thing that says which
     // picture is being drawn rather than which handle it wears today.
     files: all(host, "mmc-asset").map((chip) => chip.attrs?.title ?? ""),
@@ -92,22 +105,22 @@ const row = (timeline, index) => {
     // The door onto a reference's own card, which a pool entry does not open.
     doors: all(host, "mmc-asset-door").length,
     // Her files, which the shelf holds rather than the row.
-    shelf: all(editor.castHost, "mmc-cast-ref").map((tile) => tile.dataset.handle),
+    shelf: all(castHost, "mmc-cast-ref").map((tile) => tile.dataset.handle),
   };
 };
 
 // ---- the row ----------------------------------------------------------------
 
 // One shot: her picture is on the card, and the card owns it outright.
-out.lone = row(piece([card1()]), 0);
+out.lone = await row(piece([card1()]), 0);
 
 // Grown. Her picture is the piece's now, and both cards write her name.
 const grown = piece([card1()]);
 grown.segments.push(S.continuingSegment(grown));
 grown.segments[1].prompt = "@anna sits down";
 S.syncTimeline(grown);
-out.grown1 = row(grown, 0);
-out.grown2 = row(grown, 1);
+out.grown1 = await row(grown, 0);
+out.grown2 = await row(grown, 1);
 out.grownPool = grown.assets.map((a) => `${a.handle}:${a.filename}`);
 
 // A card that says nothing about her draws nothing of hers — the row is about
@@ -116,7 +129,7 @@ const quiet = piece([card1()]);
 quiet.segments.push(S.continuingSegment(quiet));
 quiet.segments[1].prompt = "an empty room";
 S.syncTimeline(quiet);
-out.quiet = row(quiet, 1);
+out.quiet = await row(quiet, 1);
 
 // The card's own files and the piece's, in one row: the card's lead, and only
 // the card's carry the two buttons.
@@ -125,7 +138,7 @@ both.segments.push(S.continuingSegment(both));
 both.segments[1].prompt = "@anna sits by @img-1";
 both.segments[1].assets = [image("img-1", "chair.png")];
 S.syncTimeline(both);
-out.both = row(both, 1);
+out.both = await row(both, 1);
 
 // A piece file nobody is built out of, cited by its own handle: the row still
 // draws it as the piece's, since no shelf holds it.
@@ -135,13 +148,12 @@ S.syncTimeline(loose);
 loose.assets.push(image("ref-5", "lamp.png"));
 loose.segments[1].prompt = "@anna by @ref-5";
 S.syncTimeline(loose);
-out.loose = row(loose, 1);
+out.loose = await row(loose, 1);
 
 // The shelf's own readout of her picture, when a card cites the *file* and
 // not her. "in shots 1, 2" was read off the shots that write her name alone,
 // so a third card saying `@ref-1` was in the compile and off the shelf.
 {
-  const { openTimeline } = await import("./web/creator/timeline.js");
   const timeline = S.parseTimeline(JSON.stringify({
     version: 2, prompt: "", aspect: "16:9", short_edge: 720,
     assets: [image("ref-1", "anna.png")],
@@ -215,6 +227,10 @@ with layout.pack(skip=["atlas"]) as target:
     got = layout.in_pack(CHECK.replace('await import("./dom.mjs");', DOM), target)
 
 # ---- the row ----------------------------------------------------------------
+
+for name in ("lone", "grown1", "grown2", "quiet", "both", "loose"):
+    check(f"{name}: the card carries the Cast tool, its door onto the shelf (#124)",
+          got[name]["tool"], True)
 
 lone = got["lone"]
 check("one shot: her picture is on the shelf, under her", lone["shelf"], ["img-1"])
