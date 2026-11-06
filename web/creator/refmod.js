@@ -231,17 +231,76 @@ export function modTokens(entry, mode, onKnown, space = DEFAULT_SPACE) {
 // `makeRefMod` and friends invalidate that cache, so asking again is cheap and
 // always current; what is kept here is the synchronous view a redraw reads.
 let known = new Map();
+// When the listing last landed (0: never), and the one on its way, so a
+// redraw asking about twenty tiles asks the server once.
+let listedAt = 0;
+let pending = null;
+// How old a listing may be before a redraw asks again: files deleted on disk
+// behind the page's back are noticed, without a request per redraw.
+const STALE_MS = 30000;
 export async function modRows() {
   const rows = await listAssets({ root: "refmods" });
   known = new Map(rows.map((row) => [row.path, row]));
+  listedAt = Date.now();
   return known;
 }
+function refresh() {
+  if (!pending) pending = modRows().finally(() => { pending = null; });
+  return pending;
+}
+// What a redraw would draw differently about one mod: there or not, and what
+// it costs. A fresh listing that changes none of it redraws nothing.
+const rowKey = (row) => (row ? `${row.mode}|${row.tokens}|${row.size}|${row.source_present}` : String(row));
 /** The listing row of one mod, or undefined while the listing is on its way
- *  (`onKnown` fires when it lands) — or null for a mod the listing lacks. */
+ *  — or null for a mod the listing lacks: its file is gone.
+ *
+ *  `onKnown` fires only when what the answer would be has changed. It used to
+ *  fire after every listing a missing mod asked for, so a member whose file
+ *  had been deleted asked again on the redraw that drew it, forever: the
+ *  listing endpoint hammered and the card redrawn under the cursor too fast
+ *  to open, edit or delete (issue #121). */
 export function modRow(path, onKnown) {
-  if (known.has(path)) return known.get(path);
-  modRows().then(() => onKnown?.(), () => {});
-  return known.size ? null : undefined;
+  const now = known.has(path) ? known.get(path) : listedAt ? null : undefined;
+  if (!listedAt || Date.now() - listedAt > STALE_MS) {
+    refresh().then(() => {
+      if (rowKey(known.get(path) ?? null) !== rowKey(now)) onKnown?.();
+    }, () => {});
+  }
+  return now;
+}
+
+/** The renditions `entries` carry in `space` whose files are gone from
+ *  models/refmods, by path. Empty while the listing is on its way. */
+export function missingMods(entries, space = DEFAULT_SPACE, onKnown = null) {
+  return entries
+    .map((entry) => entry?.mods?.[space])
+    .filter((path) => path && modRow(path, onKnown) === null);
+}
+
+/**
+ * Take `space`'s renditions off `files` — every one, or only those in `paths`
+ * — so the pictures are pictures again for that family and can be saved
+ * afresh. -> how many were taken off.
+ *
+ * Only the reference is forgotten; the file stays in models/refmods, where
+ * another piece or a workflow may still cite it, and the library's Saved
+ * references column is where it is deleted. A rendition whose file has gone
+ * is the case this exists for: the render refuses it by name (`encode._mod_of`)
+ * and nothing else in the card could take it off.
+ */
+export function forgetMods(files, space = DEFAULT_SPACE, paths = null) {
+  const only = paths ? new Set(paths) : null;
+  let count = 0;
+  for (const file of files ?? []) {
+    const path = file?.mods?.[space];
+    if (!path || (only && !only.has(path))) continue;
+    const rest = { ...file.mods };
+    delete rest[space];
+    if (Object.keys(rest).length) file.mods = rest;
+    else delete file.mods;
+    count += 1;
+  }
+  return count;
 }
 
 /** What a listing row is, in the ledger's words: a stack, or compressed / full. */
@@ -265,14 +324,17 @@ const long = (n) => n.toLocaleString();
  */
 export function cost(entries, canvas, onKnown, space = DEFAULT_SPACE) {
   const out = { pictures: 0, clips: 0, mods: 0, picTokens: 0, modTokens: 0, modes: new Set(),
-                exact: true, rows: [] };
+                exact: true, rows: [], missing: [] };
   for (const entry of entries) {
     const path = modIn(entry, space);
     if (path) {
       out.mods += 1;
       const row = modRow(path, onKnown);
       if (row) { out.modTokens += row.tokens ?? 0; out.modes.add(row.mode); out.rows.push(row); }
-      else out.exact = false;
+      else {
+        out.exact = false;
+        if (row === null) out.missing.push(path);
+      }
     } else if (entry.kind === "video") {
       // A clip's tokens are its latent frames times a 768-edge grid — a number
       // that needs the clip's length, which nothing here has. Counted, not
@@ -379,39 +441,54 @@ function rowAspect(row) {
 }
 
 /**
- * The re-encode menu's rows: every per-picture mode the member's mods are not
- * already all in, each naming what their mods would cost in it, and where the
- * picture to read comes from. A stack has no rows — it was several files, and
+ * The re-encode menu's rows: one per per-picture mode, each naming what their
+ * mods would cost in it and where the picture to read comes from. A stack and
+ * a clip have no rows — they were several files, or a run of frames, and
  * saving the member again is how one is remade.
  *
+ * A mode the mods are in already is offered too, as an encode *again* from the
+ * picture: the way to redo one that came out wrong, or that was made before
+ * the picture was fixed (issue #121 — the menu used to offer only the mode a
+ * mod was not in, so a bad one could never be redone).
+ *
  * A mod whose picture has gone can still be *compressed*: the full file is the
- * encode, and the grid is pooled and refined against it. It cannot be made
- * full again, and the row says so rather than queueing a refusal.
+ * encode, and the grid is pooled and refined against it. Nothing else can be
+ * made of it. Those are left out of a row rather than sinking it, the row says
+ * how many, and a row with nothing it can do is drawn disabled.
  */
 export function remakeRows(rows, onPick) {
-  const stills = rows.filter((row) => row.source !== "stack");
+  const stills = rows.filter((row) => row && row.source !== "stack" && row.kind !== "video");
   if (!stills.length) return [];
-  return MODES.filter((mode) => mode.key !== "stack").flatMap((mode) => {
+  return MODES.filter((mode) => mode.key === "compressed" || mode.key === "full").map((mode) => {
     const current = mode.key === "compressed" ? "training" : "encode";
-    const targets = stills.filter((row) => row.mode !== current);
-    if (!targets.length) return [];
-    const stuck = targets.filter((row) => !row.source_present && mode.key === "full");
+    // From the picture where it is there; from the file's own full encode
+    // where only that is left and the mode asked for is compressed.
+    const doable = (row) => row.source_present || (mode.key === "compressed" && row.mode === "encode");
+    const targets = stills.filter(doable);
+    const stuck = stills.length - targets.length;
+    const again = targets.length > 0 && targets.every((row) => row.mode === current);
     const tokens = targets.reduce((sum, row) => sum + (mode.key === "compressed"
       ? Math.round(COMPRESSED_TOKENS / rowAspect(row))
       : Math.round(FULL_TOKENS * rowAspect(row))), 0);
-    const from = targets.every((row) => row.source_present)
-      ? t("From {file}", { file: targets.map((row) => row.source_file).join(", ") })
-      : stuck.length
-        ? t("The picture it was made of is not in the input folder any more — attach it "
-          + "again and save the member instead.")
+    const from = !targets.length
+      ? t("The picture it was made of is not in the input folder any more — attach it "
+        + "again and save the member instead.")
+      : targets.every((row) => row.source_present)
+        ? t("From {file}", { file: targets.map((row) => row.source_file).join(", ") })
         : t("Pooled from the full encode already in the file — the picture it was "
           + "made of is not in the input folder any more.");
-    return [{
-      label: t("{mode} — {tokens} tokens", { mode: t(mode.label), tokens: `≈${long(tokens)}` }),
-      note: `${t(mode.note)} ${from}`,
-      disabled: stuck.length > 0,
+    const skipped = stuck && targets.length
+      ? ` ${t(stuck === 1 ? "{count} is left as it is — its picture is not in the input folder any more."
+                          : "{count} are left as they are — their pictures are not in the input folder any more.",
+              { count: stuck })}`
+      : "";
+    return {
+      label: t(again ? "{mode} again — {tokens} tokens" : "{mode} — {tokens} tokens",
+               { mode: t(mode.label), tokens: `≈${long(tokens)}` }),
+      note: `${t(mode.note)} ${from}${skipped}`,
+      disabled: !targets.length,
       onPick: () => onPick(mode.key, targets.map((row) => row.path)),
-    }];
+    };
   });
 }
 

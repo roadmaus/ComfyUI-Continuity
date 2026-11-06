@@ -6,6 +6,23 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Saving a member again never overwrites another picture's RefMod, and a
+saved reference can be redone or forgotten (#121).** A make job named its
+mods `<member>`, `<member>-2`, ... counting from the first picture it was
+handed, and saving a member again hands it only the pictures not saved yet,
+so a swapped picture's new mod was written over the first picture's file and
+the face quietly became the swapped-in sheet. A new mod now takes the first
+name no file answers to. A rendition whose file had been deleted sent the
+ledger into a loop, asking the listing again on every redraw it caused, which
+hammered `/continuity/assets?root=refmods` and redrew the card too fast to
+open, edit or delete; the listing is now asked once and redraws only on a
+changed answer, and the card says which saved references are gone and offers
+to forget them. The re-encode menu offers the mode a mod is in already, as an
+encode again from its picture, and is drawn wherever a member has saved
+references, alongside "Forget the saved references", which takes them off the
+pictures (the files stay in models/refmods, for whatever else cites them) so
+they can be saved afresh.
+
 **Every render previews, with or without KJNodes.** The live picture in the
 node came from KJNodes' Model Preview Override and nothing else, so an install
 without that pack sampled behind an empty box on every family, video and still,
