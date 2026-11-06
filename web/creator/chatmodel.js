@@ -27,7 +27,7 @@
 import { el, icon, placeNear, dismissable } from "./dom.js";
 import { openChoicePopover, stepperPill } from "./pills.js";
 import { settings as refinerSettings, saveSettings as saveRefiner, chosenModel,
-         listModels, drawRemoteCard, remoteStatus, seedControl, takesSeed } from "./refine.js";
+         listModels, listDevices, drawRemoteCard, remoteStatus, seedControl, takesSeed } from "./refine.js";
 import { rememberedWeights } from "./models.js";
 import { neuralSwitch } from "./neural.js";
 import { FAMILIES } from "./manifest.js";
@@ -91,6 +91,7 @@ export function openThinker(anchor, { rail, setRail, skills, onChange }) {
   const pop = el("div", { class: "mmc-pop mmc-ch-thinker" });
   const backendHost = el("div", { class: "mmc-refine-seg" });
   const modelHost = el("div", { class: "mmc-refine-models" });
+  const deviceHost = el("div", { class: "mmc-ch-device-host" });
   const noteHost = el("div", { class: "mmc-refine-hint mmc-refine-note" });
   const writesHost = el("div", { class: "mmc-ch-writes" });
 
@@ -129,9 +130,37 @@ export function openThinker(anchor, { rail, setRail, skills, onChange }) {
 
   /** The list, filtered to what can think, each with what it is beside it. */
   async function drawModels(force = false) {
-    if (refinerSettings().backend === "remote") return drawRemoteCard(modelHost, changed, force);
+    if (refinerSettings().backend === "remote") {
+      deviceHost.replaceChildren();
+      return drawRemoteCard(modelHost, changed, force);
+    }
     modelHost.replaceChildren(el("div", { class: "mmc-refine-hint", text: t("Looking for models…") }));
-    const names = (await listModels({ force })).filter((name) => !NOT_A_THINKER.test(name));
+    const available = await listModels({ force });
+    const choices = await listDevices();
+    const devices = choices.includes("default") ? choices : ["default", ...choices];
+    const names = available.filter((name) => !NOT_A_THINKER.test(name));
+    if (devices.length > 1) {
+      const savedDevice = refinerSettings().chatDevice || "default";
+      const selected = devices.includes(savedDevice) ? savedDevice : "default";
+      deviceHost.replaceChildren(el("div", { class: "mmc-ch-device-line" }, [
+        el("span", { class: "mmc-ch-k", text: t("LLM device") }),
+        el("button", {
+          class: "mmc-pill mmc-ch-value",
+          text: selected === "default" ? t("ComfyUI default") : selected,
+          title: t("Choose the device used to load the local chat model."),
+          onclick: (event) => openChoicePopover(event.currentTarget, {
+            title: t("Local LLM device"),
+            options: devices,
+            value: selected,
+            label: (device) => device === "default" ? t("ComfyUI default") : device,
+            onPick: (device) => {
+              saveRefiner({ chatDevice: device === "default" ? "" : device });
+              changed(); drawModels();
+            },
+          }),
+        }),
+      ]));
+    } else deviceHost.replaceChildren();
     if (!names.length) {
       modelHost.replaceChildren(el("div", { class: "mmc-refine-empty" }, [
         el("div", { text: t("No model here can chat yet.") }),
@@ -225,13 +254,23 @@ export function openThinker(anchor, { rail, setRail, skills, onChange }) {
               + "What a render samples on is another number, the room's own die."))
         : line(t("Seed"), el("span", { class: "mmc-refine-hint", text: t("this server takes none") }),
                t("Claude's API has no seed, so every reply is a fresh roll whatever is set here.")),
-      line(t("Reply length"), stepperPill({
-        value: Number(bar.reply_tokens) || 1024, ...REPLY_TOKENS, width: "62px",
-        format: (n) => t("{n} tokens", { n }),
-        onChange: (next) => { setRail({ reply_tokens: next }); drawWrites(); },
-      }), t("How many tokens a reply may run to. A reply is a line and one prompt, "
-            + "so this stays small: on one card the model reserves memory for the "
-            + "whole budget before it writes, and a large one slows every word.")),
+      line(t("Reply length"), (() => {
+        const value = Number(bar.reply_tokens) || 1024;
+        const readout = el("span", { class: "mmc-ch-token-count", text: t("{n} tokens", { n: value }) });
+        const slider = el("input", {
+          class: "mmc-ch-token-slider", type: "range",
+          min: REPLY_TOKENS.min, max: REPLY_TOKENS.max, step: REPLY_TOKENS.step,
+          value,
+          "aria-label": t("Reply length"),
+          onpointerdown: (event) => event.stopPropagation(),
+          oninput: (event) => {
+            const next = Number(event.currentTarget.value);
+            readout.textContent = t("{n} tokens", { n: next });
+          },
+          onchange: (event) => setRail({ reply_tokens: Number(event.currentTarget.value) }),
+        });
+        return el("div", { class: "mmc-ch-token-control" }, [slider, readout]);
+      })(), t("How many tokens a reply may run to. Lower this to reduce the local model's reserved generation memory; raise it if replies are being cut off.")),
       ...magicRows(bar),
     );
   }
@@ -270,6 +309,7 @@ export function openThinker(anchor, { rail, setRail, skills, onChange }) {
                 text: t("Turns what you say into a prompt. The same choice as the node's "
                         + "Refine button, so it is set once.") }),
     modelHost,
+    deviceHost,
     noteHost,
     el("div", { class: "mmc-ch-rule" }),
     writesHost,

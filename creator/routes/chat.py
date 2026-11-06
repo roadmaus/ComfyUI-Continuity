@@ -575,6 +575,14 @@ def _ask(block, system, message):
     the plan off before it was written. `json_object` finds the brace either way.
     """
     ask, _look = refine_routes._backend(block)
+    device = str(block.get("device") or "").strip()
+    options = {}
+    if block.get("backend") != "remote" and device:
+        if device not in core_models.device_options():
+            raise refine.RefineError(
+                f"the selected local LLM device '{device}' is no longer available"
+            )
+        options["device"] = device
     return ask(
         block.get("model") or "",
         system, message, [],
@@ -588,6 +596,7 @@ def _ask(block, system, message):
         # reserves a KV cache of the prompt plus this.
         max_tokens=chat.reply_tokens(block.get("reply_tokens")),
         prefill="",
+        **options,
     )
 
 

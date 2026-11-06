@@ -6,6 +6,12 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The chat's local LLM can use a chosen CUDA device and a smaller reply budget.**
+The Thinks with settings now expose the device choices from ComfyUI-MultiGPU and
+a reply-length slider. Pinning moves the local text encoder through ComfyUI's
+model loader, and changing devices reloads it; reducing the budget lowers the
+generation cache reservation. Remote backends ignore the device choice.
+
 **A card in the Timeline window shows its cast's pictures again, and can
 change them (#124).** Since a member's files moved off the reference row and
 onto the cast shelf, a card drew no shelf of its own and no Cast tool, and

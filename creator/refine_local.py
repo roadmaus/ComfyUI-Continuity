@@ -81,7 +81,7 @@ def list_models():
 
 # ---- the model --------------------------------------------------------------
 
-_loaded = {"name": None, "clip": None}
+_loaded = {"name": None, "device": None, "clip": None}
 
 
 def _check(clip, name):
@@ -115,7 +115,7 @@ def _check(clip, name):
     return clip
 
 
-def load(name):
+def load(name, device=""):
     """The chosen text encoder, loaded once and kept.
 
     Kept because the alternative is reading several gigabytes off disk every
@@ -126,7 +126,10 @@ def load(name):
     """
     if not (name or "").strip():
         raise refine.RefineError("no text encoder chosen")
-    if _loaded["name"] == name and _loaded["clip"] is not None:
+    device = str(device or "").strip()
+    if device == "default":
+        device = ""
+    if _loaded["name"] == name and _loaded["device"] == device and _loaded["clip"] is not None:
         return _loaded["clip"]
 
     import comfy.sd
@@ -138,9 +141,15 @@ def load(name):
 
     path = folder_paths.get_full_path_or_raise("text_encoders", name)
     try:
+        model_options = {}
+        if device:
+            import torch
+
+            model_options["load_device"] = torch.device(device)
         clip = comfy.sd.load_clip(
             ckpt_paths=[path],
             embedding_directory=folder_paths.get_folder_paths("embeddings"),
+            model_options=model_options,
         )
     except refine.RefineError:
         raise
@@ -148,7 +157,7 @@ def load(name):
         raise refine.RefineError(f"'{name}' could not be loaded as a text encoder: {exc}") from exc
 
     _check(clip, name)
-    _loaded.update(name=name, clip=clip)
+    _loaded.update(name=name, device=device, clip=clip)
     return clip
 
 
@@ -182,7 +191,7 @@ def unload():
         mm.unload_model_and_clones(_loaded["clip"].patcher)
     except Exception:  # noqa: BLE001 — best effort; the reference below is what matters
         pass
-    _loaded.update(name=None, clip=None)
+    _loaded.update(name=None, device=None, clip=None)
     gc.collect()
 
 
@@ -245,7 +254,7 @@ def _progress_context():
 
 
 def chat(name, system, message, images=(), temperature=0.7, seed=-1, max_tokens=None,
-         prefill=refine.PREFILL):
+         prefill=refine.PREFILL, device=""):
     """One generation -> the assistant's raw content string.
 
     The returned string carries the prefill back, because that is what the
@@ -259,7 +268,7 @@ def chat(name, system, message, images=(), temperature=0.7, seed=-1, max_tokens=
     truncated to fit anything, and `BaseGenerate.generate` reserves a KV cache of
     the prompt's length plus this.
     """
-    clip = load(name)
+    clip = load(name, device=device)
     max_tokens = refine.reply_tokens(max_tokens) if max_tokens is not None else MAX_TOKENS
 
     prompt = refine.chatml(system, message, images=len(images), prefill=prefill)

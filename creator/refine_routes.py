@@ -31,7 +31,7 @@ from aiohttp import web
 
 from server import PromptServer
 
-from . import compile as compiler, jobs, media, preview, refine_local, refine_remote, refine_skill
+from . import compile as compiler, jobs, media, models as core_models, preview, refine_local, refine_remote, refine_skill
 from .families import refine
 from .guard import same_origin
 
@@ -1002,7 +1002,7 @@ async def refine_models(request):
     """
     loop = asyncio.get_running_loop()
     names = await loop.run_in_executor(None, refine_local.list_models)
-    return web.json_response({"models": names})
+    return web.json_response({"models": names, "devices": core_models.device_options()})
 
 
 @PromptServer.instance.routes.get("/continuity/refine/remote")

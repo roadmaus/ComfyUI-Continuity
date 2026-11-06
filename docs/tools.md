@@ -578,6 +578,9 @@ What is the room's own is in the composer's foot and behind the gear:
   wins over the dial where the two disagree. *Set up again* asks the three
   questions afresh.
 - **The model** is in the bar — this ComfyUI, or a server you already run.
+  On a local backend, the Thinks with popover can pin the LLM to a device
+  offered by ComfyUI-MultiGPU. Its **Reply length** slider sets the maximum
+  generated tokens; a lower value reduces the local model's reserved cache.
 - **Magic prompt**, in the model's popover, is for pictures on Ideogram 4.0.
   Ideogram was trained on a structured JSON caption rather than a sentence,
   and without this the room wraps its sentence into the smallest caption

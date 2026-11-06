@@ -58,6 +58,9 @@ const DEFAULTS = {
   // key live server-side (see `refine_remote.py`), so neither this store nor
   // the workflow blob ever holds an address or a credential.
   backend: "local",
+  // Local chat generation may be pinned to a device exposed by
+  // ComfyUI-MultiGPU. Empty means ComfyUI's normal text-encoder placement.
+  chatDevice: "",
   // The server's model, kept apart from the text encoder's name so switching
   // backends and back loses neither choice.
   remoteModel: "",
@@ -279,6 +282,7 @@ export function seedControl(changed, titles) {
 }
 
 let modelCache = { at: 0, names: [] };
+let deviceCache = [];
 
 /** The text encoders on disk. Empty means the folder is bare — which the
  *  settings popover says, rather than showing a blank list. */
@@ -288,10 +292,18 @@ export async function listModels({ force = false } = {}) {
     const response = await api.fetchApi("/continuity/refine/models");
     const body = await response.json();
     modelCache = { at: Date.now(), names: body.models ?? [] };
+    deviceCache = body.devices ?? [];
   } catch {
     modelCache = { at: Date.now(), names: [] };
   }
   return modelCache.names;
+}
+
+/** Devices exposed by the installed ComfyUI-MultiGPU CLIP loader. */
+export async function listDevices({ force = false } = {}) {
+  if (!force && Date.now() - modelCache.at < 20000) return deviceCache;
+  await listModels({ force });
+  return deviceCache;
 }
 
 // What the browser may know about the remote endpoint: the URL, and *whether*

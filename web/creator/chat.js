@@ -660,6 +660,7 @@ function requestBlock(sync) {
   return {
     backend: current.backend === "remote" ? "remote" : "local",
     model: chosenModel(current),
+    device: current.chatDevice || "",
     temperature: current.temperature,
     seed: current.seed,
     max_tokens: current.maxTokens,

@@ -518,6 +518,10 @@ export const css = `
 .mmc-ch-makes { width: 540px; max-width: calc(100vw - 24px); max-height: calc(100vh - 80px); overflow-y: auto; padding: 10px 14px 12px; }
 .mmc-ch-thinker { width: 400px; max-width: calc(100vw - 24px); max-height: calc(100vh - 80px); overflow-y: auto; padding: 10px 12px 12px; }
 .mmc-ch-thinker-lead { padding: 0 8px 8px; }
+.mmc-ch-device-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px; border-top: 1px solid var(--mmc-line); }
+.mmc-ch-token-control { display: flex; align-items: center; gap: 9px; width: 100%; }
+.mmc-ch-token-slider { flex: 1; min-width: 90px; accent-color: var(--mmc-blue); }
+.mmc-ch-token-count { min-width: 68px; text-align: right; color: var(--mmc-text); font-variant-numeric: tabular-nums; }
 .mmc-ch-writes .mmc-ch-line:first-child { border-top: 0; }
 .mmc-ch-gearhead {
   display: flex; align-items: center; gap: 8px; min-height: var(--mmc-pill-h);
