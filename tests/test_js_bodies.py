@@ -1985,12 +1985,13 @@ try {
   out.errors.push(`cast fold: ${error.stack}`);
 }
 
-// ---- a card in the Timeline window hands the press to the window's shelf ---
+// ---- a card in the Timeline window carries the cast's shelf itself (#124) ---
 //
-// The window has the piece's shelf a few rows down. A card's editor used to
-// summon a second one inside the card — two places to edit one person — so a
-// card is told the window has one (`openCast`), draws none and no Cast tool,
-// and a name pressed in it opens the member on the window's.
+// The card is a sheet over the window, so the window's shelf is behind it. A
+// card that drew none, with a member's files kept off its reference row, showed
+// nobody's picture and had no way to change one: #91, back as #124. So the card
+// draws the piece's shelf and the Cast tool, built exactly as `timeline.edit`
+// builds it, and a name pressed in it opens the member right there.
 try {
   const findAll = (root, cls) => {
     const hits = [];
@@ -2003,34 +2004,34 @@ try {
   };
   const node = fakeNode("MiniMaxH3Timeline", "timeline_data", JSON.stringify({
     version: 2, render: "chained", prompt: "", aspect: "16:9", short_edge: 768,
-    assets: [],
-    subjects: [{ handle: "vera", takes: "person", from: [] }],
+    assets: [{ handle: "ref-1", kind: "image", role: "reference", filename: "vera.png",
+               ref_size: "max" }],
+    subjects: [{ handle: "vera", takes: "person", from: ["ref-1"] }],
     segments: [{ prompt: "@vera waits", duration_s: 5, assets: [], loras: [] },
-               { prompt: "shot 2", duration_s: 5, assets: [], loras: [] }],
+               { prompt: "@vera leaves", duration_s: 5, assets: [], loras: [] }],
   }));
   await ext.nodeCreated(node);
   const timeline = node.mmcBody.timeline;
   const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
   openTimelineModal({ timeline, onCommit: () => node.mmcBody.commit() });
   await new Promise((done) => setTimeout(done, 0));
-  const win = document.body.children.at(-1);
-  const openOnWindow = () => findAll(win, "mmc-cast-card")
-    .filter((c) => String(c.className).split(" ").includes("open"))
-    .map((c) => findAll(c, "mmc-cast-name")[0]?.attrs?.value ?? null);
-  const beforePress = openOnWindow();
-  findAll(win, "mmc-tl-edit")[0].listeners.click[0]();
+  findAll(document.body.children.at(-1), "mmc-tl-edit")[1].listeners.click[0]();
   const sheet = document.body.children.at(-1);
+  const castHost = () => findAll(sheet, "mmc-cast-host")[0];
+  const tiles = () => findAll(castHost() ?? sheet, "mmc-cast-ref").map((t) => t.dataset.handle);
+  const tool = findAll(sheet, "mmc-tool-cast")[0] ?? null;
+  const folded = (castHost()?.children ?? []).length;
   const box = findAll(sheet, "mmc-prompt")[0];
   box.listeners?.click?.forEach((fn) => fn({
     target: box.querySelectorAll('.mmc-ref-cast[data-handle="vera"]')[0],
     preventDefault() {}, stopPropagation() {},
   }));
+  const opened = findAll(castHost() ?? sheet, "mmc-cast-card")
+    .filter((c) => String(c.className).split(" ").includes("open"))
+    .map((c) => findAll(c, "mmc-cast-name")[0]?.attrs?.value ?? null);
   out.castCard = {
-    // The card draws no shelf and no Cast tool of its own...
-    noShelf: findAll(sheet, "mmc-cast").length === 0,
-    noTool: findAll(sheet, "mmc-tool-cast").length === 0,
-    // ...and the press opened them on the window's.
-    beforePress, onWindow: openOnWindow(),
+    tool: !!tool, toolCount: tool?.text?.includes("1") ?? false,
+    folded, opened, tiles: tiles(),
   };
 } catch (error) {
   out.errors.push(`cast card: ${error.stack}`);
@@ -4053,11 +4054,13 @@ check("the rail's tool brings it up", fold.get("toggledUp"), 1)
 check("...and folds it again", fold.get("toggledDown"), 0)
 
 card = report.get("castCard", {})
-check("a card in the Timeline window draws no shelf of its own", card.get("noShelf"), True)
-check("...and no Cast tool", card.get("noTool"), True)
-check("...nobody was open on the window's shelf before", card.get("beforePress"), [])
-check("...and a name pressed in it opens them on the window's shelf",
-      card.get("onWindow"), ["vera"])
+check("a card in the Timeline window carries the Cast tool (#124)", card.get("tool"), True)
+check("...wearing the head count", card.get("toolCount"), True)
+check("...with its shelf folded until asked for", card.get("folded"), 0)
+check("a name pressed in the card opens them on the card's own shelf",
+      card.get("opened"), ["vera"])
+check("...where her picture is, though it lives in the piece's pool",
+      card.get("tiles"), ["ref-1"])
 
 # The same fold, after the face's editor was rebuilt under the open shell —
 # which is what applying a preset that carries a strip does. Folded is every
