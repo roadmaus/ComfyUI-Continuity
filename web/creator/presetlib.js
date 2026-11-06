@@ -37,7 +37,7 @@ import { el, icon, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
 import { deleteRefMod, describeRefMod, isRefMod, makeRefMod, moveRefMod, renderMeta, stillUrl,
          uploadRefMod, viewUrl } from "./api.js";
-import { DEFAULT_SPACE, SUBFOLDER as MOD_FOLDER, castFamilies, modIn, modRow, modRows, modeWord, remakeMods, remakeRows } from "./refmod.js";
+import { DEFAULT_SPACE, SUBFOLDER as MOD_FOLDER, castFamilies, forgetMods, modIn, modRow, modRows, modeWord, remakeMods, remakeRows } from "./refmod.js";
 import { WearsPanel } from "./wears.js";
 import { rememberedWeights } from "./models.js";
 import { atlasRef } from "./presets/atlasref.js";
@@ -221,6 +221,7 @@ class PresetLibrary {
       canSave: () => Boolean(this.target?.vae),
       save: (member, mode, family) => this.keepAsMod(member, mode, family),
       remake: (member, mode, mods, family) => this.remake(member, mode, mods, family),
+      clear: (member, family, paths) => this.forgetMods(member, family, paths),
       library: (path) => { this.reveal = path; this.closeSheet(); this.renderInspector(); },
       hangLora: (member, family, reveal) => this.addLora(member, family, reveal),
       loraMenu: (anchor, member, family, entry) => this.pickLora(anchor, member, family, entry),
@@ -1730,6 +1731,17 @@ class PresetLibrary {
       file.slot === "from" && ["image", "video"].includes(file.kind ?? "image")
       && !modIn(file, space) && !file.panels?.length
       && (mode === "stack" || (file.kind ?? "image") === (mode === "clip" ? "video" : "image")));
+  }
+
+  /** Take a stored member's renditions for one family off their pictures —
+   *  every one, or only `paths` — and save the roster. The files stay in
+   *  models/refmods; the Saved references column is where they are deleted. */
+  async forgetMods(member, family, paths = null) {
+    if (this.encoding) return;
+    const files = (member.files ?? []).filter((file) => file.slot === "from");
+    this.modNote = null;
+    if (forgetMods(files, family?.space ?? DEFAULT_SPACE, paths)) await this.flushSave();
+    this.renderSheet();
   }
 
   /** Write their mods again for one family, in place. The roster does not

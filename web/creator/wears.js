@@ -40,7 +40,9 @@ import { openMenu } from "./cast.js";
  *   note(subject)             what went wrong the last time, or null
  *   canSave()                 whether this host can encode at all (a VAE and a queue)
  *   save(subject, mode, family)       encode their pictures for one family, or for a list of them
- *   remake(subject, mode, mods, family)  write those mods again in the other mode
+ *   remake(subject, mode, mods, family)  write those mods again, in either mode
+ *   clear(subject, family, paths)  forget their renditions for that family —
+ *                             every one, or only `paths` — leaving the files
  *   library(path)             open the roster on a saved file, or null
  *   hangLora(subject, family, reveal)   the LoRA manager on their row for that family
  *   loraMenu(anchor, subject, family, entry)  the chip's own menu
@@ -119,9 +121,16 @@ export class WearsPanel {
       const saved = entries.filter((entry) => modIn(entry, family.space)).length;
       const state = saved === entries.length
         ? t("saved") : saved ? t("{saved} of {count} saved", { saved, count: entries.length }) : t("not saved");
+      // What is saved already can be encoded again from here too — a size
+      // already made is the one a bad encode needs redoing in (issue #121).
+      const mods = saved ? entries.map((entry) => modIn(entry, family.space)).filter(Boolean)
+        .map((path) => modRow(path, onKnown)).filter(Boolean) : [];
+      const again = family.vae
+        ? remakeRows(mods, (remode, paths) => this.host.remake(subject, remode, paths, family)) : [];
       return {
         head: `${t(family.label)} · ${state}`,
-        rows: familyModeRows(entries, family, (mode, one) => this.host.save(subject, mode, one), onKnown),
+        rows: [...familyModeRows(entries, family, (mode, one) => this.host.save(subject, mode, one), onKnown),
+               ...again.map((row) => ({ ...row, label: t("Re-encode saved · {label}", { label: row.label }) }))],
       };
     });
     const every = everyFamilyRows(entries, keepers, (mode, list) => this.host.save(subject, mode, list), onKnown);
@@ -318,30 +327,38 @@ export class WearsPanel {
       const mods = entries.map((entry) => modIn(entry, family.space)).filter(Boolean)
         .map((path) => modRow(path, onKnown)).filter(Boolean);
       const fresh = c.pictures + c.clips;
-      if (mode === "saved" || (!fresh && c.mods)) {
+      if (c.missing.length) {
+        // A rendition whose file has gone: the render refuses it by name, and
+        // until it is forgotten nothing here can be saved over it.
+        say("⚠", "warn");
+        say(t(c.missing.length === 1
+          ? "{count} saved reference for {family} is not in models/refmods any more — the render will refuse it."
+          : "{count} saved references for {family} are not in models/refmods any more — the render will refuse them.",
+              { count: c.missing.length, family: t(family.label) }));
+        if (this.host.clear) {
+          act(t("Forget the missing"), () => this.host.clear(subject, family, c.missing), "amber");
+        }
+      } else if (mode === "saved" || (!fresh && c.mods)) {
         say("✓", "ok");
         const modes = [...new Set(c.rows.map(modeWord))].join("/");
         say(t(c.mods === 1 ? "Saved as a RefMod for {family} · {mode} · {tokens} tokens"
                            : "Saved as {count} RefMods for {family} · {mode} · {tokens} tokens",
               { count: c.mods, family: t(family.label), mode: modes || "…",
                 tokens: c.exact ? c.modTokens.toLocaleString() : "…" }));
-        if (canSave && remakeRows(mods, () => {}).length) {
-          act(t("Re-encode ▾"), (event) => openMenu(event.currentTarget, {
-            title: t("Re-encode @{handle}'s saved looks for {family}", { handle: subject.handle, family: t(family.label) }),
-            sections: [{ rows: remakeRows(mods, (remode, paths) => this.host.remake(subject, remode, paths, family)) }],
-          }), "quiet");
-        }
+        this.modsAct(act, subject, family, entries, mods, canSave);
         if (this.host.library && mods[0]) act(t("Show in library"), () => this.host.library(mods[0].path), "quiet");
       } else if (c.mods && fresh) {
         say(t("{mods} saved, {fresh} encoded every render — ≈{tokens} tokens.",
               { mods: c.mods, fresh, tokens: shortTokens(c.picTokens + c.modTokens) }));
         if (canSave) act(t("Save the rest ▾"), (event) => this.saveOne(event.currentTarget, subject, family, entries), "amber");
+        this.modsAct(act, subject, family, entries, mods, canSave);
         if (S.sendFor(subject, family.id) !== "saved") {
           act(t("Use the saved ones"), () => { S.wearOn(subject, family.id).send = "saved"; this.host.commit(); this.host.redraw(); }, "quiet");
         }
       } else if (mode === "pictures" && c.mods) {
         say(t("A saved reference exists for {family} but the pictures are sent instead.", { family: t(family.label) }));
         act(t("Use the saved one"), () => { S.wearOn(subject, family.id).send = "saved"; this.host.commit(); this.host.redraw(); });
+        this.modsAct(act, subject, family, entries, mods, canSave);
       } else {
         const what = [c.pictures ? t(c.pictures === 1 ? "{count} picture" : "{count} pictures", { count: c.pictures }) : null,
                       c.clips ? t(c.clips === 1 ? "{count} clip" : "{count} clips", { count: c.clips }) : null]
@@ -354,6 +371,31 @@ export class WearsPanel {
     }
     if (note) line.appendChild(el("span", { class: "mmc-wears-note", text: note }));
     return line;
+  }
+
+  /** The saved references' own menu: encode them again — in the other mode,
+   *  or the same one from the picture — or forget them and start over. Drawn
+   *  wherever a member has saved references for this family, whole or in
+   *  part; forgetting needs no VAE, so it is offered where encoding is not. */
+  modsAct(act, subject, family, entries, mods, canSave) {
+    const remake = canSave
+      ? remakeRows(mods, (remode, paths) => this.host.remake(subject, remode, paths, family)) : [];
+    // Only a rendition hung on a picture can be forgotten: a look that *is*
+    // a mod — imported, or a stack — is taken off from its tile instead.
+    const hung = entries.some((entry) => entry?.mods?.[family.space]);
+    const forget = this.host.clear && hung ? [{
+      label: t("Forget the saved references"),
+      note: t("Their pictures are sent to {family} again, and can be saved afresh. The files "
+            + "stay in models/refmods, where other pieces may still use them — delete them "
+            + "from the library.", { family: t(family.label) }),
+      onPick: () => this.host.clear(subject, family, null),
+    }] : [];
+    if (!remake.length && !forget.length) return;
+    act(t(remake.length ? "Re-encode ▾" : "Saved references ▾"), (event) => openMenu(event.currentTarget, {
+      title: t("@{handle}'s saved references for {family}", { handle: subject.handle, family: t(family.label) }),
+      sections: [...(remake.length ? [{ head: t("Encode again"), rows: remake }] : []),
+                 ...(forget.length ? [{ head: t("Start over"), rows: forget }] : [])],
+    }), "quiet");
   }
 
   saveOne(anchor, subject, family, entries) {

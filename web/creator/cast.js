@@ -58,7 +58,7 @@ import { createDisclosure } from "./disclosure.js";
 import { isVisualReference, previewable, openReferencePreview } from "./reference-preview.js";
 import { t } from "./i18n.js";
 import { loraBase, openLoras } from "./loras.js";
-import { DEFAULT_SPACE, costMark, keepable, looks, modIn, remakeMods } from "./refmod.js";
+import { DEFAULT_SPACE, costMark, forgetMods, keepable, looks, modIn, remakeMods } from "./refmod.js";
 import * as S from "./state.js";
 import { WearsPanel } from "./wears.js";
 
@@ -571,6 +571,7 @@ export class CastShelf {
       canSave: () => Boolean(this.mod && this.vae),
       save: (subject, mode, family) => this.keepAsMod(subject, mode, family),
       remake: (subject, mode, mods, family) => this.remake(subject, mode, mods, family),
+      clear: (subject, family, paths) => this.forgetMods(subject, family, paths),
       library: this.library ? (path) => this.library({ reveal: path }) : null,
       hangLora: (subject, family, reveal) => this.addLora(subject, family, reveal),
       loraMenu: (anchor, subject, family, entry) => this.pickLora(anchor, subject, family, entry),
@@ -1110,6 +1111,17 @@ export class CastShelf {
     }
     this.encoding = null;
     this.render();
+  }
+
+  /** Take their renditions for one family off their pictures — every one,
+   *  or only `paths` — so the pictures are pictures again there and can be
+   *  saved afresh. The files stay where they are (`refmod.forgetMods`). */
+  forgetMods(subject, family, paths = null) {
+    if (this.encoding) return;
+    const space = family?.space ?? DEFAULT_SPACE;
+    this.modNote = null;
+    if (forgetMods(this.looks(subject), space, paths)) this.save();
+    else this.render();
   }
 
   /** Encode them for one family — or, handed a list, for each in turn: the

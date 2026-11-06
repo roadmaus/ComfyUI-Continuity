@@ -152,6 +152,36 @@ def _stem(name, space):
     return name if space == refmod.DEFAULT_SPACE else f"{name}.{space}"
 
 
+def _on_disk(target):
+    try:
+        refmod.resolve(refmod.SCHEME + target)
+        return True
+    except refmod.RefModError:
+        return False
+
+
+def _targets(name, subfolder, space, count):
+    """`count` names for new mods: `name`, `name-2`, `name-3`, ... skipping
+    every one a file already answers to. A new mod never lands on an old one.
+
+    The first version numbered a job's sources from `name` up, so saving a
+    member again after swapping one picture wrote that picture's mod over the
+    first picture's file — and the face quietly became whatever was swapped in
+    (issue #121). A mod is somebody's picture, cited by name from pieces and
+    workflows this job knows nothing of; the only safe name is a free one.
+    One job runs at a time (`jobs`), so names picked here stay free until
+    they are written.
+    """
+    out, n = [], 1
+    while len(out) < count:
+        stem = _stem(name if n == 1 else f"{name}-{n}", space)
+        target = f"{subfolder}/{stem}" if subfolder else stem
+        if not _on_disk(target):
+            out.append(target)
+        n += 1
+    return out
+
+
 # A clip on its own (`mode: "clip"`): how much of it is read and how many of
 # its frames are sampled by default — the stack's numbers, and the same
 # `n % 17 == 5` run core's reference path takes whole. Up to `CLIP_SECONDS_MAX`
@@ -243,6 +273,7 @@ def _run_clips(body, sources, family, table):
 
     vae = _vae(str(body.get("vae") or ""), space)
     crops = _crops(body, sources)
+    targets = _targets(name, subfolder, space, len(sources))
     rows = []
     for index, source in enumerate(sources):
         base = index / len(sources)
@@ -256,8 +287,7 @@ def _run_clips(body, sources, family, table):
             latent = refmod.compress(latent, grid, steps,
                                      tell=lambda f, p=progress: p(0.3 + 0.7 * f))
         pool = "x".join(str(v) for v in latent.shape[2:])
-        stem = name if index == 0 else f"{name}-{index + 1}"
-        target = f"{subfolder}/{_stem(stem, space)}" if subfolder else _stem(stem, space)
+        target = targets[index]
         path = refmod.save(target, latent, {
             "kind": "video", "mode": "training" if compressed else "encode",
             "source": "video", "source_shape": full_shape, "pool": pool,
@@ -316,7 +346,7 @@ def _run_stack(body, sources):
         tell(0.3 * (index + 1) / len(sources))
     stacked, kept = refmod.stack(latents, grid, steps, max_tokens=max_tokens,
                                  tell=lambda f: tell(0.3 + 0.7 * f))
-    target = f"{subfolder}/{_stem(name, space)}" if subfolder else _stem(name, space)
+    [target] = _targets(name, subfolder, space, 1)
     path = refmod.save(target, stacked, {
         "kind": "video", "mode": "training", "source": "stack",
         "source_shape": " +".join(shapes),
@@ -386,6 +416,7 @@ def _run_job(body):
 
     vae = _vae(str(body.get("vae") or ""), space)
     crops = _crops(body, sources)
+    targets = _targets(name, subfolder, space, len(sources))
     rows = []
     for index, source in enumerate(sources):
         image = media.load_image(source, crop=crops[index])
@@ -394,9 +425,7 @@ def _run_job(body):
         latent, meta = _still(latent.detach().float().cpu(), mode, grid, steps,
                               tell=lambda f, base=base: tell(base + f / len(sources)))
         tell((index + 1) / len(sources))
-        stem = name if index == 0 else f"{name}-{index + 1}"
-        stem = _stem(stem, space)
-        target = f"{subfolder}/{stem}" if subfolder else stem
+        target = targets[index]
         path = refmod.save(target, latent, {
             **meta, "description": description, "concept_type": concept,
             # The path as the picker gave it, not its basename: it is what a
