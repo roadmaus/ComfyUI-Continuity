@@ -716,10 +716,9 @@ def clean_chat(raw):
 
 
 REFINER_BACKENDS = ("local", "remote")
-REFINER_NAMES = ("model", "remoteModel", "language", "skill", "chatReasoningEffort")
+REFINER_NAMES = ("model", "remoteModel", "language", "skill")
 REFINER_FLAGS = ("eject",)
 REFINER_TABLES = ("skillModes", "templates")
-CHAT_REASONING_EFFORTS = ("none", "low", "medium", "high")
 
 
 def clean_refiner(raw):
@@ -745,9 +744,6 @@ def clean_refiner(raw):
         if not isinstance(raw[key], str):
             raise ValueError(f"refiner.{key} must be a name")
         kept[key] = raw[key]
-    if "chatReasoningEffort" in kept and kept["chatReasoningEffort"] not in CHAT_REASONING_EFFORTS:
-        raise ValueError("refiner.chatReasoningEffort must be one of "
-                         + ", ".join(CHAT_REASONING_EFFORTS))
     for key in REFINER_FLAGS:
         if raw.get(key) is None:
             continue

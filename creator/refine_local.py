@@ -254,7 +254,7 @@ def _progress_context():
 
 
 def chat(name, system, message, images=(), temperature=0.7, seed=-1, max_tokens=None,
-         prefill=refine.PREFILL, device="", reasoning_effort="none"):
+         prefill=refine.PREFILL, device=""):
     """One generation -> the assistant's raw content string.
 
     The returned string carries the prefill back, because that is what the

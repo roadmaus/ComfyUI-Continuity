@@ -258,9 +258,20 @@ RICH_EXPANSION = ("Rich verbosity requires a materially expanded prompt for a ne
                   "unspecified details; do not merely repeat the user's wording.")
 
 
-def needs_rich_expansion(action, user_text, verbosity=0, edits=False):
+def needs_rich_expansion(action, user_text, verbosity=0, edits=False, ledger=()):
     """Whether a valid render action still failed the rich-writing request."""
-    if edits or verbosity_tier(verbosity) != TIERS or action.get("act") != ACT_RENDER:
+    if verbosity_tier(verbosity) != TIERS or action.get("act") != ACT_RENDER:
+        return False
+    # `edits` says the selected rail *can* edit a picture; it does not say this
+    # turn does. A plain cited image is the actual edit signal. New renders on
+    # an edit-capable rail must still honour rich verbosity.
+    entries = {str(entry.get("handle")): _entry_kind(entry) for entry in ledger or []
+               if isinstance(entry, dict) and entry.get("handle")}
+    direct_edit = edits and any(
+        scope is None and entries.get(handle) == "image"
+        for handle, scope in (split_handle(item) for item in action.get("from") or [])
+    )
+    if direct_edit:
         return False
     prompt_words = re.findall(r"[A-Za-z0-9][A-Za-z0-9'’-]*", action.get("prompt") or "")
     user_words = re.findall(r"[A-Za-z0-9][A-Za-z0-9'’-]*", user_text or "")

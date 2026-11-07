@@ -1306,6 +1306,9 @@ check("rich verbosity re-asks a short new-render prompt",
 check("a rich prompt with enough detail is accepted",
       chat.needs_rich_expansion(full, "a fox at dusk", verbosity=1), False)
 check("direct image edits remain concise at rich verbosity",
-      chat.needs_rich_expansion(rich, "make it blue", verbosity=1, edits=True), False)
+      chat.needs_rich_expansion({**rich, "from": ["pic-1"]}, "make it blue", verbosity=1,
+                                edits=True, ledger=[{"handle": "pic-1", "kind": "still"}]), False)
+check("a new render on an edit-capable rail still expands at rich verbosity",
+      chat.needs_rich_expansion(rich, "a fox at dusk", verbosity=1, edits=True), True)
 
 passed("the chat surface parses, refuses, re-asks and patches as specified")

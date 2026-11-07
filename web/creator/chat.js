@@ -663,7 +663,6 @@ function requestBlock(sync) {
     device: current.chatDevice || "",
     temperature: current.temperature,
     seed: current.seed,
-    chat_reasoning_effort: current.chatReasoningEffort || "none",
     max_tokens: current.maxTokens,
     eject: current.backend === "remote" && current.eject === true,
     skill: bar.skill || "",

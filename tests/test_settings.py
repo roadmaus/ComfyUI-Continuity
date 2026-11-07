@@ -323,7 +323,6 @@ refuses("a dial that is a switch", {"chat": {"verbosity": True}}, "0 to 1")
 REFINER = {"backend": "remote", "model": "qwen3vl_4b.safetensors",
            "remoteModel": "qwen3-vl:4b", "eject": True, "temperature": 0.3,
            "seed": -1, "maxTokens": 6144, "language": "German", "skill": "noir",
-           "chatReasoningEffort": "high",
            "skillModes": {"noir": "add"}, "templates": {"h3": "REF2VA"}}
 check("an empty refiner block is the default", settings.clean({})["refiner"], {})
 check("a refiner block is stored whole", settings.clean({"refiner": REFINER})["refiner"], REFINER)
@@ -332,7 +331,6 @@ check("a key this build has never heard of is dropped",
 refuses("a backend that is neither", {"refiner": {"backend": "cloud"}}, "one of local, remote")
 refuses("a model that is not a name", {"refiner": {"model": 4}}, "must be a name")
 refuses("a temperature that is not a number", {"refiner": {"temperature": "hot"}}, "must be a number")
-refuses("an unknown chat reasoning effort", {"refiner": {"chatReasoningEffort": "max"}}, "one of")
 refuses("a boolean budget", {"refiner": {"maxTokens": True}}, "must be a number")
 refuses("a template table that is not names", {"refiner": {"templates": {"h3": 1}}}, "names to names")
 refuses("a refiner that is not an object", {"refiner": "local"}, "must be an object")

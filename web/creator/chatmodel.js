@@ -245,15 +245,6 @@ export function openThinker(anchor, { rail, setRail, skills, onChange }) {
         onChange: (next) => { saveRefiner({ temperature: next }); changed(); },
       }), t("The model's temperature. Lower keeps closer to your wording; higher "
             + "invents more around it. Cold keeps a small model on task.")),
-      current.backend === "remote" ? line(t("Reasoning effort"), el("button", {
-        class: "mmc-pill mmc-ch-value", text: t(current.chatReasoningEffort || "none"),
-        title: t("How much hidden reasoning the remote provider may use for chat turns."),
-        onclick: (event) => openChoicePopover(event.currentTarget, {
-          title: t("Reasoning effort"), options: ["none", "low", "medium", "high"],
-          value: current.chatReasoningEffort || "none",
-          onPick: (value) => { saveRefiner({ chatReasoningEffort: value }); changed(); },
-        }),
-      }), t("Remote only. Higher effort may improve planning, but it can consume the reply budget; it does not itself make prompts longer.")) : null,
       takesSeed(current)
         ? line(t("Seed"), seedControl(changed, {
           random: t("Every reply comes out differently. Click to fix it."),

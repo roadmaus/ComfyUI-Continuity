@@ -583,9 +583,8 @@ What is the room's own is in the composer's foot and behind the gear:
   On a local backend, the Thinks with popover can pin the LLM to a device
   offered by ComfyUI-MultiGPU. Its **Reply length** slider sets the maximum
   generated tokens for a chat action; it avoids cutoffs but does not force a
-  longer response. On a remote model, **Reasoning effort** controls the
-  provider's hidden reasoning budget for chat turns; it defaults to off so it
-  does not consume the action's reply budget.
+  longer response. The same chat prompt and generation controls are used for
+  an in-process model and a server model.
 - **Magic prompt**, in the model's popover, is for pictures on Ideogram 4.0.
   Ideogram was trained on a structured JSON caption rather than a sentence,
   and without this the room wraps its sentence into the smallest caption

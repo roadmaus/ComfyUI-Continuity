@@ -596,7 +596,6 @@ def _ask(block, system, message):
         # reserves a KV cache of the prompt plus this.
         max_tokens=chat.reply_tokens(block.get("reply_tokens")),
         prefill="",
-        reasoning_effort=block.get("chat_reasoning_effort", "none"),
         **options,
     )
 
@@ -647,8 +646,7 @@ def _magic(block, action, ledger, rail, cast):
     def once(text):
         return ask(block.get("model") or "", module.system_prompt(), text, [],
                    temperature=module.TEMPERATURE, seed=block.get("seed", -1),
-                   max_tokens=refine.reply_tokens(block.get("max_tokens")),
-                   reasoning_effort=block.get("chat_reasoning_effort", "none"))
+                   max_tokens=refine.reply_tokens(block.get("max_tokens")))
 
     raw = once(message)
     try:
@@ -762,7 +760,7 @@ def _run(body):
     # image edits: an edit prompt is intentionally a compact delta.
     if quoted is None and verdict["act"] == chat.ACT_RENDER \
             and chat.needs_rich_expansion(verdict["action"], asked,
-                                          block.get("verbosity"), edits):
+                                          block.get("verbosity"), edits, ledger):
         quoted = chat.RICH_EXPANSION
         log.debug("chat turn re-asked for rich expansion")
         raw = _ask(block, system, chat.reask(message, raw, quoted))
