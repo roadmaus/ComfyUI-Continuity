@@ -155,16 +155,17 @@ def system_prompt(extra="", verbosity=0, edits=False):
     it for the same reason `families/refine.EXTRA_RULE` places it late: it is
     about how to write, and the shape of the reply is not its to move. That
     rule is the one the route quotes when it refuses a `replace` skill here.
-    It goes after the dial's block too, so where a skill says how long to
-    write, the skill wins — the rule says as much.
+    It goes before the dial's block. A selected verbosity is an explicit
+    request for the amount of prose in this turn, so it has the final word on
+    length even when a skill also gives writing advice.
     """
     parts = [_prompt_file("system.txt"),
              _prompt_file("edit.txt" if edits else "redraw.txt")]
     tier = verbosity_tier(verbosity)
-    if tier:
-        parts.append(_prompt_file(f"detail-{tier}.txt"))
     if (extra or "").strip():
         parts.append(refine.EXTRA_RULE.format(extra=extra.strip()))
+    if tier:
+        parts.append(_prompt_file(f"detail-{tier}.txt"))
     return "\n\n".join(parts)
 
 
@@ -243,6 +244,31 @@ def reply_tokens(value):
         return max(MIN_REPLY_TOKENS, min(MAX_REPLY_TOKENS, int(value)))
     except (TypeError, ValueError):
         return REPLY_TOKENS
+
+
+# A rich setting is a request, not merely permission, to expand a new prompt.
+# The structured-action validator cannot otherwise distinguish a prompt the
+# model faithfully elaborated from one that simply repeated the user's line.
+# Direct image edits are deliberately excluded: their model sees the picture
+# and must receive the concise delta rather than a fresh description.
+RICH_MIN_WORDS = 80
+RICH_EXPANSION = ("Rich verbosity requires a materially expanded prompt for a new render. "
+                  "Write the requested two short paragraphs with concrete subject, setting, "
+                  "light, framing, texture and atmosphere details. Make sensible choices for "
+                  "unspecified details; do not merely repeat the user's wording.")
+
+
+def needs_rich_expansion(action, user_text, verbosity=0, edits=False):
+    """Whether a valid render action still failed the rich-writing request."""
+    if edits or verbosity_tier(verbosity) != TIERS or action.get("act") != ACT_RENDER:
+        return False
+    prompt_words = re.findall(r"[A-Za-z0-9][A-Za-z0-9'’-]*", action.get("prompt") or "")
+    user_words = re.findall(r"[A-Za-z0-9][A-Za-z0-9'’-]*", user_text or "")
+    # A person who already supplied a long production prompt need not have it
+    # padded. For short requests, require enough room for the rich block to do
+    # its job; for longer ones, require a meaningful expansion over their text.
+    required = RICH_MIN_WORDS if len(user_words) < RICH_MIN_WORDS else int(len(user_words) * 1.25)
+    return len(prompt_words) < required
 
 
 class ActionError(ValueError):

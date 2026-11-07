@@ -5,7 +5,10 @@ look, its materials, its posture, its expression. The second is the world
 around it: the light and where it comes from, the palette, the framing and the
 lens, the textures, the weather or the air, what moves in the background, what
 is heard, and for a clip how the camera moves and how the sound plays over the
-shot. Every addition must be something the scene already implies.
+shot. Make specific, sensible cinematic choices for details the person left
+open: do not merely repeat their words because they did not name a lens,
+palette, texture, atmosphere or background action. Nothing you add may
+contradict the request.
 
 Never change what the person asked for: the subject, what it does, where it is,
 any quoted words, every @handle and every @name stay as they meant them, and

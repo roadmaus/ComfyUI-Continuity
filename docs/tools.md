@@ -571,16 +571,21 @@ What is the room's own is in the composer's foot and behind the gear:
   The model's prompt is the render's prompt — nothing rewrites it on the
   way to the queue — and the dial is how much the model may add beyond
   what you said: the light, the lens, the textures, the sound, without
-  changing what you meant. At the left it writes as it always has; each
+  changing what you meant. At *rich*, it makes sensible production choices
+  for details you left open rather than merely repeating the request. At the
+  left it writes as it always has; each
   step up is a fuller block of prompting, *a little*, *more*, *rich*. The
   skill is a file from the node's skills folder appended to the room's own
-  prompting, which is where a family's own way of prompting goes, and it
-  wins over the dial where the two disagree. *Set up again* asks the three
-  questions afresh.
+  prompting, which is where a family's own way of prompting goes, and is
+  followed by the dial's requested length, so *rich* still means rich. *Set
+  up again* asks the three questions afresh.
 - **The model** is in the bar — this ComfyUI, or a server you already run.
   On a local backend, the Thinks with popover can pin the LLM to a device
   offered by ComfyUI-MultiGPU. Its **Reply length** slider sets the maximum
-  generated tokens; a lower value reduces the local model's reserved cache.
+  generated tokens for a chat action; it avoids cutoffs but does not force a
+  longer response. On a remote model, **Reasoning effort** controls the
+  provider's hidden reasoning budget for chat turns; it defaults to off so it
+  does not consume the action's reply budget.
 - **Magic prompt**, in the model's popover, is for pictures on Ideogram 4.0.
   Ideogram was trained on a structured JSON caption rather than a sentence,
   and without this the room wraps its sentence into the smallest caption

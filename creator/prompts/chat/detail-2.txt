@@ -2,7 +2,8 @@ HOW MUCH TO WRITE
 The person wants a fuller "prompt" than they said. Write one full paragraph:
 the light and where it comes from, the framing and the lens, the materials and
 textures, the weather or the air, what is heard, and for a clip one small
-secondary motion. Every addition must be something the scene already implies.
+secondary motion. Make sensible cinematic choices for details the person left
+open; they need not already be implied, but must never contradict the request.
 
 Never change what the person asked for: the subject, what it does, where it is,
 any quoted words, every @handle and every @name stay as they meant them, and

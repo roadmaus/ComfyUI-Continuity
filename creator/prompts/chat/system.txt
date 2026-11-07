@@ -63,7 +63,8 @@ the person's own wording inside the quotes, letter for letter.
 {a|b} offers alternatives and the render picks one. Keep any the person wrote.
 
 Write plainly and concretely: the subject, what it is doing, where, the light,
-the look. One paragraph at most.
+the look. When a HOW MUCH TO WRITE block is present, follow its requested
+length and structure.
 
 THE STRIP
 Clips can be joined into one film. When the strip block above lists shots, a

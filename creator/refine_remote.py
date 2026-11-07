@@ -474,7 +474,7 @@ def _content(body):
 
 
 def chat(model, system, message, images=(), temperature=0.7, seed=-1,
-         max_tokens=None, prefill=refine.PREFILL, eject=False):
+         max_tokens=None, prefill=refine.PREFILL, eject=False, reasoning_effort="none"):
     """One generation -> the assistant's raw content string.
 
     The same signature as `refine_local.chat`, which is what lets the routes
@@ -502,14 +502,13 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
     }
     if int(seed) >= 0:
         payload["seed"] = int(seed)
-    # Reasoning off. The in-process path prefills an empty `<think>` block for
-    # this; chat-completions has no prefill, and a thinking model left to its
-    # default spends the whole reply budget on a trace and returns no content
-    # at all. `"none"` is the OpenAI spelling Ollama and vLLM honour; a
-    # provider that rejects the value 400s and `adapt` sheds it. Not every
+    # Chat defaults to no reasoning: chat-completions has no prefill, and a
+    # thinking model left to its default can spend the whole reply budget on a
+    # trace and return no content. A chat-specific remote setting may opt in;
+    # a provider that rejects the value 400s and `adapt` sheds it. Not every
     # build listens — Ollama's Qwen3-VL template reasons whatever it is told,
     # and the empty-reply message below is where that is said.
-    payload["reasoning_effort"] = "none"
+    payload["reasoning_effort"] = str(reasoning_effort or "none")
     # Asked for in the same breath as the generation, because LM Studio 0.3 has
     # no unload call and this is the only thing it will hear. Local servers
     # only: `ttl` is a word no hosted provider knows, and the ones that check

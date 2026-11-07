@@ -281,6 +281,8 @@ remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
                  "finish_reason": "stop"}]}})
 check("the request asks for no reasoning", remote.chat("m", "sys", "hi"), '{"shots": []}')
 check("…in the OpenAI spelling", calls[-1][1].get("reasoning_effort"), "none")
+remote.chat("m", "sys", "hi", reasoning_effort="high")
+check("a caller may opt into higher reasoning effort", calls[-1][1].get("reasoning_effort"), "high")
 
 remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
     "choices": [{"message": {"role": "assistant", "content": "",

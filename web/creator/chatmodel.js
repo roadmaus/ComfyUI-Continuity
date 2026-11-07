@@ -245,6 +245,15 @@ export function openThinker(anchor, { rail, setRail, skills, onChange }) {
         onChange: (next) => { saveRefiner({ temperature: next }); changed(); },
       }), t("The model's temperature. Lower keeps closer to your wording; higher "
             + "invents more around it. Cold keeps a small model on task.")),
+      current.backend === "remote" ? line(t("Reasoning effort"), el("button", {
+        class: "mmc-pill mmc-ch-value", text: t(current.chatReasoningEffort || "none"),
+        title: t("How much hidden reasoning the remote provider may use for chat turns."),
+        onclick: (event) => openChoicePopover(event.currentTarget, {
+          title: t("Reasoning effort"), options: ["none", "low", "medium", "high"],
+          value: current.chatReasoningEffort || "none",
+          onPick: (value) => { saveRefiner({ chatReasoningEffort: value }); changed(); },
+        }),
+      }), t("Remote only. Higher effort may improve planning, but it can consume the reply budget; it does not itself make prompts longer.")) : null,
       takesSeed(current)
         ? line(t("Seed"), seedControl(changed, {
           random: t("Every reply comes out differently. Click to fix it."),
@@ -270,7 +279,7 @@ export function openThinker(anchor, { rail, setRail, skills, onChange }) {
           onchange: (event) => setRail({ reply_tokens: Number(event.currentTarget.value) }),
         });
         return el("div", { class: "mmc-ch-token-control" }, [slider, readout]);
-      })(), t("How many tokens a reply may run to. Lower this to reduce the local model's reserved generation memory; raise it if replies are being cut off.")),
+      })(), t("The maximum tokens for this chat action, separate from Refiner reply length. It prevents cutoffs but does not force the model to use every token.")),
       ...magicRows(bar),
     );
   }

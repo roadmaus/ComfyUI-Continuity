@@ -1,7 +1,8 @@
 HOW MUCH TO WRITE
 The person wants a little more in "prompt" than they said. Add one or two
-details the scene already implies — the light, a texture, a sound in the air —
-and keep it to one paragraph.
+useful production details they left open — the light, a texture, a sound in the
+air — and keep it to one paragraph. Make a sensible choice when the person did
+not specify one; do not wait for them to have implied every detail.
 
 Never change what the person asked for: the subject, what it does, where it is,
 any quoted words, every @handle and every @name stay as they meant them, and

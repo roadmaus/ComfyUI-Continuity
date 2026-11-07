@@ -61,6 +61,10 @@ const DEFAULTS = {
   // Local chat generation may be pinned to a device exposed by
   // ComfyUI-MultiGPU. Empty means ComfyUI's normal text-encoder placement.
   chatDevice: "",
+  // Remote chat turns can opt into a provider's reasoning budget. It is kept
+  // separate from rewrite settings because a chat action has a tight JSON
+  // contract and normally benefits from no hidden reasoning output.
+  chatReasoningEffort: "none",
   // The server's model, kept apart from the text encoder's name so switching
   // backends and back loses neither choice.
   remoteModel: "",

@@ -131,11 +131,15 @@ check("the rail starts the reply budget at the server's default",
       bool(re.search(r"function defaultRail\(.*?reply_tokens: %d,.*?\n\}" % chat.REPLY_TOKENS, ROOM, re.DOTALL)), True)
 check("the turn's settings block carries it",
       bool(block) and "reply_tokens:" in block.group(0), True)
+check("the turn carries the chat reasoning effort separately from the refiner budget",
+      bool(block) and "chat_reasoning_effort:" in block.group(0), True)
 ends = re.search(r"const REPLY_TOKENS = \{ min: (\d+), max: (\d+)", THINKER)
 check("the pill's ends are the server's clamp",
       ends and (int(ends.group(1)), int(ends.group(2))), (chat.MIN_REPLY_TOKENS, chat.MAX_REPLY_TOKENS))
 check("the route spends the rail's budget, clamped, not the refiner's",
       'max_tokens=chat.reply_tokens(block.get("reply_tokens"))' in ROUTE, True)
+check("the route forwards the explicitly selected chat reasoning effort",
+      'reasoning_effort=block.get("chat_reasoning_effort", "none")' in ROUTE, True)
 check("junk falls back to the default, and the ends hold",
       [chat.reply_tokens(v) for v in (None, "x", 0, 1024, 10 ** 6)],
       [chat.REPLY_TOKENS, chat.REPLY_TOKENS, chat.MIN_REPLY_TOKENS, 1024, chat.MAX_REPLY_TOKENS])

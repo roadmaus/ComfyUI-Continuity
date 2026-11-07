@@ -1296,7 +1296,16 @@ lengths = [len(chat.parse(block[len(SYSTEM):])[1]["prompt"]) for block in blocks
 check(f"the worked prompts grow with the dial: {lengths}",
       lengths == sorted(lengths) and len(set(lengths)) == chat.TIERS, True)
 both = chat.system_prompt("Write everything in the present tense.", verbosity=1)
-check("a skill lands after the block, so its say on length wins",
-      both.index("HOW MUCH TO WRITE") < both.index("present tense"), True)
+check("the verbosity block follows a skill, so its requested length wins",
+      both.index("present tense") < both.rindex("HOW MUCH TO WRITE"), True)
+
+rich = {"act": "render", "kind": "still", "prompt": "a fox at dusk", "from": []}
+full = {**rich, "prompt": " ".join(["fox"] * chat.RICH_MIN_WORDS)}
+check("rich verbosity re-asks a short new-render prompt",
+      chat.needs_rich_expansion(rich, "a fox at dusk", verbosity=1), True)
+check("a rich prompt with enough detail is accepted",
+      chat.needs_rich_expansion(full, "a fox at dusk", verbosity=1), False)
+check("direct image edits remain concise at rich verbosity",
+      chat.needs_rich_expansion(rich, "make it blue", verbosity=1, edits=True), False)
 
 passed("the chat surface parses, refuses, re-asks and patches as specified")
