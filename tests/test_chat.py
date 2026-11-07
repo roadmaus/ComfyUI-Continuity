@@ -684,7 +684,7 @@ still = chat.still_piece(
                    "from": ["img-1"], "aspect": "1:1"}, LEDGER), LEDGER, RAIL)
 check("a still is a pre-stage blob of the rail's architecture", still["arch"], "krea2")
 check("the model's prompt goes in as typed", still["prompt"], "the fox, bluer")
-check("the action's aspect wins over the rail's", still["aspect"], "1:1")
+check("the selected rail aspect wins over the action's", still["aspect"], "16:9")
 check("and the rail's is used when the action says nothing",
       chat.still_piece(chat.validate(
           {"act": "render", "kind": "still", "prompt": "a fox"}, LEDGER),
@@ -703,6 +703,10 @@ check("a still is drawn at the still edge", still["short_edge"], 1024)
 check("a clip is sampled at the clip edge",
       chat.video_piece(chat.validate({"act": "render", "kind": "video", "prompt": "a fox"}, LEDGER),
                        LEDGER, RAIL)["short_edge"], 768)
+check("the selected aspect applies to a clip even if the action disagrees",
+      chat.video_piece(chat.validate({"act": "render", "kind": "video", "prompt": "a fox",
+                                      "aspect": "16:9"}, LEDGER),
+                       LEDGER, {**RAIL, "aspect": "3:4"})["aspect"], "3:4")
 check("an older rail's one short edge is read for both",
       chat.still_piece(chat.validate({"act": "render", "kind": "still", "prompt": "a fox"}, LEDGER),
                        LEDGER, {**RAIL, "still_edge": None, "short_edge": 896})["short_edge"], 896)
@@ -749,7 +753,7 @@ check("a still over the pre-stage keeps its stack, switch, row, weights and pass
 check("and takes the turn's prompt, citation and shape over the node's",
       (over["prompt"], over["refs"], over["init"], over["aspect"], over["short_edge"]),
       ("the fox, bluer", [{"handle": "img-1", "filename": "continuity/chat/fox.png"}],
-       None, "1:1", 1024))
+       None, "16:9", 1024))
 check("the base is copied, not written on",
       (PRE["prompt"], PRE["refs"][0]["handle"]), ("an old prompt", "old"))
 check("the pre-stage's switch on the checkpoint is the file the card counts",
@@ -968,7 +972,7 @@ check("and a member alone is drawn from, on a blank canvas",
       (chat.EDIT_FIRST_FIELD in alone, alone["aspect"]), (False, "16:9"))
 fresh = edited({"act": "render", "kind": "still", "prompt": "a fox", "aspect": "1:1"})
 check("a still with nothing cited on an edit family is an ordinary still",
-      (chat.EDIT_FIRST_FIELD in fresh, fresh["aspect"], fresh["refs"]), (False, "1:1", []))
+      (chat.EDIT_FIRST_FIELD in fresh, fresh["aspect"], fresh["refs"]), (False, "16:9", []))
 check("none of which a family that only cites pictures does",
       chat.EDIT_FIRST_FIELD in chat.still_piece(
           chat.validate({"act": "render", "kind": "still", "prompt": "x", "from": ["img-1:style"]}, LEDGER),

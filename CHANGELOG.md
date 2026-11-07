@@ -6,6 +6,11 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The chat's selected aspect ratio applies to pictures and videos.** The
+selector was already sent with each turn, but the model did not see it and its
+action's aspect field overrode the room setting. The turn now tells the model
+which shape is selected, and render stamping applies that choice to both kinds.
+
 **The chat's local LLM can use a chosen CUDA device and a smaller reply budget.**
 The Thinks with settings now expose the device choices from ComfyUI-MultiGPU and
 a reply-length slider. Pinning moves the local text encoder through ComfyUI's

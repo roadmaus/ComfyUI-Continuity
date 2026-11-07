@@ -736,7 +736,8 @@ def _run(body):
     edits = chat.changes_pictures(rail)
     system = chat.system_prompt(_skill(block), verbosity=block.get("verbosity"),
                                 edits=edits)
-    message = chat.context(messages, ledger, card, strip=strip, cast=cast, edits=edits)
+    message = chat.context(messages, ledger, card, strip=strip, cast=cast,
+                           edits=edits, aspect=rail.get("aspect"))
     asked = _last_user(messages)
 
     raw = _ask(block, system, message)

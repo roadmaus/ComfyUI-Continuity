@@ -1384,7 +1384,7 @@ CLOSING_EDITS = (CLOSING + " If it asks for a change to a picture, \"prompt\" is
 
 
 def context(messages, ledger, card, exchanges=MAX_EXCHANGES, strip=(), cast=(),
-            edits=False):
+            edits=False, aspect=None):
     """The one user message: the machine, the ledger, then the conversation.
 
     `edits` is `changes_pictures` of the rail, and picks the closing line.
@@ -1402,7 +1402,12 @@ def context(messages, ledger, card, exchanges=MAX_EXCHANGES, strip=(), cast=(),
     one thing the research says it cannot.
     """
     kept = trim(messages, exchanges=exchanges)
-    blocks = [card, ledger_block(ledger), strip_block(strip), cast_block(cast)]
+    blocks = [card]
+    if aspect:
+        blocks.append(f"SELECTED OUTPUT SHAPE\nUse {aspect} for new stills and videos. "
+                      "A picture being changed keeps its own shape. Leave the action's "
+                      "aspect field out.")
+    blocks.extend((ledger_block(ledger), strip_block(strip), cast_block(cast)))
     if kept:
         blocks.append("\n".join(["THE CONVERSATION"] + [_rendered(m) for m in kept]))
     blocks.append(CLOSING_EDITS if edits else CLOSING)
@@ -1588,7 +1593,10 @@ def _canvas(action, rail, kind):
     """
     canvas = {}
     rail = rail or {}
-    aspect = action.get("aspect") or rail.get("aspect")
+    # The room's selector is a standing choice for every mode. The model's
+    # action may repeat a stale example or a ratio from earlier conversation;
+    # only use that field when no shape was selected in the room.
+    aspect = rail.get("aspect") or action.get("aspect")
     if aspect:
         canvas["aspect"] = aspect
     edge = rail.get(f"{kind}_edge")
@@ -1600,11 +1608,11 @@ def _canvas(action, rail, kind):
 
 
 def still_aspect(action, rail):
-    """The shape a still is drawn at, as a label: the action's, the rail's, or
+    """The shape a still is drawn at, as a label: the rail's, the action's, or
     the image families' default — the order `_canvas` writes them and the
     compiler falls back in. Asked for where the words have to know the shape
     before there is a blob: the magic prompt places its elements on it."""
-    return (action.get("aspect") or (rail or {}).get("aspect")
+    return ((rail or {}).get("aspect") or action.get("aspect")
             or compile_image.DEFAULT_ASPECT)
 
 

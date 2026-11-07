@@ -12,7 +12,7 @@ THE ACTION
  "prompt": "...",              render only: what goes in the prompt box
  "from": ["pic-2"],            handles from the ledger; leave out if none
  "seconds": 6,                 video only; leave out for the family's own
- "aspect": "16:9",             leave out for the standing shape
+ "aspect": "...",               leave out; the selected shape applies to new stills and videos
  "after": "clip-2",             video only: this shot follows that one on the strip
  "replaces": "clip-2",          video only: this shot stands in for that one
  "say": "..."}                 one short line the person reads
