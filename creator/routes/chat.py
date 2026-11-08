@@ -781,11 +781,14 @@ def _run(body):
     if verdict["act"] == chat.ACT_RENDER:
         out["action"] = _stamp(block, verdict["action"], ledger, rail, cast)
         # A fresh clip longer than one shot holds well, or a request for
-        # several shots, is planned as a piece instead (§5.1 of the spec).
-        # Code decides, on the model's own reading of the request, so "make
-        # it 20 seconds" about a clip stays a change to that clip. The action
-        # rides along as `held` while one clip could hold it, so the room
-        # can still render it as one if that is what the person wants.
+        # several shots, is *offered* as a piece (§5.1 of the spec): the clip
+        # renders as asked, and the turn says why a plan might serve better.
+        # It used to be planned instead, by itself, and that made the plain
+        # chat — the refiner, with the Plan switch off — start a project when
+        # the person only wanted their prompt written and rendered. The Plan
+        # switch is the way in; this is a door beside the clip, not a turn
+        # taken for them. Code decides, on the model's own reading of the
+        # request, so "make it 20 seconds" about a clip stays that clip.
         ceiling = _ceiling(rail)
         why = director.wants_plan(out["action"], asked, ceiling)
         # A fresh clip is as long as the person said, where they said, over
@@ -793,14 +796,17 @@ def _run(body):
         # small model asked for "one continuous 40 second shot" writes ten.
         said = director.asked_seconds(asked)
         fresh = not (out["action"].get("after") or out["action"].get("replaces"))
-        if out["action"]["kind"] == chat.KIND_VIDEO and fresh and said and why != director.OVER_CEILING \
-                and (not ceiling or said <= ceiling):
+        if out["action"]["kind"] == chat.KIND_VIDEO and fresh and said:
             out["action"] = {**out["action"], "seconds": said}
+        # Past what the family renders, the clip is as long as it can be, and
+        # the offer says so.
+        seconds = out["action"].get("seconds")
+        if out["action"]["kind"] == chat.KIND_VIDEO and ceiling and seconds and seconds > ceiling:
+            out["action"] = {**out["action"], "seconds": ceiling}
         if why:
-            held = out.pop("action")
             out["plan"] = why
-            if why != director.OVER_CEILING:
-                out["held"] = held
+            if ceiling:
+                out["ceiling"] = ceiling
     return out
 
 

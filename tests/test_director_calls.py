@@ -473,3 +473,22 @@ check("…and one shot", "Write 1 shot " in asked[4]["message"], True)
 check("the shot is a take", plan["shots"][0].get("one_take"), True)
 check("it renders as one 40 s clip under the 60 s ceiling",
       [(c["seconds"], c["parts"]) for c in director.clips(plan)], [(40, 1)])
+
+# A brief filmed through somebody's eyes: the basics write the camera, and the
+# beats, entities and shots calls are each shown it, so the person whose eyes
+# they are is written as the camera all the way down rather than as somebody
+# standing in frame.
+POV = list(GOOD)
+POV[1] = fence({"title": "Night Train", "seconds": 12, "look": "sodium light, grain",
+                "camera": "first-person view through George's eyes"})
+ask, asked = scripted(POV)
+plan = calls.plan_piece("a 12 second piece seen through @george's eyes on a night train", RAIL, ask,
+                        cast=[{"name": "george", "description": "a man"}])["plan"]
+check("the camera lands on the plan", plan["camera"], "first-person view through George's eyes")
+check("the beats, entities and shots calls are shown it",
+      [("THE CAMERA" in a["message"]) for a in asked[2:]], [True] * len(asked[2:]))
+ask, asked = scripted(list(GOOD))
+calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask,
+                 cast=[{"name": "george", "description": "a man"}])
+check("a brief without one shows no camera block",
+      any("THE CAMERA" in a["message"] for a in asked), False)

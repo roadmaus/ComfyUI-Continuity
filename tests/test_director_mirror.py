@@ -79,6 +79,11 @@ PLANS = {
 _takes = plan(70, ["long", "medium"], {0: [("one unbroken take", "new")], 1: [("b", "cut")]},
               rail={"video": "x", "max_seconds": 20})
 PLANS["one take beside chained shots"] = director.edit(_takes, "s1", {"one_take": True})
+# A camera line: a shot's fingerprint holds it, a sheet's does not.
+PLANS["a camera rule"] = director.edit(
+    plan(20, ["medium", "medium"], {0: [("@keeper waits", "new")], 1: [("@keeper turns", "cut")]},
+         entities=(KEEPER,)),
+    director.HEADER, {"camera": "first-person, through the keeper's eyes"})
 PLANS["one take with no ceiling"] = director.edit(
     plan(90, ["medium"], {0: [("a", "new")]}), "s1", {"one_take": True})
 

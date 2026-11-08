@@ -313,6 +313,25 @@ check("a pin carries on", clip4.get(chat.SEAM_KEY), None)
 first = director.action_for(done, "s1")
 check("the first clip follows nothing", first["after"], None)
 
+# The camera: how every shot is filmed, when the brief said. It goes on the
+# shots' prompts and not on the sheets, and a plan without one fingerprints
+# exactly as plans did before the field.
+check("basics read a camera", director.read_basics(
+    {"title": "T", "seconds": 10, "look": "", "camera": "first-person, through the visor"})["camera"],
+    "first-person, through the visor")
+check("basics without one read it as empty", director.read_basics({"title": "T", "look": ""})["camera"], "")
+pov = director.edit(done, director.HEADER, {"camera": "first-person view through George's eyes"})
+check("a clip carries the camera before the look", director.action_for(pov, "s1")["prompt"].split("\n\n")[1:],
+      ["Camera: first-person view through George's eyes.", "Look: overcast, desaturated teal, 35mm grain."])
+check("a keyframe carries it too", "Camera:" in director.action_for(pov, "kf.s3")["prompt"], True)
+check("a sheet does not", director.action_for(pov, "e2")["prompt"], sheet["prompt"])
+check("a sheet's fingerprint ignores the camera",
+      director.fingerprint(pov, "e2"), director.fingerprint(done, "e2"))
+check("a shot's fingerprint holds it", director.fingerprint(pov, "s1") != director.fingerprint(done, "s1"), True)
+check("an empty camera is no camera",
+      director.fingerprint(director.edit(done, director.HEADER, {"camera": ""}), "s1"),
+      director.fingerprint(done, "s1"))
+
 strip = [handles[c["id"]] for c in director.clips(done)]
 for row in director.rows(done):
     action = director.action_for(done, row["id"])

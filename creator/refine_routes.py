@@ -758,9 +758,13 @@ def _run(body):
     # and the reply is started mid-object.
     shape = prompting.reply_shape(mode, len(shots), cuts=cuts, shown=shown,
                                   piece=ask_piece, ref_shots=ref_shots, cast=cast)
+    # Whether anything at all rides with the request. Without it the family
+    # leaves out its lesson on handles, which a model otherwise reads as a
+    # cue to cite clips and sounds nobody attached.
+    attached = bool(pool or cast or any(shot.get("slots") for shot in shots))
     system = prompting.system_prompt(mode, body.get("language") or "English",
                                      shape=shape, cuts=cuts, extra=extra, cast=cast,
-                                     still=still)
+                                     still=still, attached=attached)
     message = prompting.user_message(
         shots,
         seconds=seconds,

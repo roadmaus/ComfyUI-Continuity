@@ -3335,4 +3335,9 @@ export const zh = {
  "Rendered as one unbroken clip, cut only where the video model stops. Press to chain it in shorter clips instead.": "渲染为一个不间断的片段，只在视频模型的上限处切开。点击改为用较短的片段衔接。",
  "Render this shot as one unbroken clip instead of chained clips, up to what the video model can run.": "把这个镜头渲染为一个不间断的片段，而不是衔接的片段，最长到视频模型能渲染的长度。",
  "Past {limit} seconds one clip drifts more than chained shots.": "超过 {limit} 秒后，单个片段比衔接的镜头更容易走样。",
+ "No camera rule — each shot frames itself.": "没有镜头规则 — 每个镜头自行构图。",
+ "Plan it as a piece": "规划为作品",
+ "Past about 15 seconds one clip drifts. Planned as a piece, it is shots chained on the strip.": "超过约 15 秒，单个片段会走样。规划为作品后，它会成为时间条上串联的多个镜头。",
+ "The video model renders at most {seconds} seconds in one clip, so this one stops there. Planned as a piece, it runs the whole length.": "视频模型单个片段最多渲染 {seconds} 秒，所以这个片段在那里停止。规划为作品后，会渲染完整长度。",
+ "You named several shots, and this is one clip. Planned as a piece, each is a shot of its own.": "你提到了多个镜头，而这是一个片段。规划为作品后，每个都是独立的镜头。",
 };

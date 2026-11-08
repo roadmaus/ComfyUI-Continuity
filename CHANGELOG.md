@@ -6,15 +6,44 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
-**A request longer than one shot is planned as a piece by itself.** A fresh
-clip longer than 15 seconds, longer than the video model renders at all, or a
-message naming several shots used to be rendered as one clip the model chose
-the length of. Code now reads the turn's answer and the person's words and,
-in those cases, plans the message as a Director brief instead, saying why.
-Nothing renders until the plan is approved, and while one clip could hold the
-request the plan has a *Render it as one clip* button. A clip after or in
-place of one on the strip is never switched, and the length the person said
+**The refiner stops inventing references.** Refining a bare prompt on the
+node, with nothing attached, could come back citing video and audio
+references nobody had added. The H3 refiner taught every request how handles
+work, with `@vid-2` and `@aud-1` as its examples and "a clip is @vid-N" as a
+rule, and a 27B model read that as references to write. The lesson is now
+given only when the request carries a file, the piece's pool or a cast.
+
+**A request longer than one shot offers a plan, and the plain chat stays a
+refiner.** A fresh clip longer than 15 seconds, longer than the video model
+renders at all, or a message naming several shots used to be planned as a
+Director brief by itself, which turned the plain chat — the Plan switch off,
+asked only to write and render a prompt — into a project it never asked for.
+Now the clip renders as asked (at the video model's ceiling when it asks for
+more), and the answer carries a *Plan it as a piece* button that sends the
+same message as a brief, with the reason on its tooltip. A clip after or in
+place of one on the strip is never offered, and the length the person said
 wins over the one the model wrote.
+
+**A piece filmed through somebody's eyes stays that way.** "Filmed entirely
+from the diver's POV through his helmet lens" was lost after the brief: the
+beats, the who-and-what list and the shots were written as if the diver stood
+in frame, and the diver got a reference sheet of his own. The plan now has a
+*Camera* line beside the look, written by the basics call when the brief says
+how the whole piece is filmed and editable on the card. The beats, entities
+and shots calls are shown it, the person whose eyes it is is not listed, and
+every clip and opening frame carries it in its prompt; sheets do not, and a
+plan without one renders exactly as before. The entities call also no longer
+lists light, beams, glow, smoke or open water as things with a picture of
+their own, and a shot writes "the floodlights of @ship_deck" rather than
+using a name as an adjective.
+
+**A plan made again can cast its people again.** Approving @diver on the
+second version of a brief was refused as "already somebody in this chat's
+cast": the first version's @diver was still there, and the check only knew
+the current plan's own earlier takes. A cast member made by approving any
+Director sheet in the chat — this plan's, a replaced plan's, or a version the
+person stepped away from — is now the plan's to replace; only somebody cast
+another way is refused.
 
 **A planned shot can be one long take.** Director splits shots over 15
 seconds into chained clips, and that stays the default. A shot can now be

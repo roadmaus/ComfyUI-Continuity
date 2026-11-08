@@ -664,6 +664,34 @@ function livePlan(messages = state.messages) {
   return messages.findLast((message) => message.plan?.doc && !message.plan.dropped) ?? null;
 }
 
+/** Every message the chat holds: the transcript on screen, and every
+ *  version of it the person stepped away from (`branch`). */
+function everyMessage() {
+  const out = [...state.messages];
+  const walk = (forks) => {
+    for (const fork of forks ?? []) {
+      for (const version of fork.versions ?? []) {
+        if (!version) continue;
+        out.push(...(version.messages ?? []));
+        walk(version.forks);
+      }
+    }
+  };
+  walk(state.forks);
+  return out;
+}
+
+/** Whether a cast member was made by approving a Director sheet: its picture
+ *  is one a prep card in the chat landed. Derived by scan rather than marked
+ *  on the subject, so a member cast before this check existed reads true. */
+function castFromSheet(subject, piece) {
+  const handles = new Set(subject.from ?? []);
+  const files = new Set((piece.assets ?? [])
+    .filter((asset) => handles.has(asset.handle)).map((asset) => asset.filename).filter(Boolean));
+  if (!files.size) return false;
+  return everyMessage().some((message) => message.card?.prep && files.has(message.card.entry?.filename));
+}
+
 /** The last thing a stretch of the transcript made that has a picture. */
 function lastPicture(messages) {
   for (let i = messages.length - 1; i >= 0; i -= 1) {
@@ -1759,6 +1787,20 @@ class Room {
               ["turnLeft", t("Ask again from here"), () => this.again(index)],
             ], index, flight),
           ].filter(Boolean)));
+        }
+        if (message.offer && !livePlan()) {
+          const ceiling = message.offer.ceiling;
+          const why = {
+            long: t("Past about 15 seconds one clip drifts. Planned as a piece, it is shots chained on the strip."),
+            ceiling: t("The video model renders at most {seconds} seconds in one clip, so this one stops there. Planned as a piece, it runs the whole length.",
+                       { seconds: ceiling ?? "" }),
+            shots: t("You named several shots, and this is one clip. Planned as a piece, each is a shot of its own."),
+          }[message.offer.why];
+          nodes.push(el("div", { class: "mmc-ch-oneclip" }, [
+            el("button", { class: "mmc-ch-door", text: t("Plan it as a piece"),
+                           disabled: state.busy || undefined, title: why ?? null,
+                           onclick: () => this.planOffered(message) }),
+          ]));
         }
         if (message.plan?.held && message === livePlan()) {
           nodes.push(el("div", { class: "mmc-ch-oneclip" }, [
@@ -2881,16 +2923,13 @@ class Room {
     state.busy = false;
 
     // Longer than one shot holds well, longer than the family renders, or
-    // several shots named: the server held the clip back and the message is
-    // planned as a piece instead (`director.wants_plan`). The room switches
-    // by itself, since a plan is only words until the person asks for more;
-    // the clip it held rides on the plan for "Render it as one clip".
-    if (turn.plan && last?.role === "user") {
-      last.brief = true;
-      return this.askPlan(last, { why: turn.plan, held: turn.held ?? null });
-    }
-
-    const message = { role: "assistant", say: turn.say || "" };
+    // several shots named (`director.wants_plan`): the clip still renders as
+    // asked — with the Plan switch off this is the refiner, and it does not
+    // start a project by itself — and the answer carries a door to plan the
+    // same message as a piece instead.
+    const message = { role: "assistant", say: turn.say || "",
+                      ...(turn.plan && last?.role === "user"
+                        ? { offer: { why: turn.plan, ceiling: turn.ceiling ?? null } } : {}) };
     state.messages.push(message);
     notify();
     if (turn.action) await this.queueRender(turn.action, message);
@@ -2910,7 +2949,7 @@ class Room {
    * room's questions is sent beside the brief it answers, and is planned
    * without asking again.
    */
-  async askPlan(message, auto = null) {
+  async askPlan(message) {
     state.busy = true;
     state.error = null;
     this.paint();
@@ -2944,19 +2983,32 @@ class Room {
       return notify();
     }
     const doc = result.plan;
-    const words = { title: doc.title, seconds: doc.seconds, count: doc.shots.length };
-    const why = {
-      long: t("That is longer than one shot holds together, so here it is planned as {count} shots chained on the strip: “{title}”, {seconds} seconds. Change anything on it, or render it as one clip.", words),
-      ceiling: t("That is longer than the video model renders in one clip, so here it is planned as {count} shots chained on the strip: “{title}”, {seconds} seconds. Change anything on it before it renders.", words),
-      shots: t("You named several shots, so here they are as a plan: “{title}”, {seconds} seconds in {count} shots. Change anything on it, or render it as one clip.", words),
-    };
     state.messages.push({
       role: "assistant",
-      say: why[auto?.why]
-        ?? t("A plan for “{title}”: {seconds} seconds in {count} shots. Press anything on it to change it.", words),
-      plan: { doc, warnings: result.warnings ?? [], ...(auto?.held ? { held: auto.held } : {}) },
+      say: t("A plan for “{title}”: {seconds} seconds in {count} shots. Press anything on it to change it.",
+             { title: doc.title, seconds: doc.seconds, count: doc.shots.length }),
+      plan: { doc, warnings: result.warnings ?? [] },
     });
     notify();
+  }
+
+  /**
+   * "Plan it as a piece": the message the offer answered is sent again as a
+   * brief, and its plan lands at the end of the chat. The clip the turn
+   * rendered stays where it is. The offer goes once taken.
+   */
+  async planOffered(answer) {
+    if (state.busy) return;
+    const at = state.messages.indexOf(answer);
+    const asked = state.messages.slice(0, at).findLast((message) => message.role === "user");
+    if (!asked?.text) return;
+    delete answer.offer;
+    state.turn += 1;
+    const brief = { role: "user", text: asked.text, attached: asked.attached ?? [], turn: state.turn,
+                    brief: true };
+    state.messages.push(brief);
+    notify();
+    await this.askPlan(brief);
   }
 
   /**
@@ -3181,7 +3233,11 @@ class Room {
     const piece = state.piece;
     piece.subjects ??= [];
     const taken = piece.subjects.find((subject) => subject.handle === entity.name);
-    if (taken && ours !== entity.name) {
+    // A member Director cast from a sheet — this plan's earlier take, a plan
+    // this one replaced, or the version of the brief the person stepped away
+    // from — is the plan's own, and the newer sheet takes its place. Only
+    // somebody cast another way is somebody else's.
+    if (taken && ours !== entity.name && !castFromSheet(taken, piece)) {
       return t("@{name} is already somebody in this chat's cast. Rename them on the plan, or cite @{name} to use them as they are.",
                { name: entity.name });
     }

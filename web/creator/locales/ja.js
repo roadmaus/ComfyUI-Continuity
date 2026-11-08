@@ -3334,4 +3334,9 @@ export const ja = {
  "Rendered as one unbroken clip, cut only where the video model stops. Press to chain it in shorter clips instead.": "途切れない 1 クリップで描画し、動画モデルの限界でのみ切ります。押すと短いクリップをつなぐ形に戻します。",
  "Render this shot as one unbroken clip instead of chained clips, up to what the video model can run.": "このショットを、つないだクリップではなく途切れない 1 クリップで、動画モデルが扱える長さまで描画します。",
  "Past {limit} seconds one clip drifts more than chained shots.": "{limit} 秒を超えると、1 クリップはつないだショットより崩れやすくなります。",
+ "No camera rule — each shot frames itself.": "カメラの決まりなし — 各ショットが自分で構図を決めます。",
+ "Plan it as a piece": "作品として計画する",
+ "Past about 15 seconds one clip drifts. Planned as a piece, it is shots chained on the strip.": "約 15 秒を超えると 1 クリップは崩れやすくなります。作品として計画すると、ストリップ上でつないだショットになります。",
+ "The video model renders at most {seconds} seconds in one clip, so this one stops there. Planned as a piece, it runs the whole length.": "動画モデルは 1 クリップで最大 {seconds} 秒しか描画できないため、このクリップはそこで止まります。作品として計画すると、全体の長さで描画されます。",
+ "You named several shots, and this is one clip. Planned as a piece, each is a shot of its own.": "複数のショットを指定しましたが、これは 1 クリップです。作品として計画すると、それぞれが独立したショットになります。",
 };

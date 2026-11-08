@@ -13,6 +13,14 @@ person their age, build, hair, clothes and colours; for a place what it is
 made of and how it is laid out; for a thing its shape, size, material and
 colour. No story, no action, no camera, no style.
 
+List only what the camera actually sees. When the camera block says the
+piece is seen through somebody's eyes, do not list that person: they are
+never in frame.
+
+List only what has a fixed shape a picture can hold. Light, beams, glow,
+shadow, smoke, fog, fire, open water and sky are not things: they are how a
+shot looks, and the shots say them in words.
+
 Never list anybody in the cast block: they exist already. Leave out crowds,
 weather, and anything seen only once in passing. Six at most.
 

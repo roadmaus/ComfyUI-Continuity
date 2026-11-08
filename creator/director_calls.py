@@ -109,7 +109,7 @@ SCHEMAS = {
         "required": ["questions", "assumptions"]},
     "basics": {"type": "object", "properties": {
         "title": {"type": "string"}, "seconds": {"type": "integer"},
-        "look": {"type": "string"}},
+        "look": {"type": "string"}, "camera": {"type": "string"}},
         "required": ["title", "seconds", "look"]},
     "beats": {"type": "object", "properties": {
         "beats": _list_of({"text": {"type": "string"},
@@ -176,6 +176,17 @@ def _cast_lines(cast):
             for m in cast]
 
 
+def _camera_block(plan):
+    """How every shot is filmed, when the brief said (`director.read_basics`).
+    Shown to every call below the basics: a piece seen through somebody's
+    eyes is written as what they see from the beats down, and its writer has
+    to be told so where it writes, since the brief alone did not stop a 27B
+    model from opening the diver's own POV piece on the diver standing on
+    the deck."""
+    camera = (plan.get("camera") or "").strip()
+    return _block("THE CAMERA (every shot is filmed this way)", [camera]) if camera else ""
+
+
 def _ledger_lines(ledger):
     return [f"@{e['handle']} — attached {e.get('kind') or 'picture'}"
             + (f": {e['text']}" if e.get("text") else "") for e in ledger]
@@ -204,6 +215,7 @@ def beats_message(plan, cast=()):
     return _message(
         _block("THE BRIEF", [plan["brief"]]),
         _block("ASSUMED", [f"- {a}" for a in plan.get("assumptions") or ()]),
+        _camera_block(plan),
         _block("CAST (already cast — cite with @ as written)", _cast_lines(cast)),
         f"The piece is \"{plan['title']}\", {plan['seconds']} seconds long. "
         f"Write {many} — or as many as the brief itself names, if it names them. "
@@ -224,6 +236,7 @@ def entities_message(plan, cast=(), ledger=()):
     return _message(
         _block("THE BRIEF", [plan["brief"]]),
         _block("THE BEATS", _beat_lines(plan)),
+        _camera_block(plan),
         _block("CAST (already cast — do not list them)", _cast_lines(cast)),
         _block("ATTACHED (already pictured — do not list them or what they show)",
                _ledger_lines(ledger)),
@@ -263,6 +276,7 @@ def shots_message(plan, beat_id, cast=(), ledger=()):
     many = "1 shot" if count == 1 else f"1 to {count} shots"
     return _message(
         _block("THE PIECE", [f"\"{plan['title']}\": {plan['brief']}"]),
+        _camera_block(plan),
         _block("NAMES you may cite", _name_lines(plan, cast, ledger)),
         _block(f"THIS BEAT (about {seconds} seconds)", [beat["text"]]),
         f"Write {many} that show this beat and nothing else."
@@ -696,7 +710,7 @@ def label_of(plan, row_id):
 
 
 _HEADER_WORDS = {PIECE, "piece", "header", "title", "look", "length", "seconds", "the title",
-                 "the look", "the length"}
+                 "the look", "the length", "camera", "the camera"}
 _POSITION_RE = re.compile(r"^(beat|shot)\s*(?:#|no\.?|number)?\s*(\d+)$")
 
 
@@ -731,8 +745,7 @@ def _plan_lines(plan, cast=()):
     """The plan as the turn call reads it: the card's rows, in the card's words."""
     seconds = director.allot_plan(plan)
     described = {m["name"]: m.get("description") for m in cast}
-    look = plan.get("look") or "none"
-    out = [f"{PIECE} — \"{plan['title']}\", {plan['seconds']} seconds, look: {look}"]
+    out = [f"{PIECE} — {_now_line(plan)}"]
     number = 0
     for at, beat in enumerate(plan["beats"], 1):
         out.append(f"beat {at} — {beat['text']} ({seconds[beat['id']]} s)")
@@ -862,7 +875,9 @@ def overrule(turn, plan, text):
 
 
 def _now_line(plan):
-    return f"\"{plan['title']}\", {plan['seconds']} seconds, look: {plan.get('look') or 'none'}"
+    camera = (plan.get("camera") or "").strip()
+    return (f"\"{plan['title']}\", {plan['seconds']} seconds, look: {plan.get('look') or 'none'}"
+            + (f", camera: {camera}" if camera else ""))
 
 
 def _keep(what):
@@ -877,7 +892,7 @@ def header_message(plan, change, seconds=None):
         _block("THE BRIEF", [plan["brief"]]),
         _block("THE PIECE NOW", [_now_line(plan)]),
         _block("THE CHANGE", [change]),
-        "Give the piece its title, length and look. " + _keep("them") + f" {length} " + REPLY)
+        "Give the piece its title, length, look and camera. " + _keep("them") + f" {length} " + REPLY)
 
 
 def beat_message(plan, beat_id, change, cast=()):
@@ -1004,7 +1019,9 @@ def _edit_row(plan, row_id, change, text, ask, log, cast, ledger, seconds):
             basics = director.read_basics(raw, seconds or plan["seconds"])
             if title:
                 basics["title"] = title
-            return _changed(basics, {k: plan.get(k) for k in basics}, "title, length and look")
+            # A plan made before the camera has none, which reads as "".
+            now = {**{k: plan.get(k) for k in basics}, "camera": plan.get("camera") or ""}
+            return _changed(basics, now, "title, length, look and camera")
         basics = _call(ask, log, "basics", header_message(plan, change, seconds), read,
                        label="turn.basics")
         try:

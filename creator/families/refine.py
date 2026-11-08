@@ -616,8 +616,12 @@ class Prompting:
         raise NotImplementedError(f"{self.id}.reply_shape")
 
     def system_prompt(self, mode, language="English", shape=None, cuts=0, extra="",
-                      cast=(), still=False):
+                      cast=(), still=False, attached=True):
         """The whole instruction: rules, craft, the mode's template, the contract.
+
+        `attached` is whether the request carries anything at all — a file
+        on a shot, the piece's pool, a cast. A family that teaches handles
+        leaves that lesson out without one (H3's `_REFS_RULE`).
 
         `extra` is the user's own instructions, from a prompt file they put in
         the node's skills/ folder and set to add to the built-in prompting

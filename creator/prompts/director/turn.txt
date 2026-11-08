@@ -9,8 +9,8 @@ THE REPLY
  "change": "...",   for edit and replan: the change, in one sentence
  "say": "..."}      for say: the answer, in one or two sentences
 
-- "edit" changes one row. The title, the length and the look are "the
-  piece". What a person, place or thing looks like is their @ row. What one
+- "edit" changes one row. The title, the length, the look and the camera
+  are "the piece". What a person, place or thing looks like is their @ row. What one
   shot shows, or how it is framed, is that shot. What happens in one beat,
   or how long it lasts next to the others, is that beat.
 - "replan" changes the whole piece: what it is about, where or when it is

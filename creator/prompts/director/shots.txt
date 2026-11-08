@@ -8,11 +8,18 @@ THE REPLY
 prompt: who, doing what, where, and the framing in a few words when it
 matters. One or two sentences, present tense.
 
-Every person, place and thing from the names block is written with @ and its
-name exactly as listed: "@baker walks into @bakery". Never
+Every person, place and thing from the names block that is seen in this shot
+is written with @ and its name exactly as listed: "@baker walks into
+@bakery". A name stands alone as a noun, never as a word describing
+something else: "the floodlights of @ship_deck", not "@ship_deck
+floodlights". Never
 describe what they look like: the citation brings their picture. Never write
 style, colour grading or film stock: the look is added to every shot by
 itself. Somebody who is not in the names block is written out in words.
+
+When there is a camera block, every shot is filmed that way. Seen through
+somebody's eyes, a shot is what they see: write what is in front of the lens
+and what their hands do, and never show the person themselves.
 
 "continues" is how the shot joins the one before it:
 - "new": a real cut. Another place, or time has passed.

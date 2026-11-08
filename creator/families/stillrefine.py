@@ -407,7 +407,7 @@ class StillPrompting(harness.Prompting):
         return reply_shape(shown=shown)
 
     def system_prompt(self, mode, language="English", shape=None, cuts=0, extra="",
-                      cast=(), still=True):
+                      cast=(), still=True, attached=True):
         return system_prompt(mode, language, shape=shape, extra=extra)
 
     def user_message(self, shots, seconds=None, shown=(), mode=None, piece=None,

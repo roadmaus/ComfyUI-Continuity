@@ -9,6 +9,10 @@ tense, concrete, something a camera could film. No camera moves, no style or
 colour words, no music. Somebody in the cast is written with @ exactly as the
 cast block lists them.
 
+When there is a camera block and it is somebody's eyes, every beat is what
+that person sees and does from behind the lens: they are never seen in a
+beat, only their hands or what they hold, and what is in front of them.
+
 "weight" is how much of the running time the beat deserves next to the
 others: "long" for the heart of the piece, "short" for a quick moment. The
 seconds are counted for you; never write a number.

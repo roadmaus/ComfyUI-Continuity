@@ -3335,4 +3335,9 @@ export const ko = {
  "Rendered as one unbroken clip, cut only where the video model stops. Press to chain it in shorter clips instead.": "끊김 없는 클립 하나로 렌더하며, 비디오 모델이 멈추는 곳에서만 자릅니다. 누르면 짧은 클립들로 이어 붙입니다.",
  "Render this shot as one unbroken clip instead of chained clips, up to what the video model can run.": "이 숏을 이어진 클립들 대신 끊김 없는 클립 하나로, 비디오 모델이 가능한 길이까지 렌더합니다.",
  "Past {limit} seconds one clip drifts more than chained shots.": "{limit}초를 넘으면 클립 하나는 이어진 숏보다 더 흐트러집니다.",
+ "No camera rule — each shot frames itself.": "카메라 규칙 없음 — 각 숏이 직접 구도를 잡습니다.",
+ "Plan it as a piece": "작품으로 계획하기",
+ "Past about 15 seconds one clip drifts. Planned as a piece, it is shots chained on the strip.": "약 15초를 넘기면 클립 하나는 흐트러집니다. 작품으로 계획하면 스트립에 이어진 숏들이 됩니다.",
+ "The video model renders at most {seconds} seconds in one clip, so this one stops there. Planned as a piece, it runs the whole length.": "비디오 모델은 클립 하나에 최대 {seconds}초까지만 렌더하므로 이 클립은 거기서 멈춥니다. 작품으로 계획하면 전체 길이로 렌더됩니다.",
+ "You named several shots, and this is one clip. Planned as a piece, each is a shot of its own.": "여러 숏을 말했지만 이것은 클립 하나입니다. 작품으로 계획하면 각각이 독립된 숏이 됩니다.",
 };

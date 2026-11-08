@@ -279,7 +279,11 @@ export function fingerprint(plan, rowId, every = null, memo = null) {
     const current = records[dep]?.fingerprint === mark;
     return dep in handles && current ? handles[dep] : mark;
   });
-  const blob = pyJson([row.kind, family ?? null, rail.aspect ?? null, plan.look ?? null, body, deps]);
+  // The camera is a shot's, not a sheet's, and only there when the plan has
+  // one: `director.styled`.
+  const camera = row.kind === "sheet" ? null : (plan.camera || null);
+  const style = camera ? [plan.look ?? null, camera] : (plan.look ?? null);
+  const blob = pyJson([row.kind, family ?? null, rail.aspect ?? null, style, body, deps]);
   memo[rowId] = sha1(blob).slice(0, 12);
   return memo[rowId];
 }
@@ -683,6 +687,15 @@ export function planCard(plan, hooks = {}) {
       editable(doc.look, { live, placeholder: t("No look — the rail's style applies."),
                            label: t("Look"), onCommit: (look) => edit("header", { look }) }),
     ]),
+    // How every shot is filmed, when the brief said: "through the diver's
+    // helmet lens". Shown only when there is one, or on a live plan to add one.
+    doc.camera || live
+      ? el("div", { class: "mmc-dr-look" }, [
+          el("span", { class: "mmc-dr-key", text: t("Camera") }),
+          editable(doc.camera ?? "", { live, placeholder: t("No camera rule — each shot frames itself."),
+                                       label: t("Camera"), onCommit: (camera) => edit("header", { camera }) }),
+        ])
+      : null,
     doc.assumptions?.length
       ? el("div", { class: "mmc-dr-assumed" }, [
           el("span", { class: "mmc-dr-key", text: t("Assumed") }),

@@ -157,19 +157,20 @@ renders a person must approve), **run** (everything else, one command).
 
 - **The person asks for it.** A *Plan* toggle on the composer sends the message
   as a brief.
-- **The room switches by itself.** Code, not the model, notices a request one
-  render should not satisfy (`director.wants_plan`), on the turn's own reading
-  of it: a fresh clip longer than the shot limit, longer than the video family
-  renders at all, or a message naming more than one shot. The turn then plans
-  the message as a brief instead of rendering, and says why. A plan is only
-  words, so nothing is spent by switching; while one clip could still hold
-  the request, the plan carries a *Render it as one clip* button that turns
-  it down and renders the clip the turn asked for. A clip after or in place of
-  one on the strip is never switched, and neither is a request for one
-  continuous take within the family's ceiling. The person's stated length
-  wins over the model's. The model is not given a third `act`: on a small
-  model, every choice added to the turn schema costs accuracy on the two that
-  are already there (`creator/chat.py`'s header explains why).
+- **The room offers it.** Code, not the model, notices a request one render
+  should not satisfy (`director.wants_plan`), on the turn's own reading of
+  it: a fresh clip longer than the shot limit, longer than the video family
+  renders at all, or a message naming more than one shot. The clip still
+  renders as asked — at the family's ceiling when it asks for more — and the
+  answer carries a *Plan it as a piece* button that sends the same message as
+  a brief. The room does not switch by itself: with the Plan toggle off the
+  chat is the refiner, and starting a project the person did not ask for is
+  worse than one clip that drifts. A clip after or in place of one on the
+  strip is never offered, and neither is a request for one continuous take
+  within the family's ceiling. The person's stated length wins over the
+  model's. The model is not given a third `act`: on a small model, every
+  choice added to the turn schema costs accuracy on the two that are already
+  there (`creator/chat.py`'s header explains why).
 
 A chat holds at most one plan at a time. A new brief while one exists asks
 whether to replace it.

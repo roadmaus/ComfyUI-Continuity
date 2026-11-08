@@ -301,7 +301,15 @@ def _next_id(plan, prefix, rows):
 # ---- what the model's calls return -------------------------------------------
 
 def read_basics(raw, seconds=None):
-    """The basics call -> `{title, seconds, look}`.
+    """The basics call -> `{title, seconds, look, camera}`.
+
+    `camera` is how every shot of the piece is filmed, when the brief says so
+    ("entirely from the diver's point of view, through his helmet lens"), and
+    empty otherwise. It is not part of the look because the look goes on the
+    sheets too, and a person's reference sheet seen through their own eyes is
+    a picture of nothing; and the beats, entities and shots calls are shown
+    it, since a brief filmed through somebody's eyes is written differently
+    all the way down — that person is the camera, and is never in frame.
 
     `seconds` is what the person asked for, when the room could read a number
     in the brief: theirs wins over the model's, since it is a decision and not
@@ -313,7 +321,8 @@ def read_basics(raw, seconds=None):
     asked = seconds if seconds is not None else raw.get("seconds")
     total = DEFAULT_SECONDS if asked in (None, "") else _whole(asked, '"seconds"', 1, MAX_SECONDS)
     look = _text(raw.get("look"), '"look"', required=False)
-    return {"title": title, "seconds": total, "look": look}
+    camera = _text(raw.get("camera"), '"camera"', required=False)
+    return {"title": title, "seconds": total, "look": look, "camera": camera}
 
 
 def read_beats(raw):
@@ -717,9 +726,23 @@ def _row(plan, row_id, every=None):
 
 # ---- prompts -------------------------------------------------------------------
 
-def _with_look(prompt, plan):
+def _with_look(prompt, plan, camera=True):
+    """A prompt with the piece's camera and look after it. A sheet takes the
+    look only: it is a reference picture of somebody or something, and the
+    piece's point of view is the shots' (`read_basics`)."""
     look = (plan.get("look") or "").strip()
+    shot = (plan.get("camera") or "").strip() if camera else ""
+    if shot:
+        prompt = f"{prompt}\n\nCamera: {shot.rstrip('.')}."
     return f"{prompt}\n\nLook: {look.rstrip('.')}." if look else prompt
+
+
+def styled(plan, sheet=False):
+    """What of the header a row's fingerprint holds: the look, and the camera
+    for a shot's rows when there is one. A plan with no camera reads exactly
+    as plans did before the field, so their rows do not go stale."""
+    camera = None if sheet else (plan.get("camera") or None)
+    return [plan.get("look"), camera] if camera else plan.get("look")
 
 
 def _resolve(plan, text, handles):
@@ -798,7 +821,7 @@ def action_for(plan, row_id):
     if row["kind"] == "sheet":
         entity = next(e for e in plan["entities"] if e["id"] == row["entity"])
         prompt = SHEETS[entity["kind"]].format(description=_inline(entity["description"]))
-        return _blank(KIND_STILL, _with_look(prompt, plan), [])
+        return _blank(KIND_STILL, _with_look(prompt, plan, camera=False), [])
     shot = next(s for s in plan["shots"] if s["id"] == row["shot"])
     prompt, cited = _resolve(plan, shot["action"], handles)
     if row["kind"] == "keyframe":
@@ -898,7 +921,8 @@ def fingerprint(plan, row_id, every=None, memo=None):
         mark = fingerprint(plan, dep, every, memo)
         current = (records.get(dep) or {}).get("fingerprint") == mark
         deps.append(handles[dep] if dep in handles and current else mark)
-    blob = json.dumps([row["kind"], family, rail.get("aspect"), plan.get("look"), body, deps],
+    blob = json.dumps([row["kind"], family, rail.get("aspect"),
+                       styled(plan, row["kind"] == "sheet"), body, deps],
                       ensure_ascii=False, sort_keys=True)
     memo[row_id] = hashlib.sha1(blob.encode("utf-8")).hexdigest()[:12]
     return memo[row_id]
@@ -1008,7 +1032,7 @@ def _ready(plan, phase, st=None):
 
 HEADER = "header"
 EDITABLE = {
-    "header": ("title", "seconds", "look", "keyframes", "shot_limit"),
+    "header": ("title", "seconds", "look", "camera", "keyframes", "shot_limit"),
     "b": ("text", "weight"),
     "e": ("name", "description", "source"),
     "s": ("action", "continues", "one_take"),
@@ -1040,6 +1064,8 @@ def edit(plan, row_id, fields):
             plan["seconds"] = _whole(fields["seconds"], '"seconds"', 1, MAX_SECONDS)
         if "look" in fields:
             plan["look"] = _text(fields["look"], '"look"', required=False)
+        if "camera" in fields:
+            plan["camera"] = _text(fields["camera"], '"camera"', required=False)
         if "keyframes" in fields:
             plan["keyframes"] = bool(fields["keyframes"])
         if "shot_limit" in fields:
