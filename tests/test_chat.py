@@ -879,7 +879,7 @@ check("and it keeps its own shape — the aspect is not written",
 beside = edited({"act": "render", "kind": "still", "prompt": "a fox in that look",
                  "from": ["img-1:style"], "aspect": "1:1"})
 check("a picture cited for its look is only drawn from: a blank canvas, in the asked shape",
-      (chat.EDIT_FIRST_FIELD in beside, beside["aspect"]), (False, "1:1"))
+      (chat.EDIT_FIRST_FIELD in beside, beside["aspect"]), (False, "16:9"))
 ordered = edited({"act": "render", "kind": "still", "prompt": "@img-2 in the look of @img-1",
                   "from": ["img-1:style", "img-2"]})
 # A member's picture carries its saved renditions (`compile.Asset.mods`):
@@ -1141,10 +1141,12 @@ check("a still cited plain beside the member opens the shot",
 # opens the shot only if nothing else does.
 roles = chat.video_piece(chat.validate({"act": "render", "kind": "video", "prompt": "x",
                                         "from": ["img-2:end", "img-1:start", "vid-1:camera"]},
-                                       ROOM), ROOM, RAIL)
+                                       ROOM), ROOM, RAIL, base={"aspect_source": "pill"})
 check("start and end land as the shot's keyframes wherever they were cited",
       [(a["handle"], a["role"]) for a in roles["segments"][0]["assets"]],
       [("img-2", "last_frame"), ("img-1", "first_frame"), ("vid-1", "reference")])
+check("a keyframe lets the Creator use the input's canvas, not a saved room pill",
+      roles["aspect_source"], "auto")
 check("a scope on a clip is what it is cited for",
       roles["segments"][0]["assets"][2].get("takes"), "camera")
 asref = chat.video_piece(chat.validate({"act": "render", "kind": "video", "prompt": "x",
@@ -1180,6 +1182,8 @@ check("after keeps the strip in front, held on its take",
 check("and the new card follows it live on both tracks, with the family's medium blend",
       {k: after["segments"][1].get(k) for k in ("continue", "continue_audio", "feather")},
       {"continue": True, "continue_audio": True, "feather": chat.default_feather("h3")})
+check("an extension takes its canvas from the continued clip",
+      after["aspect_source"], "auto")
 check("the family's medium blend is the third width of its grid", chat.default_feather("h3"), 22)
 replaced = chat.video_piece(chat.validate({"act": "render", "kind": "video", "prompt": "again",
                                            "replaces": "vid-1"}, ROOM, strip=["vid-1"]),

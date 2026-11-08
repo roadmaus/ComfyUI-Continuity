@@ -2082,6 +2082,12 @@ def video_piece(action, ledger, rail, base=None, strip=None):
         "turbo": piece.get("turbo") or {"on": False, "lora": None},
         "subjects": [s for s in piece.get("subjects") or [] if isinstance(s, dict)],
         "assets": _pool(piece),
+        # The room's aspect pill is the fallback for a fresh clip. Its input
+        # is the geometry anchor, though: a first or last frame, or footage
+        # carried forward by `after`, must keep its own canvas just as it does
+        # on the Creator node. Do not inherit a node blob's explicit pin (for
+        # example, "pill"), which would suppress that automatic selection.
+        "aspect_source": "auto",
         **_canvas(action, rail, "video"),
         "segments": kept + [card],
     })
