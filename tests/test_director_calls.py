@@ -252,3 +252,202 @@ check("shots: per beat", [calls.shots_for(s) for s in (3, 6, 12, 40)], [1, 1, 2,
 
 for name in calls.CALLS:
     check(f"{name}.txt has a worked example", "```json" in calls.prompt_file(name), True)
+
+# ---- plan turns --------------------------------------------------------------------
+#
+# The plan from the happy path: beat 1 is shot 1, beat 2 is shots 2 and 3,
+# @george is cast and @carriage is a place with a sheet to make.
+
+ask, asked = scripted(list(GOOD))
+base = calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask,
+                        cast=[{"name": "george", "description": "a tall man"}])["plan"]
+GEORGE = [{"name": "george", "description": "a tall man"}]
+
+
+def turn(text, replies, plan=base, cast=GEORGE):
+    ask, asked = scripted(list(replies))
+    return calls.plan_turn(plan, text, ask, cast=cast), asked
+
+
+out, asked = turn("how many shots are there?",
+                  [fence({"act": "say", "row": "", "change": "", "say": "Three shots."})])
+check("a question is answered, and changes nothing", (out["act"], out["say"], out["plan"]),
+      ("say", "Three shots.", None))
+check("the turn is shown the plan in the card's words",
+      [line for line in asked[0]["message"].split("\n") if line.startswith(("beat", "  shot", "@"))],
+      ["beat 1 — @george wakes in the carriage. (8 s)",
+       "  shot 1 — @george wakes up inside @carriage. (8 s)",
+       "beat 2 — He finds the cab empty. (22 s)",
+       "  shot 2 — @george walks the length of @carriage. (11 s)",
+       "  shot 3 — @george opens the cab door: nobody. (11 s)",
+       "@george — cast: a tall man",
+       "@carriage — place: an old train carriage"])
+check("…the person's words last, above the instruction",
+      asked[0]["message"].endswith("THE MESSAGE\nhow many shots are there?\n\n"
+                                   "Decide what the message asks of the plan. " + calls.REPLY), True)
+check("…with its schema", asked[0]["schema"] is calls.SCHEMAS["turn"], True)
+
+CLOSE = {"action": "Close on @george's hand on the cab door: nobody inside.", "continues": "cut"}
+out, asked = turn("make the last shot a close-up",
+                  [fence({"act": "edit", "row": "Shot 3", "change": "A close-up on the door.", "say": ""}),
+                   fence({"shots": [CLOSE]})])
+check("an edit to a shot rewrites that shot by its own call",
+      ([a["label"] for a in asked], out["row"], out["plan"]["shots"][2]["action"]),
+      (["turn", "turn.shot"], "s3", CLOSE["action"]))
+check("…and no other", [s["action"] for s in out["plan"]["shots"][:2]],
+      [s["action"] for s in base["shots"][:2]])
+check("…shown the shot as it stands and the change",
+      "THIS SHOT NOW (about 11 seconds, continues \"cut\")\n@george opens the cab door: nobody."
+      in asked[1]["message"] and "THE CHANGE\nA close-up on the door." in asked[1]["message"], True)
+check("…with nothing to change on the edit path", out["render"], None)
+
+out, asked = turn("shot nine darker",
+                  [fence({"act": "edit", "row": "shot 9", "change": "darker", "say": ""}),
+                   fence({"act": "edit", "row": "shot 3", "change": "darker", "say": ""}),
+                   fence({"shots": [CLOSE]})])
+check("a row the plan does not have is re-asked with the rows it has",
+      ('"row" must name one row of the plan: "the piece", "beat 1", "beat 2", "shot 1"'
+       in out["log"][0]["first_error"], out["row"]), (True, "s3"))
+check("rows read loosely", [calls.row_of(base, w) for w in ("Beat 2", "shot #1", "carriage",
+                                                            "@George", "the look")],
+      ["b2", "s1", "e2", "e1", "header"])
+
+out, asked = turn("make the second beat shorter",
+                  [fence({"act": "edit", "row": "beat 2", "change": "shorter", "say": ""}),
+                   fence({"beats": [{"text": "He finds the cab empty.", "weight": "short"}]})])
+check("a beat that only changed length keeps its shots",
+      (len(asked), out["plan"]["beats"][1]["weight"], [s["id"] for s in out["plan"]["shots"]]),
+      (2, "short", ["s1", "s2", "s3"]))
+check("…and its seconds are code's", director.allot_plan(out["plan"])["b2"], 15)
+
+out, asked = turn("in beat two he finds the driver asleep instead",
+                  [fence({"act": "edit", "row": "beat 2", "change": "He finds the driver asleep.", "say": ""}),
+                   fence({"beats": [{"text": "He finds the driver asleep at the controls.", "weight": "long"}]}),
+                   fence({"shots": [{"action": "@george finds the driver asleep at the controls.",
+                                     "continues": "cut"}]})])
+check("a beat whose action changed has its shots written again, under new ids",
+      ([a["label"] for a in asked], [s["id"] for s in out["plan"]["shots"]]),
+      (["turn", "turn.beat", "shots.b2"], ["s1", "s4"]))
+
+made = director.land(director.start(base, "e2")[0], "e2", "pic-7", director.fingerprint(base, "e2"))
+made = director.approve(made, "e2")
+out, asked = turn("the carriage should be a sleeper car",
+                  [fence({"act": "edit", "row": "@carriage", "change": "Make @carriage a sleeper car.", "say": ""}),
+                   fence({"entities": [{"name": "sleeper_carriage", "kind": "place",
+                                        "description": "A sleeper car with bunks."}]})], plan=made)
+entity = out["plan"]["entities"][1]
+check("an entity is rewritten by the entities call, its name kept unless the person gave one",
+      (entity["name"], entity["description"]), ("carriage", "A sleeper car with bunks."))
+check("a sheet already made is changed on the edit path",
+      (out["render"]["row"], out["render"]["action"]["from"], out["render"]["action"]["prompt"]),
+      ("e2", ["pic-7"], "Make carriage a sleeper car."))
+check("…under the row's mark in the changed plan, so it lands current",
+      out["render"]["mark"], director.fingerprint(out["plan"], "e2"))
+check("…and until it lands the old sheet is stale", director.state_of(out["plan"], "e2"), "stale")
+
+conductor = director.validate(director.add_entities(
+    base, [{"name": "conductor", "kind": "person", "description": "a conductor"}]))
+out, asked = turn("use @anna for the conductor",
+                  [fence({"act": "edit", "row": "@conductor", "change": "Anna plays the conductor.", "say": ""})],
+                  plan=conductor, cast=GEORGE + [{"name": "anna", "description": "a woman"}])
+check("citing a cast member on a person recasts them, with no call of its own",
+      (len(asked), out["recast"], out["plan"]["entities"][2]["source"]), (1, "anna", {"cited": "anna"}))
+check("…and their sheet is no longer a row",
+      [r["id"] for r in director.rows(out["plan"]) if r["kind"] == "sheet"], ["e2"])
+
+out, asked = turn("make it 20 seconds and call it Last Train",
+                  [fence({"act": "edit", "row": "the piece", "change": "20 seconds, titled Last Train", "say": ""}),
+                   fence({"title": "Last Train", "seconds": 45, "look": "sodium light, grain"})])
+check("a length the person says wins over the model's",
+      (out["plan"]["seconds"], out["plan"]["title"]), (20, "Last Train"))
+check("…told the length it is to keep",
+      "The person asked for 20 seconds." in asked[1]["message"], True)
+
+WINTER = [fence({"act": "replan", "row": "", "change": "It is winter, snow everywhere.", "say": ""}),
+          fence({"title": "Snow Train", "seconds": 30, "look": "sodium light, grain"}),
+          fence({"beats": [{"text": "@george wakes as a snowdrift buries @carriage.", "weight": "long"}]}),
+          fence({"entities": [{"name": "carriage", "kind": "place", "description": "listed again"},
+                              {"name": "snowdrift", "kind": "thing", "description": "a deep drift"}]}),
+          fence({"shots": [{"action": "@george wakes inside @carriage as snow piles at the window.",
+                            "continues": "new"}]})]
+out, asked = turn("set it in winter", WINTER, plan=made)
+new = out["plan"]
+check("a replan writes the piece again from the beats down",
+      [a["label"] for a in asked], ["turn", "replan.basics", "replan.beats", "replan.entities", "shots.b3"])
+check("…under new ids", ([b["id"] for b in new["beats"]], [s["id"] for s in new["shots"]]),
+      (["b3"], ["s4"]))
+check("…keeping the entities it had, their sheets with them",
+      ([e["id"] for e in new["entities"]], new["entities"][1]["description"],
+       new["renders"]["e2"]["handle"], director.state_of(new, "e2")),
+      (["e1", "e2"], "an old train carriage", "pic-7", "approved"))
+COLD = list(WINTER)
+COLD[1] = fence({"title": "Snow Train", "seconds": 30, "look": "cold blue light"})
+check("…but a new look is in every sheet's prompt, so a sheet made in the old one is stale",
+      director.state_of(turn("set it in winter", COLD, plan=made)[0]["plan"], "e2"), "stale")
+check("…an entity it adds that no shot cites goes", "snowdrift" in director.names(new), False)
+check("…the entities call is told who is already there",
+      "@carriage — an old train carriage" in asked[3]["message"], True)
+check("…and the change is part of the brief from now on",
+      new["brief"].endswith("It is winter, snow everywhere."), True)
+
+out, asked = turn("make it 2 seconds",
+                  [fence({"act": "edit", "row": "the piece", "change": "2 seconds", "say": ""}),
+                   fence({"title": "Night Train", "seconds": 2, "look": "x"})]
+                  + [fence({"title": "Night Train", "seconds": 2, "look": "x"}),
+                     fence({"beats": [{"text": "@george wakes in the carriage.", "weight": "short"}]}),
+                     fence({"entities": []}),
+                     fence({"shots": [{"action": "@george wakes up inside @carriage.", "continues": "new"}]})])
+check("a length the shots cannot share is planned again at that length",
+      (out["act"], out["plan"]["seconds"], len(out["plan"]["shots"])), ("replan", 2, 1))
+
+try:
+    turn("whatever", ["nothing", "nothing again"])
+    check("a turn that fails twice raises", False, True)
+except calls.PlanningFailed as failed:
+    check("a turn that fails twice keeps the plan as it was", failed.plan, base)
+    check("…and says what to do", str(failed).startswith("Could not tell what that changes"), True)
+
+# ---- what the person's words say plainly ---------------------------------------------
+
+check("rows named by position", calls.named_rows(base, "make the last beat longer and the 2nd shot wider"),
+      ["b2", "s2"])
+check("…by number", calls.named_rows(base, "in shot 1 he wakes"), ["s1"])
+check("…and one past the end names nothing", calls.named_rows(base, "the fourth shot"), [])
+check("a title in the words", calls.asked_title("call it “Last Orders”."), "Last Orders")
+check("…and none in other words", calls.asked_title("call the waitress Mia"), None)
+
+out, asked = turn("make the last beat shorter",
+                  [fence({"act": "edit", "row": "shot 3", "change": "shorter", "say": ""}),
+                   fence({"beats": [{"text": "He finds the cab empty.", "weight": "short"}]})])
+check("a beat the words name overrules the row the call picked",
+      (out["row"], out["log"][0]["overruled"]), ("b2", "s3 -> b2"))
+
+out, asked = turn("in the first shot he should wake with a start",
+                  [fence({"act": "edit", "row": "@george", "change": "He wakes with a start.", "say": ""}),
+                   fence({"shots": [{"action": "@george jolts awake inside @carriage.", "continues": "new"}]})])
+check("a cast member's row is no row to edit, and the words name the shot",
+      (out["row"], out["log"][0]["tries"]), ("s1", 1))
+
+out, asked = turn("call it Last Train",
+                  [fence({"act": "say", "row": "", "change": "", "say": "It is called Night Train."}),
+                   fence({"title": "Night Train", "seconds": 30, "look": "sodium light, grain"})])
+check("a title the words give is the header's, whatever the call said",
+      (out["act"], out["row"], out["plan"]["title"]), ("edit", "header", "Last Train"))
+
+out, asked = turn("is 20 seconds too long?",
+                  [fence({"act": "say", "row": "", "change": "", "say": "No."})])
+check("a length in a question changes nothing", (out["act"], out["plan"]), ("say", None))
+
+out, asked = turn("make @carriage a sleeper",
+                  [fence({"act": "edit", "row": "@carriage", "change": "A sleeper car.", "say": ""}),
+                   fence({"entities": [{"name": "carriage", "kind": "place", "description": "an old train carriage"}]}),
+                   fence({"entities": [{"name": "carriage", "kind": "place", "description": "A sleeper car."}]})])
+check("a rewrite that is the row as it was is re-asked",
+      (out["log"][1]["first_error"].startswith("your description of @carriage is exactly as it was"),
+       out["plan"]["entities"][1]["description"]), (True, "A sleeper car."))
+
+out, asked = turn("how long is it?", [fence({"say": "Thirty seconds."})])
+check("an answer with no act is an answer", (out["act"], out["say"]), ("say", "Thirty seconds."))
+out, asked = turn("make it darker", [fence({"say": "Make it darker."}),
+                                     fence({"act": "say", "row": "", "change": "", "say": "Sure."})])
+check("…but the message said back is re-asked", out["log"][0]["tries"], 2)

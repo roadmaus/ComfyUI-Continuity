@@ -3304,4 +3304,11 @@ export const ko = {
  "Out of date: the plan changed since.": "오래됨: 그 뒤 플랜이 바뀌었습니다.",
  "Approve": "승인",
  "Use this picture in the piece.": "이 그림을 작품에 사용합니다.",
+ "Say what to change in the plan, or ask about it…": "계획에서 바꿀 점을 말하거나 계획에 대해 물어보세요…",
+ "Planned again: “{title}”, {seconds} seconds in {count} shots.": "다시 계획했습니다: “{title}”, {seconds}초, {count}개 샷.",
+ "@{name} is now played by @{cast}, as they are in the cast.": "이제 캐스트의 @{cast}이(가) 그대로 @{name} 역을 맡습니다.",
+ "Changed @{name}.": "@{name}을(를) 바꿨습니다.",
+ "Changed beat {n}.": "비트 {n}을(를) 바꿨습니다.",
+ "Changed shot {n}.": "샷 {n}을(를) 바꿨습니다.",
+ "Changed the title, length or look.": "제목, 길이 또는 룩을 바꿨습니다.",
 };

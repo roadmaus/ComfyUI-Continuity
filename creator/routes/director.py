@@ -24,6 +24,13 @@ card does its own arithmetic (seconds, splits, rows) through the mirror in
 `web/creator/director.js`, so a weight changed on the card shows its seconds
 before the answer is back; what is *allowed* is decided here.
 
+**A plan turn is a turn.** While a plan is open, what the person says in the
+room goes to `director/turn` rather than `chat/turn`, and is answered the
+same way: one call decides whether it edits a row, replans, or is a question,
+and an edit runs that row's own call again (`director_calls.plan_turn`). A
+change to a picture already made comes back as an action for the room to
+queue down the edit path, like any prep render.
+
 **A prep render is a chat render.** `director/action` takes the plan and one
 row and answers the chat action that row becomes (`director.action_for`) and
 its fingerprint now. The room queues the action through `chat/render` like any
@@ -159,12 +166,10 @@ def _plan_job(body):
 jobs.register("director_plan", _plan_job)
 
 
-@PromptServer.instance.routes.post("/continuity/director/plan")
-@same_origin
-async def director_plan(request):
-    """A brief -> its plan, or the brief call's questions. Answered as a chat
-    turn is: `{"answer_id"}` on the remote backend, `{"prompt_id"}` on the
-    in-process one, the result on the socket either way."""
+async def _answered(request, work, job):
+    """A request that needs the model, answered the way a chat turn is:
+    `{"answer_id"}` on the remote backend, `{"prompt_id"}` on the in-process
+    one (as the queued `job`), the result on the socket either way."""
     try:
         body = await request.json()
     except ValueError:
@@ -175,13 +180,67 @@ async def director_plan(request):
     if refused is not None:
         return refused
     if block.get("backend") == "remote":
-        answer_id = jobs.answer_later(lambda: _plan(body), body.get("client_id"), _EXPECTED)
+        answer_id = jobs.answer_later(lambda: work(body), body.get("client_id"), _EXPECTED)
         return web.json_response({"answer_id": answer_id})
     try:
-        prompt_id = await jobs.submit("director_plan", body, body.get("client_id"))
+        prompt_id = await jobs.submit(job, body, body.get("client_id"))
     except jobs.JobError as problem:
         return web.json_response({"error": str(problem)}, status=500)
     return web.json_response({"prompt_id": prompt_id})
+
+
+@PromptServer.instance.routes.post("/continuity/director/plan")
+@same_origin
+async def director_plan(request):
+    """A brief -> its plan, or the brief call's questions."""
+    return await _answered(request, _plan, "director_plan")
+
+
+# ---- plan turns -------------------------------------------------------------------
+
+
+def _turn(body):
+    """The blocking half of `director/turn`: what the person said about an
+    open plan -> `{plan, act, row, say, render, recast, warnings}`
+    (`director_calls.plan_turn`; `plan` is None when nothing changed).
+
+    The turn is told about the cast members the plan already uses, so a
+    rewritten shot can cite them, and the ones the person's words cite,
+    which is how "use @george for the keeper" reaches it. It is told the
+    attached files the brief, the shots or the words cite, since a rewritten
+    shot may cite them again and nothing else."""
+    block = body.get("settings") or {}
+    plan = director.validate(body.get("plan"))
+    text = " ".join(str(body.get("text") or "").split())
+    if not text:
+        raise director.PlanError("a message about the plan must say something.")
+    ledger, cast = chat_routes._with_piece(body)
+    used = " ".join("@" + e["source"]["cited"] for e in plan["entities"]
+                    if "cited" in (e.get("source") or {}))
+    told = " ".join([plan["brief"], text] + [s["action"] for s in plan["shots"]])
+    result = director_calls.plan_turn(
+        plan, text, asker(block), cast=cited_cast(f"{used} {text}", cast),
+        ledger=cited_ledger(told, ledger))
+    return {key: result.get(key) for key in
+            ("plan", "act", "row", "say", "render", "recast", "warnings")}
+
+
+def _turn_job(body):
+    try:
+        return _turn(body)
+    except _EXPECTED as problem:
+        raise jobs.JobError(str(problem)) from problem
+
+
+jobs.register("director_turn", _turn_job)
+
+
+@PromptServer.instance.routes.post("/continuity/director/turn")
+@same_origin
+async def director_turn(request):
+    """Something said in the room while a plan is open -> the plan changed,
+    or an answer (§5.4 of the spec)."""
+    return await _answered(request, _turn, "director_turn")
 
 
 # ---- editing --------------------------------------------------------------------

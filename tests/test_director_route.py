@@ -255,4 +255,55 @@ except director.PlanError as problem:
 else:
     FAILURES.append("a missing row's action was not refused")
 
+# ---- a plan turn ---------------------------------------------------------------
+
+turn_calls = []
+
+
+def turn_ask(replies):
+    def ask(block, system, message, schema=None):
+        turn_calls.append({"block": block, "message": message, "schema": schema})
+        return fence(replies.pop(0))
+    return ask
+
+
+chat_routes._ask = turn_ask([{"act": "say", "row": "", "change": "", "say": "Two shots."}])
+said = route._turn({"plan": doc, "text": "how many shots?", "settings": SETTINGS,
+                    "piece": PIECE, "ledger": LEDGER})
+check("a question about the plan is answered, the plan unchanged",
+      (said["act"], said["say"], said["plan"]), ("say", "Two shots.", None))
+check("...through the room's one ask", turn_calls[0]["block"] is SETTINGS, True)
+check("...told who the plan already casts", "@george — cast: a weathered man of seventy"
+      in turn_calls[0]["message"], True)
+check("...and nothing else the room keeps", "log" in said, False)
+
+turn_calls.clear()
+chat_routes._ask = turn_ask([
+    {"act": "edit", "row": "shot 1", "change": "Closer.", "say": ""},
+    {"shots": [{"action": "Close on @george lifting @bottle from @pic-3.", "continues": "new"}]}])
+edited = route._turn({"plan": doc, "text": "closer on the first shot", "settings": SETTINGS,
+                      "piece": PIECE, "ledger": LEDGER})
+check("an edit comes back as the plan with the row changed",
+      (edited["row"], edited["plan"]["shots"][0]["action"]),
+      ("s1", "Close on @george lifting @bottle from @pic-3."))
+check("...the rewritten shot may cite a file the brief attached",
+      "@pic-3 — attached image: the rocks" in turn_calls[1]["message"], True)
+
+turn_calls.clear()
+person = director.validate(director.add_entities(
+    doc, [{"name": "keeper", "kind": "person", "description": "an old keeper"}]))
+chat_routes._ask = turn_ask([{"act": "edit", "row": "@keeper", "change": "Anna plays the keeper.", "say": ""}])
+recast = route._turn({"plan": person, "text": "use @anna for the keeper", "settings": SETTINGS,
+                      "piece": PIECE, "ledger": LEDGER})
+check("a cast member the words cite recasts a person",
+      (recast["recast"], recast["plan"]["entities"][-1]["source"]), ("anna", {"cited": "anna"}))
+chat_routes._ask = fake_ask
+
+try:
+    route._turn({"plan": doc, "text": "  ", "settings": SETTINGS})
+except director.PlanError as problem:
+    check("an empty message is refused in a sentence", "must say something" in str(problem), True)
+else:
+    FAILURES.append("an empty plan turn was answered")
+
 passed("the plan route plans with the room's backend, rail and cast")

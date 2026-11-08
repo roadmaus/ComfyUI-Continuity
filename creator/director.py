@@ -716,15 +716,42 @@ def action_for(plan, row_id):
     return _blank(KIND_VIDEO, _with_look(prompt, plan), cited, row["seconds"], after)
 
 
-def sheet_change(plan, entity_id, change):
-    """A change to a rendered sheet, said in words -> the chat action that
-    makes it on the room's ordinary edit path: the old picture cited plain,
-    the change as the prompt. The new picture is the entity's new candidate
-    and needs approving again (`land`)."""
-    handle = handles_of(plan).get(entity_id)
+def change_action(plan, row_id, change):
+    """A change to a rendered prep picture — a sheet or an opening frame —
+    said in words -> the chat action that makes it on the room's ordinary
+    edit path: the old picture cited plain, the change as the prompt, as a
+    typed "make @pic-3 older" would be. The new picture is the row's new
+    candidate and needs approving again (`land`).
+
+    Names from the plan come off as plain words: the edit family is changing
+    one picture, and `@keeper` in its prompt would be a citation of somebody
+    the render was never sent."""
+    row = _row(plan, row_id)
+    if row["phase"] != PREP:
+        raise PlanError(f"{row_id} is not a picture made for approval.")
+    handle = handles_of(plan).get(row_id)
     if not handle:
-        raise PlanError(f"{entity_id} has no sheet to change yet.")
-    return _blank(KIND_STILL, _text(change, "the change"), [handle])
+        raise PlanError(f"{row_id} has no picture to change yet.")
+
+    def plain(match):
+        entity = _entity(plan, match.group(1))
+        return entity["name"].replace("_", " ") if entity else match.group(0)
+
+    return _blank(KIND_STILL, CITE_RE.sub(plain, _text(change, "the change")), [handle])
+
+
+def prune(plan):
+    """The plan less the render records of rows it no longer has.
+
+    A replan writes new beats and shots under new ids, so the clips and
+    opening frames of the old ones have no row to be stale against; their
+    records would only ride along in every saved chat. A sheet's record
+    stays while its entity does — a replan keeps the people and places it
+    already made (`director_calls.replan`)."""
+    plan = copy.deepcopy(plan)
+    have = {r["id"] for r in rows(plan)}
+    plan["renders"] = {rid: r for rid, r in (plan.get("renders") or {}).items() if rid in have}
+    return plan
 
 
 # ---- fingerprints and states ---------------------------------------------------

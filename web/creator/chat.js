@@ -608,6 +608,38 @@ function switchTo(fork, to) {
   }
 }
 
+/** The plan the server answered, with the render records the plan has now:
+ *  renders land while a request is away, so the records are the ones on
+ *  `now`, less any the server took off what was `sent` (an entity recast as
+ *  somebody cited loses its sheet; a replan drops the old shots' clips). */
+function withLanded(now, sent, answered) {
+  const renders = { ...(now.renders ?? {}) };
+  for (const id of Object.keys(sent.renders ?? {})) if (!(id in (answered.renders ?? {}))) delete renders[id];
+  return { ...answered, renders };
+}
+
+/** The room's one line after a plan turn: what moved, said in the card's
+ *  own words — beats and shots by their number on the card as it was. */
+function turnWords(result, sent) {
+  if (result.act === "say") return result.say || "";
+  const doc = result.plan;
+  if (result.act === "replan") {
+    return t("Planned again: “{title}”, {seconds} seconds in {count} shots.",
+             { title: doc.title, seconds: doc.seconds, count: doc.shots.length });
+  }
+  const row = result.row ?? "";
+  const entity = doc.entities.find((e) => e.id === row);
+  if (result.recast && entity) {
+    return t("@{name} is now played by @{cast}, as they are in the cast.", { name: entity.name, cast: result.recast });
+  }
+  if (entity) return t("Changed @{name}.", { name: entity.name });
+  const beat = sent.beats.findIndex((b) => b.id === row);
+  if (beat >= 0) return t("Changed beat {n}.", { n: beat + 1 });
+  const shot = sent.shots.findIndex((s) => s.id === row);
+  if (shot >= 0) return t("Changed shot {n}.", { n: shot + 1 });
+  return t("Changed the title, length or look.");
+}
+
 /** The message holding the chat's plan, or null. A chat holds one live plan:
  *  the newest. A card whose plan a later brief replaced is drawn as a record
  *  and cannot be changed (`director.js`). */
@@ -649,7 +681,7 @@ function forServer() {
     // A brief and its plan are Director's, and the turn model never reads
     // them: a brief is not a request for one render, and answering one as
     // if it were is what the plan exists to avoid.
-    if (message.brief || message.plan || message.planAsk) continue;
+    if (message.brief || message.plan || message.planAsk || message.planTurn || message.planReply) continue;
     if (message.role === "user") {
       exchanges += 1;
       if (exchanges > EXCHANGES) break;
@@ -2109,6 +2141,7 @@ class Room {
     this.box.root.classList.toggle("mmc-ch-off", state.busy || asking);
     this.box.root.dataset.placeholder = asking ? t("Answer above first")
       : state.planning ? t("Describe the piece: what happens, how long, the mood…")
+      : livePlan() ? t("Say what to change in the plan, or ask about it…")
       : t("Ask for a picture or a shot…");
     this.planButton.setAttribute("aria-pressed", String(state.planning));
     this.planButton.disabled = asking;
@@ -2563,6 +2596,9 @@ class Room {
     // brief's questions, since the answer is the brief's and nothing else.
     const asked = state.messages.at(-1)?.planAsk;
     const brief = Boolean(text) && (state.planning || Boolean(asked));
+    // While the chat holds a plan, what is said is said about it (§5.4 of
+    // the spec): a plan turn, which edits a row, plans again, or answers.
+    const planTurn = Boolean(text) && !brief && Boolean(livePlan());
     if (brief && !asked && !replace && this.revising === null && livePlan()) {
       this.replacing = true;
       return this.paintComposer();
@@ -2589,7 +2625,8 @@ class Room {
       return entry;
     });
     this.pending = [];
-    state.messages.push({ role: "user", text, attached, turn: state.turn, ...(brief ? { brief: true } : {}) });
+    state.messages.push({ role: "user", text, attached, turn: state.turn,
+                          ...(brief ? { brief: true } : {}), ...(planTurn ? { planTurn: true } : {}) });
     if (!text) return this.paint();
     await this.ask();
   }
@@ -2599,6 +2636,7 @@ class Room {
   async ask() {
     const last = state.messages.at(-1);
     if (last?.role === "user" && last.brief) return this.askPlan(last);
+    if (last?.role === "user" && last.planTurn && livePlan()) return this.askPlanTurn(last);
     state.busy = true;
     state.error = null;
     this.paint();
@@ -2708,16 +2746,62 @@ class Room {
     const sent = plan.doc;
     try {
       const result = await run("/continuity/director/edit", { plan: sent, row, fields });
-      // An edit never makes a render, but renders land while it is away: the
-      // records are the ones on the plan now, less any the edit took off
-      // (an entity recast as somebody cited loses its sheet).
-      const renders = { ...(plan.doc.renders ?? {}) };
-      for (const id of Object.keys(sent.renders ?? {})) if (!(id in (result.plan.renders ?? {}))) delete renders[id];
-      plan.doc = { ...result.plan, renders };
+      plan.doc = withLanded(plan.doc, sent, result.plan);
     } catch (error) {
       plan.error = String(error.message || error);
     }
     plan.pending = false;
+    notify();
+  }
+
+  /**
+   * What the person said while a plan is open, about the plan.
+   *
+   * The server decides what it asks — one row changed, the piece planned
+   * again, or a question — and answers the changed plan, or the answer
+   * (`routes/director.py`, `director/turn`). The plan is changed where it
+   * stands, on its card; the room says in one line what moved. A change to a
+   * picture already made comes back as an action for the edit path, queued
+   * here as a prep render of that row: a new candidate to approve again.
+   */
+  async askPlanTurn(message) {
+    const planMessage = livePlan();
+    const plan = planMessage.plan;
+    state.busy = true;
+    state.error = null;
+    plan.error = null;
+    this.paint();
+    const sent = plan.doc;
+    let result;
+    try {
+      result = await run("/continuity/director/turn", {
+        plan: sent,
+        text: withAttached(message),
+        ledger: state.ledger,
+        piece: state.piece,
+        settings: requestBlock(this.sync),
+      }, {
+        onProgress: (_fraction, value, max) => {
+          state.tokens = { value, max };
+          notify();
+        },
+      });
+    } catch (error) {
+      state.tokens = null;
+      state.busy = false;
+      state.error = String(error.message || error);
+      return notify();
+    }
+    state.tokens = null;
+    state.busy = false;
+    if (result.plan) {
+      plan.doc = withLanded(plan.doc, sent, result.plan);
+      const warnings = result.warnings ?? [];
+      plan.warnings = result.act === "replan" ? warnings : [...(plan.warnings ?? []), ...warnings];
+    }
+    state.messages.push({ role: "assistant", say: turnWords(result, sent), planReply: true });
+    notify();
+    if (result.render) await this.prepRow(planMessage, result.render.row, { answer: result.render });
     notify();
   }
 
@@ -2770,15 +2854,18 @@ class Room {
    * A still is stamped against the rail as it is now (`over.again`), which
    * is what puts the room's still family on it: the plan never picks one.
    */
-  async prepRow(planMessage, row, { seed } = {}) {
+  async prepRow(planMessage, row, { seed, answer } = {}) {
     const plan = planMessage.plan;
-    let answer;
-    try {
-      answer = await run("/continuity/director/action", { plan: plan.doc, row });
-    } catch (error) {
-      plan.error = String(error.message || error);
-      notify();
-      return false;
+    // A plan turn that changed a picture already made hands its action in:
+    // the edit path's, citing the old picture (`director.change_action`).
+    if (!answer) {
+      try {
+        answer = await run("/continuity/director/action", { plan: plan.doc, row });
+      } catch (error) {
+        plan.error = String(error.message || error);
+        notify();
+        return false;
+      }
     }
     const ticket = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
     plan.doc = D.note(D.start(plan.doc, row, answer.mark), row, { ticket });

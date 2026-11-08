@@ -323,6 +323,15 @@ check("actions carry the chat's fields", sorted(sheet), sorted(chat.FIELDS))
 
 refuses("a row before its deps", lambda: director.action_for(plan, "kf.s1"), "needs e2")
 
-change = director.sheet_change(done, "e3", "make the bottle blue")
-check("sheet change edits the old picture", (change["from"], change["prompt"]),
-      (["pic-2"], "make the bottle blue"))
+change = director.change_action(done, "e3", "make @bottle blue")
+check("a sheet change edits the old picture, the name said plainly",
+      (change["from"], change["prompt"]), (["pic-2"], "make bottle blue"))
+frame = director.change_action(done, "kf.s3", "a lower angle")
+check("an opening frame is changed the same way", frame["from"], [done["renders"]["kf.s3"]["handle"]])
+refuses("a clip is not changed on the edit path", lambda: director.change_action(done, "s3", "x"),
+        "not a picture made for approval")
+refuses("a picture not made yet", lambda: director.change_action(plan, "e3", "x"), "no picture")
+
+stray = {**done, "renders": {**done["renders"], "s9": {"handle": "clip-9", "state": "approved"}}}
+check("prune drops the records of rows the plan no longer has",
+      sorted(director.prune(stray)["renders"]), sorted(done["renders"]))

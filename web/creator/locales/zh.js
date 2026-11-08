@@ -3304,4 +3304,11 @@ export const zh = {
  "Out of date: the plan changed since.": "已过期：规划此后已更改。",
  "Approve": "批准",
  "Use this picture in the piece.": "在作品中使用这张图片。",
+ "Say what to change in the plan, or ask about it…": "说出要改动计划的地方，或就计划提问…",
+ "Planned again: “{title}”, {seconds} seconds in {count} shots.": "已重新规划：“{title}”，{seconds} 秒，{count} 个镜头。",
+ "@{name} is now played by @{cast}, as they are in the cast.": "@{name} 现在由演员表中的 @{cast} 原样出演。",
+ "Changed @{name}.": "已修改 @{name}。",
+ "Changed beat {n}.": "已修改第 {n} 拍。",
+ "Changed shot {n}.": "已修改第 {n} 个镜头。",
+ "Changed the title, length or look.": "已修改标题、长度或风格。",
 };

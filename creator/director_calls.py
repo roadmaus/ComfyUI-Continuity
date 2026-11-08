@@ -10,7 +10,8 @@ plans a piece in the room is byte for byte the code the bench measured.
 
 **One decision per call.** A plan is filled in five kinds of call: the brief
 (is anything blocking?), the basics (title and look), the beats, the
-entities, and the shots, one call per beat. Each answers one small object
+entities, and the shots, one call per beat. A sixth, the turn, reads what the
+person says about a plan once it exists (see "plan turns" below). Each answers one small object
 against a fixed schema. That is the bargain `chat.py` already makes, and for
 the same reason: a 2B model holding one question gets it right far more often
 than one holding five, and a wrong answer to a small question is a cheap
@@ -42,6 +43,7 @@ the plan as far as it got — degrade, don't discard: the beats that worked are
 still the person's to look at.
 """
 
+import copy
 import os
 import re
 import unicodedata
@@ -555,6 +557,40 @@ def _call(ask, log, name, message, read, label=None):
         raise
 
 
+def _reader_of_entities(brief, plan, known, attached, relisted, invented):
+    """The entities call's reader, with what code drops on the way: somebody
+    already there (`known`: the cast, or on a replan every entity the plan
+    keeps), an attached picture read as somebody, and an entity nothing in the
+    brief or the beats speaks of."""
+    def read(raw):
+        items = raw.get("entities") if isinstance(raw, dict) else raw
+        listed = {director.name_of((i or {}).get("name")) for i in items or ()
+                  if isinstance(i, dict)}
+        entities = director.read_entities(raw, known)
+        relisted[:] = sorted(n for n in listed if n in known)
+        # An attached picture listed as somebody: `@pic-1` read as a
+        # person called Pic-1. It is already a picture; drop it. And an
+        # entity neither the brief nor any beat speaks of has no shot to
+        # be in — on the floor model, it is the prompt file's worked
+        # example copied into a piece it has nothing to do with.
+        told = " ".join([brief] + [b["text"] for b in plan["beats"]])
+        entities = [e for e in entities if e["name"] not in attached]
+        invented[:] = sorted(e["name"] for e in entities if not mentioned(e, told))
+        return [e for e in entities if e["name"] not in invented]
+    return read
+
+
+def _write_shots(ask, log, plan, cast, ledger, beats=None):
+    """One shots call per beat, in order -> the plan with their shots."""
+    for beat in list(beats if beats is not None else plan["beats"]):
+        shots = _call(
+            ask, log, "shots", shots_message(plan, beat["id"], cast, ledger),
+            lambda raw, at=beat["id"]: read_shots(raw, plan, at, ledger),
+            label=f"shots.{beat['id']}")
+        plan = director.set_shots(plan, beat["id"], shots)
+    return plan
+
+
 def plan_piece(brief, rail, ask, cast=(), ledger=(), keyframes=None,
                shot_limit=director.SHOT_LIMIT, questions=True):
     """A brief -> `{"plan", "questions", "log", "relisted"}`.
@@ -573,13 +609,9 @@ def plan_piece(brief, rail, ask, cast=(), ledger=(), keyframes=None,
     Raises `PlanningFailed` when a call fails its re-ask.
     """
     log, plan = [], None
-    cast = [{"name": director.name_of(m["name"]), "description": m.get("description") or ""}
-            for m in cast or ()]
+    cast = _cast(cast)
     cast_names = [m["name"] for m in cast]
     relisted, invented = [], []
-
-    def failed(problem):
-        return PlanningFailed(str(problem), plan, log)
 
     try:
         assumptions = []
@@ -600,36 +632,512 @@ def plan_piece(brief, rail, ask, cast=(), ledger=(), keyframes=None,
         beats = _call(ask, log, "beats", beats_message(plan, cast), director.read_beats)
         plan = director.add_beats(plan, beats)
 
-        def read_entities(raw):
-            items = raw.get("entities") if isinstance(raw, dict) else raw
-            listed = {director.name_of((i or {}).get("name")) for i in items or ()
-                      if isinstance(i, dict)}
-            entities = director.read_entities(raw, cast_names)
-            relisted[:] = sorted(n for n in listed if n in cast_names)
-            # An attached picture listed as somebody: `@pic-1` read as a
-            # person called Pic-1. It is already a picture; drop it. And an
-            # entity neither the brief nor any beat speaks of has no shot to
-            # be in — on the floor model, it is the prompt file's worked
-            # example copied into a piece it has nothing to do with.
-            told = " ".join([brief] + [b["text"] for b in plan["beats"]])
-            entities = [e for e in entities if e["name"] not in attached]
-            invented[:] = sorted(e["name"] for e in entities if not mentioned(e, told))
-            return [e for e in entities if e["name"] not in invented]
-
         attached = {director.name_of(e["handle"]) for e in ledger or ()}
         entities = _call(ask, log, "entities", entities_message(plan, cast, ledger),
-                         read_entities)
+                         _reader_of_entities(brief, plan, cast_names, attached,
+                                             relisted, invented))
         plan = director.add_entities(plan, entities)
-
-        for beat in list(plan["beats"]):
-            shots = _call(
-                ask, log, "shots", shots_message(plan, beat["id"], cast, ledger),
-                lambda raw: read_shots(raw, plan, beat["id"], ledger),
-                label=f"shots.{beat['id']}")
-            plan = director.set_shots(plan, beat["id"], shots)
-        plan = director.validate(plan)
+        plan = director.validate(_write_shots(ask, log, plan, cast, ledger))
     except director.PlanError as problem:
-        raise failed(problem) from None
+        raise PlanningFailed(str(problem), plan, log) from None
     return {"plan": plan, "questions": [], "assumptions": plan.get("assumptions") or [],
             "log": log, "relisted": relisted, "invented": invented,
-            "warnings": [f"{e['label']}: {e['warning']}" for e in log if e.get("warning")]}
+            "warnings": _warnings(log)}
+
+
+def _cast(cast):
+    return [{"name": director.name_of(m["name"]), "description": m.get("description") or ""}
+            for m in cast or ()]
+
+
+def _warnings(log):
+    return [f"{e['label']}: {e['warning']}" for e in log if e.get("warning")]
+
+
+# ---- plan turns ------------------------------------------------------------------
+#
+# While a plan is open, what the person says in the room is about the plan
+# (§5.4 of the spec). One call reads it and answers one of three things: edit
+# one row, replan from the beats down, or say something back. It is shown the
+# plan the way the card shows it — "beat 2", "shot 3", "@keeper" — because
+# those are the words the person used, and a small model matches words it was
+# shown far better than it maps "the third shot" onto an id it was not.
+#
+# What the edit then does is the row's own call again, shown the row and the
+# change: the basics for the piece, the beats call for a beat, the entities
+# call for a person, place or thing, the shots call for a shot. Same prompt
+# files, same readers, same schema as the plan was written with, so an edited
+# row is held to exactly what a first draft was. Code keeps what is code's: a
+# length the person says wins over any the model writes, a cast member the
+# person cites replaces a person with no call at all, and a picture already
+# made is changed on the edit path rather than drawn again.
+
+TURN_ACTS = ("edit", "replan", "say")
+
+SCHEMAS["turn"] = {"type": "object", "properties": {
+    "act": {"type": "string", "enum": list(TURN_ACTS)},
+    "row": {"type": "string"}, "change": {"type": "string"}, "say": {"type": "string"}},
+    "required": ["act", "row", "change", "say"]}
+
+CALLS = CALLS + ("turn",)
+
+PIECE = "the piece"
+
+
+def labels(plan):
+    """`[(label, row id)]`: every row the person can name, as the card names
+    it. Beats and shots by position, since that is what the card numbers;
+    ids never reach the model."""
+    out = [(PIECE, director.HEADER)]
+    out += [(f"beat {at}", b["id"]) for at, b in enumerate(plan["beats"], 1)]
+    out += [(f"shot {at}", s["id"]) for at, s in enumerate(plan["shots"], 1)]
+    out += [("@" + e["name"], e["id"]) for e in plan["entities"]]
+    return out
+
+
+def label_of(plan, row_id):
+    return next((label for label, rid in labels(plan) if rid == row_id), row_id)
+
+
+_HEADER_WORDS = {PIECE, "piece", "header", "title", "look", "length", "seconds", "the title",
+                 "the look", "the length"}
+_POSITION_RE = re.compile(r"^(beat|shot)\s*(?:#|no\.?|number)?\s*(\d+)$")
+
+
+def row_of(plan, label):
+    """What the turn call wrote in `"row"` -> a row id, or a `PlanError`
+    listing what it may write. Read loosely — "Shot 3", "shot #3", "keeper"
+    without its @ — since the meaning is not in doubt."""
+    text = " ".join(str(label or "").lower().split())
+    for name, rid in labels(plan):
+        if text == name:
+            return rid
+    if text in _HEADER_WORDS:
+        return director.HEADER
+    match = _POSITION_RE.match(text)
+    if match:
+        rows = plan["beats"] if match.group(1) == "beat" else plan["shots"]
+        at = int(match.group(2))
+        if 1 <= at <= len(rows):
+            return rows[at - 1]["id"]
+    every = {r["id"] for key in ("beats", "entities", "shots") for r in plan[key]}
+    if text in every:
+        return text
+    name = director.name_of(text)
+    if name and any(e["name"] == name for e in plan["entities"]):
+        return next(e["id"] for e in plan["entities"] if e["name"] == name)
+    shown = ", ".join(f'"{name}"' for name, _ in labels(plan))
+    raise director.PlanError(f'"row" must name one row of the plan: {shown}; '
+                             f"it was {director._shown(label)}.")
+
+
+def _plan_lines(plan, cast=()):
+    """The plan as the turn call reads it: the card's rows, in the card's words."""
+    seconds = director.allot_plan(plan)
+    described = {m["name"]: m.get("description") for m in cast}
+    look = plan.get("look") or "none"
+    out = [f"{PIECE} — \"{plan['title']}\", {plan['seconds']} seconds, look: {look}"]
+    number = 0
+    for at, beat in enumerate(plan["beats"], 1):
+        out.append(f"beat {at} — {beat['text']} ({seconds[beat['id']]} s)")
+        for shot in (s for s in plan["shots"] if s["beat"] == beat["id"]):
+            number += 1
+            out.append(f"  shot {number} — {shot['action']} ({seconds[shot['id']]} s)")
+    for entity in plan["entities"]:
+        source = entity.get("source") or {}
+        if "cited" in source:
+            out.append(f"@{entity['name']} — cast: "
+                       + (described.get(source["cited"]) or "somebody already cast"))
+        else:
+            out.append(f"@{entity['name']} — {entity['kind']}: {entity['description']}")
+    return out
+
+
+def turn_message(plan, text, cast=()):
+    return _message(
+        _block("THE PLAN", _plan_lines(plan, cast)),
+        _block("THE MESSAGE", [text]),
+        "Decide what the message asks of the plan. " + REPLY)
+
+
+def _sentence(value):
+    return " ".join(value.split())[:director.MAX_TEXT] if isinstance(value, str) else ""
+
+
+def read_turn(raw, plan, text=""):
+    """The turn call -> `{act, row, change, say}`. A change left empty is the
+    person's own words, which say it as well as any rewording would."""
+    if not isinstance(raw, dict):
+        raise director.PlanError('the reply must be an object with "act", "row", "change" and "say".')
+    act = str(raw.get("act") or "").strip().lower()
+    said = _sentence(raw.get("say"))
+    if not act and said and not raw.get("row") and not raw.get("change") \
+            and said.lower().rstrip(".!") != _sentence(text).lower().rstrip(".!"):
+        # `{"say": "..."}` and nothing else: without a schema the floor model
+        # drops the act on an answer. An answer that is the message said
+        # back is not one, and is re-asked.
+        act = "say"
+    if act not in TURN_ACTS:
+        raise director.PlanError(f'"act" must be edit, replan or say; it was {director._shown(raw.get("act"))}.')
+    change, say = _sentence(raw.get("change")), _sentence(raw.get("say"))
+    if act == "say":
+        if not (say or change):
+            raise director.PlanError('a "say" reply needs "say": the sentence to answer with.')
+        return {"act": act, "row": None, "change": "", "say": say or change}
+    row = row_of(plan, raw.get("row")) if act == "edit" else None
+    entity = next((e for e in plan["entities"] if e["id"] == row), None)
+    if entity and "cited" in (entity.get("source") or {}) and not _cites_cast(text, entity):
+        # Somebody the person cast is used as they are, so their row has
+        # nothing to change; on the floor model it is the row picked for "he"
+        # in a message about a shot.
+        raise director.PlanError(
+            f"@{entity['name']} is from the cast and is used as they are, so their row "
+            f"cannot change. Pick the row the message is about.")
+    return {"act": act, "row": row, "change": change or _sentence(text), "say": say}
+
+
+def _cites_cast(text, entity):
+    """Whether `text` cites a cast member other than the one `entity` is —
+    "use @anna for @george" is a recast, which code does."""
+    return any(w.lower() != entity["source"]["cited"] for w in director.CITE_RE.findall(text or ""))
+
+
+# ---- what the person's words say plainly ------------------------------------------
+#
+# Read by code, as `asked_seconds` reads a length out of a brief, and for the
+# same reason: "the last beat" names one row and "make it 20 seconds" names
+# one number, and a small model that answers "shot 4" to the first is wrong
+# about something that was never in doubt. Each overrules the turn call only
+# where the words are unambiguous, and the log says it did.
+
+_ORDINALS = {"first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5, "sixth": 6,
+             "seventh": 7, "eighth": 8, "ninth": 9, "tenth": 10}
+_NAMED_ROW_RE = re.compile(
+    r"\b(?:(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|last|\d+)"
+    r"(?:st|nd|rd|th)?\s+(beat|shot)s?|(beat|shot)\s*(?:#|no\.?|number)?\s*(\d+))\b",
+    re.IGNORECASE)
+
+
+def named_rows(plan, text):
+    """The beats and shots the person's words name by number or position ->
+    their ids, in order, each once. "The last beat", "shot 3", "the 2nd
+    shot"; one past the end names nothing."""
+    out = []
+    for match in _NAMED_ROW_RE.finditer(text or ""):
+        word, kind = (match.group(1), match.group(2)) if match.group(2) else (match.group(4), match.group(3))
+        rows = plan["beats" if kind.lower() == "beat" else "shots"]
+        word = word.lower()
+        at = len(rows) if word == "last" else _ORDINALS.get(word) or int(word)
+        if 1 <= at <= len(rows) and rows[at - 1]["id"] not in out:
+            out.append(rows[at - 1]["id"])
+    return out
+
+
+_TITLE_RE = re.compile(
+    r"^\s*(?:please\s+)?(?:call|title|name|rename)\s+(?:it|this|the\s+(?:piece|film|video|plan))"
+    r"\s+(?:to\s+|as\s+)?[\"“'‘]?(.+?)[\"”'’]?\s*[.!]?\s*$", re.IGNORECASE)
+
+
+def asked_title(text):
+    """The title the person's words give the piece ("call it Last Orders"),
+    or None."""
+    match = _TITLE_RE.match(text or "")
+    return " ".join(match.group(1).split())[:80] if match else None
+
+
+def overrule(turn, plan, text):
+    """The turn call's answer, with what the words say plainly put first ->
+    `(turn, note)`; `note` says what code changed, or is None.
+
+    A title or a length the person names, with no beat or shot named beside
+    it, is the piece's header ("make shot 2 five seconds" is not a length
+    for the piece). A beat or shot named alone is the row an edit is about.
+    A question keeps its answer: "is 20 seconds too long?" asks nothing."""
+    named = named_rows(plan, text)
+    asking = text.rstrip().endswith("?")
+    header = asked_title(text) or (not named and asked_seconds(text) not in (None, plan["seconds"]))
+    if header and not asking and turn["act"] != "replan" and turn["row"] != director.HEADER:
+        was = turn["row"] or turn["act"]
+        return {**turn, "act": "edit", "row": director.HEADER,
+                "change": turn["change"] or _sentence(text)}, f"{was} -> header"
+    if turn["act"] == "edit" and len(named) == 1 and turn["row"] != named[0]:
+        return {**turn, "row": named[0]}, f"{turn['row']} -> {named[0]}"
+    return turn, None
+
+
+def _now_line(plan):
+    return f"\"{plan['title']}\", {plan['seconds']} seconds, look: {plan.get('look') or 'none'}"
+
+
+def _keep(what):
+    return (f"Rewrite {what} with the change made. Keep everything the change "
+            "does not touch exactly as it is.")
+
+
+def header_message(plan, change, seconds=None):
+    length = (f"The person asked for {seconds} seconds." if seconds
+              else f"Keep {plan['seconds']} seconds.")
+    return _message(
+        _block("THE BRIEF", [plan["brief"]]),
+        _block("THE PIECE NOW", [_now_line(plan)]),
+        _block("THE CHANGE", [change]),
+        "Give the piece its title, length and look. " + _keep("them") + f" {length} " + REPLY)
+
+
+def beat_message(plan, beat_id, change, cast=()):
+    at = next(i for i, b in enumerate(plan["beats"], 1) if b["id"] == beat_id)
+    beat = plan["beats"][at - 1]
+    return _message(
+        _block("THE BRIEF", [plan["brief"]]),
+        _block("CAST (already cast — cite with @ as written)", _cast_lines(cast)),
+        _block(f"BEAT {at} NOW ({beat['weight']})", [beat["text"]]),
+        _block("THE CHANGE", [change]),
+        _keep("this one beat") + " Write 1 beat. " + REPLY)
+
+
+def entity_message(plan, entity, change):
+    return _message(
+        _block("THE BRIEF", [plan["brief"]]),
+        _block("NOW", [f"@{entity['name']} — {entity['kind']}: {entity['description']}"]),
+        _block("THE CHANGE", [change]),
+        _keep(f"@{entity['name']}") + f" List only @{entity['name']}, still a "
+        f"{entity['kind']}. " + REPLY)
+
+
+def shot_message(plan, shot_id, change, cast=(), ledger=()):
+    shot = next(s for s in plan["shots"] if s["id"] == shot_id)
+    beat = next(b for b in plan["beats"] if b["id"] == shot["beat"])
+    seconds = director.allot_plan(plan)
+    return _message(
+        _block("THE PIECE", [f"\"{plan['title']}\": {plan['brief']}"]),
+        _block("NAMES you may cite", _name_lines(plan, cast, ledger)),
+        _block("THIS BEAT", [beat["text"]]),
+        _block(f"THIS SHOT NOW (about {seconds[shot_id]} seconds, continues \"{shot['continues']}\")",
+               [shot["action"]]),
+        _block("THE CHANGE", [change]),
+        _keep("this one shot") + " Write 1 shot. " + REPLY)
+
+
+def _said(cast, text):
+    """The members of `cast` that `text` cites with @."""
+    named = {w.lower() for w in director.CITE_RE.findall(text or "")}
+    return [m for m in cast if m["name"] in named]
+
+
+def _changed(new, old, what):
+    """A rewrite that is the row as it was is a `Doubt`: re-asked once with
+    the change quoted, then kept with a warning. The floor model asked to
+    change a row it is shown copies the row about as often as it changes
+    it; the re-ask is its second chance, and a row left as it was is the
+    person's to change on the card."""
+    if new == old:
+        raise Doubt(f"your {what} is exactly as it was. Write it with the change made.", new)
+    return new
+
+
+def _one(items, what):
+    if len(items) != 1:
+        raise director.PlanError(f"write exactly one {what}; the reply held {len(items)}.")
+    return items[0]
+
+
+def plan_turn(plan, text, ask, cast=(), ledger=()):
+    """Something said about an open plan -> `{"plan", "act", "row", "say",
+    "render", "recast", "log", "warnings"}`.
+
+    `plan` is None in the answer when nothing changed (a `say`). `render` is
+    `{row, action, mark}` when the change was to a picture already made — a
+    sheet, or an opening frame — and goes down the room's edit path: the
+    room queues the action as a prep render of that row, under that mark.
+    `cast` is `[{name, description}]`: the chat's cast members the plan
+    already uses, and any the person's words cite. Citing one the plan does
+    not hold, on a person the plan would draw a sheet for, is "use @george
+    for the keeper", and is done by code with no call.
+
+    Raises `PlanningFailed` (with the plan unchanged) when a call fails its
+    re-ask, or when the change cannot be made.
+    """
+    log = []
+    cast = _cast(cast)
+    plan = director.validate(plan)
+    try:
+        def read(raw):
+            try:
+                return read_turn(raw, plan, text)
+            except director.PlanError:
+                # A row the reply cannot have — somebody cast, or no row at
+                # all — is no matter when the words name the row themselves.
+                named = named_rows(plan, text)
+                row = named[0] if len(named) == 1 else director.HEADER if asked_title(text) else None
+                if row is None or not isinstance(raw, dict) or raw.get("act") != "edit":
+                    raise
+                return read_turn({**raw, "row": row}, plan, text)
+
+        turn = _call(ask, log, "turn", turn_message(plan, text, cast), read)
+        turn, note = overrule(turn, plan, text)
+        if note:
+            log[0]["overruled"] = note
+        out = {"plan": None, "act": turn["act"], "row": turn["row"], "say": turn["say"],
+               "render": None, "recast": None, "log": log}
+        if turn["act"] == "say":
+            return {**out, "warnings": _warnings(log)}
+        seconds = asked_seconds(text)
+        if turn["act"] == "replan":
+            out["plan"] = replan(plan, turn["change"], ask, cast, ledger, seconds, log, text)
+        else:
+            out.update(_edit_row(plan, turn["row"], turn["change"], text, ask, log,
+                                 cast, ledger, seconds))
+    except director.PlanError as problem:
+        if len(log) == 1 and log[0]["call"] == "turn":
+            # The turn call itself failed twice: what reaches the person is
+            # what to do, not the sentence the model was re-asked with.
+            problem = ("Could not tell what that changes in the plan. Name the row as "
+                       "the card does (“shot 2”, “beat 1”, “@keeper”), or change it on the card.")
+        raise PlanningFailed(str(problem), plan, log) from None
+    return {**out, "warnings": _warnings(log)}
+
+
+def _edit_row(plan, row_id, change, text, ask, log, cast, ledger, seconds):
+    """One row, changed by its own call. -> the parts of `plan_turn`'s answer
+    that say what happened."""
+    out = {"act": "edit", "row": row_id, "render": None, "recast": None}
+    if row_id == director.HEADER:
+        title = asked_title(text)
+
+        def read(raw):
+            basics = director.read_basics(raw, seconds or plan["seconds"])
+            if title:
+                basics["title"] = title
+            return _changed(basics, {k: plan.get(k) for k in basics}, "title, length and look")
+        basics = _call(ask, log, "basics", header_message(plan, change, seconds), read,
+                       label="turn.basics")
+        try:
+            out["plan"] = director.edit(plan, director.HEADER, basics)
+        except director.PlanError:
+            if basics["seconds"] == plan["seconds"]:
+                raise
+            # A length the shots cannot share — six shots in five seconds —
+            # is a piece to plan again at that length, not a refusal.
+            out.update(act="replan", row=None,
+                       plan=replan(plan, change, ask, cast, ledger, basics["seconds"], log, text))
+        return out
+
+    kind = row_id.rstrip("0123456789")
+    if kind == "b":
+        beat = next(b for b in plan["beats"] if b["id"] == row_id)
+        rewritten = _call(ask, log, "beats", beat_message(plan, row_id, change, cast),
+                          lambda raw: _changed(_one(director.read_beats(raw), "beat"),
+                                               {k: beat[k] for k in ("text", "weight")}, "beat"),
+                          label="turn.beat")
+        new = director.edit(plan, row_id, rewritten)
+        if rewritten["text"] != beat["text"]:
+            # What happens in the beat changed, so its shots are written again;
+            # a beat that only got longer keeps them.
+            new = director.validate(_write_shots(
+                ask, log, new, cast, ledger, [b for b in new["beats"] if b["id"] == row_id]))
+        out["plan"] = new
+        return out
+
+    if kind == "e":
+        entity = next(e for e in plan["entities"] if e["id"] == row_id)
+        recast = next((m["name"] for m in _said(cast, text)
+                       if not any(e["name"] == m["name"] for e in plan["entities"])), None)
+        if recast and entity["kind"] == "person":
+            out["plan"] = director.edit(plan, row_id, {"source": recast})
+            out["recast"] = recast
+            return out
+        if "cited" in (entity.get("source") or {}):
+            raise director.PlanError(
+                f"@{entity['name']} is played by @{entity['source']['cited']} from the cast, as "
+                f"they are. Change them in the cast, or cite somebody else for @{entity['name']}.")
+
+        def read(raw):
+            items = director.read_entities(raw)
+            got = _one(items, f"entry, @{entity['name']}")
+            if got["description"] == entity["description"]:
+                raise Doubt(f"your description of @{entity['name']} is exactly as it was. "
+                            "Write it with the change made.", got)
+            return got
+        rewritten = _call(ask, log, "entities", entity_message(plan, entity, change), read,
+                          label="turn.entity")
+        fields = {"description": rewritten["description"]}
+        # A new name only when the person said it: a small model asked to
+        # change a description renames as often as not ("old_keeper").
+        if rewritten["name"] != entity["name"] and _mention(rewritten["name"]).search(_fold(text)):
+            fields["name"] = rewritten["name"]
+        new = director.edit(plan, row_id, fields)
+        out["plan"] = new
+        out["render"] = _changed_picture(plan, new, row_id, change)
+        return out
+
+    shot = next(s for s in plan["shots"] if s["id"] == row_id)
+    rewritten = _call(ask, log, "shots", shot_message(plan, row_id, change, cast, ledger),
+                      lambda raw: _changed(_one(read_shots(raw, plan, shot["beat"], ledger), "shot"),
+                                           {k: shot[k] for k in ("action", "continues")}, "shot"),
+                      label="turn.shot")
+    new = director.edit(plan, row_id, rewritten)
+    out["plan"] = new
+    frame = next((r["id"] for r in director.rows(new)
+                  if r["kind"] == "keyframe" and r["shot"] == row_id), None)
+    out["render"] = _changed_picture(plan, new, frame, change) if frame else None
+    return out
+
+
+def _changed_picture(old, new, row_id, change):
+    """A prep row whose picture was made before the change -> the edit-path
+    render that changes it (`director.change_action`), under the row's mark
+    in the changed plan. None when there is no picture to change: the row
+    renders fresh from the plan when its turn comes."""
+    if row_id not in director.handles_of(old):
+        return None
+    if not any(r["id"] == row_id for r in director.rows(new)):
+        return None
+    return {"row": row_id, "action": director.change_action(new, row_id, change),
+            "mark": director.fingerprint(new, row_id)}
+
+
+def replan(plan, change, ask, cast=(), ledger=(), seconds=None, log=None, text=None):
+    """The plan rewritten from the beats down with `change` made -> the plan.
+
+    The header is the basics call again with the change; then beats,
+    entities and every beat's shots, as a first plan writes them. What is
+    kept is what was made: every person, place and thing the plan already
+    holds keeps its id, its description and its sheet, and the entities call
+    is told they exist and lists only what is new. A kept entity no new shot
+    cites, and whose sheet was never made, goes. New beats and shots get
+    new ids, so the clips and opening frames of the old ones have no row
+    and their records go too (`director.prune`).
+    """
+    log = log if log is not None else []
+    cast = _cast(cast)
+    brief = " ".join(f"{plan['brief']} {change}".split())
+    basics = _call(ask, log, "basics", header_message(plan, change, seconds),
+                   lambda raw: director.read_basics(raw, seconds or plan["seconds"]),
+                   label="replan.basics")
+    new = copy.deepcopy(plan)
+    new.update(basics, brief=brief, beats=[], shots=[])
+    have = {e["name"] for e in new["entities"]}
+    for member in _said(cast, f"{text or ''} {change}"):
+        if member["name"] not in have:
+            new["entities"].append({"id": director._next_id(new, "e", new["entities"]),
+                                    "name": member["name"], "kind": "person",
+                                    "description": "", "source": {"cited": member["name"]}})
+    # Everybody the plan holds reads to the new calls as already there.
+    there = cast + [{"name": e["name"], "description": e["description"]}
+                    for e in new["entities"] if "new" in (e.get("source") or {})]
+    beats = _call(ask, log, "beats", beats_message(new, there), director.read_beats,
+                  label="replan.beats")
+    new = director.add_beats(new, beats)
+    attached = {director.name_of(e["handle"]) for e in ledger or ()}
+    entities = _call(ask, log, "entities", entities_message(new, there, ledger),
+                     _reader_of_entities(brief, new, [e["name"] for e in new["entities"]],
+                                         attached, [], []),
+                     label="replan.entities")
+    new = director.add_entities(new, entities)
+    new = _write_shots(ask, log, new, cast, ledger)
+    cited = {w.lower() for s in new["shots"] for w in director.CITE_RE.findall(s["action"])}
+    made = director.handles_of(new)
+    new["entities"] = [e for e in new["entities"]
+                       if e["name"] in cited or e["id"] in made
+                       or "cited" in (e.get("source") or {})]
+    return director.prune(director.validate(new))

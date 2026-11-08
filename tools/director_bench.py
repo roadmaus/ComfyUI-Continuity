@@ -28,7 +28,13 @@ went. Nothing is rendered; the plan is the result.
   example copied in) or because they were cast already, and shots that
   repeat an earlier one even after the re-ask (kept, with a warning);
 - a question asked when none was wanted, or none when one was;
-- wall time and tokens per call.
+- wall time and tokens per call;
+- plan turns (§5.4 of the spec): each brief's scripted messages about its
+  plan, sent one at a time to the plan as it was made. Whether the turn call
+  picked an act and row the script accepts, whether the row then actually
+  changed, and how the row's own call went. A turn naming a row the plan
+  does not have (no heron in a heron piece) is counted as not measurable,
+  not as wrong.
 
 **Built to be compared.** `--json` writes the whole report, settings and
 replies included, so a run of the 2B model on this Mac and a run of a 27B in
@@ -228,11 +234,11 @@ def _table(rows, calls):
               f"{stats['seconds']:>8.1f} {stats['in']:>8.0f} {stats['out']:>8.0f}")
 
 
-def _per_call(logs, meters):
+def _per_call(logs, meters, names=("brief", "basics", "beats", "entities", "shots"), key="call"):
     out = {}
-    for name in ("brief", "basics", "beats", "entities", "shots"):
-        entries = [e for log in logs for e in log if e["call"] == name]
-        timed = [c for c in meters if c["label"].split(".")[0] == name]
+    for name in names:
+        entries = [e for log in logs for e in log if (e[key] if key == "call" else e["label"]) == name]
+        timed = [c for c in meters if (c["label"].split(".")[0] if key == "call" else c["label"]) == name]
         if not entries:
             continue
         out[name] = {
@@ -245,6 +251,105 @@ def _per_call(logs, meters):
             "out": statistics.mean(c["completion_tokens"] for c in timed) if timed else 0,
         }
     return out
+
+
+# ---- plan turns ------------------------------------------------------------------
+
+def _wanted(calls, plan, want):
+    """A script's `want` list -> `[(act, row id or None)]` the plan can
+    satisfy. `edit:shot:2`, `edit:beat:last`, `edit:entity:keeper` (any
+    entity whose name holds the word), `edit:header`, `replan`, `say`."""
+    out = []
+    for item in want:
+        act, _, where = item.partition(":")
+        if act != "edit":
+            out.append((act, None))
+            continue
+        kind, _, which = where.partition(":")
+        if kind == "header":
+            out.append((act, "header"))
+        elif kind in ("beat", "shot"):
+            rows = plan["beats" if kind == "beat" else "shots"]
+            at = len(rows) if which == "last" else int(which)
+            if 1 <= at <= len(rows):
+                out.append((act, rows[at - 1]["id"]))
+        elif kind == "entity":
+            out += [(act, e["id"]) for e in plan["entities"] if which in e["name"]]
+    return out
+
+
+def _row_of(plan, row_id):
+    if row_id == "header":
+        return {k: plan.get(k) for k in ("title", "seconds", "look")}
+    for key in ("beats", "entities", "shots"):
+        for row in plan[key]:
+            if row["id"] == row_id:
+                return row
+    return None
+
+
+def _turns(pkg, brief, plan, meter):
+    """Each scripted turn, on the plan as it was made. -> one row per turn."""
+    calls = pkg.director_calls
+    out = []
+    for script in brief.get("turns") or ():
+        wanted = _wanted(calls, plan, script["want"])
+        row = {"brief": brief["id"], "say": script["say"], "want": script["want"],
+               "measurable": bool(wanted), "act": None, "row": None, "right": None,
+               "changed": None, "failed": None, "log": [], "reply": None}
+        started = time.time()
+        try:
+            got = calls.plan_turn(plan, script["say"], meter.ask,
+                                  cast=brief.get("cast") or (), ledger=brief.get("ledger") or ())
+        except calls.PlanningFailed as failed:
+            row.update(failed=str(failed), log=failed.log)
+        else:
+            row.update(act=got["act"], row=got["row"], log=got["log"],
+                       label=calls.label_of(plan, got["row"]) if got["row"] else None,
+                       reply=got["say"] if got["act"] == "say" else None,
+                       render=bool(got.get("render")), recast=got.get("recast"))
+            if wanted:
+                row["right"] = any(act == got["act"] and (rid is None or rid == got["row"])
+                                   for act, rid in wanted)
+            new = got["plan"]
+            if got["act"] == "edit" and new:
+                row["changed"] = _row_of(plan, got["row"]) != _row_of(new, got["row"])
+            elif got["act"] == "replan" and new:
+                row["changed"] = [b["text"] for b in new["beats"]] != [b["text"] for b in plan["beats"]]
+        row["wall"] = round(time.time() - started, 1)
+        row["overruled"] = next((e.get("overruled") for e in row["log"] if e.get("overruled")), None)
+        row["doubted"] = [e["warning"] for e in row["log"] if e.get("warning")]
+        out.append(row)
+        if row["failed"]:
+            verdict = "FAILED: " + row["failed"]
+        else:
+            what = row["act"] + (f" {row['label']}" if row.get("label") else "")
+            mark = "" if row["right"] is None else ("ok" if row["right"] else "WRONG, want " + " or ".join(script["want"]))
+            if not row["measurable"]:
+                mark = "not measurable here"
+            tail = "" if row["changed"] in (None, True) else " (nothing changed)"
+            verdict = f"{what} — {mark}{tail}" + (f": {row['reply']}" if row["reply"] else "")
+            if row["overruled"]:
+                verdict += f" [code: {row['overruled']}]"
+        print(f"  turn \"{script['say']}\" -> {verdict}")
+    return out
+
+
+def _turn_table(turns, stats):
+    if not turns:
+        return
+    print("\n########## plan turns")
+    measured = [t for t in turns if t["measurable"] and not t["failed"]]
+    edits = [t for t in turns if t["changed"] is not None]
+    print(f"turns {len(turns)}, measurable {len(measured)}, right act and row "
+          f"{sum(1 for t in measured if t['right'])}/{len(measured)}, failed "
+          f"{sum(1 for t in turns if t['failed'])}, edits that changed their row "
+          f"{sum(1 for t in edits if t['changed'])}/{len(edits)}, overruled by code "
+          f"{sum(1 for t in turns if t['overruled'])}")
+    print(f"{'call':<16} {'n':>3} {'1st':>5} {'re':>4} {'fail':>5} {'s/call':>8} {'tok in':>8} {'tok out':>8}")
+    for name, st in stats.items():
+        print(f"{name:<16} {st['n']:>3} {st['first']:>5} {st['re']:>4} {st['fail']:>5} "
+              f"{st['seconds']:>8.1f} {st['in']:>8.0f} {st['out']:>8.0f}")
 
 
 def main():
@@ -263,6 +368,8 @@ def main():
                         help="send no response_format: the reply rides on the prompt alone, "
                              "as it does on a server that cannot constrain one")
     parser.add_argument("--quiet", action="store_true", help="the tables only, not each plan")
+    parser.add_argument("--no-turns", action="store_true",
+                        help="plan only: skip each brief's scripted plan turns")
     parser.add_argument("--dump", action="store_true",
                         help="print every system prompt, message and reply")
     parser.add_argument("--json", help="write the whole report to this file")
@@ -273,7 +380,7 @@ def main():
     rail = _rail(pkg, args.still, args.edit, args.video)
     meter = Meter(remote, args)
 
-    rows, logs, plans = [], [], {}
+    rows, logs, plans, turns, turn_timings = [], [], {}, [], []
     for brief in _briefs(args.briefs, args.only):
         print(f"\n########## {brief['id']}: {brief['brief']}")
         out, error = None, None
@@ -308,15 +415,26 @@ def main():
         if plan:
             plans[brief["id"]] = plan
         print(f"  ({row['wall']} s)")
+        if out and out.get("plan") and not args.no_turns:
+            # Timed apart from the plan's calls: a turn re-runs the beats or
+            # shots call, and those must not blur the planning numbers.
+            planned = len(meter.calls)
+            turns += _turns(pkg, brief, out["plan"], meter)
+            turn_timings += meter.calls[planned:]
+            del meter.calls[planned:]
 
     per_call = _per_call(logs, meter.calls)
     _table(rows, per_call)
+    labels = sorted({e["label"] for t in turns for e in t["log"]})
+    turn_calls = _per_call([t["log"] for t in turns], turn_timings, labels, key="label")
+    _turn_table(turns, turn_calls)
     if args.json:
         report = {"model": args.model, "url": args.url, "rail": rail,
                   "schema": not args.no_schema, "temperature": args.temperature,
                   "seed": args.seed, "when": time.strftime("%Y-%m-%d %H:%M:%S"),
                   "briefs": rows, "calls": per_call, "timings": meter.calls,
-                  "logs": logs, "plans": plans}
+                  "logs": logs, "plans": plans, "turns": turns, "turn_calls": turn_calls,
+                  "turn_timings": turn_timings}
         with open(args.json, "w", encoding="utf-8") as handle:
             json.dump(report, handle, ensure_ascii=False, indent=1)
         print(f"\nreport: {args.json}")

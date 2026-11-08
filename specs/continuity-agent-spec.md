@@ -246,6 +246,14 @@ shown the plan with its row ids, that answers one of three things:
 Every change recomputes what code owns (seconds, splits, `after`) and marks
 anything downstream stale through its fingerprint (§6).
 
+The turn call is shown the plan in the card's own words (`the piece`, `beat
+2`, `shot 3`, `@keeper`), never the ids. A length change ("make it 20
+seconds") is an edit of the piece: code shares the new length out, and plans
+again from the beats only when the shots cannot fit it. A replan keeps every
+entity the plan holds, with its sheet, and asks only for what is new. Beats
+and shots get new ids, so their old clips have no row left to be stale
+against and their records go.
+
 ### 5.5 Run
 
 When every prep row is approved, the plan card's **Run** button is enabled, and
@@ -501,6 +509,34 @@ What the bench still shows on the floor and code cannot fix: entity kinds
 are often wrong (rain as a thing, a crowd as a place), and the look line
 sometimes names people or places despite the prompt. Both are worth reading
 on the lab's models before more moves into code.
+
+### 12.2 What the step-5 bench showed (2026-11-08)
+
+Fourteen scripted plan turns over five briefs (`turns` in
+`tests/director_briefs.jsonl`), on `lfm3-omni` with the schema, two seeds.
+At first, 6 of 12 measurable turns picked the right act and row. The misses
+were mostly things the person's words say plainly, so code now reads them
+first (`director_calls.overrule`), as it reads a length out of a brief: a beat
+or shot named by number or position ("the last beat", "shot 3"), a title
+("call it …") and a length. With that, 12 of 13 and 13 of 14, with code
+correcting the call on 4. Also moved into code:
+
+- a rewritten row that comes back as it was is a *doubt*: re-asked once, then
+  kept with a warning. The floor model copies the row it is shown about as
+  often as it changes it;
+- a row that names somebody from the cast is re-asked, since they are used as
+  they are and their row has nothing to change. On the floor model it was the
+  row picked for "he" in a message about a shot;
+- without a schema the model drops the act on an answer (`{"say": …}`), which
+  code reads as a say, unless it only repeats the message;
+- a turn whose own call fails twice tells the person to name the row the way
+  the card does, instead of quoting the sentence the model was re-asked with.
+
+What code cannot fix: the floor model never once answered `replan` for "set
+it on a sunny summer morning". It edits a person, or answers instead. Worth
+reading on the lab's models before the prompt changes. Someone the entity call
+left out (the waitress, on one seed) cannot be added by a turn. They can
+only be described in the beats.
 
 ## 13. Risks
 

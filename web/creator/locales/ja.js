@@ -3303,4 +3303,11 @@ export const ja = {
  "Out of date: the plan changed since.": "古くなっています。その後プランが変更されました。",
  "Approve": "承認",
  "Use this picture in the piece.": "この画像を作品で使います。",
+ "Say what to change in the plan, or ask about it…": "プランの変更点を伝えるか、プランについて質問してください…",
+ "Planned again: “{title}”, {seconds} seconds in {count} shots.": "プランを作り直しました:「{title}」、{seconds}秒、{count}ショット。",
+ "@{name} is now played by @{cast}, as they are in the cast.": "@{name} はキャストの @{cast} がそのまま演じます。",
+ "Changed @{name}.": "@{name} を変更しました。",
+ "Changed beat {n}.": "ビート {n} を変更しました。",
+ "Changed shot {n}.": "ショット {n} を変更しました。",
+ "Changed the title, length or look.": "タイトル、長さ、またはルックを変更しました。",
 };
