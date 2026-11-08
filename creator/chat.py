@@ -389,11 +389,18 @@ def _handles(raw, known):
                 f'"from" must hold handles from the ledger, like "img-1" or '
                 f'"img-1:style"; it holds {_shown(item)}.')
         handle, scope = match.group(1), match.group(2)
+        if not known:
+            # Nothing has been made, so nothing can be cited, and a handle
+            # here is the worked examples' `pic-1` copied, not a picture
+            # meant. The 2B floor model does it on most first turns, and as
+            # often again on the re-ask; refusing it turned the opening
+            # request of a chat into prose. With a ledger to cite from, an
+            # unknown handle may be a slip for a real one, and is refused.
+            continue
         if handle not in known:
-            where = ", ".join(known) if known else "nothing has been made yet"
             raise ActionError(
                 f'"from" names @{handle}, which is not in the ledger. The '
-                f"handles you may cite are: {where}.")
+                f"handles you may cite are: {', '.join(known)}.")
         if scope:
             media = known.get(handle) or _media_kind(handle)
             allowed = scopes_for(media)
@@ -624,6 +631,47 @@ def bind(action, user_text, known):
     return {**action, "from": out}
 
 
+# The words that say which kind was asked for, when only one kind is named.
+# "Shot" is in neither: a shot of a fox is as often a photograph as a clip.
+VIDEO_WORDS = ("clip", "video", "film", "footage", "animation", "animate")
+STILL_WORDS = ("picture", "image", "photo", "photograph", "still", "portrait", "poster",
+               "drawing", "illustration", "painting", "frame")
+
+
+def _names_any(text, words):
+    return any(re.search(rf"(?<![a-z]){re.escape(w)}s?(?![a-z])", text) for w in words)
+
+
+def said_kind(action, user_text, ledger=(), strip=(), cast=()):
+    """A render of the other kind than the person plainly asked for -> the
+    kind they asked for.
+
+    "A clip of rain on a window" came back as a still from the 2B floor model
+    on one seed in two. When the message names one kind and not the other,
+    that is the person's decision, as a handle they typed is (`bind`), so it
+    is written in rather than re-asked. A message naming both ("a picture
+    for the clip") or neither is left to the model, and so is a render on the
+    strip, which is a clip by what it is. The changed action must validate as
+    the new kind, or the model's stands.
+    """
+    if action.get("act") != ACT_RENDER or action.get("after") or action.get("replaces"):
+        return action
+    text = (user_text or "").lower()
+    video, still = _names_any(text, VIDEO_WORDS), _names_any(text, STILL_WORDS)
+    if video == still:
+        return action
+    kind = KIND_VIDEO if video else KIND_STILL
+    if action["kind"] == kind:
+        return action
+    changed = {**action, "kind": kind}
+    if kind == KIND_STILL:
+        changed["seconds"] = None
+    try:
+        return validate(changed, ledger, strip, cast)
+    except ActionError:
+        return action
+
+
 def known_handles(ledger):
     """The ledger -> `{handle: media kind}`, the two things a citation needs."""
     out = {}
@@ -703,6 +751,7 @@ def judge(reply, ledger, user_text, second=False, strip=(), cast=()):
             return {"act": ACT_SAY, "say": spoken(reply)}
         return {"act": "reask", "sentence": str(problem)}
     action = bind(action, user_text, known_handles(ledger))
+    action = said_kind(action, user_text, ledger, strip, cast)
 
     if action["act"] == ACT_SAY:
         if not second and asks_for_render(user_text):

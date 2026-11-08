@@ -455,25 +455,66 @@ def json_object(content):
     sentence in front of it. What the object *holds* is each family's own
     `parse_reply` to judge, and that half is strict.
     """
+    import json
+
     text = THINK_RE.sub("", content).strip()
     fenced = _FENCE_RE.match(text)
     if fenced:
         text = fenced.group(1).strip()
-    if not text.startswith("{"):
-        at = text.find("{")
-        if at < 0:
-            raise RefineError(f"the model did not return JSON: {content[:300]}")
-        text = text[at:text.rfind("}") + 1]
-
-    import json
-
+    if text.find("{") < 0:
+        raise RefineError(f"the model did not return JSON: {content[:300]}")
     try:
         data = json.loads(text)
     except ValueError as exc:
-        raise RefineError(f"the model's JSON could not be read ({exc}): {text[:300]}") from exc
+        data = _first_object(text)
+        if data is None:
+            raise RefineError(f"the model's JSON could not be read ({exc}): {text[:300]}") from exc
     if not isinstance(data, dict):
         raise RefineError("the model returned JSON, but not an object")
     return data
+
+
+# A fenced block anywhere in a reply, closed or not. The prompts ask for the
+# object in a fence, so a fence is where the answer is looked for first.
+_FENCES_RE = re.compile(r"```(?:\w+)?\s*(.*?)\s*(?:```|$)", re.DOTALL)
+
+
+def _first_object(text):
+    """The object a reply that is not one clean object meant -> a dict, or None.
+
+    Two shapes the small models write, both seen on the 2B floor: an object
+    and then the real answer in a fence (`{"act": "say", …}` followed by the
+    render, fenced — the fence is what was asked for, and the last fence is
+    the answer the model settled on), and one object with something after it
+    (a stray closing brace, a second sentence). Each is read with
+    `raw_decode`, which takes one object and ignores what follows, rather
+    than handing everything between the first `{` and the last `}` to a
+    parser that wants exactly one value.
+
+    Only from the first `{` of each block. An object that does not decode
+    from there is broken or unclosed, and every later brace is inside it: a
+    shot from an unclosed shot list is not the answer, and is left for the
+    caller's own repair (`director_calls._closed`).
+    """
+    import json
+
+    decoder = json.JSONDecoder()
+
+    def first_in(chunk):
+        at = chunk.find("{")
+        if at < 0:
+            return None
+        try:
+            value, _end = decoder.raw_decode(chunk, at)
+        except ValueError:
+            return None
+        return value if isinstance(value, dict) else None
+
+    for block in reversed(_FENCES_RE.findall(text)):
+        found = first_in(block)
+        if found is not None:
+            return found
+    return first_in(text)
 
 
 # ---- what a family says a prompt looks like ---------------------------------

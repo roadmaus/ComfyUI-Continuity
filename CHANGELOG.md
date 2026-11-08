@@ -6,6 +6,14 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The chat reads the small models' replies again.** On `lfm3-omni` every turn
+failed: the model writes a stray `{"act": "say"}` object before the fenced
+answer, and the reply was read as one value and refused. The reply reader now
+takes the fenced object first and the first complete object otherwise. A
+handle copied from the worked examples into "from" while nothing has been
+made yet is dropped instead of refused, and a message that plainly names a
+clip or a picture gets that kind when the model wrote the other.
+
 **A cast member a clip cites in the wrong case is in the clip again.** Director
 writes every name in its plan in lower case, so George from the chat's cast
 was cited as `@george` in every shot. The chat's check accepts a cast name in

@@ -83,6 +83,13 @@ SHAPES = {
     "a leaked think block": f"<think>\nthey want a picture\n</think>\nA picture.\n```\n{ACTION}\n```",
     "a bare object": ACTION,
     "a sentence in front of it": f"Sure, here is the action: {ACTION}",
+    # Off lfm3-omni (2B), on every turn of the chat bench: a stray bare object
+    # and then the answer in the fence that was asked for. Read as one value,
+    # the two were "Extra data" and every turn of the room failed.
+    "a stray object, then the fence": ('{"act": "say", "say": "Making it now."}\n'
+                                       f"```json\n{ACTION}\n```"),
+    "a stray brace after the object": ACTION + "\n}",
+    "a fence never closed": f"A picture.\n```json\n{ACTION}",
 }
 for label, reply in SHAPES.items():
     _, action = chat.read(reply, LEDGER)
@@ -97,6 +104,10 @@ check("a reply that is all object has no plan line", chat.plan_of(ACTION), "")
 check("the think block is not mistaken for one",
       chat.plan_of(SHAPES["a leaked think block"]), "A picture.")
 
+refuses("an object never closed is still a re-ask, not a piece of it",
+        lambda: chat.read('{"act": "render", "kind": "still", "from": [{"handle": "img-1"}], "prompt": "a f',
+                          LEDGER),
+        "no JSON object")
 refuses("prose with no object at all is a re-ask, not a crash",
         lambda: chat.read("I could make that for you if you like!", LEDGER),
         "no JSON object", "``` fence")
@@ -143,10 +154,11 @@ refuses("an unknown handle is refused with the ones that exist",
         lambda: chat.validate({"act": "render", "kind": "still", "prompt": "a fox",
                                "from": ["img-9"]}, LEDGER),
         "@img-9", "img-1, vid-1")
-refuses("and with an empty ledger it says so instead",
-        lambda: chat.validate({"act": "render", "kind": "still", "prompt": "a fox",
-                               "from": ["img-1"]}, []),
-        "nothing has been made yet")
+# With nothing made yet there is nothing to cite, and a handle in "from" is
+# the worked examples' copied: the 2B floor model writes one on most first
+# turns and again on the re-ask. It goes, rather than the turn.
+check("with an empty ledger, a handle in \"from\" is dropped",
+      chat.validate({"act": "render", "kind": "still", "prompt": "a fox", "from": ["img-1"]}, [])["from"], [])
 
 # Two spellings are read rather than refused. Both are what a model that has
 # just read a ledger full of `@img-1` lines does, and neither leaves any doubt
@@ -1334,6 +1346,19 @@ check("direct image edits remain concise at rich verbosity",
                                 edits=True, ledger=[{"handle": "pic-1", "kind": "still"}]), False)
 check("a new render on an edit-capable rail still expands at rich verbosity",
       chat.needs_rich_expansion(rich, "a fox at dusk", verbosity=1, edits=True), True)
+
+# The kind the person plainly named wins over the model's: "a clip of rain"
+# came back as a still from the 2B floor model on one seed in two.
+still_reply = '```json\n{"act": "render", "kind": "still", "prompt": "rain on a window"}\n```'
+clip_reply = '```json\n{"act": "render", "kind": "video", "prompt": "a fox", "seconds": 5}\n```'
+check("a clip asked for is a clip", chat.judge(still_reply, [], "a clip of rain on a window")["action"]["kind"],
+      "video")
+check("a picture asked for is a picture, with no length",
+      [chat.judge(clip_reply, [], "a picture of a fox")["action"][k] for k in ("kind", "seconds")],
+      ["still", None])
+check("a message naming both is the model's to read",
+      chat.judge(still_reply, [], "a picture for the clip")["action"]["kind"], "still")
+check("and one naming neither", chat.judge(still_reply, [], "rain on a window")["action"]["kind"], "still")
 
 # A cast name cited in another case leaves in the cast's spelling: the
 # compiler matches handles exactly, and Director writes every name in lower
