@@ -6,6 +6,13 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A chat clip on LTX 2.5 can follow the one before it again.** The dry run
+every chat render goes through compiled each pass as MiniMax H3, so the seam an
+LTX 2.5 clip opens with "after" another was checked against H3's feather widths
+and refused ("a seam can inherit 1, 5, 22 … not 17"). The dry run now compiles
+each pass for the piece's own family, which also makes the editor's compiled
+prompt box right for LTX pieces.
+
 **The chat's selected aspect ratio applies to pictures and videos.** The
 selector was already sent with each turn, but the model did not see it and its
 action's aspect field overrode the room setting. The turn now tells the model
