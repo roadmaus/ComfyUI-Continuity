@@ -123,14 +123,43 @@ function plate(item) {
 
 /** The treatments that make their own picture rather than being handed one.
  *
- *  Every other card on this surface is a photograph — a frame off the piece, or
- *  one of the plates shipped beside the code — and that is the right material
- *  for a tool whose subject is an image. A room where you *talk* has no such
- *  frame: the thing it does is the exchange, and the honest picture of an
- *  exchange is the exchange. So one kind is drawn here in the same vocabulary
- *  the rest of the plate is styled in, rather than a photograph being found for
- *  it that would be a picture of something else. */
-const DRAWN = new Set(["chat", "lift", "forge"]);
+ *  The two Go-to cards show the piece when the piece has a frame, because the
+ *  piece is what they take you to. Everything else on this surface is drawn:
+ *  one picture per tool, in the plate's own ink, with amber on the one thing
+ *  that moves — and what moves under the pointer is the tool doing its job,
+ *  not the card lighting up. The first cut shipped a photograph per bench
+ *  beside the code (a lens barrel, a mannequin, a depth pass of it) and the
+ *  grid read as two surfaces: five stills in one key light and two line
+ *  drawings. Drawn, the nine cards are one set, nothing in them is a picture of
+ *  something else, and nothing smaller than a bar has to survive two hundred
+ *  and thirty pixels. The Go-to cards fall back to a drawing too, on the day
+ *  the piece has no frame yet. */
+const DRAWN = new Set(["frame", "reel", "chat", "dials", "edges", "blocks", "grow", "lift", "forge"]);
+
+/** A drawn plate: one static SVG in the plate's 16:9, built from the constants
+ *  in this module and nothing else — no outside text reaches `innerHTML`. */
+const drawn = (cls, markup) => {
+  const plate = el("div", { class: `mmc-dash-drawn mmc-dash-${cls}` });
+  plate.innerHTML = `<svg viewBox="0 0 160 90" aria-hidden="true">${markup}</svg>`;
+  return plate;
+};
+
+/** Capsule limbs as lines, `width` mapping each limb's thickness; a limb's far
+ *  side is marked so the stylesheet can set it back a step. */
+const limbs = (list, width = (w) => w) => list.map(([x1, y1, x2, y2, w, far]) =>
+  `<line${far ? ' class="mmc-dash-far"' : ""} x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${width(w)}"/>`).join("");
+
+/** A stand-in landscape — a sun and a hill line, the shapes the image glyph is
+ *  made of — clipped to the frame at (x, y, w, h), panned by `shift`. What a
+ *  card draws where a picture would go, on a piece that has none yet. */
+const scene = (x, y, w, h, shift = 0, sun = 4) => {
+  const id = `mmc-dash-scene-${x}-${y}`.replace(/\./g, "_");
+  return `<clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}"/></clipPath>`
+    + `<g clip-path="url(#${id})"><g transform="translate(${shift} 0)">`
+    + `<circle class="mmc-dash-sun" cx="${x + w * 0.74}" cy="${y + h * 0.3}" r="${sun}"/>`
+    + `<path class="mmc-dash-hills" d="M${x} ${y + h}V${y + h * 0.76}C${x + w * 0.17} ${y + h * 0.5} ${x + w * 0.28} ${y + h * 0.45} ${x + w * 0.45} ${y + h * 0.65}`
+    + `C${x + w * 0.58} ${y + h * 0.8} ${x + w * 0.67} ${y + h * 0.55} ${x + w * 1.1} ${y + h * 0.6}V${y + h}Z"/></g></g>`;
+};
 
 /** The forge card's walk: four frames of one cycle, in the order the cells
  *  show them. The first two are the pose stage's mannequin, as capsules
@@ -154,11 +183,11 @@ const frame = (url, cls = "") =>
 /**
  * The treatments, by name.
  *
- * Two of them — the tracing and the upscale — are the same gesture: the picture
- * twice, one copy over the other, with a seam between them that the pointer
- * moves. That is not decoration either. A tracing and an upscale are both
- * *comparisons* — this frame, and what the tool would hand back — and a card
- * that shows only the after has thrown away the half that explains it.
+ * The three photographic ones are the Go-to cards' — the piece's own frame,
+ * plain, ruled or moving. The rest draw themselves; see `DRAWN`. The tracing
+ * keeps the seam the photographed card had, because a tracing is a
+ * *comparison* — this figure, and what the bench would read out of it — and a
+ * card that shows only the after has thrown away the half that explains it.
  */
 const TREATMENTS = {
   /** The still, plain and whole. Nothing is done to it, because nothing is what
@@ -191,127 +220,190 @@ const TREATMENTS = {
     return media;
   },
 
-  /** The frame, and the map the bench would make of it.
+  /** The still, before there is one.
    *
-   *  A real depth pass, run through the same Depth Anything the bench runs and
-   *  shipped beside the picture it was made from — not a filter standing in for
-   *  one. The browser can convolve an edge kernel over an image and that is what
-   *  this card did first, but a Laplacian over a black stage is a handful of thin
-   *  lines: at two hundred and thirty pixels wide it read as a dark smudge, and
-   *  it was a simulation of the tool rather than the tool's own output. Depth is
-   *  a solid, legible thing at any size, and it is what came out of the bench. */
-  trace: (art) => follows(el("div", { class: "mmc-dash-split" }, [
-    frame(art.url),
-    el("div", { class: "mmc-dash-wipe" }, [frame(art.made)]),
-    el("span", { class: "mmc-dash-seam" }),
-  ])),
+   *  A frame with registration marks around it — the picture alone in the
+   *  middle of the screen, which is what the card does. The marks step outward
+   *  under the pointer: the screen clearing around it. */
+  frame: () => drawn("frame", `
+    <g class="mmc-dash-marks">
+      <path class="mmc-dash-m1" d="M38 19V11H46"/><path class="mmc-dash-m2" d="M114 11H122V19"/>
+      <path class="mmc-dash-m3" d="M38 69V77H46"/><path class="mmc-dash-m4" d="M114 77H122V69"/>
+    </g>
+    <g class="mmc-dash-scene">
+      <rect class="mmc-dash-pic" x="44" y="17" width="72" height="54" rx="1.5"/>
+      ${scene(44, 17, 72, 54, 0, 5)}
+    </g>`),
 
-  /** The frame, small against large. The left half is genuinely a low-resolution
-   *  copy — a thirty-pixel canvas blown up by the browser — rather than a blur
-   *  filter, because blur is what a soft photograph looks like and blocks are
-   *  what a small file looks like, and the bench is about the second one. */
-  scale: (art) => {
-    const small = el("canvas", { class: "mmc-dash-shot mmc-dash-blocks", width: 44, height: 25 });
-    const source = new Image();
-    source.onload = () => {
-      // The canvas takes the picture's own shape, so the blocks stay square
-      // when the frame is not sixteen by nine.
-      small.height = Math.max(1, Math.round(small.width * (source.naturalHeight / source.naturalWidth)));
-      small.getContext("2d")?.drawImage(source, 0, 0, small.width, small.height);
-    };
-    source.src = art.url;
-    // The sharp copy is on the right of the seam here rather than the left, so
-    // pulling the seam left uncovers what the bench would hand back.
-    return follows(el("div", { class: "mmc-dash-split mmc-dash-split-out" }, [
-      small,
-      el("div", { class: "mmc-dash-wipe mmc-dash-wipe-right" }, [frame(art.url)]),
-      el("span", { class: "mmc-dash-seam" }),
+  /** The shot, before there is a still to rule into frames.
+   *
+   *  A strip of three cells holding one view that pans a step a cell — a shot
+   *  is time, and three copies of the same frame would be a mistake rather
+   *  than a filmstrip. The playhead steps cell to cell under the pointer, in
+   *  the amber the forge card's does. */
+  reel: () => {
+    const cell = 140 / 3, holes = [];
+    for (let x = 13; x < 146; x += 9.2) {
+      holes.push(`<rect x="${x}" y="23" width="3.6" height="2.6"/><rect x="${x}" y="64.4" width="3.6" height="2.6"/>`);
+    }
+    return drawn("reel", `
+      <rect class="mmc-dash-strip" x="10" y="21" width="140" height="48" rx="1.5"/>
+      <g class="mmc-dash-holes">${holes.join("")}</g>
+      ${[0, 1, 2].map((i) => scene(10 + i * cell, 28, cell, 34, -6 * i)).join("")}
+      <line class="mmc-dash-cut" x1="${10 + cell}" y1="21" x2="${10 + cell}" y2="69"/>
+      <line class="mmc-dash-cut" x1="${10 + cell * 2}" y1="21" x2="${10 + cell * 2}" y2="69"/>
+      <rect class="mmc-dash-head" x="10" y="21" width="${cell}" height="48"/>`);
+  },
+
+  /** A line said, and the frame it turns into.
+   *
+   *  The asking line is four word-length bars with an amber caret after them
+   *  — not letters, which are a smudge at this size. Under it the frame is
+   *  only part drawn; the pointer finishes the stroke and the picture fades in
+   *  while the caret blinks, which is the room doing what it does. */
+  chat: () => drawn("chat", `
+    <g class="mmc-dash-ask">
+      <line x1="40" y1="22" x2="58" y2="22"/><line x1="62" y1="22" x2="78" y2="22"/>
+      <line x1="82" y1="22" x2="90" y2="22"/><line x1="94" y1="22" x2="114" y2="22"/>
+    </g>
+    <rect class="mmc-dash-caret" x="118.5" y="18" width="1.2" height="8"/>
+    <g class="mmc-dash-made">${scene(40, 34, 80, 44, 0, 4.5)}</g>
+    <rect class="mmc-dash-frame" x="40" y="34" width="80" height="44" rx="2" pathLength="100"/>`),
+
+  /** A sheet of settings, and where a saved one puts them.
+   *
+   *  Three sliders with faint amber ticks at the preset's positions and two
+   *  more sheets stacked behind. Under the pointer the knobs slide to the
+   *  ticks: a preset is a setup you can put back, and this is it being put
+   *  back. */
+  dials: () => drawn("dials", `
+    <rect class="mmc-dash-back mmc-dash-b2" x="22" y="12" width="100" height="56" rx="3"/>
+    <rect class="mmc-dash-back mmc-dash-b1" x="26" y="16" width="100" height="56" rx="3"/>
+    <rect class="mmc-dash-sheet" x="30" y="20" width="100" height="56" rx="3"/>
+    <g class="mmc-dash-track"><line x1="42" y1="34" x2="118" y2="34"/><line x1="42" y1="48" x2="118" y2="48"/><line x1="42" y1="62" x2="118" y2="62"/></g>
+    <g class="mmc-dash-tick"><line x1="92" y1="31" x2="92" y2="37"/><line x1="58" y1="45" x2="58" y2="51"/><line x1="104" y1="59" x2="104" y2="65"/></g>
+    <circle class="mmc-dash-knob mmc-dash-k1" cx="64" cy="34" r="3"/>
+    <circle class="mmc-dash-knob mmc-dash-k2" cx="98" cy="48" r="3"/>
+    <circle class="mmc-dash-knob mmc-dash-k3" cx="76" cy="62" r="3"/>`),
+
+  /** The figure, and the edges the bench reads out of it.
+   *
+   *  The forge's mannequin stands whole on the right of a seam; left of it the
+   *  same figure is only its contour, a thin amber line with nothing inside —
+   *  which is what an edge pass hands back. The contour is the figure drawn
+   *  thick and masked by the figure drawn at size, so where a near limb
+   *  crosses a far one the near one's edge wins, as in a line drawing. The
+   *  seam is the pointer's, the same gesture the photographed card had. */
+  edges: () => {
+    const [pose] = WALK;
+    const far = pose.limbs.filter((limb) => limb[5]), near = pose.limbs.filter((limb) => !limb[5]);
+    const [hx, hy, hr] = pose.head;
+    const ground = `<line class="mmc-dash-ground" x1="20" y1="78" x2="140" y2="78"/>`;
+    const solid = `<g class="mmc-dash-soft" transform="translate(80 26)">${limbs(pose.limbs)}<circle cx="${hx}" cy="${hy}" r="${hr}"/></g>`;
+    const outline = `<g class="mmc-dash-edges" transform="translate(80 26)">`
+      + `<defs><mask id="mmc-dash-edge-mask" maskUnits="userSpaceOnUse" x="-40" y="-10" width="80" height="80">`
+      + `<rect x="-40" y="-10" width="80" height="80" fill="#fff"/>`
+      + `<g class="mmc-dash-body">${limbs(pose.limbs)}<circle cx="${hx}" cy="${hy}" r="${hr}"/></g></mask></defs>`
+      + `<g mask="url(#mmc-dash-edge-mask)"><g class="mmc-dash-far">${limbs(far, (w) => w + 1.6)}</g>`
+      + `${limbs(near, (w) => w + 1.6)}<circle cx="${hx}" cy="${hy}" r="${hr + 0.8}"/></g></g>`;
+    const wipe = el("div", { class: "mmc-dash-wipe mmc-dash-drawn" });
+    wipe.innerHTML = `<svg viewBox="0 0 160 90" aria-hidden="true">${ground}${outline}</svg>`;
+    const whole = el("div", { class: "mmc-dash-drawn" });
+    whole.innerHTML = `<svg viewBox="0 0 160 90" aria-hidden="true">${ground}${solid}</svg>`;
+    return follows(el("div", { class: "mmc-dash-split mmc-dash-trace" }, [
+      whole, wipe, el("span", { class: "mmc-dash-seam" }),
     ]));
   },
 
-  /** Two lines said, and a frame that came of them.
+  /** Boxes on a floor, and one camera walked through them.
    *
-   *  Drawn rather than photographed — see `DRAWN`. The shapes are the room's
-   *  own: a short line from the person, a shorter one back, and under them the
-   *  picture that answer turned into, arriving on hover the way a render
-   *  arrives in the room. Nothing in it is text, because a card with words on
-   *  it at two hundred pixels wide is a card with a smudge on it. */
-  chat: () => el("div", { class: "mmc-dash-chat" }, [
-    el("span", { class: "mmc-dash-ask" }),
-    el("span", { class: "mmc-dash-back" }),
-    el("span", { class: "mmc-dash-made" }),
-  ]),
+   *  Three wire boxes on an isometric grid, a dashed amber path across the
+   *  floor, and a small camera on it that dollies along under the pointer.
+   *  The grid, boxes and path are precomputed on a 2:1 isometric at 8 units a
+   *  cell, origin (80, 50): P(a, b) = (80 + (a − b)·6.93, 50 + (a + b)·4). */
+  blocks: () => drawn("blocks", `
+    <path class="mmc-dash-floor" d="M80 10L10.7 50M80 10L149.3 50M86.93 14L17.63 54M73.07 14L142.37 54M93.86 18L24.56 58M66.14 18L135.44 58M100.79 22L31.49 62M59.21 22L128.51 62M107.72 26L38.42 66M52.28 26L121.58 66M114.65 30L45.35 70M45.35 30L114.65 70M121.58 34L52.28 74M38.42 34L107.72 74M128.51 38L59.21 78M31.49 38L100.79 78M135.44 42L66.14 82M24.56 42L93.86 82M142.37 46L73.07 86M17.63 46L86.93 86M149.3 50L80 90M10.7 50L80 90"/>
+    <path class="mmc-dash-box" d="M66.14 12L80 20L66.14 28L52.28 20ZM80 20L80 42L66.14 50L66.14 28ZM66.14 28L66.14 50L52.28 42L52.28 20Z"/>
+    <path class="mmc-dash-box" d="M114.65 24L128.51 32L107.72 44L93.86 36ZM128.51 32L128.51 46L107.72 58L107.72 44ZM107.72 44L107.72 58L93.86 50L93.86 36Z"/>
+    <path class="mmc-dash-box" d="M86.93 32L97.33 38L86.93 44L76.53 38ZM97.33 38L97.33 68L86.93 74L86.93 44ZM86.93 44L86.93 74L76.53 68L76.53 38Z"/>
+    <path class="mmc-dash-dolly" d="M17.63 50C55.75 56 90.39 48 135.44 54"/>
+    <g class="mmc-dash-cam"><rect x="-4" y="-2" width="6" height="4" rx=".6"/><path d="M2 -1L5.5 -3V3L2 1Z"/></g>`),
+
+  /** The file small, and the same subject at the size the bench hands back.
+   *
+   *  A bust in eight-by-five pixels in a small frame, amber rays projecting it
+   *  to a large one where it is a smooth silhouette — blocks becoming curves,
+   *  which is what resolution is. The large copy sharpens and takes corner
+   *  brackets under the pointer. */
+  grow: () => {
+    const rows = ["...##...", "...##...", "..####..", ".######.", "########"], px = 3.6;
+    const dots = rows.flatMap((row, y) => [...row].map((on, x) => on === "." ? ""
+      : `<rect x="${(15.6 + x * px).toFixed(1)}" y="${(33 + y * px).toFixed(1)}" width="${px}" height="${px}"/>`)).join("");
+    return drawn("grow", `
+      <defs><clipPath id="mmc-dash-grow-clip"><rect x="74" y="25" width="72" height="40.5" rx="1.5"/></clipPath></defs>
+      <g class="mmc-dash-rays">
+        <line x1="14" y1="33" x2="74" y2="25"/><line x1="46" y1="33" x2="146" y2="25"/>
+        <line x1="14" y1="51" x2="74" y2="65.5"/><line x1="46" y1="51" x2="146" y2="65.5"/>
+      </g>
+      <rect class="mmc-dash-pic" x="14" y="33" width="32" height="18" rx="1"/>
+      <g class="mmc-dash-px">${dots}</g>
+      <rect class="mmc-dash-pic" x="74" y="25" width="72" height="40.5" rx="1.5"/>
+      <g class="mmc-dash-smooth" clip-path="url(#mmc-dash-grow-clip)">
+        <circle cx="110" cy="40" r="7.5"/><path d="M86 65.5C86 52 98 50 110 50C122 50 134 52 134 65.5Z"/>
+      </g>
+      <g class="mmc-dash-corners">
+        <path d="M74 31V25H80"/><path d="M140 25H146V31"/><path d="M74 59.5V65.5H80"/><path d="M140 65.5H146V59.5"/>
+      </g>`);
+  },
 
   /** A picture, its camera, and the mesh at the end of its rays.
    *
-   *  Drawn, like the chat card, and for a stronger reason: the tool's result
-   *  is a thing you turn in your hands, and a photograph of one would be the
-   *  one view of it the card cannot turn. What the card can show is the idea
-   *  the tool is built on — the picture stands in front of its own camera and
-   *  the mesh is lifted out along the rays through it — in the amber the
-   *  tool's own stage draws those rays in. Under the pointer the rays light
-   *  and the cube turns, which is the build happening. */
-  lift: () => {
-    const plate = el("div", { class: "mmc-dash-lift" });
-    // Static markup, nothing interpolated into it: an SVG drawn once.
-    plate.innerHTML = `<svg viewBox="0 0 160 90" aria-hidden="true">
-      <g class="mmc-dash-rays">
-        <line x1="8" y1="45" x2="150" y2="6"/><line x1="8" y1="45" x2="150" y2="84"/>
-        <line x1="8" y1="45" x2="150" y2="30"/><line x1="8" y1="45" x2="150" y2="60"/>
-      </g>
-      <rect class="mmc-dash-pic" x="40" y="31" width="22" height="28" rx="1.5"/>
-      <ellipse class="mmc-dash-subject" cx="51" cy="47" rx="6" ry="8"/>
-      <g class="mmc-dash-cube">
-        <path d="M112 25l17 9.5v19L112 63l-17-9.5v-19z"/>
-        <path d="M112 44.5L95 34.5M112 44.5l17-10M112 44.5V63"/>
-      </g>
-    </svg>`;
-    return plate;
-  },
+   *  The tool's result is a thing you turn in your hands, and a photograph of
+   *  one would be the one view of it the card cannot turn. What the card can
+   *  show is the idea the tool is built on — the picture stands in front of
+   *  its own camera and the mesh is lifted out along the rays through it — in
+   *  the amber the tool's own stage draws those rays in. Under the pointer
+   *  the rays light and the cube turns, which is the build happening. */
+  lift: () => drawn("lift", `
+    <g class="mmc-dash-rays">
+      <line x1="8" y1="45" x2="150" y2="6"/><line x1="8" y1="45" x2="150" y2="84"/>
+      <line x1="8" y1="45" x2="150" y2="30"/><line x1="8" y1="45" x2="150" y2="60"/>
+    </g>
+    <rect class="mmc-dash-pic" x="40" y="31" width="22" height="28" rx="1.5"/>
+    <ellipse class="mmc-dash-subject" cx="51" cy="47" rx="6" ry="8"/>
+    <g class="mmc-dash-cube">
+      <path d="M112 25l17 9.5v19L112 63l-17-9.5v-19z"/>
+      <path d="M112 44.5L95 34.5M112 44.5l17-10M112 44.5V63"/>
+    </g>`),
 
   /** A walk, as the forge renders one: four frames in one grid on one
    *  baseline.
    *
-   *  Drawn, for the reason the lift card is. The forge renders a set of frames
-   *  as one sheet so they keep one scale and one ground, and that sheet is
-   *  the most characteristic thing it makes. The cells run from the pose
-   *  stage's mannequin into the sprite it becomes, so the conversion is read
-   *  left to right. Under the pointer an amber frame steps through the cells
-   *  at a frame a beat, which is the sheet played as the animation it is. */
+   *  The forge renders a set of frames as one sheet so they keep one scale and
+   *  one ground, and that sheet is the most characteristic thing it makes.
+   *  The cells run from the pose stage's mannequin into the sprite it
+   *  becomes, so the conversion is read left to right. Under the pointer an
+   *  amber frame steps through the cells at a frame a beat, which is the
+   *  sheet played as the animation it is. */
   forge: () => {
-    const plate = el("div", { class: "mmc-dash-forge" });
     const cell = 34, left = 12, top = 14, base = 76, px = 3.6;
-    const drawn = WALK.map((frame, i) => {
+    const cells = WALK.map((frame, i) => {
       const x = left + i * cell;
       const box = `<rect class="mmc-dash-cell" x="${x}" y="${top}" width="${cell}" height="${base - top}"/>`;
       if (!Array.isArray(frame)) {
-        const limbs = frame.limbs.map(([x1, y1, x2, y2, w, far]) =>
-          `<line${far ? ' class="mmc-dash-far"' : ""} x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${w}"/>`).join("");
         const [hx, hy, hr] = frame.head;
-        return `${box}<g class="mmc-dash-soft" transform="translate(${x + cell / 2} ${base - 52})">${limbs}`
+        return `${box}<g class="mmc-dash-soft" transform="translate(${x + cell / 2} ${base - 52})">${limbs(frame.limbs)}`
           + `<circle cx="${hx}" cy="${hy}" r="${hr}"/></g>`;
       }
       const x0 = x + (cell - frame[0].length * px) / 2, y0 = base - frame.length * px;
       return box + frame.flatMap((row, y) => [...row].map((on, c) => on === "." ? ""
         : `<rect class="${on === "#" ? "mmc-dash-px" : "mmc-dash-px-far"}" x="${x0 + c * px}" y="${y0 + y * px}" width="${px}" height="${px}"/>`)).join("");
     }).join("");
-    // Built from the constants above and nothing else: no outside text reaches it.
-    plate.innerHTML = `<svg viewBox="0 0 160 90" aria-hidden="true">
+    return drawn("forge", `
       <line class="mmc-dash-ground" x1="${left - 4}" y1="${base}" x2="${left + cell * 4 + 4}" y2="${base}"/>
-      ${drawn}
-      <rect class="mmc-dash-play" x="${left}" y="${top}" width="${cell}" height="${base - top}"/>
-    </svg>`;
-    return plate;
+      ${cells}
+      <rect class="mmc-dash-play" x="${left}" y="${top}" width="${cell}" height="${base - top}"/>`);
   },
-
-  /** The frame, dealt out. A preset is a setup you can put back, so the card is
-   *  the same picture three times over — one setting, saved, and saved again —
-   *  and the deck spreads under the pointer. */
-  deck: (art) => el("div", { class: "mmc-dash-deck" }, [
-    frame(art.url, "mmc-dash-deck-3"),
-    frame(art.url, "mmc-dash-deck-2"),
-    frame(art.url, "mmc-dash-deck-1"),
-  ]),
 };
 
 /**

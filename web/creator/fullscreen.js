@@ -77,25 +77,14 @@ const PIECE = ["MiniMaxH3Creator", "MiniMaxH3Timeline"];
 const PRESTAGE = "MiniMaxH3PreStage";
 
 /**
- * A tool card's plate.
+ * A tool card's plate is drawn, not photographed — see `DRAWN` in navigate.js.
  *
  * The two Go-to cards show the piece, because the piece is what they take you
- * to. A bench does not: it is a room of its own with its own subject, and the
- * first cut of this surface — every card cut from whatever frame the piece was
- * carrying — put the same photograph on the grid five times over.
- *
- * So each tool has a picture of its own, shipped beside the code. They are one
- * set on purpose: a black stage, one warm key, deep falloff, no text and no
- * faces. And each was chosen for what its card *does* to it — the mannequin and
- * its rigging because a depth pass over it is a figure you can read at a glance,
- * the knurled lens barrel because the detail on it visibly dies at forty-four
- * pixels wide. The ControlNet card ships two: the frame, and the depth map the
- * bench itself made of it.
- *
- * Off `import.meta.url`, so the installed folder's name stays the browser's
- * business — the same trick `presets/atlasref.js` uses for the atlas.
+ * to, and fall back to a drawing on the day it has no frame. Every tool has a
+ * drawing of its own, built in navigate.js from constants in that module: one
+ * set in one ink, amber on the one thing that moves. The first cut shipped a
+ * photograph per bench beside the code and the grid read as two surfaces.
  */
-const cardArt = (name) => new URL(`./cards/${name}.webp`, import.meta.url).href;
 
 /** The open editor, or null. One at a time: it is the window. */
 let open = null;
@@ -851,29 +840,29 @@ class Fullscreen {
     const body = this.front?.mmcBody;
     const editor = body?.editor ?? body;
     const strip = this.node.mmcBody?.showsStrip?.();
-    // What the two Go-to cards are made of: the piece itself. The tools carry
-    // their own plates — see `cardArt` for why the two halves of this surface
-    // are pictured differently.
+    // What the two Go-to cards are made of: the piece itself, when it has a
+    // frame. The tools draw their own plates — see `DRAWN` in navigate.js.
     const still = this.pieceFrame();
     const clip = this.shown?.shot && !this.shown.shot.isImage ? this.shown.shot.url : null;
     return [
       { title: t("Go to"), items: [
         { label: t("Pre-stage"), glyph: "image",
           sub: t("The still this shot is built on, alone in the middle of the screen"),
-          art: { kind: "still", url: still },
+          art: still ? { kind: "still", url: still } : { kind: "frame" },
           go: () => this.goTo("pre") },
         { label: strip ? t("Strip") : t("Shot"), glyph: "video",
           sub: t("The video — the prompt, the cast and everything the render reads"),
-          // The rendered clip if there is one, and the still it was built from
-          // cut into frames if there is not: the card says what the shot *is* so
-          // far, and never repeats the pre-stage card's photograph whole.
-          art: clip ? { kind: "clip", url: clip } : { kind: "strip", url: still },
+          // The rendered clip if there is one, the still it was built from cut
+          // into frames if there is not, and a drawn strip before there is
+          // either: the card says what the shot *is* so far, and never repeats
+          // the pre-stage card's photograph whole.
+          art: clip ? { kind: "clip", url: clip }
+            : still ? { kind: "strip", url: still } : { kind: "reel" },
           go: () => this.goTo("shot") },
       ] },
       { title: t("Tools"), items: [
         { label: t("Presets"), sub: t("Apply a saved setup, or save this one"),
-          glyph: "star",
-          art: { kind: "deck", url: cardArt("presets") },
+          glyph: "star", art: { kind: "dials" },
           go: () => openPresetLibrary({
             target: editor?.presetTarget?.() ?? body?.pieceTarget?.() ?? null,
           }).then(() => editor?.render?.()) },
@@ -882,8 +871,7 @@ class Fullscreen {
         // are the two places this piece can take one.
         { label: t("ControlNet"), glyph: "pen",
           sub: t("Trace footage into edges, lines or tones — then aim a render at it"),
-          art: { kind: "trace", url: cardArt("controlnet"),
-                 made: cardArt("controlnet-depth") },
+          art: { kind: "edges" },
           go: () => openControl({ targets: this.guideTargets(), back: () => this.openDash() }) },
         // The bench that needs no footage: the scene is staged in the browser
         // and rendered there too, so the card's targets are the tracing
@@ -891,8 +879,7 @@ class Fullscreen {
         // whichever pass drew it, As staged included.
         { label: t("Blockout"), glyph: "cube",
           sub: t("Stage a scene out of boxes, walk one camera through it — then render along it"),
-          art: { kind: "trace", url: cardArt("blockout"),
-                 made: cardArt("blockout-depth") },
+          art: { kind: "blocks" },
           go: () => openBlockout({
             targets: this.guideTargets(),
             // The piece's cast, as handles: who a block can play. The bench
@@ -908,9 +895,9 @@ class Fullscreen {
         // The other bench, and the one with no doors: what it makes is the
         // finished file rather than something a render reads, so it lands on a
         // shelf beside the renders and nothing here has to take it anywhere.
-        // The one tool that is a conversation rather than a bench. Its plate is
-        // drawn rather than photographed: what it does is the exchange, and a
-        // photograph of a frame would be a picture of something else.
+        // The one tool that is a conversation rather than a bench: what it
+        // does is the exchange, and its plate is a line said and the frame
+        // that came of it.
         { label: t("Chat"), glyph: "speech",
           sub: t("Ask for a picture or a shot, then ask for changes."),
           art: { kind: "chat" },
@@ -925,7 +912,7 @@ class Fullscreen {
           }) },
         { label: t("Upscale"), glyph: "expand",
           sub: t("Make a still or a clip bigger — the file itself, not a new render"),
-          art: { kind: "scale", url: cardArt("upscale") },
+          art: { kind: "grow" },
           go: () => openUpscale({
             source: this.lastTake(), targets: this.upscaleTargets(),
             // The way back. A card opened a room; its wordmark is what puts the

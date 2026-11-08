@@ -6,6 +6,18 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Every card on the wordmark's dashboard is drawn now.** Image to 3D and Game
+Forge were line drawings and the five benches beside them were photographs,
+so the grid read as two surfaces. Presets, ControlNet, Blockout, Upscale and
+Chat each get a drawing of their own in the same vocabulary — one picture per
+tool in the plate's ink, amber on the one thing that moves, and the motion
+under the pointer is the tool doing its job: knobs sliding back to a saved
+setup, a figure's edges traced left of the seam, a camera dollying through
+boxes, a pixel bust resolving at size, a frame drawing itself from a line
+said. Pre-stage and Shot still show the piece's own frame, and on the day it
+has none they draw one too instead of a cropped glyph. The six photographs
+shipped beside the code are gone.
+
 **The chat's selected aspect ratio applies to pictures and videos.** The
 selector was already sent with each turn, but the model did not see it and its
 action's aspect field overrode the room setting. The turn now tells the model

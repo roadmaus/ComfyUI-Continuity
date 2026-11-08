@@ -1582,14 +1582,13 @@ export const css = `
               var(--rule) 66.66% 0 / 2px 100% no-repeat;
 }
 
-/* The comparison plates — the tracing and the upscale.
+/* The comparison plate — the tracing.
  *
- * One picture and what the tool makes of it, with a seam across it: on the left
- * the tool's own output — a depth pass, a low-resolution copy — and on the right
- * the frame it was handed. The pointer moves the seam, and
- * it moves in the direction of the tool — the tracing takes the frame over, the
- * upscale gives it back sharp — so hovering a card is the card demonstrating
- * itself rather than a card lighting up.
+ * One figure and what the bench reads out of it, with a seam across it: on the
+ * left the bench's own output, the figure's edges, and on the right the figure
+ * it was handed. The pointer moves the seam, and it moves in the direction of
+ * the tool — the tracing takes the figure over — so hovering the card is the
+ * card demonstrating itself rather than a card lighting up.
  */
 /* Registered, because a bare custom property is a string and a string does not
    tween: without this the seam jumps to its hover position instead of sliding. */
@@ -1601,112 +1600,174 @@ export const css = `
 /* The layer the seam cuts. Clipped rather than sized, so both copies stay the
    same picture in the same place and only how much of one you see changes. */
 .mmc-dash-wipe { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--wipe)) 0 0); }
-.mmc-dash-wipe-right { clip-path: inset(0 0 0 var(--wipe)); }
 /* The cut itself. A hairline of light, because a seam that is a border reads as
    two pictures side by side and this is one picture in two states. */
 .mmc-dash-seam {
   position: absolute; top: 0; bottom: 0; left: var(--wipe); width: 1px;
   background: rgba(255, 255, 255, .62); box-shadow: 0 0 6px rgba(0, 0, 0, .55);
 }
-/* And the small copy, blown up. The canvas is thirty-two pixels wide and the
-   browser is told not to smooth it, so what the seam is comparing is resolution
-   and not sharpening. */
-.mmc-dash-blocks { image-rendering: pixelated; }
 /* Under the pointer the seam is dragged rather than animated — see follows() in
    navigate.js, which writes the property inline and so wins over everything
    here. While it is being held the tween is off, or the seam trails the hand.
    The keyboard has no x to read, so a card reached by tabbing plays the move
-   the pointer would have made: the tracing takes the frame over, the upscale
-   hands it back sharp. */
+   the pointer would have made: the tracing takes the figure over. */
 .mmc-dash-split-held { transition: none; }
-.mmc-dash-card:focus-visible .mmc-dash-split { --wipe: 78%; }
-.mmc-dash-card:focus-visible .mmc-dash-split-out { --wipe: 22%; }
+.mmc-dash-card:focus-visible .mmc-dash-split { --wipe: 72%; }
 
-/* The deck: the same frame three times, because a preset is a setup you can put
-   back. The copies behind are dimmed and tilted rather than blurred — they are
-   the same picture at another moment, not an out-of-focus one — and the deck
-   spreads under the pointer. */
-/* The deck needs a table under it. The plate's own tint is a hair off the card
-   and the backs of these cards are nearly black, so the stack merged into the
-   ground and read as one picture with a smudge beside it. A lighter ground with
-   a pool of light where the deck sits: the cards are objects on a surface, which
-   is the only reason the treatment says anything. */
-.mmc-dash-deck {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(120% 95% at 46% 42%,
-                    color-mix(in srgb, var(--mmc-ink) 13%, transparent), transparent 74%),
-    var(--mmc-surface-3);
-}
-.mmc-dash-deck .mmc-dash-shot {
-  border-radius: 6px; transform-origin: 50% 100%;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .62);
-  transition: transform 320ms cubic-bezier(.2, .7, .3, 1), opacity 220ms ease;
-}
-.mmc-dash-deck-3 { transform: scale(.8) rotate(-9deg) translate(-13%, -5%); opacity: .38; }
-.mmc-dash-deck-2 { transform: scale(.8) rotate(-4.5deg) translate(-6%, -2%); opacity: .62; }
-.mmc-dash-deck-1 { transform: scale(.8) rotate(1.5deg) translate(3%, 1%); }
-.mmc-dash-card:hover .mmc-dash-deck-3 { transform: scale(.8) rotate(-15deg) translate(-22%, -8%); opacity: .5; }
-.mmc-dash-card:hover .mmc-dash-deck-2 { transform: scale(.8) rotate(-7.5deg) translate(-11%, -4%); opacity: .76; }
-.mmc-dash-card:hover .mmc-dash-deck-1 { transform: scale(.8) rotate(3.5deg) translate(6%, 2%); }
-
-/* The chat card, drawn rather than photographed — see DRAWN in navigate.js. Two
-   said lines and the frame that came of them, on the same lit ground the deck
-   stands on. Everything is a bar or a box: at two hundred and thirty pixels
-   wide nothing smaller than that reads, and letters least of all. The frame
-   arrives under the pointer, which is what the room does. */
-.mmc-dash-chat {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(120% 95% at 50% 38%,
-                    color-mix(in srgb, var(--mmc-ink) 13%, transparent), transparent 74%),
-    var(--mmc-surface-3);
-}
-.mmc-dash-ask, .mmc-dash-back, .mmc-dash-made { position: absolute; display: block; }
-/* The asking line: short, to the right, in the ink the user's own bubble wears. */
-.mmc-dash-ask {
-  right: 13%; top: 15%; width: 40%; height: 11%;
-  border-radius: 999px; background: color-mix(in srgb, var(--mmc-ink) 42%, transparent);
-}
-/* And the answer: shorter, flush left, quieter — the room's own asymmetry. */
-.mmc-dash-back {
-  left: 13%; top: 33%; width: 28%; height: 9%;
-  border-radius: 999px; background: color-mix(in srgb, var(--mmc-ink) 22%, transparent);
-}
-/* What it made. Landed a little low and lifting into place on hover, which is
-   the one motion on this card and the one thing the tool actually does. */
-.mmc-dash-made {
-  left: 13%; right: 13%; top: 52%; height: 34%;
-  border-radius: 7px; background: var(--mmc-media-bg);
-  border: 1px solid color-mix(in srgb, var(--mmc-ink) 30%, transparent);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .55);
-  transform: translateY(8%); opacity: .72;
-  transition: transform 320ms cubic-bezier(.2, .7, .3, 1), opacity 220ms ease;
-}
-.mmc-dash-card:hover .mmc-dash-made { transform: translateY(0); opacity: 1; }
-@media (prefers-reduced-motion: reduce) {
-  .mmc-dash-made { transition: none; }
-}
-
-/* The image-to-3D card, drawn: a picture on the lit ground, the rays from its
-   camera through it, and the wire cube they lift out. Amber is the rays only,
-   as on the tool's own stage; they brighten and the cube turns under the
-   pointer. */
-.mmc-dash-lift {
+/* The drawn plates — see DRAWN in navigate.js.
+ *
+ * One ground for all of them: the plate's own surface with a pool of light
+ * where the drawing sits, so the shapes are objects on a table rather than
+ * marks on a card. The drawing is the plate's ink at a handful of fixed
+ * strengths, and amber is spent on exactly one thing per card — the thing
+ * that moves. Strokes are in the drawing's own units and scale with it, so
+ * a hairline here is a hairline on a 236px card and two pixels on a wide one.
+ */
+.mmc-dash-drawn {
   position: absolute; inset: 0;
   background:
     radial-gradient(120% 95% at 60% 45%,
                     color-mix(in srgb, var(--mmc-ink) 13%, transparent), transparent 74%),
     var(--mmc-surface-3);
 }
-.mmc-dash-lift svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mmc-dash-drawn svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* The shared vocabulary: a frame where a picture goes, the stand-in landscape
+   inside it, amber rays, and a baseline. */
+.mmc-dash-pic {
+  fill: var(--mmc-media-bg); stroke: color-mix(in srgb, var(--mmc-ink) 45%, transparent); stroke-width: .6;
+}
+.mmc-dash-sun { fill: color-mix(in srgb, var(--mmc-ink) 40%, transparent); }
+.mmc-dash-hills { fill: color-mix(in srgb, var(--mmc-ink) 22%, transparent); }
 .mmc-dash-rays line {
   stroke: var(--mmc-accent); stroke-width: .6; opacity: .45;
   transition: opacity 220ms ease;
 }
-.mmc-dash-pic {
-  fill: var(--mmc-media-bg); stroke: color-mix(in srgb, var(--mmc-ink) 45%, transparent); stroke-width: .6;
+.mmc-dash-card:hover .mmc-dash-rays line, .mmc-dash-card:focus-visible .mmc-dash-rays line { opacity: .95; }
+.mmc-dash-ground { stroke: color-mix(in srgb, var(--mmc-ink) 22%, transparent); stroke-width: .5; shape-rendering: crispEdges; }
+/* One flat silhouette at the group's opacity, so overlapping limbs do not
+   darken at the joints; the far side is a step quieter, as on the sprite. */
+.mmc-dash-soft { opacity: .38; }
+.mmc-dash-soft line { stroke: var(--mmc-ink); stroke-linecap: round; }
+.mmc-dash-soft .mmc-dash-far { stroke: color-mix(in srgb, var(--mmc-ink) 55%, var(--mmc-surface-3)); }
+.mmc-dash-soft circle { fill: var(--mmc-ink); }
+.mmc-dash-px { fill: color-mix(in srgb, var(--mmc-ink) 72%, transparent); shape-rendering: crispEdges; }
+.mmc-dash-px-far { fill: color-mix(in srgb, var(--mmc-ink) 42%, transparent); shape-rendering: crispEdges; }
+
+/* The pre-stage, before there is a still: a frame with registration marks,
+   which step outward under the pointer — the screen clearing around it. */
+.mmc-dash-marks path {
+  fill: none; stroke: var(--mmc-accent); stroke-width: .8; opacity: .55;
+  transition: transform 320ms cubic-bezier(.2, .7, .3, 1), opacity 220ms ease;
 }
+.mmc-dash-scene { transform-box: fill-box; transform-origin: 50% 50%; transition: transform 320ms cubic-bezier(.2, .7, .3, 1); }
+.mmc-dash-card:hover .mmc-dash-marks path, .mmc-dash-card:focus-visible .mmc-dash-marks path { opacity: 1; }
+.mmc-dash-card:hover .mmc-dash-m1, .mmc-dash-card:focus-visible .mmc-dash-m1 { transform: translate(-3px, -3px); }
+.mmc-dash-card:hover .mmc-dash-m2, .mmc-dash-card:focus-visible .mmc-dash-m2 { transform: translate(3px, -3px); }
+.mmc-dash-card:hover .mmc-dash-m3, .mmc-dash-card:focus-visible .mmc-dash-m3 { transform: translate(-3px, 3px); }
+.mmc-dash-card:hover .mmc-dash-m4, .mmc-dash-card:focus-visible .mmc-dash-m4 { transform: translate(3px, 3px); }
+.mmc-dash-card:hover .mmc-dash-scene, .mmc-dash-card:focus-visible .mmc-dash-scene { transform: scale(1.03); }
+
+/* The shot, before there is a still: a strip whose three cells pan one view,
+   and a playhead that steps a cell a beat under the pointer. Steps, not a
+   slide — a strip is read frame by frame. Its travel is three cells of the
+   drawing's 46.67 units; px inside an SVG transform are user units. */
+.mmc-dash-strip { fill: none; stroke: color-mix(in srgb, var(--mmc-ink) 30%, transparent); stroke-width: .6; }
+.mmc-dash-holes { fill: color-mix(in srgb, var(--mmc-ink) 22%, transparent); }
+.mmc-dash-cut { stroke: color-mix(in srgb, var(--mmc-ink) 30%, transparent); stroke-width: .6; }
+.mmc-dash-head { fill: none; stroke: var(--mmc-accent); stroke-width: .9; opacity: 0; shape-rendering: crispEdges; }
+.mmc-dash-card:hover .mmc-dash-head, .mmc-dash-card:focus-visible .mmc-dash-head {
+  opacity: 1; animation: mmc-dash-reel 1.2s steps(3) infinite;
+}
+@keyframes mmc-dash-reel { to { transform: translateX(140px); } }
+
+/* The chat card: four word-length bars, an amber caret, and under them a
+   frame only part drawn. The pointer finishes the stroke and the picture
+   fades in — the room's one gesture, said once. The dash is in pathLength
+   units, so 42 of 100 is the stroke still to go. */
+.mmc-dash-ask line { stroke: color-mix(in srgb, var(--mmc-ink) 50%, transparent); stroke-width: 3; stroke-linecap: round; }
+.mmc-dash-caret { fill: var(--mmc-accent); }
+.mmc-dash-frame {
+  fill: color-mix(in srgb, var(--mmc-media-bg) 35%, transparent);
+  stroke: color-mix(in srgb, var(--mmc-ink) 55%, transparent); stroke-width: .7;
+  stroke-dasharray: 100; stroke-dashoffset: 42;
+  transition: stroke-dashoffset 520ms cubic-bezier(.2, .7, .3, 1);
+}
+.mmc-dash-made { opacity: .25; transition: opacity 320ms ease; }
+.mmc-dash-card:hover .mmc-dash-frame, .mmc-dash-card:focus-visible .mmc-dash-frame { stroke-dashoffset: 0; }
+.mmc-dash-card:hover .mmc-dash-made, .mmc-dash-card:focus-visible .mmc-dash-made { opacity: 1; }
+.mmc-dash-card:hover .mmc-dash-caret { animation: mmc-dash-blink 1s steps(2) infinite; }
+@keyframes mmc-dash-blink { to { opacity: 0; } }
+
+/* The presets card: a sheet of three sliders, two more behind it, and amber
+   ticks where the saved setup put the knobs. Under the pointer the knobs go
+   there — a preset being put back — and the deck spreads a little. */
+.mmc-dash-back {
+  fill: none; stroke: color-mix(in srgb, var(--mmc-ink) 14%, transparent); stroke-width: .6;
+  transition: transform 320ms cubic-bezier(.2, .7, .3, 1);
+}
+.mmc-dash-sheet {
+  fill: color-mix(in srgb, var(--mmc-media-bg) 35%, transparent);
+  stroke: color-mix(in srgb, var(--mmc-ink) 40%, transparent); stroke-width: .6;
+}
+.mmc-dash-track line { stroke: color-mix(in srgb, var(--mmc-ink) 22%, transparent); stroke-width: .8; stroke-linecap: round; }
+.mmc-dash-tick { opacity: .6; transition: opacity 220ms ease; }
+.mmc-dash-tick line { stroke: var(--mmc-accent); stroke-width: .8; }
+.mmc-dash-knob {
+  fill: color-mix(in srgb, var(--mmc-ink) 75%, transparent);
+  transition: transform 420ms cubic-bezier(.2, .7, .3, 1);
+}
+.mmc-dash-card:hover .mmc-dash-tick, .mmc-dash-card:focus-visible .mmc-dash-tick { opacity: 1; }
+.mmc-dash-card:hover .mmc-dash-k1, .mmc-dash-card:focus-visible .mmc-dash-k1 { transform: translateX(28px); }
+.mmc-dash-card:hover .mmc-dash-k2, .mmc-dash-card:focus-visible .mmc-dash-k2 { transform: translateX(-40px); }
+.mmc-dash-card:hover .mmc-dash-k3, .mmc-dash-card:focus-visible .mmc-dash-k3 { transform: translateX(28px); }
+.mmc-dash-card:hover .mmc-dash-b1, .mmc-dash-card:focus-visible .mmc-dash-b1 { transform: translate(-3px, -3px); }
+.mmc-dash-card:hover .mmc-dash-b2, .mmc-dash-card:focus-visible .mmc-dash-b2 { transform: translate(-6px, -6px); }
+
+/* The tracing: the figure whole on the right of the seam, its edges alone on
+   the left. The contour is amber; the mask that hollows it is black on
+   white, which is what an SVG mask reads. The far limbs' edge is a step
+   quieter, as the far limbs are. The wipe layer carries the drawn ground so
+   the figure under it does not show through. */
+.mmc-dash-edges line { stroke: var(--mmc-accent); stroke-linecap: round; }
+.mmc-dash-edges .mmc-dash-far { opacity: .55; }
+.mmc-dash-edges circle { fill: var(--mmc-accent); }
+.mmc-dash-edges .mmc-dash-body line { stroke: #000; stroke-linecap: round; }
+.mmc-dash-edges .mmc-dash-body circle { fill: #000; }
+
+/* The blockout: three wire boxes on an isometric floor, a dashed amber path
+   across it, and a camera that dollies along the path under the pointer.
+   The path is the same curve the dolly follows. */
+.mmc-dash-floor { fill: none; stroke: color-mix(in srgb, var(--mmc-ink) 13%, transparent); stroke-width: .4; }
+.mmc-dash-box {
+  fill: color-mix(in srgb, var(--mmc-media-bg) 28%, transparent);
+  stroke: color-mix(in srgb, var(--mmc-ink) 62%, transparent); stroke-width: .7; stroke-linejoin: round;
+}
+.mmc-dash-dolly {
+  fill: none; stroke: var(--mmc-accent); stroke-width: .6; stroke-dasharray: 2 2; opacity: .5;
+  transition: opacity 220ms ease;
+}
+.mmc-dash-cam {
+  offset-path: path("M17.63 50 C55.75 56 90.39 48 135.44 54"); offset-rotate: auto; offset-distance: 0%;
+  transition: offset-distance 600ms cubic-bezier(.2, .7, .3, 1);
+}
+.mmc-dash-cam rect { fill: var(--mmc-accent); }
+.mmc-dash-cam path { fill: none; stroke: var(--mmc-accent); stroke-width: .6; stroke-linejoin: round; }
+.mmc-dash-card:hover .mmc-dash-dolly, .mmc-dash-card:focus-visible .mmc-dash-dolly { opacity: .95; }
+.mmc-dash-card:hover .mmc-dash-cam { animation: mmc-dash-dolly 2.6s ease-in-out infinite alternate; }
+.mmc-dash-card:focus-visible .mmc-dash-cam { offset-distance: 62%; }
+@keyframes mmc-dash-dolly { to { offset-distance: 100%; } }
+
+/* The upscale: a bust in pixels in a small frame, rays to a large frame where
+   it is a smooth silhouette. The large copy sharpens and takes amber corner
+   brackets under the pointer. */
+.mmc-dash-smooth { fill: color-mix(in srgb, var(--mmc-ink) 72%, transparent); opacity: .3; transition: opacity 320ms ease; }
+.mmc-dash-corners path { fill: none; stroke: var(--mmc-accent); stroke-width: .9; opacity: 0; transition: opacity 220ms ease; }
+.mmc-dash-card:hover .mmc-dash-smooth, .mmc-dash-card:focus-visible .mmc-dash-smooth { opacity: 1; }
+.mmc-dash-card:hover .mmc-dash-corners path, .mmc-dash-card:focus-visible .mmc-dash-corners path { opacity: 1; }
+
+/* The image-to-3D card: a picture on the lit ground, the rays from its camera
+   through it, and the wire cube they lift out. Amber is the rays only, as on
+   the tool's own stage; they brighten and the cube turns under the pointer. */
 .mmc-dash-subject { fill: color-mix(in srgb, var(--mmc-ink) 38%, transparent); }
 .mmc-dash-cube path {
   fill: none; stroke: color-mix(in srgb, var(--mmc-ink) 70%, transparent); stroke-width: .9;
@@ -1716,38 +1777,15 @@ export const css = `
   transform-box: fill-box; transform-origin: 50% 50%;
   transition: transform 420ms cubic-bezier(.2, .7, .3, 1);
 }
-.mmc-dash-card:hover .mmc-dash-rays line, .mmc-dash-card:focus-visible .mmc-dash-rays line { opacity: .95; }
 .mmc-dash-card:hover .mmc-dash-cube, .mmc-dash-card:focus-visible .mmc-dash-cube { transform: rotate(-8deg) scale(1.06); }
-@media (prefers-reduced-motion: reduce) {
-  .mmc-dash-cube, .mmc-dash-rays line { transition: none; }
-}
 
-/* The forge card, drawn: a walk in four cells on one ground, mannequin into
-   sprite. The amber is the playhead only, and only under the pointer, where
-   it steps a cell a beat (steps, not a slide: a sheet is played frame by
-   frame). Its travel is four cells of the drawing's 34 units; px inside an
-   SVG transform are user units, so it scales with the plate. */
-.mmc-dash-forge {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(110% 90% at 60% 48%,
-                    color-mix(in srgb, var(--mmc-ink) 12%, transparent), transparent 72%),
-    var(--mmc-surface-3);
-}
-.mmc-dash-forge svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.mmc-dash-ground { stroke: color-mix(in srgb, var(--mmc-ink) 22%, transparent); stroke-width: .5; shape-rendering: crispEdges; }
+/* The forge card: a walk in four cells on one ground, mannequin into sprite.
+   The amber is the playhead only, and only under the pointer, where it steps
+   a cell a beat. Its travel is four cells of the drawing's 34 units. */
 .mmc-dash-cell {
   fill: none; stroke: color-mix(in srgb, var(--mmc-ink) 14%, transparent); stroke-width: .5;
   shape-rendering: crispEdges;
 }
-/* One flat silhouette at the group's opacity, so overlapping limbs do not
-   darken at the joints; the far side is a step quieter, as on the sprite. */
-.mmc-dash-soft { opacity: .38; }
-.mmc-dash-soft line { stroke: var(--mmc-ink); stroke-linecap: round; }
-.mmc-dash-soft .mmc-dash-far { stroke: color-mix(in srgb, var(--mmc-ink) 55%, var(--mmc-surface-3)); }
-.mmc-dash-soft circle { fill: var(--mmc-ink); }
-.mmc-dash-px { fill: color-mix(in srgb, var(--mmc-ink) 72%, transparent); shape-rendering: crispEdges; }
-.mmc-dash-px-far { fill: color-mix(in srgb, var(--mmc-ink) 42%, transparent); shape-rendering: crispEdges; }
 .mmc-dash-play {
   fill: none; stroke: var(--mmc-accent); stroke-width: .8; opacity: 0; shape-rendering: crispEdges;
 }
@@ -1755,8 +1793,10 @@ export const css = `
   opacity: 1; animation: mmc-dash-walk 1s steps(4) infinite;
 }
 @keyframes mmc-dash-walk { to { transform: translateX(136px); } }
+
 @media (prefers-reduced-motion: reduce) {
-  .mmc-dash-card:hover .mmc-dash-play, .mmc-dash-card:focus-visible .mmc-dash-play { animation: none; }
+  .mmc-dash-drawn * { transition: none !important; animation: none !important; }
+  .mmc-dash-card:hover .mmc-dash-cam { offset-distance: 62%; }
 }
 
 /* The first day, and the fallback everywhere else: no picture on the piece, so
@@ -1815,7 +1855,7 @@ export const css = `
   .mmc-dash-card { animation: none; }
   .mmc-dash-card:hover { transform: none; }
   .mmc-dash-glyph, .mmc-fs-caret, .mmc-dash-split,
-  .mmc-dash-deck .mmc-dash-shot, .mmc-dash-plate > .mmc-dash-shot { transition: none; }
+  .mmc-dash-plate > .mmc-dash-shot { transition: none; }
 }
 @media (max-width: 720px) {
   .mmc-dash-sheet { padding: 24px 18px 32px; }
