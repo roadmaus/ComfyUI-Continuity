@@ -399,11 +399,12 @@ Two ways to run it, chosen in the refiner's settings:
 - **This ComfyUI**: a small Qwen3-VL text encoder loaded in-process, evicted
   like any other model when the sampler needs the VRAM. See
   [models.md](models.md#the-refine-button) for the file.
-- **A server**: any OpenAI-compatible endpoint - LM Studio, Ollama, llama.cpp,
-  vLLM, or a hosted API with a key. The key is stored server-side on your
+- **A server**: any OpenAI-compatible endpoint - LM Studio, Ollama, llama.cpp
+  (alone or behind llama-swap), vLLM, or a hosted API with a key. The key is stored server-side on your
   machine, never in the browser or a workflow file. "Eject when done" asks a
   local server to unload the model as soon as the rewrite is in, so the
-  sampler gets the memory back. Reasoning is asked off; a build that thinks
+  sampler gets the memory back (LM Studio, Ollama and llama-swap know how; a
+  lone llama.cpp server or vLLM keeps it). Reasoning is asked off; a build that thinks
   anyway (Ollama's Qwen3-VL tags do) needs a larger reply length than the
   default, or it spends the whole reply on the trace and returns nothing.
 

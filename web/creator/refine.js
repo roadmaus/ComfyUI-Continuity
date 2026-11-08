@@ -227,6 +227,7 @@ export function saveTemplate(family, name) {
 export const PROVIDERS = [
   ["LM Studio", "http://localhost:1234/v1"],
   ["Ollama", "http://localhost:11434/v1"],
+  ["llama-swap", "http://localhost:8080/v1"],
   ["Anthropic", "https://api.anthropic.com/v1"],
   ["OpenAI", "https://api.openai.com/v1"],
   ["OpenRouter", "https://openrouter.ai/api/v1"],

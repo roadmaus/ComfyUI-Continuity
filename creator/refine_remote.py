@@ -8,7 +8,7 @@ that machine the *in-process* load is the redundant copy, and issue #19 is a
 user copy-pasting prompts by hand to route around it.
 
 One client, not one per provider. LM Studio, Ollama (`/v1`), llama.cpp's
-server, vLLM, KoboldCpp, OpenRouter and OpenAI all speak the same
+server and llama-swap in front of it, vLLM, KoboldCpp, OpenRouter and OpenAI all speak the same
 chat-completions dialect, and Anthropic and Gemini publish compatibility
 endpoints for it — so "support everything" is a base URL and a model name, and
 a provider this file has never heard of works the day it ships that dialect.
@@ -41,9 +41,9 @@ refuses it with the fix in the message rather than sending it and hoping.
 **Ejecting.** A server that keeps the refiner's model resident is holding VRAM
 the sampler is about to want, which on one machine is the whole difference
 between a refine and a slower render. So a press can end by asking the server
-to drop the model again: `unload` walks the two endpoints that exist for it —
-LM Studio's `/api/v1/models/unload` and Ollama's `keep_alive: 0` — and a server
-with neither is left alone, silently, because failing to free memory is not a
+to drop the model again: `unload` walks the endpoints that exist for it —
+LM Studio's `/api/v1/models/unload`, Ollama's `keep_alive: 0` and llama-swap's
+`/api/models/unload/<model>` — and a server with none is left alone, silently, because failing to free memory is not a
 reason to fail a rewrite that already succeeded. It is asked only of a server
 on this machine or this LAN: a hosted API has nothing to evict, and an unload
 POST at a public host would only be the key on a stranger's wire again.
@@ -236,19 +236,23 @@ def _headers(url, key):
     return headers
 
 
-def _request(url, key, payload=None, timeout=TIMEOUT):
+def _request(url, key, payload=None, timeout=TIMEOUT, parse=True):
     """One HTTP exchange -> the parsed JSON body, every failure a RefineError.
 
     The provider's own complaint is worth relaying — "model not found" beats
     "400" — so an error body is excerpted, scrubbed and passed on. Headers are
     never quoted anywhere.
+
+    `parse=False` is for the calls whose answer is the status alone: llama-swap
+    acknowledges an unload with a bare `OK`, which as JSON would read as a
+    broken reply and turn a call that worked into one that failed.
     """
     data = json.dumps(payload).encode("utf-8") if payload is not None else None
     request = urllib.request.Request(url, data=data, headers=_headers(url, key),
                                      method="POST" if data else "GET")
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
-            return json.load(response)
+            return json.load(response) if parse else None
     except urllib.error.HTTPError as exc:
         detail = ""
         try:
@@ -280,14 +284,21 @@ def _request(url, key, payload=None, timeout=TIMEOUT):
         ) from None
 
 
-# Where LM Studio and Ollama answer by default, and what the room's first run
+# Where LM Studio, Ollama and llama.cpp answer by default, and what the room's first run
 # knocks on to say "Ollama is running" before anybody has typed an address.
 # Loopback only, keyless, and a fixed list: a probe that took a URL from a
 # request would be the open relay the module docstring refuses, and one that
 # carried the stored key would hand it to whatever answered on that port.
+#
+# Port 8080 is two servers: llama.cpp's own `llama-server` and llama-swap, the
+# proxy that fronts a set of them and swaps the loaded model per request. Both
+# list their models at `/v1/models` and neither says which it is in a way worth
+# a second request, so the name says both — the room only needs to know that
+# something there can do the thinking.
 LOCAL_SERVERS = (
     ("LM Studio", "http://localhost:1234/v1"),
     ("Ollama", "http://localhost:11434/v1"),
+    ("llama.cpp / llama-swap", "http://localhost:8080/v1"),
 )
 PROBE_TIMEOUT = 1.5
 
@@ -298,7 +309,7 @@ def list_models(url=None, key=None, timeout=TIMEOUT):
     Called with nothing, it lists for the stored endpoint — the only URL the
     routes ever hand it, so no request can point this fetch anywhere. Called
     with an explicit URL by `configure`'s connection test, before anything is
-    stored, and by `probe_local` with the two loopback defaults.
+    stored, and by `probe_local` with the loopback defaults.
     """
     if url is None:
         stored = _read()
@@ -337,15 +348,23 @@ def probe_local():
 # because zero reads as "no TTL" in more dialects than it reads as "now".
 EJECT_TTL = 1
 
-# The two ways a local server can be told to drop a model, newest first. Each is
-# `(path under the server's root, the body it wants)`; the model name is the
-# only variable either takes. LM Studio 0.4 added `/api/v1`; Ollama has always
-# taken `keep_alive: 0` on its native generate endpoint, where an empty request
-# means "just unload". Everything else — llama.cpp's server, vLLM, KoboldCpp —
-# has no such call, answers 404 to both, and is left holding its model.
+# The ways a local server can be told to drop a model. Each is `(path under the
+# server's root, the body it wants)`, both functions of the model name. LM
+# Studio 0.4 added `/api/v1`; Ollama has always taken `keep_alive: 0` on its
+# native generate endpoint, where an empty request means "just unload".
+# llama-swap names the model in the path (`POST /api/models/unload/{model...}`,
+# aliases resolved on its side) and ignores the body — but an empty `{}` still
+# goes, because a request with no body is a GET to `_request`, and the route is
+# POST only. It answers a bare `OK`, hence `parse=False` on every rung: the
+# status is the whole answer here. Last, because the other two are the servers
+# people more often run, and each rung a server lacks is one 404. Everything
+# else — a lone llama.cpp server, vLLM, KoboldCpp — has no such call, answers
+# 404 to all three, and is left holding its model.
 UNLOADS = (
-    ("/api/v1/models/unload", lambda model: {"instance_id": model}),
-    ("/api/generate", lambda model: {"model": model, "keep_alive": 0}),
+    (lambda model: "/api/v1/models/unload", lambda model: {"instance_id": model}),
+    (lambda model: "/api/generate", lambda model: {"model": model, "keep_alive": 0}),
+    (lambda model: "/api/models/unload/" + urllib.parse.quote(model, safe="/"),
+     lambda model: {}),
 )
 
 
@@ -377,8 +396,8 @@ def unload(model):
     root = _root(url)
     for path, body in UNLOADS:
         try:
-            _request(f"{root}{path}", key, body(model))
-            return path
+            _request(f"{root}{path(model)}", key, body(model), parse=False)
+            return path(model)
         except refine.RefineError:
             continue
     return ""

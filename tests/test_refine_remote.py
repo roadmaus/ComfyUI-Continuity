@@ -186,7 +186,7 @@ real_request = remote._request
 
 def _fake(answers):
     """Record every call and answer from `answers`, keyed by the whole URL."""
-    def request(url, key, payload=None, timeout=None):
+    def request(url, key, payload=None, timeout=None, parse=True):
         calls.append((url, payload))
         answer = answers.get(url)
         if isinstance(answer, Exception):
@@ -217,14 +217,33 @@ check("a server without the newer endpoint gets the keep_alive call",
 check("…which says zero seconds, which is Ollama for now",
       calls[-1][1], {"model": "qwen3:8b", "keep_alive": 0})
 
-# llama.cpp, vLLM, KoboldCpp: neither call exists, and that is not an error.
+# llama-swap names the model in the path, POSTs (so a body, even an empty
+# one) and answers a bare `OK` that must not read as a failed call.
+calls.clear()
+seen = []
+def _swap(url, key, payload=None, timeout=None, parse=True):
+    calls.append((url, payload))
+    if url != "http://localhost:1234/api/models/unload/org/qwen%203":
+        raise remote.ServerError("404", 404, "")
+    seen.append(parse)
+    return None
+remote._request = _swap
+check("llama-swap is asked last, with the model in the path",
+      remote.unload("org/qwen 3"), "/api/models/unload/org/qwen%203")
+check("…a slash kept for its wildcard route, a space escaped", calls[-1][0],
+      "http://localhost:1234/api/models/unload/org/qwen%203")
+check("…with a body, which is what makes it a POST", calls[-1][1], {})
+check("…and its plain-text reply is not parsed as JSON", seen, [False])
+
+# A lone llama.cpp, vLLM, KoboldCpp: no call exists, and that is not an error.
 calls.clear()
 remote._request = _fake({
     "http://localhost:1234/api/v1/models/unload": remote.ServerError("404", 404, ""),
     "http://localhost:1234/api/generate": refine.RefineError("could not reach"),
+    "http://localhost:1234/api/models/unload/m": remote.ServerError("404", 404, ""),
 })
-check("a server that can do neither is left alone, silently", remote.unload("m"), "")
-check("…after asking both ways", len(calls), 2)
+check("a server that can do none of them is left alone, silently", remote.unload("m"), "")
+check("…after asking every way", len(calls), 3)
 
 remote.configure("https://api.openai.com/v1", "sk-hosted")
 calls.clear()
@@ -246,14 +265,16 @@ calls.clear()
 remote._request = _fake({
     "http://localhost:11434/v1/models": {"data": [{"id": "qwen3-vl:4b"}, {"id": "gemma3"}]},
     "http://localhost:1234/v1/models": refine.RefineError("could not reach"),
+    "http://localhost:8080/v1/models": refine.RefineError("could not reach"),
 })
 found = remote.probe_local()
 check("the servers that answered are listed with their models",
       found, [{"name": "Ollama", "url": "http://localhost:11434/v1",
                "models": ["gemma3", "qwen3-vl:4b"]}])
-check("both loopback ports were knocked on and nothing else",
+check("the loopback ports were knocked on and nothing else",
       sorted(url for url, _ in calls),
-      ["http://localhost:11434/v1/models", "http://localhost:1234/v1/models"])
+      ["http://localhost:11434/v1/models", "http://localhost:1234/v1/models",
+       "http://localhost:8080/v1/models"])
 check("every probed address is loopback",
       all(remote._loopback(urllib.parse.urlparse(url).hostname)
           for _, url in remote.LOCAL_SERVERS), True)

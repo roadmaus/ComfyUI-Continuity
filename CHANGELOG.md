@@ -6,6 +6,15 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**llama-swap is found, offered and ejected like LM Studio and Ollama.** It
+already worked as a server URL, being OpenAI-compatible, but the room's first
+run only knocked on LM Studio's and Ollama's ports, and "Eject when done" knew
+neither of llama-swap's unload calls, so its model held the VRAM until its own
+TTL ran out. The first run now also checks `localhost:8080`, where llama.cpp's
+server and llama-swap both answer; the refiner's settings have a llama-swap
+preset; and an eject ends with `POST /api/models/unload/<model>`, whose bare
+`OK` reply is read as the success it is.
+
 **A chat clip on LTX 2.5 can follow the one before it again.** The dry run
 every chat render goes through compiled each pass as MiniMax H3, so the seam an
 LTX 2.5 clip opens with "after" another was checked against H3's feather widths
