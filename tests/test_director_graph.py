@@ -125,9 +125,12 @@ def prepared(family, keyframes):
     replies = list(REPLIES)
     plan = calls.plan_piece("a 24 second piece: @george on a night train", rail,
                             lambda *_: replies.pop(0),
-                            cast=[{"name": "george", "description": "a tall man"}],
+                            # Spelled as a person spells a name: the plan writes
+                            # it in lower case, and the clip must cite it the
+                            # cast's way or the compiler reads a bare word.
+                            cast=[{"name": "George", "description": "a tall man"}],
                             keyframes=keyframes)["plan"]
-    ledger, piece = [], {"subjects": [{"handle": "george", "takes": "person", "from": ["ref-1"],
+    ledger, piece = [], {"subjects": [{"handle": "George", "takes": "person", "from": ["ref-1"],
                                        "description": "a tall man"}],
                          "assets": [{"handle": "ref-1", "kind": "image", "role": "reference",
                                      "filename": "george.png"}]}
@@ -238,7 +241,10 @@ try:
             check(f"{label}: the place rides as a scene reference",
                   [a.get("takes") for a in first if a["role"] == "reference"], ["scene"])
             check(f"{label}: the cast is the chat's, the conductor among them",
-                  sorted(s["handle"] for s in blobs[-1]["subjects"]), ["conductor", "george"])
+                  sorted(s["handle"] for s in blobs[-1]["subjects"]), ["George", "conductor"])
+            check(f"{label}: the shots with George cite him in the cast's spelling, as the compiler matches",
+                  [("@George" in b["segments"][-1]["prompt"], "@george" in b["segments"][-1]["prompt"])
+                   for b in blobs], [(True, False), (True, False), (False, False)])
 finally:
     core_models.available, settings.load = _available, _load
     shutil.rmtree(PICTURE_DIR, ignore_errors=True)

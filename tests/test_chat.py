@@ -1335,4 +1335,15 @@ check("direct image edits remain concise at rich verbosity",
 check("a new render on an edit-capable rail still expands at rich verbosity",
       chat.needs_rich_expansion(rich, "a fox at dusk", verbosity=1, edits=True), True)
 
+# A cast name cited in another case leaves in the cast's spelling: the
+# compiler matches handles exactly, and Director writes every name in lower
+# case, so `@george` for a member called George reached the model as a word.
+spelled = chat.validate({"act": "render", "kind": "video", "prompt": "@george and @ANNA meet",
+                         "from": []}, LEDGER, cast=["George", "anna"])
+check("a cast citation is written in the cast's own spelling",
+      spelled["prompt"], "@George and @anna meet")
+check("a ledger handle in the prose is left as it is",
+      chat.validate({"act": "render", "kind": "still", "prompt": "@george beside @img-1",
+                     "from": []}, LEDGER, cast=["George"])["prompt"], "@George beside @img-1")
+
 passed("the chat surface parses, refuses, re-asks and patches as specified")

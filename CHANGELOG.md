@@ -6,6 +6,15 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A cast member a clip cites in the wrong case is in the clip again.** Director
+writes every name in its plan in lower case, so George from the chat's cast
+was cited as `@george` in every shot. The chat's check accepts a cast name in
+any case, but the compiler matches the cast's own spelling exactly, so the name
+reached the model as a bare word with no picture behind it, and no clip of the
+run had him in it. A cited cast name is now written in the cast's spelling
+before the render is built, which also covers storyboard stills and any chat
+turn where the model changes a name's case.
+
 **llama-swap is found, offered and ejected like LM Studio and Ollama.** It
 already worked as a server URL, being OpenAI-compatible, but the room's first
 run only knocked on LM Studio's and Ollama's ports, and "Eject when done" knew

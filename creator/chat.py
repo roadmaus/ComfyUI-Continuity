@@ -558,6 +558,16 @@ def validate(raw, ledger, strip=(), cast=()):
                 f"the prompt cites @{word}, who is not in the cast. The cast is: "
                 f"{where}. Write only names the cast block lists, or write the "
                 f"person out in words.")
+    # A name is accepted in any case, so it must also leave here in the
+    # cast's own spelling: the compiler's `subjects.citation_re` matches the
+    # declared handle exactly, and `@george` against a member called George
+    # reaches the model as the bare word, with no picture behind it. Director
+    # writes every name it plans in lower case (`director.name_of`), so every
+    # clip it ran with a capitalised cast member lost them this way.
+    spelled = {str(n).lower(): str(n) for n in cast or ()}
+    prompt = CITE_RE.sub(
+        lambda m: "@" + spelled.get(m.group(1).lower(), m.group(1))
+        if "-" not in m.group(1) else m.group(0), prompt)
 
     after = _on_strip(raw, "after", strip)
     replaces = _on_strip(raw, "replaces", strip)
