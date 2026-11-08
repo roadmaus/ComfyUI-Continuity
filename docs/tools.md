@@ -6,8 +6,9 @@ node's rail.
 
 ![The tools dashboard](img/dashboard.png)
 
-**Go to** switches between the pre-stage and the shot, each opening over the
-piece you already have. **Tools** opens a bench on it.
+**Go to** is where a piece is made: the pre-stage and the shot, each opening
+over the piece you already have, and the chat, where you ask for either in
+words. **Tools** opens a bench on it.
 
 ## ControlNet bench
 

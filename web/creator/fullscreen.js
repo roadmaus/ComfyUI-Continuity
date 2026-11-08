@@ -828,13 +828,18 @@ class Fullscreen {
   /**
    * Everywhere the wordmark can take you.
    *
-   * Two groups, and the split between them is what a card *does* to the window.
-   * **Go to** rearranges the room you are already in: the same piece, one column
-   * in the middle of the screen, showing the step you named. **Tools** open a
-   * surface over it. Both are cards because both are destinations, and a person
+   * Two groups, and the split between them is what a card is *for*. **Go to**
+   * is the places a piece is made: the pre-stage, where its still is drawn;
+   * the shot, where its video is; and the chat, where both are asked for in
+   * words and a whole piece can be planned and run. **Tools** are what you do
+   * around a piece — a bench for a guide, a bigger file, a mesh, a game's
+   * assets. Both are cards because both are destinations, and a person
    * pressing the mark is asking the same question either way — where else can I
-   * be — but a card that moves the furniture and a card that opens a door should
-   * not be adjacent without a line between them.
+   * be — but a card that makes the thing and a card that works on it should not
+   * be adjacent without a line between them. (The chat sat under Tools once, on
+   * the older rule that Go to only rearranged the room while a tool opened a
+   * surface over it; that rule filed the third way of making a piece beside the
+   * upscaler, and read wrong every time the dashboard opened.)
    *
    * The quick links exist because the two halves of a piece are two rooms and the
    * way between them was three presses in two different places: the view switch
@@ -869,6 +874,22 @@ class Fullscreen {
           // far, and never repeats the pre-stage card's photograph whole.
           art: clip ? { kind: "clip", url: clip } : { kind: "strip", url: still },
           go: () => this.goTo("shot") },
+        // The third place a piece is made, and the one that is a conversation
+        // rather than a step on the card: its plate is drawn, not the piece's
+        // own frame, because what it does is the exchange, and a photograph of
+        // a frame would be a picture of something else.
+        { label: t("Chat"), glyph: "speech",
+          sub: t("Ask for a picture or a shot, then ask for changes."),
+          art: { kind: "chat" },
+          go: () => openChat({
+            back: () => this.openDash(),
+            // The nodes the room renders with: this piece's, and the pre-stage
+            // beside it — spawned on the room's first picture, since a
+            // picture is a pre-stage's to make. See `chatnode.js`.
+            node: () => this.node,
+            preStage: () => preStageOf(this.node),
+            spawnPreStage: () => this.spawnPreStage(),
+          }) },
       ] },
       { title: t("Tools"), items: [
         { label: t("Presets"), sub: t("Apply a saved setup, or save this one"),
@@ -908,21 +929,6 @@ class Fullscreen {
         // The other bench, and the one with no doors: what it makes is the
         // finished file rather than something a render reads, so it lands on a
         // shelf beside the renders and nothing here has to take it anywhere.
-        // The one tool that is a conversation rather than a bench. Its plate is
-        // drawn rather than photographed: what it does is the exchange, and a
-        // photograph of a frame would be a picture of something else.
-        { label: t("Chat"), glyph: "speech",
-          sub: t("Ask for a picture or a shot, then ask for changes."),
-          art: { kind: "chat" },
-          go: () => openChat({
-            back: () => this.openDash(),
-            // The nodes the room renders with: this piece's, and the pre-stage
-            // beside it — spawned on the room's first picture, since a
-            // picture is a pre-stage's to make. See `chatnode.js`.
-            node: () => this.node,
-            preStage: () => preStageOf(this.node),
-            spawnPreStage: () => this.spawnPreStage(),
-          }) },
         { label: t("Upscale"), glyph: "expand",
           sub: t("Make a still or a clip bigger — the file itself, not a new render"),
           art: { kind: "scale", url: cardArt("upscale") },

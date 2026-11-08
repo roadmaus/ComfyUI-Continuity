@@ -3020,6 +3020,9 @@ try {
       && !rowWith(dash, "mmc-dash-name", node.title),
     // ...and the empty place the next tool lands in is not pressable.
     holdsAPlace: !!rowWith(dash, "mmc-dash-name", "More to come"),
+    // The chat is a place a piece is made, so it is a Go-to card beside the
+    // pre-stage and the shot, not a bench under Tools.
+    chatIsAGoTo: !!rowWith(dash.querySelectorAll(".mmc-dash-grid")[0], "mmc-dash-name", "Chat"),
   };
   press(rowWith(dash, "mmc-dash-card", "Presets"));
   await settle(); await settle();
@@ -3631,6 +3634,7 @@ check("the wordmark turns the room over to the dashboard", nav.get("dashOpened")
 check("...and the mark says which side you are on", nav.get("markSaysOpen"), True)
 check("...with no piece history in it", nav.get("noPieceHistory"), True)
 check("...and a place kept for the next tool", nav.get("holdsAPlace"), True)
+check("the chat is a Go-to card, where a piece is made", nav.get("chatIsAGoTo"), True)
 check("Presets opens the library", nav.get("opensTheLibrary"), True)
 check("...and the room comes back with the press", nav.get("dashGone"), True)
 

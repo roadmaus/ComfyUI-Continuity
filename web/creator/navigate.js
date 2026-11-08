@@ -229,18 +229,32 @@ const TREATMENTS = {
     ]));
   },
 
-  /** Two lines said, and a frame that came of them.
+  /** The room at the moment before: a composer with a sentence begun, and
+   *  the outline of the picture it has not made yet.
    *
-   *  Drawn rather than photographed — see `DRAWN`. The shapes are the room's
-   *  own: a short line from the person, a shorter one back, and under them the
-   *  picture that answer turned into, arriving on hover the way a render
-   *  arrives in the room. Nothing in it is text, because a card with words on
-   *  it at two hundred pixels wide is a card with a smudge on it. */
-  chat: () => el("div", { class: "mmc-dash-chat" }, [
-    el("span", { class: "mmc-dash-ask" }),
-    el("span", { class: "mmc-dash-back" }),
-    el("span", { class: "mmc-dash-made" }),
-  ]),
+   *  Drawn rather than photographed — see `DRAWN`. The composer runs across
+   *  the lower third with a cast citation at its head and the caret after a
+   *  few words; above it a dashed frame holds a sketch of a picture — a
+   *  horizon, two hills, a sun — faint, because nothing has been made. Under
+   *  the pointer the frame closes and the sketch draws in, which is what the
+   *  room does when you press send. Nothing in it is a word: a card with
+   *  words on it at two hundred pixels wide is a card with a smudge on it.
+   *  The one glyph is the @, the room's own mark, which reads at that size
+   *  where a word would not, and is the one place the chat is unlike a
+   *  prompt box: you name somebody. It is a symbol and not copy, so it is
+   *  not translated. */
+  chat: () => {
+    const plate = el("div", { class: "mmc-dash-chat" });
+    // Static markup, nothing interpolated into it: an SVG drawn once.
+    plate.innerHTML = `<span class="mmc-dash-outline"><svg class="mmc-dash-sketch" viewBox="0 0 120 56" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <circle cx="92" cy="17" r="7"/>
+        <path d="M-4 44Q34 16 76 44Z"/>
+        <path class="mmc-dash-near" d="M36 46Q86 12 128 46Z"/>
+        <line x1="-4" y1="44" x2="124" y2="44"/>
+      </svg></span>
+      <span class="mmc-dash-field"><span class="mmc-dash-at" aria-hidden="true">@</span><span class="mmc-dash-typed"></span><span class="mmc-dash-caret"></span><span class="mmc-dash-send"></span></span>`;
+    return plate;
+  },
 
   /** A picture, its camera, and the mesh at the end of its rays.
    *

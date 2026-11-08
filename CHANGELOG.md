@@ -6,6 +6,16 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The Chat card sits under Go to, with a plate of its own.** The dashboard
+filed the chat beside the upscaler, under Tools, on the rule that a Go-to card
+only rearranged the room while a tool opened a surface over it. The chat is
+where a piece is asked for in words and, with Director, planned and run, so it
+now sits beside Pre-stage and Shot as the third place a piece is made. Its
+plate is drawn afresh: a composer with a cast citation begun and the caret
+after a few words, and above it the dashed outline of the picture not made
+yet with a faint sketch inside. Under the pointer the outline closes, the
+sketch draws in and the caret blinks.
+
 **Director can plan a piece in two calls for a model that can carry them.**
 A plan was made in one decision a call — the brief, the title, the beats,
 the cast, then one call per beat's shots, each shown only its own sliver —

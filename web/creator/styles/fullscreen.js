@@ -1650,42 +1650,75 @@ export const css = `
 .mmc-dash-card:hover .mmc-dash-deck-2 { transform: scale(.8) rotate(-7.5deg) translate(-11%, -4%); opacity: .76; }
 .mmc-dash-card:hover .mmc-dash-deck-1 { transform: scale(.8) rotate(3.5deg) translate(6%, 2%); }
 
-/* The chat card, drawn rather than photographed — see DRAWN in navigate.js. Two
-   said lines and the frame that came of them, on the same lit ground the deck
-   stands on. Everything is a bar or a box: at two hundred and thirty pixels
-   wide nothing smaller than that reads, and letters least of all. The frame
-   arrives under the pointer, which is what the room does. */
+/* The chat card, drawn rather than photographed — see DRAWN in navigate.js. The
+   room at the moment before: a composer across the lower third with a cast
+   citation begun and the caret after a few words, and above it the dashed
+   outline of the picture not made yet, a sketch of one faint inside it, on
+   the same lit ground the deck stands on. Everything is a bar or a box but
+   the @, the one glyph that reads at two hundred and thirty pixels wide.
+   Under the pointer the outline closes, the sketch draws in and the caret
+   goes, which is what the room does when you press send. Still at rest, like
+   every other card: the surface comes in and then it is quiet. */
 .mmc-dash-chat {
   position: absolute; inset: 0;
   background:
-    radial-gradient(120% 95% at 50% 38%,
-                    color-mix(in srgb, var(--mmc-ink) 13%, transparent), transparent 74%),
+    radial-gradient(120% 95% at 50% 25%,
+                    color-mix(in srgb, var(--mmc-ink) 11%, transparent), transparent 72%),
     var(--mmc-surface-3);
 }
-.mmc-dash-ask, .mmc-dash-back, .mmc-dash-made { position: absolute; display: block; }
-/* The asking line: short, to the right, in the ink the user's own bubble wears. */
-.mmc-dash-ask {
-  right: 13%; top: 15%; width: 40%; height: 11%;
-  border-radius: 999px; background: color-mix(in srgb, var(--mmc-ink) 42%, transparent);
+/* The picture to come: an outline, dashed until something is in it. */
+.mmc-dash-outline {
+  position: absolute; left: 24%; right: 24%; top: 12%; height: 44%; display: block;
+  border-radius: 6px; overflow: hidden;
+  border: 1px dashed color-mix(in srgb, var(--mmc-ink) 26%, transparent);
+  transition: border-color 220ms ease;
 }
-/* And the answer: shorter, flush left, quieter — the room's own asymmetry. */
-.mmc-dash-back {
-  left: 13%; top: 33%; width: 28%; height: 9%;
-  border-radius: 999px; background: color-mix(in srgb, var(--mmc-ink) 22%, transparent);
+/* The sketch: a sun, a far hill, a near hill and the horizon, in ink only.
+   Faint and a touch large at rest — not made yet — and drawn in to size
+   under the pointer. */
+.mmc-dash-sketch {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  opacity: .3; transform: scale(1.05); transform-origin: 50% 70%;
+  transition: opacity 320ms ease, transform 420ms cubic-bezier(.2, .7, .3, 1);
 }
-/* What it made. Landed a little low and lifting into place on hover, which is
-   the one motion on this card and the one thing the tool actually does. */
-.mmc-dash-made {
-  left: 13%; right: 13%; top: 52%; height: 34%;
-  border-radius: 7px; background: var(--mmc-media-bg);
-  border: 1px solid color-mix(in srgb, var(--mmc-ink) 30%, transparent);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .55);
-  transform: translateY(8%); opacity: .72;
-  transition: transform 320ms cubic-bezier(.2, .7, .3, 1), opacity 220ms ease;
+.mmc-dash-sketch circle { fill: color-mix(in srgb, var(--mmc-ink) 46%, transparent); }
+.mmc-dash-sketch path { fill: color-mix(in srgb, var(--mmc-ink) 16%, transparent); }
+.mmc-dash-sketch .mmc-dash-near { fill: color-mix(in srgb, var(--mmc-ink) 26%, transparent); }
+.mmc-dash-sketch line { stroke: color-mix(in srgb, var(--mmc-ink) 40%, transparent); stroke-width: 1; }
+/* The composer: sunk into the ground colour, the citation chip at its head in
+   the accent the room's own @ chips wear, a few words typed, the caret, and
+   the send button as a quiet disc at the far end. */
+.mmc-dash-field {
+  position: absolute; left: 11%; right: 11%; top: 66%; height: 22%;
+  display: flex; align-items: center; gap: 6px; padding-left: 7px; box-sizing: border-box;
+  border-radius: 999px; background: var(--mmc-bg);
+  border: 1px solid color-mix(in srgb, var(--mmc-ink) 20%, transparent);
 }
-.mmc-dash-card:hover .mmc-dash-made { transform: translateY(0); opacity: 1; }
+.mmc-dash-at {
+  flex: none; width: 18px; height: 18px; border-radius: 999px; text-align: center;
+  font-size: 12.5px; font-weight: 700; line-height: 18px; letter-spacing: 0;
+  color: var(--mmc-accent); background: color-mix(in srgb, var(--mmc-accent) 18%, transparent);
+}
+.mmc-dash-typed {
+  display: block; width: 34%; height: 5px; border-radius: 999px;
+  background: color-mix(in srgb, var(--mmc-ink) 44%, transparent);
+}
+.mmc-dash-caret { display: block; width: 1.5px; height: 12px; border-radius: 1px; background: var(--mmc-ink); }
+.mmc-dash-send {
+  position: absolute; right: 6px; top: 50%; width: 14px; height: 14px; margin-top: -7px;
+  border-radius: 999px; background: color-mix(in srgb, var(--mmc-ink) 14%, transparent);
+}
+.mmc-dash-card:hover .mmc-dash-outline, .mmc-dash-card:focus-visible .mmc-dash-outline {
+  border-style: solid; border-color: color-mix(in srgb, var(--mmc-ink) 40%, transparent);
+}
+.mmc-dash-card:hover .mmc-dash-sketch, .mmc-dash-card:focus-visible .mmc-dash-sketch { opacity: 1; transform: none; }
+.mmc-dash-card:hover .mmc-dash-caret, .mmc-dash-card:focus-visible .mmc-dash-caret {
+  animation: mmc-dash-blink 1.1s steps(1) infinite;
+}
+@keyframes mmc-dash-blink { 50% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .mmc-dash-made { transition: none; }
+  .mmc-dash-outline, .mmc-dash-sketch { transition: none; }
+  .mmc-dash-card:hover .mmc-dash-caret, .mmc-dash-card:focus-visible .mmc-dash-caret { animation: none; }
 }
 
 /* The image-to-3D card, drawn: a picture on the lit ground, the rays from its
