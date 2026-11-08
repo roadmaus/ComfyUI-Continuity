@@ -306,4 +306,42 @@ except director.PlanError as problem:
 else:
     FAILURES.append("an empty plan turn was answered")
 
+# ---- the run's file ------------------------------------------------------------------
+
+import tempfile  # noqa: E402
+
+run_mod = importlib.import_module(f"{PACKAGE}.creator.director_run")
+users = tempfile.mkdtemp(prefix="director-runs-")
+alive = {"version": run_mod.VERSION, "chat": "abc", "state": "running", "error": None,
+         "plan": {"version": 1}, "steps": [], "total": 0}
+done = {**alive, "chat": "def", "state": "done"}
+for user, record in (("default", alive), ("other", done)):
+    route._write_run(os.path.join(users, user, route.RUN_FILE.format(chat=record["chat"])), record)
+check("a run file is written whole, with nothing half-written left beside it",
+      sorted(os.listdir(os.path.join(users, "default"))), ["continuity.director.abc.json"])
+check("a server start stops the runs it finds running, in every user's folder, and only those",
+      [os.path.basename(p) for p in route.restart_runs(users)], ["continuity.director.abc.json"])
+check("...which come back stopped, never running",
+      route._read_run(os.path.join(users, "default", "continuity.director.abc.json"))["state"], "stopped")
+try:
+    route._run_path(None, "../../etc")
+except run_mod.RunError:
+    pass
+else:
+    FAILURES.append("a chat id that walks out of the user folder was given a path")
+
+check("a finished prompt lands with its outputs",
+      route._outcome({"status": {"status_str": "success", "completed": True}, "outputs": {"n": {}}}, False),
+      ("landed", {"n": {}}))
+check("a failed one is said in the error's words",
+      route._outcome({"status": {"status_str": "error", "messages": [
+          ["execution_error", {"exception_message": "out of memory"}]]}}, False),
+      ("failed", "out of memory"))
+check("one interrupted by Stop is stopped, not failed",
+      route._outcome({"status": {"status_str": "error", "messages": [["execution_interrupted", {}]]}}, True),
+      ("stopped", None))
+check("one cancelled from ComfyUI's own queue is said so",
+      route._outcome({"status": {"status_str": "error", "messages": [["execution_interrupted", {}]]}}, False),
+      ("failed", "cancelled"))
+
 passed("the plan route plans with the room's backend, rail and cast")

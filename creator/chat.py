@@ -1925,6 +1925,23 @@ def default_feather(family):
 # the three, and it is what lets "after vid-2" find the card.
 STRIP_KEY = "chat_handle"
 
+# A clip put on the strip after another *without* carrying on from it: a hard
+# cut, the kept shots in front and this one sampled fresh, opening on its own
+# picture or on nothing. Never the model's — a turn's `after` always carries on,
+# which is what "the next shot" means in a conversation — but Director's: a
+# planned `cut` or `new` shot belongs to the piece's strip and must not open on
+# the last frame of the shot before (`director.action_for`). Carried beside the
+# action the way a caption is, and read back on by `with_seam`.
+SEAM_KEY, SEAM_CUT = "seam", "cut"
+
+
+def with_seam(action, raw):
+    """The validated `action` with the harness's hard cut from `raw` put back
+    on it, where it has a shot to cut from."""
+    if isinstance(raw, dict) and raw.get(SEAM_KEY) == SEAM_CUT and action.get("after"):
+        return {**action, SEAM_KEY: SEAM_CUT}
+    return action
+
 
 def _kept(strip, action):
     """The cards of the strip that stay in front of this shot, held.
@@ -2089,7 +2106,7 @@ def video_piece(action, ledger, rail, base=None, strip=None):
         "duration_s": action.get("seconds") or rail.get("seconds") or DEFAULT_SECONDS,
         "checkpoint": "auto",
     }
-    if kept:
+    if kept and action.get(SEAM_KEY) != SEAM_CUT:
         card.update({"continue": True, "continue_audio": True,
                      "feather": default_feather(family)})
 

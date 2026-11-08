@@ -104,6 +104,9 @@ const SIDE_KEY = "continuity-chat-side";
  *  before writing costs a `stringify` per tick and a write per turn. */
 const SAVE_AFTER = 600;
 
+/** What runs an approved plan when said in the composer instead of pressed. */
+const RUN_WORDS = /^(?:\/run|run it|run|go)[.!]?$/i;
+
 /**
  * The conversation, for the life of the page.
  *
@@ -328,8 +331,11 @@ async function openSaved(id) {
   state.confirming = null;
   lastWritten = JSON.stringify(pack(home()));
   for (const message of state.messages) {
-    if (message.card?.state === "left") settle(message.card, home());
+    // A run's clips are the run's to say: after a restart the queue's history
+    // is empty, and a clip the run landed would be called lost here.
+    if (message.card?.state === "left" && !message.card.run) settle(message.card, home());
   }
+  catchUp();
   if (open) {
     open.paint();
     open.log.scrollTop = open.log.scrollHeight;
@@ -492,6 +498,15 @@ function nextHandle(media, where = home()) {
   return `${prefix}-${where.counts[prefix]}`;
 }
 
+/** A handle taken off the counter earlier (a Director run reserves its clips'
+ *  when Run is pressed), with the counter made sure to be past it — a chat
+ *  catching up in another browser never saw the reservation. */
+function reserved(handle, where) {
+  const [prefix, number] = String(handle).split("-");
+  where.counts[prefix] = Math.max(where.counts[prefix] ?? 0, Number(number) || 0);
+  return handle;
+}
+
 /**
  * Add one made or uploaded thing to the ledger. -> its entry.
  *
@@ -500,8 +515,8 @@ function nextHandle(media, where = home()) {
  * describe it. Nothing else travels — pixels never enter the model's context,
  * which is what makes the handle the load-bearing part.
  */
-function remember({ media, kind, aspect, filename, text, turn = state.turn }, where = home()) {
-  const entry = { handle: nextHandle(media, where), kind, aspect: aspect || "",
+function remember({ media, kind, aspect, filename, text, turn = state.turn, handle = null }, where = home()) {
+  const entry = { handle: handle ? reserved(handle, where) : nextHandle(media, where), kind, aspect: aspect || "",
                   turn, filename, text: text || "" };
   where.ledger.push(entry);
   return entry;
@@ -902,6 +917,7 @@ function land(card) {
     filename: shot ?? `${path} [${saved.type ?? "output"}]`,
     text: card.action.prompt,
     turn: card.turn ?? state.turn,
+    handle: card.run?.handle ?? null,
   }, where);
   if (card.isClip && last >= 0) {
     where.strip.length = 0;
@@ -931,14 +947,22 @@ function land(card) {
 // a redo honest — a render the person has since asked for again lands as a
 // picture in the ledger, but the plan waits for the newer one.
 
-/** The message holding the plan a prep card renders for, or null when the
- *  plan was replaced or no longer has the row. */
+/** What ties a card to its plan row: `card.prep` for a prep render, the
+ *  same three fields under `card.run` for a clip the run made. */
+const jobOf = (card) => card?.prep ?? card?.run ?? null;
+
+/** The message holding the plan a prep or run card renders for, or null
+ *  when the plan was replaced or no longer has the row. */
 function planFor(card, where = card.home ?? home()) {
-  if (!card?.prep) return null;
+  const job = jobOf(card);
+  if (!job) return null;
   const message = livePlan(where.messages);
   if (!message) return null;
+  // Row ids are minted per plan, so a later plan has an `s1` too: a run's
+  // card files only on the plan it was run from.
+  if (job.brief !== undefined && job.brief !== message.plan.doc.brief) return null;
   try {
-    return D.rows(message.plan.doc).some((row) => row.id === card.prep.row) ? message : null;
+    return D.rows(message.plan.doc).some((row) => row.id === job.row) ? message : null;
   } catch {
     return null;
   }
@@ -946,31 +970,184 @@ function planFor(card, where = card.home ?? home()) {
 
 /** Whether `card` is the render its row is waiting on. */
 function current(card, message) {
-  return message.plan.doc.renders?.[card.prep.row]?.ticket === card.prep.ticket;
+  const job = jobOf(card);
+  return message.plan.doc.renders?.[job.row]?.ticket === job.ticket;
 }
 
 function filePrep(card, where) {
   const message = planFor(card, where);
   if (!message || !card.entry || !current(card, message)) return;
-  message.plan.doc = D.land(message.plan.doc, card.prep.row, card.entry.handle, card.prep.mark);
+  const job = jobOf(card);
+  message.plan.doc = D.land(message.plan.doc, job.row, card.entry.handle, job.mark);
 }
 
 function prepFailed(card) {
   const message = planFor(card);
   if (!message || !current(card, message)) return;
-  message.plan.doc = D.fail(message.plan.doc, card.prep.row, card.error || t("the render failed"));
+  const job = jobOf(card);
+  message.plan.doc = D.fail(message.plan.doc, job.row, card.error || t("the render failed"));
 }
 
-/** A prep card's row and its state now, or null for any other card. */
+/** A prep or run card's row and its state now, or null for any other card. */
 function prepState(card) {
   const message = planFor(card);
   if (!message) return null;
+  const job = jobOf(card);
   try {
-    return { message, row: card.prep.row, current: current(card, message),
-             state: D.stateOf(message.plan.doc, card.prep.row) };
+    return { message, row: job.row, current: current(card, message),
+             state: D.stateOf(message.plan.doc, job.row) };
   } catch {
     return null;
   }
+}
+
+// ---- Director's run ------------------------------------------------------------------
+//
+// The server drives a run (`routes/director.py`): it puts each clip on the
+// queue as the one before lands, keeps what happened in the chat's run file,
+// and says each step on the socket as `mmc_director`. What the room does
+// with that is what it does with a render it queued itself — a message and a
+// card per clip, the clip landed into the ledger and the strip by `land`,
+// filed on the plan by `filePrep` — so after the run "make shot 3 darker" is
+// an ordinary turn about an ordinary clip. Two things differ. The handle was
+// reserved when Run was pressed (`Room.runPlan`) and comes with the step.
+// And the card lands on the run's word rather than on `executed`, which goes
+// only to the tab that queued the prompt, and that tab may be closed. A chat
+// opened later asks `director/status` and lands what it missed (`catchUp`).
+
+/** The card already in the transcript for a run step, or null. */
+function runCardFor(step) {
+  return state.messages.find((message) => message.card?.run?.ticket === step.prompt_id)?.card ?? null;
+}
+
+/** A run step's message and card, hung on the end of the conversation as the
+ *  room would hang a clip it queued, and its row marked rendering on the
+ *  plan it was run from. */
+function runCard(step, brief) {
+  const planMessage = livePlan();
+  const doc = planMessage?.plan?.doc;
+  const words = doc && doc.brief === brief ? D.runWords(doc, step.row) : { say: "", tag: t("Plan") };
+  state.turn += 1;
+  const card = {
+    action: step.action, state: "queued", progress: 0, home: home(), turn: state.turn,
+    shape: rail().aspect, promptId: step.prompt_id, piece: step.piece ?? null, seed: step.seed ?? null,
+    run: { row: step.row, mark: step.mark, ticket: step.prompt_id, handle: step.handle, brief },
+  };
+  state.messages.push({ role: "assistant", say: words.say, action: step.action, card,
+                        runRow: { row: step.row, tag: words.tag } });
+  if (planFor(card)) {
+    planMessage.plan.doc = D.note(D.start(doc, step.row, step.mark), step.row, { ticket: step.prompt_id });
+  }
+  return card;
+}
+
+/** One step of the run, on its card: queued (watched for progress and
+ *  previews), landed, or failed. A step that failed before it was queued
+ *  has no card; the plan card says why. */
+function runStep(kind, step, brief) {
+  if (!step?.prompt_id) return;
+  const card = runCardFor(step) ?? runCard(step, brief);
+  if (["done", "failed"].includes(card.state)) return;
+  if (kind === "queued") {
+    if (card.state === "left") card.state = "queued";
+    if (!card.stop) watchRender(card);
+    return;
+  }
+  card.stop?.();
+  card.stop = null;
+  release(card);
+  if (kind !== "landed") return fail(card, step.error || t("the render failed"));
+  card.saved = step.saved;
+  card.takes = step.takes ?? [];
+  card.isClip = step.clip !== false;
+  card.piece = step.piece ?? card.piece;
+  card.state = "done";
+  card.progress = 1;
+  card.landedAt = Date.now();
+  if (card.startedAt) card.took = card.landedAt - card.startedAt;
+  if (!card.entry) land(card);
+}
+
+/** The room's one line when a run finishes. */
+function finished(planMessage) {
+  const doc = planMessage?.plan?.doc;
+  if (!doc) return;
+  state.messages.push({
+    role: "assistant", runDone: true,
+    say: t("“{title}” is finished: {seconds} seconds in {count} shots. The last clip plays the whole piece.",
+           { title: doc.title, seconds: doc.seconds, count: doc.shots.length }),
+  });
+}
+
+/** The run as the plan card shows it: everything but the steps. */
+function runSummary(run) {
+  if (!run) return null;
+  const { steps: _steps, ...rest } = run;
+  return rest;
+}
+
+/** What the server said about a run, as it happened. */
+function onRunEvent(detail) {
+  if (!detail?.chat || detail.chat !== state.chat?.id) return;
+  const planMessage = livePlan();
+  const before = planMessage?.plan?.run?.state;
+  if (planMessage?.plan && detail.run?.brief === planMessage.plan.doc.brief) {
+    planMessage.plan.run = runSummary(detail.run);
+  }
+  if (["queued", "landed", "failed"].includes(detail.kind)) runStep(detail.kind, detail.step, detail.run?.brief);
+  if (detail.kind === "state" && before === "running" && detail.run?.state === "done") finished(planMessage);
+  notify();
+}
+
+let following = false;
+
+/** Listen for runs, once for the page: a clip lands whether or not the room
+ *  is open, as any render does. */
+function followRuns() {
+  if (following) return;
+  following = true;
+  api.addEventListener("mmc_director", (event) => onRunEvent(event.detail));
+}
+
+/**
+ * Land what the chat's run did while the room was not looking.
+ *
+ * The run file has every step with what it landed as, so a clip that
+ * finished while the tab was closed lands now, in order, as it would have.
+ * Asking also makes this tab the one the next clip's progress goes to. A
+ * run card the run no longer knows (its file was replaced) is settled
+ * against the queue's history like any other card.
+ */
+async function catchUp() {
+  const id = state.chat?.id;
+  if (!id) return;
+  let result = null;
+  try {
+    const response = await api.fetchApi(`/continuity/director/status?chat=${encodeURIComponent(id)}`
+                                        + `&client_id=${encodeURIComponent(api.clientId ?? "")}`);
+    result = response.ok ? (await response.json()).result ?? null : null;
+  } catch { result = null; }
+  if (state.chat?.id !== id) return;
+  const planMessage = livePlan();
+  if (result && planMessage?.plan && result.brief === planMessage.plan.doc.brief) {
+    planMessage.plan.run = runSummary(result);
+  }
+  const steps = result?.steps ?? [];
+  let landedNow = false;
+  for (const step of steps) {
+    if (!step.prompt_id) continue;
+    const card = runCardFor(step);
+    if (card && ["done", "failed"].includes(card.state)) continue;
+    const kind = step.state === "landed" ? "landed" : ["queued", "building"].includes(step.state) ? "queued" : "failed";
+    landedNow ||= kind === "landed";
+    runStep(kind, step, result.brief);
+  }
+  const known = new Set(steps.map((step) => step.prompt_id));
+  for (const message of state.messages) {
+    if (message.card?.run && message.card.state === "left" && !known.has(message.card.promptId)) settle(message.card, home());
+  }
+  if (landedNow && result?.state === "done" && !state.messages.at(-1)?.runDone) finished(planMessage);
+  notify();
 }
 
 /**
@@ -1368,6 +1545,8 @@ class Room {
       if (this.overlay.isConnected) this.paint();
     });
     if (!state.indexRead) readIndex();
+    followRuns();
+    catchUp();
     // The family's pins go on every chat render; warm the store so the first
     // render wears them too.
     loadLoraPrefs().then(() => this.pinsMoved()).catch(() => {});
@@ -1703,7 +1882,7 @@ class Room {
     return JSON.stringify([
       message.say, message.bad, message.action?.kind, can,
       message.plan && [message.plan, message === livePlan(), state.busy],
-      card?.prep && (() => { const now = prepState(card); return now && [now.state, now.current]; })(),
+      jobOf(card) && (() => { const now = prepState(card); return now && [now.state, now.current]; })(),
       card && [card.state, card.progress, card.frameUrl, card.frameIsClip,
                card.saved, card.error, card.entry?.handle, card.isClip,
                card.state === "queued" ? this.queue.remaining : 0],
@@ -1970,6 +2149,17 @@ class Room {
    * gone, is an ordinary picture with a note saying so.
    */
   prepDoors(card, message) {
+    if (card.run) {
+      // A clip the run made: its row, and whether the plan has moved on
+      // since. It is redone by running again, not from here.
+      const now = card.state === "done" ? prepState(card) : null;
+      return el("div", { class: "mmc-ch-doors" }, [
+        el("span", { class: "mmc-dr-for", text: message.runRow?.tag || t("Plan") }),
+        now?.current && now.state === "stale"
+          ? el("span", { class: "mmc-ch-note", text: t("Out of date: the plan changed since. Run renders it again.") })
+          : null,
+      ].filter(Boolean));
+    }
     if (!card.prep || card.state !== "done") return null;
     const now = prepState(card);
     const tag = el("span", { class: "mmc-dr-for", text: message.prep?.tag || t("Plan") });
@@ -2596,6 +2786,15 @@ class Room {
     // brief's questions, since the answer is the brief's and nothing else.
     const asked = state.messages.at(-1)?.planAsk;
     const brief = Boolean(text) && (state.planning || Boolean(asked));
+    // "run it", "go" or /run while the plan is ready is the Run button
+    // (§5.5), said rather than pressed. Nothing goes to the model.
+    if (!brief && !this.pending.length && RUN_WORDS.test(text) && livePlan()) {
+      const planMessage = livePlan();
+      if (D.canRun(planMessage.plan.doc) && D.runSteps(planMessage.plan.doc).length) {
+        this.box.setValue("");
+        return this.runPlan(planMessage);
+      }
+    }
     // While the chat holds a plan, what is said is said about it (§5.4 of
     // the spec): a plan turn, which edits a row, plans again, or answers.
     const planTurn = Boolean(text) && !brief && Boolean(livePlan());
@@ -2811,6 +3010,8 @@ class Room {
       busy: state.busy,
       edit: (row, fields) => this.editPlan(message, row, fields),
       make: () => this.makePieces(message),
+      run: () => this.runPlan(message),
+      stop: () => this.stopRun(message),
       picture: (handle) => {
         const entry = state.ledger.find((line) => line.handle === handle);
         return entry?.filename ? viewUrl(entry.filename, { preview: true }) : null;
@@ -2954,6 +3155,68 @@ class Room {
     return t("@{name} could not be added to the cast.", { name: entity.name });
   }
 
+  // ---- the run ---------------------------------------------------------------------
+
+  /**
+   * Run the plan: every clip not yet rendered, one after another, on the
+   * server (`director/run`), which carries on with the tab closed.
+   *
+   * The room hands over what a clip is built from, as it would for a clip
+   * it queued: the plan, the ledger, the strip, the chat's piece, the rail
+   * and the base. And it reserves a handle per clip off its own counter,
+   * so the clips the run makes are numbered in the chat's sequence and
+   * nothing the room makes meanwhile can take their numbers. The server
+   * rehearses the whole piece before queueing anything, and a clip that
+   * would not render is refused here, in its words, on the plan card.
+   */
+  async runPlan(planMessage) {
+    const plan = planMessage.plan;
+    if (plan.starting || plan.run?.state === "running" || state.busy) return;
+    const todo = D.runSteps(plan.doc);
+    if (!D.canRun(plan.doc) || !todo.length) return;
+    const where = home();
+    plan.starting = true;
+    plan.error = null;
+    notify();
+    const handles = todo.map(() => nextHandle("video", where));
+    const bar = railFor(this.sync);
+    const base = renderBase(this.sync, "video");
+    base.widgets.seed = Number(bar.seed) || 0;
+    try {
+      // The chat must be on the shelf before its clips can land into it
+      // from a later visit: the run file names it.
+      await saveNow(where);
+      const result = await run("/continuity/director/run", {
+        chat: where.chat.id, plan: plan.doc, ledger: state.ledger, strip: state.strip,
+        piece: state.piece, rail: bar, base, handles,
+      });
+      plan.run = runSummary(result);
+    } catch (error) {
+      plan.error = String(error.message || error);
+    } finally {
+      plan.starting = false;
+      notify();
+    }
+  }
+
+  /** Stop the run: the clip on the queue is taken off it or interrupted, and
+   *  what landed stays. Run carries on from there. */
+  async stopRun(planMessage) {
+    const plan = planMessage.plan;
+    if (!state.chat?.id) return;
+    plan.stopping = true;
+    notify();
+    try {
+      const result = await run("/continuity/director/stop", { chat: state.chat.id });
+      if (result) plan.run = { ...runSummary(result), stopping: true };
+    } catch (error) {
+      plan.error = String(error.message || error);
+    } finally {
+      plan.stopping = false;
+      notify();
+    }
+  }
+
   // ---- going back ----------------------------------------------------------------
   //
   // A conversation is not all or nothing. A message can be taken back and
@@ -3044,6 +3307,12 @@ class Room {
    *  afresh: what it cites may have changed since. */
   async retry(message) {
     if (message.prep) return this.redoPrep(message);
+    // A run's clip is made again by running again, which carries on from the
+    // first clip not yet rendered — this one.
+    if (message.runRow) {
+      const planMessage = livePlan();
+      return planMessage ? this.runPlan(planMessage) : undefined;
+    }
     if (state.busy || !message.action) return;
     message.bad = false;
     if (message.said !== undefined) message.say = message.said;

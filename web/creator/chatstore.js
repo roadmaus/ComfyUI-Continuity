@@ -140,6 +140,11 @@ function packCard(card) {
     // lands under and its ticket (`chat.js filePrep`), so a sheet left
     // rendering when the room closed is still filed on the plan.
     ...(card.prep ? { prep: card.prep } : {}),
+    // A clip a Director run made: its row, fingerprint, ticket (the prompt
+    // id), reserved handle and the plan it was run from, so a chat reopened
+    // later lands it from the run file rather than from the queue's history
+    // (`chat.js catchUp`).
+    ...(card.run ? { run: card.run } : {}),
   };
 }
 
@@ -160,6 +165,8 @@ function packMessage(message) {
     ...(message.plan?.doc ? { plan: packPlan(message.plan) } : {}),
     ...(message.planAsk ? { planAsk: { brief: String(message.planAsk.brief ?? "") } } : {}),
     ...(message.prep ? { prep: message.prep } : {}),
+    ...(message.runRow ? { runRow: message.runRow } : {}),
+    ...(message.runDone ? { runDone: true } : {}),
   };
 }
 

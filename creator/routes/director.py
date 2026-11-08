@@ -40,20 +40,30 @@ render that lands while the room is closed is still filed (`chat.js land`). A
 plan edited while a row rendered lands the render under the old fingerprint,
 which is stale against the new one: nothing to reconcile.
 
-**Stateless, like the chat.** The plan lives in the browser, on the message
-that drew its card, and is saved with the chat (`chatstore.js`). Nothing here
-keeps one between requests. The run (§8 of the spec) will be the exception,
-and only because it must outlive the tab.
+**Stateless, like the chat, until the run.** The plan lives in the browser,
+on the message that drew its card, and is saved with the chat
+(`chatstore.js`). Nothing above keeps one between requests. The run (§8 of
+the spec) is the exception, and only because it must outlive the tab:
+`director/run` takes the approved plan and everything a clip is built from,
+keeps it in one file per chat beside the chats, and a task here puts the next
+clip on the queue each time the last one lands (`director_run.drive`). The
+room follows it on the socket (`mmc_director`) and lands each clip as it
+lands its own; a room opened later asks `director/status` and lands what it
+missed. A server that restarts brings a running run back stopped.
 """
 
 import asyncio
+import glob
+import json
 import logging
+import os
+import re
 
 from aiohttp import web
 
 from server import PromptServer
 
-from .. import chat, director, director_calls, jobs
+from .. import chat, director, director_calls, director_run, jobs, settings
 from ..families import manifest, refine
 from ..guard import same_origin
 from . import chat as chat_routes
@@ -303,3 +313,314 @@ async def director_action(request):
     except Exception as problem:  # noqa: BLE001 — said to the card, not swallowed
         log.exception("[Continuity] a plan row's action failed")
         return web.json_response({"error": f"{type(problem).__name__}: {problem}"}, status=500)
+
+
+# ---- the run ------------------------------------------------------------------------
+#
+# The one piece of Director the server keeps (§8 of the spec): a run takes as
+# long as a dozen clips take and must go on with the tab closed, so the loop
+# that puts the next clip on the queue lives here, in a task beside the
+# prompt worker, and what it has done lives in one file per chat. The moves
+# are `creator/director_run.py`'s, pure; this is the disk, the queue and the
+# socket they are played on.
+
+RUN_EVENT = "mmc_director"
+RUN_FILE = "continuity.director.{chat}.json"
+_CHAT_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
+
+# How often a step on the queue is looked for in the history. The history is a
+# dict lookup under the queue's mutex; twice a second is nothing to it and
+# well inside what a person notices of a clip that took minutes.
+POLL_SECONDS = 0.5
+
+# How long a prompt may be neither on the queue nor in the history before it
+# is called gone: somebody took it off the queue from ComfyUI's own panel.
+GONE_AFTER = 10.0
+
+
+class _Live:
+    """A chat's run while this server holds it: the record, its file, the tab
+    whose progress bar and previews the next clip reports to, and Stop."""
+
+    def __init__(self, run, path, client_id):
+        self.run, self.path, self.client = run, path, client_id
+        self.stop = False
+        self.task = None
+
+    def going(self):
+        # A run with no task yet is one a press is starting right now.
+        if self.task is None:
+            return self.run.get("state") == director_run.RUNNING
+        return not self.task.done()
+
+
+_runs = {}
+# The loop tasks, held strongly for the same reason `jobs._answering` is.
+_driving = set()
+
+
+def _run_path(request, chat_id):
+    """Where a chat's run file lives: beside its chat, in the asking user's
+    userdata directory, as `chatstore.js` writes the chat itself."""
+    if not _CHAT_ID.match(chat_id or ""):
+        raise director_run.RunError("that is not a chat this room saved.")
+    name = RUN_FILE.format(chat=chat_id)
+    manager = getattr(PromptServer.instance, "user_manager", None)
+    if manager is not None and request is not None:
+        try:
+            path = manager.get_request_user_filepath(request, name)
+        except KeyError:
+            path = None
+        if path:
+            return path
+    import folder_paths
+
+    return os.path.join(folder_paths.get_user_directory(), "default", name)
+
+
+def _read_run(path):
+    try:
+        with open(path, encoding="utf-8") as handle:
+            run = json.load(handle)
+    except (OSError, ValueError):
+        return None
+    return run if isinstance(run, dict) and run.get("version") == director_run.VERSION else None
+
+
+def _write_run(path, run):
+    """Whole or not at all: a run file half written by a crash would come back
+    as no run, and the clips it had landed with it."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    temporary = f"{path}.part"
+    with open(temporary, "w", encoding="utf-8") as handle:
+        json.dump(run, handle, ensure_ascii=False)
+    os.replace(temporary, path)
+
+
+def restart_runs(root=None):
+    """Every run file a previous server left running, stopped (§8: a restart
+    is not consent to spend the GPU). Called once, when this module is
+    imported, which is when the server starts. -> the files changed."""
+    import folder_paths
+
+    root = root or folder_paths.get_user_directory()
+    changed = []
+    for path in glob.glob(os.path.join(root, "*", RUN_FILE.format(chat="*"))):
+        run = _read_run(path)
+        if run and run.get("state") == director_run.RUNNING:
+            try:
+                _write_run(path, director_run.restarted(run))
+                changed.append(path)
+            except OSError:
+                log.warning("[Continuity] could not stop the run in %s", path)
+    return changed
+
+
+try:
+    restart_runs()
+except Exception:  # noqa: BLE001 — a bad user directory must not stop the pack loading
+    log.exception("[Continuity] reading Director's run files at start failed")
+
+
+def _brief(run):
+    """The record without its steps: what every socket message carries."""
+    public = director_run.public(run) or {}
+    return {k: v for k, v in public.items() if k != "steps"}
+
+
+def _build_step(run, step):
+    """One run step's render, built the way `chat/render` builds one: the
+    action held to `chat.validate` against the run's ledger, strip and cast,
+    then `_build` over the room's base with the step's seed."""
+    ledger, cast = chat_routes._with_piece({"piece": run["piece"], "ledger": run["ledger"]})
+    try:
+        action = chat.with_seam(chat.validate(step["action"], ledger,
+                                              strip=[c.get(chat.STRIP_KEY) for c in run["strip"]],
+                                              cast=[m.get("name") for m in cast]),
+                                step["action"])
+        piece = run["base"]["piece"]
+        rail = chat_routes._rail({**run["rail"], **chat_routes._families_of(piece, False)})
+    except chat.ActionError as problem:
+        return {"problem": str(problem)}
+    base = (piece, {**run["base"]["widgets"], "seed": step["seed"]})
+    return chat_routes._build(action, ledger, rail, settings.load().get("weights") or {},
+                              base, run["strip"], cast)
+
+
+def _outcome(record, cancelled):
+    """A prompt's history record -> `director_run.drive`'s wait answer."""
+    status = record.get("status") or {}
+    if status.get("status_str") == "success" or status.get("completed"):
+        return "landed", record.get("outputs") or {}
+    if cancelled:
+        return "stopped", None
+    for event, data in status.get("messages") or []:
+        if event == "execution_error":
+            return "failed", (data or {}).get("exception_message") or "the render failed"
+        if event == "execution_interrupted":
+            return "failed", "cancelled"
+    return "failed", "the render failed"
+
+
+def _interrupt(queue, prompt_id):
+    """Interrupt `prompt_id` if it is the one sampling, and nothing else.
+
+    Core's own atomic check where it has one (`interrupt_if_running`); on a
+    core from before it, the same check without the atomicity, which is what
+    `/interrupt` with a prompt id did then."""
+    if hasattr(queue, "interrupt_if_running"):
+        return queue.interrupt_if_running(prompt_id)
+    import nodes
+
+    running, _pending = queue.get_current_queue_volatile()
+    if any(item[1] == prompt_id for item in running):
+        nodes.interrupt_processing()
+        return True
+    return False
+
+
+class _Queue:
+    """`director_run.drive`'s io, on ComfyUI's queue."""
+
+    def __init__(self, live):
+        self.live = live
+
+    async def build(self, run, step):
+        return await asyncio.get_running_loop().run_in_executor(None, _build_step, run, step)
+
+    async def enqueue(self, prompt):
+        return await jobs.enqueue(prompt, self.live.client)
+
+    async def wait(self, prompt_id):
+        queue = PromptServer.instance.prompt_queue
+        cancelled, gone = False, 0.0
+        while True:
+            if self.live.stop and not cancelled:
+                cancelled = True
+                if not queue.delete_queue_item(lambda item: item[1] == prompt_id):
+                    _interrupt(queue, prompt_id)
+            record = queue.get_history(prompt_id=prompt_id).get(prompt_id)
+            if record:
+                return _outcome(record, cancelled)
+            running, pending = queue.get_current_queue_volatile()
+            if any(item[1] == prompt_id for item in [*running, *pending]):
+                gone = 0.0
+            elif cancelled:
+                return "stopped", None
+            else:
+                gone += POLL_SECONDS
+                if gone >= GONE_AFTER:
+                    return "failed", "it was taken off the queue"
+            await asyncio.sleep(POLL_SECONDS)
+
+    def save(self, run):
+        self.live.run = run
+        _write_run(self.live.path, run)
+
+    def tell(self, kind, run, step):
+        PromptServer.instance.send_sync(RUN_EVENT, {"kind": kind, "chat": run["chat"],
+                                                    "run": _brief(run), "step": step}, None)
+
+    def stopping(self):
+        return self.live.stop
+
+
+async def _drive(live):
+    io = _Queue(live)
+    try:
+        await director_run.drive(live.run, io)
+    except Exception as problem:  # noqa: BLE001 — a bug, said in the run and the log
+        log.exception("[Continuity] Director's run stopped on a bug")
+        run = director_run.stopped(live.run, words=f"{type(problem).__name__}: {problem}",
+                                   state=director_run.FAILED)
+        run["error"] = f"{type(problem).__name__}: {problem}"
+        try:
+            io.save(run)
+        except OSError:
+            live.run = run
+        io.tell("state", run, None)
+
+
+def _start(request, body):
+    chat_id = str(body.get("chat") or "")
+    path = _run_path(request, chat_id)
+    live = _runs.get(chat_id)
+    if live is not None and live.going():
+        raise director_run.RunError("this chat's run is still going. Stop it first.")
+    prior = live.run if live is not None else _read_run(path)
+    run = director_run.begin(
+        chat_id, body.get("plan"), ledger=body.get("ledger"), strip=body.get("strip"),
+        piece=body.get("piece"), rail=body.get("rail"), base=body.get("base"),
+        handles=body.get("handles"), prior=director_run.restarted(prior) if prior else None)
+    # Every clip built and compiled first, sampling none: a clip that cannot
+    # render is said now, not after the ones in front of it have spent the GPU.
+    refused = director_run.rehearse(run, _build_step)
+    if refused:
+        raise director_run.RunError(refused)
+    live = _Live(run, path, body.get("client_id"))
+    _runs[chat_id] = live
+    return live
+
+
+@PromptServer.instance.routes.post("/continuity/director/run")
+@same_origin
+async def director_run_route(request):
+    """Run an approved plan to the end. -> `{"result": the run}` once the loop
+    has started; every clip after that is told on the socket as
+    `mmc_director`, and the run file says the same to a room opened later."""
+    try:
+        body = await request.json()
+    except ValueError:
+        return web.json_response({"error": "the request body was not JSON"}, status=400)
+    # Off the loop: the rehearsal reads the settings, the model folders and
+    # every picture a clip opens on.
+    loop = asyncio.get_running_loop()
+    try:
+        live = await loop.run_in_executor(None, _start, request, body)
+    except (director_run.RunError, director.PlanError) as problem:
+        return web.json_response({"error": str(problem)}, status=400)
+    except Exception as problem:  # noqa: BLE001 — said to the card, not swallowed
+        log.exception("[Continuity] starting a Director run failed")
+        return web.json_response({"error": f"{type(problem).__name__}: {problem}"}, status=500)
+    live.task = loop.create_task(_drive(live))
+    _driving.add(live.task)
+    live.task.add_done_callback(_driving.discard)
+    return web.json_response({"result": director_run.public(live.run)})
+
+
+@PromptServer.instance.routes.post("/continuity/director/stop")
+@same_origin
+async def director_stop(request):
+    """Stop a chat's run: the clip on the queue is taken off it, or interrupted
+    if it is sampling, through ComfyUI's own cancel. -> `{"result": the run}`;
+    the run says `stopped` on the socket once the clip has let go."""
+    try:
+        body = await request.json()
+    except ValueError:
+        return web.json_response({"error": "the request body was not JSON"}, status=400)
+    live = _runs.get(str(body.get("chat") or ""))
+    if live is None:
+        return web.json_response({"result": None})
+    live.stop = True
+    return web.json_response({"result": director_run.public(live.run)})
+
+
+@PromptServer.instance.routes.get("/continuity/director/status")
+async def director_status(request):
+    """A chat's run, as the room catches up with it on opening the chat:
+    every step with what it landed as. `client_id` makes the asking tab the
+    one the next clip's progress and previews go to. -> `{"result": run or
+    null}`."""
+    chat_id = request.query.get("chat", "")
+    live = _runs.get(chat_id)
+    if live is not None:
+        if request.query.get("client_id") and live.going():
+            live.client = request.query["client_id"]
+        return web.json_response({"result": director_run.public(live.run)})
+    try:
+        path = _run_path(request, chat_id)
+    except director_run.RunError as problem:
+        return web.json_response({"error": str(problem)}, status=400)
+    loop = asyncio.get_running_loop()
+    run = await loop.run_in_executor(None, _read_run, path)
+    return web.json_response({"result": director_run.public(run)})

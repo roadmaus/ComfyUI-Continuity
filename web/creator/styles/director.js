@@ -180,12 +180,16 @@ export const css = `
   display: inline-flex; align-items: center; gap: 8px;
   font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-faint);
 }
-.mmc-ch-door.mmc-dr-make, .mmc-ch-door.mmc-dr-approve {
+.mmc-ch-door.mmc-dr-make, .mmc-ch-door.mmc-dr-approve, .mmc-ch-door.mmc-dr-run:not(:disabled) {
   background: var(--mmc-accent); border-color: var(--mmc-accent); color: var(--mmc-on-accent);
 }
-.mmc-ch-door.mmc-dr-make:hover:not(:disabled), .mmc-ch-door.mmc-dr-approve:hover:not(:disabled) {
+.mmc-ch-door.mmc-dr-make:hover:not(:disabled), .mmc-ch-door.mmc-dr-approve:hover:not(:disabled),
+.mmc-ch-door.mmc-dr-run:hover:not(:disabled) {
   background: color-mix(in srgb, var(--mmc-accent) 85%, var(--mmc-ink));
 }
+/* While the run goes: Stop is the one thing to press, and it is not a call
+   to action, so it keeps the door's own quiet face with the warning hue. */
+.mmc-ch-door.mmc-dr-stop { color: var(--mmc-warn); border-color: color-mix(in srgb, var(--mmc-warn) 45%, transparent); }
 /* On a prep render's card: which row of the plan it is for, and its verdict. */
 .mmc-dr-for { font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-faint); white-space: nowrap; }
 .mmc-dr-verdict { font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-dim); }

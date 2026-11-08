@@ -506,6 +506,8 @@ async def chat_render(request):
         base = _base(body.get("base"), still)
         rail = _rail({**(body.get("rail") or {}), **_families_of(base[0], still)})
         action = _with_caption(action, (body.get("action") or {}).get("caption"), base[0], still)
+        # A run clip made again from its card keeps its hard cut.
+        action = chat.with_seam(action, body.get("action"))
     except chat.ActionError as problem:
         return web.json_response({"error": str(problem)}, status=400)
 

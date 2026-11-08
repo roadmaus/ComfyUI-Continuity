@@ -393,6 +393,9 @@ tab, so the server drives it:
 - **`creator/director.py`** — pure: no ComfyUI, no disk. Plan schema and
   validation, seconds arithmetic, splitting, dependency order, row states,
   fingerprints, plan row → chat action, applying a plan turn's edit.
+- **`creator/director_run.py`** — pure: the run record and its moves (a step
+  begun, queued, landed, failed; stopped; restarted), the rehearsal, and the
+  loop that drives a run with its build, queue and wait handed in.
 - **`creator/prompts/director/*.txt`** — one prompt file per call (`brief`,
   `basics`, `beats`, `entities`, `shots`, `sheet`, `turn`),
   each with one worked example. Stable wording, tuned on the bench, never
@@ -538,6 +541,53 @@ reading on the lab's models before the prompt changes. Someone the entity call
 left out (the waitress, on one seed) cannot be added by a turn. They can
 only be described in the beats.
 
+### 12.3 What step 6 found (2026-11-08)
+
+The run is built as §8 says: `director/run` takes the approved plan with
+everything a clip is built from (ledger, strip, the chat's piece, the rail and
+the base `renderBase` makes), keeps it in `continuity.director.<chat>.json`
+beside the chats, and a task beside the prompt worker queues the next clip
+when the last one lands, read off the queue's history. The room follows on
+`mmc_director`, and a chat opened later lands what it missed from
+`director/status`. The clips' handles are reserved off the room's counter when
+Run is pressed, one per clip, so the room can go on making things meanwhile.
+A restart brings a running run back stopped, its queued clip failed so the
+next Run renders it again.
+
+The graph dry run (`tests/test_director_graph.py`), which builds and compiles
+every clip of a planned piece the way the run does, found three things before
+anything rendered:
+
+- **A cut was never a cut.** Every clip went `after` the one before, and the
+  chat turns any `after` into a continuation from the last frame. A `cut` or
+  `new` shot with an opening frame was refused by the compiler, and one
+  without quietly opened on the last frame of the shot it cut away from.
+  Planned cuts now carry a harness-only `seam: "cut"` beside the action
+  (`chat.SEAM_CUT`, never the model's, read back as a caption is): the clip
+  goes on the strip after the last one and is sampled fresh. Only a `pin`
+  carries on.
+- **LTX 2.5 could not chain at all.** The dry run every chat render goes
+  through compiled each pass as H3 (`server_routes.compiled_passes` dropped
+  the piece's family), so an LTX seam was checked against H3's feather grid
+  and refused. That was the chat's own bug, for any clip "after" another on
+  LTX, and is fixed there.
+- **LTX 2.5 reads one reference picture.** Its Ingredients adapter takes a
+  single composite sheet, laid out in the picker; a shot citing a person and
+  a place sends it two pictures and is refused. The manifest's
+  `reference.max.image` (9) counts panels, not files, so Director reads LTX
+  as a family that takes references and starts the storyboard off. Not
+  solved here — see §15. What is solved is that it costs nothing: Run first
+  **rehearses** the whole piece, building and compiling every clip against a
+  stand-in take of the one before, and refuses at the press with the first
+  clip that would not render and why. A run that passes its rehearsal fails
+  only on what sampling itself can fail on.
+
+What is not tested here: a run on real weights (this Mac cannot render), the
+progress bar and previews of a run clip in a tab that did not press Run (the
+next clip reports to whichever tab last asked `director/status`), and two
+tabs open on the same chat during a run, which land the same clips twice into
+two copies of the chat, as two tabs already can for any render.
+
 ## 13. Risks
 
 - **Small models plan badly.** Mitigated by small calls, schemas and code-owned
@@ -574,5 +624,9 @@ only be described in the beats.
 - **The one-pass timeline:** H3 can render a multi-shot timeline in one pass
   with no seams (`compile.single_payload`). Should Run offer it for short
   pieces, at the cost of one checkpoint and one LoRA stack for the whole piece?
+- **LTX 2.5 and more than one picture (§12.3).** Lay out the composite sheet
+  per shot on the server, from the plate code the picker uses (the shot's
+  cast and places as panels), or cite one picture per shot on a family that
+  reads one sheet (its opening frame, with the storyboard forced on)?
 - **Approving in bulk:** should *Approve all* exist for prep, or should each
   sheet be looked at once?

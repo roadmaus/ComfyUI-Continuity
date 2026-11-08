@@ -522,6 +522,20 @@ export function prepWords(plan, rowId) {
            tag: t("Plan · shot {n}", { n }) };
 }
 
+/** The line a run clip's message says, and the tag its card wears: the shot
+ *  by its number on the card, and the part where the run cut it in parts. */
+export function runWords(plan, rowId) {
+  const clip = clips(plan).find((c) => c.id === rowId);
+  if (!clip) return { say: "", tag: t("Plan") };
+  const n = plan.shots.findIndex((s) => s.id === clip.shot) + 1;
+  return {
+    say: clip.parts > 1
+      ? t("Shot {n}, part {part} of {parts}, from the plan.", { n, part: clip.part, parts: clip.parts })
+      : t("Shot {n}, from the plan.", { n }),
+    tag: t("Plan · shot {n}", { n }),
+  };
+}
+
 /** An entity's source, said: who plays them, or what will be made and how far
  *  it has got. */
 function sourceOf(plan, entity, st, picture) {
@@ -713,6 +727,31 @@ export function planCard(plan, hooks = {}) {
         onclick: () => hooks.make(),
       })
     : null;
+  // The run, while there is one: how far it has got and the way to stop it;
+  // otherwise Run, enabled once every prep row is approved and there is a
+  // clip left to render. `plan.run` is the server's word (`director/status`).
+  const run = plan.run ?? null;
+  const running = run?.state === "running";
+  const todo = sums.error ? [] : runSteps(doc);
+  const ready = !sums.error && canRun(doc) && todo.length > 0;
+  const runDoor = !live || !hooks.run ? null
+    : running
+      ? el("button", {
+          class: "mmc-ch-door mmc-dr-stop", text: t("Stop"),
+          disabled: plan.stopping || run.stopping ? true : null,
+          title: t("Stop after taking the clip on the queue off it. What has landed stays; Run carries on from there."),
+          onclick: () => hooks.stop?.(),
+        })
+      : el("button", {
+          class: "mmc-ch-door mmc-dr-run", text: todo.length ? t("Run ({count} clips)", { count: todo.length }) : t("Run"),
+          disabled: !ready || plan.starting || hooks.busy ? true : null,
+          title: ready
+            ? t("Render every clip left, one after another, without stopping. It goes on with the room closed.")
+            : todo.length
+              ? t("Approve every sheet and opening frame first.")
+              : t("Every clip of this plan is rendered. Change a shot to render it again."),
+          onclick: () => hooks.run(),
+        });
   const sheets = sums.rows.filter((r) => r.kind === "sheet").length;
   const frames = sums.rows.filter((r) => r.kind === "keyframe" && r.phase === PREP).length;
   const foot = el("div", { class: "mmc-dr-foot" }, [
@@ -729,19 +768,33 @@ export function planCard(plan, hooks = {}) {
     el("span", { class: "mmc-bn-gap" }),
     el("span", {
       class: "mmc-dr-quiet",
-      text: progress && approved + making + waiting
-        ? progress
-        : sheets + frames
-          ? t("{prep} to approve, then {clips} clips", { prep: sheets + frames, clips: sums.clips.length })
-          : t("{clips} clips to render", { clips: sums.clips.length }),
+      text: running
+        ? (plan.starting ? t("Checking every clip…")
+          : t("Shot {n} of {count} rendering", { n: Math.min(run.total, run.done + 1), count: run.total }))
+        : plan.starting
+          ? t("Checking every clip…")
+          : progress && approved + making + waiting
+            ? progress
+            : sheets + frames
+              ? t("{prep} to approve, then {clips} clips", { prep: sheets + frames, clips: sums.clips.length })
+              : t("{clips} clips to render", { clips: sums.clips.length }),
     }),
-    make,
+    running ? null : make,
+    runDoor,
   ].filter(Boolean));
 
   const notes = [
     ...(plan.warnings ?? []).map((line) => el("div", { class: "mmc-dr-warn", text: line })),
     sums.error ? el("div", { class: "mmc-dr-error", text: sums.error }) : null,
     plan.error ? el("div", { class: "mmc-dr-error", role: "alert", text: plan.error }) : null,
+    run?.state === "failed" && run.error
+      ? el("div", { class: "mmc-dr-error", role: "alert",
+                    text: t("The run stopped: {error}. Run carries on from there.", { error: run.error.replace(/\.$/, "") }) })
+      : null,
+    run?.state === "stopped"
+      ? el("div", { class: "mmc-dr-warn", text: t("The run was stopped after {done} of {count} clips. Run carries on from there.",
+                                                  { done: run.done, count: run.total }) })
+      : null,
     hooks.live ? null : el("div", { class: "mmc-dr-quiet", text: t("Replaced by a later plan.") }),
   ].filter(Boolean);
 

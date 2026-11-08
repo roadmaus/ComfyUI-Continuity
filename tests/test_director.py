@@ -304,9 +304,12 @@ clip3 = director.action_for(done, "s3")
 check("cut clip opens on its keyframe, after the clip before",
       (clip3["from"], clip3["after"], clip3["seconds"]), (["pic-5:start", "pic-2:object"], "clip-2", 10))
 check("cut wording appended", director.CONTINUITY["cut"] in clip3["prompt"], True)
+check("a cut goes on the strip as a hard cut, not carried on from the clip before",
+      clip3.get(chat.SEAM_KEY), chat.SEAM_CUT)
 clip4 = director.action_for(done, "s4")
 check("pin clip has no keyframe", (clip4["from"], clip4["after"]), (["pic-2:object"], "clip-3"))
 check("pin wording appended", director.CONTINUITY["pin"] in clip4["prompt"], True)
+check("a pin carries on", clip4.get(chat.SEAM_KEY), None)
 first = director.action_for(done, "s1")
 check("the first clip follows nothing", first["after"], None)
 
@@ -318,7 +321,8 @@ for row in director.rows(done):
     except chat.ActionError as problem:
         FAILURES.append(f"{row['id']}: chat refused the action: {problem}")
         continue
-    check(f"{row['id']} survives chat.validate", valid, action)
+    check(f"{row['id']} survives chat.validate, the hard cut put back by with_seam",
+          chat.with_seam(valid, action), action)
 check("actions carry the chat's fields", sorted(sheet), sorted(chat.FIELDS))
 
 refuses("a row before its deps", lambda: director.action_for(plan, "kf.s1"), "needs e2")

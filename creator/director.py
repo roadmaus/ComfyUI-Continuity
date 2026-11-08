@@ -36,7 +36,8 @@ keyframe's stored render no longer matches: stale, and so is the clip that
 opens on it. Nobody walks the graph marking things; the graph is the hash.
 
 **A row becomes an action the room already renders.** `action_for` writes the
-chat's own nine-field action — the same dict `chat.validate` returns — so a run
+chat's own nine-field action — the same dict `chat.validate` returns, plus a
+hard cut where a planned cut is one (`chat.SEAM_CUT`) — so a run
 is a sequence of ordinary chat renders nobody had to type, and after the run
 "make shot 3 darker" is an ordinary turn about an ordinary clip.
 
@@ -52,7 +53,7 @@ import math
 import re
 import unicodedata
 
-from .chat import ACT_RENDER, KIND_STILL, KIND_VIDEO, ROLE_START
+from .chat import ACT_RENDER, KIND_STILL, KIND_VIDEO, ROLE_START, SEAM_CUT, SEAM_KEY
 
 
 VERSION = 1
@@ -713,7 +714,14 @@ def action_for(plan, row_id):
     if keyframe in row["deps"]:
         cited = [f"{handles[keyframe]}:{ROLE_START}"] + cited
     after = next((handles[d] for d in row["deps"] if d in {c["id"] for c in clips(plan)}), None)
-    return _blank(KIND_VIDEO, _with_look(prompt, plan), cited, row["seconds"], after)
+    action = _blank(KIND_VIDEO, _with_look(prompt, plan), cited, row["seconds"], after)
+    # Only a pin carries on from the clip before. A cut or a new scene goes on
+    # the strip after it as a hard cut, opening on its own frame or its
+    # references; carried on, it would open on the last frame of the shot it
+    # is cutting away from (`chat.SEAM_CUT`).
+    if after and row["continues"] in (CUT, NEW):
+        action[SEAM_KEY] = SEAM_CUT
+    return action
 
 
 def change_action(plan, row_id, change):
