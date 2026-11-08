@@ -1573,10 +1573,22 @@ def cites_plain_picture(action, ledger):
 
 def cites_member_picture(action, ledger, cast=()):
     """A cast member named in the prompt who has a picture: who they are."""
-    known = known_handles(ledger)
-    return any(known.get(str(handle)) == "image"
+    return any(kind == "image"
                for member in _cited_members(action.get("prompt") or "", cast)
-               for handle in member.get("from") or [])
+               for _handle, kind, _filename, _scope in _member_files(member, ledger))
+
+
+def _member_files(member, ledger):
+    """A member's sources -> `_cited`'s tuples: off the ledger where the room
+    holds the handle, else off the piece's shelf, which `cast_entries` read
+    onto the member as `files`. Refuses, as `_cited` does, a handle neither
+    holds."""
+    files = member.get("files") or {}
+    shelf = [{"handle": h, "kind": f.get("kind"), "filename": f.get("filename")}
+             for h, f in files.items() if isinstance(f, dict)]
+    known = {str(e.get("handle")) for e in ledger or [] if isinstance(e, dict)}
+    return _cited(None, [*(ledger or []), *(e for e in shelf if e["handle"] not in known)],
+                  member.get("from") or [])
 
 
 def still_arch_for(action, ledger, rail, cast=()):
@@ -1691,7 +1703,7 @@ def _cast_still(action, ledger, rail, base=None, cast=None):
         spaces = member.get("spaces") or {}
         mods = member.get("mods") or {}
         sources = []
-        for handle, kind, filename, _ in _cited(None, ledger, member.get("from") or []):
+        for handle, kind, filename, _ in _member_files(member, ledger):
             if kind != "image":
                 continue
             sources.append(handle)
@@ -1966,10 +1978,18 @@ def cast_entries(piece):
     # handle, off the pool and every card: what a still family reads a
     # member's picture from when it has one in the family's own space.
     renditions = {}
+    # And the files themselves, by handle: a member's pictures sit on the
+    # piece's shelf (`ref-N`), which is not the room's ledger — the model is
+    # never told the shelf — so a still that names them resolves them here
+    # (`_member_files`).
+    shelf = {}
     for owner in [piece or {}, *((piece or {}).get("segments") or [])]:
         for asset in (owner.get("assets") or []) if isinstance(owner, dict) else []:
             if isinstance(asset, dict) and asset.get("handle") and isinstance(asset.get("mods"), dict):
                 renditions[str(asset["handle"])] = dict(asset["mods"])
+            if isinstance(asset, dict) and asset.get("handle") and asset.get("filename"):
+                shelf.setdefault(str(asset["handle"]), {"kind": str(asset.get("kind") or "image"),
+                                                        "filename": str(asset["filename"])})
     out = []
     for subject in (piece or {}).get("subjects") or []:
         if not isinstance(subject, dict) or not subject.get("handle"):
@@ -1982,6 +2002,7 @@ def cast_entries(piece):
             files.append(subject["voice"])
         handles = [str(h) for h in files if h]
         mods = {h: renditions[h] for h in handles if renditions.get(h)}
+        files = {h: shelf[h] for h in handles if h in shelf}
         # What they wear and what each family is sent, by family id
         # (`subjects.Subject.wears`). A blob written before the rows existed
         # carries a flat `loras` list, which was the piece's family's.
@@ -1995,6 +2016,7 @@ def cast_entries(piece):
                     "from": handles,
                     "description": subject.get("description") or "",
                     **({"mods": mods} if mods else {}),
+                    **({"files": files} if files else {}),
                     **({"wears": wears} if wears else {})})
     return out
 

@@ -1215,6 +1215,26 @@ words = chat.still_piece(chat.validate({"act": "render", "kind": "still", "promp
 check("and their description alone where the family takes no picture",
       (words["prompt"], words["refs"]), ("red coat at dusk", []))
 
+# The member the room casts — from the library, or a Director sheet approved —
+# has their picture on the piece's shelf (`ref-1`), which the room never puts
+# in the ledger: the model is not told the shelf. The still resolves it off
+# the shelf through the cast entry, and decides its family by it too.
+SHELVED = chat.cast_entries({"subjects": [{"handle": "keeper", "from": ["ref-1"], "description": "an old man"}],
+                             "assets": [{"handle": "ref-1", "kind": "image", "role": "reference",
+                                         "filename": "sheets/keeper.png [output]"}]})
+check("a cast entry carries its shelf files",
+      SHELVED[0].get("files"), {"ref-1": {"kind": "image", "filename": "sheets/keeper.png [output]"}})
+asked = chat.validate({"act": "render", "kind": "still", "prompt": "@keeper on the rocks"}, [], cast=["keeper"])
+shelved = chat.still_piece(asked, [], STILL_RAIL, cast=SHELVED)
+check("a member whose picture is only on the shelf is still their picture",
+      (shelved["prompt"], shelved["refs"]),
+      ("@ref-1 (an old man) on the rocks", [{"handle": "ref-1", "filename": "sheets/keeper.png [output]"}]))
+check("and counts as a picture cited", chat.cites_member_picture(asked, [], SHELVED), True)
+refuses("a member's file on neither the ledger nor the shelf is refused by name",
+        lambda: chat.still_piece(asked, [], STILL_RAIL,
+                                 cast=[{"name": "keeper", "takes": "person", "from": ["ref-9"]}]),
+        "@ref-9")
+
 
 # ---- the system prompt ------------------------------------------------------
 #
