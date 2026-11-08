@@ -157,16 +157,16 @@ export function rows(plan) {
     if (renders(entity)) out.push({ id: entity.id, kind: "sheet", phase: PREP, entity: entity.id, deps: [] });
   }
   const shots = Object.fromEntries(plan.shots.map((s) => [s.id, s]));
-  const keyframePhase = plan.keyframes ?? true ? PREP : RUN;
+  const storyboard = plan.keyframes ?? true;
   let previous = null;
   const clipRows = [];
   for (const clip of clips(plan)) {
     const shot = shots[clip.shot];
     const sheets = citedEntities(plan, shot.action).filter(renders).map((e) => e.id);
     const deps = [...sheets];
-    if (clip.part === 1 && (clip.continues === "cut" || clip.continues === "new")) {
+    if (storyboard && clip.part === 1 && (clip.continues === "cut" || clip.continues === "new")) {
       const key = `kf.${clip.id}`;
-      out.push({ id: key, kind: "keyframe", phase: keyframePhase, clip: clip.id, shot: shot.id,
+      out.push({ id: key, kind: "keyframe", phase: PREP, clip: clip.id, shot: shot.id,
                  deps: [...sheets] });
       deps.push(key);
     }
@@ -718,7 +718,7 @@ export function planCard(plan, hooks = {}) {
   const foot = el("div", { class: "mmc-dr-foot" }, [
     el("label", {
       class: "mmc-dr-check",
-      title: t("An opening still for every shot that does not carry straight on, to approve before any video is made. Off, the run makes them unseen."),
+      title: t("An opening still for every shot that does not carry straight on, drawn by the still family and approved before any video is made. Off, each shot opens from the people, places and things it cites, which a video family that takes references does better on its own."),
     }, [
       el("input", {
         type: "checkbox", checked: doc.keyframes !== false, disabled: live ? null : true,

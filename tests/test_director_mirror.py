@@ -221,7 +221,7 @@ check("the walk reaches every state",
 check("the long shot really is split", len(director.clips(PLANS["a shot over the limit"])), 3)
 check("the rail really clamps", director.limit_of(PLANS["the rail clamps the limit"]), 8)
 check("the rail really raises the floor", director.floor_of(PLANS["the rail raises the floor"]), 3)
-check("keyframes off really moves them to the run",
-      {r["phase"] for r in director.rows(PLANS["keyframes off"]) if r["kind"] == "keyframe"}, {"run"})
+check("keyframes off really leaves none",
+      [r for r in director.rows(PLANS["keyframes off"]) if r["kind"] == "keyframe"], [])
 
 passed("the plan card's arithmetic is director.py's")

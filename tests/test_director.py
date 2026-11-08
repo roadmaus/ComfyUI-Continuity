@@ -129,7 +129,8 @@ check("entities: cited then new, cast dup dropped", [(e["id"], e["name"]) for e 
       [("e1", "george"), ("e2", "lighthouse"), ("e3", "bottle")])
 check("first shot is forced new", plan["shots"][0]["continues"], "new")
 check("rail snapshot", plan["rail"], {"still": "krea2", "edit": "qwenedit", "video": "h3",
-                                       "aspect": "16:9", "min_seconds": 1, "max_seconds": 60})
+                                       "aspect": "16:9", "min_seconds": 1, "max_seconds": 60,
+                                       "references": False})
 
 seconds = director.allot_plan(plan)
 check("beats share the 40 s by weight", [seconds[b] for b in ("b1", "b2", "b3")], [13, 20, 7])
@@ -176,8 +177,22 @@ for row in every:
     for dep in row["deps"]:
         if [r["id"] for r in every].index(dep) >= at:
             FAILURES.append(f"{row['id']} comes before its dep {dep}")
-check("keyframes off: keyframes move to the run",
-      {r["id"]: r["phase"] for r in director.rows(lighthouse(keyframes=False))}["kf.s1"], "run")
+off = lighthouse(keyframes=False)
+check("storyboard off: no keyframes at all",
+      [r["id"] for r in director.rows(off) if r["kind"] == "keyframe"], [])
+check("...so a clip opens from what it cites, its sheets and the clip before",
+      all(not d.startswith("kf.") for r in director.rows(off) for d in r["deps"]), True)
+check("the storyboard starts off for a video family that takes references",
+      director.new_plan("b", {"title": "T", "seconds": 10, "look": ""},
+                        {**RAIL, "references": True})["keyframes"], False)
+check("...and on for one that takes none",
+      director.new_plan("b", {"title": "T", "seconds": 10, "look": ""},
+                        {**RAIL, "references": False})["keyframes"], True)
+check("...unless the person said",
+      director.new_plan("b", {"title": "T", "seconds": 10, "look": ""},
+                        {**RAIL, "references": True}, keyframes=True)["keyframes"], True)
+check("the rail snapshot keeps whether it takes references",
+      director.follow_rail({}, {**RAIL, "references": True})[0]["rail"]["references"], True)
 
 # ---- states, approval, staleness ----------------------------------------------------
 

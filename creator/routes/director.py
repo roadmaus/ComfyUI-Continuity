@@ -68,10 +68,16 @@ def rail_of(block):
     the families a render from this room would use.
     """
     rail = chat_routes._rail(block)
-    frames = ((manifest.describe(rail["video_family"]) or {}).get("canvas") or {}).get("frames") or {}
+    described = manifest.describe(rail["video_family"]) or {}
+    frames = (described.get("canvas") or {}).get("frames") or {}
+    # Whether the family is sent pictures as references: then a shot opens
+    # from its cast and sheets, and the plan's storyboard starts off
+    # (`director.new_plan`).
+    pictures = ((described.get("reference") or {}).get("max") or {}).get("image") or 0
     return {"still": rail["still_family"], "edit": rail.get("edit_family"),
             "video": rail["video_family"], "aspect": block.get("aspect") or None,
-            "min_seconds": frames.get("min_seconds"), "max_seconds": frames.get("max_seconds")}
+            "min_seconds": frames.get("min_seconds"), "max_seconds": frames.get("max_seconds"),
+            "references": pictures > 0}
 
 
 def cited_cast(brief, cast):
@@ -129,7 +135,7 @@ def _plan(body):
     result = director_calls.plan_piece(
         brief, rail_of(block), asker(block),
         cast=cited_cast(brief, cast), ledger=cited_ledger(brief, ledger),
-        keyframes=body.get("keyframes", True) is not False,
+        keyframes=body.get("keyframes") if isinstance(body.get("keyframes"), bool) else None,
         questions=not answer and body.get("questions", True) is not False)
     # The log keeps every raw reply, which is the bench's to print and not
     # the room's to carry in a saved chat.

@@ -3224,7 +3224,7 @@ export const ko = {
   "{on}/{n} LoRAs": "LoRA {on}/{n}개",
  // Director's plan card.
  "({count} clips)": "({count}개 클립)",
- "An opening still for every shot that does not carry straight on, to approve before any video is made. Off, the run makes them unseen.": "그대로 이어지지 않는 숏마다 첫 스틸을 만들어, 영상을 만들기 전에 승인합니다. 끄면 실행 중에 확인 없이 만들어집니다.",
+ "An opening still for every shot that does not carry straight on, drawn by the still family and approved before any video is made. Off, each shot opens from the people, places and things it cites, which a video family that takes references does better on its own.": "그대로 이어지지 않는 샷마다 스틸 패밀리로 첫 스틸을 그려, 영상을 만들기 전에 승인합니다. 끄면 각 샷은 인용한 인물, 장소, 사물에서 시작합니다. 참고를 받는 영상 패밀리는 그쪽이 더 잘합니다.",
  "Assumed": "가정",
  "Beat {n}": "비트 {n}",
  "Beats and shots": "비트와 숏",

@@ -555,7 +555,7 @@ def _call(ask, log, name, message, read, label=None):
         raise
 
 
-def plan_piece(brief, rail, ask, cast=(), ledger=(), keyframes=True,
+def plan_piece(brief, rail, ask, cast=(), ledger=(), keyframes=None,
                shot_limit=director.SHOT_LIMIT, questions=True):
     """A brief -> `{"plan", "questions", "log", "relisted"}`.
 

@@ -3223,7 +3223,7 @@ export const ja = {
   "{on}/{n} LoRAs": "LoRA {on}/{n} 件",
  // Director's plan card.
  "({count} clips)": "({count} クリップ)",
- "An opening still for every shot that does not carry straight on, to approve before any video is made. Off, the run makes them unseen.": "そのまま続かないショットごとに冒頭のスチルを作り、動画を作る前に承認します。オフにすると、実行時に確認なしで作られます。",
+ "An opening still for every shot that does not carry straight on, drawn by the still family and approved before any video is made. Off, each shot opens from the people, places and things it cites, which a video family that takes references does better on its own.": "そのまま続かないショットごとに、スチル用ファミリーで冒頭のスチルを描き、動画を作る前に承認します。オフにすると、各ショットは引用する人物・場所・物から始まります。参照を受け取れる動画ファミリーは、そのほうがうまく描けます。",
  "Assumed": "前提",
  "Beat {n}": "ビート {n}",
  "Beats and shots": "ビートとショット",

@@ -3224,7 +3224,7 @@ export const zh = {
   "{on}/{n} LoRAs": "{on}/{n} 个 LoRA",
  // Director's plan card.
  "({count} clips)": "({count} 个片段)",
- "An opening still for every shot that does not carry straight on, to approve before any video is made. Off, the run makes them unseen.": "为每个不直接延续的镜头生成开场静帧，在生成任何视频之前先审批。关闭后，运行时会直接生成而不经审阅。",
+ "An opening still for every shot that does not carry straight on, drawn by the still family and approved before any video is made. Off, each shot opens from the people, places and things it cites, which a video family that takes references does better on its own.": "为每个不直接延续的镜头用静帧系列画一张开场静帧，在制作视频前批准。关闭时，每个镜头直接从它引用的人物、地点和物件开始；能接收参考的视频系列这样做效果更好。",
  "Assumed": "假设",
  "Beat {n}": "节拍 {n}",
  "Beats and shots": "节拍与镜头",

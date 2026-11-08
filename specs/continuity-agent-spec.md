@@ -213,12 +213,15 @@ saying so.
   empty establishing view; a thing as an isolated reference shot. Mago's wording
   for the three is a starting point. Each is an ordinary render card in the
   transcript, with *Approve* and *Redo* beside the card's usual actions.
-- **Keyframes** (on by default, a toggle on the plan card). One opening still
-  per `cut`/`new` shot, made from the shot prompt with its cast and entities
-  cited. They come after the sheets they cite are approved, because a keyframe
-  of an unapproved face is wasted. They are the storyboard: cheap next to
-  video, and where a wrong composition is caught. With the toggle off, the run
-  makes them unseen.
+- **Keyframes** (a toggle on the plan card, *Storyboard first*). One opening
+  still per `cut`/`new` shot, made from the shot prompt with its cast and
+  entities cited, after the sheets they cite are approved. Off by default for
+  a video family that is sent references (H3 and LTX 2.5 both are, read off
+  the manifest's `reference.max.image`): such a family opens a shot from the
+  people, places and things it cites, and a still drawn first by the still
+  family only pins every shot to a worse picture of the same people (found on
+  the first real run, 2026-11-08). On by default for a family that takes no
+  references. Off means none at all: the clip cites its sheets directly.
 - **On approval** a person's sheet becomes a member of the chat's cast, and a
   place or a thing becomes a reference the shots cite (`:scene`, `:object`).
   People and pictures the person cited are approved from the start.
@@ -249,10 +252,9 @@ When every prep row is approved, the plan card's **Run** button is enabled, and
 "run it", "go" or `/run` in the composer does the same. One command runs
 everything left:
 
-1. Keyframes not yet made (toggle off, or stale).
-2. Clips, in strip order, each an ordinary strip render with `after` set. A
+1. Clips, in strip order, each an ordinary strip render with `after` set. A
    `pin` shot waits for its predecessor's last frame; a chain renders in order.
-3. Nothing else. The strip already joins the shots: the last clip's card plays
+2. Nothing else. The strip already joins the shots: the last clip's card plays
    the whole film, and that card is the finished piece.
 
 No gates during the run. It stops only on a failure: a render error, a missing

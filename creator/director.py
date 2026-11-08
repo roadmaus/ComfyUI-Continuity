@@ -313,14 +313,23 @@ def _check_cites(text, names, label):
 
 # ---- the document ------------------------------------------------------------
 
-def new_plan(brief, basics, rail, cast=(), assumptions=(), keyframes=True,
+def new_plan(brief, basics, rail, cast=(), assumptions=(), keyframes=None,
              shot_limit=SHOT_LIMIT):
     """A plan with its header and nothing else, ready for beats.
 
     `cast` is the people the person cited, by name: each becomes an entity
     whose source is the citation, approved from the start, so the entity call
     is told they exist and the shots may cite them.
+
+    `keyframes` is the storyboard toggle. Unsaid, it follows the rail's video
+    family: one that is sent references (`rail["references"]`) opens each shot
+    from its cast and references directly, and an opening still drawn first
+    by the still family would only pin the shot to a worse picture of the
+    same people — so the storyboard starts off. A family that takes no
+    references starts with it on.
     """
+    if keyframes is None:
+        keyframes = not (rail or {}).get("references")
     plan = {
         "version": VERSION,
         "brief": _text(brief, "the brief"),
@@ -509,7 +518,7 @@ def clips(plan):
 
 # ---- the rail ----------------------------------------------------------------
 
-RAIL_KEYS = ("still", "edit", "video", "aspect", "min_seconds", "max_seconds")
+RAIL_KEYS = ("still", "edit", "video", "aspect", "min_seconds", "max_seconds", "references")
 
 
 def follow_rail(plan, rail):
@@ -529,6 +538,7 @@ def follow_rail(plan, rail):
         "aspect": rail.get("aspect"),
         "min_seconds": rail.get("min_seconds"),
         "max_seconds": rail.get("max_seconds"),
+        "references": bool(rail.get("references")),
     }
     if not plan.get("version"):
         return {"rail": snapshot}, []
@@ -564,11 +574,12 @@ def rows(plan):
     phase, deps, ...}]`.
 
     Sheets first, one per entity the plan made up (a cited person needs
-    none). Then each clip's keyframe, where its clip opens on one: the first
-    part of a `cut` or a `new` shot. A keyframe is prep while the plan's
-    keyframes toggle is on — the storyboard the person approves — and run
-    when it is off. Then the clips, each depending on its keyframe, the
-    sheets it cites, and the clip in front of it on the strip.
+    none). Then, while the plan's storyboard toggle is on, each clip's
+    keyframe where its clip opens on one — the first part of a `cut` or a
+    `new` shot — as prep, for the person to approve. Off, there are none:
+    the clip opens from what it cites, the cast by name and the places and
+    things by their sheets. Then the clips, each depending on its keyframe
+    if it has one, the sheets it cites, and the clip in front of it.
 
     The list is already in dependency order: everything a row depends on
     comes earlier in it, so the run's order is this order.
@@ -579,16 +590,16 @@ def rows(plan):
             out.append({"id": entity["id"], "kind": "sheet", "phase": PREP,
                         "entity": entity["id"], "deps": []})
     shots = {s["id"]: s for s in plan["shots"]}
-    keyframe_phase = PREP if plan.get("keyframes", True) else RUN
+    storyboard = plan.get("keyframes", True)
     previous = None
     clip_rows = []
     for clip in clips(plan):
         shot = shots[clip["shot"]]
         sheets = [e["id"] for e in _cited_entities(plan, shot["action"]) if _renders(e)]
         deps = list(sheets)
-        if clip["part"] == 1 and clip["continues"] in (CUT, NEW):
+        if storyboard and clip["part"] == 1 and clip["continues"] in (CUT, NEW):
             key = f"kf.{clip['id']}"
-            out.append({"id": key, "kind": "keyframe", "phase": keyframe_phase,
+            out.append({"id": key, "kind": "keyframe", "phase": PREP,
                         "clip": clip["id"], "shot": shot["id"], "deps": list(sheets)})
             deps.append(key)
         if previous:
@@ -833,8 +844,8 @@ def prep_steps(plan):
 
 
 def run_steps(plan):
-    """Everything Run still has to render, in order: run rows that are not
-    approved, plus any keyframe the toggle left to the run."""
+    """Everything Run still has to render, in order: the clips not yet
+    approved."""
     st = states(plan)
     return [r["id"] for r in rows(plan) if r["phase"] == RUN and st[r["id"]] != APPROVED]
 

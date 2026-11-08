@@ -113,6 +113,7 @@ check("the video family is the room's", rail["video"], "h3")
 check("an unknown still family falls back as a turn's does",
       rail["still"], registry.STILL_ARCHES[registry.DEFAULT_STILL_ARCH])
 check("the ceiling is the video family's own", rail["max_seconds"], frames.get("max_seconds"))
+check("H3 takes references, so its plans open shots from them", rail["references"], True)
 check("the floor is the video family's own", rail["min_seconds"], frames.get("min_seconds"))
 check("the shape is the room's", rail["aspect"], "16:9")
 check("no shape is no shape", route.rail_of({})["aspect"], None)
