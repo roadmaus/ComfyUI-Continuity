@@ -136,6 +136,10 @@ function packCard(card) {
     seed: card.seed ?? null,
     took: card.took ?? null,
     landedAt: card.landedAt ?? null,
+    // A Director prep render: the plan row it is for, the fingerprint it
+    // lands under and its ticket (`chat.js filePrep`), so a sheet left
+    // rendering when the room closed is still filed on the plan.
+    ...(card.prep ? { prep: card.prep } : {}),
   };
 }
 
@@ -155,6 +159,7 @@ function packMessage(message) {
     ...(message.card ? { card: packCard(message.card) } : {}),
     ...(message.plan?.doc ? { plan: packPlan(message.plan) } : {}),
     ...(message.planAsk ? { planAsk: { brief: String(message.planAsk.brief ?? "") } } : {}),
+    ...(message.prep ? { prep: message.prep } : {}),
   };
 }
 

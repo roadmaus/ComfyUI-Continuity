@@ -231,4 +231,27 @@ for label, sent, fragment in [
     else:
         FAILURES.append(f"{label}: was not refused")
 
+# ---- a prep row's action -----------------------------------------------------
+
+made = [r["id"] for r in director.rows(doc) if r["kind"] == "sheet"]
+if made:
+    first = made[0]
+    answer = route._action({"plan": doc, "row": first})
+    check("a sheet's action is a still", answer["action"]["kind"], "still")
+    check("...with the fingerprint it lands under", answer["mark"], director.fingerprint(doc, first))
+frame = next((r for r in director.rows(doc) if r["kind"] == "keyframe" and r["deps"]), None)
+if frame:
+    try:
+        route._action({"plan": doc, "row": frame["id"]})
+    except director.PlanError as problem:
+        check("a keyframe before its sheet is refused by name", frame["deps"][0] in str(problem), True)
+    else:
+        FAILURES.append("a keyframe before its sheet was not refused")
+try:
+    route._action({"plan": doc, "row": "e99"})
+except director.PlanError as problem:
+    check("a row that is not there is refused", "no row e99" in str(problem), True)
+else:
+    FAILURES.append("a missing row's action was not refused")
+
 passed("the plan route plans with the room's backend, rail and cast")

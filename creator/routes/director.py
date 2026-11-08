@@ -24,6 +24,15 @@ card does its own arithmetic (seconds, splits, rows) through the mirror in
 `web/creator/director.js`, so a weight changed on the card shows its seconds
 before the answer is back; what is *allowed* is decided here.
 
+**A prep render is a chat render.** `director/action` takes the plan and one
+row and answers the chat action that row becomes (`director.action_for`) and
+its fingerprint now. The room queues the action through `chat/render` like any
+other, and when it lands it writes the handle and that fingerprint onto the
+plan itself — the record-keeping is the card's mirror of `director.land`, so a
+render that lands while the room is closed is still filed (`chat.js land`). A
+plan edited while a row rendered lands the render under the old fingerprint,
+which is stale against the new one: nothing to reconcile.
+
 **Stateless, like the chat.** The plan lives in the browser, on the message
 that drew its card, and is saved with the chat (`chatstore.js`). Nothing here
 keeps one between requests. The run (§8 of the spec) will be the exception,
@@ -198,4 +207,34 @@ async def director_edit(request):
         return web.json_response({"error": str(problem)}, status=400)
     except Exception as problem:  # noqa: BLE001 — said to the card, not swallowed
         log.exception("[Continuity] a plan edit failed")
+        return web.json_response({"error": f"{type(problem).__name__}: {problem}"}, status=500)
+
+
+# ---- prep ---------------------------------------------------------------------------
+
+
+def _action(body):
+    """-> `{action, mark}`: what one row renders as, and the fingerprint the
+    render lands under. `PlanError` when something the row cites has not
+    landed, or the row is not in the plan."""
+    plan = director.validate(body.get("plan"))
+    row = str(body.get("row") or "")
+    return {"action": director.action_for(plan, row), "mark": director.fingerprint(plan, row)}
+
+
+@PromptServer.instance.routes.post("/continuity/director/action")
+@same_origin
+async def director_action(request):
+    """One row of a plan -> `{"result": {action, mark}}` inline, or `{"error"}`
+    in a sentence. No model, no disk: the room queues the action itself."""
+    try:
+        body = await request.json()
+    except ValueError:
+        return web.json_response({"error": "the request body was not JSON"}, status=400)
+    try:
+        return web.json_response({"result": _action(body)})
+    except director.PlanError as problem:
+        return web.json_response({"error": str(problem)}, status=400)
+    except Exception as problem:  # noqa: BLE001 — said to the card, not swallowed
+        log.exception("[Continuity] a plan row's action failed")
         return web.json_response({"error": f"{type(problem).__name__}: {problem}"}, status=500)

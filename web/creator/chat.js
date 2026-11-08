@@ -62,7 +62,7 @@ import { styleCastMember } from "./presetlib.js";
 import { PromptBox } from "./prompt.js";
 import { listChats, loadChat, saveChat, renameChat, deleteChat, newId, pack, groupByDay,
          coverOf } from "./chatstore.js";
-import { planCard } from "./director.js";
+import * as D from "./director.js";
 import { t } from "./i18n.js";
 import { api } from "../../../scripts/api.js";
 
@@ -382,6 +382,7 @@ async function settle(card, where, removed = false) {
 function fail(card, message) {
   card.state = "failed";
   card.error = message;
+  prepFailed(card);
   notify();
 }
 
@@ -808,6 +809,7 @@ function watchRender(card) {
     card.error = message;
     release(card);
     stop();
+    prepFailed(card);
     notify();
   };
 
@@ -880,8 +882,63 @@ function land(card) {
       } } : {}),
     }));
   }
+  filePrep(card, where);
   if (where.messages !== state.messages) saveNow(where).catch(report);
   notify();
+}
+
+// ---- Director's prep renders ----------------------------------------------------
+//
+// A sheet or an opening frame the plan needs is an ordinary render with a
+// card in the transcript (`Room.prepRow`). What makes it the plan's is
+// `card.prep`: the row it renders, the fingerprint `director/action` answered
+// for it, and a ticket naming this render among the row's renders. Landing or
+// failing, it is written onto the plan from here, at module level, for the
+// same reason `land` is: a sheet that finishes while the room is closed is
+// still the plan's, in the conversation it was asked for in. The ticket keeps
+// a redo honest — a render the person has since asked for again lands as a
+// picture in the ledger, but the plan waits for the newer one.
+
+/** The message holding the plan a prep card renders for, or null when the
+ *  plan was replaced or no longer has the row. */
+function planFor(card, where = card.home ?? home()) {
+  if (!card?.prep) return null;
+  const message = livePlan(where.messages);
+  if (!message) return null;
+  try {
+    return D.rows(message.plan.doc).some((row) => row.id === card.prep.row) ? message : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Whether `card` is the render its row is waiting on. */
+function current(card, message) {
+  return message.plan.doc.renders?.[card.prep.row]?.ticket === card.prep.ticket;
+}
+
+function filePrep(card, where) {
+  const message = planFor(card, where);
+  if (!message || !card.entry || !current(card, message)) return;
+  message.plan.doc = D.land(message.plan.doc, card.prep.row, card.entry.handle, card.prep.mark);
+}
+
+function prepFailed(card) {
+  const message = planFor(card);
+  if (!message || !current(card, message)) return;
+  message.plan.doc = D.fail(message.plan.doc, card.prep.row, card.error || t("the render failed"));
+}
+
+/** A prep card's row and its state now, or null for any other card. */
+function prepState(card) {
+  const message = planFor(card);
+  if (!message) return null;
+  try {
+    return { message, row: card.prep.row, current: current(card, message),
+             state: D.stateOf(message.plan.doc, card.prep.row) };
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -1613,7 +1670,8 @@ class Room {
     const card = message.card;
     return JSON.stringify([
       message.say, message.bad, message.action?.kind, can,
-      message.plan && [message.plan, message === livePlan()],
+      message.plan && [message.plan, message === livePlan(), state.busy],
+      card?.prep && (() => { const now = prepState(card); return now && [now.state, now.current]; })(),
       card && [card.state, card.progress, card.frameUrl, card.frameIsClip,
                card.saved, card.error, card.entry?.handle, card.isClip,
                card.state === "queued" ? this.queue.remaining : 0],
@@ -1860,15 +1918,57 @@ class Room {
           class: "mmc-ch-door mmc-ch-save", title: t("Download this render."),
           onclick: () => download(this.sourceOf(card).path),
         }, [icon("download", 14)]),
-        el("button", {
+        card.prep ? null : el("button", {
           class: "mmc-ch-door", text: t("Retake"),
           title: t("The same request again, on a new seed."),
           onclick: () => this.retake(card),
         }),
-      ]));
+      ].filter(Boolean)));
     }
+    const prep = this.prepDoors(card, message);
+    if (prep) body.push(prep);
     return el("div", { class: "mmc-ch-msg mmc-ch-bot" },
                  [el("div", { class: "mmc-ch-card" }, body)]);
+  }
+
+  /**
+   * What a prep render's card adds: the plan row it belongs to, and the two
+   * things the person does with it — Approve, or Redo on a new seed. Only on
+   * the render its row is waiting on; an earlier take, or one whose plan has
+   * gone, is an ordinary picture with a note saying so.
+   */
+  prepDoors(card, message) {
+    if (!card.prep || card.state !== "done") return null;
+    const now = prepState(card);
+    const tag = el("span", { class: "mmc-dr-for", text: message.prep?.tag || t("Plan") });
+    if (!now) {
+      return el("div", { class: "mmc-ch-doors" }, [
+        tag, el("span", { class: "mmc-ch-note", text: t("Its plan has been replaced.") })]);
+    }
+    if (!now.current) {
+      return el("div", { class: "mmc-ch-doors" }, [
+        tag, el("span", { class: "mmc-ch-note", text: t("An earlier take; the plan uses a newer one.") })]);
+    }
+    const redo = el("button", {
+      class: "mmc-ch-door", text: t("Redo"),
+      title: t("Make it again on a new seed. The new picture needs approving."),
+      disabled: state.busy || now.message.plan.making ? true : null,
+      onclick: () => this.redoPrep(message),
+    });
+    const word = { approved: t("Approved"), stale: t("Out of date: the plan changed since.") }[now.state];
+    return el("div", { class: "mmc-ch-doors" }, [
+      tag,
+      el("span", { class: "mmc-bn-gap" }),
+      word ? el("span", { class: `mmc-dr-verdict ${now.state}`, text: word }) : null,
+      redo,
+      now.state === "pending"
+        ? el("button", {
+            class: "mmc-ch-door mmc-dr-approve", text: t("Approve"),
+            title: t("Use this picture in the piece."),
+            onclick: () => this.approvePrep(message),
+          })
+        : null,
+    ].filter(Boolean));
   }
 
   /** The turning part of a card: the picture on the front, the slate on the
@@ -2605,9 +2705,15 @@ class Room {
     plan.pending = true;
     plan.error = null;
     notify();
+    const sent = plan.doc;
     try {
-      const result = await run("/continuity/director/edit", { plan: plan.doc, row, fields });
-      plan.doc = result.plan;
+      const result = await run("/continuity/director/edit", { plan: sent, row, fields });
+      // An edit never makes a render, but renders land while it is away: the
+      // records are the ones on the plan now, less any the edit took off
+      // (an entity recast as somebody cited loses its sheet).
+      const renders = { ...(plan.doc.renders ?? {}) };
+      for (const id of Object.keys(sent.renders ?? {})) if (!(id in (result.plan.renders ?? {}))) delete renders[id];
+      plan.doc = { ...result.plan, renders };
     } catch (error) {
       plan.error = String(error.message || error);
     }
@@ -2616,11 +2722,149 @@ class Room {
   }
 
   planCardFor(message) {
-    return planCard(message.plan, {
+    return D.planCard(message.plan, {
       live: message === livePlan(),
+      busy: state.busy,
       edit: (row, fields) => this.editPlan(message, row, fields),
+      make: () => this.makePieces(message),
+      picture: (handle) => {
+        const entry = state.ledger.find((line) => line.handle === handle);
+        return entry?.filename ? viewUrl(entry.filename, { preview: true }) : null;
+      },
       family: (id) => (id ? t(FAMILIES.find((entry) => entry.id === id)?.label ?? id) : ""),
     });
+  }
+
+  // ---- prep: what the plan needs, made for approval ---------------------------------
+
+  /**
+   * *Make the missing pieces*: every prep row that is ready, one render each.
+   *
+   * Ready is `director.prep_steps`: not made, failed or gone stale, with
+   * everything it cites approved — so the first press makes the sheets, and
+   * the opening frames wait for a second, after the faces they cite have been
+   * looked at. Queued one after another, each with its own card.
+   */
+  async makePieces(planMessage) {
+    const plan = planMessage.plan;
+    if (plan.making || state.busy) return;
+    plan.making = true;
+    plan.error = null;
+    notify();
+    try {
+      for (const row of D.prepSteps(plan.doc)) {
+        if (!(await this.prepRow(planMessage, row))) break;
+      }
+    } finally {
+      plan.making = false;
+      notify();
+    }
+  }
+
+  /**
+   * One prep row, rendered: the server answers the chat action the row
+   * becomes and the fingerprint it lands under (`director/action`), the row
+   * is marked rendering, and the action is queued as any turn's is, as a
+   * message of its own. -> whether it was queued.
+   *
+   * A still is stamped against the rail as it is now (`over.again`), which
+   * is what puts the room's still family on it: the plan never picks one.
+   */
+  async prepRow(planMessage, row, { seed } = {}) {
+    const plan = planMessage.plan;
+    let answer;
+    try {
+      answer = await run("/continuity/director/action", { plan: plan.doc, row });
+    } catch (error) {
+      plan.error = String(error.message || error);
+      notify();
+      return false;
+    }
+    const ticket = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+    plan.doc = D.note(D.start(plan.doc, row, answer.mark), row, { ticket });
+    const words = D.prepWords(plan.doc, row);
+    state.turn += 1;
+    const message = { role: "assistant", say: words.say, prep: { row, tag: words.tag } };
+    state.messages.push(message);
+    notify();
+    await this.queueRender(answer.action, message, {
+      again: answer.action.kind === "still",
+      prep: { row, mark: answer.mark, ticket },
+      ...(seed !== undefined ? { seed } : {}),
+    });
+    notify();
+    return true;
+  }
+
+  /** The prep render on `message`, made again on a new seed, as a new card. */
+  async redoPrep(message) {
+    const planMessage = planFor(message.card ?? { prep: message.prep });
+    if (!planMessage || state.busy) return;
+    planMessage.plan.error = null;
+    await this.prepRow(planMessage, message.prep.row, { seed: Math.floor(Math.random() * 0xffffffff) });
+  }
+
+  /**
+   * The person approves a prep render.
+   *
+   * A place or a thing needs nothing more: its shots cite its picture by
+   * handle (`director._resolve`). A person becomes a member of the chat's
+   * cast under the entity's name, with the sheet as their picture, which is
+   * how every shot that names them cites them. A member of that name the
+   * plan did not cast is somebody else's, and is not overwritten: the
+   * person is told to rename one or cite the other. One the plan cast
+   * itself, from an earlier take of the sheet, is replaced.
+   */
+  approvePrep(message) {
+    const card = message.card;
+    const planMessage = planFor(card);
+    if (!planMessage || !card?.entry) return;
+    const plan = planMessage.plan;
+    let doc = plan.doc;
+    try {
+      const row = D.rows(doc).find((r) => r.id === card.prep.row);
+      const entity = row?.kind === "sheet" ? doc.entities.find((e) => e.id === row.entity) : null;
+      if (entity?.kind === "person") {
+        const refused = this.castSheet(entity, card.entry, doc.renders?.[row.id]?.cast);
+        if (refused) {
+          plan.error = refused;
+          return notify();
+        }
+        doc = D.note(doc, row.id, { cast: entity.name });
+      }
+      plan.doc = D.approve(doc, card.prep.row);
+      plan.error = null;
+    } catch (error) {
+      plan.error = String(error.message || error);
+    }
+    notify();
+  }
+
+  /** `entity`'s approved sheet onto the chat's piece as a cast member. ->
+   *  the sentence that refused it, or null. `ours` is the name the plan last
+   *  cast this entity as. */
+  castSheet(entity, entry, ours) {
+    const piece = state.piece;
+    piece.subjects ??= [];
+    const taken = piece.subjects.find((subject) => subject.handle === entity.name);
+    if (taken && ours !== entity.name) {
+      return t("@{name} is already somebody in this chat's cast. Rename them on the plan, or cite @{name} to use them as they are.",
+               { name: entity.name });
+    }
+    if (taken) {
+      // The earlier take, and the picture only it was built from.
+      piece.subjects = piece.subjects.filter((subject) => subject !== taken);
+      const still = new Set(piece.subjects.flatMap((subject) => subject.from ?? []));
+      piece.assets = (piece.assets ?? []).filter((asset) =>
+        !(taken.from ?? []).includes(asset.handle) || still.has(asset.handle));
+    }
+    const subject = castIntoPiece({
+      handle: entity.name, takes: "person", description: entity.description,
+      files: [{ filename: entry.filename, kind: "image", slot: "from" }],
+    }, piece, { pool: true });
+    if (subject?.handle === entity.name) return null;
+    if (subject) piece.subjects = piece.subjects.filter((other) => other !== subject);
+    return t("@{name} could not be added to the cast.", { name: entity.name });
   }
 
   // ---- going back ----------------------------------------------------------------
@@ -2708,8 +2952,11 @@ class Room {
     notify();
   }
 
-  /** The same action on the same reply, after a render that failed. */
+  /** The same action on the same reply, after a render that failed. A prep
+   *  render is asked for again through its row, which answers its action
+   *  afresh: what it cites may have changed since. */
   async retry(message) {
+    if (message.prep) return this.redoPrep(message);
     if (state.busy || !message.action) return;
     message.bad = false;
     if (message.said !== undefined) message.say = message.said;
@@ -2754,13 +3001,19 @@ class Room {
     message.action = action;
     message.shape = bar.aspect;
     const card = { action, state: "starting", progress: 0, home: home(), turn: state.turn,
-                   shape: bar.aspect };
+                   shape: bar.aspect, ...(over.prep ? { prep: over.prep } : {}) };
     message.card = card;
     notify();
 
     // The refusal goes under the model's own line, which is kept apart so a
-    // second try does not stack a second refusal under the first.
+    // second try does not stack a second refusal under the first. A prep
+    // render refused before it queued is a failed row on the plan, as one
+    // that failed on the queue is.
     const said = (line) => {
+      if (card.prep) {
+        card.error = line;
+        prepFailed(card);
+      }
       message.card = null;
       message.said ??= message.say;
       message.say = [message.said, line].filter(Boolean).join("\n\n");

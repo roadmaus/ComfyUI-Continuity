@@ -188,6 +188,11 @@ check("Run disabled before prep", director.can_run(plan), False)
 check("prep starts with the sheets", director.prep_steps(plan), ["e2", "e3"])
 
 
+check("a description's leading article reads inside the sentence",
+      [director._inline(d) for d in ("A man in his forties.", "An old coat", "The bay", "Anna's coat.", "A")],
+      ["a man in his forties", "an old coat", "the bay", "Anna's coat", "A"])
+
+
 def render(plan, row_id, handle):
     plan, mark = director.start(plan, row_id)
     return director.land(plan, row_id, handle, mark)

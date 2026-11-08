@@ -164,6 +164,33 @@ export const css = `
 .mmc-dr-check { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; color: var(--mmc-text); }
 .mmc-dr-check input { margin: 0; accent-color: var(--mmc-accent); }
 
+/* --- prep: what has been made, and what waits for the person -------------- */
+.mmc-dr-state {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: calc(12px * var(--mmc-type)); color: var(--mmc-faint); white-space: nowrap;
+}
+.mmc-dr-state.pending { color: var(--mmc-accent); }
+.mmc-dr-state.approved { color: var(--mmc-dim); }
+.mmc-dr-state.stale, .mmc-dr-state.failed { color: var(--mmc-warn); }
+.mmc-dr-thumb {
+  width: 22px; height: 22px; object-fit: cover; border-radius: 4px; flex: none;
+  align-self: center; background: var(--mmc-wash);
+}
+.mmc-dr-frame {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-faint);
+}
+.mmc-ch-door.mmc-dr-make, .mmc-ch-door.mmc-dr-approve {
+  background: var(--mmc-accent); border-color: var(--mmc-accent); color: var(--mmc-on-accent);
+}
+.mmc-ch-door.mmc-dr-make:hover:not(:disabled), .mmc-ch-door.mmc-dr-approve:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--mmc-accent) 85%, var(--mmc-ink));
+}
+/* On a prep render's card: which row of the plan it is for, and its verdict. */
+.mmc-dr-for { font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-faint); white-space: nowrap; }
+.mmc-dr-verdict { font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-dim); }
+.mmc-dr-verdict.stale { color: var(--mmc-warn); }
+
 @media (prefers-reduced-motion: reduce) {
   .mmc-dr-sshot, .mmc-dr-shot { transition: none; }
 }

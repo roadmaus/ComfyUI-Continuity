@@ -73,6 +73,48 @@ PLANS = {
         0: [("a", "new")], 1: [("b", "cut")], 2: [("c", "new")], 3: [("d", "pin")]}, limit=60),
 }
 
+# Plans with renders on them, for the states: a walk through prep and the run
+# the way the room makes one, with a redo and an edit that leave rows stale,
+# and words that make the JSON escape (quotes, a newline, accents, a CJK
+# name) since the fingerprint hashes the text Python writes.
+def _render(doc, row, handle):
+    doc, mark = director.start(doc, row)
+    return director.land(doc, row, handle, mark)
+
+
+def walk():
+    doc = plan(40, ["medium", "short", "long"], {
+        0: [("@keeper climbs the stairs", "new"), ("@keeper reaches the lamp", "pin")],
+        1: [("@keeper sees @bottle on @coast", "cut")],
+        2: [("@keeper reads the note", "new"), ("close on the note", "cut")],
+    }, entities=(KEEPER, BOTTLE, {"name": "coast", "kind": "place",
+                                  "description": 'a "rocky" coast,\nwind — café 灯台'}))
+    doc = {**doc, "look": "désaturé teal, 35mm \"grain\"", "rail": {**doc["rail"], "aspect": "16:9"}}
+    steps = {"fresh": doc}
+    doc = _render(doc, "e1", "pic-1")
+    steps["a sheet waiting"] = doc
+    doc = director.approve(doc, "e1")
+    doc, _mark = director.start(doc, "e2")
+    steps["one approved, one rendering"] = doc
+    doc = director.fail(doc, "e2", "  out of\\nmemory ")
+    steps["a failed sheet"] = doc
+    doc = director.approve(_render(doc, "e2", "pic-2"), "e2")
+    doc = director.approve(_render(doc, "e3", "pic-3"), "e3")
+    steps["sheets approved"] = doc
+    for at, row in enumerate(r["id"] for r in director.rows(doc) if r["kind"] == "keyframe"):
+        doc = director.approve(_render(doc, row, f"pic-{4 + at}"), row)
+    steps["ready to run"] = doc
+    for at, row in enumerate(director.run_steps(doc)[:2]):
+        doc = _render(doc, row, f"clip-{1 + at}")
+    steps["two clips in"] = doc
+    steps["the bottle redone"] = _render(doc, "e2", "pic-20")
+    steps["a shot edited"] = director.edit(doc, "s1", {"action": "@keeper runs up the stairs"})
+    steps["the rail moved"] = director.follow_rail(doc, {**doc["rail"], "video": "ltx", "max_seconds": 5})[0]
+    return steps
+
+
+STEPS = walk()
+
 rng = random.Random(7)
 ALLOTS = []
 for _ in range(300):
@@ -97,7 +139,29 @@ out.weights = d.WEIGHTS; out.continues = d.CONTINUES; out.kinds = d.KINDS; out.l
 console.log(JSON.stringify(out));
 """
 
+STATE_SCRIPT = """
+const d = await import(process.argv[1]);
+const steps = JSON.parse(process.argv[2]);
+const out = {};
+for (const [name, plan] of Object.entries(steps)) {
+  const marks = {};
+  for (const row of d.rows(plan)) marks[row.id] = d.fingerprint(plan, row.id);
+  out[name] = { marks, states: d.states(plan), prep: d.prepSteps(plan), canRun: d.canRun(plan),
+                runSteps: d.runSteps(plan), handles: d.handlesOf(plan) };
+}
+const fresh = steps.fresh;
+const mark = d.fingerprint(fresh, "e2");
+const landed = d.land(d.start(fresh, "e2", mark), "e2", "pic-1", mark);
+out.records = { started: d.start(fresh, "e2", mark).renders, landed: landed.renders,
+                approved: d.approve(landed, "e2").renders,
+                failed: d.fail(d.start(fresh, "e2", mark), "e2", "  out of\\nmemory ").renders };
+try { d.approve(fresh, "e3"); } catch (error) { out.refused = error.message; }
+out.sha = [d.sha1(""), d.sha1("abc"), d.sha1("é灯".repeat(40))];
+console.log(JSON.stringify(out));
+"""
+
 got = layout.run(SCRIPT, MIRROR, PLANS, ALLOTS)
+stated = layout.run(STATE_SCRIPT, MIRROR, STEPS)
 
 check("the weights are the same three", got["weights"], director.WEIGHTS)
 check("the joins are the same three", got["continues"], list(director.CONTINUES))
@@ -121,6 +185,36 @@ try:
     director.allot(3, [1, 1], [2, 2])
 except director.PlanError as problem:
     check("a total too short for its floors is refused in the same words", got["refused"], str(problem))
+
+import hashlib  # noqa: E402
+
+check("sha1 is sha1", stated["sha"],
+      [hashlib.sha1(x.encode("utf-8")).hexdigest() for x in ("", "abc", "é灯" * 40)])
+for name, doc in STEPS.items():
+    mine = stated[name]
+    check(f"{name}: fingerprints",
+          mine["marks"], {r["id"]: director.fingerprint(doc, r["id"]) for r in director.rows(doc)})
+    check(f"{name}: states", mine["states"], director.states(doc))
+    check(f"{name}: prep steps", mine["prep"], director.prep_steps(doc))
+    check(f"{name}: can run", mine["canRun"], director.can_run(doc))
+    check(f"{name}: run steps", mine["runSteps"], director.run_steps(doc))
+    check(f"{name}: handles", mine["handles"], director.handles_of(doc))
+fresh = STEPS["fresh"]
+started, mark = director.start(fresh, "e2")
+landed = director.land(started, "e2", "pic-1", mark)
+check("start records as director.start", stated["records"]["started"], started["renders"])
+check("land records as director.land", stated["records"]["landed"], landed["renders"])
+check("approve records as director.approve", stated["records"]["approved"],
+      director.approve(landed, "e2")["renders"])
+check("fail records as director.fail", stated["records"]["failed"],
+      director.fail(started, "e2", "  out of\nmemory ")["renders"])
+try:
+    director.approve(fresh, "e3")
+except director.PlanError as problem:
+    check("approving a row not waiting is refused in the same words", stated.get("refused"), str(problem))
+# The walk is worth what it reaches.
+check("the walk reaches every state",
+      {s for doc in STEPS.values() for s in director.states(doc).values()} >= set(director.STATES), True)
 
 # The cases are worth what they exercise: a split, a clamp and a raised floor
 # that never happened would be agreement about nothing.

@@ -665,6 +665,15 @@ def _blank(kind, prompt, cited, seconds=None, after=None):
             "seconds": seconds, "aspect": None, "say": "", "after": after, "replaces": None}
 
 
+def _inline(description):
+    """A description as it reads inside the sheet's sentence: "A man in his
+    forties." is "a man in his forties". Only a leading article is lowered —
+    "Anna's coat" keeps its capital — and the full stop goes."""
+    text = description.rstrip(".")
+    first, _, rest = text.partition(" ")
+    return f"{first.lower()} {rest}" if rest and first in ("A", "An", "The") else text
+
+
 def action_for(plan, row_id):
     """A row -> the chat action that renders it.
 
@@ -680,7 +689,7 @@ def action_for(plan, row_id):
             raise PlanError(f"{row_id} needs {dep}, which has not rendered yet.")
     if row["kind"] == "sheet":
         entity = next(e for e in plan["entities"] if e["id"] == row["entity"])
-        prompt = SHEETS[entity["kind"]].format(description=entity["description"].rstrip("."))
+        prompt = SHEETS[entity["kind"]].format(description=_inline(entity["description"]))
         return _blank(KIND_STILL, _with_look(prompt, plan), [])
     shot = next(s for s in plan["shots"] if s["id"] == row["shot"])
     prompt, cited = _resolve(plan, shot["action"], handles)
