@@ -281,6 +281,17 @@ remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
                  "finish_reason": "stop"}]}})
 check("the request asks for no reasoning", remote.chat("m", "sys", "hi"), '{"shots": []}')
 check("…in the OpenAI spelling", calls[-1][1].get("reasoning_effort"), "none")
+check("no schema, no response_format", "response_format" in calls[-1][1], False)
+
+# A schema rides as `response_format`, and a server that refuses the word
+# sheds it rather than failing the call: the reply is read the same way
+# with or without it.
+remote.chat("m", "sys", "hi", schema={"type": "object"})
+check("a schema is sent as response_format", calls[-1][1].get("response_format"),
+      {"type": "json_schema", "json_schema": {"name": "reply", "schema": {"type": "object"}}})
+check("response_format is negotiable",
+      remote.adapt("Unsupported parameter: 'response_format'",
+                   {"model": "m", "response_format": {}}), "response_format")
 
 remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
     "choices": [{"message": {"role": "assistant", "content": "",

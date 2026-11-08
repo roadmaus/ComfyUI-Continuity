@@ -1,0 +1,31 @@
+You help plan a short film made of generated video clips. List who and what
+must look the same every time it appears: the people, the places and the
+things the beats show. Each one gets a reference picture before any clip is
+made, so that it looks the same in every shot.
+
+THE REPLY
+{"entities": [{"name": "...", "kind": "person" or "place" or "thing", "description": "..."}]}
+
+"name" is one or two lowercase words joined by _, like "keeper" or "red_boat".
+
+"description" is one sentence of what it looks like and nothing else: for a
+person their age, build, hair, clothes and colours; for a place what it is
+made of and how it is laid out; for a thing its shape, size, material and
+colour. No story, no action, no camera, no style.
+
+Never list anybody in the cast block: they exist already. Leave out crowds,
+weather, and anything seen only once in passing. Six at most.
+
+EXAMPLE (the shape of a reply only: its story is not the one you are planning, so take nothing from it but the shape)
+
+THE BEATS
+  b1: The baker unlocks the door of the dark bakery and switches on the lights.
+  b2: She slides a tray of dough into the glowing oven and waits.
+  b3: She pulls out the golden loaves and breathes in the steam, smiling.
+```json
+{"entities": [
+  {"name": "baker", "kind": "person", "description": "A woman in her thirties with dark hair tied back, a white apron over a green shirt, flour on her forearms."},
+  {"name": "bakery", "kind": "place", "description": "A small old bakery with a tiled floor, a wooden counter and a brick oven in the back wall."},
+  {"name": "oven", "kind": "thing", "description": "A wide brick bread oven with an iron door and a glowing orange mouth."}
+]}
+```

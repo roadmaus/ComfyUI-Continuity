@@ -410,8 +410,11 @@ def to_data_url(image):
 # complaint names `max_completion_tokens`, it renames instead of dropping, so
 # the reply-length budget survives the newer dialect. `ttl` is only ever sent
 # by an eject, and only LM Studio knows the word; anything else that bothers to
-# complain about it sheds it here and refines anyway.
-NEGOTIABLE = ("temperature", "seed", "max_tokens", "ttl", "reasoning_effort")
+# complain about it sheds it here and refines anyway. `response_format` is
+# only sent with a schema, and a server that cannot constrain to one still
+# answers the prompt.
+NEGOTIABLE = ("temperature", "seed", "max_tokens", "ttl", "reasoning_effort",
+              "response_format")
 
 
 def adapt(detail, payload):
@@ -474,7 +477,7 @@ def _content(body):
 
 
 def chat(model, system, message, images=(), temperature=0.7, seed=-1,
-         max_tokens=None, prefill=refine.PREFILL, eject=False):
+         max_tokens=None, prefill=refine.PREFILL, eject=False, schema=None):
     """One generation -> the assistant's raw content string.
 
     The same signature as `refine_local.chat`, which is what lets the routes
@@ -485,6 +488,13 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
     prompt alone and on `refine.json_object`'s tolerance for a fenced or
     prefaced object — the models people point this at are large enough that
     the brace trick was carrying the small ones.
+
+    `schema` is a JSON Schema the reply should be an object of. Sent as
+    `response_format`, which Ollama, LM Studio, llama.cpp, vLLM and OpenAI
+    all constrain decoding to; a server that refuses the word sheds it
+    (`adapt`) and the reply rides on the prompt alone, as it does without one.
+    The reader downstream is the same either way, so a schema is a help to a
+    small model and never something the result depends on.
     """
     stored = _read()
     url, key = stored.get("url", ""), stored.get("key", "")
@@ -502,6 +512,9 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
     }
     if int(seed) >= 0:
         payload["seed"] = int(seed)
+    if schema:
+        payload["response_format"] = {"type": "json_schema",
+                                      "json_schema": {"name": "reply", "schema": schema}}
     # Reasoning off. The in-process path prefills an empty `<think>` block for
     # this; chat-completions has no prefill, and a thinking model left to its
     # default spends the whole reply budget on a trace and returns no content

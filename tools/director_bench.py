@@ -1,0 +1,327 @@
+#!/usr/bin/env python3
+"""Plan pieces headless, against any OpenAI-compatible server, and measure it.
+
+Director plans a piece in many small calls (`creator/director_calls.py`), and
+whether that holds up is a question about the model on the other end, not
+about the room. This runs exactly the planning loop the room will run — the
+same prompt files, the same readers, the same one re-ask — over the briefs in
+`tests/director_briefs.jsonl`, and prints, per brief and per call, how it
+went. Nothing is rendered; the plan is the result.
+
+    python3 tools/director_bench.py --model lfm3-omni
+    python3 tools/director_bench.py --url http://lab:8000/v1 --model qwen3.8-27b --json lab.json
+    python3 tools/director_bench.py --only three --dump
+
+**What it measures**, for each brief:
+
+- each call valid on the first try, after the re-ask, or failed;
+- the length the plan runs against the target, and what the model itself
+  said, so a correction by code is visible rather than silent;
+- whether every citation resolved (a refused citation is a re-ask, and its
+  sentence is printed);
+- cast members the brief cited: used in a shot, never listed as an entity
+  (code drops them, but the relisting is counted), never given a sheet;
+- entities no shot cites, and shots that cite nothing — the two quiet ways a
+  plan stops being one piece;
+- what code corrected on the way: entities dropped because nothing in the
+  brief or beats speaks of them (on a small model, the prompt file's worked
+  example copied in) or because they were cast already, and shots that
+  repeat an earlier one even after the re-ask (kept, with a warning);
+- a question asked when none was wanted, or none when one was;
+- wall time and tokens per call.
+
+**Built to be compared.** `--json` writes the whole report, settings and
+replies included, so a run of the 2B model on this Mac and a run of a 27B in
+the lab sit side by side. A prompt change is judged across every model
+benched, never tuned for the one at hand.
+
+Needs no ComfyUI and no torch: the pure half of the pack, loaded the way the
+test suites load it, and the remote client. The node's credential file is not
+read; the URL given here is the only one used, with no key.
+"""
+
+import argparse
+import importlib.util
+import json
+import os
+import statistics
+import sys
+import time
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "tests"))
+
+import layout  # noqa: E402 — tests' loader, which knows where the family modules live
+
+BRIEFS = os.path.join(ROOT, "tests", "director_briefs.jsonl")
+
+
+def _load(url):
+    pkg = layout.load("canvas", "contextir", "compile", "compile_image", "prompting",
+                      "manifest", "registry", "chat", "director", "director_calls",
+                      package="mmc")
+    spec = importlib.util.spec_from_file_location(
+        "mmc.refine_remote", os.path.join(ROOT, "creator", "refine_remote.py"))
+    remote = importlib.util.module_from_spec(spec)
+    sys.modules["mmc.refine_remote"] = remote
+    spec.loader.exec_module(remote)
+    remote._read = lambda: {"url": url, "key": ""}
+    return pkg, remote
+
+
+def _rail(pkg, still, edit, video):
+    """The rail as the room would snapshot it: the families by id, and the
+    video family's own floor and ceiling off its manifest, which is what
+    `director.limit_of` clamps the shot limit to."""
+    frames = (pkg.manifest.describe(video).get("canvas") or {}).get("frames") or {}
+    return {"still": still, "edit": edit, "video": video, "aspect": "16:9",
+            "min_seconds": frames.get("min_seconds"), "max_seconds": frames.get("max_seconds")}
+
+
+def _briefs(path, only):
+    out = []
+    with open(path, "r", encoding="utf-8") as handle:
+        for line in handle:
+            if line.strip():
+                out.append(json.loads(line))
+    if only:
+        wanted = set(only.split(","))
+        out = [b for b in out if b["id"] in wanted]
+    return out
+
+
+class Meter:
+    """An `ask` with a stopwatch and a token counter round it.
+
+    Tokens come off the server's `usage` block, read by wrapping the remote
+    client's one request function; a server that sends none counts as zero
+    rather than as a guess.
+    """
+
+    def __init__(self, remote, args):
+        self.remote, self.args, self.calls, self._usage = remote, args, [], None
+        real = remote._request
+
+        def request(url, key, payload=None, **kw):
+            body = real(url, key, payload, **kw)
+            if isinstance(body, dict) and "usage" in body:
+                self._usage = body.get("usage") or {}
+            return body
+        remote._request = request
+
+    def ask(self, system, message, schema, label):
+        if self.args.dump:
+            print(f"\n===== {label}: SYSTEM =====\n{system}\n===== {label}: MESSAGE =====\n{message}")
+        self._usage = None
+        started = time.time()
+        reply = self.remote.chat(self.args.model, system, message, [],
+                                 temperature=self.args.temperature, seed=self.args.seed,
+                                 max_tokens=self.args.max_tokens, prefill="",
+                                 schema=None if self.args.no_schema else schema)
+        usage = self._usage or {}
+        self.calls.append({"label": label, "seconds": round(time.time() - started, 2),
+                           "prompt_tokens": usage.get("prompt_tokens") or 0,
+                           "completion_tokens": usage.get("completion_tokens") or 0})
+        if self.args.dump:
+            print(f"===== {label}: REPLY =====\n{reply}")
+        return reply
+
+
+def _measure(pkg, brief, out, error):
+    """What the bench reports about one brief's plan."""
+    director = pkg.director
+    plan = out.get("plan") if out else (error.plan if error else None)
+    log = (out or {}).get("log") or (error.log if error else [])
+    cast = [director.name_of(m["name"]) for m in brief.get("cast") or ()]
+    row = {"id": brief["id"], "target": brief.get("seconds"),
+           "asked": bool(out and out.get("questions")), "want_ask": bool(brief.get("asks")),
+           "questions": (out or {}).get("questions") or [],
+           "failed": str(error) if error else None,
+           "first_try": sum(1 for e in log if e["ok"] and e["tries"] == 1),
+           "reasked": sum(1 for e in log if e["ok"] and e["tries"] == 2),
+           "failed_calls": sum(1 for e in log if not e["ok"]),
+           "reask_reasons": [f"{e['label']}: {e['first_error']}" for e in log if e["first_error"]],
+           "relisted": (out or {}).get("relisted") or [],
+           "invented": (out or {}).get("invented") or [],
+           "warnings": (out or {}).get("warnings") or []}
+    basics = next((e for e in log if e["call"] == "basics"), None)
+    row["model_seconds"] = ((basics or {}).get("raw") or {}).get("seconds")
+    if plan and plan.get("shots") and not error:
+        clips = director.clips(plan)
+        actions = " ".join(s["action"] for s in plan["shots"])
+        cited = {w.lower() for w in director.CITE_RE.findall(actions)}
+        rows = director.rows(plan)
+        row.update({
+            "seconds": sum(c["seconds"] for c in clips),
+            "beats": len(plan["beats"]), "entities": len([e for e in plan["entities"]
+                                                          if "new" in e.get("source", {})]),
+            "shots": len(plan["shots"]), "clips": len(clips),
+            "cast_used": sorted(n for n in cast if n in cited),
+            "cast_unused": sorted(n for n in cast if n not in cited),
+            "cast_sheets": sorted(r["entity"] for r in rows if r["kind"] == "sheet"
+                                  and any(e["id"] == r["entity"] and e["name"] in cast
+                                          for e in plan["entities"])),
+            "uncited_entities": sorted(e["name"] for e in plan["entities"]
+                                       if "new" in e.get("source", {}) and e["name"] not in cited),
+            "bare_shots": sum(1 for s in plan["shots"]
+                              if not director.CITE_RE.search(s["action"])
+                              and "@" not in s["action"]),
+            "joins": [s["continues"] for s in plan["shots"]],
+        })
+    return row
+
+
+def _show(plan, director):
+    print(f"  \"{plan['title']}\", {plan['seconds']} s — look: {plan['look'] or '(none)'}")
+    for a in plan.get("assumptions") or ():
+        print(f"  assumes: {a}")
+    seconds = director.allot_plan(plan)
+    for beat in plan["beats"]:
+        print(f"  {beat['id']} [{beat['weight']}, {seconds[beat['id']]} s] {beat['text']}")
+        for shot in (s for s in plan["shots"] if s["beat"] == beat["id"]):
+            print(f"      {shot['id']} {shot['continues']:>3} {seconds[shot['id']]:>3} s  {shot['action']}")
+    for entity in plan["entities"]:
+        source = entity.get("source") or {}
+        what = f"cast @{source['cited']}" if "cited" in source else entity["description"]
+        print(f"  @{entity['name']} ({entity['kind']}): {what}")
+
+
+def _verdict(row):
+    if row["failed"]:
+        return "FAILED"
+    if row["asked"] != row["want_ask"]:
+        return "ASKED" if row["asked"] else "NO-ASK"
+    if row["asked"]:
+        return "ok (asked)"
+    problems = []
+    if row.get("target") and row.get("seconds") != row["target"]:
+        problems.append("length")
+    if row.get("cast_unused") or row.get("cast_sheets"):
+        problems.append("cast")
+    if row.get("uncited_entities"):
+        problems.append("uncited")
+    if row.get("warnings"):
+        problems.append("repeat")
+    return "ok" if not problems else "weak: " + ",".join(problems)
+
+
+def _table(rows, calls):
+    print("\n########## per brief")
+    head = f"{'brief':<10} {'verdict':<16} {'calls 1st/re/fail':<18} {'len (model)':<13} " \
+           f"{'b/e/s/c':<10} {'cast used':<12} {'uncited':<20} {'dropped':<16} bare"
+    print(head)
+    print("-" * len(head))
+    for r in rows:
+        calls_col = f"{r['first_try']}/{r['reasked']}/{r['failed_calls']}"
+        length = f"{r.get('seconds', '-')} ({r['model_seconds'] if r['model_seconds'] is not None else '-'})"
+        shape = "/".join(str(r.get(k, "-")) for k in ("beats", "entities", "shots", "clips"))
+        cast = ",".join(r.get("cast_used") or []) or ("-" if not r.get("cast_unused") else "NONE")
+        print(f"{r['id']:<10} {_verdict(r):<16} {calls_col:<18} {length:<13} {shape:<10} "
+              f"{cast:<12} {','.join(r.get('uncited_entities') or []) or '-':<20} "
+              f"{','.join(r['invented'] + r['relisted']) or '-':<16} "
+              f"{r.get('bare_shots', '-')}")
+
+    print("\n########## per call")
+    print(f"{'call':<10} {'n':>3} {'1st':>5} {'re':>4} {'fail':>5} {'s/call':>8} {'tok in':>8} {'tok out':>8}")
+    for name, stats in calls.items():
+        print(f"{name:<10} {stats['n']:>3} {stats['first']:>5} {stats['re']:>4} {stats['fail']:>5} "
+              f"{stats['seconds']:>8.1f} {stats['in']:>8.0f} {stats['out']:>8.0f}")
+
+
+def _per_call(logs, meters):
+    out = {}
+    for name in ("brief", "basics", "beats", "entities", "shots"):
+        entries = [e for log in logs for e in log if e["call"] == name]
+        timed = [c for c in meters if c["label"].split(".")[0] == name]
+        if not entries:
+            continue
+        out[name] = {
+            "n": len(entries),
+            "first": sum(1 for e in entries if e["ok"] and e["tries"] == 1),
+            "re": sum(1 for e in entries if e["ok"] and e["tries"] == 2),
+            "fail": sum(1 for e in entries if not e["ok"]),
+            "seconds": statistics.mean(c["seconds"] for c in timed) if timed else 0.0,
+            "in": statistics.mean(c["prompt_tokens"] for c in timed) if timed else 0,
+            "out": statistics.mean(c["completion_tokens"] for c in timed) if timed else 0,
+        }
+    return out
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    parser.add_argument("--model", default="lfm3-omni")
+    parser.add_argument("--url", default="http://localhost:11434/v1")
+    parser.add_argument("--briefs", default=BRIEFS)
+    parser.add_argument("--only", help="comma-separated brief ids")
+    parser.add_argument("--still", default="krea2", help="the rail's still family")
+    parser.add_argument("--edit", default="qwenedit", help="the rail's edit family")
+    parser.add_argument("--video", default="h3", help="the rail's video family")
+    parser.add_argument("--temperature", type=float, default=0.3)
+    parser.add_argument("--seed", type=int, default=1)
+    parser.add_argument("--max-tokens", type=int, default=None)
+    parser.add_argument("--no-schema", action="store_true",
+                        help="send no response_format: the reply rides on the prompt alone, "
+                             "as it does on a server that cannot constrain one")
+    parser.add_argument("--quiet", action="store_true", help="the tables only, not each plan")
+    parser.add_argument("--dump", action="store_true",
+                        help="print every system prompt, message and reply")
+    parser.add_argument("--json", help="write the whole report to this file")
+    args = parser.parse_args()
+
+    pkg, remote = _load(args.url)
+    calls = pkg.director_calls
+    rail = _rail(pkg, args.still, args.edit, args.video)
+    meter = Meter(remote, args)
+
+    rows, logs, plans = [], [], {}
+    for brief in _briefs(args.briefs, args.only):
+        print(f"\n########## {brief['id']}: {brief['brief']}")
+        out, error = None, None
+        started = time.time()
+        try:
+            out = calls.plan_piece(brief["brief"], rail, meter.ask,
+                                   cast=brief.get("cast") or (), ledger=brief.get("ledger") or ())
+        except calls.PlanningFailed as failed:
+            error = failed
+        except pkg.prompting.RefineError as unreachable:
+            # Not the model planning badly: the model not answering. Every
+            # brief after this would say the same, so the run stops here.
+            print(f"STOPPED: {unreachable}")
+            return 1
+        logs.append((out or {}).get("log") or (error.log if error else []))
+        row = _measure(pkg, brief, out, error)
+        row["wall"] = round(time.time() - started, 1)
+        rows.append(row)
+        for reason in row["reask_reasons"]:
+            print(f"  re-asked {reason}")
+        for warning in row["warnings"]:
+            print(f"  kept with a warning: {warning}")
+        if error:
+            print(f"  FAILED: {error}")
+            if error.plan and not args.quiet:
+                _show(error.plan, pkg.director)
+        elif out["questions"]:
+            print("  asks: " + " / ".join(out["questions"]))
+        elif not args.quiet:
+            _show(out["plan"], pkg.director)
+        plan = (out or {}).get("plan") or (error.plan if error else None)
+        if plan:
+            plans[brief["id"]] = plan
+        print(f"  ({row['wall']} s)")
+
+    per_call = _per_call(logs, meter.calls)
+    _table(rows, per_call)
+    if args.json:
+        report = {"model": args.model, "url": args.url, "rail": rail,
+                  "schema": not args.no_schema, "temperature": args.temperature,
+                  "seed": args.seed, "when": time.strftime("%Y-%m-%d %H:%M:%S"),
+                  "briefs": rows, "calls": per_call, "timings": meter.calls,
+                  "logs": logs, "plans": plans}
+        with open(args.json, "w", encoding="utf-8") as handle:
+            json.dump(report, handle, ensure_ascii=False, indent=1)
+        print(f"\nreport: {args.json}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

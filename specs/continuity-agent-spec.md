@@ -178,7 +178,7 @@ All model calls, no renders. Each call is one decision against a schema:
 - **Basics.** `{title, seconds, look}`. `seconds` is what the person asked for,
   or a default. `look` is a short description of the visual style. Aspect is
   the rail's, not the model's.
-- **Beats.** An ordered list of 2–8 beats, each a sentence of what happens and
+- **Beats.** An ordered list of 1–8 beats (one for a piece that is a single moment), each a sentence of what happens and
   a rough weight (short, medium, long). Code turns the weights into seconds
   that add up to the target.
 - **Entities.** `[{name, kind: person|place|thing, description, beats}]`.
@@ -465,6 +465,40 @@ settings at it.
    stopped. The replay suite. The graph dry run.
 7. `director_e2e.py`, the smoke profile here, then the lab.
 8. Docs: a Director section in `docs/tools.md`, and the CHANGELOG.
+
+### 12.1 What the step-2 bench decided (2026-11-08)
+
+`tools/director_bench.py` against `lfm3-omni` (2.2B) on Ollama, six briefs,
+three seeds with the schema sent and two without. With the schema, every
+plan completed, 113 of 116 calls valid on the first try and the rest after
+one re-ask, at about 12 s per plan. Without it, 11 of 12 briefs gave a plan
+(one with a warning) and one failed on a broken object. The vague
+brief never got a question (0 of 5): the floor model plans anything rather
+than ask.
+
+The floor model *copies* what it is shown, and that decided the shape of the
+calls more than any count did. It copied the worked examples' content (a
+bakery's brick oven turned up in a train carriage), the previous shot when
+shown it, and the first beat's text when shown the beat list. So, moved into
+code or out of the messages (`creator/director_calls.py`):
+
+- worked examples tell a story no brief tells, and an entity neither the
+  brief nor the beats mention is dropped (`invented` in the bench);
+- the shots call is shown only the brief, the names and *this* beat — not
+  the other beats, not the shot before;
+- a plain mention of an entity ("the bottle") is cited by code;
+- a shot that mostly repeats an earlier one, or cites a name the plan does
+  not hold, is a *doubt*: re-asked once, then kept with a warning (the `@`
+  comes off an unknown name), never a discarded plan;
+- an object the model forgot to close is closed;
+- an entity named after an attached handle (`@pic-1` read as a person) is
+  dropped, and accents fold in names (`café` is `cafe`);
+- a piece can be one beat (`MIN_BEATS` is 1), for the single-shot brief.
+
+What the bench still shows on the floor and code cannot fix: entity kinds
+are often wrong (rain as a thing, a crowd as a place), and the look line
+sometimes names people or places despite the prompt. Both are worth reading
+on the lab's models before more moves into code.
 
 ## 13. Risks
 

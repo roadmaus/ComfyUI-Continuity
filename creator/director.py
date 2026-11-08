@@ -50,6 +50,7 @@ import hashlib
 import json
 import math
 import re
+import unicodedata
 
 from .chat import ACT_RENDER, KIND_STILL, KIND_VIDEO, ROLE_START
 
@@ -122,7 +123,9 @@ MIN_SECONDS = 1
 DEFAULT_SECONDS = 30
 MAX_SECONDS = 600
 
-MIN_BEATS, MAX_BEATS = 2, 8
+# One beat is a piece that is one moment: "a single 6 s shot" planned as a
+# piece is still one beat, and forcing a second would cut it in two.
+MIN_BEATS, MAX_BEATS = 1, 8
 MAX_TEXT = 600
 
 # A name the cast can hold: `subjects.HANDLE_RE`, spelled here so this module
@@ -175,7 +178,9 @@ def name_of(text):
     not in doubt, and the name is only ever a citation in this pack's own
     prompts. What cannot become a name at all is refused by the caller.
     """
-    name = re.sub(r"[^A-Za-z0-9_]+", "_", str(text or "").strip().lstrip("@")).strip("_")
+    # Accents fold rather than vanish: a café is `cafe`, not `caf`.
+    text = unicodedata.normalize("NFKD", str(text or "")).encode("ascii", "ignore").decode("ascii")
+    name = re.sub(r"[^A-Za-z0-9_]+", "_", text.strip().lstrip("@")).strip("_")
     name = name.lower()[:32]
     return name if NAME_RE.match(name) else ""
 
@@ -219,7 +224,7 @@ def read_basics(raw, seconds=None):
 
 
 def read_beats(raw):
-    """The beats call -> `[{text, weight}]`, 2 to 8 of them, in order."""
+    """The beats call -> `[{text, weight}]`, 1 to 8 of them, in order."""
     items = raw.get("beats") if isinstance(raw, dict) else raw
     if not isinstance(items, list):
         raise PlanError('"beats" must be a list of {"text", "weight"} objects.')

@@ -100,7 +100,9 @@ check("basics numeric string", director.read_basics({"title": "T", "seconds": "2
 refuses("basics bool seconds", lambda: director.read_basics({"title": "T", "seconds": True}),
         '"seconds" must be a number')
 refuses("basics no title", lambda: director.read_basics({"seconds": 10}), '"title"')
-refuses("one beat", lambda: director.read_beats({"beats": [{"text": "x"}]}), "2 to 8 beats")
+check("one beat is a piece of one moment",
+      director.read_beats({"beats": [{"text": "x"}]}), [{"text": "x", "weight": "medium"}])
+refuses("no beats", lambda: director.read_beats({"beats": []}), "1 to 8 beats")
 refuses("bad weight", lambda: director.read_beats([{"text": "a", "weight": "huge"}, "b"]),
         "beat 1's \"weight\" must be short, medium or long")
 check("beat as a string reads as medium", director.read_beats(["a", "b"])[0],
