@@ -339,3 +339,53 @@ refuses("a picture not made yet", lambda: director.change_action(plan, "e3", "x"
 stray = {**done, "renders": {**done["renders"], "s9": {"handle": "clip-9", "state": "approved"}}}
 check("prune drops the records of rows the plan no longer has",
       sorted(director.prune(stray)["renders"]), sorted(done["renders"]))
+
+
+# ---- one take, and when a chat request is planned ----------------------------
+#
+# Chained shots are the default for a long piece; one unbroken take is allowed
+# up to what the video family itself renders, and asked for in plain words.
+
+for said in ("one continuous shot of the sea", "a single take, 30 seconds", "a oner down the hall",
+             "no cuts", "an unbroken 40 s shot", "film it in one go"):
+    check(f"one take is read in {said!r}", director.asks_one_take(said), True)
+check("a plain request asks for no one take", director.asks_one_take("a 40 second spot of the sea"), False)
+for said in ("three shots of a fox", "2 quick shots", "a few shots of rain", "a montage of the city",
+             "several cuts between them"):
+    check(f"many shots are read in {said!r}", director.asks_many_shots(said), True)
+for said in ("a shot of a fox", "one shot", "make shot 3 darker", "1 shots"):
+    check(f"no many shots in {said!r}", director.asks_many_shots(said), False)
+
+CLIP = {"act": "render", "kind": "video", "prompt": "the sea", "from": [], "seconds": 40,
+        "aspect": None, "say": "", "after": None, "replaces": None}
+check("a 40 s clip is planned as a piece", director.wants_plan(CLIP, "a 40 second spot", 60),
+      director.TOO_LONG)
+check("a 40 s clip asked as one take is rendered as one",
+      director.wants_plan(CLIP, "one continuous 40 second shot", 60), None)
+check("one take or not, past the family's ceiling it is planned",
+      director.wants_plan({**CLIP, "seconds": 90}, "one continuous 90 second shot", 60),
+      director.OVER_CEILING)
+check("a clip at the limit is rendered", director.wants_plan({**CLIP, "seconds": 15}, "x", 60), None)
+check("three shots named are planned", director.wants_plan({**CLIP, "seconds": 8}, "three shots of a fox", 60),
+      director.MANY_SHOTS)
+check("a clip after one on the strip is never planned",
+      director.wants_plan({**CLIP, "after": "clip-1"}, "a 40 second spot", 60), None)
+check("a clip in place of one is never planned",
+      director.wants_plan({**CLIP, "replaces": "clip-1"}, "make it 40 seconds", 60), None)
+check("a still is never planned", director.wants_plan({**CLIP, "kind": "still"}, "three shots", 60), None)
+
+took = director.edit(lighthouse(seconds=60), "s2", {"one_take": True})
+parts = [c for c in director.clips(took) if c["shot"] == "s2"]
+check("a one-take shot runs to the family's ceiling uncut", [c["parts"] for c in parts], [1])
+check("its neighbours still split at the plan's limit",
+      all(c["seconds"] <= director.SHOT_LIMIT for c in director.clips(took) if c["shot"] != "s2"), True)
+long_take = director.edit(director.edit(took, director.HEADER, {"seconds": 200}), "s2", {"one_take": True})
+check("a one take past the ceiling is cut there, into pins",
+      [(c["seconds"] <= 60, c["continues"]) for c in director.clips(long_take) if c["shot"] == "s2"][1:],
+      [(True, "pin")] * (len([c for c in director.clips(long_take) if c["shot"] == "s2"]) - 1))
+check("one take off again leaves no field behind",
+      "one_take" in next(s for s in director.edit(took, "s2", {"one_take": False})["shots"]
+                         if s["id"] == "s2"), False)
+check("one take on a shot is all an edit needs: the action stays",
+      next(s for s in took["shots"] if s["id"] == "s2")["action"],
+      next(s for s in lighthouse(seconds=60)["shots"] if s["id"] == "s2")["action"])

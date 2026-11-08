@@ -342,4 +342,44 @@ try:
 finally:
     route._stamp_rail = _real_stamp_rail
 
+# A fresh clip longer than one shot holds well is planned as a piece instead,
+# by code and on the model's own reading of the request (`director.wants_plan`):
+# the turn answers `plan` with why, and the clip it held back while one clip
+# could still hold it. Past the family's ceiling nothing is held.
+
+def turn_answering(reply, text, strip=()):
+    real = route._ask
+    route._ask = lambda *_args, **_kw: "```json\n" + json.dumps(reply) + "\n```"
+    try:
+        return route._run({"messages": [{"role": "user", "text": text}], "ledger": [],
+                           "settings": {}, "piece": {}, "strip": list(strip)})
+    finally:
+        route._ask = real
+
+
+SEA = {"act": "render", "kind": "video", "prompt": "the sea at dusk, waves rolling in", "say": "Here.",
+       "seconds": 40}
+ceiling = route._ceiling(route._rail({}))
+planned = turn_answering(SEA, "a 40 second video of the sea at dusk")
+check("a 40 s clip is planned, the clip held back",
+      (planned.get("plan"), "action" in planned, planned.get("held", {}).get("seconds")), ("long", False, 40))
+check("asked as one continuous shot, it renders as one",
+      turn_answering(SEA, "one continuous 40 second shot of the sea").get("action", {}).get("seconds"), 40)
+over = turn_answering({**SEA, "seconds": ceiling + 10}, "one continuous shot of the sea")
+check("past the family's ceiling it is planned, nothing held",
+      (over.get("plan"), "held" in over, "action" in over), ("ceiling", False, False))
+check("three shots named are planned",
+      turn_answering({**SEA, "seconds": 8}, "three shots of the sea at dusk").get("plan"), "shots")
+short_said = turn_answering({**SEA, "seconds": 10}, "a 40 second video of the sea at dusk")
+check("the person's 40 s wins over the model's 10, and is planned",
+      (short_said.get("plan"), short_said.get("held", {}).get("seconds")), ("long", 40))
+check("one take asked at 40 s renders 40 s, whatever the model wrote",
+      turn_answering({**SEA, "seconds": 10}, "one continuous 40 second shot of the sea")
+      .get("action", {}).get("seconds"), 40)
+check("a clip after another keeps the model's length",
+      turn_answering({**SEA, "seconds": 6, "after": "clip-1"}, "now 40 seconds more",
+                     strip=[{"handle": "clip-1", "seconds": 6}]).get("action", {}).get("seconds"), 6)
+check("a short clip renders as it did", turn_answering({**SEA, "seconds": 8}, "the sea at dusk").get("plan"),
+      None)
+
 passed("the chat render route builds over the node on the canvas")

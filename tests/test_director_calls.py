@@ -451,3 +451,25 @@ check("an answer with no act is an answer", (out["act"], out["say"]), ("say", "T
 out, asked = turn("make it darker", [fence({"say": "Make it darker."}),
                                      fence({"act": "say", "row": "", "change": "", "say": "Sure."})])
 check("…but the message said back is re-asked", out["log"][0]["tries"], 2)
+
+
+# ---- one take -----------------------------------------------------------------
+#
+# "One continuous shot" is asked as one beat of one shot, and that shot is a
+# take: cut only where the video family stops, not at the plan's limit.
+
+ask, asked = scripted([
+    fence({"questions": [], "assumptions": []}),
+    fence({"title": "Corridor", "seconds": 40, "look": "fluorescent"}),
+    fence({"beats": [{"text": "@george walks the corridor to the door.", "weight": "long"}]}),
+    fence({"entities": [{"name": "corridor", "kind": "place", "description": "a long hospital corridor"}]}),
+    fence({"shots": [{"action": "@george walks the length of @corridor.", "continues": "new"}]}),
+])
+out = calls.plan_piece("one continuous 40 second shot: @george walks a hospital corridor", RAIL, ask,
+                       cast=[{"name": "george"}])
+plan = out["plan"]
+check("a one-take brief asks for one beat", "Write 1 beat" in asked[2]["message"], True)
+check("…and one shot", "Write 1 shot " in asked[4]["message"], True)
+check("the shot is a take", plan["shots"][0].get("one_take"), True)
+check("it renders as one 40 s clip under the 60 s ceiling",
+      [(c["seconds"], c["parts"]) for c in director.clips(plan)], [(40, 1)])

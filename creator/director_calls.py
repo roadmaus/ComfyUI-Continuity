@@ -132,25 +132,15 @@ SCHEMAS = {
 
 # ---- what code counts for the model --------------------------------------------
 
-_SECONDS_RE = re.compile(
-    r"(\d+(?:\.\d+)?)\s*-?\s*(seconds?|secs?|s|minutes?|mins?)\b", re.IGNORECASE)
+# The length a brief asks for is read by `director.asked_seconds`, which the
+# chat's turn route reads too, to know a request is longer than one shot.
+asked_seconds = director.asked_seconds
 
 
-def asked_seconds(brief):
-    """The length the brief asks for, in whole seconds, or None.
-
-    The first length named wins: "a 40-second spot, each shot about 5 s" is a
-    forty-second piece. Minutes are read as minutes. A number with no unit is
-    not a length — "3 shots" is not three seconds.
-    """
-    match = _SECONDS_RE.search(brief or "")
-    if not match:
-        return None
-    number = float(match.group(1))
-    if match.group(2).lower().startswith("m"):
-        number *= 60
-    seconds = int(round(number))
-    return seconds if director.MIN_SECONDS <= seconds <= director.MAX_SECONDS else None
+def one_take(plan):
+    """Whether the brief asks for the piece as one unbroken shot: then it is
+    one beat of one shot, and that shot is a take (`director.asks_one_take`)."""
+    return director.asks_one_take(plan.get("brief"))
 
 
 def beats_for(seconds):
@@ -209,7 +199,7 @@ def basics_message(brief, assumptions=(), seconds=None):
 
 
 def beats_message(plan, cast=()):
-    count = beats_for(plan["seconds"])
+    count = 1 if one_take(plan) else beats_for(plan["seconds"])
     many = "1 beat" if count == 1 else f"{count} beats"
     return _message(
         _block("THE BRIEF", [plan["brief"]]),
@@ -266,7 +256,7 @@ def shots_message(plan, beat_id, cast=(), ledger=()):
     wording code appends; the previous shot's prose added nothing a small
     model could use except a thing to copy."""
     seconds = beat_seconds(plan).get(beat_id)
-    count = shots_for(seconds)
+    count = 1 if one_take(plan) else shots_for(seconds)
     order = [b["id"] for b in plan["beats"]]
     before = [s for s in plan["shots"] if order.index(s["beat"]) < order.index(beat_id)]
     beat = next(b for b in plan["beats"] if b["id"] == beat_id)
@@ -638,6 +628,12 @@ def plan_piece(brief, rail, ask, cast=(), ledger=(), keyframes=None,
                                              relisted, invented))
         plan = director.add_entities(plan, entities)
         plan = director.validate(_write_shots(ask, log, plan, cast, ledger))
+        # "One continuous shot" is one shot that is cut only where the video
+        # family stops. A model that wrote more than one shot anyway has
+        # planned cuts the person said they did not want; that is left for
+        # the card to show rather than merged by code.
+        if one_take(plan) and len(plan["shots"]) == 1:
+            plan = director.edit(plan, plan["shots"][0]["id"], {"one_take": True})
     except director.PlanError as problem:
         raise PlanningFailed(str(problem), plan, log) from None
     return {"plan": plan, "questions": [], "assumptions": plan.get("assumptions") or [],

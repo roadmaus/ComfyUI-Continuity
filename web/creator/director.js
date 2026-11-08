@@ -32,6 +32,7 @@ export const CONTINUES = ["cut", "pin", "new"];
 export const KINDS = ["person", "place", "thing"];
 export const SHOT_LIMIT = 15;
 export const MIN_SECONDS = 1;
+export const MAX_SECONDS = 600;
 const PREP = "prep";
 const RUN = "run";
 const CITE_RE = /@([A-Za-z][A-Za-z0-9_]*)\b(?!-)/g;
@@ -84,9 +85,11 @@ function compare(a, b) {
 }
 
 /** The longest one clip may run: the plan's limit, under the rail's video
- *  family's own ceiling. */
-export function limitOf(plan) {
+ *  family's own ceiling. A shot asked for as one take runs to the ceiling
+ *  itself (`director.limit_of`). */
+export function limitOf(plan, shot = null) {
   const ceiling = plan.rail?.max_seconds;
+  if (shot?.one_take) return ceiling ? Math.max(1, Math.trunc(ceiling)) : MAX_SECONDS;
   const limit = Math.trunc(Number(plan.shot_limit) || SHOT_LIMIT);
   return ceiling ? Math.max(1, Math.min(limit, Math.trunc(ceiling))) : limit;
 }
@@ -119,11 +122,11 @@ export function allotPlan(plan) {
  *  after the first a `pin` of the one before. */
 export function clips(plan) {
   const seconds = allotPlan(plan);
-  const limit = limitOf(plan);
   const floor = floorOf(plan);
   const out = [];
   for (const shot of plan.shots) {
     const total = seconds[shot.id];
+    const limit = limitOf(plan, shot);
     const parts = Math.max(1, Math.ceil(total / limit));
     const shares = parts > 1 ? allot(total, Array(parts).fill(1), Array(parts).fill(floor)) : [total];
     shares.forEach((share, i) => {
@@ -475,6 +478,33 @@ function partsOf(shot, made) {
   });
 }
 
+/**
+ * Whether a long shot is one take, said and switched. Shown only where it
+ * matters: on a shot longer than the plan's limit, which is otherwise cut into
+ * chained parts, and on one already a take. Chained shots are the default for
+ * a reason — one generation stops holding a single idea together somewhere
+ * past the limit — so a take longer than that says so beside the switch.
+ */
+function takeOf(doc, shot, length, live, edit) {
+  const on = Boolean(shot.one_take);
+  const limit = limitOf(doc);
+  if (!on && !(length > limit)) return null;
+  const toggle = live
+    ? el("button", {
+        class: "mmc-dr-take", "aria-pressed": String(on), text: t("One take"),
+        title: on
+          ? t("Rendered as one unbroken clip, cut only where the video model stops. Press to chain it in shorter clips instead.")
+          : t("Render this shot as one unbroken clip instead of chained clips, up to what the video model can run."),
+        onclick: () => edit(shot.id, { one_take: !on }),
+      })
+    : on ? el("span", { class: "mmc-dr-tag", text: t("One take") }) : null;
+  const drift = on && length > limit
+    ? el("span", { class: "mmc-dr-parts",
+                   text: t("Past {limit} seconds one clip drifts more than chained shots.", { limit }) })
+    : null;
+  return toggle || drift ? el("div", { class: "mmc-dr-takeline" }, [toggle, drift].filter(Boolean)) : null;
+}
+
 // A prep row's state, said. `planned` is the plan's word for what has not been
 // made, which on a sheet is "to make" and on an opening frame the same.
 const STATE_LABEL = {
@@ -684,6 +714,7 @@ export function planCard(plan, hooks = {}) {
         el("div", { class: "mmc-dr-action" }, [
           editable(shot.action, { live, label: t("Shot"), onCommit: (action) => edit(shot.id, { action }) }),
           partsOf(shot, sums.clips),
+          takeOf(doc, shot, sums.seconds[shot.id], live, edit),
           frameOf(doc, shot, sums, picture),
         ].filter(Boolean)),
         el("span", { class: "mmc-dr-secs", text: seconds(sums.seconds[shot.id]) }),

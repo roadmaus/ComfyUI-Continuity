@@ -116,6 +116,19 @@ export const css = `
 .mmc-dr-beatline .mmc-dr-secs { color: var(--mmc-text); }
 .mmc-dr-action { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .mmc-dr-parts { font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-faint); }
+/* A long shot's one-take switch, and what a long take costs beside it. */
+.mmc-dr-takeline { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.mmc-dr-take {
+  border: 1px solid var(--mmc-line); border-radius: 999px; background: transparent;
+  color: var(--mmc-faint); padding: 1px 8px; cursor: pointer;
+  font: inherit; font-size: calc(11.5px * var(--mmc-type));
+}
+.mmc-dr-take:hover { color: var(--mmc-text); }
+.mmc-dr-take[aria-pressed="true"] {
+  color: var(--mmc-accent); border-color: var(--mmc-accent);
+  background: color-mix(in srgb, var(--mmc-accent) 12%, transparent);
+}
+.mmc-dr-take:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
 .mmc-dr-entity {
   display: grid; grid-template-columns: 7em 4.4em auto 1fr; gap: 10px; align-items: baseline;
 }

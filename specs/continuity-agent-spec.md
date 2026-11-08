@@ -157,12 +157,19 @@ renders a person must approve), **run** (everything else, one command).
 
 - **The person asks for it.** A *Plan* toggle on the composer sends the message
   as a brief.
-- **The room suggests it.** Code, not the model, notices a request one render
-  cannot satisfy: a length over the shot limit, or more than one shot named.
-  The turn then answers with a *"Plan this as a piece?"* card instead of a
-  render. The model is not given a third `act`: on a small model, every choice
-  added to the turn schema costs accuracy on the two that are already there
-  (`creator/chat.py`'s header explains why).
+- **The room switches by itself.** Code, not the model, notices a request one
+  render should not satisfy (`director.wants_plan`), on the turn's own reading
+  of it: a fresh clip longer than the shot limit, longer than the video family
+  renders at all, or a message naming more than one shot. The turn then plans
+  the message as a brief instead of rendering, and says why. A plan is only
+  words, so nothing is spent by switching; while one clip could still hold
+  the request, the plan carries a *Render it as one clip* button that turns
+  it down and renders the clip the turn asked for. A clip after or in place of
+  one on the strip is never switched, and neither is a request for one
+  continuous take within the family's ceiling. The person's stated length
+  wins over the model's. The model is not given a third `act`: on a small
+  model, every choice added to the turn schema costs accuracy on the two that
+  are already there (`creator/chat.py`'s header explains why).
 
 A chat holds at most one plan at a time. A new brief while one exists asks
 whether to replace it.
@@ -191,7 +198,12 @@ All model calls, no renders. Each call is one decision against a schema:
 - **Code** then:
   - gives each shot its seconds from its beat's share;
   - splits any shot over the **shot limit** into continuation shots (15 s by
-    default, clamped to the rail's video family's `max_seconds`);
+    default, clamped to the rail's video family's `max_seconds`). A shot
+    marked **one take** (`one_take`) is split only at the family's own
+    ceiling. One take is allowed, not encouraged: a brief that asks for one
+    continuous shot is planned as one beat of one take, the card offers the
+    switch on any shot longer than the limit, and says beside a long take
+    that one clip drifts more than chained shots past the limit;
   - sets `after` from `continues`, so the shots chain on the strip the way the
     chat already chains them;
   - picks each shot's opening picture: the previous shot's last frame for
@@ -620,7 +632,9 @@ two copies of the chat, as two tabs already can for any render.
 ## 15. Open questions
 
 - **Shot limit:** 15 s by default as a planning choice, under H3's and LTX's
-  declared 60 s. Should the limit be per family?
+  declared 60 s. Settled for now by *one take* (§5.2): chained shots stay the
+  default, and a single shot can run to the family's ceiling when asked. A
+  per-family default limit is still open.
 - **The one-pass timeline:** H3 can render a multi-shot timeline in one pass
   with no seams (`compile.single_payload`). Should Run offer it for short
   pieces, at the cost of one checkpoint and one LoRA stack for the whole piece?

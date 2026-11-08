@@ -118,7 +118,11 @@ PREP, RUN = "prep", "run"
 
 # Planning defaults. The limit is a planning choice, under what the families
 # declare (H3 and LTX both accept 60 s): fifteen seconds is about where one
-# generation stops holding a single idea together.
+# generation stops holding a single idea together, so a longer piece is
+# planned as shots chained on the strip. A shot can still be asked for as
+# **one take** (`one_take` on its row): it is cut only where the video family
+# itself stops, which is what "one continuous shot" means. It is allowed, not
+# encouraged — the card says so beside a take longer than the limit.
 SHOT_LIMIT = 15
 MIN_SECONDS = 1
 DEFAULT_SECONDS = 30
@@ -134,6 +138,94 @@ MAX_TEXT = 600
 # together.
 NAME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]{0,31}$")
 CITE_RE = re.compile(r"@([A-Za-z][A-Za-z0-9_]*)\b(?!-)")
+
+# What a person says when they want one unbroken shot rather than a cut piece:
+# "one continuous shot", "a single take", "a oner", "no cuts", "unbroken".
+# Read by code, as a length is, because the words are plain and a small model
+# asked to notice them does not.
+ONE_TAKE_RE = re.compile(
+    r"\b(?:continuous|unbroken|uncut|oner|long take|one take|single take"
+    r"|one shot|single shot|in one go|no cuts?|without (?:a )?cuts?)\b", re.IGNORECASE)
+
+# A request that names more than one shot: "three shots", "2 shots", "a few
+# shots", "a sequence of shots", "a montage".
+_NUMBERS = {"two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8,
+            "nine": 9, "ten": 10, "a few": 3, "several": 3, "multiple": 2, "a couple of": 2}
+MANY_SHOTS_RE = re.compile(
+    r"\b(\d+|" + "|".join(sorted(_NUMBERS, key=len, reverse=True)) + r")\s+(?:\w+\s+)?(?:shots|cuts|scenes)\b"
+    r"|\b(?:sequence of shots|shot list|montage|storyboard)\b", re.IGNORECASE)
+
+
+_SECONDS_RE = re.compile(
+    r"(\d+(?:\.\d+)?)\s*-?\s*(seconds?|secs?|s|minutes?|mins?)\b", re.IGNORECASE)
+
+
+def asked_seconds(text):
+    """The length `text` asks for, in whole seconds, or None.
+
+    The first length named wins: "a 40-second spot, each shot about 5 s" is a
+    forty-second piece. Minutes are read as minutes. A number with no unit is
+    not a length — "3 shots" is not three seconds.
+    """
+    match = _SECONDS_RE.search(text or "")
+    if not match:
+        return None
+    number = float(match.group(1))
+    if match.group(2).lower().startswith("m"):
+        number *= 60
+    seconds = int(round(number))
+    return seconds if MIN_SECONDS <= seconds <= MAX_SECONDS else None
+
+
+def asks_one_take(text):
+    """Whether `text` asks for one unbroken shot."""
+    return bool(ONE_TAKE_RE.search(text or ""))
+
+
+def asks_many_shots(text):
+    """Whether `text` names more than one shot (`MANY_SHOTS_RE`)."""
+    for match in MANY_SHOTS_RE.finditer(text or ""):
+        word = (match.group(1) or "").lower()
+        if not word:
+            return True
+        count = int(word) if word.isdigit() else _NUMBERS.get(word, 0)
+        if count >= 2:
+            return True
+    return False
+
+
+# Why a chat request became a plan, as the room says it.
+TOO_LONG, OVER_CEILING, MANY_SHOTS = "long", "ceiling", "shots"
+
+
+def wants_plan(action, text, ceiling=None, limit=SHOT_LIMIT):
+    """A chat turn's render, and the words that asked for it -> why it should
+    be planned as a piece instead, or None (§5.1 of the spec).
+
+    Code decides, not the model: the turn schema keeps its two acts. Only a
+    fresh clip is considered — one after or in place of a clip on the strip
+    belongs to a piece already being made, and "make it 20 seconds" about a
+    clip is a change to that clip. A clip longer than `limit` is planned as
+    chained shots unless the person asked for one take; one longer than the
+    video family's own `ceiling` is planned whatever was asked, since one
+    clip cannot hold it. A request naming several shots is planned too.
+
+    The length is the person's where they said one, over the model's: a small
+    model asked for "a 40 second video" writes a ten-second clip often enough,
+    and the clip it would render is not what was asked for either way.
+    """
+    if not isinstance(action, dict) or action.get("kind") != KIND_VIDEO:
+        return None
+    if action.get("after") or action.get("replaces"):
+        return None
+    seconds = max(action.get("seconds") or 0, asked_seconds(text) or 0)
+    if ceiling and seconds > ceiling:
+        return OVER_CEILING
+    if asks_many_shots(text) and not asks_one_take(text):
+        return MANY_SHOTS
+    if seconds > limit and not asks_one_take(text):
+        return TOO_LONG
+    return None
 
 
 # ---- small readers -----------------------------------------------------------
@@ -457,11 +549,14 @@ def allot(total, weights, floors=None):
     return out
 
 
-def limit_of(plan):
+def limit_of(plan, shot=None):
     """The longest one clip may run: the plan's limit, under the rail's video
-    family's own ceiling."""
+    family's own ceiling. A shot asked for as one take runs to the ceiling
+    itself, and is cut only past it."""
     rail = plan.get("rail") or {}
     ceiling = rail.get("max_seconds")
+    if shot is not None and shot.get("one_take"):
+        return max(1, int(ceiling)) if ceiling else MAX_SECONDS
     limit = int(plan.get("shot_limit") or SHOT_LIMIT)
     return max(1, min(limit, int(ceiling))) if ceiling else limit
 
@@ -502,10 +597,11 @@ def clips(plan):
     one clip under the shot's own id, so the common case reads plainly.
     """
     seconds = allot_plan(plan)
-    limit, floor = limit_of(plan), floor_of(plan)
+    floor = floor_of(plan)
     out = []
     for shot in plan["shots"]:
         total = seconds[shot["id"]]
+        limit = limit_of(plan, shot)
         parts = max(1, math.ceil(total / limit))
         shares = allot(total, [1] * parts, [floor] * parts) if parts > 1 else [total]
         for at, share in enumerate(shares, 1):
@@ -915,7 +1011,7 @@ EDITABLE = {
     "header": ("title", "seconds", "look", "keyframes", "shot_limit"),
     "b": ("text", "weight"),
     "e": ("name", "description", "source"),
-    "s": ("action", "continues"),
+    "s": ("action", "continues", "one_take"),
 }
 
 
@@ -956,8 +1052,18 @@ def edit(plan, row_id, fields):
     if prefix == "b":
         row.update(_read_beat({"text": row["text"], "weight": row["weight"], **fields}, row_id))
     elif prefix == "s":
-        merged = read_shots([{**{k: row[k] for k in ("action", "continues")}, **fields}], names(plan))[0]
-        row.update(merged)
+        fields = dict(fields)
+        if "one_take" in fields:
+            # Absent rather than false, so a plan written before the field
+            # and one that never used it are the same document.
+            if fields.pop("one_take"):
+                row["one_take"] = True
+            else:
+                row.pop("one_take", None)
+        if fields:
+            merged = read_shots([{**{k: row[k] for k in ("action", "continues")}, **fields}],
+                                names(plan))[0]
+            row.update(merged)
     else:
         _edit_entity(plan, row, fields)
     return validate(plan)

@@ -6,6 +6,23 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A request longer than one shot is planned as a piece by itself.** A fresh
+clip longer than 15 seconds, longer than the video model renders at all, or a
+message naming several shots used to be rendered as one clip the model chose
+the length of. Code now reads the turn's answer and the person's words and,
+in those cases, plans the message as a Director brief instead, saying why.
+Nothing renders until the plan is approved, and while one clip could hold the
+request the plan has a *Render it as one clip* button. A clip after or in
+place of one on the strip is never switched, and the length the person said
+wins over the one the model wrote.
+
+**A planned shot can be one long take.** Director splits shots over 15
+seconds into chained clips, and that stays the default. A shot can now be
+marked *One take* on the plan card, which runs it to what the video family
+can render before cutting; a brief asking for "one continuous shot" is
+planned as one beat of one take; and the card says beside a long take that
+one clip drifts more than chained shots.
+
 **The chat reads the small models' replies again.** On `lfm3-omni` every turn
 failed: the model writes a stray `{"act": "say"}` object before the fenced
 answer, and the reply was read as one value and refused. The reply reader now

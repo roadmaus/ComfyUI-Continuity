@@ -50,7 +50,7 @@ from aiohttp import web
 
 from server import PromptServer
 
-from .. import chat, jobs, media, models as core_models, refine_local, refine_remote, refmod
+from .. import chat, director, jobs, media, models as core_models, refine_local, refine_remote, refmod
 from .. import refine_routes, refine_skill, server_routes, settings
 from ..families import manifest, refine, registry
 from ..guard import same_origin
@@ -780,7 +780,34 @@ def _run(body):
         out["reask"] = quoted
     if verdict["act"] == chat.ACT_RENDER:
         out["action"] = _stamp(block, verdict["action"], ledger, rail, cast)
+        # A fresh clip longer than one shot holds well, or a request for
+        # several shots, is planned as a piece instead (§5.1 of the spec).
+        # Code decides, on the model's own reading of the request, so "make
+        # it 20 seconds" about a clip stays a change to that clip. The action
+        # rides along as `held` while one clip could hold it, so the room
+        # can still render it as one if that is what the person wants.
+        ceiling = _ceiling(rail)
+        why = director.wants_plan(out["action"], asked, ceiling)
+        # A fresh clip is as long as the person said, where they said, over
+        # what the model wrote — the same rule a brief's length follows. A
+        # small model asked for "one continuous 40 second shot" writes ten.
+        said = director.asked_seconds(asked)
+        fresh = not (out["action"].get("after") or out["action"].get("replaces"))
+        if out["action"]["kind"] == chat.KIND_VIDEO and fresh and said and why != director.OVER_CEILING \
+                and (not ceiling or said <= ceiling):
+            out["action"] = {**out["action"], "seconds": said}
+        if why:
+            held = out.pop("action")
+            out["plan"] = why
+            if why != director.OVER_CEILING:
+                out["held"] = held
     return out
+
+
+def _ceiling(rail):
+    """The longest clip the rail's video family renders, in seconds, or None."""
+    described = manifest.describe(rail.get("video_family")) or {}
+    return ((described.get("canvas") or {}).get("frames") or {}).get("max_seconds")
 
 
 def _stamp_rail(block):

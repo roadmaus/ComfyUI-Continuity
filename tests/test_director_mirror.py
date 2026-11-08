@@ -73,6 +73,15 @@ PLANS = {
         0: [("a", "new")], 1: [("b", "cut")], 2: [("c", "new")], 3: [("d", "pin")]}, limit=60),
 }
 
+# One take: a shot asked for unbroken runs to the family's ceiling before it
+# is cut, beside chained shots that still split at the plan's limit; and with
+# no ceiling on the rail, to the plan's own maximum.
+_takes = plan(70, ["long", "medium"], {0: [("one unbroken take", "new")], 1: [("b", "cut")]},
+              rail={"video": "x", "max_seconds": 20})
+PLANS["one take beside chained shots"] = director.edit(_takes, "s1", {"one_take": True})
+PLANS["one take with no ceiling"] = director.edit(
+    plan(90, ["medium"], {0: [("a", "new")]}), "s1", {"one_take": True})
+
 # Plans with renders on them, for the states: a walk through prep and the run
 # the way the room makes one, with a redo and an edit that leave rows stale,
 # and words that make the JSON escape (quotes, a newline, accents, a CJK
@@ -131,7 +140,8 @@ const allots = JSON.parse(process.argv[3]);
 const out = { plans: {}, allots: [], refused: null };
 for (const [name, plan] of Object.entries(plans)) {
   out.plans[name] = { seconds: d.allotPlan(plan), clips: d.clips(plan), rows: d.rows(plan),
-                      limit: d.limitOf(plan), floor: d.floorOf(plan) };
+                      limit: d.limitOf(plan), floor: d.floorOf(plan),
+                      shotLimits: plan.shots.map((shot) => d.limitOf(plan, shot)) };
 }
 for (const [total, weights, floors] of allots) out.allots.push(d.allot(total, weights, floors));
 try { d.allot(3, [1, 1], [2, 2]); } catch (error) { out.refused = error.message; }
@@ -173,6 +183,8 @@ for name, doc in PLANS.items():
     check(f"{name}: seconds", mine["seconds"], director.allot_plan(doc))
     check(f"{name}: clips", mine["clips"], director.clips(doc))
     check(f"{name}: rows", mine["rows"], director.rows(doc))
+    check(f"{name}: each shot's limit", mine["shotLimits"],
+          [director.limit_of(doc, shot) for shot in doc["shots"]])
     check(f"{name}: limit", mine["limit"], director.limit_of(doc))
     check(f"{name}: floor", mine["floor"], director.floor_of(doc))
 

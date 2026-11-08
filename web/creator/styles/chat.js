@@ -377,6 +377,8 @@ export const css = `
   font-size: calc(11px * var(--mmc-type)); color: var(--mmc-faint);
 }
 .mmc-ch-briefmark svg { stroke: currentColor; fill: none; stroke-width: 2; }
+/* The way out of a plan the room made by itself: one clip after all. */
+.mmc-ch-oneclip { display: flex; justify-content: flex-start; }
 .mmc-ch-send { background: var(--mmc-accent); color: var(--mmc-on-accent); }
 .mmc-ch-send svg { stroke: currentColor; fill: none; stroke-width: 2.2; }
 .mmc-ch-send:disabled { background: var(--mmc-surface-2); color: var(--mmc-off); cursor: default; }

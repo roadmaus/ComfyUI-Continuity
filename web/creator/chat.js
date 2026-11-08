@@ -659,7 +659,9 @@ function turnWords(result, sent) {
  *  the newest. A card whose plan a later brief replaced is drawn as a record
  *  and cannot be changed (`director.js`). */
 function livePlan(messages = state.messages) {
-  return messages.findLast((message) => message.plan?.doc) ?? null;
+  // A plan the room made unasked and the person turned down for one clip
+  // stays in the transcript as a record, and is nobody's plan.
+  return messages.findLast((message) => message.plan?.doc && !message.plan.dropped) ?? null;
 }
 
 /** The last thing a stretch of the transcript made that has a picture. */
@@ -1757,6 +1759,14 @@ class Room {
               ["turnLeft", t("Ask again from here"), () => this.again(index)],
             ], index, flight),
           ].filter(Boolean)));
+        }
+        if (message.plan?.held && message === livePlan()) {
+          nodes.push(el("div", { class: "mmc-ch-oneclip" }, [
+            el("button", { class: "mmc-ch-door", text: t("Render it as one clip"),
+                           disabled: state.busy || undefined,
+                           title: t("Turn the plan down and render what you asked for as a single clip. Past about 15 seconds one clip drifts more than chained shots."),
+                           onclick: () => this.oneClip(message) }),
+          ]));
         }
         if (message.card) nodes.push(this.renderCard(message.card, message));
         if (message.plan?.doc) nodes.push(this.planCardFor(message));
@@ -2870,6 +2880,16 @@ class Room {
     state.tokens = null;
     state.busy = false;
 
+    // Longer than one shot holds well, longer than the family renders, or
+    // several shots named: the server held the clip back and the message is
+    // planned as a piece instead (`director.wants_plan`). The room switches
+    // by itself, since a plan is only words until the person asks for more;
+    // the clip it held rides on the plan for "Render it as one clip".
+    if (turn.plan && last?.role === "user") {
+      last.brief = true;
+      return this.askPlan(last, { why: turn.plan, held: turn.held ?? null });
+    }
+
     const message = { role: "assistant", say: turn.say || "" };
     state.messages.push(message);
     notify();
@@ -2890,7 +2910,7 @@ class Room {
    * room's questions is sent beside the brief it answers, and is planned
    * without asking again.
    */
-  async askPlan(message) {
+  async askPlan(message, auto = null) {
     state.busy = true;
     state.error = null;
     this.paint();
@@ -2924,12 +2944,38 @@ class Room {
       return notify();
     }
     const doc = result.plan;
+    const words = { title: doc.title, seconds: doc.seconds, count: doc.shots.length };
+    const why = {
+      long: t("That is longer than one shot holds together, so here it is planned as {count} shots chained on the strip: “{title}”, {seconds} seconds. Change anything on it, or render it as one clip.", words),
+      ceiling: t("That is longer than the video model renders in one clip, so here it is planned as {count} shots chained on the strip: “{title}”, {seconds} seconds. Change anything on it before it renders.", words),
+      shots: t("You named several shots, so here they are as a plan: “{title}”, {seconds} seconds in {count} shots. Change anything on it, or render it as one clip.", words),
+    };
     state.messages.push({
       role: "assistant",
-      say: t("A plan for “{title}”: {seconds} seconds in {count} shots. Press anything on it to change it.",
-             { title: doc.title, seconds: doc.seconds, count: doc.shots.length }),
-      plan: { doc, warnings: result.warnings ?? [] },
+      say: why[auto?.why]
+        ?? t("A plan for “{title}”: {seconds} seconds in {count} shots. Press anything on it to change it.", words),
+      plan: { doc, warnings: result.warnings ?? [], ...(auto?.held ? { held: auto.held } : {}) },
     });
+    notify();
+  }
+
+  /**
+   * "Render it as one clip": the plan the room made unasked is turned down,
+   * and the clip the turn asked for is rendered as the turn would have. The
+   * plan stays on screen as a record but is no longer the chat's, so what is
+   * said next is an ordinary turn again.
+   */
+  async oneClip(planMessage) {
+    const plan = planMessage.plan;
+    const action = plan?.held;
+    if (!action || state.busy) return;
+    delete plan.held;
+    plan.dropped = true;
+    state.turn += 1;
+    const message = { role: "assistant", say: t("As one clip, then.") };
+    state.messages.push(message);
+    notify();
+    await this.queueRender(action, message);
     notify();
   }
 
