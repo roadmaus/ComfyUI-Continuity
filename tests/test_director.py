@@ -408,3 +408,90 @@ check("one take off again leaves no field behind",
 check("one take on a shot is all an edit needs: the action stays",
       next(s for s in took["shots"] if s["id"] == "s2")["action"],
       next(s for s in lighthouse(seconds=60)["shots"] if s["id"] == "s2")["action"])
+
+
+# ---- arranging shots: added, taken out, moved ---------------------------------------
+#
+# Rows are named by id, so a shot that moves keeps its record, and what moved
+# around it goes stale on its own: the clip behind it now follows another
+# clip's handle. A beat is where its shots are; one left empty goes.
+
+CLOSE = {"action": "close on @bottle in @george's hand", "continues": "cut"}
+added = director.add_shot(done, CLOSE, beat="b2")
+check("a shot added to a beat goes at its end, under a new id",
+      [(s["id"], s["beat"]) for s in added["shots"]],
+      [("s1", "b1"), ("s2", "b2"), ("s3", "b2"), ("s5", "b2"), ("s4", "b3")])
+check("…and the seconds still add up", sum(c["seconds"] for c in director.clips(added)), 40)
+st = director.states(added)
+check("…the beat's other shots are stale (shorter), the one before the beat is not",
+      (st["s1"], st["s2"], st["s3"], st["s5"]), ("approved", "stale", "stale", "planned"))
+check("…and so is the clip now behind the new shot", st["s4"], "stale")
+check("a shot added before another goes in that shot's beat, before it",
+      [s["id"] for s in director.add_shot(done, CLOSE, before="s2")["shots"]], ["s1", "s5", "s2", "s3", "s4"])
+check("…after another, after it, in its beat",
+      [(s["id"], s["beat"]) for s in director.add_shot(done, CLOSE, after="s4")["shots"]][-1], ("s5", "b3"))
+check("a shot added before the first opens the piece as new",
+      director.add_shot(done, CLOSE, before="s1")["shots"][0]["continues"], "new")
+refuses("a shot with nowhere to go", lambda: director.add_shot(done, CLOSE), "say where")
+refuses("a shot with two places to go", lambda: director.add_shot(done, CLOSE, before="s1", after="s2"),
+        "say where")
+refuses("a shot placed by a shot that is not there", lambda: director.add_shot(done, CLOSE, after="s9"),
+        "no shot s9")
+refuses("a shot placed in a beat that is not there", lambda: director.add_shot(done, CLOSE, beat="b9"),
+        "no beat b9")
+
+less = director.remove_shot(done, "s3")
+check("a shot taken out leaves the others as they were",
+      [s["id"] for s in less["shots"]], ["s1", "s2", "s4"])
+check("…its records go with it", sorted(k for k in less["renders"] if k in ("s3", "kf.s3")), [])
+st = director.states(less)
+check("…what came before it is still current, what came after is stale; the shot left alone in "
+      "its beat has the whole beat now, which is over the limit, so it is cut in two",
+      (st["s1"], sorted(k for k in st if k.startswith("s2")), st["s4"]),
+      ("approved", ["s2.1", "s2.2"], "stale"))
+alone = director.remove_shot(done, "s1")
+check("a beat's last shot takes the beat with it",
+      ([b["id"] for b in alone["beats"]], [s["id"] for s in alone["shots"]]), (["b2", "b3"], ["s2", "s3", "s4"]))
+check("…and the shot now first opens the piece", alone["shots"][0]["continues"], "new")
+refuses("a shot the plan does not have", lambda: director.remove_shot(done, "s9"), "no shot s9")
+single = director.new_plan("one", director.read_basics({"title": "One", "seconds": 6, "look": ""}), RAIL)
+single = director.set_shots(director.add_beats(single, [{"text": "a heron", "weight": "medium"}]), "b1",
+                            [{"action": "a heron lifts off", "continues": "new"}])
+refuses("the plan's only shot", lambda: director.remove_shot(single, "s1"), "only shot")
+refuses("the plan's only beat", lambda: director.remove_beat(single, "b1"), "only beat")
+check("a beat taken out takes its shots",
+      [s["id"] for s in director.remove_beat(done, "b2")["shots"]], ["s1", "s4"])
+
+moved = director.move_shot(done, "s4", before="s1")
+check("a shot moved before the first opens the piece, in the first beat, and its empty beat goes",
+      ([(s["id"], s["beat"], s["continues"]) for s in moved["shots"]], [b["id"] for b in moved["beats"]]),
+      ([("s4", "b1", "new"), ("s1", "b1", "new"), ("s2", "b2", "new"), ("s3", "b2", "cut")], ["b1", "b2"]))
+check("…its record moved with it", moved["renders"]["s4"]["handle"], done["renders"]["s4"]["handle"])
+check("…stale, since it follows nothing now, and everything behind it is too",
+      [k for k, v in director.states(moved).items() if v == "stale" and k.startswith("s")],
+      ["s4", "s1", "s2", "s3"])
+within = director.move_shot(done, "s2", after="s3")
+check("a shot moved within its beat", [s["id"] for s in within["shots"]], ["s1", "s3", "s2", "s4"])
+check("…before a later one", [s["id"] for s in director.move_shot(done, "s1", before="s3")["shots"]],
+      ["s2", "s1", "s3", "s4"])
+check("…before an earlier one", [s["id"] for s in director.move_shot(done, "s3", before="s2")["shots"]],
+      ["s1", "s3", "s2", "s4"])
+check("…to its own place is no move", [s["id"] for s in director.move_shot(done, "s2", before="s3")["shots"]],
+      [s["id"] for s in done["shots"]])
+check("…to the end of another beat", [(s["id"], s["beat"]) for s in director.move_shot(done, "s1", beat="b3")["shots"]],
+      [("s2", "b2"), ("s3", "b2"), ("s4", "b3"), ("s1", "b3")])
+refuses("a shot moved next to itself", lambda: director.move_shot(done, "s2", after="s2"), "next to itself")
+refuses("a shot that is not there moved", lambda: director.move_shot(done, "s9", before="s1"), "no shot s9")
+
+check("an id freed by a removal is never minted again",
+      director.add_shot(director.remove_shot(done, "s4"), CLOSE, beat="b2")["shots"][-1]["id"], "s5")
+
+check("arrange: add reads the words as a model's",
+      director.arrange(done, "add", beat="b2", action="close on @bottle", continues="cut")["shots"][3]["action"],
+      "close on @bottle")
+refuses("arrange: an added shot citing nobody", lambda: director.arrange(
+    done, "add", beat="b2", action="close on @nobody", continues="cut"), "cites @nobody")
+check("arrange: remove a shot", len(director.arrange(done, "remove", shot="s3")["shots"]), 3)
+check("arrange: remove a beat", len(director.arrange(done, "remove", beat="b2")["beats"]), 2)
+check("arrange: move", director.arrange(done, "move", shot="s4", before="s1")["shots"][0]["id"], "s4")
+refuses("arrange: something else", lambda: director.arrange(done, "swap", shot="s1"), "add, remove or move")

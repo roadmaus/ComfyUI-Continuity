@@ -386,3 +386,18 @@ check("one cancelled from ComfyUI's own queue is said so",
       ("failed", "cancelled"))
 
 passed("the plan route plans with the room's backend, rail and cast")
+
+# ---- arranging, with no model ---------------------------------------------------------
+
+moved = route._arrange({"plan": doc, "op": "move", "shot": "s2", "before": "s1"})["plan"]
+check("the arrange route moves a shot by the server's rules, the emptied beat going with it",
+      ([s["id"] for s in moved["shots"]], [b["id"] for b in moved["beats"]]), (["s2", "s1"], ["b1"]))
+added = route._arrange({"plan": doc, "op": "add", "beat": "b1", "action": "close on @bottle",
+                        "continues": "cut"})["plan"]
+check("…adds a typed shot through the shots reader", [(s["id"], s["beat"]) for s in added["shots"]],
+      [("s1", "b1"), ("s3", "b1"), ("s2", "b2")])
+try:
+    route._arrange({"plan": doc, "op": "add", "beat": "b1", "action": "close on @nobody", "continues": "cut"})
+    check("…and refuses a citation of nobody", False, True)
+except director.PlanError as problem:
+    check("…and refuses a citation of nobody", "cites @nobody" in str(problem), True)

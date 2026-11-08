@@ -247,7 +247,7 @@ saying so.
 ### 5.4 Iterating on the plan
 
 While a plan is open, a message in the room is a **plan turn**: one call,
-shown the plan with its row ids, that answers one of three things:
+shown the plan with its row ids, that answers one of six things:
 
 - `{act: "edit", row, change}`: change one row (a beat, an entity, a shot, or
   the header). The row's own call runs again with the change, or, for a
@@ -255,17 +255,36 @@ shown the plan with its row ids, that answers one of three things:
 - `{act: "replan"}`: rewrite from the beats down, for a change that touches
   everything ("make it 20 seconds", "set it at night").
 - `{act: "say", say}`: answer a question about the plan.
+- `{act: "add", place, change}`: one more shot. The shots call runs once
+  more, shown the beat it joins and that beat's shots, told where the new
+  one goes and what it shows, and writes the one shot. Nowhere said is the
+  end of the last beat.
+- `{act: "remove", row}`: a shot, or a beat with its shots, taken out. No
+  call: code does it. A beat's last shot takes the beat with it; the plan's
+  last shot cannot go.
+- `{act: "move", row, place}`: a shot put somewhere else, into whatever beat
+  that is. No call. Its id goes with it, so its render does too; what now
+  follows it is stale on its own.
 
 Every change recomputes what code owns (seconds, splits, `after`) and marks
 anything downstream stale through its fingerprint (§6).
 
 The turn call is shown the plan in the card's own words (`the piece`, `beat
-2`, `shot 3`, `@keeper`), never the ids. A length change ("make it 20
-seconds") is an edit of the piece: code shares the new length out, and plans
-again from the beats only when the shots cannot fit it. A replan keeps every
-entity the plan holds, with its sheet, and asks only for what is new. Beats
-and shots get new ids, so their old clips have no row left to be stale
-against and their records go.
+2`, `shot 3`, `@keeper`), never the ids. A `place` is words too — "after shot
+2", "before the last shot", "in beat 2", "first", "last" — read by code, and
+read off the person's own words first: "move shot 3 before shot 1" says
+where as plainly as which, and so do "drop shot 2", "another shot of…" and
+"swap shots 2 and 3", which code turns into their acts whatever the model
+read. A length change ("make it 20 seconds") is an edit of the piece: code
+shares the new length out, and plans again from the beats only when the
+shots cannot fit it. A replan keeps every entity the plan holds, with its
+sheet, and asks only for what is new. Beats and shots get new ids, so their
+old clips have no row left to be stale against and their records go.
+
+The same three moves are on the card: up, down and out under each shot's
+seconds, and *Add a shot* under each beat, where the words typed go through
+the shots reader as a model's would. The card asks the server
+(`director/arrange`) and draws what comes back, as it does for an edit.
 
 ### 5.5 Run
 

@@ -593,6 +593,77 @@ function frameOf(plan, shot, sums, picture) {
 }
 
 /**
+ * A shot's own buttons: up, down, and out. Rearranging is the server's
+ * (`director/arrange`, `director.move_shot` and `remove_shot`); the card only
+ * says which shot and where. Up is before the shot above it and down is after
+ * the one below, whichever beat they are in, so a shot walks across a beat
+ * line by walking. Drawn faint and shown under the pointer or the keyboard,
+ * since a plan reads as a plan rather than as a toolbar.
+ */
+function tools(doc, shot, live, arrange) {
+  if (!live || !arrange) return null;
+  const at = doc.shots.indexOf(shot);
+  const above = doc.shots[at - 1];
+  const below = doc.shots[at + 1];
+  const alone = doc.shots.filter((s) => s.beat === shot.beat).length === 1;
+  const button = (name, title, enabled, onclick, cls = "") => el("button", {
+    class: `mmc-dr-tool ${cls}`, title, "aria-label": title, disabled: enabled ? null : true, onclick,
+  }, [icon(name, 13)]);
+  return el("span", { class: "mmc-dr-tools" }, [
+    button("chevron", t("Move this shot up"), Boolean(above),
+           () => arrange("move", { shot: shot.id, before: above.id }), "up"),
+    button("chevron", t("Move this shot down"), Boolean(below),
+           () => arrange("move", { shot: shot.id, after: below.id })),
+    button("close", alone
+             ? t("Take this shot out. It is the only shot of its beat, so the beat goes with it.")
+             : t("Take this shot out of the plan."),
+           doc.shots.length > 1, () => arrange("remove", { shot: shot.id })),
+  ]);
+}
+
+/**
+ * The line under a beat's shots that adds one: a button, and pressed, a
+ * field for what the shot shows. Enter keeps it and the server reads the
+ * words as it reads a model's (names checked), Escape or an empty field
+ * drops it. The join is a new angle on the beat's moment, which the select
+ * on the new row changes.
+ */
+function addLine(doc, beat, live, arrange) {
+  if (!live || !arrange) return null;
+  const line = el("div", { class: "mmc-dr-addline" });
+  const button = el("button", {
+    class: "mmc-dr-add", title: t("Add a shot at the end of this beat."),
+    onclick: () => {
+      const area = el("textarea", {
+        class: "mmc-dr-input", rows: "1", placeholder: t("What the new shot shows…"),
+        "aria-label": t("New shot"),
+      });
+      let done = false;
+      const finish = (keep) => {
+        if (done) return;
+        done = true;
+        const action = area.value.replace(/\s+/g, " ").trim();
+        area.replaceWith(button);
+        if (keep && action) arrange("add", { beat: beat.id, action, continues: "cut" });
+      };
+      area.addEventListener("input", () => { area.style.height = "auto"; area.style.height = `${area.scrollHeight}px`; });
+      area.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); finish(true); }
+        else if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); finish(false); }
+      });
+      area.addEventListener("blur", () => setTimeout(() => {
+        if (area.isConnected && document.activeElement === area) return;
+        finish(true);
+      }, 0));
+      button.replaceWith(area);
+      area.focus();
+    },
+  }, [icon("plus", 12), el("span", { text: t("Add a shot") })]);
+  line.append(button);
+  return line;
+}
+
+/**
  * The piece's length drawn to scale: a strip the width of the card, cut into
  * the beats, each beat into its shots, each shot into the clips the run will
  * make of it. It is the arithmetic above made visible, so a weight changed on a
@@ -639,16 +710,18 @@ function linkShots(card) {
  * doubts the planning calls kept rather than threw away, an edit on its way to
  * the server, and the sentence the last one was refused with. `hooks.live`
  * says whether this is the chat's plan (editable) or a record of one replaced
- * since; `hooks.edit(row, fields)` sends one row's change; `hooks.family(id)`
- * names a family for the rail line; `hooks.picture(handle)` is a landed
- * render's thumbnail URL; `hooks.make()` renders the prep rows that are ready
- * (`prepSteps`), and `hooks.busy` holds it while the room is busy.
+ * since; `hooks.edit(row, fields)` sends one row's change; `hooks.arrange(op,
+ * fields)` adds, takes out or moves a shot; `hooks.family(id)` names a family
+ * for the rail line; `hooks.picture(handle)` is a landed render's thumbnail
+ * URL; `hooks.make()` renders the prep rows that are ready (`prepSteps`), and
+ * `hooks.busy` holds it while the room is busy.
  */
 export function planCard(plan, hooks = {}) {
   const doc = plan.doc;
   const live = Boolean(hooks.live) && !plan.pending;
   const sums = arithmetic(doc);
   const edit = (row, fields) => hooks.edit?.(row, fields);
+  const arrange = hooks.arrange ? (op, fields) => hooks.arrange(op, fields) : null;
   const family = hooks.family ?? ((id) => id);
   const picture = hooks.picture ?? null;
 
@@ -730,9 +803,13 @@ export function planCard(plan, hooks = {}) {
           takeOf(doc, shot, sums.seconds[shot.id], live, edit),
           frameOf(doc, shot, sums, picture),
         ].filter(Boolean)),
-        el("span", { class: "mmc-dr-secs", text: seconds(sums.seconds[shot.id]) }),
+        el("span", { class: "mmc-dr-secs" }, [
+          el("span", { text: seconds(sums.seconds[shot.id]) }),
+          tools(doc, shot, live, arrange),
+        ].filter(Boolean)),
       ])),
-    ])),
+      addLine(doc, beat, live, arrange),
+    ].filter(Boolean))),
   ]);
 
   const entities = doc.entities.length

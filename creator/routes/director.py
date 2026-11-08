@@ -284,23 +284,45 @@ def _edit(body):
     return {"plan": director.edit(plan, row, fields)}
 
 
-@PromptServer.instance.routes.post("/continuity/director/edit")
-@same_origin
-async def director_edit(request):
-    """One row of a plan changed on the card. -> `{"result": {plan}}` inline,
-    or `{"error"}` with the sentence the card shows under the row."""
+def _arrange(body):
+    """-> the plan with a shot added, taken out or moved (`director.arrange`),
+    validated. The card's buttons: no model, the added shot's words typed."""
+    plan = director.validate(body.get("plan"))
+    fields = {k: body.get(k) for k in ("shot", "beat", "before", "after", "action", "continues")}
+    return {"plan": director.arrange(plan, str(body.get("op") or ""), **fields)}
+
+
+async def _inline(request, work, what):
+    """A request the card answers with no model: `{"result": ...}` inline,
+    or `{"error"}` with the sentence the card shows."""
     try:
         body = await request.json()
     except ValueError:
         return web.json_response({"error": "the request body was not JSON"}, status=400)
     loop = asyncio.get_running_loop()
     try:
-        return web.json_response({"result": await loop.run_in_executor(None, _edit, body)})
+        return web.json_response({"result": await loop.run_in_executor(None, work, body)})
     except director.PlanError as problem:
         return web.json_response({"error": str(problem)}, status=400)
     except Exception as problem:  # noqa: BLE001 — said to the card, not swallowed
-        log.exception("[Continuity] a plan edit failed")
+        log.exception("[Continuity] %s failed", what)
         return web.json_response({"error": f"{type(problem).__name__}: {problem}"}, status=500)
+
+
+@PromptServer.instance.routes.post("/continuity/director/edit")
+@same_origin
+async def director_edit(request):
+    """One row of a plan changed on the card. -> `{"result": {plan}}` inline,
+    or `{"error"}` with the sentence the card shows under the row."""
+    return await _inline(request, _edit, "a plan edit")
+
+
+@PromptServer.instance.routes.post("/continuity/director/arrange")
+@same_origin
+async def director_arrange(request):
+    """A shot added, taken out or moved on the card. -> `{"result": {plan}}`
+    inline, or `{"error"}` with the sentence the card shows."""
+    return await _inline(request, _arrange, "arranging a plan")
 
 
 # ---- prep ---------------------------------------------------------------------------

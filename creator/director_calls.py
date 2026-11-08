@@ -953,13 +953,26 @@ def _warnings(log):
 # length the person says wins over any the model writes, a cast member the
 # person cites replaces a person with no call at all, and a picture already
 # made is changed on the edit path rather than drawn again.
+#
+# Three more acts change which shots there are rather than what one says
+# (`director.ARRANGE`): **add** a shot, **remove** a shot or a beat, **move** a
+# shot. Only the add needs the model again — the shots call once more, shown
+# the beat and its shots and told where the new one goes, writing the one
+# shot — and the other two are bookkeeping `director` does with no call. Where
+# a shot goes is a `place`: "after shot 2", "before the last shot", "in beat
+# 2", "first", "last". The model writes one in its own words and code reads it
+# (`placement`); and the same reader runs over the person's words first, as
+# `named_rows` does for the row, since "move shot 3 before shot 1" says where
+# as plainly as it says which, and a small model that answers "after shot 1"
+# is wrong about something that was never in doubt.
 
-TURN_ACTS = ("edit", "replan", "say")
+TURN_ACTS = ("edit", "replan", "say", "add", "remove", "move")
 
 SCHEMAS["turn"] = {"type": "object", "properties": {
     "act": {"type": "string", "enum": list(TURN_ACTS)},
-    "row": {"type": "string"}, "change": {"type": "string"}, "say": {"type": "string"}},
-    "required": ["act", "row", "change", "say"]}
+    "row": {"type": "string"}, "place": {"type": "string"},
+    "change": {"type": "string"}, "say": {"type": "string"}},
+    "required": ["act", "row", "place", "change", "say"]}
 
 CALLS = CALLS + ("turn",)
 
@@ -1046,8 +1059,9 @@ def _sentence(value):
 
 
 def read_turn(raw, plan, text=""):
-    """The turn call -> `{act, row, change, say}`. A change left empty is the
-    person's own words, which say it as well as any rewording would."""
+    """The turn call -> `{act, row, place, change, say}`. A change left empty
+    is the person's own words, which say it as well as any rewording would.
+    `place` is where an added or moved shot goes (`placement`), or None."""
     if not isinstance(raw, dict):
         raise director.PlanError('the reply must be an object with "act", "row", "change" and "say".')
     act = str(raw.get("act") or "").strip().lower()
@@ -1059,13 +1073,41 @@ def read_turn(raw, plan, text=""):
         # back is not one, and is re-asked.
         act = "say"
     if act not in TURN_ACTS:
-        raise director.PlanError(f'"act" must be edit, replan or say; it was {director._shown(raw.get("act"))}.')
+        raise director.PlanError('"act" must be edit, replan, say, add, remove or move; '
+                                 f'it was {director._shown(raw.get("act"))}.')
     change, say = _sentence(raw.get("change")), _sentence(raw.get("say"))
+    out = {"act": act, "row": None, "place": None, "change": change or _sentence(text), "say": say}
     if act == "say":
         if not (say or change):
             raise director.PlanError('a "say" reply needs "say": the sentence to answer with.')
-        return {"act": act, "row": None, "change": "", "say": say or change}
-    row = row_of(plan, raw.get("row")) if act == "edit" else None
+        return {**out, "change": "", "say": say or change}
+    if act == "replan":
+        return out
+    if act == "add":
+        # Where it goes: the place, or failing that the row it was written
+        # against — a beat is its end, a shot is after it.
+        place = placement(plan, raw.get("place"))
+        if place is None and raw.get("row"):
+            try:
+                row = row_of(plan, raw.get("row"))
+            except director.PlanError:
+                row = None
+            if row and row.startswith("b"):
+                place = {"beat": row}
+            elif row and row.startswith("s"):
+                place = {"after": row}
+        return {**out, "place": place}
+    row = row_of(plan, raw.get("row"))
+    if act == "remove":
+        if row[0] not in "bs":
+            raise director.PlanError(
+                f'only a shot or a beat can be taken out; {label_of(plan, row)} is not one. '
+                f'Change the shots instead.')
+        return {**out, "row": row}
+    if act == "move":
+        if not row.startswith("s"):
+            raise director.PlanError(f'only a shot can be moved; {label_of(plan, row)} is not one.')
+        return {**out, "row": row, "place": placement(plan, raw.get("place"))}
     entity = next((e for e in plan["entities"] if e["id"] == row), None)
     if entity and "cited" in (entity.get("source") or {}) and not _cites_cast(text, entity):
         # Somebody the person cast is used as they are, so their row has
@@ -1074,7 +1116,7 @@ def read_turn(raw, plan, text=""):
         raise director.PlanError(
             f"@{entity['name']} is from the cast and is used as they are, so their row "
             f"cannot change. Pick the row the message is about.")
-    return {"act": act, "row": row, "change": change or _sentence(text), "say": say}
+    return {**out, "row": row}
 
 
 def _cites_cast(text, entity):
@@ -1099,13 +1141,22 @@ _NAMED_ROW_RE = re.compile(
     re.IGNORECASE)
 
 
+_NAMED_LIST_RE = re.compile(r"\b(beat|shot)s\s+(\d+(?:\s*(?:,|and|&)\s*\d+)+)\b", re.IGNORECASE)
+
+
 def named_rows(plan, text):
     """The beats and shots the person's words name by number or position ->
     their ids, in order, each once. "The last beat", "shot 3", "the 2nd
-    shot"; one past the end names nothing."""
-    out = []
+    shot", "shots 2 and 3"; one past the end names nothing."""
+    found = []
     for match in _NAMED_ROW_RE.finditer(text or ""):
         word, kind = (match.group(1), match.group(2)) if match.group(2) else (match.group(4), match.group(3))
+        found.append((match.start(), kind, word))
+    for match in _NAMED_LIST_RE.finditer(text or ""):
+        for number in re.findall(r"\d+", match.group(2)):
+            found.append((match.start(), match.group(1), number))
+    out = []
+    for _at, kind, word in sorted(found, key=lambda f: f[0]):
         rows = plan["beats" if kind.lower() == "beat" else "shots"]
         word = word.lower()
         at = len(rows) if word == "last" else _ORDINALS.get(word) or int(word)
@@ -1126,24 +1177,137 @@ def asked_title(text):
     return " ".join(match.group(1).split())[:80] if match else None
 
 
+# Where a shot goes, in words: a shot named next to it, a beat it joins, or
+# an end of the piece. One shot reference, two ways round — "shot 2", "the
+# second shot", "the last shot" — and the same for a beat.
+_ORDINAL_WORDS = "|".join(list(_ORDINALS) + ["last"])
+_SHOT_REF = (r"(?:shot\s*(?:#|no\.?|number)?\s*(\d+)|(?:the\s+)?(" + _ORDINAL_WORDS
+             + r"|\d+)(?:st|nd|rd|th)?\s+shot)")
+_BEAT_REF = (r"(?:beat\s*(?:#|no\.?|number)?\s*(\d+)|(?:the\s+)?(" + _ORDINAL_WORDS
+             + r"|\d+)(?:st|nd|rd|th)?\s+beat)")
+_BETWEEN_RE = re.compile(r"\bbetween\s+(?:shots?\s+)?(\d+)\s+and\s+(?:shot\s+)?(\d+)\b", re.IGNORECASE)
+_NEXT_TO_RE = re.compile(r"\b(before|ahead of|in front of|after|behind|following)\s+" + _SHOT_REF,
+                         re.IGNORECASE)
+_IN_BEAT_RE = re.compile(r"\b(start of|beginning of|opening|open|in|into|to|inside|within|under|end of|"
+                         r"close of|closing)\s+(?:the\s+)?" + _BEAT_REF, re.IGNORECASE)
+_FIRST_RE = re.compile(r"\b(?:first|(?:at|to)\s+the\s+(?:start|beginning|top|front)|open(?:s|ing)?\s+"
+                       r"the\s+piece)\b(?!\s+(?:shot|beat))", re.IGNORECASE)
+_LAST_RE = re.compile(r"\b(?:last|(?:at|to)\s+the\s+(?:end|back|close)|end(?:s|ing)?\s+the\s+piece)\b"
+                      r"(?!\s+(?:shot|beat))", re.IGNORECASE)
+
+
+def _row_at(rows, digits, word):
+    word = (digits or word or "").lower()
+    at = len(rows) if word == "last" else _ORDINALS.get(word) or (int(word) if word.isdigit() else 0)
+    return rows[at - 1]["id"] if 1 <= at <= len(rows) else None
+
+
+def placement(plan, words):
+    """Words saying where a shot goes -> `{"before": shot}`, `{"after":
+    shot}` or `{"beat": beat}` (its end), the keywords `director.add_shot`
+    and `move_shot` take; None when the words say nothing the plan has.
+    "Between shots 2 and 3" is after shot 2; "the start of beat 2" is before
+    its first shot; "first" and "last" are the piece's ends."""
+    text = " ".join(str(words or "").split())
+    shots = plan["shots"]
+    if not text or not shots:
+        return None
+    match = _BETWEEN_RE.search(text)
+    if match:
+        pair = [_row_at(shots, match.group(1), None), _row_at(shots, match.group(2), None)]
+        if all(pair):
+            order = [s["id"] for s in shots]
+            return {"after": min(pair, key=order.index)}
+    match = _NEXT_TO_RE.search(text)
+    if match:
+        anchor = _row_at(shots, match.group(2), match.group(3))
+        if anchor:
+            side = "before" if match.group(1).lower() in ("before", "ahead of", "in front of") else "after"
+            return {side: anchor}
+    match = _IN_BEAT_RE.search(text)
+    if match:
+        beat = _row_at(plan["beats"], match.group(2), match.group(3))
+        if beat:
+            if match.group(1).lower() in ("start of", "beginning of", "opening", "open"):
+                return {"before": next(s["id"] for s in shots if s["beat"] == beat)}
+            return {"beat": beat}
+    if _FIRST_RE.search(text):
+        return {"before": shots[0]["id"]}
+    if _LAST_RE.search(text):
+        return {"after": shots[-1]["id"]}
+    return None
+
+
+# The verbs that say which act a message is, when they open it. Read by code
+# because "drop shot 3" is not an edit however the floor model reads it.
+_REMOVE_RE = re.compile(r"^\s*(?:please\s+)?(?:remove|delete|drop|cut out|take out|take away|"
+                        r"get rid of|lose|scrap|ditch|kill)\b", re.IGNORECASE)
+_ADD_RE = re.compile(r"^\s*(?:please\s+)?(?:add|insert|include|put in|squeeze in|slip in)\b"
+                     r"|\b(?:another|a new|an extra|one more|an additional|a further)\s+shot\b",
+                     re.IGNORECASE)
+_MOVE_RE = re.compile(r"^\s*(?:please\s+)?(?:move|put|shift|bring|reorder|swap|switch)\b", re.IGNORECASE)
+_SWAP_RE = re.compile(r"^\s*(?:please\s+)?(?:swap|switch|exchange)\b", re.IGNORECASE)
+
+
+def asked_act(text):
+    """The act the person's opening verb names — add, remove, move — or None."""
+    if _REMOVE_RE.match(text or ""):
+        return "remove"
+    if _ADD_RE.search(text or ""):
+        return "add"
+    if _MOVE_RE.match(text or ""):
+        return "move"
+    return None
+
+
 def overrule(turn, plan, text):
     """The turn call's answer, with what the words say plainly put first ->
     `(turn, note)`; `note` says what code changed, or is None.
 
     A title or a length the person names, with no beat or shot named beside
     it, is the piece's header ("make shot 2 five seconds" is not a length
-    for the piece). A beat or shot named alone is the row an edit is about.
-    A question keeps its answer: "is 20 seconds too long?" asks nothing."""
+    for the piece). A beat or shot named alone is the row an edit or a
+    removal is about. "Drop", "add" and "move" opening the message are the
+    act, when the rest of the words name what they need: one row to drop, a
+    shot and a place to move it to. A place said in the words is where an
+    added or moved shot goes, whatever the model wrote. A question keeps its
+    answer: "is 20 seconds too long?" asks nothing."""
     named = named_rows(plan, text)
     asking = text.rstrip().endswith("?")
+    place = placement(plan, text)
+    want = None if asking else asked_act(text)
+    if want == "remove" and len(named) == 1 and (turn["act"], turn["row"]) != ("remove", named[0]):
+        return {**turn, "act": "remove", "row": named[0], "place": None}, f"{turn['act']} -> remove {named[0]}"
+    if want == "move":
+        shots = [r for r in named if r.startswith("s")]
+        row, to = None, place
+        if _SWAP_RE.match(text) and len(shots) == 2 and not place:
+            order = [s["id"] for s in plan["shots"]]
+            first, second = sorted(shots, key=order.index)
+            row, to = second, {"before": first}
+        elif shots and place:
+            row = shots[0]
+        if row and (turn["act"], turn["row"], turn["place"]) != ("move", row, to):
+            return {**turn, "act": "move", "row": row, "place": to}, f"{turn['act']} -> move {row} {_said_place(to)}"
+    if want == "add" and turn["act"] in ("edit", "say", "replan"):
+        return {**turn, "act": "add", "row": None, "place": place,
+                "change": turn["change"] or _sentence(text)}, f"{turn['act']} -> add {_said_place(place)}"
+    if turn["act"] in ("add", "move") and place and turn["place"] != place:
+        return {**turn, "place": place}, f"place -> {_said_place(place)}"
+    if turn["act"] in ("add", "move", "remove"):
+        return turn, None
     header = asked_title(text) or (not named and asked_seconds(text) not in (None, plan["seconds"]))
-    if header and not asking and turn["act"] != "replan" and turn["row"] != director.HEADER:
+    if header and not asking and want is None and turn["act"] != "replan" and turn["row"] != director.HEADER:
         was = turn["row"] or turn["act"]
         return {**turn, "act": "edit", "row": director.HEADER,
                 "change": turn["change"] or _sentence(text)}, f"{was} -> header"
     if turn["act"] == "edit" and len(named) == 1 and turn["row"] != named[0]:
         return {**turn, "row": named[0]}, f"{turn['row']} -> {named[0]}"
     return turn, None
+
+
+def _said_place(place):
+    return " ".join(f"{k} {v}" for k, v in (place or {}).items()) or "nowhere"
 
 
 def _now_line(plan):
@@ -1256,7 +1420,8 @@ def plan_turn(plan, text, ask, cast=(), ledger=(), steps=SMALL):
                 # all — is no matter when the words name the row themselves.
                 named = named_rows(plan, text)
                 row = named[0] if len(named) == 1 else director.HEADER if asked_title(text) else None
-                if row is None or not isinstance(raw, dict) or raw.get("act") != "edit":
+                if row is None or not isinstance(raw, dict) \
+                        or raw.get("act") not in ("edit", "remove", "move"):
                     raise
                 return read_turn({**raw, "row": row}, plan, text)
 
@@ -1272,11 +1437,17 @@ def plan_turn(plan, text, ask, cast=(), ledger=(), steps=SMALL):
         if turn["act"] == "replan":
             out["plan"] = replan(plan, turn["change"], ask, cast, ledger, seconds, log, text,
                                  steps)
+        elif turn["act"] == "add":
+            out.update(_add_shot(plan, turn["place"], turn["change"], ask, log, cast, ledger))
+        elif turn["act"] == "remove":
+            out.update(_remove_row(plan, turn["row"]))
+        elif turn["act"] == "move":
+            out.update(_move_shot(plan, turn["row"], turn["place"]))
         else:
             out.update(_edit_row(plan, turn["row"], turn["change"], text, ask, log,
                                  cast, ledger, seconds, steps))
     except director.PlanError as problem:
-        if len(log) == 1 and log[0]["call"] == "turn":
+        if len(log) == 1 and log[0]["call"] == "turn" and not log[0]["ok"]:
             # The turn call itself failed twice: what reaches the person is
             # what to do, not the sentence the model was re-asked with.
             problem = ("Could not tell what that changes in the plan. Name the row as "
@@ -1372,6 +1543,76 @@ def _edit_row(plan, row_id, change, text, ask, log, cast, ledger, seconds, steps
                   if r["kind"] == "keyframe" and r["shot"] == row_id), None)
     out["render"] = _changed_picture(plan, new, frame, change) if frame else None
     return out
+
+
+def _anchor_of(plan, place):
+    """A place -> `(beat id, the shot it is next to or None, side)`."""
+    if "beat" in place:
+        return place["beat"], None, "at the end of"
+    side = "before" if "before" in place else "after"
+    anchor = next(s for s in plan["shots"] if s["id"] == place[side])
+    return anchor["beat"], anchor["id"], side
+
+
+def new_shot_message(plan, place, change, cast=(), ledger=()):
+    """The shots call, asked for one more shot: the beat it joins with the
+    shots that beat has, where the new one goes among them, and what it is
+    to show. The shots already there are shown so the new one is written
+    around them, and the instruction says not to write them again — the
+    floor model copies what it is shown unless told what the list is for."""
+    beat_id, anchor, side = _anchor_of(plan, place)
+    beat = next(b for b in plan["beats"] if b["id"] == beat_id)
+    seconds = director.allot_plan(plan)
+    numbered = {s["id"]: at for at, s in enumerate(plan["shots"], 1)}
+    siblings = [f"shot {numbered[s['id']]} — {s['action']}" for s in plan["shots"] if s["beat"] == beat_id]
+    where = f"{side} shot {numbered[anchor]}" if anchor else f"{side} this beat"
+    opens = (anchor == plan["shots"][0]["id"] and side == "before")
+    return _message(
+        _block("THE PIECE", [f"\"{plan['title']}\": {plan['brief']}"]),
+        _camera_block(plan),
+        _block("NAMES you may cite", _name_lines(plan, cast, ledger)),
+        _block(f"THIS BEAT (about {seconds[beat_id]} seconds)", [beat["text"]]),
+        _block("ITS SHOTS NOW (already written — do not write them again)", siblings),
+        _block(f"THE NEW SHOT ({where})", [change]),
+        "Write 1 shot: the new one only, showing what THE NEW SHOT says."
+        + (" It opens the piece, so it is \"new\"." if opens else "") + " " + REPLY)
+
+
+def _add_shot(plan, place, change, ask, log, cast, ledger):
+    """A shot the person asked for, written by the shots call and put where
+    the place says — at the end of the last beat when nowhere was said. ->
+    the parts of `plan_turn`'s answer, `row` the new shot's id."""
+    place = place or {"beat": plan["beats"][-1]["id"]}
+    beat_id, _anchor, _side = _anchor_of(plan, place)
+    shot = _call(ask, log, "shots", new_shot_message(plan, place, change, cast, ledger),
+                 # Compared against every shot of the plan, its beat's too
+                 # (`read_shots` spares the beat being written): a new shot
+                 # that repeats one already there is the floor model copying.
+                 lambda raw: _one(read_shots(raw, plan, None, ledger), "shot"),
+                 label="turn.add")
+    new = director.add_shot(plan, shot, **place)
+    had = {s["id"] for s in plan["shots"]}
+    row = next(s["id"] for s in new["shots"] if s["id"] not in had)
+    return {"act": "add", "row": row, "plan": new, "render": None, "recast": None}
+
+
+def _remove_row(plan, row_id):
+    """A shot or a beat taken out, by `director`, with no call."""
+    new = director.remove_beat(plan, row_id) if row_id.startswith("b") else director.remove_shot(plan, row_id)
+    return {"act": "remove", "row": row_id, "plan": new, "render": None, "recast": None}
+
+
+def _move_shot(plan, row_id, place):
+    """A shot moved to its place, by `director`, with no call. A place that
+    is the shot's own ("move the last shot to the end") moves nothing and
+    says so."""
+    if not place:
+        raise director.PlanError(f"Say where {label_of(plan, row_id)} goes: before or after another "
+                                 "shot, into a beat, first or last.")
+    if row_id in place.values():
+        raise director.PlanError(f"{label_of(plan, row_id)} is already there.")
+    new = director.move_shot(plan, row_id, **place)
+    return {"act": "move", "row": row_id, "plan": new, "render": None, "recast": None}
 
 
 def _changed_picture(old, new, row_id, change):

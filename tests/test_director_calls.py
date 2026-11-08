@@ -610,3 +610,119 @@ ask, asked = scripted([fence({"act": "edit", "row": "shot 3", "change": "closer"
                        fence({"shots": [CLOSE]})])
 out = calls.plan_turn(large, "make the last shot a close-up", ask, cast=GEORGE, steps="large")
 check("large: one row is still its own small call", [a["label"] for a in asked], ["turn", "turn.shot"])
+
+
+# ---- arranging shots by talking -------------------------------------------------------
+#
+# Add is the shots call once more, written around the beat's shots; remove and
+# move are `director`'s with no call. Where a shot goes is read off the words.
+
+HAT = {"action": "A conductor's hat lies on an empty seat in @carriage.", "continues": "cut"}
+out, asked = turn("add a shot of a conductor's hat on a seat after shot 2",
+                  [fence({"act": "add", "row": "", "place": "after shot 2",
+                          "change": "A conductor's hat on an empty seat.", "say": ""}),
+                   fence({"shots": [HAT]})])
+check("a shot is added by the shots call, where the place says",
+      ([a["label"] for a in asked], out["act"], out["row"], [s["id"] for s in out["plan"]["shots"]]),
+      (["turn", "turn.add"], "add", "s4", ["s1", "s2", "s4", "s3"]))
+check("…shown the beat's shots and told where the new one goes",
+      ("ITS SHOTS NOW (already written — do not write them again)\n"
+       "shot 2 — @george walks the length of @carriage.\nshot 3 — @george opens the cab door: nobody."
+       in asked[1]["message"],
+       "THE NEW SHOT (after shot 2)\nA conductor's hat on an empty seat." in asked[1]["message"]),
+      (True, True))
+check("…as the model wrote it, in that beat", next(s for s in out["plan"]["shots"] if s["id"] == "s4"),
+      {**HAT, "id": "s4", "beat": "b2"})
+
+out, asked = turn("add a close-up of the door before shot 1",
+                  [fence({"act": "add", "row": "", "place": "last", "change": "Close on the door.", "say": ""}),
+                   fence({"shots": [{"action": "Close on the door of @carriage.", "continues": "cut"}]})])
+check("a place the words say wins over the model's",
+      (out["log"][0]["overruled"], [s["id"] for s in out["plan"]["shots"]], out["plan"]["shots"][0]["continues"]),
+      ("place -> before s1", ["s4", "s1", "s2", "s3"], "new"))
+check("…and the call is told it opens the piece", "It opens the piece" in asked[1]["message"], True)
+
+out, asked = turn("add a shot of the hat",
+                  [fence({"act": "add", "row": "", "place": "", "change": "The hat.", "say": ""}),
+                   fence({"shots": [HAT]})])
+check("nowhere said is the end of the last beat",
+      ([(s["id"], s["beat"]) for s in out["plan"]["shots"]][-1], "THE NEW SHOT (at the end of this beat)"
+       in asked[1]["message"]), (("s4", "b2"), True))
+
+out, asked = turn("add a shot of the hat in beat 1",
+                  [fence({"act": "add", "row": "beat 1", "place": "", "change": "The hat.", "say": ""}),
+                   fence({"shots": [HAT]})])
+check("a beat named is its end", [(s["id"], s["beat"]) for s in out["plan"]["shots"]][:2],
+      [("s1", "b1"), ("s4", "b1")])
+
+out, asked = turn("another shot where he finds the hat",
+                  [fence({"act": "edit", "row": "shot 3", "change": "He finds the hat.", "say": ""}),
+                   fence({"shots": [HAT]})])
+check("\"another shot\" is an add whatever the model read",
+      (out["act"], out["log"][0]["overruled"], len(out["plan"]["shots"])), ("add", "edit -> add nowhere", 4))
+
+out, asked = turn("drop shot 2",
+                  [fence({"act": "edit", "row": "shot 2", "change": "drop it", "say": ""})])
+check("\"drop shot 2\" takes shot 2 out, with no second call, whatever the model read",
+      (len(asked), out["act"], out["row"], out["log"][0]["overruled"], [s["id"] for s in out["plan"]["shots"]]),
+      (1, "remove", "s2", "edit -> remove s2", ["s1", "s3"]))
+check("…and the records of the rows that went are gone",
+      any(k.startswith("s2") or k == "kf.s2" for k in out["plan"]["renders"]), False)
+
+out, asked = turn("remove beat 1",
+                  [fence({"act": "remove", "row": "beat 1", "place": "", "change": "", "say": ""})])
+check("a beat is taken out with its shots, and the shot now first opens the piece",
+      ([b["id"] for b in out["plan"]["beats"]], [(s["id"], s["continues"]) for s in out["plan"]["shots"]]),
+      (["b2"], [("s2", "new"), ("s3", "cut")]))
+
+out, asked = turn("lose the carriage shots, keep the last",
+                  [fence({"act": "remove", "row": "@carriage", "place": "", "change": "", "say": ""}),
+                   fence({"act": "remove", "row": "shot 2", "place": "", "change": "", "say": ""})])
+check("an entity is nobody's to take out: re-asked, and the second answer kept",
+      (out["log"][0]["first_error"].startswith("only a shot or a beat can be taken out; @carriage"),
+       out["row"]), (True, "s2"))
+
+out, asked = turn("move shot 3 before shot 1",
+                  [fence({"act": "move", "row": "shot 3", "place": "after shot 1", "change": "", "say": ""})])
+check("a shot is moved where the words say, into that beat, with no second call",
+      (len(asked), out["log"][0]["overruled"], [(s["id"], s["beat"], s["continues"]) for s in out["plan"]["shots"]]),
+      (1, "move -> move s3 before s1", [("s3", "b1", "new"), ("s1", "b1", "new"), ("s2", "b2", "pin")]))
+check("…its record moved with it, stale now that it follows nothing",
+      ("s3" in out["plan"]["renders"]) if base["renders"].get("s3") else True, True)
+
+out, asked = turn("swap shots 2 and 3",
+                  [fence({"act": "edit", "row": "shot 2", "change": "swap", "say": ""})])
+check("a swap is the later shot moved before the earlier",
+      (out["act"], out["row"], [s["id"] for s in out["plan"]["shots"]]), ("move", "s3", ["s1", "s3", "s2"]))
+
+out, asked = turn("put the first shot last",
+                  [fence({"act": "move", "row": "shot 1", "place": "last", "change": "", "say": ""})])
+check("\"last\" is after the last shot, in its beat",
+      [(s["id"], s["beat"]) for s in out["plan"]["shots"]], [("s2", "b2"), ("s3", "b2"), ("s1", "b2")])
+
+try:
+    turn("move the last shot to the end",
+         [fence({"act": "move", "row": "shot 3", "place": "last", "change": "", "say": ""})])
+    check("a shot moved to its own place", False, True)
+except calls.PlanningFailed as failed:
+    check("a shot moved to its own place is said to be there", str(failed), "shot 3 is already there.")
+try:
+    turn("move shot 2", [fence({"act": "move", "row": "shot 2", "place": "", "change": "", "say": ""})])
+    check("a move with nowhere to go", False, True)
+except calls.PlanningFailed as failed:
+    check("a move with nowhere to go asks where", str(failed).startswith("Say where shot 2 goes"), True)
+
+out, asked = turn("should we drop shot 2?",
+                  [fence({"act": "say", "row": "", "place": "", "change": "", "say": "It is the walk; keep it."})])
+check("a question about dropping a shot is a question", (out["act"], out["plan"]), ("say", None))
+
+for words, want in (("between shots 1 and 2", {"after": "s1"}), ("before the last shot", {"before": "s3"}),
+                    ("after the 2nd shot", {"after": "s2"}), ("in beat 2", {"beat": "b2"}),
+                    ("at the start of beat 2", {"before": "s2"}), ("first", {"before": "s1"}),
+                    ("to the end", {"after": "s3"}), ("after shot 9", None), ("", None),
+                    ("in the first shot he wakes", None)):
+    check(f"placement of {words!r}", calls.placement(base, words), want)
+for words, want in (("drop the second shot", "remove"), ("add a shot of rain", "add"),
+                    ("put shot 1 last", "move"), ("another shot of the door", "add"),
+                    ("make it darker", None), ("swap shots 2 and 3", "move")):
+    check(f"asked act of {words!r}", calls.asked_act(words), want)

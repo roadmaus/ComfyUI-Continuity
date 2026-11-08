@@ -266,11 +266,13 @@ def _per_call(logs, meters, names=("brief", "basics", "beats", "entities", "shot
 def _wanted(calls, plan, want):
     """A script's `want` list -> `[(act, row id or None)]` the plan can
     satisfy. `edit:shot:2`, `edit:beat:last`, `edit:entity:keeper` (any
-    entity whose name holds the word), `edit:header`, `replan`, `say`."""
+    entity whose name holds the word), `edit:header`, `replan`, `say`; and
+    for the acts that arrange shots, `add`, `remove:shot:2`, `move:shot:last`
+    (a bare `remove` or `move` takes any row)."""
     out = []
     for item in want:
         act, _, where = item.partition(":")
-        if act != "edit":
+        if act not in ("edit", "remove", "move") or not where:
             out.append((act, None))
             continue
         kind, _, which = where.partition(":")
@@ -325,6 +327,9 @@ def _turns(pkg, brief, plan, meter, steps="small"):
                 row["changed"] = _row_of(plan, got["row"]) != _row_of(new, got["row"])
             elif got["act"] == "replan" and new:
                 row["changed"] = [b["text"] for b in new["beats"]] != [b["text"] for b in plan["beats"]]
+            elif got["act"] in ("add", "remove", "move") and new:
+                # A shot came, went, or the order moved.
+                row["changed"] = [s["id"] for s in new["shots"]] != [s["id"] for s in plan["shots"]]
         row["wall"] = round(time.time() - started, 1)
         row["overruled"] = next((e.get("overruled") for e in row["log"] if e.get("overruled")), None)
         row["doubted"] = [e["warning"] for e in row["log"] if e.get("warning")]

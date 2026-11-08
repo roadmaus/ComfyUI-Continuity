@@ -654,8 +654,20 @@ function turnWords(result, sent) {
   if (entity) return t("Changed @{name}.", { name: entity.name });
   const beat = sent.beats.findIndex((b) => b.id === row);
   if (beat >= 0) return t("Changed beat {n}.", { n: beat + 1 });
-  const shot = sent.shots.findIndex((s) => s.id === row);
-  if (shot >= 0) return t("Changed shot {n}.", { n: shot + 1 });
+  const was = sent.shots.findIndex((s) => s.id === row) + 1;
+  const now = doc.shots.findIndex((s) => s.id === row) + 1;
+  if (result.act === "add") return t("Added shot {n}.", { n: now });
+  if (result.act === "move") {
+    return was === now ? t("Shot {n} stays where it is.", { n: now })
+                       : t("Shot {was} is now shot {now}.", { was, now });
+  }
+  if (result.act === "remove") {
+    const gone = sent.beats.findIndex((b) => b.id === row) + 1;
+    if (gone) return t("Removed beat {n} and its shots.", { n: gone });
+    const beats = sent.beats.length - doc.beats.length;
+    return beats ? t("Removed shot {n}, and its beat with it.", { n: was }) : t("Removed shot {n}.", { n: was });
+  }
+  if (was) return t("Changed shot {n}.", { n: was });
   return t("Changed the title, length or look.");
 }
 
@@ -3056,6 +3068,25 @@ class Room {
     notify();
   }
 
+  /** A shot added, taken out or moved from the card's own buttons
+   *  (`director/arrange`): the server's rules, the card's words. */
+  async arrangePlan(message, op, fields) {
+    const plan = message.plan;
+    if (!plan || plan.pending) return;
+    plan.pending = true;
+    plan.error = null;
+    notify();
+    const sent = plan.doc;
+    try {
+      const result = await run("/continuity/director/arrange", { plan: sent, op, ...fields });
+      plan.doc = withLanded(plan.doc, sent, result.plan);
+    } catch (error) {
+      plan.error = String(error.message || error);
+    }
+    plan.pending = false;
+    notify();
+  }
+
   /**
    * What the person said while a plan is open, about the plan.
    *
@@ -3112,6 +3143,7 @@ class Room {
       live: message === livePlan(),
       busy: state.busy,
       edit: (row, fields) => this.editPlan(message, row, fields),
+      arrange: (op, fields) => this.arrangePlan(message, op, fields),
       make: () => this.makePieces(message),
       run: () => this.runPlan(message),
       stop: () => this.stopRun(message),

@@ -6,6 +6,25 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A plan's shots can be added, taken out and moved, by talking and on the
+card.** A plan turn could change what a row said and plan the piece again,
+and nothing in between: "drop shot 2" was read as an edit of shot 2, and a
+shot wanted between two others meant a replan that rewrote every beat. The
+turn call now answers three more acts. *Add* runs the shots call once more,
+shown the beat the shot joins and that beat's shots, told where the new one
+goes and what it shows, and writes the one shot. *Remove* takes a shot out,
+or a beat with its shots, and *move* puts a shot somewhere else, into
+whatever beat that is; neither needs the model. Where a shot goes is said in
+words ("after shot 2", "before the last shot", "in beat 2", "first", "last")
+and read by code, off the person's own message first, so "move shot 3 before
+shot 1", "swap shots 2 and 3", "drop the second shot" and "another shot of
+the door" do what they say whatever a small model made of them. Ids go with
+the shots, so a moved shot keeps its render and what now follows it is stale
+on its own; a beat whose last shot goes is gone with it, and the plan's last
+shot stays. The card has the same three moves: up, down and out under each
+shot's seconds, faint until the pointer is on the row, and *Add a shot* under
+each beat, where the words typed go through the same reader as a model's.
+
 **The Chat card sits under Go to, with a plate of its own.** The dashboard
 filed the chat beside the upscaler, under Tools, on the rule that a Go-to card
 only rearranged the room while a tool opened a surface over it. The chat is

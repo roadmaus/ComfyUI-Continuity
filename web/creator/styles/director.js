@@ -129,6 +129,29 @@ export const css = `
   background: color-mix(in srgb, var(--mmc-accent) 12%, transparent);
 }
 .mmc-dr-take:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
+/* --- a shot's own buttons, and the line that adds one ----------------------
+   Up, down and out sit under the shot's seconds, faint until the pointer or
+   the keyboard is on the row, so the list still reads as a plan. */
+.mmc-dr-shot .mmc-dr-secs { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.mmc-dr-tools { display: flex; gap: 1px; margin-right: -3px; opacity: 0; transition: opacity .12s ease; }
+.mmc-dr-shot:hover .mmc-dr-tools, .mmc-dr-shot:focus-within .mmc-dr-tools { opacity: 1; }
+.mmc-dr-tool {
+  display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px;
+  padding: 0; border: 0; border-radius: 4px; background: transparent; color: var(--mmc-faint); cursor: pointer;
+}
+.mmc-dr-tool.up svg { transform: rotate(180deg); }
+.mmc-dr-tool:hover:not(:disabled) { color: var(--mmc-text); background: var(--mmc-wash); }
+.mmc-dr-tool:disabled { opacity: .3; cursor: default; }
+.mmc-dr-tool:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
+.mmc-dr-addline { margin: 1px 0 4px calc(1.4em + 10px + 6.6em + 10px); }
+.mmc-dr-add {
+  display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px 1px 5px;
+  border: 1px dashed var(--mmc-line); border-radius: 999px; background: transparent;
+  color: var(--mmc-faint); cursor: pointer; font: inherit; font-size: calc(11.5px * var(--mmc-type));
+}
+.mmc-dr-add:hover { color: var(--mmc-text); border-color: var(--mmc-dim); }
+.mmc-dr-add:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
+.mmc-dr-addline .mmc-dr-input { margin: 0; }
 .mmc-dr-entity {
   display: grid; grid-template-columns: 7em 4.4em auto 1fr; gap: 10px; align-items: baseline;
 }
@@ -209,11 +232,15 @@ export const css = `
 .mmc-dr-verdict.stale { color: var(--mmc-warn); }
 
 @media (prefers-reduced-motion: reduce) {
-  .mmc-dr-sshot, .mmc-dr-shot { transition: none; }
+  .mmc-dr-sshot, .mmc-dr-shot, .mmc-dr-tools { transition: none; }
+}
+@media (hover: none) {
+  .mmc-dr-tools { opacity: 1; }
 }
 @media (max-width: 560px) {
   .mmc-dr-facts { padding-left: 0; }
   .mmc-dr-facts .mmc-dr-rail { margin-left: 0; }
+  .mmc-dr-addline { margin-left: calc(1.4em + 4px); }
   .mmc-dr-shot { grid-template-columns: 1fr auto; row-gap: 0; margin-left: calc(1.4em + 4px); }
   .mmc-dr-shot::before { display: none; }
   .mmc-dr-shot > :first-child { grid-column: 1 / -1; }

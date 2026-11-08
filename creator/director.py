@@ -1095,6 +1095,141 @@ def edit(plan, row_id, fields):
     return validate(plan)
 
 
+# ---- arranging shots ----------------------------------------------------------------
+#
+# An edit changes what a row says. These change which rows there are and in
+# what order: a shot added, taken out, or moved — on the card by its buttons
+# and in the room by talking (`director_calls`, the add, remove and move acts).
+# The same bargain as an edit: ids are minted, never reused, so a shot moved
+# from third to first keeps its id and its render record, and what changed
+# around it goes stale through its fingerprint rather than by anybody marking
+# it — the clip now behind it depends on a different clip's handle.
+#
+# A beat is where its shots are. A beat whose last shot is taken out or moved
+# away has nothing left to show, and a beat with no shots is not a plan this
+# module keeps (`validate`), so the beat goes with the shot. The card's button
+# says so before it is pressed. The plan's last shot cannot go: a piece is at
+# least one beat of one shot.
+
+ARRANGE = ("add", "remove", "move")
+
+
+def _placement(plan, beat=None, before=None, after=None):
+    """Where a shot goes -> `(beat id, index in that beat's shots)`. Exactly
+    one of `beat` (its end), `before` and `after` (a shot id) is given."""
+    given = [k for k, v in (("beat", beat), ("before", before), ("after", after)) if v]
+    if len(given) != 1:
+        raise PlanError("say where the shot goes: a beat, or before or after one shot.")
+    if beat:
+        if not any(b["id"] == beat for b in plan["beats"]):
+            raise PlanError(f"there is no beat {beat} in the plan.")
+        return beat, sum(1 for s in plan["shots"] if s["beat"] == beat)
+    anchor = next((s for s in plan["shots"] if s["id"] == (before or after)), None)
+    if anchor is None:
+        raise PlanError(f"there is no shot {before or after} in the plan.")
+    siblings = [s["id"] for s in plan["shots"] if s["beat"] == anchor["beat"]]
+    at = siblings.index(anchor["id"])
+    return anchor["beat"], at if before else at + 1
+
+
+def _settle(plan):
+    """A plan whose shots were rearranged -> the plan, in order and valid:
+    shots in their beats' order, a beat left with no shots gone, the first
+    shot of the piece `new`, and the records of rows that went pruned."""
+    order = {b["id"]: at for at, b in enumerate(plan["beats"])}
+    plan["shots"].sort(key=lambda s: order.get(s["beat"], len(order)))
+    kept = {s["beat"] for s in plan["shots"]}
+    plan["beats"] = [b for b in plan["beats"] if b["id"] in kept]
+    if plan["shots"]:
+        plan["shots"][0] = {**plan["shots"][0], "continues": NEW}
+    return prune(validate(plan))
+
+
+def _insert(plan, shot, beat, at):
+    """`shot` into `beat`'s shots at `at`, in the flat list."""
+    siblings = [i for i, s in enumerate(plan["shots"]) if s["beat"] == beat]
+    if at < len(siblings):
+        index = siblings[at]
+    elif siblings:
+        index = siblings[-1] + 1
+    else:
+        order = [b["id"] for b in plan["beats"]]
+        index = next((i for i, s in enumerate(plan["shots"])
+                      if order.index(s["beat"]) > order.index(beat)), len(plan["shots"]))
+    plan["shots"].insert(index, {**shot, "beat": beat})
+
+
+def add_shot(plan, shot, beat=None, before=None, after=None):
+    """A shot `{action, continues}` (already read) added where the placement
+    says -> the new plan. Its id is the newest, so the caller can find it."""
+    plan = copy.deepcopy(plan)
+    where, at = _placement(plan, beat, before, after)
+    _insert(plan, {"id": _next_id(plan, "s", plan["shots"]), **shot}, where, at)
+    return _settle(plan)
+
+
+def remove_shot(plan, shot_id):
+    """The shot taken out -> the new plan. The beat goes with its last shot;
+    the plan's last shot is refused."""
+    plan = copy.deepcopy(plan)
+    if not any(s["id"] == shot_id for s in plan["shots"]):
+        raise PlanError(f"there is no shot {shot_id} in the plan.")
+    if len(plan["shots"]) == 1:
+        raise PlanError("the plan's only shot cannot go; change it, or plan again.")
+    plan["shots"] = [s for s in plan["shots"] if s["id"] != shot_id]
+    return _settle(plan)
+
+
+def remove_beat(plan, beat_id):
+    """The beat and its shots taken out -> the new plan. The last beat is refused."""
+    plan = copy.deepcopy(plan)
+    if not any(b["id"] == beat_id for b in plan["beats"]):
+        raise PlanError(f"there is no beat {beat_id} in the plan.")
+    if len(plan["beats"]) == 1:
+        raise PlanError("the plan's only beat cannot go; change it, or plan again.")
+    plan["beats"] = [b for b in plan["beats"] if b["id"] != beat_id]
+    plan["shots"] = [s for s in plan["shots"] if s["beat"] != beat_id]
+    return _settle(plan)
+
+
+def move_shot(plan, shot_id, beat=None, before=None, after=None):
+    """The shot moved to where the placement says, into that beat -> the new
+    plan. Its id, and so its render record, go with it; its own `continues`
+    does too, since how it joins the shot before is the shot's to say."""
+    plan = copy.deepcopy(plan)
+    shot = next((s for s in plan["shots"] if s["id"] == shot_id), None)
+    if shot is None:
+        raise PlanError(f"there is no shot {shot_id} in the plan.")
+    if shot_id in (before, after):
+        raise PlanError(f"shot {shot_id} cannot be moved next to itself.")
+    where, at = _placement(plan, beat, before, after)
+    # The placement was counted with the shot still in its beat: a slot past
+    # its own old one is one nearer once it is out.
+    if shot["beat"] == where:
+        old = [s["id"] for s in plan["shots"] if s["beat"] == where].index(shot_id)
+        if old < at:
+            at -= 1
+    plan["shots"] = [s for s in plan["shots"] if s["id"] != shot_id]
+    _insert(plan, shot, where, at)
+    return _settle(plan)
+
+
+def arrange(plan, op, shot=None, beat=None, before=None, after=None, action=None,
+            continues=None):
+    """One of the three (`ARRANGE`), as the card asks for it -> the new plan.
+    An added shot's words go through `read_shots` as a model's would."""
+    if op == "add":
+        made = read_shots([{"action": action, "continues": continues}], names(plan))[0]
+        return add_shot(plan, made, beat, before, after)
+    if op == "remove":
+        if beat and not shot:
+            return remove_beat(plan, beat)
+        return remove_shot(plan, shot)
+    if op == "move":
+        return move_shot(plan, shot, beat, before, after)
+    raise PlanError(f"{_shown(op)} is not a way to arrange the plan; add, remove or move.")
+
+
 def _edit_entity(plan, row, fields):
     if "description" in fields:
         row["description"] = _text(fields["description"], f"@{row['name']}'s description")
