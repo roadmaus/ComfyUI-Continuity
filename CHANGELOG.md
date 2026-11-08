@@ -6,6 +6,28 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Director can plan a piece in two calls for a model that can carry them.**
+A plan was made in one decision a call — the brief, the title, the beats,
+the cast, then one call per beat's shots, each shown only its own sliver —
+because that is the shape a 2B model holds. A capable model paid for it: the
+shot that opened one beat was joined to the beat before by a model that never
+read the beat before, no call ever saw the whole shot list, and a plan was ten
+round trips. The chat's model settings now have a *Planning* choice beside
+Verbosity. *Many small steps* stays the default and plans as before. *Two
+calls* shows the model the whole brief and asks for the structure in one
+reply (title, length, look, camera, beats and who and what is in it, told
+ranges rather than counts), then every beat with its seconds and asks for the
+whole shot list, with the beat each shot shows. The same readers check both
+shapes, the one re-ask names the beat it is about, an entity no shot cites
+is dropped rather than drawn, and a replan on this setting is the same two
+calls again. The plan that comes out is the same document, and a change to
+one row is still that row's own small call. A whole structure or shot list
+is a longer reply than a turn's, so on this setting the reply budget is at
+least 4096 tokens whatever the slider says. `tools/director_bench.py` takes
+`--steps large` so the two shapes can be run on one model and compared; the
+2B floor model does not carry them, which is why small steps stays the
+default.
+
 **The refiner stops inventing references.** Refining a bare prompt on the
 node, with nothing attached, could come back citing video and audio
 references nobody had added. The H3 refiner taught every request how handles

@@ -4,7 +4,9 @@ Director plans a whole piece in many small model calls
 (`creator/director_calls.py`) and keeps the result in a plan whose every rule
 is `creator/director.py`'s. Both are pure. What is here is the joining that
 cannot be: the room's backend and model, the rail's families and what the
-video family declares about length, the chat's cast, and the queue.
+video family declares about length, the rail's planning setting (how many
+calls a plan is made in, `director_calls.STEPS`), the chat's cast, and the
+queue.
 
 **Planning is one turn, as far as the room can tell.** `director/plan` takes a
 brief and answers the plan, the way `chat/turn` takes a message and answers an
@@ -122,11 +124,25 @@ def cited_ledger(brief, ledger):
             for e in ledger or () if isinstance(e, dict) and e.get("handle") in named]
 
 
-def asker(block):
+# The least a large-profile reply may run to, in tokens. The rail's reply
+# budget is sized for a turn — a plan line and one object, 1024 by default —
+# and the small calls fit it; the structure of a long piece and its whole
+# shot list in one reply do not, and a reply cut off is a failed call with a
+# sentence about the slider. So the large profile lifts the floor to this and
+# leaves a slider set higher alone.
+LARGE_REPLY_TOKENS = 4096
+
+
+def asker(block, steps=director_calls.SMALL):
     """`director_calls`'s `ask(system, message, schema, label)` over the room's
     backend. The schema is sent where the backend can constrain to one
     (`refine_remote.chat`'s `response_format`); the in-process refiner gets
-    the prompt alone and the reader does the rest, as it does for a turn."""
+    the prompt alone and the reader does the rest, as it does for a turn.
+    On the large profile the reply budget is at least `LARGE_REPLY_TOKENS`."""
+    if steps == director_calls.LARGE:
+        budget = chat.reply_tokens(block.get("reply_tokens"))
+        block = {**block, "reply_tokens": max(budget, LARGE_REPLY_TOKENS)}
+
     def ask(system, message, schema, _label):
         return chat_routes._ask(block, system, message, schema=schema)
     return ask
@@ -149,11 +165,12 @@ def _plan(body):
     if answer:
         brief = f"{brief} {answer}"
     ledger, cast = chat_routes._with_piece(body)
+    steps = director_calls.steps_of(block.get("plan_steps"))
     result = director_calls.plan_piece(
-        brief, rail_of(block), asker(block),
+        brief, rail_of(block), asker(block, steps),
         cast=cited_cast(brief, cast), ledger=cited_ledger(brief, ledger),
         keyframes=body.get("keyframes") if isinstance(body.get("keyframes"), bool) else None,
-        questions=not answer and body.get("questions", True) is not False)
+        questions=not answer and body.get("questions", True) is not False, steps=steps)
     # The log keeps every raw reply, which is the bench's to print and not
     # the room's to carry in a saved chat.
     return {"plan": result["plan"], "brief": brief, "questions": result["questions"],
@@ -228,9 +245,10 @@ def _turn(body):
     used = " ".join("@" + e["source"]["cited"] for e in plan["entities"]
                     if "cited" in (e.get("source") or {}))
     told = " ".join([plan["brief"], text] + [s["action"] for s in plan["shots"]])
+    steps = director_calls.steps_of(block.get("plan_steps"))
     result = director_calls.plan_turn(
-        plan, text, asker(block), cast=cited_cast(f"{used} {text}", cast),
-        ledger=cited_ledger(told, ledger))
+        plan, text, asker(block, steps), cast=cited_cast(f"{used} {text}", cast),
+        ledger=cited_ledger(told, ledger), steps=steps)
     return {key: result.get(key) for key in
             ("plan", "act", "row", "say", "render", "recast", "warnings")}
 

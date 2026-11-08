@@ -173,6 +173,47 @@ check("an answer is planned beside its brief", answered["brief"],
 check("...without asking again", any("questions" in c["schema"]["properties"] for c in calls), False)
 check("...into a plan", answered["plan"] is not None, True)
 
+
+# ---- the rail's planning setting --------------------------------------------------
+#
+# `plan_steps: "large"` on the block is the two-call profile; anything else,
+# or nothing, is the small calls above. The replay answers by schema, so the
+# structure call is told apart by its "beats" and "title" together.
+
+STRUCTURE = {"questions": [], "assumptions": ["dusk"], "title": "The Bottle", "seconds": 12,
+             "look": "overcast, teal", "camera": "",
+             "beats": REPLIES["beats"]["beats"], "entities": REPLIES["entities"]["entities"]}
+SHOTLIST = {"shots": [dict(SHOTS[0]["shots"][0], beat=1), dict(SHOTS[1]["shots"][0], beat=2)]}
+
+
+def large_ask(block, system, message, schema=None):
+    calls.append({"block": block, "schema": schema, "message": message})
+    properties = (schema or {}).get("properties", {})
+    if "title" in properties and "beats" in properties:
+        return fence(STRUCTURE)
+    if "shots" in properties:
+        return fence(SHOTLIST)
+    raise AssertionError("a small call on the large profile: " + ", ".join(properties))
+
+
+chat_routes._ask = large_ask
+calls.clear()
+big = route._plan(dict(body, settings={**SETTINGS, "plan_steps": "large"}))["plan"]
+check("the large profile plans in two calls", len(calls), 2)
+check("...with the reply budget lifted to the profile's floor",
+      [c["block"]["reply_tokens"] for c in calls], [route.LARGE_REPLY_TOKENS] * 2)
+check("...into the same document", ([b["id"] for b in big["beats"]], [s["beat"] for s in big["shots"]],
+                                    big["seconds"], [e["name"] for e in big["entities"]]),
+      (["b1", "b2"], ["b1", "b2"], 12, ["george", "bottle"]))
+calls.clear()
+try:
+    route._plan(dict(body, settings={**SETTINGS, "plan_steps": "huge"}))
+except AssertionError as small:
+    check("a setting this build has no profile for is the small calls", "questions" in str(small), True)
+else:
+    FAILURES.append("an unknown planning setting did not fall back to the small calls")
+chat_routes._ask = fake_ask
+
 try:
     route._plan(dict(body, brief="   "))
 except director.PlanError as problem:

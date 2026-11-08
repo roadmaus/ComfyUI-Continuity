@@ -41,6 +41,22 @@ it is still holding when it starts writing.
 chat does. A second failure stops planning with `PlanningFailed`, which keeps
 the plan as far as it got — degrade, don't discard: the beats that worked are
 still the person's to look at.
+
+**Two shapes of the same plan.** Everything above is the shape built for the
+2B floor and measured against it (§12.1 of the spec): each call is shown a
+sliver, because the floor model copies whatever it is shown and writes
+whichever beat it read first. A model that holds a whole brief at once pays
+for that shape in what no sliver can see — the shot that opens beat 3 is
+joined to beat 2 by a model that never read beat 2's shots — and in a dozen
+sequential round trips. So the room has a planning setting with two values
+(`STEPS`): `small`, the calls above, and `large`, two calls — the
+**structure** (header, beats and entities in one object) and the **shot
+list** for the whole piece, with every beat and its seconds in view. Same
+readers, same schemas' vocabulary, same one re-ask, same plan document;
+only what the model is shown and asked at once differs. Small is the
+default because it holds on every model; large is for the one the person
+knows can carry it, and `tools/director_bench.py --steps large` is how they
+find out.
 """
 
 import copy
@@ -56,7 +72,18 @@ _PROMPTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "prompts", "
 
 CALLS = ("brief", "basics", "beats", "entities", "shots")
 
+# How many calls a plan is made in (the module header). Read off the room's
+# rail by `steps_of`; anything that is not "large" is small, so a rail saved
+# before the setting existed plans as it always did.
+SMALL, LARGE = "small", "large"
+STEPS = (SMALL, LARGE)
+
 _read = {}
+
+
+def steps_of(value):
+    """The room's planning setting -> `SMALL` or `LARGE`."""
+    return LARGE if str(value or "").strip().lower() == LARGE else SMALL
 
 
 def prompt_file(name):
@@ -128,6 +155,21 @@ SCHEMAS = {
                           ("action", "continues"))},
         "required": ["shots"]},
 }
+
+# The large profile's two calls: the brief, basics, beats and entities calls'
+# fields in one object, and the shots call's with the beat each shot shows.
+SCHEMAS["structure"] = {"type": "object", "properties": {
+    **SCHEMAS["brief"]["properties"], **SCHEMAS["basics"]["properties"],
+    **SCHEMAS["beats"]["properties"], **SCHEMAS["entities"]["properties"]},
+    "required": ["questions", "assumptions", "title", "seconds", "look", "beats", "entities"]}
+SCHEMAS["shotlist"] = {"type": "object", "properties": {
+    "shots": _list_of({"beat": {"type": "integer"}, "action": {"type": "string"},
+                       "continues": {"type": "string", "enum": list(director.CONTINUES)}},
+                      ("beat", "action", "continues"))},
+    "required": ["shots"]}
+
+LARGE_CALLS = ("structure", "shotlist")
+CALLS = CALLS + LARGE_CALLS
 
 
 # ---- what code counts for the model --------------------------------------------
@@ -291,6 +333,83 @@ def beat_seconds(plan):
     shares = director.allot(int(plan["seconds"]),
                             [director.WEIGHTS.get(b.get("weight"), 2) for b in beats])
     return {b["id"]: s for b, s in zip(beats, shares)}
+
+
+# ---- the large profile's two messages ---------------------------------------------
+#
+# Ranges, not counts: the small profile tells the model "write 4 beats"
+# because the floor model told "a 40-second film" writes anything from two to
+# eleven. A model that can hold the brief is told what is usual and left the
+# judgment, and the readers still take anything in range. What the person's
+# own words decide — a length, one continuous shot — is still said as a
+# decision, on both profiles.
+
+
+def _length_line(seconds):
+    return (f"The person asked for {seconds} seconds." if seconds
+            else f"The person named no length; use {director.DEFAULT_SECONDS}.")
+
+
+def _beats_line(take):
+    if take:
+        return "The person asked for one continuous shot: write 1 beat."
+    return (f"Write {director.MIN_BEATS} to {director.MAX_BEATS} beats, as many as the piece "
+            "wants: about one for every ten seconds is usual, one for a piece that is a "
+            "single moment, and as many as the brief itself names when it names them.")
+
+
+def structure_message(brief, cast=(), ledger=(), seconds=None, take=False, questions=True):
+    asking = ("" if questions else
+              " Ask nothing: the person has answered, so plan it and write your choices as assumptions.")
+    return _message(
+        _block("THE BRIEF", [brief]),
+        _block("CAST (already cast — use as they are, cite with @ as written, do not list them)",
+               _cast_lines(cast)),
+        _block("ATTACHED (already pictured — do not list them or what they show)",
+               _ledger_lines(ledger)),
+        "Plan the piece: its title, length, look and camera, its beats, and the people, "
+        f"places and things that must look the same every time they appear.{asking} "
+        f"{_length_line(seconds)} {_beats_line(take)} " + REPLY)
+
+
+def restructure_message(plan, change, there=(), ledger=(), seconds=None):
+    """The structure call for a replan: the piece as it stands, the change,
+    and everybody the plan already holds, who are kept and not listed again."""
+    length = (f"The person asked for {seconds} seconds." if seconds
+              else f"Keep {plan['seconds']} seconds unless the change says otherwise.")
+    return _message(
+        _block("THE BRIEF", [plan["brief"]]),
+        _block("THE PIECE NOW", [_now_line(plan)]),
+        _block("ALREADY THERE (keep them, cite with @ as written, do not list them)",
+               _cast_lines(there)),
+        _block("ATTACHED (already pictured — do not list them or what they show)",
+               _ledger_lines(ledger)),
+        _block("THE CHANGE", [change]),
+        "Plan the piece again with the change made: its title, length, look and camera, "
+        "its beats, and whoever and whatever is new. Keep what the change does not "
+        f"touch. Ask nothing. {length} {_beats_line(one_take(plan))} " + REPLY)
+
+
+def shotlist_message(plan, cast=(), ledger=()):
+    """Every beat's shots in one call. Each beat is shown with its seconds
+    and how many shots it can hold, and the reply names the beat each shot
+    shows by number — the card's number, never the id."""
+    seconds = beat_seconds(plan)
+    take = one_take(plan)
+    lines = []
+    for at, beat in enumerate(plan["beats"], 1):
+        count = 1 if take else shots_for(seconds[beat["id"]])
+        many = "1 shot" if count == 1 else f"1 to {count} shots"
+        lines.append(f"beat {at} ({seconds[beat['id']]} seconds, {many}): {beat['text']}")
+    return _message(
+        _block("THE PIECE", [f"\"{plan['title']}\": {plan['brief']}"]),
+        _block("ASSUMED", [f"- {a}" for a in plan.get("assumptions") or ()]),
+        _camera_block(plan),
+        _block("NAMES you may cite", _name_lines(plan, cast, ledger)),
+        _block("THE BEATS", lines),
+        "Write the shots of every beat, in order, each with the number of the beat it "
+        "shows. A shot runs about five to fifteen seconds, and a beat's shots share its "
+        "seconds. The first shot of the piece is \"new\". " + REPLY)
 
 
 def reask(message, reply, sentence):
@@ -518,6 +637,104 @@ def _check_handles(shots, ledger):
     return shots
 
 
+# ---- reading the large profile's replies -----------------------------------------
+
+
+def read_structure(raw, seconds=None, known=(), questions=True, relisted=None):
+    """The structure call -> `{questions, assumptions}` when it asks and may,
+    else `{questions: [], assumptions, basics, beats, entities}`, each part
+    read by the small profile's own reader. `known` is everybody already
+    there — the cast, or on a replan every entity kept — whom the model was
+    told not to list; one listed anyway is dropped and named in `relisted`."""
+    if not isinstance(raw, dict):
+        raise director.PlanError(
+            'the reply must be one object with "questions", "assumptions", "title", '
+            '"seconds", "look", "camera", "beats" and "entities".')
+    asked, assumptions = read_brief(raw)
+    if asked and questions:
+        return {"questions": asked, "assumptions": assumptions}
+    basics = director.read_basics(raw, seconds)
+    beats = director.read_beats(raw.get("beats"))
+    items = raw.get("entities") if isinstance(raw.get("entities"), list) else []
+    listed = {director.name_of((i or {}).get("name")) for i in items if isinstance(i, dict)}
+    entities = director.read_entities(raw.get("entities"), known)
+    if relisted is not None:
+        relisted[:] = sorted(n for n in listed if n in {str(k).lower() for k in known})
+    return {"questions": [], "assumptions": assumptions, "basics": basics,
+            "beats": beats, "entities": entities}
+
+
+def _beat_of(beats, value, at):
+    """What a shot wrote in `"beat"` -> that beat's id. The number the beats
+    block showed, read loosely ("beat 2", "2", 2.0, or the id itself)."""
+    text = " ".join(str(value if value is not None else "").lower().split())
+    text = re.sub(r"^beat\s*(?:#|no\.?|number)?\s*", "", text)
+    for beat in beats:
+        if text == beat["id"]:
+            return beat["id"]
+    try:
+        number = int(float(text))
+    except ValueError:
+        number = 0
+    if 1 <= number <= len(beats) and float(text) == number:
+        return beats[number - 1]["id"]
+    raise director.PlanError(f'shot {at}\'s "beat" must be the number of the beat it shows, '
+                             f"1 to {len(beats)}; it was {director._shown(value)}.")
+
+
+def read_shotlist(raw, plan, ledger=()):
+    """The shot list call -> `{beat id: [shots]}`, every beat with at least
+    one. Each beat's shots go through `read_shots` in beat order, against the
+    plan with the beats before it already written, so a repeat across beats
+    is caught the way the small profile catches it. A `Doubt` on any beat is
+    collected and raised once for the whole list, with the whole list as its
+    value, so the one re-ask has everything to correct and a doubt kept is
+    the whole plan with a warning, not one beat's shots without the rest."""
+    items = raw.get("shots") if isinstance(raw, dict) else raw
+    if not isinstance(items, list) or not items:
+        raise director.PlanError('"shots" must be a list of {"beat", "action", "continues"} '
+                                 "objects, one or more for every beat.")
+    beats = plan["beats"]
+    grouped = {b["id"]: [] for b in beats}
+    for at, item in enumerate(items, 1):
+        if not isinstance(item, dict):
+            raise director.PlanError(f"shot {at} must be an object; it was {director._shown(item)}.")
+        grouped[_beat_of(beats, item.get("beat"), at)].append(
+            {k: v for k, v in item.items() if k != "beat"})
+    empty = [at for at, b in enumerate(beats, 1) if not grouped[b["id"]]]
+    if empty:
+        raise director.PlanError(f"beat {empty[0]} has no shots; every beat needs at least one.")
+    out, doubts, trial = {}, [], plan
+    for at, beat in enumerate(beats, 1):
+        try:
+            shots = read_shots(grouped[beat["id"]], trial, beat["id"], ledger)
+        except Doubt as doubt:
+            shots = doubt.value
+            doubts.append(f"beat {at}: {doubt}")
+        except director.PlanError as problem:
+            raise director.PlanError(f"beat {at}: {problem}") from None
+        out[beat["id"]] = shots
+        trial = director.set_shots(trial, beat["id"], shots)
+    if doubts:
+        raise Doubt(" ".join(doubts), out)
+    return out
+
+
+def _cited_only(plan):
+    """The plan less every entity it made up that no shot cites and no sheet
+    was made for -> `(plan, the names dropped)`. An entity nothing cites has
+    no shot to be in and would only get a sheet rendered for nothing; a cited
+    person stays, since they are the person's own."""
+    cited = {w.lower() for s in plan["shots"] for w in director.CITE_RE.findall(s["action"])}
+    made = director.handles_of(plan)
+    kept = [e for e in plan["entities"]
+            if e["name"] in cited or e["id"] in made or "cited" in (e.get("source") or {})]
+    dropped = [e["name"] for e in plan["entities"] if e not in kept]
+    plan = copy.deepcopy(plan)
+    plan["entities"] = kept
+    return plan, dropped
+
+
 # ---- the loop ------------------------------------------------------------------
 
 def _call(ask, log, name, message, read, label=None):
@@ -596,7 +813,7 @@ def _write_shots(ask, log, plan, cast, ledger, beats=None):
 
 
 def plan_piece(brief, rail, ask, cast=(), ledger=(), keyframes=None,
-               shot_limit=director.SHOT_LIMIT, questions=True):
+               shot_limit=director.SHOT_LIMIT, questions=True, steps=SMALL):
     """A brief -> `{"plan", "questions", "log", "relisted"}`.
 
     `ask(system, message, schema, label) -> reply text` is the one model call.
@@ -607,24 +824,33 @@ def plan_piece(brief, rail, ask, cast=(), ledger=(), keyframes=None,
     brief. `relisted` names cast members the entities call listed anyway and
     code dropped — not wrong about the piece, but measured, since a model
     that does it is not reading the cast block. `invented` names entities
-    code dropped because nothing in the brief or the beats speaks of them.
+    code dropped because nothing in the brief or the beats speaks of them
+    (small steps only). `uncited` names entities dropped because no shot
+    cites them (large steps only: there, every shot was written with every
+    entity in view, so one nothing cites is one the piece does not need).
     `warnings` are the doubts a re-ask did not clear (`Doubt`), by call.
+
+    `steps` is the room's planning setting (`STEPS`): the small calls, or
+    the large profile's two.
 
     Raises `PlanningFailed` when a call fails its re-ask.
     """
     log, plan = [], None
     cast = _cast(cast)
     cast_names = [m["name"] for m in cast]
-    relisted, invented = [], []
+    relisted, invented, uncited = [], [], []
+    done = {"log": log, "relisted": relisted, "invented": invented, "uncited": uncited}
 
     try:
+        if steps_of(steps) == LARGE:
+            return _plan_large(brief, rail, ask, cast, ledger, keyframes, shot_limit,
+                               questions, done)
         assumptions = []
         if questions:
             asked, assumptions = _call(ask, log, "brief", brief_message(brief, cast, ledger),
                                        read_brief)
             if asked:
-                return {"plan": None, "questions": asked, "assumptions": assumptions,
-                        "log": log, "relisted": relisted, "invented": invented}
+                return {"plan": None, "questions": asked, "assumptions": assumptions, **done}
 
         seconds = asked_seconds(brief)
         basics = _call(ask, log, "basics", basics_message(brief, assumptions, seconds),
@@ -641,18 +867,64 @@ def plan_piece(brief, rail, ask, cast=(), ledger=(), keyframes=None,
                          _reader_of_entities(brief, plan, cast_names, attached,
                                              relisted, invented))
         plan = director.add_entities(plan, entities)
-        plan = director.validate(_write_shots(ask, log, plan, cast, ledger))
-        # "One continuous shot" is one shot that is cut only where the video
-        # family stops. A model that wrote more than one shot anyway has
-        # planned cuts the person said they did not want; that is left for
-        # the card to show rather than merged by code.
-        if one_take(plan) and len(plan["shots"]) == 1:
-            plan = director.edit(plan, plan["shots"][0]["id"], {"one_take": True})
+        plan = _take(director.validate(_write_shots(ask, log, plan, cast, ledger)))
     except director.PlanError as problem:
-        raise PlanningFailed(str(problem), plan, log) from None
+        raise PlanningFailed(str(problem), done.pop("plan", plan), log) from None
     return {"plan": plan, "questions": [], "assumptions": plan.get("assumptions") or [],
-            "log": log, "relisted": relisted, "invented": invented,
-            "warnings": _warnings(log)}
+            "warnings": _warnings(log), **done}
+
+
+def _take(plan):
+    """"One continuous shot" is one shot that is cut only where the video
+    family stops. A model that wrote more than one shot anyway has planned
+    cuts the person said they did not want; that is left for the card to
+    show rather than merged by code."""
+    if one_take(plan) and len(plan["shots"]) == 1:
+        return director.edit(plan, plan["shots"][0]["id"], {"one_take": True})
+    return plan
+
+
+def _plan_large(brief, rail, ask, cast, ledger, keyframes, shot_limit, questions, done):
+    """`plan_piece` on the large profile: the structure, then the shot list.
+    Raises `director.PlanError` for `plan_piece` to wrap, with the plan as
+    far as it got on `done["plan"]`."""
+    log, plan = done["log"], None
+    cast_names = [m["name"] for m in cast]
+    seconds = asked_seconds(brief)
+    take = director.asks_one_take(brief)
+    try:
+        parts = _call(ask, log, "structure",
+                      structure_message(brief, cast, ledger, seconds, take, questions),
+                      lambda raw: read_structure(raw, seconds, cast_names, questions,
+                                                 done["relisted"]))
+        if parts["questions"]:
+            return {"plan": None, "questions": parts["questions"],
+                    "assumptions": parts["assumptions"], **done}
+        plan = director.new_plan(brief, parts["basics"], rail, cast=cast_names,
+                                 assumptions=parts["assumptions"], keyframes=keyframes,
+                                 shot_limit=shot_limit)
+        plan = director.add_beats(plan, parts["beats"])
+        attached = {director.name_of(e["handle"]) for e in ledger or ()}
+        plan = director.add_entities(plan, [e for e in parts["entities"]
+                                            if e["name"] not in attached])
+        plan = _write_shotlist(ask, log, plan, cast, ledger)
+        plan, dropped = _cited_only(plan)
+        done["uncited"][:] = dropped
+        plan = _take(director.validate(plan))
+    except director.PlanError:
+        done["plan"] = plan
+        raise
+    return {"plan": plan, "questions": [], "assumptions": plan.get("assumptions") or [],
+            "warnings": _warnings(log), **done}
+
+
+def _write_shotlist(ask, log, plan, cast, ledger, label="shotlist"):
+    """The whole piece's shots in one call -> the plan with them."""
+    grouped = _call(ask, log, "shotlist", shotlist_message(plan, cast, ledger),
+                    lambda raw: read_shotlist(raw, plan, ledger), label=label)
+    for beat in plan["beats"]:
+        plan = director.set_shots(plan, beat["id"], grouped[beat["id"]])
+    return plan
 
 
 def _cast(cast):
@@ -952,9 +1224,13 @@ def _one(items, what):
     return items[0]
 
 
-def plan_turn(plan, text, ask, cast=(), ledger=()):
+def plan_turn(plan, text, ask, cast=(), ledger=(), steps=SMALL):
     """Something said about an open plan -> `{"plan", "act", "row", "say",
     "render", "recast", "log", "warnings"}`.
+
+    `steps` is the room's planning setting, read by a replan: an edit to one
+    row is that row's own small call on either profile, since one row is one
+    decision whatever the model.
 
     `plan` is None in the answer when nothing changed (a `say`). `render` is
     `{row, action, mark}` when the change was to a picture already made — a
@@ -994,10 +1270,11 @@ def plan_turn(plan, text, ask, cast=(), ledger=()):
             return {**out, "warnings": _warnings(log)}
         seconds = asked_seconds(text)
         if turn["act"] == "replan":
-            out["plan"] = replan(plan, turn["change"], ask, cast, ledger, seconds, log, text)
+            out["plan"] = replan(plan, turn["change"], ask, cast, ledger, seconds, log, text,
+                                 steps)
         else:
             out.update(_edit_row(plan, turn["row"], turn["change"], text, ask, log,
-                                 cast, ledger, seconds))
+                                 cast, ledger, seconds, steps))
     except director.PlanError as problem:
         if len(log) == 1 and log[0]["call"] == "turn":
             # The turn call itself failed twice: what reaches the person is
@@ -1008,7 +1285,7 @@ def plan_turn(plan, text, ask, cast=(), ledger=()):
     return {**out, "warnings": _warnings(log)}
 
 
-def _edit_row(plan, row_id, change, text, ask, log, cast, ledger, seconds):
+def _edit_row(plan, row_id, change, text, ask, log, cast, ledger, seconds, steps=SMALL):
     """One row, changed by its own call. -> the parts of `plan_turn`'s answer
     that say what happened."""
     out = {"act": "edit", "row": row_id, "render": None, "recast": None}
@@ -1032,7 +1309,8 @@ def _edit_row(plan, row_id, change, text, ask, log, cast, ledger, seconds):
             # A length the shots cannot share — six shots in five seconds —
             # is a piece to plan again at that length, not a refusal.
             out.update(act="replan", row=None,
-                       plan=replan(plan, change, ask, cast, ledger, basics["seconds"], log, text))
+                       plan=replan(plan, change, ask, cast, ledger, basics["seconds"], log, text,
+                                   steps))
         return out
 
     kind = row_id.rstrip("0123456789")
@@ -1109,32 +1387,34 @@ def _changed_picture(old, new, row_id, change):
             "mark": director.fingerprint(new, row_id)}
 
 
-def replan(plan, change, ask, cast=(), ledger=(), seconds=None, log=None, text=None):
+def replan(plan, change, ask, cast=(), ledger=(), seconds=None, log=None, text=None,
+           steps=SMALL):
     """The plan rewritten from the beats down with `change` made -> the plan.
 
     The header is the basics call again with the change; then beats,
-    entities and every beat's shots, as a first plan writes them. What is
-    kept is what was made: every person, place and thing the plan already
-    holds keeps its id, its description and its sheet, and the entities call
-    is told they exist and lists only what is new. A kept entity no new shot
-    cites, and whose sheet was never made, goes. New beats and shots get
-    new ids, so the clips and opening frames of the old ones have no row
-    and their records go too (`director.prune`).
+    entities and every beat's shots, as a first plan writes them — or, on
+    the large profile, the structure call and the shot list, as a first plan
+    on that profile writes them. What is kept is what was made: every
+    person, place and thing the plan already holds keeps its id, its
+    description and its sheet, and the entities call is told they exist and
+    lists only what is new. A kept entity no new shot cites, and whose sheet
+    was never made, goes. New beats and shots get new ids, so the clips and
+    opening frames of the old ones have no row and their records go too
+    (`director.prune`).
     """
     log = log if log is not None else []
     cast = _cast(cast)
     brief = " ".join(f"{plan['brief']} {change}".split())
+    new = copy.deepcopy(plan)
+    new.update(brief=brief, beats=[], shots=[])
+    if steps_of(steps) == LARGE:
+        new = _replan_large(new, change, ask, cast, ledger, seconds, log, text)
+        return director.prune(director.validate(_cited_only(new)[0]))
     basics = _call(ask, log, "basics", header_message(plan, change, seconds),
                    lambda raw: director.read_basics(raw, seconds or plan["seconds"]),
                    label="replan.basics")
-    new = copy.deepcopy(plan)
-    new.update(basics, brief=brief, beats=[], shots=[])
-    have = {e["name"] for e in new["entities"]}
-    for member in _said(cast, f"{text or ''} {change}"):
-        if member["name"] not in have:
-            new["entities"].append({"id": director._next_id(new, "e", new["entities"]),
-                                    "name": member["name"], "kind": "person",
-                                    "description": "", "source": {"cited": member["name"]}})
+    new.update(basics)
+    new = _cast_said(new, cast, text, change)
     # Everybody the plan holds reads to the new calls as already there.
     there = cast + [{"name": e["name"], "description": e["description"]}
                     for e in new["entities"] if "new" in (e.get("source") or {})]
@@ -1148,9 +1428,39 @@ def replan(plan, change, ask, cast=(), ledger=(), seconds=None, log=None, text=N
                      label="replan.entities")
     new = director.add_entities(new, entities)
     new = _write_shots(ask, log, new, cast, ledger)
-    cited = {w.lower() for s in new["shots"] for w in director.CITE_RE.findall(s["action"])}
-    made = director.handles_of(new)
-    new["entities"] = [e for e in new["entities"]
-                       if e["name"] in cited or e["id"] in made
-                       or "cited" in (e.get("source") or {})]
-    return director.prune(director.validate(new))
+    return director.prune(director.validate(_cited_only(new)[0]))
+
+
+def _cast_said(new, cast, text, change):
+    """A cast member the person's words cite, not yet in the plan, is in it
+    as cast: "set it in winter, with @anna" casts Anna with no call."""
+    have = {e["name"] for e in new["entities"]}
+    for member in _said(cast, f"{text or ''} {change}"):
+        if member["name"] not in have:
+            new["entities"].append({"id": director._next_id(new, "e", new["entities"]),
+                                    "name": member["name"], "kind": "person",
+                                    "description": "", "source": {"cited": member["name"]}})
+    return new
+
+
+def _replan_large(new, change, ask, cast, ledger, seconds, log, text):
+    """`replan` on the large profile: the structure again with the change,
+    then the shot list. `new` is the plan with its brief extended and its
+    beats and shots emptied."""
+    plan = new
+    new = _cast_said(new, cast, text, change)
+    there = cast + [{"name": e["name"], "description": e["description"]}
+                    for e in new["entities"] if "new" in (e.get("source") or {})]
+    known = [e["name"] for e in new["entities"]]
+    parts = _call(ask, log, "structure",
+                  restructure_message(plan, change, there, ledger, seconds),
+                  lambda raw: read_structure(raw, seconds or plan["seconds"], known,
+                                             questions=False),
+                  label="replan.structure")
+    new.update(parts["basics"])
+    if parts["assumptions"]:
+        new["assumptions"] = parts["assumptions"]
+    new = director.add_beats(new, parts["beats"])
+    attached = {director.name_of(e["handle"]) for e in ledger or ()}
+    new = director.add_entities(new, [e for e in parts["entities"] if e["name"] not in attached])
+    return _write_shotlist(ask, log, new, cast, ledger, label="replan.shotlist")

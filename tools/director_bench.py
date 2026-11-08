@@ -10,7 +10,13 @@ went. Nothing is rendered; the plan is the result.
 
     python3 tools/director_bench.py --model lfm3-omni
     python3 tools/director_bench.py --url http://lab:8000/v1 --model qwen3.8-27b --json lab.json
+    python3 tools/director_bench.py --url http://lab:8000/v1 --model qwen3.8-27b --steps large
     python3 tools/director_bench.py --only three --dump
+
+`--steps` picks the planning profile the room's Planning setting picks
+(`director_calls.STEPS`): `small`, the default, one decision a call; or
+`large`, the structure and the shot list in two. Run both on one model and
+compare the reports: that is what decides which the room should be set to.
 
 **What it measures**, for each brief:
 
@@ -149,8 +155,9 @@ def _measure(pkg, brief, out, error):
            "reask_reasons": [f"{e['label']}: {e['first_error']}" for e in log if e["first_error"]],
            "relisted": (out or {}).get("relisted") or [],
            "invented": (out or {}).get("invented") or [],
+           "uncited_dropped": (out or {}).get("uncited") or [],
            "warnings": (out or {}).get("warnings") or []}
-    basics = next((e for e in log if e["call"] == "basics"), None)
+    basics = next((e for e in log if e["call"] in ("basics", "structure")), None)
     row["model_seconds"] = ((basics or {}).get("raw") or {}).get("seconds")
     if plan and plan.get("shots") and not error:
         clips = director.clips(plan)
@@ -224,7 +231,7 @@ def _table(rows, calls):
         cast = ",".join(r.get("cast_used") or []) or ("-" if not r.get("cast_unused") else "NONE")
         print(f"{r['id']:<10} {_verdict(r):<16} {calls_col:<18} {length:<13} {shape:<10} "
               f"{cast:<12} {','.join(r.get('uncited_entities') or []) or '-':<20} "
-              f"{','.join(r['invented'] + r['relisted']) or '-':<16} "
+              f"{','.join(r['invented'] + r['relisted'] + r['uncited_dropped']) or '-':<16} "
               f"{r.get('bare_shots', '-')}")
 
     print("\n########## per call")
@@ -234,7 +241,8 @@ def _table(rows, calls):
               f"{stats['seconds']:>8.1f} {stats['in']:>8.0f} {stats['out']:>8.0f}")
 
 
-def _per_call(logs, meters, names=("brief", "basics", "beats", "entities", "shots"), key="call"):
+def _per_call(logs, meters, names=("brief", "basics", "beats", "entities", "shots",
+                                    "structure", "shotlist"), key="call"):
     out = {}
     for name in names:
         entries = [e for log in logs for e in log if (e[key] if key == "call" else e["label"]) == name]
@@ -288,7 +296,7 @@ def _row_of(plan, row_id):
     return None
 
 
-def _turns(pkg, brief, plan, meter):
+def _turns(pkg, brief, plan, meter, steps="small"):
     """Each scripted turn, on the plan as it was made. -> one row per turn."""
     calls = pkg.director_calls
     out = []
@@ -300,7 +308,8 @@ def _turns(pkg, brief, plan, meter):
         started = time.time()
         try:
             got = calls.plan_turn(plan, script["say"], meter.ask,
-                                  cast=brief.get("cast") or (), ledger=brief.get("ledger") or ())
+                                  cast=brief.get("cast") or (), ledger=brief.get("ledger") or (),
+                                  steps=steps)
         except calls.PlanningFailed as failed:
             row.update(failed=str(failed), log=failed.log)
         else:
@@ -364,6 +373,9 @@ def main():
     parser.add_argument("--temperature", type=float, default=0.3)
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--max-tokens", type=int, default=None)
+    parser.add_argument("--steps", choices=("small", "large"), default="small",
+                        help="the planning profile: one decision a call, or the structure "
+                             "and the shot list in two (the room's Planning setting)")
     parser.add_argument("--no-schema", action="store_true",
                         help="send no response_format: the reply rides on the prompt alone, "
                              "as it does on a server that cannot constrain one")
@@ -387,7 +399,8 @@ def main():
         started = time.time()
         try:
             out = calls.plan_piece(brief["brief"], rail, meter.ask,
-                                   cast=brief.get("cast") or (), ledger=brief.get("ledger") or ())
+                                   cast=brief.get("cast") or (), ledger=brief.get("ledger") or (),
+                                   steps=args.steps)
         except calls.PlanningFailed as failed:
             error = failed
         except pkg.prompting.RefineError as unreachable:
@@ -419,7 +432,7 @@ def main():
             # Timed apart from the plan's calls: a turn re-runs the beats or
             # shots call, and those must not blur the planning numbers.
             planned = len(meter.calls)
-            turns += _turns(pkg, brief, out["plan"], meter)
+            turns += _turns(pkg, brief, out["plan"], meter, args.steps)
             turn_timings += meter.calls[planned:]
             del meter.calls[planned:]
 
@@ -429,7 +442,7 @@ def main():
     turn_calls = _per_call([t["log"] for t in turns], turn_timings, labels, key="label")
     _turn_table(turns, turn_calls)
     if args.json:
-        report = {"model": args.model, "url": args.url, "rail": rail,
+        report = {"model": args.model, "url": args.url, "rail": rail, "steps": args.steps,
                   "schema": not args.no_schema, "temperature": args.temperature,
                   "seed": args.seed, "when": time.strftime("%Y-%m-%d %H:%M:%S"),
                   "briefs": rows, "calls": per_call, "timings": meter.calls,

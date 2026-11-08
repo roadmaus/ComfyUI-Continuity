@@ -410,9 +410,17 @@ tab, so the server drives it:
   begun, queued, landed, failed; stopped; restarted), the rehearsal, and the
   loop that drives a run with its build, queue and wait handed in.
 - **`creator/prompts/director/*.txt`** — one prompt file per call (`brief`,
-  `basics`, `beats`, `entities`, `shots`, `sheet`, `turn`),
+  `basics`, `beats`, `entities`, `shots`, `turn`, and the large profile's
+  `structure` and `shotlist`; the sheet wording is code's, `director.SHEETS`),
   each with one worked example. Stable wording, tuned on the bench, never
   assembled at runtime.
+- **Two planning profiles, one plan** (§12.4). The room's rail carries a
+  *Planning* setting, `plan_steps`: `small` (the default) is the calls
+  above; `large` is two calls, the structure and the whole shot list.
+  `director_calls.plan_piece` and `replan` take it as `steps`; the readers,
+  the schema vocabulary, the one re-ask and the plan document are the same
+  on both. A row edit from a plan turn is that row's own small call on
+  either profile.
 - **`creator/routes/director.py`** — `plan` (brief → plan; all the planning
   calls inside one job, answered on the socket like a chat turn), `turn` (a
   plan turn), `row` (redo one row's call), `run`, `stop`, `status`. Prep
@@ -600,6 +608,55 @@ progress bar and previews of a run clip in a tab that did not press Run (the
 next clip reports to whichever tab last asked `director/status`), and two
 tabs open on the same chat during a run, which land the same clips twice into
 two copies of the chat, as two tabs already can for any render.
+
+### 12.4 Two calls for a model that can carry them (2026-11-08)
+
+Everything in §12.1 and §12.2 moved into code because the floor model copies
+what it is shown and writes whichever beat it read first. The shape that
+fixed that — a sliver per call, no other beats' shots in view, counts
+dictated — costs a capable model exactly what it was built to avoid on a
+small one: the shot that opens beat 3 is joined to beat 2 by a model that
+never read beat 2's shots, framing is never varied across the piece because
+no call sees the piece, "write 4 beats" takes away a judgment a 27B-class
+model makes well, and a plan is ten sequential round trips with a different
+system prompt each, so nothing prefixes in the server's cache.
+
+So the room has a **Planning** setting beside Verbosity, with two values,
+and the default is the small calls because they hold on every model:
+
+- **Many small steps** — §5.2 as built.
+- **Two calls** — the **structure** (questions, assumptions, title, length,
+  look, camera, beats and entities in one object, told ranges rather than
+  counts) and the **shot list** (every beat with its code-allotted seconds and
+  how many shots it can hold, every name, and the whole list written in one
+  reply with the beat each shot shows by number). Code still allots, splits,
+  cites plain mentions, checks every citation, appends the continuity
+  wording, and re-asks once with the beat named. Two differences in what code
+  drops: nothing is dropped for going unmentioned in the brief (§12.1's
+  `invented` guard was for a model copying its worked example), and an entity
+  no shot cites is dropped after the shot list, as a replan already drops
+  one, because every shot was written with every entity in view. A replan on
+  this profile is the structure again with the change, then the shot list; a
+  row edit is that row's own small call on either profile.
+
+Chosen by the person, not sniffed off a model name: they know what they
+pointed the room at, and `tools/director_bench.py --steps large` on the same
+briefs is how they find out which shape their model carries. The bench
+measures validity, corrections and turn accuracy, not coherence; the
+`--dump` of both profiles side by side is where joins across beats and
+framing variety are read. **Not yet run on a large model**: this profile is
+built on the argument above, and the lab's 27B is where the argument is
+checked before the default moves.
+
+What the floor did with it, for the record: `lfm3-omni` on the 40-second
+brief wrote a usable structure first try (501 tokens, with the worked
+example's flour on the keeper's forearms) and then a shot list for two of
+the three beats, twice; on the 6-second brief it wrote assumptions until the
+reply budget ran out. Both are the copying and the drift §12.1 moved into
+code, and both are why small stays the default. Because a whole structure or
+shot list is a longer reply than a turn's, the route lifts the rail's reply
+budget to at least 4096 tokens on this profile (`routes/director.
+LARGE_REPLY_TOKENS`), leaving a slider set higher alone.
 
 ## 13. Risks
 

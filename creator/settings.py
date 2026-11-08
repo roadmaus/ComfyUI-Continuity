@@ -661,6 +661,10 @@ CHAT_COUNTS = (("short_edge", 1), ("still_edge", 1), ("video_edge", 1), ("seed",
 SEED_POLICIES = ("fixed", "random")
 # The verbosity dial, 0 to 1: a fraction, not a count, so it has its own check.
 CHAT_DIALS = ("verbosity",)
+# How many model calls Director plans a piece in (`director_calls.STEPS`):
+# many small ones, which hold on every model, or two large ones for a model
+# that can carry a whole brief at once.
+PLAN_STEPS = ("small", "large")
 
 
 def clean_chat(raw):
@@ -712,6 +716,10 @@ def clean_chat(raw):
         if raw["seed_policy"] not in SEED_POLICIES:
             raise ValueError("chat.seed_policy must be one of " + ", ".join(SEED_POLICIES))
         kept["seed_policy"] = raw["seed_policy"]
+    if raw.get("plan_steps") is not None:
+        if raw["plan_steps"] not in PLAN_STEPS:
+            raise ValueError("chat.plan_steps must be one of " + ", ".join(PLAN_STEPS))
+        kept["plan_steps"] = raw["plan_steps"]
     return kept
 
 

@@ -492,3 +492,121 @@ calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask,
                  cast=[{"name": "george", "description": "a man"}])
 check("a brief without one shows no camera block",
       any("THE CAMERA" in a["message"] for a in asked), False)
+
+
+# ---- two calls: the large profile -------------------------------------------------
+#
+# The same plan from a structure call (header, beats and entities in one
+# object) and a shot list for the whole piece. Same readers underneath, so a
+# bad citation or a repeat is refused in the same sentence, prefixed with the
+# beat it is in; an entity no shot cites is dropped rather than drawn.
+
+STRUCTURE = {"questions": [], "assumptions": ["It is night."], "title": "Night Train",
+             "seconds": 12, "look": "sodium light, grain", "camera": "",
+             "beats": [{"text": "@george wakes in the carriage.", "weight": "short"},
+                       {"text": "He finds the cab empty.", "weight": "long"}],
+             "entities": [{"name": "George", "kind": "person", "description": "a man"},
+                          {"name": "carriage", "kind": "place", "description": "an old train carriage"},
+                          {"name": "lantern", "kind": "thing", "description": "a brass lantern"}]}
+SHOTLIST = {"shots": [{"beat": 1, "action": "@george wakes up inside @carriage.", "continues": "cut"},
+                      {"beat": "2", "action": "@george walks the length of @carriage.", "continues": "pin"},
+                      {"beat": "beat 2", "action": "@george opens the cab door: nobody.", "continues": "cut"}]}
+
+ask, asked = scripted([fence(STRUCTURE), fence(SHOTLIST)])
+out = calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask,
+                       cast=[{"name": "george", "description": "a tall man"}], steps="large")
+large = out["plan"]
+check("large: two calls", [a["label"] for a in asked], ["structure", "shotlist"])
+check("large: each with its schema", [a["schema"] is calls.SCHEMAS[a["label"]] for a in asked],
+      [True, True])
+check("large: the plan is the same document",
+      (large["title"], large["seconds"], large["assumptions"], [b["id"] for b in large["beats"]],
+       [(s["id"], s["beat"], s["continues"]) for s in large["shots"]]),
+      ("Night Train", 30, ["It is night."], ["b1", "b2"],
+       [("s1", "b1", "new"), ("s2", "b2", "pin"), ("s3", "b2", "cut")]))
+check("large: the cited cast member is not re-cast, and the relisting is measured",
+      ([e["name"] for e in large["entities"]], out["relisted"]), (["george", "carriage"], ["george"]))
+check("large: an entity no shot cites is dropped and named",
+      out["uncited"], ["lantern"])
+check("large: nothing is dropped for going unmentioned", out["invented"], [])
+check("large: the structure call is told the length and a range, not a count",
+      "The person asked for 30 seconds." in asked[0]["message"]
+      and "Write 1 to 8 beats" in asked[0]["message"], True)
+check("large: the shot list sees every beat with its seconds and room",
+      "THE BEATS\nbeat 1 (8 seconds, 1 to 2 shots): @george wakes in the carriage.\n"
+      "beat 2 (22 seconds, 1 to 4 shots): He finds the cab empty." in asked[1]["message"], True)
+check("large: …and the names it may cite",
+      "@george — cast: a tall man" in asked[1]["message"]
+      and "@carriage — place: an old train carriage" in asked[1]["message"], True)
+check("large: the clips add up", sum(c["seconds"] for c in director.clips(large)), 30)
+check("the setting reads loosely", [calls.steps_of(v) for v in ("large", " Large ", "small", None, 3)],
+      ["large", "large", "small", "small", "small"])
+
+ask, asked = scripted([fence({**STRUCTURE, "questions": ["What is it about?"], "beats": [], "entities": []})])
+out = calls.plan_piece("make me a video", RAIL, ask, steps="large")
+check("large: a question stops planning at one call", (out["plan"], out["questions"], len(asked)),
+      (None, ["What is it about?"], 1))
+ask, asked = scripted([fence({**STRUCTURE, "questions": ["Still asking?"]}), fence(SHOTLIST)])
+out = calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask,
+                       cast=[{"name": "george"}], steps="large", questions=False)
+check("large: with questions off the brief is planned regardless, and the call is told so",
+      (out["plan"] is not None, "Ask nothing" in asked[0]["message"]), (True, True))
+
+missing = {"shots": [s for s in SHOTLIST["shots"] if s["beat"] == 1]}
+ask, asked = scripted([fence(STRUCTURE), fence(missing), fence(SHOTLIST)])
+out = calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask,
+                       cast=[{"name": "george"}], steps="large")
+check("large: a beat with no shots is re-asked", out["log"][1]["first_error"],
+      "beat 2 has no shots; every beat needs at least one.")
+wrong = {"shots": [{**SHOTLIST["shots"][0], "beat": 7}] + SHOTLIST["shots"][1:]}
+ask, asked = scripted([fence(STRUCTURE), fence(wrong), fence(SHOTLIST)])
+out = calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask,
+                       cast=[{"name": "george"}], steps="large")
+check("large: a beat number the plan does not have is re-asked", out["log"][1]["first_error"],
+      'shot 1\'s "beat" must be the number of the beat it shows, 1 to 2; it was 7.')
+ghost = {"shots": [SHOTLIST["shots"][0], {"beat": 2, "action": "@ghost walks.", "continues": "pin"}]}
+ask, asked = scripted([fence(STRUCTURE), fence(ghost), fence(ghost)])
+out = calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask,
+                       cast=[{"name": "george"}], steps="large")
+check("large: an unknown citation is re-asked naming the beat, then kept as a word",
+      (out["log"][1]["first_error"].startswith("beat 2: @ghost is not in the plan"),
+       out["plan"]["shots"][1]["action"], len(out["warnings"])),
+      (True, "ghost walks.", 1))
+ask, asked = scripted([fence(STRUCTURE), "nothing", "nothing"])
+try:
+    calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask,
+                     cast=[{"name": "george"}], steps="large")
+    check("large: two failures stop planning", False, True)
+except calls.PlanningFailed as failed:
+    check("large: two failures keep the structure", (len(failed.plan["beats"]), len(failed.plan["shots"])),
+          (2, 0))
+
+# A replan on the large profile is the structure again, then the shot list;
+# an edit to one row is that row's own small call on either profile.
+made_large = director.approve(director.land(director.start(large, "e2")[0], "e2", "pic-7",
+                                            director.fingerprint(large, "e2")), "e2")
+ask, asked = scripted([
+    fence({"act": "replan", "row": "", "change": "It is winter.", "say": ""}),
+    fence({**STRUCTURE, "title": "Snow Train", "assumptions": ["Snow is falling."],
+           "beats": [{"text": "@george wakes as snow buries @carriage.", "weight": "long"}],
+           "entities": [{"name": "carriage", "kind": "place", "description": "listed again"},
+                        {"name": "drift", "kind": "thing", "description": "a deep drift"}]}),
+    fence({"shots": [{"beat": 1, "action": "@george wakes inside @carriage as snow piles up.",
+                      "continues": "new"}]})])
+out = calls.plan_turn(made_large, "set it in winter", ask, cast=GEORGE, steps="large")
+new = out["plan"]
+check("large: …the sheet already made stays made", director.state_of(new, "e2"), "approved")
+check("large: a replan is two calls", [a["label"] for a in asked],
+      ["turn", "replan.structure", "replan.shotlist"])
+check("large: …told who is already there",
+      "ALREADY THERE" in asked[1]["message"] and "@carriage — an old train carriage" in asked[1]["message"],
+      True)
+check("large: …keeping the entities it had, under new beat and shot ids, with the model's assumptions",
+      ([e["id"] for e in new["entities"]], new["entities"][1]["description"],
+       [b["id"] for b in new["beats"]], new["title"], new["assumptions"]),
+      (["e1", "e2"], "an old train carriage", ["b3"], "Snow Train", ["Snow is falling."]))
+check("large: …and an entity it adds that no shot cites goes", "drift" in director.names(new), False)
+ask, asked = scripted([fence({"act": "edit", "row": "shot 3", "change": "closer", "say": ""}),
+                       fence({"shots": [CLOSE]})])
+out = calls.plan_turn(large, "make the last shot a close-up", ask, cast=GEORGE, steps="large")
+check("large: one row is still its own small call", [a["label"] for a in asked], ["turn", "turn.shot"])

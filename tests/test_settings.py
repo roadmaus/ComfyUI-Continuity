@@ -313,6 +313,10 @@ check("the reply budget is stored as a count",
 check("the dial's ends are stored", settings.clean({"chat": {"verbosity": 1}})["chat"], {"verbosity": 1.0})
 refuses("a dial past its end", {"chat": {"verbosity": 1.5}}, "0 to 1")
 refuses("a dial that is a switch", {"chat": {"verbosity": True}}, "0 to 1")
+check("Director's planning profile is stored",
+      settings.clean({"chat": {"plan_steps": "large"}})["chat"], {"plan_steps": "large"})
+refuses("a planning profile this build has no calls for", {"chat": {"plan_steps": "huge"}},
+        "small, large")
 
 # ---- the prompt refiner -------------------------------------------------------
 #

@@ -443,6 +443,10 @@ function defaultRail() {
     // How long a reply may run, in tokens — a plan line and one object, so
     // far below the refiner's rewrite budget. Mirrors `chat.REPLY_TOKENS`.
     reply_tokens: 1024,
+    // How many model calls Director plans a piece in: "small", one decision
+    // a call, which holds on every model; or "large", two calls, for a model
+    // that can carry a whole brief at once (`director_calls.STEPS`).
+    plan_steps: "small",
     // A file under the node's skills/ folder, appended to the room's own
     // prompting. Only ever appended — the room's reply contract is what turns
     // an answer into a render, so replacing it would leave nothing to queue.
@@ -765,6 +769,7 @@ function requestBlock(sync) {
     skill_mode: bar.skill ? "add" : "",
     verbosity: Number(bar.verbosity) || 0,
     reply_tokens: Number(bar.reply_tokens) || 1024,
+    plan_steps: bar.plan_steps === "large" ? "large" : "small",
     magic: bar.magic === true,
     magic_bboxes: bar.magic_bboxes === true,
     // The pill's shape: what a magic caption places its elements on where the
