@@ -306,6 +306,46 @@ function sourceOf(entity) {
 }
 
 /**
+ * The piece's length drawn to scale: a strip the width of the card, cut into
+ * the beats, each beat into its shots, each shot into the clips the run will
+ * make of it. It is the arithmetic above made visible, so a weight changed on a
+ * beat moves the cuts on the strip before the server answers, and a shot too
+ * long for one clip shows its seam. A strip and not a chart because the thing
+ * it stands for is an editor's timeline, read left to right at one glance.
+ * Pointing at a shot on the strip lights its row in the list and the other way
+ * round (`linkShots`); it is drawn for eyes only, since every number on it is
+ * also in the list as text.
+ */
+function strip(doc, sums) {
+  if (sums.error || !sums.clips.length) return null;
+  return el("div", { class: "mmc-dr-strip", "aria-hidden": "true" }, doc.beats.map((beat, at) => {
+    const shots = doc.shots.filter((shot) => shot.beat === beat.id);
+    return el("div", { class: "mmc-dr-sbeat", style: { flexGrow: String(sums.seconds[beat.id] || 1) } }, [
+      el("div", { class: "mmc-dr-sbar" }, shots.map((shot) => el("div", {
+        class: "mmc-dr-sshot", "data-shot": shot.id, title: shot.action,
+        style: { flexGrow: String(sums.seconds[shot.id] || 1) },
+      }, sums.clips.filter((c) => c.shot === shot.id).map((c) => el("span", {
+        class: "mmc-dr-sclip", style: { flexGrow: String(c.seconds) },
+      }))))),
+      el("div", { class: "mmc-dr-slabel" }, [
+        el("span", { class: "mmc-dr-num", text: String(at + 1) }),
+        el("span", { text: seconds(sums.seconds[beat.id]) }),
+      ]),
+    ]);
+  }));
+}
+
+/** A shot pointed at, on the strip or in the list, lit in both places. */
+function linkShots(card) {
+  const light = (id) => {
+    for (const node of card.querySelectorAll("[data-shot]")) node.classList.toggle("hot", node.dataset.shot === id);
+  };
+  card.addEventListener("pointerover", (event) => light(event.target.closest?.("[data-shot]")?.dataset.shot ?? null));
+  card.addEventListener("pointerleave", () => light(null));
+  return card;
+}
+
+/**
  * The plan, as a card in the transcript.
  *
  * `plan` is the message's `{doc, warnings, pending, error}`: the document, the
@@ -324,7 +364,7 @@ export function planCard(plan, hooks = {}) {
 
   const header = el("div", { class: "mmc-dr-head" }, [
     el("div", { class: "mmc-dr-titleline" }, [
-      el("span", { class: "mmc-dr-badge" }, [icon("clapperboard", 14), el("span", { text: t("Plan") })]),
+      el("span", { class: "mmc-dr-mark", title: t("Plan") }, [icon("clapperboard", 16)]),
       editable(doc.title, { live, cls: "mmc-dr-title", multiline: false, label: t("Title"),
                             onCommit: (title) => edit("header", { title }) }),
     ]),
@@ -339,17 +379,15 @@ export function planCard(plan, hooks = {}) {
                 if (Number.isFinite(next) && next !== doc.seconds) edit("header", { seconds: next });
               },
             }),
-            el("span", { text: t("seconds") }),
+            el("span", { class: "mmc-dr-unit", text: t("seconds") }),
           ])
         : el("span", { text: seconds(doc.seconds) }),
-      el("span", { class: "mmc-dr-dot", text: "·" }),
       el("span", { text: t("{count} shots", { count: doc.shots.length }) }),
       sums.clips.length !== doc.shots.length
         ? el("span", { class: "mmc-dr-quiet", text: t("({count} clips)", { count: sums.clips.length }) })
         : null,
-      el("span", { class: "mmc-dr-dot", text: "·" }),
       el("span", {
-        class: "mmc-dr-quiet",
+        class: "mmc-dr-quiet mmc-dr-rail",
         title: t("The families this plan renders on: the room's still and video choices when it was made."),
         text: [family(doc.rail?.still), family(doc.rail?.video), doc.rail?.aspect].filter(Boolean).join(" · "),
       }),
@@ -380,7 +418,7 @@ export function planCard(plan, hooks = {}) {
         }),
         el("span", { class: "mmc-dr-secs", text: seconds(sums.seconds[beat.id]) }),
       ]),
-      ...doc.shots.filter((shot) => shot.beat === beat.id).map((shot) => el("div", { class: "mmc-dr-shot" }, [
+      ...doc.shots.filter((shot) => shot.beat === beat.id).map((shot) => el("div", { class: "mmc-dr-shot", "data-shot": shot.id }, [
         doc.shots[0] === shot
           ? el("span", { class: "mmc-dr-tag", text: t(JOIN_LABEL.new), title: t("The first shot opens the piece.") })
           : choice(shot.continues, CONTINUES, {
@@ -440,8 +478,8 @@ export function planCard(plan, hooks = {}) {
     hooks.live ? null : el("div", { class: "mmc-dr-quiet", text: t("Replaced by a later plan.") }),
   ].filter(Boolean);
 
-  return el("div", {
+  return linkShots(el("div", {
     class: `mmc-ch-msg mmc-ch-bot mmc-dr-card${hooks.live ? "" : " mmc-dr-old"}${plan.pending ? " busy" : ""}`,
     "aria-busy": plan.pending ? "true" : null,
-  }, [header, beats, entities, ...notes, foot].filter(Boolean));
+  }, [header, strip(doc, sums), beats, entities, ...notes, foot].filter(Boolean)));
 }
