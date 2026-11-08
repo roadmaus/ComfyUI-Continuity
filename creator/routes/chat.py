@@ -560,8 +560,13 @@ def _skill(block):
     return refine_skill.instructions(skill)
 
 
-def _ask(block, system, message):
+def _ask(block, system, message, schema=None):
     """One generation on whichever backend the room is pointed at.
+
+    `schema` is a JSON Schema the reply should be an object of — Director's
+    planning calls send one (`routes/director.py`). Only the remote backend
+    can constrain decoding to it (`refine_remote.chat`); the in-process one
+    is never handed it, and the reader downstream is the same either way.
 
     The one place a reply is produced, which is where a native tool call will
     land when the runtime reports it: the same schema as the one tool, with
@@ -583,6 +588,8 @@ def _ask(block, system, message):
                 f"the selected local LLM device '{device}' is no longer available"
             )
         options["device"] = device
+    if schema and block.get("backend") == "remote":
+        options["schema"] = schema
     return ask(
         block.get("model") or "",
         system, message, [],

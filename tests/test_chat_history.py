@@ -75,6 +75,22 @@ out.back = { turn: back.turn, counts: back.counts, ledger: back.ledger.length,
 out.cover = store.coverOf(state);
 out.emptyPiece = store.unpack({ messages: [], ledger: [], counts: {}, turn: 0 }).piece;
 
+// -- a planned piece ---------------------------------------------------------
+// The plan lives on the message whose card draws it. Its document and the
+// doubts planning kept come back; an edit in flight and the sentence a
+// refused one was said in were the moment's.
+const doc = { version: 1, title: "The Bottle", seconds: 12, beats: [], entities: [], shots: [] };
+const planned = store.pack({ messages: [
+  { role: "user", text: "a 12 s piece about a bottle", attached: [], turn: 1, brief: true },
+  { role: "assistant", say: "Day or night?", planAsk: { brief: "a 12 s piece about a bottle" } },
+  { role: "user", text: "night", attached: [], turn: 2, brief: true },
+  { role: "assistant", say: "A plan.", plan: { doc, warnings: ["shots.b1: a doubt"],
+                                               pending: true, error: "refused" } },
+], ledger: [], counts: {}, turn: 2 });
+const replanned = store.unpack(JSON.parse(JSON.stringify(planned)));
+out.plan = { brief: replanned.messages[0].brief, ask: replanned.messages[1].planAsk,
+             plan: replanned.messages[3].plan, plain: "plan" in planned.messages[1] };
+
 // -- the shelf --------------------------------------------------------------
 const t0 = 1_700_000_000_000;
 const a = { id: "a", title: "", created: t0 };
@@ -144,6 +160,14 @@ check("a chat saved before it had a piece comes back with an empty one",
       out.get("emptyPiece"), {"subjects": [], "assets": []})
 check(f"cards come back whole: {back}", bool(back["saved"]["subfolder"] == "continuity/stills/krea2" and back["entry"] == "pic-1"
       and back["leftState"] == "left"), True)
+plan = out["plan"]
+check("a brief comes back a brief", plan["brief"], True)
+check("the brief's questions come back with the brief they asked about",
+      plan["ask"], {"brief": "a 12 s piece about a bottle"})
+check("a plan comes back with its document and its doubts, and nothing of the moment",
+      plan["plan"], {"doc": {"version": 1, "title": "The Bottle", "seconds": 12, "beats": [],
+                             "entities": [], "shots": []}, "warnings": ["shots.b1: a doubt"]})
+check("a message with no plan saves none", plan["plain"], False)
 check(f"the cover is the last render: {out['cover']}", bool(out["cover"] == {"cover": "continuity/stills/krea2/Krea2_00001_.png [output]", "coverKind": "still"}), True)
 
 lines = out["lines"]

@@ -62,6 +62,7 @@ import { styleCastMember } from "./presetlib.js";
 import { PromptBox } from "./prompt.js";
 import { listChats, loadChat, saveChat, renameChat, deleteChat, newId, pack, groupByDay,
          coverOf } from "./chatstore.js";
+import { planCard } from "./director.js";
 import { t } from "./i18n.js";
 import { api } from "../../../scripts/api.js";
 
@@ -135,6 +136,10 @@ const state = {
   rail: null,
   railTouched: false,
   busy: false,
+  // The composer's Plan switch: the next message is a brief for a whole
+  // piece rather than a turn (`director.js`). The page's, not the chat's —
+  // it says how the next message is sent, not what the conversation is.
+  planning: false,
   // How far into its reply a queued turn is, as the refine button's token
   // counter. On the state rather than on the room for the same reason
   // everything else here is: the turn outlives the overlay.
@@ -602,6 +607,13 @@ function switchTo(fork, to) {
   }
 }
 
+/** The message holding the chat's plan, or null. A chat holds one live plan:
+ *  the newest. A card whose plan a later brief replaced is drawn as a record
+ *  and cannot be changed (`director.js`). */
+function livePlan(messages = state.messages) {
+  return messages.findLast((message) => message.plan?.doc) ?? null;
+}
+
 /** The last thing a stretch of the transcript made that has a picture. */
 function lastPicture(messages) {
   for (let i = messages.length - 1; i >= 0; i -= 1) {
@@ -633,6 +645,10 @@ function forServer() {
     // The first run's bubbles are the room's own and say nothing the model
     // should read — the machine card already tells it what is set up.
     if (message.local) continue;
+    // A brief and its plan are Director's, and the turn model never reads
+    // them: a brief is not a request for one render, and answering one as
+    // if it were is what the plan exists to avoid.
+    if (message.brief || message.plan || message.planAsk) continue;
     if (message.role === "user") {
       exchanges += 1;
       if (exchanges > EXCHANGES) break;
@@ -1093,6 +1109,19 @@ class Room {
       class: "mmc-ch-tool", title: t("Add a picture, a clip or a sound"),
       onclick: () => this.browse(),
     }, [icon("plus", 18)]);
+    // Director's switch. A brief is a message like any other, so it is said
+    // in the same box; what changes is what the room does with it.
+    this.planButton = el("button", {
+      class: "mmc-ch-tool mmc-ch-plan",
+      title: t("Plan a whole piece: your next message is a brief, and the answer is a plan you can change before anything renders."),
+      "aria-pressed": false,
+      onclick: () => {
+        state.planning = !state.planning;
+        this.replacing = false;
+        this.paintComposer();
+        this.box.root.focus();
+      },
+    }, [icon("clapperboard", 16), el("span", { text: t("Plan") })]);
     this.sendButton = el("button", {
       class: "mmc-ch-send", title: t("Send"),
       onclick: () => this.send(),
@@ -1110,12 +1139,23 @@ class Room {
     // every render — which is to say, in the middle of every sentence anybody
     // types while something is sampling. The pills and chips inside it are
     // hosts that repaint on their own.
+    // Shown when a brief is about to replace the chat's plan: a chat holds
+    // one, and replacing it is a thing to have said yes to.
+    this.replacing = false;
+    this.replacingText = el("span");
+    this.replacingBar = el("div", { class: "mmc-ch-revising", hidden: true }, [
+      this.replacingText,
+      el("button", { class: "mmc-ch-door", text: t("Replace it"), onclick: () => this.send(true) }),
+      el("button", { class: "mmc-ch-door", text: t("Cancel"),
+                     onclick: () => { this.replacing = false; this.paintComposer(); } }),
+    ]);
     this.composer = el("div", { class: "mmc-ch-compose" }, [
       this.revisingBar,
+      this.replacingBar,
       this.chips,
       this.box.root,
       el("div", { class: "mmc-ch-foot" }, [
-        this.attachButton, this.pills, el("span", { class: "mmc-bn-gap" }), this.sendButton,
+        this.attachButton, this.planButton, this.pills, el("span", { class: "mmc-bn-gap" }), this.sendButton,
       ]),
     ]);
     this.talk = el("div", { class: "mmc-ch-talk" }, [
@@ -1427,6 +1467,10 @@ class Room {
             message.attached?.length
               ? el("div", { class: "mmc-ch-thumbs" }, message.attached.map((entry) => this.thumb(entry)))
               : null,
+            message.brief
+              ? el("span", { class: "mmc-ch-briefmark", title: t("Sent as a brief for a planned piece.") },
+                   [icon("clapperboard", 12), el("span", { text: t("Plan") })])
+              : null,
             message.text ? el("div", { class: "mmc-ch-said", text: message.text }) : null,
           ].filter(Boolean)),
           message.local ? null : this.acts([
@@ -1447,6 +1491,7 @@ class Room {
           ].filter(Boolean)));
         }
         if (message.card) nodes.push(this.renderCard(message.card, message));
+        if (message.plan?.doc) nodes.push(this.planCardFor(message));
       }
       this.rows.set(message, { key, nodes });
       rows.push(...nodes);
@@ -1488,7 +1533,17 @@ class Room {
         ].filter(Boolean)),
       ]));
     }
+    // A field being typed into on a plan card survives the repaint: the rows
+    // are kept, but putting them back takes the focus out of the one the
+    // person is in, and the queue repaints on every step of every render.
+    const focused = this.log.contains(document.activeElement) ? document.activeElement : null;
+    const caret = focused && typeof focused.selectionStart === "number"
+      ? [focused.selectionStart, focused.selectionEnd] : null;
     this.log.replaceChildren(...rows);
+    if (focused?.isConnected && document.activeElement !== focused) {
+      focused.focus({ preventScroll: true });
+      if (caret) focused.setSelectionRange(...caret);
+    }
     if (bottom) this.log.scrollTop = this.log.scrollHeight;
   }
 
@@ -1558,6 +1613,7 @@ class Room {
     const card = message.card;
     return JSON.stringify([
       message.say, message.bad, message.action?.kind, can,
+      message.plan && [message.plan, message === livePlan()],
       card && [card.state, card.progress, card.frameUrl, card.frameIsClip,
                card.saved, card.error, card.entry?.handle, card.isClip,
                card.state === "queued" ? this.queue.remaining : 0],
@@ -1951,7 +2007,16 @@ class Room {
     this.revisingBar.hidden = this.revising === null;
     this.box.root.contentEditable = state.busy || asking ? "false" : "true";
     this.box.root.classList.toggle("mmc-ch-off", state.busy || asking);
-    this.box.root.dataset.placeholder = asking ? t("Answer above first") : t("Ask for a picture or a shot…");
+    this.box.root.dataset.placeholder = asking ? t("Answer above first")
+      : state.planning ? t("Describe the piece: what happens, how long, the mood…")
+      : t("Ask for a picture or a shot…");
+    this.planButton.setAttribute("aria-pressed", String(state.planning));
+    this.planButton.disabled = asking;
+    this.replacingBar.hidden = !this.replacing;
+    if (this.replacing) {
+      this.replacingText.textContent = t("This chat already has a plan, “{title}”. A new brief replaces it.",
+                                         { title: livePlan()?.plan.doc.title ?? "" });
+    }
     this.paintSend();
     this.chips.hidden = !this.pending.length;
     this.chips.replaceChildren(...this.pending.map((asset) => this.chip(asset)));
@@ -2391,9 +2456,18 @@ class Room {
    * a file that now exists is a thing to talk about on the next turn, not a
    * turn.
    */
-  async send() {
+  async send(replace = false) {
     const text = this.box.getValue().trim();
     if ((!text && !this.pending.length) || state.busy || state.setup) return;
+    // A brief, when the Plan switch is on — or when the room just asked the
+    // brief's questions, since the answer is the brief's and nothing else.
+    const asked = state.messages.at(-1)?.planAsk;
+    const brief = Boolean(text) && (state.planning || Boolean(asked));
+    if (brief && !asked && !replace && this.revising === null && livePlan()) {
+      this.replacing = true;
+      return this.paintComposer();
+    }
+    this.replacing = false;
     // An edit is sent as a new version from where the edited message stood.
     if (this.revising !== null) {
       const at = this.revising;
@@ -2415,7 +2489,7 @@ class Room {
       return entry;
     });
     this.pending = [];
-    state.messages.push({ role: "user", text, attached, turn: state.turn });
+    state.messages.push({ role: "user", text, attached, turn: state.turn, ...(brief ? { brief: true } : {}) });
     if (!text) return this.paint();
     await this.ask();
   }
@@ -2423,6 +2497,8 @@ class Room {
   /** Ask the model about the conversation as it stands, and hang its answer
    *  — and the render it asked for — on the end of it. */
   async ask() {
+    const last = state.messages.at(-1);
+    if (last?.role === "user" && last.brief) return this.askPlan(last);
     state.busy = true;
     state.error = null;
     this.paint();
@@ -2462,6 +2538,89 @@ class Room {
     notify();
     if (turn.action) await this.queueRender(turn.action, message);
     notify();
+  }
+
+  // ---- planning a piece ------------------------------------------------------------
+
+  /**
+   * Plan the brief `message` holds, and hang the plan — or the brief call's
+   * questions — on the end of the conversation.
+   *
+   * One request, however many model calls the plan takes: the server runs the
+   * brief, basics, beats, entities and every beat's shots inside one job
+   * (`routes/director.py`) and answers the way a turn does, so the wait is the
+   * same thinking row with the same token count. A brief that answers the
+   * room's questions is sent beside the brief it answers, and is planned
+   * without asking again.
+   */
+  async askPlan(message) {
+    state.busy = true;
+    state.error = null;
+    this.paint();
+    const at = state.messages.indexOf(message);
+    const asked = state.messages[at - 1]?.planAsk;
+    let result;
+    try {
+      result = await run("/continuity/director/plan", {
+        brief: asked ? asked.brief : withAttached(message),
+        ...(asked ? { answer: withAttached(message) } : {}),
+        ledger: state.ledger,
+        piece: state.piece,
+        settings: requestBlock(this.sync),
+      }, {
+        onProgress: (_fraction, value, max) => {
+          state.tokens = { value, max };
+          notify();
+        },
+      });
+    } catch (error) {
+      state.tokens = null;
+      state.busy = false;
+      state.error = String(error.message || error);
+      return notify();
+    }
+    state.tokens = null;
+    state.busy = false;
+    if (!result.plan) {
+      state.messages.push({ role: "assistant", say: (result.questions ?? []).join("\n"),
+                            planAsk: { brief: result.brief } });
+      return notify();
+    }
+    const doc = result.plan;
+    state.messages.push({
+      role: "assistant",
+      say: t("A plan for “{title}”: {seconds} seconds in {count} shots. Press anything on it to change it.",
+             { title: doc.title, seconds: doc.seconds, count: doc.shots.length }),
+      plan: { doc, warnings: result.warnings ?? [] },
+    });
+    notify();
+  }
+
+  /** One row of the plan changed on its card. The server holds the change to
+   *  the rules a model's reply is held to (`director.edit`) and answers the
+   *  plan, or the sentence it refused it in, which the card shows. */
+  async editPlan(message, row, fields) {
+    const plan = message.plan;
+    if (!plan || plan.pending) return;
+    plan.pending = true;
+    plan.error = null;
+    notify();
+    try {
+      const result = await run("/continuity/director/edit", { plan: plan.doc, row, fields });
+      plan.doc = result.plan;
+    } catch (error) {
+      plan.error = String(error.message || error);
+    }
+    plan.pending = false;
+    notify();
+  }
+
+  planCardFor(message) {
+    return planCard(message.plan, {
+      live: message === livePlan(),
+      edit: (row, fields) => this.editPlan(message, row, fields),
+      family: (id) => (id ? t(FAMILIES.find((entry) => entry.id === id)?.label ?? id) : ""),
+    });
   }
 
   // ---- going back ----------------------------------------------------------------
@@ -2505,6 +2664,9 @@ class Room {
       kind: media[entry.handle.split("-")[0]] ?? "image", entry: { ...entry },
     }));
     this.box.setValue(message.text ?? "");
+    // A brief taken back is sent as a brief again unless the switch is
+    // turned off.
+    state.planning = Boolean(message.brief);
     this.paint();
     this.box.root.focus();
   }
