@@ -56,15 +56,12 @@ shot stays. The card has the same three moves: up, down and out under each
 shot's seconds, faint until the pointer is on the row, and *Add a shot* under
 each beat, where the words typed go through the same reader as a model's.
 
-**The Chat card sits under Go to, with a plate of its own.** The dashboard
-filed the chat beside the upscaler, under Tools, on the rule that a Go-to card
-only rearranged the room while a tool opened a surface over it. The chat is
-where a piece is asked for in words and, with Director, planned and run, so it
-now sits beside Pre-stage and Shot as the third place a piece is made. Its
-plate is drawn afresh: a composer with a cast citation begun and the caret
-after a few words, and above it the dashed outline of the picture not made
-yet with a faint sketch inside. Under the pointer the outline closes, the
-sketch draws in and the caret blinks.
+**The Chat card sits under Go to.** The dashboard filed the chat beside the
+upscaler, under Tools, on the rule that a Go-to card only rearranged the room
+while a tool opened a surface over it. The chat is where a piece is asked for
+in words and, with Director, planned and run, so it now sits beside Pre-stage
+and Shot as the third place a piece is made. It wears the drawn plate every
+dashboard card has now — a line said, and the frame it turns into.
 
 **Director can plan a piece in two calls for a model that can carry them.**
 A plan was made in one decision a call — the brief, the title, the beats,
@@ -166,6 +163,18 @@ LTX 2.5 clip opens with "after" another was checked against H3's feather widths
 and refused ("a seam can inherit 1, 5, 22 … not 17"). The dry run now compiles
 each pass for the piece's own family, which also makes the editor's compiled
 prompt box right for LTX pieces.
+
+**Every card on the wordmark's dashboard is drawn now.** Image to 3D and Game
+Forge were line drawings and the five benches beside them were photographs,
+so the grid read as two surfaces. Presets, ControlNet, Blockout, Upscale and
+Chat each get a drawing of their own in the same vocabulary — one picture per
+tool in the plate's ink, amber on the one thing that moves, and the motion
+under the pointer is the tool doing its job: knobs sliding back to a saved
+setup, a figure's edges traced left of the seam, a camera dollying through
+boxes, a pixel bust resolving at size, a frame drawing itself from a line
+said. Pre-stage and Shot still show the piece's own frame, and on the day it
+has none they draw one too instead of a cropped glyph. The six photographs
+shipped beside the code are gone.
 
 **The chat's selected aspect ratio applies to pictures and videos.** The
 selector was already sent with each turn, but the model did not see it and its
