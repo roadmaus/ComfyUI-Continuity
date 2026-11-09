@@ -37,7 +37,7 @@ import { el, icon, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
 import { deleteRefMod, describeRefMod, isRefMod, makeRefMod, moveRefMod, renderMeta, stillUrl,
          uploadRefMod, viewUrl } from "./api.js";
-import { DEFAULT_SPACE, SUBFOLDER as MOD_FOLDER, castFamilies, forgetMods, modIn, modRow, modRows, modeWord, remakeMods, remakeRows } from "./refmod.js";
+import { DEFAULT_SPACE, SUBFOLDER as MOD_FOLDER, castFamilies, forgetMods, keepSteps, modIn, modRow, modRows, modeWord, remakeMods, remakeRows } from "./refmod.js";
 import { WearsPanel } from "./wears.js";
 import { rememberedWeights } from "./models.js";
 import { atlasRef } from "./presets/atlasref.js";
@@ -1723,14 +1723,15 @@ class PresetLibrary {
    *  and this used to be the one picker without the chip. A cut picture comes
    *  back as a plate — the file stored is the cutout the server wrote, and the
    *  panels ride with it so casting them into a piece keeps the clicks. */
-  /** What a member can be saved out of, per mode: their looks, not already
-   *  mods, not sheets; clips only for a stack. Mirrors `refmod.keepable` for a
-   *  stored member. */
+  /** What one job can be saved out of, per mode: their looks, not already
+   *  mods, not sheets; clips for a stack and the clip modes, stills for the
+   *  rest. Mirrors `refmod.keepable` for a stored member. */
   modSources(member, mode = "stack", space = DEFAULT_SPACE) {
+    const kind = mode === "clip" || mode === "motion" ? "video" : "image";
     return (member.files ?? []).filter((file) =>
       file.slot === "from" && ["image", "video"].includes(file.kind ?? "image")
       && !modIn(file, space) && !file.panels?.length
-      && (mode === "stack" || (file.kind ?? "image") === (mode === "clip" ? "video" : "image")));
+      && (mode === "stack" || (file.kind ?? "image") === kind));
   }
 
   /** Take a stored member's renditions for one family off their pictures —
@@ -1788,52 +1789,28 @@ class PresetLibrary {
       for (const one of family) await this.keepAsMod(member, mode, one);
       return;
     }
-    const stack = mode === "stack";
     const space = family?.space ?? DEFAULT_SPACE;
-    const sources = this.modSources(member, mode, space);
-    if (!sources.length) return;
-    this.encoding = { count: sources.length, mode, progress: 0, family };
+    // The same steps a card runs (`refmod.keepSteps`): the clips first, each
+    // its own file, then the stills — every step's files read up front.
+    const steps = keepSteps(mode, family)
+      .map((step) => ({ ...step, sources: this.modSources(member, step.mode, space) }))
+      .filter((step) => step.sources.length);
+    const total = steps.reduce((sum, step) => sum + step.sources.length, 0);
+    if (!total) return;
+    this.encoding = { count: total, mode, progress: 0, family };
     this.modNote = null;
     this.say(null);
     this.renderSheet();
     try {
-      // A stack's header carries the words that were on its files — see
-      // `refmod.keepAsMod`, which does the same on a card.
-      const noted = stack ? sources.map((file) => file.note).filter(Boolean) : [];
-      const answer = await makeRefMod({
-        name: member.handle || "subject",
-        subfolder: MOD_FOLDER,
-        sources: sources.map((file) => file.filename),
-        mode: stack ? "stack" : mode === "clip" ? "clip" : mode === "full" ? "full" : "compressed",
-        description: [member.description ?? "", ...noted].filter(Boolean).join("; "),
-        concept: { person: "identity", object: "generic", scene: "background", style: "style" }[member.takes ?? "person"] ?? "generic",
-        vae: family?.vae ?? this.target?.vae?.() ?? "",
-        ...(family?.id ? { family: family.id } : {}),
-      }, { onProgress: (fraction) => {
-        if (!this.encoding) return;
-        this.encoding.progress = fraction;
-        const bar = this.sheet.querySelector(".mmc-wears-bar i");
-        if (bar) bar.style.width = `${Math.round(fraction * 100)}%`;
-      } });
-      const rows = answer?.mods ?? [];
-      if (!rows.length) throw new Error(t("the server saved nothing"));
-      if (stack) {
-        // One file in the place of all of them, at the first one's position.
-        const [first] = sources;
-        const rest = new Set(sources.slice(1));
-        member.files = member.files
-          .filter((file) => !rest.has(file))
-          .map((file) => (file === first
-            ? { slot: "from", filename: rows[0].path, kind: rows[0].kind === "video" ? "video" : "image",
-                ...(file.takes ? { takes: file.takes } : {}) }
-            : file));
-      } else {
-        // One mod per file, hung on the file it was made of: the picture
-        // stays theirs and carries its rendition for that family.
-        sources.forEach((file, index) => {
-          const row = rows[index];
-          if (row) file.mods = { ...(file.mods ?? {}), [row.space ?? space]: row.path };
+      let done = 0;
+      for (const step of steps) {
+        await this.keepStep(member, step, family, (fraction) => {
+          if (!this.encoding) return;
+          this.encoding.progress = (done + fraction * step.sources.length) / total;
+          const bar = this.sheet.querySelector(".mmc-wears-bar i");
+          if (bar) bar.style.width = `${Math.round(this.encoding.progress * 100)}%`;
         });
+        done += step.sources.length;
       }
       await this.flushSave();
       await this.loadMods();
@@ -1843,6 +1820,46 @@ class PresetLibrary {
     }
     this.encoding = null;
     this.renderSheet();
+  }
+
+  /** One job of `keepAsMod`: a step's files encoded, and filed on the member. */
+  async keepStep(member, step, family, onProgress) {
+    const stack = step.mode === "stack";
+    const space = family?.space ?? DEFAULT_SPACE;
+    const sources = step.sources;
+    // A stack's header carries the words that were on its files — see
+    // `refmod.keepAsMod`, which does the same on a card.
+    const noted = stack ? sources.map((file) => file.note).filter(Boolean) : [];
+    const answer = await makeRefMod({
+      name: member.handle || "subject",
+      subfolder: MOD_FOLDER,
+      sources: sources.map((file) => file.filename),
+      ...step.body,
+      description: [member.description ?? "", ...noted].filter(Boolean).join("; "),
+      concept: { person: "identity", object: "generic", scene: "background", style: "style" }[member.takes ?? "person"] ?? "generic",
+      vae: family?.vae ?? this.target?.vae?.() ?? "",
+      ...(family?.id ? { family: family.id } : {}),
+    }, { onProgress });
+    const rows = answer?.mods ?? [];
+    if (!rows.length) throw new Error(t("the server saved nothing"));
+    if (stack) {
+      // One file in the place of all of them, at the first one's position.
+      const [first] = sources;
+      const rest = new Set(sources.slice(1));
+      member.files = member.files
+        .filter((file) => !rest.has(file))
+        .map((file) => (file === first
+          ? { slot: "from", filename: rows[0].path, kind: rows[0].kind === "video" ? "video" : "image",
+              ...(file.takes ? { takes: file.takes } : {}) }
+          : file));
+    } else {
+      // One mod per file, hung on the file it was made of: the picture
+      // stays theirs and carries its rendition for that family.
+      sources.forEach((file, index) => {
+        const row = rows[index];
+        if (row) file.mods = { ...(file.mods ?? {}), [row.space ?? space]: row.path };
+      });
+    }
   }
 
   /** Attach a file, or — `mods` — a RefMod already on the machine. */

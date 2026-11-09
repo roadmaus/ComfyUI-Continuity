@@ -163,9 +163,12 @@ export async function memberFromMod(mod, rows = null) {
   const base = modHandle(mod.name);
   let handle = base;
   for (let n = 2; taken.has(handle); n += 1) handle = `${base}_${n}`;
+  // A bundle of several arrives split (`routes/refmod.upload_refmod`), its
+  // members under `parts`: one character, so one member built of all of them.
+  const parts = Array.isArray(mod.parts) && mod.parts.length ? mod.parts : [mod];
   const body = { cast: {
     handle, takes: "person", description: mod.description ?? "",
-    files: [{ slot: "from", filename: mod.path, kind: mod.kind === "video" ? "video" : "image" }],
+    files: parts.map((part) => ({ slot: "from", filename: part.path, kind: part.kind === "video" ? "video" : "image" })),
     features: S.seedFeatures("person"), seeded: true,
   } };
   const row = await savePreset({ name: handle, scope: "cast", data: body });

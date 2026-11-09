@@ -44,6 +44,7 @@ API = layout.STUBS["api.js"].replace(
     if (String(url).startsWith("/continuity/refmod/make")) {
       const body = JSON.parse(options.body);
       globalThis.__made = body;
+      (globalThis.__jobs ??= []).push(body);
       if (body.mode === "stack") {
         return { ok: true, status: 200, json: async () => ({ result: { mods: [
           { path: `refmod:cast/${body.name}`, kind: "video", tokens: 64 * (body.sources.length + 5),
@@ -62,7 +63,8 @@ API = layout.STUBS["api.js"].replace(
 SCRIPT = layout.DOMSHIM if hasattr(layout, "DOMSHIM") else ""
 SCRIPT = __import__("domshim").DOM + """
 import * as S from "./web/creator/state.js";
-import { castFamilies, cost, costMark, everyFamilyRows, familyModeRows, keepable, keepAsMod, modFamilies, modRows, modeRows } from "./web/creator/refmod.js";
+import { castFamilies, cost, costMark, everyFamilyRows, familyModeRows, keepable, keepAsMod, keepCount, keepSteps, modFamilies, modRows, modeRows } from "./web/creator/refmod.js";
+import { WearsPanel } from "./web/creator/wears.js";
 import { CastShelf } from "./web/creator/cast.js";
 import { openPicker } from "./web/creator/picker.js";
 
@@ -185,6 +187,51 @@ out.stacked = {
   blob: JSON.parse(JSON.stringify({ assets: stacked.assets, subjects: stacked.subjects, prompt: stacked.prompt,
                                     duration_s: 6, aspect: "16:9", short_edge: 768 })),
 };
+
+// Compressed on a member with stills and a clip: two jobs, the clip first as
+// its own file, then the stills — and every one carries its rendition after.
+const mixed = S.parseState(JSON.stringify({
+  prompt: "@mia",
+  assets: [{ handle: "img-1", kind: "image", role: "reference", filename: "a.png" },
+           { handle: "vid-1", kind: "video", role: "reference", filename: "walk.mp4" },
+           { handle: "img-2", kind: "image", role: "reference", filename: "b.png" }],
+  subjects: [{ handle: "mia", from: ["img-1", "vid-1", "img-2"], takes: "person" }],
+  duration_s: 6, aspect: "16:9", short_edge: 768,
+}));
+const progress = [];
+globalThis.__jobs = [];
+out.mixedCount = keepCount(mixed.subjects[0], mixed.assets, "compressed");
+await keepAsMod(mixed.subjects[0], mixed.assets, "compressed", {
+  vae: "v", list: () => mixed.assets, nextHandle: (k) => S.nextHandle(mixed, k),
+  texts: () => [mixed.prompt], cast: () => mixed.subjects, drop: () => {},
+  onProgress: (fraction) => progress.push(fraction),
+});
+out.mixedJobs = globalThis.__jobs.map((body) => ({ sources: body.sources, mode: body.mode,
+  use: body.use ?? null, compressed: body.compressed ?? null }));
+out.mixedSteps = {
+  h3: keepSteps("compressed").map((step) => step.body),
+  klein: keepSteps("compressed", { space: "flux2", clips: false }).map((step) => step.body),
+  motion: keepSteps("motion").map((step) => step.body),
+};
+out.mixedAfter = mixed.assets.map((a) => [a.handle, a.mods ?? null]);
+
+// The ledger: stills saved and the clip not is not "saved" — the line still
+// offers to save the rest.
+const half = S.parseState(JSON.stringify({
+  prompt: "@mia",
+  assets: [{ handle: "img-1", kind: "image", role: "reference", filename: "a.png",
+             mods: { h3_video: "refmod:cast/anna" } },
+           { handle: "vid-1", kind: "video", role: "reference", filename: "walk.mp4" }],
+  subjects: [{ handle: "mia", from: ["img-1", "vid-1"], takes: "person" }],
+  duration_s: 6, aspect: "16:9", short_edge: 768,
+}));
+const h3 = castFamilies("h3", "v", {})[0];
+const halfLooks = half.assets.map((a) => ({ filename: a.filename, kind: a.kind, mods: a.mods }));
+out.halfEffective = [
+  new WearsPanel({}).effective(half.subjects[0], h3, halfLooks),
+  new WearsPanel({}).effective(half.subjects[0], h3,
+    halfLooks.map((a) => ({ ...a, mods: { h3_video: "refmod:walk" } }))),
+];
 
 // Nothing to keep is said, not queued.
 try {
@@ -361,20 +408,23 @@ check("every family a member can be sent to is listed, the piece's first, with w
        ["qwen21", False, False, True, False, False, False],
        ["moss", False, False, False, False, False, False]])
 check("a new frame forgets the renditions", got["dropped"], None)
-check("with two families ready the menu leads with one row for all of them, per-picture modes only",
+check("with two families ready the menu leads with one row for all of them, per-picture modes only "
+      "— H3's counting the clip it keeps first, Klein's the still alone",
       got["everyRow"],
-      [["Every family", ["Compressed — ≈576 + 1,024 tokens", "Full — ≈1,024 + 4,096 tokens"]],
-       ["MiniMax H3", ["One file — everything stacked — ≈448 tokens", "Compressed — ≈576 tokens",
-                       "Full — ≈1,024 tokens", "Each clip — its own file — ≈2,016 tokens"]],
+      [["Every family", ["Compressed — ≈1,440 + 1,024 tokens", "Full — ≈3,040 + 4,096 tokens"]],
+       ["MiniMax H3", ["One file — everything stacked — ≈448 tokens", "Compressed — ≈1,440 tokens",
+                       "Full — ≈3,040 tokens", "Each clip — its own file — ≈2,016 tokens",
+                       "Each clip — for its motion — ≈448 tokens"]],
        ["Flux 2 Klein", ["Compressed — ≈1,024 tokens", "Full — ≈4,096 tokens"]]])
 check("...and picking it names every ready family, the piece's first",
       got["everyPicked"], ["compressed", ["h3", "flux2klein"]])
 
 # A stack.
-check("the menu leads with the stack where there is something to stack, and offers the clip on its own",
+check("the menu leads with the stack where there is something to stack, prices the per-picture rows with "
+      "the clip they keep first, and offers the clip on its own for its look or its motion",
       got["stackMenu"],
-      ["One file — everything stacked — ≈512 tokens", "Compressed — ≈1,152 tokens", "Full — ≈2,048 tokens",
-       "Each clip — its own file — ≈2,016 tokens"])
+      ["One file — everything stacked — ≈512 tokens", "Compressed — ≈2,016 tokens", "Full — ≈4,064 tokens",
+       "Each clip — its own file — ≈2,016 tokens", "Each clip — for its motion — ≈448 tokens"])
 check("...and not for one still", got["soloMenu"], ["Compressed — ≈576 tokens", "Full — ≈1,024 tokens"])
 check("a stack takes the clip; the per-picture modes do not",
       (got["stackable"], got["perPicture"]), (["img-1", "img-2", "vid-1"], ["img-1", "img-2"]))
@@ -391,6 +441,22 @@ check("and compile.py cites the stack as one video",
       ([step["label"] for step in stacked_blob.plan],
        "<Subject 1> is the person in <Video 1>" in stacked_blob.prompt), (["<Video 1>"], True))
 
+check("compressed on stills and a clip is two jobs, the clip first as its own file for its look",
+      got["mixedJobs"],
+      [{"sources": ["walk.mp4"], "mode": "clip", "use": "look", "compressed": True},
+       {"sources": ["a.png", "b.png"], "mode": "compressed", "use": None, "compressed": None}])
+check("...counted as three files", got["mixedCount"], 3)
+check("...and every look carries its rendition after",
+      [[handle, (mods or {}).get("h3_video") is not None] for handle, mods in got["mixedAfter"]],
+      [["img-1", True], ["vid-1", True], ["img-2", True]])
+check("the steps per pick: clips first where the family keeps them, stills alone where not, "
+      "and the motion row is one clip job",
+      got["mixedSteps"],
+      {"h3": [{"mode": "clip", "use": "look", "compressed": True}, {"mode": "compressed"}],
+       "klein": [{"mode": "compressed"}],
+       "motion": [{"mode": "clip", "use": "motion"}]})
+check("stills saved and the clip not is not \"saved\"; every look saved is",
+      got["halfEffective"], ["pictures", "saved"])
 check("a picture two members share is saved once and stays both of theirs",
       got["shared"], {"assets": ["img-1", "img-9"],
                       "anna": ["img-1", "img-9"], "ben": ["img-1"]})

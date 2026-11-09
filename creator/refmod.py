@@ -69,7 +69,8 @@ META_KEY = "refmod_meta"
 # file is a *bundle* — several references as `ref_<i>` tensors under one
 # header — and is read here when it holds exactly one visual reference, which
 # is what their Save node writes for a single mod now; a bundle of several is
-# refused by count, since one asset is one label.
+# refused by count, since one asset is one label — and split into its members
+# when it is imported (`split_bundle`), which is the way in for one.
 FORMAT_VERSION = 5
 BUNDLE_VERSION = 5
 # What this pack writes: a standalone file, which is their version 4 — one
@@ -637,8 +638,19 @@ def rewrite_meta(path, **fields):
 def adopt(temporary, name):
     """Take a file somebody uploaded into the mod folder as `<name>`, once the
     header reads as a mod. -> `(path, meta)`. The temporary file is consumed
-    either way; a refusal deletes it."""
+    either way; a refusal deletes it.
+
+    A bundle of several references is split on the way in (`split_bundle`):
+    one asset is one label here, so the file that cannot be cited whole is
+    filed as the references it holds. -> `(first path, its meta)` then, with
+    every part's path under `meta["parts"]`.
+    """
     try:
+        if len(bundle_members(temporary)) > 1:
+            paths = split_bundle(temporary, name)
+            meta = dict(header(paths[0]))
+            meta["parts"] = paths
+            return paths[0], meta
         meta = header(temporary)
         clean = name_of(name)
         target = os.path.join(home(), *clean.split("/")) + EXT
@@ -650,6 +662,159 @@ def adopt(temporary, name):
         if os.path.exists(temporary):
             os.unlink(temporary)
     return target, meta
+
+
+# ---- bundles ------------------------------------------------------------------
+#
+# The sibling pack's version-5 file holds several references under one header:
+# a `members` list of ordinary version-4 headers, and the tensors as `ref_<i>`.
+# One reference reads as one here (`_unbundle`); several are one handle
+# standing for several labels, which nothing here can cite. So a bundle of
+# several is split when it is imported — each visual member written out as the
+# standalone file it would have been — and a member's mods can be written out
+# as one bundle for their loader, which is the one file a character travels in
+# over there. Both are the safetensors layout copied byte for byte: no tensor
+# is decoded, so neither needs torch.
+
+
+def _table(path):
+    """`(the header table, where the tensor bytes start)`. Bounded the way
+    `header` is: an upload that is not a safetensors file has a length field
+    that is whatever its first eight bytes are, and reading that much is a
+    MemoryError, not a refusal."""
+    with open(path, "rb") as handle:
+        raw = handle.read(8)
+        if len(raw) < 8:
+            raise ValueError(f"{path}: not a safetensors file")
+        (length,) = struct.unpack("<Q", raw)
+        if length <= 0 or length > 64 * 1024 * 1024:
+            raise ValueError(f"{path}: not a safetensors file")
+        return json.loads(handle.read(length).decode("utf-8")), 8 + length
+
+
+def _bytes_of(path, start, entry):
+    first, last = entry["data_offsets"]
+    with open(path, "rb") as handle:
+        handle.seek(start + first)
+        return handle.read(last - first)
+
+
+def _write_raw(path, tensors, metadata):
+    """`tensors` as `[(key, dtype, shape, bytes)]` into one safetensors file,
+    written beside its target and swapped in, like `save`."""
+    table, offset = {"__metadata__": metadata}, 0
+    for key, dtype, shape, data in tensors:
+        table[key] = {"dtype": dtype, "shape": list(shape), "data_offsets": [offset, offset + len(data)]}
+        offset += len(data)
+    encoded = json.dumps(table, separators=(",", ":")).encode("utf-8")
+    encoded += b" " * (-len(encoded) % 8)
+    fd, temporary = tempfile.mkstemp(prefix=".refmod-", suffix=".tmp", dir=os.path.dirname(path) or ".")
+    try:
+        with os.fdopen(fd, "wb") as out:
+            out.write(struct.pack("<Q", len(encoded)))
+            out.write(encoded)
+            for *_, data in tensors:
+                out.write(data)
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+    return path
+
+
+def bundle_members(path):
+    """The visual members of a version-5 bundle, as `[(index, member meta)]`,
+    or `[]` for any file that is not one. Audio members are left out: a voice
+    is bound as a file here, never as a mod."""
+    try:
+        table, _ = _table(path)
+        meta = json.loads((table.get("__metadata__") or {}).get(META_KEY) or "{}")
+    except (OSError, ValueError, struct.error):
+        return []
+    if not isinstance(meta, dict) or str(meta.get("kind")) != "bundle" \
+            or int(meta.get("_format_version", 1) or 1) < BUNDLE_VERSION:
+        return []
+    members = meta.get("members")
+    if not isinstance(members, list):
+        return []
+    return [(index, member) for index, member in enumerate(members)
+            if isinstance(member, dict) and str(member.get("kind", "image")) != "audio"]
+
+
+def split_bundle(source, name):
+    """Every visual member of the bundle at `source` as its own standalone
+    file, `<name>-1`, `<name>-2`, ... -> their paths, in the bundle's order.
+
+    All or nothing: a name already taken refuses the whole import before a
+    byte is written, and a member that does not read back as a mod takes the
+    ones written before it out again.
+    """
+    table, start = _table(source)
+    whole = json.loads(table["__metadata__"][META_KEY])
+    members = bundle_members(source)
+    clean = name_of(name)
+    targets = [os.path.join(home(), *f"{clean}-{n}".split("/")) + EXT for n in range(1, len(members) + 1)]
+    for target in targets:
+        if os.path.exists(target):
+            raise RefModError(f"a RefMod named {os.path.basename(target)[:-len(EXT)]!r} is already there")
+    written = []
+    try:
+        for (index, member), target in zip(members, targets):
+            entry = table.get(f"ref_{index}")
+            if not isinstance(entry, dict):
+                raise RefModError(f"{source}: bundle member {index} has no 'ref_{index}' tensor")
+            meta = dict(member)
+            for key in ("description", "tags", "concept_type", SPACE_KEY, "made_by", "source_file"):
+                if key not in meta and key in whole:
+                    meta[key] = whole[key]
+            meta["_format_version"] = STANDALONE_VERSION
+            meta["name"] = os.path.basename(target)[:-len(EXT)]
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            _write_raw(target, [("latent", entry["dtype"], entry["shape"], _bytes_of(source, start, entry))],
+                       {META_KEY: json.dumps(meta)})
+            written.append(target)
+            header(target)
+    except Exception:
+        for path in written:
+            if os.path.exists(path):
+                os.unlink(path)
+        raise
+    return written
+
+
+def write_bundle(paths, name, target):
+    """Several H3 mods as one version-5 bundle at `target`, for the sibling
+    pack's loader. -> `target`.
+
+    Each member is the file's own header made a version-4 member, and its
+    tensor the file's bytes. H3's space only — theirs is an H3 pack, and a
+    Klein latent in their bundle is a file their loader would choke on — and
+    one reference per file, since a member is one reference.
+    """
+    tensors, members = [], []
+    for index, path in enumerate(paths):
+        meta = header(path)
+        if meta["space"] != DEFAULT_SPACE:
+            raise RefModError(f"{os.path.basename(path)} is a {space_label(meta['space'])} RefMod; "
+                              f"a bundle holds {space_label(DEFAULT_SPACE)} ones")
+        if meta.get("members", 1) != 1:
+            raise RefModError(f"{os.path.basename(path)} holds several references already")
+        table, start = _table(path)
+        entry = table[meta["tensor"]]
+        tensors.append((f"ref_{index}", entry["dtype"], entry["shape"], _bytes_of(path, start, entry)))
+        written = json.loads((table.get("__metadata__") or {}).get(META_KEY) or "{}")
+        if meta["tensor"] != "latent":
+            written, _ = _unbundle(path, written)
+        written.update({"_format_version": STANDALONE_VERSION, "kind": meta["kind"],
+                        "latent_t": meta["latent_t"], "latent_h": meta["latent_h"],
+                        "latent_w": meta["latent_w"]})
+        members.append(written)
+    if not members:
+        raise RefModError("nothing to bundle")
+    return _write_raw(target, tensors, {META_KEY: json.dumps({
+        "_format_version": BUNDLE_VERSION, "kind": "bundle", "name": str(name),
+        "members": members, "made_by": "continuity", SPACE_KEY: DEFAULT_SPACE,
+    })})
 
 
 # ---- the tensor ---------------------------------------------------------------
@@ -799,7 +964,7 @@ def grid_for(latent_h, latent_w, long_edge):
     return min(h, latent_h - latent_h % 2), min(w, latent_w - latent_w % 2)
 
 
-def compress(latent, long_edge, steps=150, lr=0.02, tell=None, grid=None):
+def compress(latent, long_edge, steps=150, lr=0.02, tell=None, grid=None, motion=0.0):
     """`[1, C, T, H, W]` (or `[1, C, H, W]`) -> the same at a `long_edge` grid,
     refined `steps` times.
 
@@ -808,6 +973,11 @@ def compress(latent, long_edge, steps=150, lr=0.02, tell=None, grid=None):
     cannot share a latent — and `long_edge` picks it at the source's aspect
     otherwise. A still space's 4-D latent is pooled and enlarged in two
     dimensions; the loss is the same.
+
+    `motion` weights the fit toward what moves (`motion_weights`): a clip's
+    small grid has few cells to spend, and a plain fit spends them evenly over
+    a wall that never changes and a hand that does. Zero is the sibling pack's
+    plain fit, and a still or a one-frame latent has no motion to weigh.
     """
     import torch
     import torch.nn.functional as F
@@ -830,6 +1000,7 @@ def compress(latent, long_edge, steps=150, lr=0.02, tell=None, grid=None):
         size, mode = (t, h, w), "trilinear"
     if steps <= 0:
         return small
+    weights = motion_weights(full, motion) if not flat else None
     # The queue runs nodes under inference mode; the refinement needs autograd.
     with torch.inference_mode(False), torch.set_grad_enabled(True):
         target = full.clone()
@@ -838,11 +1009,85 @@ def compress(latent, long_edge, steps=150, lr=0.02, tell=None, grid=None):
         for i in range(steps):
             opt.zero_grad()
             up = F.interpolate(param, size=size, mode=mode, align_corners=False)
-            F.mse_loss(up, target).backward()
+            if weights is None:
+                loss = F.mse_loss(up, target)
+            else:
+                loss = (weights * (up - target) ** 2).mean()
+            loss.backward()
             opt.step()
             if tell and (i + 1) % 10 == 0:
                 tell((i + 1) / steps)
         return param.detach()
+
+
+def motion_weights(latent, strength):
+    """Per-cell weights for a clip's fit, heavier where the clip moves. -> a
+    `[1, 1, T, H, W]` tensor, or None where there is nothing to weigh.
+
+    Why weights and not a second loss on frame differences, which is the
+    obvious first idea: the enlargement is linear and the same on every frame,
+    so the grid that best reproduces each frame also best reproduces each
+    difference — a difference term has the same optimum as the plain fit and
+    would change nothing it converges to. A *weighted* fit has a different
+    optimum: the cells over a moving arm are fitted closely and the cells over
+    the still background are allowed to drift, which is the trade a motion
+    reference wants. Each cell's movement is the larger of its change to the
+    frame before and to the frame after, averaged over channels, and the
+    weight is `1 + strength * movement / mean movement`, so a static clip
+    weighs every cell the same and `strength` 0 is the plain fit.
+    """
+    if not strength or latent.ndim != 5 or latent.shape[2] < 2:
+        return None
+    import torch
+
+    step = (latent[:, :, 1:] - latent[:, :, :-1]).abs().mean(dim=1, keepdim=True)
+    before = torch.cat([step[:, :, :1], step], dim=2)
+    after = torch.cat([step, step[:, :, -1:]], dim=2)
+    moved = torch.maximum(before, after)
+    mean = float(moved.mean())
+    if mean <= 0:
+        return None
+    return 1.0 + float(strength) * moved / mean
+
+
+# How alike two latent frames have to be for the second to be dropped by
+# `thin`: their mean squared difference over the clip's own variance. A held
+# pose under codec noise sits well under it; a slow pan's frames, four source
+# frames apart, sit well over. Set by reasoning about the measure, not by a
+# render yet — `thin` logs what it saw so the number can be moved on evidence.
+THIN = 0.02
+
+
+def thin(latent, threshold=THIN):
+    """Drop latent frames that repeat the one kept before them.
+    -> `(latent, kept indices, changes)`.
+
+    The sibling pack's budget policy drops near-duplicate frames before it
+    resamples time, because a clip that is mostly a held pose pays a whole
+    grid of tokens per frame for nothing. This is that step on its own: walk
+    the frames, keep the first, and keep each later one only if it differs
+    from the last one kept by more than `threshold` (mean squared difference
+    over the latent's variance, so the number means the same at any scale).
+    Timing compresses where frames go — a held second becomes a held instant
+    — which is the trade, and why `threshold` 0 keeps everything.
+    `changes` is every frame's measure against the frame kept before it, for
+    the log line that says what a clip was made of.
+    """
+    if latent.ndim != 5 or latent.shape[2] < 2 or not threshold:
+        return latent, list(range(latent.shape[2] if latent.ndim == 5 else 1)), []
+    full = latent.detach().float()
+    scale = float(full.var())
+    if scale <= 0:
+        return latent[:, :, :1], [0], [0.0] * (latent.shape[2] - 1)
+    kept, changes = [0], []
+    for index in range(1, full.shape[2]):
+        change = float(((full[:, :, index] - full[:, :, kept[-1]]) ** 2).mean()) / scale
+        changes.append(change)
+        if change > threshold:
+            kept.append(index)
+    if len(kept) == latent.shape[2]:
+        return latent, kept, changes
+    return latent[:, :, kept], kept, changes
 
 
 def motion_of(frames):
@@ -875,11 +1120,12 @@ def motion_of(frames):
 # frames evenly and the stills keep their one.
 
 
-def stack(latents, grid, steps=150, lr=0.02, max_tokens=0, tell=None):
+def stack(latents, grid, steps=150, lr=0.02, max_tokens=0, tell=None, motion=0.0):
     """`[[1, 24, T_i, H_i, W_i], ...]` -> one `[1, 24, sum T_i, grid, grid]`.
 
     -> `(latent, kept)`, `kept` the frame count each source contributed after
-    the cap. `max_tokens` of 0 is no cap.
+    the cap. `max_tokens` of 0 is no cap. `motion` is `compress`'s, and only
+    the clips have any.
     """
     import torch
 
@@ -902,6 +1148,6 @@ def stack(latents, grid, steps=150, lr=0.02, max_tokens=0, tell=None):
             picks = torch.linspace(0, latent.shape[2] - 1, keep).round().long()
             latent = latent[:, :, picks]
         base = index / len(latents)
-        parts.append(compress(latent, grid, steps, lr, grid=(grid, grid),
+        parts.append(compress(latent, grid, steps, lr, grid=(grid, grid), motion=motion,
                               tell=(lambda f, base=base: tell(base + f / len(latents))) if tell else None))
     return torch.cat(parts, dim=2), kept

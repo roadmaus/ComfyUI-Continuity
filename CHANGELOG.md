@@ -6,6 +6,37 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A member's clips are saved with their stills, and a clip can be kept for
+its motion.** Compressed and Full were stills only, and the ledger counted a
+member as saved once their stills were — so a member saved that way showed
+*Saved*, lost the line that offers to save the rest, and kept encoding their
+clip every render; the only way through was to save the clip first. Both rows
+now save a member's clips first, each as its own file (pooled to a 32-grid
+for Compressed, the 768 encode for Full), then their stills, and the ledger
+reads *saved* only when every look is. A new row, *Each clip — for its
+motion*, keeps a clip the way the sibling pack's motion workflow does: 56
+frames over up to fifteen seconds on a 16-grid, around 450 tokens, with the
+fit weighted toward the cells that move. A plain loss on frame differences
+was the first idea and would have changed nothing, since the enlargement is
+linear and the same per frame; a weighted fit has a different optimum.
+
+**Clips are read whole to the end, and held frames are left out.** A clip
+was sampled at the count asked for and then cut down to the 17k+5 run from
+the end, so a count off that run — or a clip shorter than it — lost the end
+of the movement; the run is now chosen first and the picks span the whole
+stretch read, the fix the sibling pack made in 0.2.6. Latent frames that
+repeat the one kept before them are dropped before a clip is pooled or
+stacked (mean squared change over the clip's variance, threshold 0.02), and
+the log says what each clip kept and measured so the threshold can move on
+evidence; `thin: 0` keeps every frame.
+
+**RefMod bundles go both ways.** A ComfyUI-MiniMaxH3Mod bundle of several
+references was refused on import; it is now split into its members
+(`anna-1`, `anna-2`, …) and one cast member is made of all of them. A member
+with two or more H3 RefMods has *Download as one bundle* in their saved
+references' menu: one format-5 file built from the files' own bytes, for that
+pack's loader, never filed here.
+
 **A plan's shots can be added, taken out and moved, by talking and on the
 card.** A plan turn could change what a row said and plan the piece again,
 and nothing in between: "drop shot 2" was read as an edit of shot 2, and a

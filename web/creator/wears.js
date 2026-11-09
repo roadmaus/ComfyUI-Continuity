@@ -27,7 +27,17 @@
 import { el, icon } from "./dom.js";
 import { t } from "./i18n.js";
 import { loraBase } from "./loras.js";
-import { cost, everyFamilyRows, familyModeRows, modIn, modRow, modeWord, remakeRows, shortTokens } from "./refmod.js";
+import { DEFAULT_SPACE, cost, everyFamilyRows, familyModeRows, modIn, modRow, modeWord, remakeRows, shortTokens } from "./refmod.js";
+import { refmodBundleUrl } from "./api.js";
+
+/** Hand several mods out as one bundle: an anchor with `download`, the way a
+ *  single mod's file is handed out, so the page never holds the bytes. */
+function downloadBundle(paths, name) {
+  const anchor = el("a", { href: refmodBundleUrl(paths, name), download: "" });
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+}
 import * as S from "./state.js";
 import { openMenu } from "./cast.js";
 
@@ -73,8 +83,12 @@ export class WearsPanel {
     const saved = space ? entries.filter((entry) => modIn(entry, space)).length : 0;
     if (chosen === "pictures") return "pictures";
     if (chosen === "saved") return saved ? "saved" : "pictures";
-    // Left to decide: the rendition where there is one, the picture otherwise.
-    return saved && saved === entries.filter((e) => e.kind !== "video").length ? "saved" : "pictures";
+    // Left to decide: the rendition where there is one, the picture otherwise
+    // — so "saved" only when every look has one, clips included. Counting the
+    // stills alone (from when only a stack could keep a clip) read a member
+    // whose stills were saved as saved, and the clip beside them, encoded
+    // every render, lost the line that offers to save it.
+    return saved && saved === entries.length ? "saved" : "pictures";
   }
 
   /** Whether the adapter a family needs to read a picture is among what they
@@ -390,10 +404,18 @@ export class WearsPanel {
             + "from the library.", { family: t(family.label) }),
       onPick: () => this.host.clear(subject, family, null),
     }] : [];
-    if (!remake.length && !forget.length) return;
+    // Two or more H3 mods travel as one file to the sibling pack's loader.
+    const bundle = family.space === DEFAULT_SPACE && mods.length > 1 ? [{
+      label: t("Download as one bundle"),
+      note: t("Their {count} saved references as one ComfyUI-MiniMaxH3Mod bundle (format 5), "
+            + "for that pack's loader. Nothing here changes.", { count: mods.length }),
+      onPick: () => downloadBundle(mods.map((row) => row.path), subject.handle),
+    }] : [];
+    if (!remake.length && !forget.length && !bundle.length) return;
     act(t(remake.length ? "Re-encode ▾" : "Saved references ▾"), (event) => openMenu(event.currentTarget, {
       title: t("@{handle}'s saved references for {family}", { handle: subject.handle, family: t(family.label) }),
       sections: [...(remake.length ? [{ head: t("Encode again"), rows: remake }] : []),
+                 ...(bundle.length ? [{ head: t("Take them elsewhere"), rows: bundle }] : []),
                  ...(forget.length ? [{ head: t("Start over"), rows: forget }] : [])],
     }), "quiet");
   }
