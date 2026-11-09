@@ -252,7 +252,7 @@ const TREATMENTS = {
       ${[0, 1, 2].map((i) => scene(10 + i * cell, 28, cell, 34, -6 * i)).join("")}
       <line class="mmc-dash-cut" x1="${10 + cell}" y1="21" x2="${10 + cell}" y2="69"/>
       <line class="mmc-dash-cut" x1="${10 + cell * 2}" y1="21" x2="${10 + cell * 2}" y2="69"/>
-      <rect class="mmc-dash-head" x="10" y="21" width="${cell}" height="48"/>`);
+      <rect class="mmc-dash-playhead" x="10" y="21" width="${cell}" height="48"/>`);
   },
 
   /** A line said, and the frame it turns into.

@@ -1674,8 +1674,8 @@ export const css = `
 .mmc-dash-strip { fill: none; stroke: color-mix(in srgb, var(--mmc-ink) 30%, transparent); stroke-width: .6; }
 .mmc-dash-holes { fill: color-mix(in srgb, var(--mmc-ink) 22%, transparent); }
 .mmc-dash-cut { stroke: color-mix(in srgb, var(--mmc-ink) 30%, transparent); stroke-width: .6; }
-.mmc-dash-head { fill: none; stroke: var(--mmc-accent); stroke-width: .9; opacity: 0; shape-rendering: crispEdges; }
-.mmc-dash-card:hover .mmc-dash-head, .mmc-dash-card:focus-visible .mmc-dash-head {
+.mmc-dash-playhead { fill: none; stroke: var(--mmc-accent); stroke-width: .9; opacity: 0; shape-rendering: crispEdges; }
+.mmc-dash-card:hover .mmc-dash-playhead, .mmc-dash-card:focus-visible .mmc-dash-playhead {
   opacity: 1; animation: mmc-dash-reel 1.2s steps(3) infinite;
 }
 @keyframes mmc-dash-reel { to { transform: translateX(140px); } }
