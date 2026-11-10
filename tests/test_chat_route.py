@@ -92,8 +92,10 @@ refuses("a clip over a pre-stage is refused", lambda: route._base({"piece": PRE}
 
 check("the rail names the piece's family", route._families_of(PIECE, False), {"video_family": "h3"})
 check("and the pre-stage's arch as its family", route._families_of(PRE, True), {"still_family": "krea2"})
-refuses("a pre-stage on the H3 branch cannot draw the room's picture",
-        lambda: route._families_of({**PRE, "arch": "minimax"}, True), "MiniMax H3", "image model")
+check("a pre-stage on MiniMax H3 Image draws the room's picture like any image arch",
+      route._families_of({**PRE, "arch": "minimax"}, True), {"still_family": "h3image"})
+refuses("an arch that is no image family is refused",
+        lambda: route._families_of({**PRE, "arch": "bogus"}, True), "image model")
 
 # ---- the widgets ------------------------------------------------------------
 

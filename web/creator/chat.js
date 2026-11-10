@@ -40,8 +40,7 @@ import { el, icon, mark, spinner, dragsFiles, mountOverlay, keepScroll, placeNea
 import { openChoicePopover, openAspectPopover, edgeSlider, aspectGlyph } from "./pills.js";
 import { seedPill, seedMarkBits } from "./sampling.js";
 import { rulesFor, resolveCanvas } from "./canvas.js";
-import { resolvedPreStage, PRESTAGE_CANVAS_MULTIPLE, PRESTAGE_MIN_EDGE, PRESTAGE_MAX_EDGE,
-         PRESTAGE_DEFAULT_EDGE } from "./state.js";
+import { resolvedPreStage, preStageCanvas, preStageEdgeFor, PRESTAGE_DEFAULT_EDGE } from "./state.js";
 import { openPicker } from "./picker.js";
 import { loadLoraPrefs, outputUrl, upload, uiSetting, patchSettings, primeSettings,
          viewUrl, download } from "./api.js";
@@ -2605,8 +2604,9 @@ class Room {
    * The short-edge slider for one kind — the pack's own control, alone.
    *
    * Two of these, because a picture and a clip are drawn on different canvases
-   * with different ceilings: the still's is the pre-stage's (the image
-   * families share one block), the clip's is the video family's. The node's
+   * with different ceilings: the still's is the pre-stage's for the room's
+   * still arch (most image families share one block; MiniMax H3 Image runs at
+   * 4-20 MP), the clip's is the video family's. The node's
    * resolution popover carries a second section — two passes, a finishing
    * backend — that the room's blob does not send, so it is not offered here.
    */
@@ -2616,19 +2616,21 @@ class Room {
     const still = kind === "still";
     const rules = still ? null : rulesFor(this.sync.videoFamily());
     const ratio = still ? null : (rules.aspects.find(([name]) => name === label)?.[1] ?? 16 / 9);
-    const mark = still ? PRESTAGE_DEFAULT_EDGE : rules.nativeShortEdge;
-    const target = { short_edge: still ? Number(bar.still_edge) || mark : clipEdge(this.sync) };
+    const arch = still ? this.sync.stillArch() : null;
+    const canvas = still ? preStageCanvas(arch) : null;
+    const mark = still ? canvas.default_short_edge : rules.nativeShortEdge;
+    const target = { short_edge: still ? preStageEdgeFor(arch, Number(bar.still_edge) || mark) : clipEdge(this.sync) };
     const size = () => {
       if (still) {
-        const { width, height } = resolvedPreStage({ aspect: label, short_edge: target.short_edge });
+        const { width, height } = resolvedPreStage({ arch, aspect: label, short_edge: target.short_edge });
         return [width, height];
       }
       return resolveCanvas(ratio, target.short_edge, rules);
     };
     const body = edgeSlider({
-      min: still ? PRESTAGE_MIN_EDGE : rules.minShortEdge,
-      max: still ? PRESTAGE_MAX_EDGE : rules.maxShortEdge,
-      step: still ? PRESTAGE_CANVAS_MULTIPLE : rules.multiple,
+      min: still ? canvas.min_short_edge : rules.minShortEdge,
+      max: still ? canvas.max_short_edge : rules.maxShortEdge,
+      step: still ? canvas.multiple : rules.multiple,
       value: target.short_edge, mark, markLabel: still ? "default" : "native",
       apply: (edge) => { target.short_edge = edge; },
       describe: () => {

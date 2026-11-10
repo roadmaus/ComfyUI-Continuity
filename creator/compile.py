@@ -159,8 +159,7 @@ FACE_OVERRIDES = ("on", "off")
 
 # H3's pair, which is what every reader that predates a second family spells.
 # `registry.ROUTED` is the family-aware answer and is what the functions below
-# ask; this stays because H3's own modules (`families/h3/still.py`) mean these
-# two and nothing else.
+# ask; this stays because H3's own modules mean these two and nothing else.
 CHECKPOINTS = registry.ROUTED[registry.DEFAULT_VIDEO]
 
 # Which of a reference video's streams are actually referenced. "sound" drops the

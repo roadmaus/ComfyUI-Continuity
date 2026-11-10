@@ -1115,14 +1115,19 @@ class Fullscreen {
       // drawing and they do genuinely different things to the render.
       const native = S.preStageReadsGuides(pre.state);
       const branch = S.preStageLoadsBranch(pre.state);
+      // And a fourth: on a family that inpaints, the drawing is a mask.
+      const mask = S.preStageMasks(pre.state);
       targets.push({
         id: "pre", kinds: ["image"],
-        label: native || branch ? t("Aim the still at it") : t("Build the still on it"),
-        does: native
-          ? t("These weights follow a tracing on their own — nothing to load.")
-          : branch
-            ? t("Loads the ControlNet branch that reads it.")
-            : t("Becomes the pre-stage's init image."),
+        label: mask ? t("Inpaint under it")
+          : native || branch ? t("Aim the still at it") : t("Build the still on it"),
+        does: mask
+          ? t("Repaints the white of the matte over Picture 1 and keeps the rest.")
+          : native
+            ? t("These weights follow a tracing on their own — nothing to load.")
+            : branch
+              ? t("Loads the ControlNet branch that reads it.")
+              : t("Becomes the pre-stage's init image."),
         // Closes the bench and puts the pre-stage in front, because sending is
         // the end of the errand: the guide exists to be written a prompt
         // around, and the next thing anybody does is write it.

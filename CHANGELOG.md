@@ -6,6 +6,38 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The pre-stage's MiniMax stills are made by MiniMax H3 Image.** The
+MiniMax choice on the pre-stage used to run the H3 *video* model on the
+shortest legal clip and decode its first latent frame, because there was no
+other way to get a picture out of MiniMax weights; it cost a video pass at a
+video canvas for one frame, and its body was a whole Creator editor with a
+clip-length and a latent-frame pill. ComfyUI 0.45 ships MiniMax H3 Image
+natively, and it is now a still family like Klein or Qwen Image Edit: core's
+`MiniMaxH3ImageConditioning` reads the prompt and up to four pictures (cited
+`<Picture N>`, MiniMax's own spelling), the first of which can be edited in
+place, at the template's six distilled steps and cfg 1. It wants a large
+canvas — 4 to 20 MP, best near 16 — so a family can now declare its own
+canvas block, and this one's slider runs 1536 to 4096 on the short edge, /32,
+up to 6272 on the long one; every other family's canvas is unchanged. The
+pill keeps its `minimax` id, so a pre-stage saved on the old branch opens on
+the new model with its prompt, pictures, LoRAs and aspect lifted out of the
+old request and its frame settings dropped (`h3image.still.migrate`, mirrored
+in `state.js`). The image VAE is told apart from the video one by its header
+and refused by name when the wrong one is picked. `MiniMaxH3StillLatent` is
+gone, H3 renders video only, and a preset's weights no longer cross between
+a pre-stage and a piece on any arch. Whether an H3 video LoRA does anything
+useful on these weights is untested: the DiT is the same shape as the pruned
+video checkpoints, so the keys match, and that is all that is known.
+
+**MiniMax H3 Image inpaints under a matte.** The pre-stage grows a *Mask*
+tool on this family: pick a matte the ControlNet bench already wrote, or mask
+a picture now and send it back with *Inpaint under it*. The matte lands as a
+mask chip, not a picture; the white of it is repainted over Picture 1 and the
+rest is kept, through core's ordinary latent noise mask (the image model's
+single stream goes down the stock inpaint path). A mask always makes Picture
+1 the picture edited, so its canvas is Picture 1's, and a mask with no
+picture under it is refused by name.
+
 **A member's clips are saved with their stills, and a clip can be kept for
 its motion.** Compressed and Full were stills only, and the ledger counted a
 member as saved once their stills were — so a member saved that way showed

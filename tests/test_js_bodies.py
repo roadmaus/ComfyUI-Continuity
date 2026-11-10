@@ -237,7 +237,7 @@ for (const [cls, widget, blob] of [
   const node = fakeNode(cls, widget, blob);
   try {
     await ext.nodeCreated(node);
-    const key = cls + (cls === "MiniMaxH3PreStage" && blob !== "{}" ? " (H3 still)" : "");
+    const key = cls + (cls === "MiniMaxH3PreStage" && blob !== "{}" ? " (MiniMax)" : "");
     // Where the piece object hangs off the body, which is not the same property
     // on both kinds — see the `pieceRead` block below for what that costs.
     out.holds ??= {};
@@ -453,42 +453,23 @@ try {
     attached: (shot.assets ?? []).map((asset) => `${asset.handle}=${asset.filename}`).join(","),
     poolLeftAlone: (piece.assets ?? []).length === 0,
     voiceBound: piece.subjects?.[0]?.voice === shot.assets?.[1]?.handle,
-    // The H3 still is a video generation with a piece of its own — the nested
-    // request — so its box offers the roster and casting lands there, files as
-    // ordinary attachments. The image branches offer it too, over their own
-    // refs: a still has the cast a shot has (`compile_image.cast_into_still`).
-    onTheStill: null,
+    // Every pre-stage offers it over its own refs: a still has the cast a shot
+    // has (`compile_image.cast_into_still`). The MiniMax one included — it is
+    // an image family like the rest now.
     onAnImagePreStage: null,
+    onTheMiniMaxStill: null,
   };
-  const still = fakeNode("MiniMaxH3PreStage", "prestage_data",
-                         JSON.stringify({ arch: "minimax" }));
-  await ext.nodeCreated(still);
-  const stillHooks = still.mmcBody.editor?.prompt?.hooks;
-  if (stillHooks?.castFromLibrary) {
-    const got = await stillHooks.castFromLibrary({
-      handle: "anna", takes: "person", description: "dark coat",
-      files: [{ slot: "from", filename: "anna/face.png", kind: "image" }],
-    });
-    const request = still.mmcBody.state[S.PRESTAGE_STILL_ARCH].request;
-    out.castFromMention.onTheStill = {
-      handle: got,
-      cast: (request.subjects ?? []).length,
-      attached: (request.assets ?? []).map((asset) => `${asset.handle}=${asset.filename}`).join(","),
-      // …and the box knows she is here: the roster dedup and the citation
-      // band both read the cast through this hook.
-      offered: (stillHooks.getCast?.() ?? []).map((subject) => subject.handle).join(","),
-    };
-  }
-  const image = fakeNode("MiniMaxH3PreStage", "prestage_data", "{}");
-  await ext.nodeCreated(image);
-  {
+  for (const [key, blob] of [["onAnImagePreStage", "{}"],
+                             ["onTheMiniMaxStill", JSON.stringify({ arch: "minimax" })]]) {
+    const image = fakeNode("MiniMaxH3PreStage", "prestage_data", blob);
+    await ext.nodeCreated(image);
     const hooks = image.mmcBody.editor?.prompt?.hooks;
     const got = (await hooks?.castFromLibrary?.({
       handle: "anna", takes: "person", description: "dark coat",
       files: [{ slot: "from", filename: "anna/face.png", kind: "image" }],
     })) ?? null;
     const state = image.mmcBody.state;
-    out.castFromMention.onAnImagePreStage = {
+    out.castFromMention[key] = {
       handle: got, cast: (state.subjects ?? []).length,
       attached: (state.refs ?? []).map((ref) => `${ref.handle}=${ref.filename}`).join(","),
       offered: (hooks?.getCast?.() ?? []).map((subject) => subject.handle).join(","),
@@ -1483,12 +1464,17 @@ try {
   const node = fakeNode("MiniMaxH3PreStage", "prestage_data", JSON.stringify({ arch: "minimax" }));
   await ext.nodeCreated(node);
   const body = node.mmcBody;
-  body.state.minimax.request.prompt = "a lighthouse";
+  body.state.prompt = "a lighthouse";
+  body.state.short_edge = 4096;
   body.setArch("krea2");
   const image = body.editor.constructor.name;
+  // The edge is the arch's: MiniMax H3 Image's 4096 is past Krea's ceiling,
+  // so arriving on Krea lands on Krea's default rather than its 2048 end.
+  const kreaEdge = body.state.short_edge;
   body.setArch("minimax");
   out.switch = { image, back: body.editor.constructor.name,
-                 promptKept: body.state.minimax.request.prompt === "a lighthouse",
+                 promptKept: body.state.prompt === "a lighthouse",
+                 edges: [kreaEdge, body.state.short_edge],
                  rendered: body.root.children.length > 0 };
 } catch (error) {
   out.errors.push(`arch switch: ${error.message}`);
@@ -3463,29 +3449,28 @@ check("...and the cuts meet, on a width that does not divide by the grid",
 
 check("the image pre-stage mounts", report["nodes"].get("MiniMaxH3PreStage"),
       {"mounted": True, "body": "PreStageEditor"})
-check("the H3 pre-stage mounts the Creator's body",
-      report["nodes"].get("MiniMaxH3PreStage (H3 still)"),
-      {"mounted": True, "body": "CreatorEditor"})
+check("the MiniMax pre-stage mounts the image body like every other arch",
+      report["nodes"].get("MiniMaxH3PreStage (MiniMax)"),
+      {"mounted": True, "body": "PreStageEditor"})
 
 # The model leads the piece's row on every face. Four bodies, one slot: the
 # shot's editor and the strip's summary name a video family, both pre-stages
 # name an image architecture, and all four put it first — see `familyPill`.
 check("the model pill leads every piece's row", report["leads"],
       {"MiniMaxH3Creator": True, "MiniMaxH3Timeline": True,
-       "MiniMaxH3PreStage": True, "MiniMaxH3PreStage (H3 still)": True})
+       "MiniMaxH3PreStage": True, "MiniMaxH3PreStage (MiniMax)": True})
 
-# What a still is set up with. Every one of these is the video nodes' own
-# control, reached by being a video request rather than by being re-described.
-for wanted in ("Add image", "Add video", "Add audio", "Add LoRA", "Gallery", "From video",
-               "Start frame", "End frame", "MiniMax H3", "5f", "T2VA"):
+# What a MiniMax still is set up with: an image model's rail, with the mask
+# that is its inpainting beside the pictures.
+for wanted in ("MiniMax H3 Image", "Pictures", "Mask", "Init image", "From video"):
     if wanted not in (report["still"] or ""):
-        FAILURES.append(f"the H3 still's body has no {wanted!r}")
+        FAILURES.append(f"the MiniMax still's body has no {wanted!r}")
 
-# ...and what it must *not* have. The settings page is the video rate control;
-# a node that writes PNGs offering it is a control over nothing.
-for unwanted in ("Settings", " s ", "sweep"):
+# ...and nothing of the video branch it replaced: no clip length, no keyframe
+# slots, no checkpoint route, and no settings page.
+for unwanted in ("Settings", "5f", "T2VA", "Start frame", "End frame", "Add audio"):
     if unwanted in (report["still"] or ""):
-        FAILURES.append(f"the H3 still's body should not carry {unwanted!r}")
+        FAILURES.append(f"the MiniMax still's body should not carry {unwanted!r}")
 check("the Creator keeps the settings tool", "Settings" in (report["creator"] or ""), True)
 
 # ---- somebody typed into the sentence ---------------------------------------
@@ -3499,18 +3484,13 @@ check("...and nothing hidden in a pool the face does not draw",
       mention.get("poolLeftAlone"), True)
 check("...and her voice still bound to the file that is her voice",
       mention.get("voiceBound"), True)
-on_still = mention.get("onTheStill") or {}
-check("the H3 still's box offers the roster — its request is a piece of its own",
-      on_still.get("handle"), "anna")
-check("...as one subject on the request", on_still.get("cast"), 1)
-check("...with her file attached as an ordinary reference on it",
-      on_still.get("attached"), "img-1=anna/face.png")
-check("...and the box's own cast hook seeing her", on_still.get("offered"), "anna")
-on_image = mention.get("onAnImagePreStage") or {}
-check("an image pre-stage is offered the roster too, and she lands on its refs",
-      (on_image.get("handle"), on_image.get("cast"), on_image.get("offered")), ("anna", 1, "anna"))
-check("...her picture among them, under the still's own handle",
-      on_image.get("attached"), "img-1=anna/face.png")
+for key, label in (("onAnImagePreStage", "an image pre-stage"),
+                   ("onTheMiniMaxStill", "the MiniMax pre-stage")):
+    on_image = mention.get(key) or {}
+    check(f"{label} is offered the roster too, and she lands on its refs",
+          (on_image.get("handle"), on_image.get("cast"), on_image.get("offered")), ("anna", 1, "anna"))
+    check(f"...her picture among them, under {label}'s own handle",
+          on_image.get("attached"), "img-1=anna/face.png")
 
 pre = report.get("prestageCast", {})
 check("an image pre-stage's row is the pictures you attached, not hers",
@@ -3797,10 +3777,10 @@ check("...and writes it where the stylesheet reads it",
 check("the folders carry a field per family, renders then stills",
       settings.get("fields"),
       ["continuity/renders/h3/H3", "continuity/renders/ltx25/LTX25",
-       "continuity/stills/h3/H3", "continuity/stills/krea2/Krea2",
+       "continuity/stills/krea2/Krea2",
        "continuity/stills/ideogram4/Ideogram4", "continuity/stills/qwenedit/QwenEdit",
        "continuity/stills/flux2klein/Flux2Klein", "continuity/stills/qwen21/Qwen21",
-       "continuity/stills/moss/MOSS"])
+       "continuity/stills/moss/MOSS", "continuity/stills/h3image/H3Image"])
 # The token is one object or it is nothing: it went in as eight characters and
 # came back as a tile wearing the plain word, with the stored string untouched.
 check("a typed token becomes one tile, and the stored string keeps its spelling",
@@ -4144,7 +4124,9 @@ check("...without blanking the score it said nothing about",
 check("switching to an image model rebuilds the body",
       report.get("switch", {}).get("image"), "PreStageEditor")
 check("and switching back rebuilds it again",
-      report.get("switch", {}).get("back"), "CreatorEditor")
+      report.get("switch", {}).get("back"), "PreStageEditor")
+check("the short edge lands inside each arch's own range",
+      report.get("switch", {}).get("edges"), [1024, 2048])
 check("the prompt survives the round trip",
       report.get("switch", {}).get("promptKept"), True)
 check("the rebuilt body is not empty",

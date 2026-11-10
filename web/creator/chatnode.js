@@ -41,9 +41,8 @@ import * as S from "./state.js";
 import { DEFAULT_STILL_ARCH, STILL_ARCHES, DEFAULT_VIDEO_FAMILY, stillFamily } from "./manifest.js";
 import { t } from "./i18n.js";
 
-/** The image arches the room can draw a picture with. H3's still branch is a
- *  video generation under its own blob, which the server's still route does
- *  not build — see `routes/chat._rail`. */
+/** The image arches the room can draw a picture with — every pre-stage arch,
+ *  MiniMax's included now that it is MiniMax H3 Image (`routes/chat._rail`). */
 export const PICTURE_ARCHES = S.PRESTAGE_IMAGE_ARCHES;
 
 /** The image arches a cited picture can be *changed* on: the families whose
@@ -413,7 +412,7 @@ export class Sync {
     } else {
       const base = arch === "ideogram4"
         ? { steps: S.PRESTAGE_IDEOGRAM_STEPS[S.emptyPreStage().quality], ...S.PRESTAGE_IDEOGRAM_ROW }
-        : (S.PRESTAGE_BASE_ROW[arch] ?? S.PRESTAGE_STILL_ROW);
+        : S.PRESTAGE_BASE_ROW[arch];
       const merged = { ...base, ...values };
       if (merged.steps !== undefined) parts.push(t("{n} steps", { n: merged.steps }));
       if (merged.cfg !== undefined) parts.push(`cfg ${merged.cfg}`);

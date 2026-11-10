@@ -131,7 +131,7 @@ def machine(still_family, video_family, weights, turbo=False, edit=None):
 def _arch_of(family):
     """The pre-stage pill's name for a family, or None where it makes no stills.
 
-    "minimax" is H3's and is frozen in every saved blob, which is why the pill's
+    "minimax" is MiniMax H3 Image's and is frozen in every saved blob, which is why the pill's
     vocabulary and the registry's ids are not the same words — see
     `registry.STILL_ARCHES`. The rail arrives naming families, because that is
     what the machine card and the settings block are keyed by, so the mapping
@@ -157,13 +157,11 @@ def _rail(raw):
     can make. The room reads both families off the nodes on the canvas (the
     piece's family, the pre-stage's arch) and sends them here by name.
 
-    The still side is the *image* families and not every family that makes a
-    still. H3's still branch is a video generation with one latent frame decoded
-    as a picture, and its pre-stage blob is the Creator's own request under a
-    `minimax` block rather than the shared image shape — a second blob for this
-    room to patch, for a picture the video family can already be asked for
-    directly. So the rail offers the families that draw a picture outright, and
-    the room's own pill offers the same set.
+    The still side is the *image* families — every family that makes a still,
+    now that MiniMax's is MiniMax H3 Image's rather than a video generation
+    with one latent frame decoded under a blob of its own. The rail checks
+    against `IMAGE_FAMILIES` all the same, so a family that ever answers for
+    stills off a video render again stays out of a room that cannot patch it.
 
     `edit_family` is the room's *Edits* choice: the image family a cited
     picture is changed on when the still family cannot read one, or nothing
@@ -220,16 +218,16 @@ def _families_of(piece, still):
     for the node that was sent and not for whatever the rail last said.
 
     A pre-stage names an arch, and the room can only draw a picture through
-    an image arch: H3's still branch is a video generation under its own blob
-    (`_rail` says why), so a pre-stage left on it is refused here, in the
-    room's words, rather than built into the wrong compiler.
+    an image arch (`_rail` says why), so an arch that is not one is refused
+    here, in the room's words, rather than built into the wrong compiler.
+    "minimax" is MiniMax H3 Image's, and an image arch like the rest.
     """
     if not still:
         return {"video_family": piece.get("family")}
     family = registry.STILL_ARCHES.get(piece.get("arch"))
     if family not in registry.IMAGE_FAMILIES:
         raise chat.ActionError(
-            "the pre-stage is on MiniMax H3, whose still the room cannot ask "
+            "the pre-stage is on a model whose still the room cannot ask "
             "for. Pick an image model on it and ask again.")
     return {"still_family": family}
 

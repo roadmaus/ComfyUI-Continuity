@@ -11,7 +11,7 @@ English keys the i18n dictionaries already carry.
 
 from ... import accel, canvas, compile, guide, models as core, sampling, settings
 from .. import manifest as m
-from . import contextir, declare, grammar, guidelora, models as slots, refine, still
+from . import contextir, declare, grammar, guidelora, models as slots, refine
 
 
 def _widgets():
@@ -89,7 +89,7 @@ _UI = {
     },
     "vae": {
         "title": "Video VAE",
-        "help": "Decodes the picture — a shot's, and a pre-stage still's.",
+        "help": "Decodes a shot's picture.",
         "hints": ["minimax", "h3"],
         "avoid": ["t1[_-]?image", "image[_-]vae", "audio"],
     },
@@ -266,9 +266,8 @@ def manifest():
         "id": declare.ID,
         "label": declare.LABEL,
         # What the arch pill's tooltip says this family is.
-        "description": "MiniMax H3 — experimental. The still is a video generation with one latent "
-                       "frame decoded as a picture, on the weights, the VAE and the canvas your render "
-                       "already uses. No second model family is loaded, and no extra file to fetch.",
+        "description": "MiniMax H3 — experimental. Video with sound from prose, keyframes and "
+                       "references; its stills are MiniMax H3 Image's.",
         "produces": sorted(declare.PRODUCES),
         "widgets": _widgets(),
         "weights": _weights(),
@@ -485,22 +484,5 @@ def manifest():
                 {"name": name, "help": _TEMPLATE_HELP[name]}
                 for name in refine.PROMPTING.templates
             ],
-        },
-        # The pre-stage branch: a still is a video generation whose first
-        # latent frame is decoded as a picture.
-        "still": {
-            "arch": still.ARCH,
-            "lengths": m.value_list(still.STILL_LENGTHS),
-            "default_frames": still.DEFAULT_FRAMES,
-            "default_index": still.DEFAULT_LATENT_INDEX,
-            "prompt_modes": m.value_list(still.PROMPT_MODES),
-            # The VAE's temporal packing: `base_frames` frames land in
-            # `base_latent` latent frames, and each further `frame_step`
-            # (the canvas grid's own) adds `latent_step`. Mirrors
-            # `still.latent_frames`; test_families holds the two together.
-            "latent": {"base_frames": declare.RULES.frame_offset,
-                       "base_latent": still.latent_frames(declare.RULES.frame_offset),
-                       "frame_step": declare.RULES.frame_step,
-                       "latent_step": 5},
         },
     }

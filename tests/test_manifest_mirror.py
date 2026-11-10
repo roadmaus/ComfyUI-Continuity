@@ -54,7 +54,7 @@ check("still arches", reflected["arches"], dict(registry.STILL_ARCHES))
 check("default still arch", reflected["defaultArch"], registry.DEFAULT_STILL_ARCH)
 check("family() resolves by id", reflected["byId"],
       catalog["families"][0]["label"])
-check("stillFamily() follows the arch alias", reflected["byArch"], "h3")
+check("stillFamily() follows the arch alias", reflected["byArch"], "h3image")
 
 # ---- fetched, the browser path ----------------------------------------------
 

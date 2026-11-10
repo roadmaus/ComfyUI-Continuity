@@ -17,11 +17,12 @@ layout.skip_without_node()
 
 MIRROR = layout.js("state.js")
 
-_pkg = layout.load("canvas", "contextir", "compile", "compile_image", "still",
+_pkg = layout.load("canvas", "contextir", "compile", "compile_image", "h3image_still",
                    "krea2_still", "ideogram4_still", "qwenedit_still",
-                   "flux2klein_still", "qwen21_still")
+                   "flux2klein_still", "qwen21_still", "registry")
 ci = _pkg.compile_image
-cs = _pkg.still
+h3i = _pkg.h3image_still
+registry = _pkg.registry
 k2 = _pkg.krea2_still
 i4 = _pkg.ideogram4_still
 qe = _pkg.qwenedit_still
@@ -86,14 +87,37 @@ for (const arch of ["qwen21", "flux2klein"]) {
 for (const quality of s.PRESTAGE_IDEOGRAM_QUALITIES) {
   out.ideogram[quality] = s.PRESTAGE_IDEOGRAM_STEPS[quality];
 }
-out.still = {
-  lengths: [...s.PRESTAGE_STILL_LENGTHS],
-  frames: s.PRESTAGE_STILL_FRAMES,
-  index: s.PRESTAGE_STILL_INDEX,
-  prompt_modes: [...s.PRESTAGE_PROMPT_MODES],
-  latents: {},
-};
-for (const n of s.PRESTAGE_STILL_LENGTHS) out.still.latents[n] = s.stillLatentFrames(n);
+// MiniMax H3 Image's own canvas (`compile_image.canvas_of`), its edge held to
+// its range on arrival, the old H3 branch's blob lifted the way
+// `h3image.still.migrate` lifts it, and the mask lifted off the pictures.
+out.h3image = { canvases: {}, edges: {} };
+for (const [label] of s.PRESTAGE_ASPECTS) {
+  for (const edge of [1536, 2048, 3072, 4096]) {
+    const g = s.resolvedPreStage({ arch: "minimax", aspect: label, short_edge: edge, init: null, refs: [] });
+    out.h3image.canvases[label + "@" + edge] = [g.width, g.height];
+  }
+}
+for (const edge of [512, 1024, 1536, 4096, 5000]) out.h3image.edges[edge] = s.preStageEdgeFor("minimax", edge);
+out.h3image.krea_edges = [1024, 4096].map((edge) => s.preStageEdgeFor("krea2", edge));
+const OLD = { arch: "minimax", prompt: "", short_edge: 768, minimax: { frames: 22, latent_index: 1, request: {
+  prompt: "@img-1 at dusk", aspect: "9:16", refined: { body: "x" },
+  assets: [{ handle: "img-1", filename: "a.png", kind: "image", role: "reference", crop: { x: 0.1 } },
+           { handle: "aud-1", filename: "s.wav", kind: "audio" },
+           { handle: "img-2", filename: "g.png", kind: "image", role: "guide" }],
+  loras: [{ name: "x.safetensors", strength: 0.5 }] } } };
+out.h3image.migrated = s.migratePreStage(OLD);
+out.h3image.migrated_other = s.migratePreStage({ ...OLD, arch: "krea2", prompt: "keep" });
+out.h3image.parsed = (() => {
+  const blob = s.parsePreStage(JSON.stringify(OLD));
+  return [blob.arch, blob.prompt, blob.refs.map((r) => r.filename), blob.short_edge, "minimax" in blob,
+          "minimax" in JSON.parse(s.serializePreStage(blob))];
+})();
+const masked = { arch: "minimax", init: null, edit_first: false,
+  refs: [{ handle: "img-1", filename: "door.png", role: "reference" },
+         { handle: "img-2", filename: "m.png", role: "guide" }] };
+out.h3image.mask = [s.preStageMasks(masked), s.preStageLoadsBranch(masked),
+                    s.preStageCountedRefs(masked).map((r) => r.filename),
+                    s.preStageEditsFirst(masked), s.preStageBranchGuide(masked)];
 
 // The turbo pill, per arch — and the reading of a blob written before it went
 // per arch, which is the migration `compile_image.turbo_block` also does.
@@ -163,19 +187,34 @@ PY_CONSTANTS = {
 for name, value in reflected["constants"].items():
     check(name, value, PY_CONSTANTS[name])
 
-# The pill offers the two image architectures `compile_image` owns plus the H3
-# branch, which is a video generation and is compiled by `families/h3/still.py`.
-check("arches", reflected["arches"], [*ci.ARCHES, cs.ARCH])
-check("image arches", reflected["image_arches"], list(ci.ARCHES))
-check("still lengths", reflected["still"]["lengths"], list(cs.STILL_LENGTHS))
-check("still default length", reflected["still"]["frames"], cs.DEFAULT_FRAMES)
-check("still default latent frame", reflected["still"]["index"], cs.DEFAULT_LATENT_INDEX)
-check("still prompt modes", reflected["still"]["prompt_modes"], list(cs.PROMPT_MODES))
-check("still latent frames", reflected["still"]["latents"],
-      {str(n): cs.latent_frames(n) for n in cs.STILL_LENGTHS})
-# No canvas check for the H3 branch: its request is an ordinary creator state,
-# so the geometry it resolves through is the video nodes' own — which
-# `test_canvas_mirror.py` already holds `canvas.js` to.
+# The pill offers every still family, under its arch — "minimax" being MiniMax
+# H3 Image's — and every one of them is an image family `compile_image` owns.
+check("arches", reflected["arches"], list(registry.STILL_ARCHES))
+check("image arches", reflected["image_arches"], list(registry.STILL_ARCHES))
+check("every arch is an image family", sorted(registry.STILL_ARCHES.values()), sorted(ci.ARCHES))
+
+H3I = ci.canvas_of(h3i)
+for key, size in reflected["h3image"]["canvases"].items():
+    label, edge = key.split("@")
+    check("h3image " + key, size, list(ci.resolve_canvas(ci.ASPECT_PRESETS[label], int(edge), H3I)))
+check("h3image edge held to its range, out-of-range to its default",
+      reflected["h3image"]["edges"],
+      {"512": 2048, "1024": 2048, "1536": 1536, "4096": 4096, "5000": 2048})
+check("...and Krea's to the shared one", reflected["h3image"]["krea_edges"], [1024, 1024])
+_OLD = {"arch": "minimax", "prompt": "", "short_edge": 768, "minimax": {"frames": 22, "latent_index": 1, "request": {
+    "prompt": "@img-1 at dusk", "aspect": "9:16", "refined": {"body": "x"},
+    "assets": [{"handle": "img-1", "filename": "a.png", "kind": "image", "role": "reference", "crop": {"x": 0.1}},
+               {"handle": "aud-1", "filename": "s.wav", "kind": "audio"},
+               {"handle": "img-2", "filename": "g.png", "kind": "image", "role": "guide"}],
+    "loras": [{"name": "x.safetensors", "strength": 0.5}]}}}
+check("an old H3 still migrates the same on both sides",
+      reflected["h3image"]["migrated"], h3i.migrate(_OLD))
+check("...and so does another arch carrying the stale block",
+      reflected["h3image"]["migrated_other"], h3i.migrate({**_OLD, "arch": "krea2", "prompt": "keep"}))
+check("...and the parsed blob is a MiniMax H3 Image still with no old block left",
+      reflected["h3image"]["parsed"], ["minimax", "@img-1 at dusk", ["a.png"], 2048, False, False])
+check("a matte on MiniMax H3 Image is a mask over Picture 1, not a branch",
+      reflected["h3image"]["mask"], [True, False, ["door.png"], True, None])
 check("aspect presets", reflected["presets"], sorted(ci.ASPECT_PRESETS))
 
 for key, size in reflected["canvases"].items():
@@ -284,7 +323,20 @@ check("what a reference is on each arch", reflected["refs"],
                 "nativeControl": [], "controlEditions": [],
                 "adapter": None, "adapterHints": [], "edit": None,
                 "editions": None, "defaultEdition": None,
-                "editionHints": [], "max": 0, "control": None}})
+                "editionHints": [], "max": 0, "control": None},
+       # MiniMax H3 Image, under the pill's frozen "minimax": an edit family
+       # whose guide is a mask, served whatever core is loaded.
+       "minimax": {"reads": True, "methods": [],
+                   "needsLora": False, "editsFirst": True,
+                   "noun": list(h3i.REFS_NOUN),
+                   "editFirst": ci.EDIT_FIRST_FIELD,
+                   "nativeControl": [], "controlEditions": [],
+                   "adapter": None, "adapterHints": [], "edit": None,
+                   "editions": None, "defaultEdition": None,
+                   "editionHints": [], "max": h3i.REFS_LIMIT,
+                   "control": {"method": "mask", "slot": None,
+                               "tracings": list(h3i.CONTROL_TRACINGS),
+                               "kind": "image", "stops": {}}}})
 
 # The cap is the render's, not a constant: the encoder has three image slots on
 # every family, and what the checkpoint was post-trained to read is its own
@@ -317,8 +369,8 @@ check("which renders read a guide as one of their pictures",
 # will refuse. MOSS-Image has none: its distillations need a sampler loop core
 # does not have (`moss.still.FIELDS`).
 
-check("every image arch but MOSS-Image has a turbo pill", reflected["turbo_arches"],
-      sorted(set(ci.ARCHES) - {"moss"}))
+check("every image arch but MOSS-Image and MiniMax H3 Image has a turbo pill",
+      reflected["turbo_arches"], sorted(set(ci.ARCHES) - {"moss", "h3image"}))
 check("which routes each arch offers",
       reflected["turbo_routes"], {"krea2": [True, True], "ideogram4": [False, True],
                                   "qwenedit": [False, True],

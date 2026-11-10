@@ -15,9 +15,10 @@ LABEL = "MiniMax H3"
 # Where this family sits in every list of them — the family pill's order.
 ORDER = 1
 
-# What it renders. H3 answers twice: a still on the pre-stage is a video
-# generation one latent frame of which is decoded.
-PRODUCES = frozenset({"video", "still"})
+# What it renders. Video only: a MiniMax still used to be a video generation
+# one latent frame of which was decoded, and is MiniMax H3 Image's now
+# (`families/h3image`), which draws the picture outright.
+PRODUCES = frozenset({"video"})
 
 # What this family's files are called, and the folder they land in. The folder
 # is the family id; this is the stem every file in it is numbered off, so a
@@ -26,10 +27,9 @@ PRODUCES = frozenset({"video", "still"})
 # would rename every file this pack has ever written.
 OUTPUT_STEM = "H3"
 
-# What the pre-stage's arch pill calls this family's still branch. "minimax"
-# predates the family ids and is frozen in every saved blob, so the alias is
-# permanent — the id it maps to is the registry's business.
-STILL_ARCH = "minimax"
+# No pre-stage arch: the pill's "minimax" — frozen in every saved blob — is
+# MiniMax H3 Image's now, and `h3image/declare.py` says why it kept the word.
+STILL_ARCH = None
 
 # How the prose reaches the text encoder, as one word for the UI to show. H3's
 # own training: section headers, `[Shot 2] At 00:05.000` cut lines, a
@@ -91,11 +91,9 @@ ROUTED = ("fl2va", "ref2va")
 #   same way at 384 as at 768).
 # - `max_short_edge` is the slider's ceiling, not a statement about the
 #   weights — everything above the native edge is off-distribution and the
-#   pill says so. There is a reason to offer it anyway: the pre-stage's H3
-#   branch decodes one latent frame as a still, which the VAE holds up to
-#   around 3 MP, and a 2K checkpoint is expected. A ceiling the
-#   hardware and the warning already govern is better than one that has to be
-#   raised again the day those weights land.
+#   pill says so. There is a reason to offer it anyway: a 2K checkpoint is
+#   expected, and a ceiling the hardware and the warning already govern is
+#   better than one that has to be raised again the day those weights land.
 # - The ratio envelope is 9:21..21:9, which is wider on the tall side than the
 #   published range (9:16..21:9). Deliberate, and a decision rather than a
 #   reading of the card: the published range is asymmetric where the weights

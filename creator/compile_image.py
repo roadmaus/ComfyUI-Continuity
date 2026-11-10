@@ -41,8 +41,9 @@ from .families.h3 import subjects
 from .screens import spec as screen_spec
 
 # The architectures this shared half serves: the families that render nothing
-# but stills, asked of the registry rather than written down — H3's still branch
-# rides the video compiler instead and so is not one of these.
+# but stills, asked of the registry rather than written down. That is every
+# still family now — MiniMax H3 Image took over from the H3 video branch that
+# rode the video compiler.
 ARCHES = registry.IMAGE_FAMILIES
 DEFAULT_ARCH = "krea2"
 
@@ -240,48 +241,84 @@ def turbo_block(data, arch):
     return block if arch == "krea2" and "on" in block else {}
 
 
-def clamp_ratio(ratio):
-    if ratio < MIN_RATIO:
-        return MIN_RATIO, True
-    if ratio > MAX_RATIO:
-        return MAX_RATIO, True
+# The shared canvas as one block, the shape `canvas_of` answers in and the
+# manifests serve. Every family reads this one unless its still module declares
+# a `CANVAS` of its own, which is a statement about the weights and not a
+# preference: MiniMax H3 Image is the family that does, because its working
+# range starts where this one stops (see `families/h3image/still.CANVAS`).
+# `max_long_edge` is the per-axis ceiling, separate from the short edge's
+# because a model that holds 16 MP holds a 21:9 strip far past its short edge.
+CANVAS = {
+    "multiple": CANVAS_MULTIPLE,
+    "min_short_edge": MIN_SHORT_EDGE,
+    "max_short_edge": MAX_SHORT_EDGE,
+    "max_long_edge": MAX_SHORT_EDGE,
+    "default_short_edge": DEFAULT_SHORT_EDGE,
+    "max_pixels": MAX_PIXELS,
+    "min_ratio": MIN_RATIO,
+    "max_ratio": MAX_RATIO,
+}
+
+
+def canvas_of(family=None):
+    """The canvas block `family` (a still module) renders on: its own `CANVAS`
+    over the shared one, so a family states only the numbers that differ."""
+    return {**CANVAS, **(getattr(family, "CANVAS", None) or {})}
+
+
+def manifest_canvas(family=None):
+    """The `canvas` block a still family's manifest serves: `canvas_of` plus the
+    aspect pill's vocabulary, which every image family shares."""
+    return {**canvas_of(family),
+            "aspects": dict(ASPECT_PRESETS),
+            "default_aspect": DEFAULT_ASPECT}
+
+
+def clamp_ratio(ratio, limits=CANVAS):
+    if ratio < limits["min_ratio"]:
+        return limits["min_ratio"], True
+    if ratio > limits["max_ratio"]:
+        return limits["max_ratio"], True
     return ratio, False
 
 
-def _snap(value):
-    return max(CANVAS_MULTIPLE, int(value / CANVAS_MULTIPLE + 0.5) * CANVAS_MULTIPLE)
+def _snap(value, multiple=CANVAS_MULTIPLE):
+    return max(multiple, int(value / multiple + 0.5) * multiple)
 
 
-def resolve_canvas(ratio, short_edge):
+def resolve_canvas(ratio, short_edge, limits=CANVAS):
     """(aspect ratio, slider short edge) -> the (width, height) generated.
 
-    Same construction as `canvas.resolve_canvas` at the image models' /16 grid:
+    Same construction as `canvas.resolve_canvas` at the image models' grid:
     the short edge is what the slider says, the long edge follows the ratio, and
     the area cap steps the long axis back down if snapping pushed past it.
+    `limits` is a `canvas_of` block; the default is the shared one.
     """
-    ratio, _ = clamp_ratio(float(ratio))
-    short_edge = max(MIN_SHORT_EDGE, min(MAX_SHORT_EDGE, int(short_edge)))
+    step = limits["multiple"]
+    max_pixels = limits["max_pixels"]
+    ratio, _ = clamp_ratio(float(ratio), limits)
+    short_edge = max(limits["min_short_edge"], min(limits["max_short_edge"], int(short_edge)))
 
     if ratio >= 1.0:
         width, height = short_edge * ratio, float(short_edge)
     else:
         width, height = float(short_edge), short_edge / ratio
 
-    if width * height > MAX_PIXELS:
-        scale = (MAX_PIXELS / (width * height)) ** 0.5
+    if width * height > max_pixels:
+        scale = (max_pixels / (width * height)) ** 0.5
         width, height = width * scale, height * scale
-    # The long side is capped too: 2048 is the models' ceiling per axis, not
-    # only as an area, and a 3:1 sheet at a big short edge would sail past it.
-    if max(width, height) > MAX_SHORT_EDGE:
-        scale = MAX_SHORT_EDGE / max(width, height)
+    # The long side is capped too: 2048 is the shared models' ceiling per axis,
+    # not only as an area, and a 3:1 sheet at a big short edge would sail past it.
+    if max(width, height) > limits["max_long_edge"]:
+        scale = limits["max_long_edge"] / max(width, height)
         width, height = width * scale, height * scale
 
-    width, height = _snap(width), _snap(height)
-    while width * height > MAX_PIXELS and max(width, height) > CANVAS_MULTIPLE:
+    width, height = _snap(width, step), _snap(height, step)
+    while width * height > max_pixels and max(width, height) > step:
         if width >= height:
-            width -= CANVAS_MULTIPLE
+            width -= step
         else:
-            height -= CANVAS_MULTIPLE
+            height -= step
     return width, height
 
 
@@ -705,7 +742,8 @@ def compile_prestage(data, family, image_size_lookup=None):
         if refs[0][2]:
             init["crop"] = refs[0][2]
 
-    short_edge = data.get("short_edge", DEFAULT_SHORT_EDGE)
+    limits = canvas_of(family)
+    short_edge = data.get("short_edge", limits["default_short_edge"])
     ratio_clamped = False
     framed = {}
     for slot, (_, filename, crop, _mods) in enumerate(refs):
@@ -736,14 +774,14 @@ def compile_prestage(data, family, image_size_lookup=None):
         source_w, source_h = framing.size(
             image_size_lookup(init["filename"]),
             framing.parse(init.get("crop"), "the init image"))
-        ratio, ratio_clamped = clamp_ratio(source_w / source_h)
+        ratio, ratio_clamped = clamp_ratio(source_w / source_h, limits)
     else:
         aspect = data.get("aspect", DEFAULT_ASPECT)
         try:
             ratio = ASPECT_PRESETS.get(aspect) or float(aspect)
         except (TypeError, ValueError):
             raise CompileError(f"unknown aspect {aspect!r}")
-    width, height = resolve_canvas(ratio, short_edge)
+    width, height = resolve_canvas(ratio, short_edge, limits)
     ref_resolution = None
     fit = getattr(family, "fit_canvas", None)
     if fit is not None:

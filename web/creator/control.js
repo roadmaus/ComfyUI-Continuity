@@ -109,6 +109,9 @@ let open = null;
    * @param {Function} [options.back]  where the wordmark goes: called after the
    *   bench closes. Absent means the wordmark is not a door — see `mount`.
  * @param {object} [options.source]  a file to start on, `{path, kind}`
+ * @param {string} [options.op]  the tracing to open on, where the errand
+ *   already says which — the pre-stage's *Mask a picture* opens on Matte.
+ *   Absent means As shot, the bench's own start.
  * @returns {Promise<void>}  resolves when the bench is closed
  */
 export function openControl(options = {}) {
@@ -126,7 +129,7 @@ class Bench {
     this.source = options.source ?? null;
     this.back = options.back ?? null;
     this.tracings = [];
-    this.op = "as_shot";
+    this.op = options.op ?? "as_shot";
     // Per tracing, so switching from Edges to Lines and back finds the
     // thresholds where they were left. A bench you have to re-dial every time
     // you compare two tracings is a bench that makes comparing them expensive.

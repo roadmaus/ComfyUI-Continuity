@@ -167,9 +167,9 @@ export class CreatorEditor {
    */
   /**
    * @param {boolean} [options.durationPill]  false where the generation's length
-   *   is not the user's seconds — the pre-stage's H3 branch samples the shortest
-   *   clip it can and keeps one frame, so it puts its own length pill in
-   *   `extraPills` instead.
+   *   is not the user's seconds. Written for the pre-stage's old H3 branch,
+   *   which sampled the shortest clip it could and kept one frame; no caller
+   *   passes it since MiniMax H3 Image replaced that branch.
    * @param {() => Element[]} [options.extraPills]  pills for the row, in the
    *   duration pill's place. What a caller that is *not* rendering a video
    *   needs to say about the generation.
@@ -246,20 +246,18 @@ export class CreatorEditor {
     this.castOpen = false;
     this.piece = piece ?? state;
     // Where the sampler row is kept, which is not always where the piece is.
-    // The pre-stage's H3 branch mounts this body on a *nested* creator request
-    // (`state.minimax.request`) while the sampler widgets belong to the
-    // pre-stage node itself — one row for all three architectures — so a row
-    // written into the request would be serialized by `serializeStill`, which
-    // does not carry one, and would be gone by the next load. Defaults to the
-    // piece, which is the answer on every body that owns its own row.
+    // A body mounted on a *nested* creator request (the pre-stage's old H3
+    // branch was the one) keeps its row on the node above it, not in the
+    // request. Defaults to the piece, which is the answer on every body that
+    // owns its own row — every body today.
     this.samplingStore = samplingStore ?? {
       read: () => this.piece.sampling,
       write: (block) => { this.piece.sampling = block; },
     };
-    // Where the cast lives, which is not always where the piece does — the
-    // pre-stage's H3 branch mounts this body on a nested request whose subjects
-    // belong to the node above it. Defaults to the piece, which is the answer on
-    // every body that owns its own cast, a strip's card included.
+    // Where the cast lives, which is not always where the piece does — a
+    // strip's card is mounted on one shot while its subjects belong to the
+    // strip. Defaults to the piece, which is the answer on every body that owns
+    // its own cast.
     this.castPiece = castPiece ?? this.piece;
     // The piece's way to grow a shot, when this body's owner has one — a pill
     // in the tail of the row, beside the other two controls that act on the
@@ -1898,7 +1896,7 @@ export class CreatorEditor {
    * one answer, this prompt.
    *
    * Every body draws it — the node face, the fullscreen shell's two views, the
-   * pre-stage's H3 branch, the editor sheet, and a card of the Timeline window.
+   * editor sheet, and a card of the Timeline window.
    * The card used to draw none and hand a pressed name to the window's shelf,
    * so as not to be a second place to edit one person. But the card is a sheet
    * *over* that window: the window's shelf is behind it, and with a member's
@@ -1955,8 +1953,8 @@ export class CreatorEditor {
       // where a pool asset lands and what has to be redrawn once one has.
       keep: (subject, assets) => keepSubject(subject, assets),
       // Offered only where somebody could actually land: a cast belongs to a
-      // piece, and this body is also what a PreStage's H3 branch draws, where
-      // the roster would open on a tab whose every Apply is refused.
+      // piece, and a body whose preset target is anything else would open the
+      // roster on a tab whose every Apply is refused.
       library: this.presetTarget?.()?.scope === "piece"
         ? (options = {}) => openPresetLibrary({ target: this.presetTarget(), scope: "cast", ...options })
             .then(() => this.render())

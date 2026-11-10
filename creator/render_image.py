@@ -43,7 +43,7 @@ def default_prefix(family):
     that tree and what a typed prefix is allowed to be, and the family owns its
     name. `family` is a family id — `emit` below takes the still *module* and
     maps its `ARCH` through the registry, because "minimax" is the pre-stage's
-    permanent alias for H3 and not a folder anybody should see.
+    permanent alias for MiniMax H3 Image and not a folder anybody should see.
 
     Every real caller passes a prefix: they resolve the setting above the graph,
     so an unusable one stops the queue before anything is sampled. This is the
@@ -140,7 +140,10 @@ def check(weights, payload, family):
         # Before the VAE header read, for `check`'s own reason: everything the
         # blob alone can refuse is refused before anything is read off disk.
         family.require_control()
-        if not weights.get("control"):
+        # A family whose guide is a mask rather than a branch loads nothing for
+        # it (`CONTROL_WEIGHTS = False` — MiniMax H3 Image's inpainting, where
+        # the matte is the sampler's noise mask), so there is no file to ask for.
+        if getattr(family, "CONTROL_WEIGHTS", True) and not weights.get("control"):
             raise ValueError(
                 "This still has a guide on it and no ControlNet branch has been "
                 "picked. Open the pre-stage node's 'weights' control and choose a "
@@ -269,8 +272,8 @@ def emit(payload, weights, sampling, unique_id, family, filename_prefix=None):
         model = graph.node("LoraLoaderModelOnly", model=model,
                            lora_name=entry["name"],
                            strength_model=entry["strength"]).out(0)
-    # The same preview override the video render and the H3 still are patched
-    # with, and here for the same reason: core's previewer paints its frames
+    # The same preview override the video render is patched with, and here
+    # for the same reason: core's previewer paints its frames
     # onto the canvas node over the top of the node body, where the stage card
     # is not, and where the fullscreen editor cannot see them at all. The
     # override broadcasts them instead — `kj_preview_override`, which stage.js

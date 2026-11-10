@@ -406,7 +406,9 @@ check("every family a member can be sent to is listed, the piece's first, with w
        ["krea2", False, False, True, False, True, False], ["ideogram4", False, False, False, False, False, False],
        ["qwenedit", False, False, True, False, False, False], ["flux2klein", False, False, True, False, False, True],
        ["qwen21", False, False, True, False, False, False],
-       ["moss", False, False, False, False, False, False]])
+       ["moss", False, False, False, False, False, False],
+       # MiniMax H3 Image takes pictures, keeps no saved references of its own.
+       ["h3image", False, False, True, False, False, False]])
 check("a new frame forgets the renditions", got["dropped"], None)
 check("with two families ready the menu leads with one row for all of them, per-picture modes only "
       "— H3's counting the clip it keeps first, Klein's the still alone",

@@ -121,10 +121,12 @@ def still_blob(arch="krea2", neural_block=None):
     data = {"version": 1, "arch": arch, "prompt": "a lantern", "aspect": "1:1",
             "short_edge": 1024, "refs": [], "loras": [], "models": KREA_MODELS}
     if arch == "minimax":
-        data["minimax"] = {"frames": 5, "latent_index": 0,
-                           "request": {"prompt": "a lantern", "assets": [], "loras": [],
-                                       "aspect": "1:1", "short_edge": 768,
-                                       "models": H3_MODELS}}
+        # MiniMax H3 Image's files beside Krea's, on its own canvas.
+        data["short_edge"] = 2048
+        data["models"] = {**KREA_MODELS, "minimax": {
+            "model": "minimax_h3_image_pruned_int8_convrot.safetensors",
+            "clip": "qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+            "vae": "minimax_h3_image_vae_fp16.safetensors"}}
     if neural_block is not None:
         data["neural"] = neural_block
     return json.dumps(data)

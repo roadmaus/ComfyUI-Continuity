@@ -149,7 +149,7 @@ for a render in plain words.
 
 | Family | Makes | Weights |
 |---|---|---|
-| MiniMax H3 | video with sound, and stills | [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3) |
+| MiniMax H3 | video with sound | [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3) |
 | LTX 2.5 | video with sound | [Lightricks/LTX-2.5](https://huggingface.co/Lightricks/LTX-2.5) |
 | Krea 2 | stills | [Comfy-Org/Krea-2](https://huggingface.co/Comfy-Org/Krea-2) |
 | Ideogram 4.0 | stills | [Comfy-Org/Ideogram-4](https://huggingface.co/Comfy-Org/Ideogram-4) |
@@ -157,6 +157,7 @@ for a render in plain words.
 | Flux 2 Klein | stills, edited from a picture | [Black Forest Labs](https://huggingface.co/black-forest-labs) |
 | Qwen Image 2.1 | stills, drawn or edited from pictures | [Comfy-Org/Qwen-Image-2.1](https://huggingface.co/Comfy-Org/Qwen-Image-2.1) |
 | MOSS-Image | stills, from prose only | [Comfy-Org/MOSS-Image](https://huggingface.co/Comfy-Org/MOSS-Image) |
+| MiniMax H3 Image | stills, drawn, edited or inpainted | [Comfy-Org/MiniMax-H3-Image](https://huggingface.co/Comfy-Org/MiniMax-H3-Image) |
 
 See [docs/models.md](docs/models.md) for which files you need and where they go.
 
